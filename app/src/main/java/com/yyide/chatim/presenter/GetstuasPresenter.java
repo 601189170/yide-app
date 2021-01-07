@@ -2,6 +2,7 @@ package com.yyide.chatim.presenter;
 
 
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.NewsEntity;
 import com.yyide.chatim.net.ApiCallback;
@@ -37,6 +38,24 @@ public class GetstuasPresenter extends BasePresenter<getstuasView> {
             }
         });
     }
+    public void getMyData2(String machineCode,String deviceDirection,int officeId) {
+        mvpView.showLoading();
+        addSubscription(dingApiStores.setpm(machineCode,officeId,deviceDirection), new ApiCallback<DeviceUpdateRsp>() {
+            @Override
+            public void onSuccess(DeviceUpdateRsp model) {
+                mvpView.getData2(model);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getDataFail2(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
 
 }
