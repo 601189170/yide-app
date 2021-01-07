@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">Cloud Communication IM</string>
+
+    // Cloud Communication
+    <string name="chat_top">Sticky on Top</string>
+    <string name="chat_delete">Delete</string>
+    <string name="quit_chat_top">Unstick</string>
+
+    // login
+    <string name="account">Account</string>
+    <string name="password">Password</string>
+
+    <string name="login_title">Login IM</string>
+    <string name="login_sub_title">Experience functions for group chat, video call etc.</string>
+    <string name="input_number">Phone Number</string>
+    <string name="input_verification">SMS Code</string>
+    <string name="verification_code">Get verification code</string>
+    <string name="button_login">Login</string>
+    <string name="password_login">Password Login</string>
+    <string name="official_website">Official Website</string>
+    <string name="debug_mode_summary">Directly login IM, only for debug mode</string>
+    <string name="account_hint">Any non-blank character</string>
+
+    // About Me
+    <string name="profile">Me</string>
+    <string name="id">Account：%1$s</string>
+    <string name="modify_user_icon">Profile Photo</string>
+    <string name="modify_nick_name">Nickname</string>
+    <string name="modify_signature">Modify Signature</string>
+    <string name="add_rule">When Add Friend</string>
+    <string name="allow_type_allow_any">Allow Anyone</string>
+    <string name="allow_type_deny_any">Deny Anyone</string>
+    <string name="allow_type_need_confirm">Need Confirm</string>
+    <string name="exit">Exit</string>
+    <string name="about_im">About IM</string>
+
+    // Main Tab
+    <string name="tab_contact_tab_text">Contacts</string>
+    <string name="tab_conversation_tab_text">Message</string>
+    <string name="tab_profile_tab_text">Me</string>
+    <string name="tab_scenes_tab_text">Live</string>
+
+    // "+"menu
+    <string name="add_friend">Add Friends</string>
+    <string name="add_group">Add Groups</string>
+    <string name="start_conversation">New Chat</string>
+    <string name="create_group_chat">New Group</string>
+    <string name="create_chat_room">New Chat Room</string>
+    <string name="create_private_group">New Private Group</string>
+    <string name="hint_add_user_id">Please Input ID</string>
+    <string name="hint_add_wording">Please Input Confirm Message</string>
+    <string name="contact_add">Add</string>
+    <string name="user_id">Other Side ID</string>
+    <string name="add_wording">Confirm Message</string>
+
+    // About Group
+    <string name="tips_empty_group_member">Please Select Group Members</string>
+    <string name="tips_empty_group_type">Please Select Join Way</string>
+    <string name="no_friend_apply">No Friend Application</string>
+
+
+    // New Friend
+    <string name="request_agree">Agreed</string>
+    <string name="request_accepted">Accepted</string>
+    <string name="request_waiting">Waiting for Verification</string>
+
+    <string name="test_custom_action">Custom Message</string>
+    <string name="test_custom_message">Details</string>
+
+    <string name="privacy_text">Agreed《<a href="http://privacy.qq.com/">Privacy Policy</a>》</string>
+
+    // scenes
+    <string name="live_scenes_live_room">Live Video</string>
+    <string name="live_scenes_voice_room">Voice Chat Room</string>
+    <string name="live_voice_room_room_title" formatted="false">Room Number: %d</string>
+    <string name="live_voice_room_numer_format" formatted="false" >%d people are watching</string>
+    <string name="live_voice_room_agree">Agree</string>
+    <string name="live_voice_room_warning_not_empty">"Input can not be empty!"</string>
+    <string name="live_voice_room_send">Send</string>
+    <string name="live_voice_room_already_agree">Agreed</string>
+    <string name="live_voice_room_main_title" formatted="false">%1s(%2d)</string>
+    <string name="live_is_over">Live over</string>
+</resources>

@@ -1,0 +1,42 @@
+package com.yyide.chatim.presenter;
+
+
+import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.GetStuasRsp;
+import com.yyide.chatim.model.NewsEntity;
+import com.yyide.chatim.net.ApiCallback;
+import com.yyide.chatim.view.NewsView;
+import com.yyide.chatim.view.getstuasView;
+
+/**
+ * 作者：Rance on 2016/10/25 15:19
+ * 邮箱：rance935@163.com
+ */
+public class GetstuasPresenter extends BasePresenter<getstuasView> {
+
+    public GetstuasPresenter(getstuasView view) {
+        attachView(view);
+    }
+
+    public void getMyData() {
+        mvpView.showLoading();
+        addSubscription(dingApiStores.getData(), new ApiCallback<GetStuasRsp>() {
+            @Override
+            public void onSuccess(GetStuasRsp model) {
+                mvpView.getData(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getDataFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+
+}
