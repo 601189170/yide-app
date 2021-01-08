@@ -16,13 +16,14 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.LoginActivity;
-import com.yyide.chatim.MyAPP;
+import com.yyide.chatim.MyApp;
 import com.yyide.chatim.R;
 import com.yyide.chatim.info.UserInfo;
 import com.yyide.chatim.utils.ClickUtils;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.LogUtil;
+import com.yyide.chatim.utils.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onForceOffline() {
             ToastUtil.toastLongMessage("您的帐号已在其它终端登录");
-            logout(MyAPP.instance());
+            logout(MyApp.getInstance());
         }
     };
 
@@ -84,6 +85,21 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         TUIKit.addIMEventListener(mIMEventListener);
+
+        //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
+        //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
+
+        //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
+        StatusBarUtil.setRootViewFitsSystemWindows(this,true);
+        //设置状态栏透明
+        StatusBarUtil.setTranslucentStatus(this);
+        //一般的手机的状态栏文字和图标都是白色的, 可如果你的应用也是纯白色的, 或导致状态栏文字看不清
+        //所以如果你是这种情况,请使用以下代码, 设置状态使用深色文字图标风格, 否则你可以选择性注释掉这个if内容
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this,0x55000000);
+        }
     }
 
     @Override
@@ -92,7 +108,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onStart();
         boolean login = UserInfo.getInstance().isAutoLogin();
         if (!login) {
-            BaseActivity.logout(MyAPP.instance());
+            BaseActivity.logout(MyApp.getInstance());
         }
     }
 
@@ -120,6 +136,7 @@ public class BaseActivity extends AppCompatActivity {
         DemoLog.i(TAG, "onDestroy");
         callCancel();
         onUnsubscribe();
+        MyApp.getInstance().queue.cancelAll(this);
         super.onDestroy();
     }
 

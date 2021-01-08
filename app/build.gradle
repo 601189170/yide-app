@@ -51,6 +51,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.github.f0ris.sweetalert:library:1.5.1'
 
 //    implementation 'com.tencent.imsdk:tuikit-live:5.1.2'
     implementation 'com.tencent.imsdk:tuikit:5.1.2'
@@ -67,7 +68,7 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
-    // 腾讯bugly sdk
+    // 腾讯bugly--sdk
     implementation 'com.tencent.bugly:crashreport:latest.release'
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     //blankj
@@ -76,11 +77,17 @@ dependencies {
     implementation 'cn.jiguang.sdk:jpush:3.2.0'  // 此处以JPush 3.8.5 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.5.5'  // 此处以JCore 2.5.5 版本为例。
     //Rxjava系列
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
+    implementation 'com.jakewharton:butterknife:7.0.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.0.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    implementation 'io.reactivex:rxandroid:1.1.0'
+    implementation 'io.reactivex:rxjava:1.1.0'
+//  volley自定义请求系列
+    implementation 'com.alibaba:fastjson:1.1.70.android'
+    implementation 'com.mcxiaoke.volley:library:1.0.19'
+    implementation 'com.alibaba:fastjson:1.2.54'
+//    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'
+//    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 }

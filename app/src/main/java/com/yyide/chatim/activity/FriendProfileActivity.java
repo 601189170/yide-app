@@ -10,9 +10,9 @@ import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.contact.ContactItemBean;
 import com.tencent.qcloud.tim.uikit.modules.contact.FriendProfileLayout;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
+import com.yyide.chatim.MyApp;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.MainActivity;
-import com.yyide.chatim.MyAPP;
 import com.yyide.chatim.R;
 import com.yyide.chatim.chat.ChatActivity;
 import com.yyide.chatim.utils.Constants;
@@ -41,15 +41,15 @@ public class FriendProfileActivity extends BaseActivity {
                     chatName = info.getNickname();
                 }
                 chatInfo.setChatName(chatName);
-                Intent intent = new Intent(MyAPP.instance(), ChatActivity.class);
+                Intent intent = new Intent(MyApp.getInstance(), ChatActivity.class);
                 intent.putExtra(Constants.CHAT_INFO, chatInfo);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyAPP.instance().startActivity(intent);
+                MyApp.getInstance().startActivity(intent);
             }
 
             @Override
             public void onDeleteFriendClick(String id) {
-                Intent intent = new Intent(MyAPP.instance(), MainActivity.class);
+                Intent intent = new Intent(MyApp.getInstance(), MainActivity.class);
                 startActivity(intent);
             }
         });

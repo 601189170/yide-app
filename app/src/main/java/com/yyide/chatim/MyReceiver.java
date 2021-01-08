@@ -98,7 +98,7 @@ public class MyReceiver extends BroadcastReceiver {
             builder = new NotificationCompat.Builder(context);
         }
         Notification notification = builder
-                .setSmallIcon(R.mipmap.leak_canary_icon)
+                .setSmallIcon(R.mipmap.fff)
                 .setContentTitle("我是一个标题")
                 .setContentText(msg)
                 .setAutoCancel(true)

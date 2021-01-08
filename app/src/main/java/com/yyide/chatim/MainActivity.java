@@ -19,11 +19,18 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.alibaba.fastjson.JSON;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.blankj.utilcode.util.AppUtils;
 
 
+import com.blankj.utilcode.util.DeviceUtils;
+import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.home.ConversationFragment;
 import com.yyide.chatim.home.Fragment1;
+import com.yyide.chatim.model.DeviceUpdateRsp;
+import com.yyide.chatim.requestbean.DeviceUpdateReq;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +38,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 //    @BindView(R.id.content)
 //    FrameLayout content;
     private View mBaseView;
@@ -48,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 //        getSupportFragmentManager().beginTransaction().replace(R.id.empty_view, new CustumFragment()).commitAllowingStateLoss();
 //        showNotice(this);
 
+        setPm("1");
+
 
 
     }
@@ -58,8 +67,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setPm(String type) {
+        DeviceUpdateReq req = new DeviceUpdateReq();
+        req.machineCode = DeviceUtils.getAndroidID();
+//        req.officeId = SpData.getDiviceName().office_id;
+        req.deviceDirection = type;
 
+        MyApp.getInstance().requestData(this, req, new listener22(), new registerErrorListener());
+    }
+    class listener22 implements Response.Listener<DeviceUpdateRsp> {
+        @Override
+        public void onResponse(DeviceUpdateRsp rsp) {
 
+            if (rsp.status == BaseConstant.REQUEST_SUCCES || rsp.status == BaseConstant.REQUEST_SUCCES2) {
+
+            }
+        }
+    }
+    class registerErrorListener implements Response.ErrorListener {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            Log.e("fortime", "GetDeviceNameRsp+Error:" + JSON.toJSONString(volleyError));
+        }
+    }
     private void showNotice(Context context) {
 //        String title = indexAd.getTitle();
         // 使用remoteViews去加载自定义布局
@@ -82,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             builder = new NotificationCompat.Builder(context);
         }
         Notification notification = builder
-                .setSmallIcon(R.mipmap.leak_canary_icon)
+                .setSmallIcon(R.mipmap.fff)
                 .setContentTitle("aaa")
                 .setContentText("bbb")
                 .setContentIntent(contentIntent)

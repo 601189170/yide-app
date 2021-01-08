@@ -60,6 +60,7 @@ public class Fragment1 extends BaseMvpFragment<GetstuasPresenter> implements get
 
     @Override
     public void getData2(DeviceUpdateRsp rsp) {
+        hideLoading();
         Log.e("TAG", "DeviceUpdateRsp==》: "+ JSON.toJSONString(rsp));
     }
 

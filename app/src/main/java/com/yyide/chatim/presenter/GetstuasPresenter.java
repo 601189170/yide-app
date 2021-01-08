@@ -39,7 +39,7 @@ public class GetstuasPresenter extends BasePresenter<getstuasView> {
         });
     }
     public void getMyData2(String machineCode,String deviceDirection,int officeId) {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.setpm(machineCode,officeId,deviceDirection), new ApiCallback<DeviceUpdateRsp>() {
             @Override
             public void onSuccess(DeviceUpdateRsp model) {

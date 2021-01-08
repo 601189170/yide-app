@@ -2,7 +2,7 @@ package com.yyide.chatim.net;
 
 import com.blankj.utilcode.util.AppUtils;
 
-import com.yyide.chatim.MyAPP;
+import com.yyide.chatim.MyApp;
 
 import java.io.File;
 import java.io.IOException;
@@ -74,7 +74,7 @@ public class AppClient {
                 builder.addInterceptor(loggingInterceptor);
             }
             //cache url
-            File httpCacheDirectory = new File(MyAPP.instance().getExternalCacheDir(), "responses");
+            File httpCacheDirectory = new File(MyApp.getInstance().getExternalCacheDir(), "responses");
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
             Cache cache = new Cache(httpCacheDirectory, cacheSize);
             builder.cache(cache);
@@ -94,14 +94,14 @@ public class AppClient {
             CacheControl cacheControl = cacheBuilder.build();
 
             Request request = chain.request();
-            if (!MyAPP.isNetworkAvailable(MyAPP.instance())) {
+            if (!MyApp.isNetworkAvailable(MyApp.getInstance())) {
                 request = request.newBuilder()
                         .cacheControl(cacheControl)
                         .build();
 
             }
             Response originalResponse = chain.proceed(request);
-            if (MyAPP.isNetworkAvailable(MyAPP.instance())) {
+            if (MyApp.isNetworkAvailable(MyApp.getInstance())) {
                 int maxAge = 0; // read from cache
                 return originalResponse.newBuilder()
                         .removeHeader("Pragma")

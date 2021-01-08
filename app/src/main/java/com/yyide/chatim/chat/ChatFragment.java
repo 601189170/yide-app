@@ -26,7 +26,7 @@ import com.tencent.qcloud.tim.uikit.modules.group.info.GroupInfo;
 import com.tencent.qcloud.tim.uikit.modules.group.info.StartGroupMemberSelectActivity;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
-import com.yyide.chatim.MyAPP;
+import com.yyide.chatim.MyApp;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.FriendProfileActivity;
 import com.yyide.chatim.utils.Constants;
@@ -83,10 +83,10 @@ public class ChatFragment extends BaseFragment {
             mTitleBar.setOnRightClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MyAPP.instance(), FriendProfileActivity.class);
+                    Intent intent = new Intent(MyApp.getInstance(), FriendProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(TUIKitConstants.ProfileType.CONTENT, mChatInfo);
-                    MyAPP.instance().startActivity(intent);
+                    MyApp.getInstance().startActivity(intent);
                 }
             });
         }
@@ -104,17 +104,17 @@ public class ChatFragment extends BaseFragment {
                 }
                 ChatInfo info = new ChatInfo();
                 info.setId(messageInfo.getFromUser());
-                Intent intent = new Intent(MyAPP.instance(), FriendProfileActivity.class);
+                Intent intent = new Intent(MyApp.getInstance(), FriendProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra(TUIKitConstants.ProfileType.CONTENT, info);
-                MyAPP.instance().startActivity(intent);
+                MyApp.getInstance().startActivity(intent);
             }
         });
 
         mChatLayout.getInputLayout().setStartActivityListener(new InputLayout.onStartActivityListener() {
             @Override
             public void onStartGroupMemberSelectActivity() {
-                Intent intent = new Intent(MyAPP.instance(), StartGroupMemberSelectActivity.class);
+                Intent intent = new Intent(MyApp.getInstance(), StartGroupMemberSelectActivity.class);
                 GroupInfo groupInfo = new GroupInfo();
                 groupInfo.setId(mChatInfo.getId());
                 groupInfo.setChatName(mChatInfo.getChatName());
@@ -125,7 +125,7 @@ public class ChatFragment extends BaseFragment {
             @Override
             public boolean handleStartGroupLiveActivity() {
                 // 打开群直播
-//                LiveRoomAnchorActivity.start(MyAPP.instance(), mChatInfo.getId());
+//                LiveRoomAnchorActivity.start(MyApp.instance(), mChatInfo.getId());
                 // demo层对消息进行处理，不走默认的逻辑
                 return true;
             }
@@ -191,15 +191,15 @@ public class ChatFragment extends BaseFragment {
         switch (atInfoType){
             case V2TIMGroupAtInfo.TIM_AT_ME:
                 mChatLayout.getAtInfoLayout().setVisibility(VISIBLE);
-                mChatLayout.getAtInfoLayout().setText(MyAPP.instance().getString(R.string.ui_at_me));
+                mChatLayout.getAtInfoLayout().setText(MyApp.getInstance().getString(R.string.ui_at_me));
                 break;
             case V2TIMGroupAtInfo.TIM_AT_ALL:
                 mChatLayout.getAtInfoLayout().setVisibility(VISIBLE);
-                mChatLayout.getAtInfoLayout().setText(MyAPP.instance().getString(R.string.ui_at_all));
+                mChatLayout.getAtInfoLayout().setText(MyApp.getInstance().getString(R.string.ui_at_all));
                 break;
             case V2TIMGroupAtInfo.TIM_AT_ALL_AT_ME:
                 mChatLayout.getAtInfoLayout().setVisibility(VISIBLE);
-                mChatLayout.getAtInfoLayout().setText(MyAPP.instance().getString(R.string.ui_at_all_me));
+                mChatLayout.getAtInfoLayout().setText(MyApp.getInstance().getString(R.string.ui_at_all_me));
                 break;
             default:
                 mChatLayout.getAtInfoLayout().setVisibility(GONE);

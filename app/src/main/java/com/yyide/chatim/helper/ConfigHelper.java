@@ -7,7 +7,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.config.CustomFaceConfig;
 import com.tencent.qcloud.tim.uikit.config.GeneralConfig;
 import com.tencent.qcloud.tim.uikit.config.TUIKitConfigs;
-import com.yyide.chatim.MyAPP;
+import com.yyide.chatim.MyApp;
 
 import java.io.File;
 
@@ -21,7 +21,7 @@ public class ConfigHelper {
         GeneralConfig config = new GeneralConfig();
         // 显示对方是否已读的view将会展示
         config.setShowRead(true);
-        config.setAppCacheDir(MyAPP.instance().getFilesDir().getPath());
+        config.setAppCacheDir(MyApp.getInstance().getFilesDir().getPath());
         if (new File(Environment.getExternalStorageDirectory() + "/111222333").exists()) {
             config.setTestEnv(true);
         }

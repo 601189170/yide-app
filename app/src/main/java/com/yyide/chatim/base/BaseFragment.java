@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.yyide.chatim.MyApp;
+
 import androidx.fragment.app.Fragment;
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -46,6 +48,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        MyApp.getInstance().queue.cancelAll(this);
         onUnsubscribe();
     }
 

@@ -1,47 +1,55 @@
 package com.yyide.chatim;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
-import com.tencent.imsdk.v2.V2TIMMessage;
-import com.tencent.imsdk.v2.V2TIMSDKConfig;
 import com.tencent.qcloud.tim.uikit.TUIKit;
-import com.tencent.qcloud.tim.uikit.base.IMEventListener;
-import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.tencent.rtmp.TXLiveBase;
 
 import com.yyide.chatim.helper.ConfigHelper;
+import com.yyide.chatim.myrequest.AuthcodeTwo;
+import com.yyide.chatim.myrequest.BaseBeanReq;
+import com.yyide.chatim.myrequest.FastJsonRequest;
+import com.yyide.chatim.myrequest.GetData;
+import com.yyide.chatim.myrequest.MyHashMap;
+import com.yyide.chatim.myrequest.OkHttpStack;
 import com.yyide.chatim.signature.GenerateTestUserSig;
-import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.PrivateConstants;
 
 import androidx.multidex.MultiDex;
 import cn.jpush.android.api.JPushInterface;
+import okhttp3.OkHttpClient;
+
+import static com.yyide.chatim.myrequest.Object2Map.object2Map;
 
 /**
  * Created by Administrator on 2020/12/14.
  */
 
-public class MyAPP  extends Application {
-    private static MyAPP instance;
-    private static final String TAG = MyAPP.class.getSimpleName();
+public class MyApp extends Application {
+    private static MyApp instance;
+    private static final String TAG = MyApp.class.getSimpleName();
 
     private final String licenceUrl = "";
     private final String licenseKey = "";
+
+    public RequestQueue queue;
+    OkHttpClient mOkHttpClient = new OkHttpClient();
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        queue = Volley.newRequestQueue(this, new OkHttpStack());
         //blankj初始化
         Utils.init(this);
         MultiDex.install(this);
@@ -82,9 +90,23 @@ public class MyAPP  extends Application {
         }
         return false;
     }
-    public static MyAPP instance() {
+    public static MyApp getInstance() {
         return instance;
     }
 
-
+    public <T> void requestData(Object tag, BaseBeanReq<T> object, Response.Listener<T> listener,
+                                Response.ErrorListener errorListener) {
+        MyHashMap map = new MyHashMap();
+        map.putAll(object2Map(object));
+        String encryStr = AuthcodeTwo.authcodeEncode(map.toString(), GetData.URL_KEY);
+        FastJsonRequest<T> request = new FastJsonRequest<>(GetData.requestUrl(object),
+                object.myTypeReference(), listener, errorListener,
+                encryStr);
+        request.setShouldCache(true);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                15000, 1,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag(tag);
+        queue.add(request);
+    }
 }

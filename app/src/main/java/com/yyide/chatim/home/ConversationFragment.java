@@ -11,16 +11,12 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
-import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.v2.V2TIMConversation;
 
-import com.tencent.imsdk.v2.V2TIMConversationManager;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
 import com.tencent.imsdk.v2.V2TIMManager;
-import com.tencent.imsdk.v2.V2TIMMessageManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
 import com.tencent.qcloud.tim.uikit.base.BaseFragment;
-import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.component.action.PopActionClickListener;
 import com.tencent.qcloud.tim.uikit.component.action.PopDialogAdapter;
@@ -28,12 +24,10 @@ import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
-import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
-import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationProvider;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
 import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.MyAPP;
+import com.yyide.chatim.MyApp;
 import com.yyide.chatim.R;
 import com.yyide.chatim.chat.ChatActivity;
 import com.yyide.chatim.menu.Menu;
@@ -207,10 +201,10 @@ public class ConversationFragment extends BaseFragment {
         chatInfo.setType(conversationInfo.isGroup() ? V2TIMConversation.V2TIM_GROUP : V2TIMConversation.V2TIM_C2C);
         chatInfo.setId(conversationInfo.getId());
         chatInfo.setChatName(conversationInfo.getTitle());
-        Intent intent = new Intent(MyAPP.instance(), ChatActivity.class);
+        Intent intent = new Intent(MyApp.getInstance(), ChatActivity.class);
         intent.putExtra(Constants.CHAT_INFO, chatInfo);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        MyAPP.instance().startActivity(intent);
+        MyApp.getInstance().startActivity(intent);
     }
 
 }
