@@ -41,6 +41,11 @@ android {
         }
         maven { url "https://mirrors.tencent.com/repository/maven/tencent_public"}
     }
+
+    compileOptions{
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -57,11 +62,9 @@ dependencies {
     implementation 'com.tencent.imsdk:tuikit:5.1.2'
 
     implementation 'com.alibaba:fastjson:1.1.70.android'
-
     implementation 'com.alibaba:fastjson:1.2.54'
-
     implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
@@ -77,7 +80,7 @@ dependencies {
     implementation 'cn.jiguang.sdk:jpush:3.2.0'  // 此处以JPush 3.8.5 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.5.5'  // 此处以JCore 2.5.5 版本为例。
     //Rxjava系列
-    implementation 'com.jakewharton:butterknife:7.0.1'
+    implementation 'com.jakewharton:butterknife:10.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
@@ -88,6 +91,11 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.70.android'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.alibaba:fastjson:1.2.54'
+
+    // 基础依赖包，必须要依赖
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    implementation 'me.jessyan:autosize:1.0.5'
+
 //    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'
 //    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 }

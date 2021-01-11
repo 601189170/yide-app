@@ -1,4 +1,4 @@
-package com.yyide.chatim.home;
+package com.yyide.chatim.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,8 +29,9 @@ import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.MyApp;
 import com.yyide.chatim.R;
-import com.yyide.chatim.chat.ChatActivity;
-import com.yyide.chatim.menu.Menu;
+
+
+import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.utils.Constants;
 
 import java.util.ArrayList;
@@ -100,8 +101,23 @@ public class ConversationFragment extends BaseFragment {
                 startPopShow(view, position, conversationInfo);
             }
         });
+
         initTitleAction();
         initPopMenuAction();
+//        TitleBarLayout titleBarLayout = mConversationLayout.findViewById(R.id.conversation_title);
+////取控件当前的布局参数
+//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleBarLayout.getLayoutParams();
+////设置宽度值
+////        params.width = dip2px(getActivity(), width);
+//        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+////设置高度值
+//        params.height = SizeUtils.dp2px(100);
+//        titleBarLayout.setLayoutParams(params);
+//        titleBarLayout.setBackgroundColor(R.color.black);
+//使设置好的布局参数应用到控件
+//        imageView.setLayoutParams(params);
+
+
     }
 
     private void initTitleAction() {
@@ -197,6 +213,7 @@ public class ConversationFragment extends BaseFragment {
     }
 
     private void startChatActivity(ConversationInfo conversationInfo) {
+        Log.e("TAG", "startChatActivity==>: "+JSON.toJSONString(conversationInfo) );
         ChatInfo chatInfo = new ChatInfo();
         chatInfo.setType(conversationInfo.isGroup() ? V2TIMConversation.V2TIM_GROUP : V2TIMConversation.V2TIM_C2C);
         chatInfo.setId(conversationInfo.getId());

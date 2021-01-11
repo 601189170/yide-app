@@ -1,4 +1,4 @@
-package com.yyide.chatim;
+package com.yyide.chatim.jiguang;
 
 import android.app.Service;
 import android.content.Intent;

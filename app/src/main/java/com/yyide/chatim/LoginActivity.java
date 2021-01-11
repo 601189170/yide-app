@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,8 +14,9 @@ import android.widget.EditText;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.info.UserInfo;
-import com.yyide.chatim.signature.GenerateTestUserSig;
+
+import com.yyide.chatim.chat.info.UserInfo;
+import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.Utils;
 
@@ -69,6 +71,7 @@ public class LoginActivity extends Activity {
                         UserInfo.getInstance().setAutoLogin(true);
                         UserInfo.getInstance().setUserSig(userSig);
                         UserInfo.getInstance().setUserId(mUserAccount.getText().toString());
+                        Log.e(TAG, "UserInfo==》: "+ UserInfo.getInstance().getUserId());
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

@@ -1,10 +1,9 @@
-package com.yyide.chatim;
+package com.yyide.chatim.jiguang;
 
 
 import android.os.Bundle;
-import android.view.View;
 
-import com.yyide.chatim.home.ConversationFragment;
+import com.yyide.chatim.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;

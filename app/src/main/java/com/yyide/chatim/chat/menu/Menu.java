@@ -1,4 +1,4 @@
-package com.yyide.chatim.menu;
+package com.yyide.chatim.chat.menu;
 
 import android.app.Activity;
 import android.content.Intent;

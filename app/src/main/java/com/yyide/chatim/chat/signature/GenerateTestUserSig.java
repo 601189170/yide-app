@@ -1,4 +1,4 @@
-package com.yyide.chatim.signature;
+package com.yyide.chatim.chat.signature;
 
 import android.text.TextUtils;
 import android.util.Base64;

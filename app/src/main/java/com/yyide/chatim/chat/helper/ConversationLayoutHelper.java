@@ -1,4 +1,4 @@
-package com.yyide.chatim.helper;
+package com.yyide.chatim.chat.helper;
 
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;

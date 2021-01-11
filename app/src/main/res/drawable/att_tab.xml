@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_contact_join_group" android:state_checkable="false" android:state_checked="true" />
+    <item android:drawable="@drawable/create_c2c" android:state_checkable="false" />
+</selector>

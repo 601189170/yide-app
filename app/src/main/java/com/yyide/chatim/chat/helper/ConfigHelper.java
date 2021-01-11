@@ -1,4 +1,4 @@
-package com.yyide.chatim.helper;
+package com.yyide.chatim.chat.helper;
 
 import android.os.Environment;
 

@@ -1,4 +1,4 @@
-package com.yyide.chatim;
+package com.yyide.chatim.jiguang;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +19,6 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 import androidx.core.app.NotificationCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import cn.jpush.android.api.JPushInterface;
 
 import static android.content.Context.NOTIFICATION_SERVICE;

@@ -11,9 +11,8 @@ import com.alibaba.fastjson.JSON;
 
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
-import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.info.UserInfo;
+import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.utils.DemoLog;
 
 public class SplashActivity extends Activity {
@@ -70,6 +69,7 @@ public class SplashActivity extends Activity {
 
             @Override
             public void onSuccess(Object data) {
+                Log.e(TAG, "UserInfo==》: "+JSON.toJSONString(UserInfo.getInstance()) );
                 startMain();
             }
         });

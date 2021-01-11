@@ -2,14 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-
     android:layout_height="match_parent">
 
- <RelativeLayout
+ <FrameLayout
 
-     android:id="@+id/empty_view"
+     android:id="@+id/content"
      android:layout_width="match_parent"
      android:layout_height="0dp"
      android:layout_weight="1" />
+
+
+ <LinearLayout
+     android:orientation="horizontal"
+     android:layout_width="match_parent"
+     android:layout_height="80dp" >
+  <FrameLayout
+      android:id="@+id/work_layout"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="match_parent">
+   <CheckedTextView
+       android:id="@+id/work"
+       android:layout_gravity="center"
+       android:background="@drawable/att_tab"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+  </FrameLayout>
+  <FrameLayout
+      android:id="@+id/adress_layout"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="match_parent">
+  <CheckedTextView
+      android:id="@+id/adress"
+      android:layout_gravity="center"
+      android:background="@drawable/att_tab"
+      android:layout_width="wrap_content"
+
+      android:layout_height="wrap_content" />
+  </FrameLayout>
+  <FrameLayout
+      android:id="@+id/user_layout"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="match_parent">
+   <CheckedTextView
+       android:id="@+id/user"
+       android:layout_gravity="center"
+       android:background="@drawable/att_tab"
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content" />
+  </FrameLayout>
+
+ </LinearLayout>
 
 </LinearLayout>

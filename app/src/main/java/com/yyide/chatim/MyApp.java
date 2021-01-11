@@ -16,14 +16,14 @@ import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.rtmp.TXLiveBase;
 
-import com.yyide.chatim.helper.ConfigHelper;
+import com.yyide.chatim.chat.helper.ConfigHelper;
 import com.yyide.chatim.myrequest.AuthcodeTwo;
 import com.yyide.chatim.myrequest.BaseBeanReq;
 import com.yyide.chatim.myrequest.FastJsonRequest;
 import com.yyide.chatim.myrequest.GetData;
 import com.yyide.chatim.myrequest.MyHashMap;
 import com.yyide.chatim.myrequest.OkHttpStack;
-import com.yyide.chatim.signature.GenerateTestUserSig;
+import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.utils.PrivateConstants;
 
 import androidx.multidex.MultiDex;
@@ -53,6 +53,9 @@ public class MyApp extends Application {
         //blankj初始化
         Utils.init(this);
         MultiDex.install(this);
+
+
+
         /**
          * TUIKit的初始化函数
          *

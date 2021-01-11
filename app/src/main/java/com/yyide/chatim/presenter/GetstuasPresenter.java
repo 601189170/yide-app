@@ -1,13 +1,18 @@
 package com.yyide.chatim.presenter;
 
 
+import android.content.Context;
+
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.NewsEntity;
 import com.yyide.chatim.net.ApiCallback;
+import com.yyide.chatim.utils.LoadingTools;
 import com.yyide.chatim.view.NewsView;
 import com.yyide.chatim.view.getstuasView;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -15,15 +20,18 @@ import com.yyide.chatim.view.getstuasView;
  */
 public class GetstuasPresenter extends BasePresenter<getstuasView> {
 
+
     public GetstuasPresenter(getstuasView view) {
         attachView(view);
     }
 
     public void getMyData() {
+
         mvpView.showLoading();
         addSubscription(dingApiStores.getData(), new ApiCallback<GetStuasRsp>() {
             @Override
             public void onSuccess(GetStuasRsp model) {
+//                mvpView.hideLoading();
                 mvpView.getData(model);
             }
 
@@ -39,7 +47,7 @@ public class GetstuasPresenter extends BasePresenter<getstuasView> {
         });
     }
     public void getMyData2(String machineCode,String deviceDirection,int officeId) {
-//        mvpView.showLoading();
+        mvpView.showLoading();
         addSubscription(dingApiStores.setpm(machineCode,officeId,deviceDirection), new ApiCallback<DeviceUpdateRsp>() {
             @Override
             public void onSuccess(DeviceUpdateRsp model) {

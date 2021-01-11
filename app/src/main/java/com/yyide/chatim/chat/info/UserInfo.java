@@ -1,4 +1,4 @@
-package com.yyide.chatim.info;
+package com.yyide.chatim.chat.info;
 
 import android.content.SharedPreferences;
 

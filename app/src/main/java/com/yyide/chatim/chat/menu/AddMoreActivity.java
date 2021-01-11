@@ -1,4 +1,4 @@
-package com.yyide.chatim.menu;
+package com.yyide.chatim.chat.menu;
 
 import android.os.Bundle;
 import android.text.TextUtils;

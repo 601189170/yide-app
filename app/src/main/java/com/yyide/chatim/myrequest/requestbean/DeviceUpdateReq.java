@@ -1,4 +1,4 @@
-package com.yyide.chatim.requestbean;
+package com.yyide.chatim.myrequest.requestbean;
 
 import com.alibaba.fastjson.TypeReference;
 import com.yyide.chatim.model.DeviceUpdateRsp;
