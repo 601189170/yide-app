@@ -19,3 +19,29 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontoptimize
+-dontpreverify
+-keepattributes  EnclosingMethod,Signature
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }
+
+-dontwarn cn.jmessage.**
+-keep class cn.jmessage.**{ *; }
+
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
+
+#========================gson================================
+-dontwarn com.google.**
+-keep class com.google.gson.** {*;}
+
+#========================protobuf================================
+-keep class com.google.protobuf.** {*;}
+
+
+#========================腾讯云Im防混淆================================
+-keep class com.tencent.imsdk.** { *; }

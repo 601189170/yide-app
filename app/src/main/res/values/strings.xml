@@ -73,7 +73,7 @@
     <string name="live_scenes_live_room">Live Video</string>
     <string name="live_scenes_voice_room">Voice Chat Room</string>
     <string name="live_voice_room_room_title" formatted="false">Room Number: %d</string>
-    <string name="live_voice_room_numer_format" formatted="false" >%d people are watching</string>
+    <string name="live_voice_room_numer_format" formatted="false">%d people are watching</string>
     <string name="live_voice_room_agree">Agree</string>
     <string name="live_voice_room_warning_not_empty">"Input can not be empty!"</string>
     <string name="live_voice_room_send">Send</string>

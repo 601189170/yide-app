@@ -1,12 +1,15 @@
 package com.yyide.chatim;
 
 
+import android.*;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -15,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 
 import com.alibaba.fastjson.JSON;
@@ -25,10 +27,11 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.DeviceUtils;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.chat.ConversationFragment;
 import com.yyide.chatim.home.adress.AdressFragment;
 import com.yyide.chatim.home.user.UserFragment;
-import com.yyide.chatim.home.work.WorkFragment;
+import com.yyide.chatim.home.home.HomeFragment;
+import com.yyide.chatim.jiguang.ExampleUtil;
+import com.yyide.chatim.jiguang.LocalBroadcastManager;
 import com.yyide.chatim.jiguang.NoticeActivity;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.myrequest.requestbean.DeviceUpdateReq;
@@ -59,23 +62,104 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.user_layout)
     FrameLayout userLayout;
 
+
+    //for receive customer msg from jpush server
+    public static boolean isForeground = false;
+    private MessageReceiver mMessageReceiver;
+    public static final String MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        registerMessageReceiver();  // used for receive msg
 
 
 
-//        getSupportFragmentManager().beginTransaction().replace(R.id.content, new ConversationFragment()).commitAllowingStateLoss();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.content, new QrCodeFragment()).commitAllowingStateLoss();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.empty_view, fragment).commitAllowingStateLoss();
 //        showNotice(this);
 
 //        setPm("1");
 
         setTab(0);
+        permission();
     }
 
+    /**
+     * @Author: Berlin
+     * @Date: 2018/12/19 14:37
+     * @Description:动态授权
+     */
+    String[] mPermissionList;
+
+    private void permission() {//https://blog.csdn.net/android_code/article/details/82027500
+        if (Build.VERSION.SDK_INT >= 23) {
+            mPermissionList = new String[]{
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.CALL_PHONE,
+                    android.Manifest.permission.READ_LOGS,
+                    android.Manifest.permission.READ_PHONE_STATE,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.SET_DEBUG_APP,
+                    android.Manifest.permission.SYSTEM_ALERT_WINDOW,
+                    android.Manifest.permission.GET_ACCOUNTS,
+                    android.Manifest.permission.WRITE_SETTINGS,
+                    android.Manifest.permission.WRITE_APN_SETTINGS,
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.RECORD_AUDIO//音频
+            };
+            requestPermissions(mPermissionList, 1);
+            //ActivityCompat.requestPermissions(getActivity(), mPermissionList, 123);
+        }
+    }
+    public void registerMessageReceiver() {
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        filter.addAction(MESSAGE_RECEIVED_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);
+    }
+
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                    String messge = intent.getStringExtra(KEY_MESSAGE);
+                    String extras = intent.getStringExtra(KEY_EXTRAS);
+                    StringBuilder showMsg = new StringBuilder();
+                    showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
+                    if (!ExampleUtil.isEmpty(extras)) {
+                        showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                    }
+                    setCostomMsg(showMsg.toString());
+                }
+            } catch (Exception e){
+            }
+        }
+    }
+
+    private void setCostomMsg(String msg){
+        Log.e("TAG", "setCostomMsg: "+msg );
+
+    }
+
+    @Override
+    protected void onPause() {
+        isForeground = false;
+        super.onPause();
+    }
+    @Override
+    protected void onResume() {
+        isForeground = true;
+        super.onResume();
+    }
     void setTab(int position) {
         work.setChecked(false);
         adress.setChecked(false);
@@ -93,7 +177,7 @@ public class MainActivity extends BaseActivity {
         switch (position) {
             case 0:
                 if (fg1 == null) {
-                    fg1 = new WorkFragment();
+                    fg1 = new HomeFragment();
                     ft.add(R.id.content, fg1, String.valueOf(work.getId()));
                 } else
                     ft.show(fg1);
@@ -122,6 +206,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
 
     }

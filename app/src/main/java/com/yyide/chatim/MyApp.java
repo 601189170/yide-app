@@ -26,7 +26,7 @@ import com.yyide.chatim.myrequest.OkHttpStack;
 import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.utils.PrivateConstants;
 
-import androidx.multidex.MultiDex;
+
 import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
@@ -52,7 +52,7 @@ public class MyApp extends Application {
         queue = Volley.newRequestQueue(this, new OkHttpStack());
         //blankj初始化
         Utils.init(this);
-        MultiDex.install(this);
+//        MultiDex.install(this);
 
 
 

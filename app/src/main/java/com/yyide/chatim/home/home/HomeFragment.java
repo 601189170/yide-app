@@ -1,4 +1,4 @@
-package com.yyide.chatim.home.work;
+package com.yyide.chatim.home.home;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +17,7 @@ import com.yyide.chatim.view.getstuasView;
 import androidx.annotation.Nullable;
 
 
-public class WorkFragment extends BaseMvpFragment<GetstuasPresenter> implements getstuasView {
+public class HomeFragment extends BaseMvpFragment<GetstuasPresenter> implements getstuasView {
 
     private View mBaseView;
 
@@ -42,7 +42,7 @@ public class WorkFragment extends BaseMvpFragment<GetstuasPresenter> implements 
     @Override
     protected GetstuasPresenter createPresenter() {
 
-        return new GetstuasPresenter(WorkFragment.this);
+        return new GetstuasPresenter(HomeFragment.this);
     }
 
     @Override

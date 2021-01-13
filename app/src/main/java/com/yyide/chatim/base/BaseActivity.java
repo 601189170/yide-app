@@ -100,7 +100,7 @@ public class BaseActivity extends AppCompatActivity {
 //            //这样半透明+白=灰, 状态栏的文字能看得清
 //            StatusBarUtil.setStatusBarColor(this,0x55000000);
 //        }
-        ImmersionBar.with(this).init();
+//        ImmersionBar.with(this).init();
 
     }
 
