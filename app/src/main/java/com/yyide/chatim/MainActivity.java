@@ -1,7 +1,7 @@
 package com.yyide.chatim;
 
 
-import android.*;
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,22 +14,28 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.DeviceUtils;
+import com.example.zhouwei.library.CustomPopWindow;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.home.adress.AdressFragment;
-import com.yyide.chatim.home.user.UserFragment;
 import com.yyide.chatim.home.home.HomeFragment;
+import com.yyide.chatim.home.user.UserFragment;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
 import com.yyide.chatim.jiguang.NoticeActivity;
@@ -65,11 +71,14 @@ public class MainActivity extends BaseActivity {
 
     //for receive customer msg from jpush server
     public static boolean isForeground = false;
+    @BindView(R.id.title)
+    TextView title;
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,17 +87,44 @@ public class MainActivity extends BaseActivity {
         registerMessageReceiver();  // used for receive msg
 
 
-
 //        getSupportFragmentManager().beginTransaction().replace(R.id.content, new QrCodeFragment()).commitAllowingStateLoss();
 //        getSupportFragmentManager().beginTransaction().replace(R.id.empty_view, fragment).commitAllowingStateLoss();
 //        showNotice(this);
 
 //        setPm("1");
 
-        setTab(0);
-        permission();
-    }
+//        setTab(0);
 
+
+        permission();
+
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopBottom();
+            }
+        });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+            showPopBottom();
+            }
+        },5000);
+
+
+    }
+    private void showPopBottom(){
+        View contentView = LayoutInflater.from(this).inflate(R.layout.msg_layout2, null);
+        CustomPopWindow popWindow = new CustomPopWindow.PopupWindowBuilder(this)
+
+                .setView(R.layout.msg_layout2)
+                .setFocusable(true)
+                .setOutsideTouchable(true)
+                .create();
+        popWindow.showAtLocation(contentView, Gravity.TOP,0,0);
+
+    }
     /**
      * @Author: Berlin
      * @Date: 2018/12/19 14:37
@@ -99,24 +135,25 @@ public class MainActivity extends BaseActivity {
     private void permission() {//https://blog.csdn.net/android_code/article/details/82027500
         if (Build.VERSION.SDK_INT >= 23) {
             mPermissionList = new String[]{
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.CALL_PHONE,
-                    android.Manifest.permission.READ_LOGS,
-                    android.Manifest.permission.READ_PHONE_STATE,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.SET_DEBUG_APP,
-                    android.Manifest.permission.SYSTEM_ALERT_WINDOW,
-                    android.Manifest.permission.GET_ACCOUNTS,
-                    android.Manifest.permission.WRITE_SETTINGS,
-                    android.Manifest.permission.WRITE_APN_SETTINGS,
-                    android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.RECORD_AUDIO//音频
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CALL_PHONE,
+                    Manifest.permission.READ_LOGS,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.SET_DEBUG_APP,
+                    Manifest.permission.SYSTEM_ALERT_WINDOW,
+                    Manifest.permission.GET_ACCOUNTS,
+                    Manifest.permission.WRITE_SETTINGS,
+                    Manifest.permission.WRITE_APN_SETTINGS,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO//音频
             };
             requestPermissions(mPermissionList, 1);
             //ActivityCompat.requestPermissions(getActivity(), mPermissionList, 123);
         }
     }
+
     public void registerMessageReceiver() {
         mMessageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter();
@@ -140,13 +177,13 @@ public class MainActivity extends BaseActivity {
                     }
                     setCostomMsg(showMsg.toString());
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
             }
         }
     }
 
-    private void setCostomMsg(String msg){
-        Log.e("TAG", "setCostomMsg: "+msg );
+    private void setCostomMsg(String msg) {
+        Log.e("TAG", "setCostomMsg: " + msg);
 
     }
 
@@ -155,11 +192,13 @@ public class MainActivity extends BaseActivity {
         isForeground = false;
         super.onPause();
     }
+
     @Override
     protected void onResume() {
         isForeground = true;
         super.onResume();
     }
+
     void setTab(int position) {
         work.setChecked(false);
         adress.setChecked(false);
@@ -176,6 +215,7 @@ public class MainActivity extends BaseActivity {
 
         switch (position) {
             case 0:
+
                 if (fg1 == null) {
                     fg1 = new HomeFragment();
                     ft.add(R.id.content, fg1, String.valueOf(work.getId()));
@@ -225,6 +265,7 @@ public class MainActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.work_layout:
                 setTab(0);
+
                 break;
             case R.id.adress_layout:
                 setTab(1);
