@@ -94,7 +94,6 @@ public class LoginActivity extends Activity {
                     type.setChecked(false);
                     type.setText("验证码登录");
                 }
-
             }
         });
 //        getcode("15920012647");

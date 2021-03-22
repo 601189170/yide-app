@@ -1,14 +1,17 @@
 package com.yyide.chatim.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.NoteBookActivity;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.chat.ConversationFragment;
 
@@ -32,6 +35,8 @@ public class MessageFragment extends BaseFragment {
     TextView line1;
     @BindView(R.id.line2)
     TextView line2;
+    @BindView(R.id.note)
+    LinearLayout note;
     private View mBaseView;
 
 
@@ -47,8 +52,10 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+/////////-******
         setTab(0);
+
+
     }
 
     void setTab(int position) {
@@ -89,7 +96,7 @@ public class MessageFragment extends BaseFragment {
         ft.commitAllowingStateLoss();
     }
 
-    @OnClick({R.id.tab1, R.id.tab2})
+    @OnClick({R.id.tab1, R.id.tab2,R.id.note})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1:
@@ -97,6 +104,9 @@ public class MessageFragment extends BaseFragment {
                 break;
             case R.id.tab2:
                 setTab(1);
+                break;
+            case R.id.note:
+                startActivity(new Intent(mActivity, NoteBookActivity.class));
                 break;
         }
     }

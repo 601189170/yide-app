@@ -85,8 +85,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         adapter = new TableTimeAdapter();
         grid.setAdapter(adapter);
         createLeftTypeView(0,1,1);
-        createLeftTypeView(2,2,2);
-        createLeftTypeView(4,3,3);
+        createLeftTypeView(1,2,2);
+        createLeftTypeView(3,3,3);
 //        createLeftTypeView(6,4,4);
 //        titleLayout.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -125,20 +125,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
             View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card_type2, null);
 //            View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card, null);
-            switch (type){
-                case 1:
-                    view.setBackground(getResources().getDrawable(R.drawable.bg_table_type1));
-                    break;
-                case 2:
-                    view.setBackground(getResources().getDrawable(R.drawable.bg_table_type2));
-                    break;
-                case 3:
-                    view.setBackground(getResources().getDrawable(R.drawable.bg_table_type3));
-                    break;
-                case 4:
-                    view.setBackground(getResources().getDrawable(R.drawable.bg_table_type4));
-                    break;
-            }
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CouseHeight * length); //设置布局高度,即跨多少节课
 //            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CouseHeight*length);
             view.setY(CouseHeight * selection);
@@ -146,6 +133,25 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             view.setLayoutParams(params);
             TextView text = view.findViewById(R.id.text_view);
             text.setText("");
+
+        switch (type){
+            case 1:
+                view.setBackground(getResources().getDrawable(R.drawable.bg_table_type1));
+                text.setText("早\n读");
+                break;
+            case 2:
+                view.setBackground(getResources().getDrawable(R.drawable.bg_table_type2));
+                text.setText("上\n午");
+                break;
+            case 3:
+                view.setBackground(getResources().getDrawable(R.drawable.bg_table_type3));
+                text.setText("下\n午");
+                break;
+            case 4:
+                view.setBackground(getResources().getDrawable(R.drawable.bg_table_type4));
+                text.setText("晚\n自\n习");
+                break;
+        }
             leftType.addView(view);
 
     }

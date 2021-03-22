@@ -170,6 +170,7 @@
         <activity android:name=".activity.PowerActivity"></activity>
         <activity android:name=".activity.FriendProfileActivity"></activity>
         <activity android:name=".activity.TableActivity"></activity>
+        <activity android:name=".activity.NoteBookActivity"></activity>
         <activity android:name=".ScanActivity">
 
 

@@ -31,6 +31,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PowerActivity;
+import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.adapter.UserAdapter;
 import com.yyide.chatim.utils.GlideUtil;
@@ -188,18 +189,22 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        hide();
         switch (v.getId()){
+
             case R.id.layout1:
-                hide();
+
                 new BottomMenuPop(context);
                 break;
             case R.id.layout2:
                 break;
             case R.id.layout3:
-                hide();
+
                 context.startActivity(new Intent(context, UserActivity.class));
                 break;
             case R.id.layout4:
+
+                context.startActivity(new Intent(context, ResetPassWordActivity.class));
                 break;
             case R.id.layout5:
                 break;
