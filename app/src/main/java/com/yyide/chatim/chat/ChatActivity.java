@@ -2,7 +2,9 @@ package com.yyide.chatim.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.tencent.imsdk.v2.V2TIMManager;
 
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
@@ -46,6 +48,7 @@ public class ChatActivity extends BaseActivity {
     private void chat(Intent intent) {
         Bundle bundle = intent.getExtras();
         DemoLog.i(TAG, "bundle: " + bundle + " intent: " + intent);
+//        Log.e(TAG, "chat==>bundle: "+ JSON.toJSONString(bundle));
         if (bundle == null) {
             startSplashActivity(null);
             return;

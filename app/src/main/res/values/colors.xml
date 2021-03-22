@@ -50,6 +50,7 @@
     <color name="blue7">#4F91FF</color>
     <color name="blue8">#4E7BA3</color>
     <color name="blue9">#389CFF</color>
+    <color name="blue11">#2C8AFF</color>
     <color name="linelv">#F6F8FE</color>
 
     <color name="red">#FE5D61</color>
@@ -59,7 +60,7 @@
     <color name="hint">#BFBFBF</color>
     <color name="hs">#F8F8F8</color>
     <color name="hs2">#F7F7FD</color>
-    <color name="item_view_selected_color">#cfcfcf</color>
+    <color name="item_view_selected_color">#cfcfcf  </color>
 
     <color name="item_view_normal_color">#FFFFFFFF</color>
     <color name="orderCheck">#3782FF</color>
@@ -69,4 +70,7 @@
     <color name="black11">#999999</color>
     <color name="blue10">#5092FF</color>
     <color name="black12">#505050</color>
+    <color name="alfph">#50000000</color>
+    <color name="line_10">#EEF2F8</color>
+    <color name="line_11">#DCDFE6</color>
 </resources>

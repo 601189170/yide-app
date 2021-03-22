@@ -2,47 +2,61 @@ package com.yyide.chatim;
 
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
-import android.widget.RemoteViews;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.blankj.utilcode.util.AppUtils;
-import com.blankj.utilcode.util.DeviceUtils;
-import com.example.zhouwei.library.CustomPopWindow;
-import com.yyide.chatim.base.BaseActivity;
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.SPUtils;
+
+import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
+import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.home.adress.AdressFragment;
-import com.yyide.chatim.home.home.HomeFragment;
-import com.yyide.chatim.home.user.UserFragment;
+import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.home.AppFragment;
+import com.yyide.chatim.home.HelpFragment;
+import com.yyide.chatim.home.HomeFragment;
+import com.yyide.chatim.home.HomeFragmentXZ;
+import com.yyide.chatim.home.MessageFragment;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
-import com.yyide.chatim.jiguang.NoticeActivity;
-import com.yyide.chatim.model.DeviceUpdateRsp;
-import com.yyide.chatim.myrequest.requestbean.DeviceUpdateReq;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
+import com.yyide.chatim.model.ScheduleRsp;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.model.SelectUserRsp;
+import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.listTimeDataRsp;
+import com.yyide.chatim.presenter.EventType;
+import com.yyide.chatim.presenter.MainPresenter;
+import com.yyide.chatim.utils.DemoLog;
+import com.yyide.chatim.view.MainView;
 
-import androidx.core.app.NotificationCompat;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -50,34 +64,63 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView {
 
 
     @BindView(R.id.content)
     FrameLayout content;
-    @BindView(R.id.work)
-    CheckedTextView work;
-    @BindView(R.id.work_layout)
-    FrameLayout workLayout;
-    @BindView(R.id.adress)
-    CheckedTextView adress;
-    @BindView(R.id.adress_layout)
-    FrameLayout adressLayout;
-    @BindView(R.id.user)
-    CheckedTextView user;
-    @BindView(R.id.user_layout)
-    FrameLayout userLayout;
 
 
     //for receive customer msg from jpush server
     public static boolean isForeground = false;
-    @BindView(R.id.title)
-    TextView title;
+
+    @BindView(R.id.tab1)
+    CheckedTextView tab1;
+    @BindView(R.id.tab1_layout)
+    FrameLayout tab1Layout;
+    @BindView(R.id.tab2)
+    CheckedTextView tab2;
+    @BindView(R.id.tab2_layout)
+    FrameLayout tab2Layout;
+    @BindView(R.id.tab3)
+    CheckedTextView tab3;
+    @BindView(R.id.tab3_layout)
+    FrameLayout tab3Layout;
+    @BindView(R.id.tab4)
+    CheckedTextView tab4;
+    @BindView(R.id.tab4_layout)
+    FrameLayout tab4Layout;
+    @BindView(R.id.msg_total_unread)
+    UnreadCountTextView msgTotalUnread;
+
+
+
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
+    public int IdType = 1;
+    public String TAG = "MainActivity";
+
+    private Dialog mDialog;
+    /**
+     * request Code 从相册选择照片不裁切
+     **/
+    private final static int SELECT_ORIGINAL_PIC = 126;
+    /**
+     * request Code 拍取照片不裁切
+     **/
+    private final static int REQ_CODE = 127;
+    private Uri imageUri;
+    private long firstTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,46 +128,149 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         registerMessageReceiver();  // used for receive msg
-
-
-//        getSupportFragmentManager().beginTransaction().replace(R.id.content, new QrCodeFragment()).commitAllowingStateLoss();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.empty_view, fragment).commitAllowingStateLoss();
-//        showNotice(this);
-
-//        setPm("1");
-
-//        setTab(0);
-
-
         permission();
 
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopBottom();
-            }
-        });
+        // 未读消息监视器
+        ConversationManagerKit.getInstance().addUnreadWatcher(this);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            showPopBottom();
-            }
-        },5000);
+        EventBus.getDefault().register(this);
+        setTab(0);
+//        startActivity(new Intent(this, ResetPassWordActivity.class));
+//        new Handler().postDelayed(new Runnable() {
+//                @Override
+//            public void run() {
+//                mvpPresenter.Login("13659896596","896596");
+//            }
+//        },5000);
 
 
+//        mvpPresenter.getselectUser();
+
+//        mvpPresenter.ToUserLogout();
+
+//        mvpPresenter.getUserSchool();
+//        mvpPresenter.SelectSchByTeaid();
+
+
+//        mvpPresenter.listAllScheduleByTeacherId();
+
+//        CheacklistSchedule("99","1","10");
+
+//        Log.e(TAG, "getNativePhoneNumber==》: "+new PhoneInfoUtils(this).getPhoneInfo());
+//        selectFromGallery();
+
+        //初始化imageUri
+//        selectFromTake();
     }
-    private void showPopBottom(){
-        View contentView = LayoutInflater.from(this).inflate(R.layout.msg_layout2, null);
-        CustomPopWindow popWindow = new CustomPopWindow.PopupWindowBuilder(this)
 
-                .setView(R.layout.msg_layout2)
-                .setFocusable(true)
-                .setOutsideTouchable(true)
-                .create();
-        popWindow.showAtLocation(contentView, Gravity.TOP,0,0);
+//    /**
+//     * 拍取照片不裁切
+//     */
+//    private void selectFromTake() {
+//        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//用来打开相机的Intent
+//        if (takePhotoIntent.resolveActivity(getPackageManager()) != null) {//这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
+//            startActivityForResult(takePhotoIntent, REQ_CODE);//启动相机
+//        }
+//    }
 
+
+    //    private void selectFromGallery() {
+//        // TODO Auto-generatedmethod stub
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_PICK);//Pick an item fromthe data
+//        intent.setType("image/*");//从所有图片中进行选择
+//        startActivityForResult(intent, SELECT_ORIGINAL_PIC);
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        // TODO Auto-generated method stub
+//        switch (requestCode) {
+//
+//            case SELECT_ORIGINAL_PIC:
+//                if (resultCode == RESULT_OK) {//从相册选择照片不裁切
+//                    try {
+//                        Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
+//                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                        Cursor cursor = getContentResolver().query(selectedImage,
+//                                filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
+//                        cursor.moveToFirst();
+//                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                        String picturePath = cursor.getString(columnIndex);  //获取照片路径
+//                        cursor.close();
+//
+//                        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+//                        Log.e(TAG, "onActivityResult: " + JSON.toJSONString(bitmap));
+////                        img.setImageBitmap(bitmap);
+//
+//                    } catch (Exception e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
+//                }
+//                break;
+//
+//
+//        }
+//        if (requestCode == REQ_CODE && resultCode == RESULT_OK) {
+//            /*缩略图信息是储存在返回的intent中的Bundle中的，
+//            * 对应Bundle中的键为data，因此从Intent中取出
+//            * Bundle再根据data取出来Bitmap即可*/
+//            Bundle extras = data.getExtras();
+//            Bitmap bitmap = (Bitmap) extras.get("data");
+//            img.setImageBitmap(bitmap);
+////            Log.e(TAG, "img==》: " + JSON.toJSONString(extras));
+//        }
+//
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
+
+
+    @Override
+    protected MainPresenter createPresenter() {
+        return new MainPresenter(this);
     }
+
+
+    @Override
+    protected void onStop() {
+        DemoLog.i("TAG", "onStop");
+        ConversationManagerKit.getInstance().destroyConversation();
+        super.onStop();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        long secondTime = System.currentTimeMillis();
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                if (secondTime - firstTime < 2000) {
+                    ActivityUtils.finishAllActivities();
+                } else {
+                    Toast.makeText(getApplicationContext(), "再按一次返回键退出", Toast.LENGTH_SHORT).show();
+                    firstTime = System.currentTimeMillis();
+                }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventType messageEvent) {
+        if (messageEvent.i == BaseConstant.CheakId) {
+            IdType = 2;
+            ActivityUtils.finishAllActivities();
+            startActivity(new Intent(this, MainActivity.class));
+            Log.e("TAG", "messageEvent: " + IdType);
+            setTab(0);
+        }
+    }
+
+
     /**
      * @Author: Berlin
      * @Date: 2018/12/19 14:37
@@ -162,6 +308,132 @@ public class MainActivity extends BaseActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);
     }
 
+    @Override
+    public void updateUnread(int count) {
+        Log.e("Chatim", "updateUnread==>: " + count);
+
+        if (count > 0) {
+            msgTotalUnread.setVisibility(View.VISIBLE);
+        } else {
+            msgTotalUnread.setVisibility(View.GONE);
+        }
+        String unreadStr = "" + count;
+        if (count > 100) {
+            unreadStr = "99+";
+        }
+        msgTotalUnread.setText(unreadStr);
+        // 华为离线推送角标
+//        HUAWEIHmsMessageService.updateBadge(this, count);
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void getData(SelectUserRsp rsp) {
+        Log.e("TAG", "getData==》: " + JSON.toJSONString(rsp));
+
+    }
+
+    @Override
+    public void getDataFail(String msg) {
+        Log.e("TAG", "getDataFail==》: " + JSON.toJSONString(msg));
+    }
+
+    @Override
+    public void UserLogoutData(UserLogoutRsp rsp) {
+        Log.e("TAG", "UserLogoutData==》: " + JSON.toJSONString(rsp));
+    }
+
+    @Override
+    public void UserLogoutDataFail(String msg) {
+        Log.e("TAG", "UserLogoutDataFail==》: " + JSON.toJSONString(msg));
+    }
+
+    @Override
+    public void getUserSchool(GetUserSchoolRsp rsp) {
+        Log.e("TAG", "GetUserSchoolRsp==》: " + JSON.toJSONString(rsp));
+        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+        if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
+            SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+        }
+
+    }
+
+    @Override
+    public void getUserSchoolDataFail(String rsp) {
+        Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
+    }
+
+    @Override
+    public void selectSchByTeaid(SelectSchByTeaidRsp rsp) {
+        Log.e("TAG", "selectSchByTeaid==》: " + JSON.toJSONString(rsp));
+    }
+
+    @Override
+    public void selectSchByTeaidDataFail(String rsp) {
+        Log.e("TAG", "selectSchByTeaidDataFail==》: " + JSON.toJSONString(rsp));
+    }
+
+    @Override
+    public void listAllScheduleByTeacherId(ListAllScheduleByTeacherIdRsp rsp) {
+        Log.e("TAG", "listAllScheduleByTeacherId==》: " + JSON.toJSONString(rsp));
+    }
+
+    @Override
+    public void listAllScheduleByTeacherIdDataFail(String rsp) {
+        Log.e("TAG", "listAllScheduleByTeacherIdDataFail==》: " + JSON.toJSONString(rsp));
+    }
+
+
+
+    OkHttpClient mOkHttpClient = new OkHttpClient();
+
+    void CheacklistSchedule(String teacherId, String current, String size) {
+        ScheduleRsp rsp = new ScheduleRsp();
+        rsp.teacherId = teacherId;
+        rsp.current = current;
+        rsp.size = size;
+        RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
+
+        //请求组合创建
+        Request request = new Request.Builder()
+                .url(BaseConstant.URL_IP + "/timetable/cloud-timetable/schedule/listSchedule")
+                .addHeader("Authorization", SpData.User().token)
+                .post(requestBody)
+                .build();
+        //发起请求
+
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", "onFailure: " + e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                Log.e("TAG", "mOkHttpClientlistSchedule==>: " + data);
+//                SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
+//                if (bean.code==BaseConstant.REQUEST_SUCCES2){
+//                    Tologin(bean.data.username,bean.data.password, String.valueOf(schoolId));
+//                }
+            }
+        });
+    }
+
     public class MessageReceiver extends BroadcastReceiver {
 
         @Override
@@ -184,7 +456,6 @@ public class MainActivity extends BaseActivity {
 
     private void setCostomMsg(String msg) {
         Log.e("TAG", "setCostomMsg: " + msg);
-
     }
 
     @Override
@@ -200,44 +471,61 @@ public class MainActivity extends BaseActivity {
     }
 
     void setTab(int position) {
-        work.setChecked(false);
-        adress.setChecked(false);
-        user.setChecked(false);
+
+        tab1.setChecked(false);
+        tab2.setChecked(false);
+        tab3.setChecked(false);
+        tab4.setChecked(false);
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment fg1 = fm.findFragmentByTag(String.valueOf(work.getId()));
-        Fragment fg2 = fm.findFragmentByTag(String.valueOf(adress.getId()));
-        Fragment fg3 = fm.findFragmentByTag(String.valueOf(user.getId()));
+        Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
+        Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
+        Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
+        Fragment fg4 = fm.findFragmentByTag(String.valueOf(tab4.getId()));
         if (fg1 != null) ft.hide(fg1);
         if (fg2 != null) ft.hide(fg2);
         if (fg3 != null) ft.hide(fg3);
+        if (fg4 != null) ft.hide(fg4);
 
         switch (position) {
             case 0:
-
                 if (fg1 == null) {
-                    fg1 = new HomeFragment();
-                    ft.add(R.id.content, fg1, String.valueOf(work.getId()));
+                    //身份切换
+                    if (IdType == 1) {
+                        fg1 = new HomeFragment();
+//                        fg1 = new HomeFragment2();
+                    } else {
+                        fg1 = new HomeFragmentXZ();
+                    }
+                    ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
                 } else
                     ft.show(fg1);
-                work.setChecked(true);
+                tab1.setChecked(true);
                 break;
             case 1:
                 if (fg2 == null) {
-                    fg2 = new AdressFragment();
-                    ft.add(R.id.content, fg2, String.valueOf(adress.getId()));
+                    fg2 = new MessageFragment();
+                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
                     ft.show(fg2);
-                adress.setChecked(true);
+                tab2.setChecked(true);
                 break;
             case 2:
                 if (fg3 == null) {
-                    fg3 = new UserFragment();
-                    ft.add(R.id.content, fg3, String.valueOf(user.getId()));
+                    fg3 = new AppFragment();
+                    ft.add(R.id.content, fg3, String.valueOf(tab3.getId()));
                 } else
                     ft.show(fg3);
-                user.setChecked(true);
+                tab3.setChecked(true);
+                break;
+            case 3:
+                if (fg4 == null) {
+                    fg4 = new HelpFragment();
+                    ft.add(R.id.content, fg4, String.valueOf(tab4.getId()));
+                } else
+                    ft.show(fg4);
+                tab4.setChecked(true);
                 break;
 
         }
@@ -246,83 +534,30 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
 
     }
 
-    private void setPm(String type) {
-        DeviceUpdateReq req = new DeviceUpdateReq();
-        req.machineCode = DeviceUtils.getAndroidID();
-//        req.officeId = SpData.getDiviceName().office_id;
-        req.deviceDirection = type;
-
-        MyApp.getInstance().requestData(this, req, new listener22(), new registerErrorListener());
-    }
-
-    @OnClick({R.id.work_layout, R.id.adress_layout, R.id.user_layout})
+    @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.work_layout:
+            case R.id.tab1_layout:
                 setTab(0);
-
                 break;
-            case R.id.adress_layout:
+            case R.id.tab2_layout:
                 setTab(1);
                 break;
-            case R.id.user_layout:
+            case R.id.tab3_layout:
                 setTab(2);
+                break;
+            case R.id.tab4_layout:
+                setTab(3);
                 break;
         }
     }
 
 
-    class listener22 implements Response.Listener<DeviceUpdateRsp> {
-        @Override
-        public void onResponse(DeviceUpdateRsp rsp) {
-
-            if (rsp.status == BaseConstant.REQUEST_SUCCES || rsp.status == BaseConstant.REQUEST_SUCCES2) {
-
-            }
-        }
-    }
-
-    class registerErrorListener implements Response.ErrorListener {
-        @Override
-        public void onErrorResponse(VolleyError volleyError) {
-            Log.e("fortime", "GetDeviceNameRsp+Error:" + JSON.toJSONString(volleyError));
-        }
-    }
-
-    private void showNotice(Context context) {
-//        String title = indexAd.getTitle();
-        // 使用remoteViews去加载自定义布局
-        RemoteViews remoteViews = new RemoteViews(AppUtils.getAppPackageName(), R.layout.notification_custom);
-//        remoteViews.setTextViewText(R.id.tv_title, title);
-//        remoteViews.setTextViewText(R.id.tv_price, "￥"+indexAd.getEndPrice()+"元");
-//        remoteViews.setTextViewText(R.id.tv_time, TimeUtils.tsToMs(indexAd.getTime()));
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.fff, null);//将资源文件转化为bitmap
-        remoteViews.setImageViewBitmap(R.id.iv_pic, bitmap);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, NoticeActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        NotificationCompat.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("渠道ID", "优惠券商品", NotificationManager.IMPORTANCE_LOW);
-            manager.createNotificationChannel(channel);
-            builder = new NotificationCompat.Builder(context, "渠道ID");
-        } else {
-            builder = new NotificationCompat.Builder(context);
-        }
-        Notification notification = builder
-                .setSmallIcon(R.mipmap.fff)
-                .setContentTitle("aaa")
-                .setContentText("bbb")
-                .setContentIntent(contentIntent)
-                .setContent(remoteViews)
-                .setAutoCancel(true)
-                .build();
-        manager.notify(0, notification);
-    }
 }

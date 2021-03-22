@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/bg"
+
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_white_top"
+        android:id="@+id/layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+
+        <TextView
+            android:id="@+id/s1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:text="拍摄"
+            android:textColor="#ff212121"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:background="#DCDFE6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+        <TextView
+            android:id="@+id/s2"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:text="从手机相册选择"
+            android:textColor="#ff212121"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:background="#F5F8FC"
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/s3"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:text="取消"
+            android:textColor="#ff212121"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
+</FrameLayout>

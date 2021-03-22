@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/bg"
+
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="500dp">
+
+        <ListView
+            android:id="@+id/listview"
+            android:divider="@color/transparent"
+            android:dividerHeight="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+
+
+    </FrameLayout>
+</FrameLayout>

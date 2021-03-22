@@ -1,0 +1,177 @@
+package com.yyide.chatim.home;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.SPUtils;
+import com.yyide.chatim.R;
+import com.yyide.chatim.ScanActivity;
+import com.yyide.chatim.SpData;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.dialog.LeftMenuPop;
+import com.yyide.chatim.homemodel.AttenceFragment;
+import com.yyide.chatim.homemodel.BannerFragment;
+import com.yyide.chatim.homemodel.ClassHonorFragment;
+import com.yyide.chatim.homemodel.NoticeFragment;
+import com.yyide.chatim.homemodel.StudentHonorFragment;
+import com.yyide.chatim.homemodel.TableFragment;
+import com.yyide.chatim.homemodel.WorkFragment;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.presenter.HomeFragmentPresenter;
+import com.yyide.chatim.view.HomeFragmentView;
+
+import androidx.annotation.Nullable;
+import butterknife.BindView;
+import butterknife.OnClick;
+
+
+public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> implements HomeFragmentView {
+
+    @BindView(R.id.user_img)
+    FrameLayout userImg;
+    @BindView(R.id.scan)
+    ImageView scan;
+    @BindView(R.id.table_content)
+    FrameLayout tableContent;
+    @BindView(R.id.notice_content)
+    FrameLayout noticeContent;
+    @BindView(R.id.kq_content)
+    FrameLayout kqContent;
+    @BindView(R.id.banner_content)
+    FrameLayout bannerContent;
+    @BindView(R.id.work_content)
+    FrameLayout workContent;
+    @BindView(R.id.class_honor_content)
+    FrameLayout classHonorContent;
+    @BindView(R.id.student_honor_content)
+    FrameLayout studentHonorContent;
+    @BindView(R.id.user_name)
+    TextView userName;
+    @BindView(R.id.school_name)
+    TextView schoolName;
+    @BindView(R.id.spmsg)
+    TextView spmsg;
+    private View mBaseView;
+
+    private long firstTime = 0;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        mBaseView = inflater.inflate(R.layout.home_fragmnet, container, false);
+        return mBaseView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        showProgressDialog2();
+
+
+        userImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new LeftMenuPop(mActivity);
+
+
+            }
+        });
+
+        setFragment();
+
+
+        mvpPresenter.getUserSchool();
+    }
+
+    @Override
+    protected HomeFragmentPresenter createPresenter() {
+        return new HomeFragmentPresenter(this);
+    }
+
+
+    @OnClick({R.id.user_img, R.id.scan})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.user_img:
+//                new LeftMenuPop(mActivity);
+                break;
+            case R.id.scan:
+                startActivity(new Intent(getActivity(), ScanActivity.class));
+                break;
+        }
+    }
+
+    void setFragment() {
+        //课表
+        getChildFragmentManager().beginTransaction().add(R.id.table_content, new TableFragment()).commit();
+        //通知
+        getChildFragmentManager().beginTransaction().add(R.id.notice_content, new NoticeFragment()).commit();
+        //考勤情况
+        getChildFragmentManager().beginTransaction().add(R.id.kq_content, new AttenceFragment()).commit();
+        //相册轮播
+        getChildFragmentManager().beginTransaction().add(R.id.banner_content, new BannerFragment()).commit();
+        //作业
+        getChildFragmentManager().beginTransaction().add(R.id.work_content, new WorkFragment()).commit();
+        //班级荣誉
+        getChildFragmentManager().beginTransaction().add(R.id.class_honor_content, new ClassHonorFragment()).commit();
+        //学生荣誉
+        getChildFragmentManager().beginTransaction().add(R.id.student_honor_content, new StudentHonorFragment()).commit();
+
+    }
+
+    @Override
+    public void getUserSchool(GetUserSchoolRsp rsp) {
+        Log.e("TAG", "getUserSchool==》: " + JSON.toJSONString(rsp));
+        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+        if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
+            SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+        }
+        setSchoolInfo(rsp);
+
+    }
+    void setSchoolInfo(GetUserSchoolRsp rsp){
+        int ids =0;
+        if (!TextUtils.isEmpty(SpData.SchoolId())){
+            ids= Integer.parseInt(SpData.SchoolId());
+            String  qhSchool="";
+            String  qhName="";
+            String  qhPhoto="";
+            for (GetUserSchoolRsp.DataBean datum : SpData.Schoolinfo().data) {
+                if (datum.schoolId==ids){
+                    qhSchool=datum.schoolName;
+                    qhName=datum.username;
+                    if (datum.imgList.size()>0){
+                        qhPhoto=datum.imgList.get(0);
+                        SPUtils.getInstance().put(SpData.USERPHOTO,qhPhoto);
+                    }
+
+                }
+            }
+            schoolName.setText(qhSchool);
+            userName.setText(qhName);
+            SPUtils.getInstance().put(SpData.USERNAME,qhName);
+        }else {
+
+            schoolName.setText(rsp.data.get(0).schoolName);
+            userName.setText(rsp.data.get(0).username);
+            SPUtils.getInstance().put(SpData.USERNAME,rsp.data.get(0).username);
+            if (rsp.data.get(0).imgList.size()>0){
+                SPUtils.getInstance().put(SpData.USERPHOTO,rsp.data.get(0).imgList.get(0));
+            }
+        }
+
+    }
+    @Override
+    public void getUserSchoolDataFail(String rsp) {
+        Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
+    }
+}

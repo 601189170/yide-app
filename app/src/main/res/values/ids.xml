@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="module1" type="id" />
+    <item name="module2" type="id" />
+    <item name="module3" type="id" />
+    <item name="module4" type="id" />
+    <item name="module5" type="id" />
+    <item name="module6" type="id" />
+    <item name="module7" type="id" />
+    <item name="module8" type="id" />
+    <item name="module9" type="id" />
+    <item name="module10" type="id" />
+    <item name="module11" type="id" />
+    <item name="module12" type="id" />
+
+
+
+
+    <item name="module2_1" type="id" />
+    <item name="module2_2" type="id" />
+    <item name="module2_3" type="id" />
+    <item name="module2_4" type="id" />
+    <item name="module2_5" type="id" />
+    <item name="module2_6" type="id" />
+    <item name="module2_7" type="id" />
+    <item name="module2_8" type="id" />
+    <item name="module2_9" type="id" />
+    <item name="module2_10" type="id" />
+    <item name="module2_11" type="id" />
+    <item name="module2_12" type="id" />
+</resources>

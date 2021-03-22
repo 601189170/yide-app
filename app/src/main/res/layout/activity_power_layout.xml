@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F8FC"
+    android:layout_height="match_parent"
+    >
+    <FrameLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="44dp">
+        <TextView
+            android:textColor="#222222"
+            android:text="权限设置"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/back"
+            android:layout_marginLeft="12dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/create_c2c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <include
+        layout="@layout/tk_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></include>
+    <include
+        layout="@layout/jz_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></include>
+    <include
+        layout="@layout/jzg_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></include>
+
+    <FrameLayout
+        android:background="@color/white"
+        android:layout_marginTop="10dp"
+        android:id="@+id/layout10"
+        android:paddingLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:text="班主任可发送班级通知公告"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#212121"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckedTextView
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="22dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

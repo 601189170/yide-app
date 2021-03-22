@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/white"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:textColor="#222222"
+        android:textSize="18sp"
+        android:text="帮助"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="44dp" />
+  <LinearLayout
+      android:paddingBottom="8dp"
+      android:paddingLeft="12dp"
+      android:paddingRight="12dp"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="109dp">
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_corners_blued_10"
+        android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_gravity="right|bottom"
+        android:background="@drawable/help_rm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+      <TextView
+          android:text="入门指南"
+          android:textSize="18sp"
+          android:textStyle="bold"
+          android:textColor="#183764"
+          android:layout_marginTop="18dp"
+          android:layout_marginLeft="13dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <TextView
+          android:id="@+id/rmtext"
+          android:text="视频和文字教程，帮助你快速上手"
+          android:textSize="12sp"
+          android:textColor="#183764"
+          android:layout_marginTop="49dp"
+          android:layout_marginLeft="13dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+    </FrameLayout>
+    <TextView
+
+        android:layout_width="12dp"
+        android:layout_height="wrap_content" />
+    <FrameLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:background="@drawable/bg_corners_redd_10"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+      <TextView
+
+          android:text="进阶使用"
+          android:textSize="18sp"
+          android:textStyle="bold"
+          android:textColor="#7A3133"
+          android:layout_marginTop="18dp"
+          android:layout_marginLeft="13dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <TextView
+          android:id="@+id/jjtext"
+
+          android:text="便捷省心的应用操作技巧"
+          android:textSize="12sp"
+          android:textColor="#7A3133"
+          android:layout_marginTop="49dp"
+          android:layout_marginLeft="13dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+      <TextView
+          android:layout_gravity="right|bottom"
+          android:background="@drawable/help_jj"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+
+    </FrameLayout>
+  </LinearLayout>
+  <TextView
+      android:background="#F5F8FC"
+      android:layout_width="match_parent"
+      android:layout_height="8dp" />
+  <LinearLayout
+      android:paddingLeft="24dp"
+      android:paddingRight="24dp"
+      android:layout_weight="1"
+      android:layout_width="match_parent"
+      android:layout_height="0dp">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginTop="23dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+    <TextView
+
+        android:background="@drawable/bg_gradite_blue"
+        android:layout_width="3dp"
+        android:layout_height="10dp" />
+      <TextView
+          android:layout_marginLeft="5dp"
+          android:textColor="#222222"
+          android:textStyle="bold"
+          android:textSize="16sp"
+          android:text="常见问题"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

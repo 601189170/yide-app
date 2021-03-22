@@ -1,23 +1,31 @@
 package com.yyide.chatim.jiguang;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import androidx.core.app.NotificationCompat;
 import cn.jpush.android.api.CmdMessage;
 import cn.jpush.android.api.CustomMessage;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.api.NotificationMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class PushMessageReceiver extends JPushMessageReceiver{
     private static final String TAG = "PushMessageReceiver";
@@ -122,6 +130,7 @@ public class PushMessageReceiver extends JPushMessageReceiver{
             String extras = customMessage.extra;
             Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
             msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+//            showNotice();
             if (!ExampleUtil.isEmpty(extras)) {
                 try {
                     JSONObject extraJson = new JSONObject(extras);
@@ -129,14 +138,29 @@ public class PushMessageReceiver extends JPushMessageReceiver{
                         msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
                     }
                 } catch (JSONException e) {
-
                 }
-
             }
             LocalBroadcastManager.getInstance(context).sendBroadcast(msgIntent);
         }
     }
-
+    private void showNotice(Context context,String msg){
+        NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("渠道ID", "优惠券商品", NotificationManager.IMPORTANCE_LOW);
+            manager.createNotificationChannel(channel);
+            builder = new NotificationCompat.Builder(context, "渠道ID");
+        }else {
+            builder = new NotificationCompat.Builder(context);
+        }
+        Notification notification = builder
+                .setSmallIcon(R.mipmap.fff)
+                .setContentTitle("我是一个标题")
+                .setContentText(msg)
+                .setAutoCancel(true)
+                .build();
+        manager.notify(0,notification);
+    }
     @Override
     public void onNotificationSettingsCheck(Context context, boolean isOn, int source) {
         super.onNotificationSettingsCheck(context, isOn, source);

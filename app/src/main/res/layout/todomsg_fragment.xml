@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="10dp"
+    android:background="#F7FAFC"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:background="@drawable/bg_corners14"
+        android:layout_width="match_parent"
+        android:layout_height="28dp">
+
+    <CheckedTextView
+        android:id="@+id/tab1"
+        android:layout_width="0dp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:text="全部"
+        android:textColor="@color/blue_white_color"
+        android:background="@drawable/to_do_msg_tab"
+        android:layout_weight="1"
+        android:layout_height="match_parent" />
+        <CheckedTextView
+            android:background="@drawable/to_do_msg_tab"
+            android:text="待办"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/blue_white_color"
+            android:id="@+id/tab2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <CheckedTextView
+            android:id="@+id/tab3"
+            android:text="已办"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/blue_white_color"
+            android:background="@drawable/to_do_msg_tab"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listview"
+        android:dividerHeight="0dp"
+        android:divider="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+</LinearLayout>

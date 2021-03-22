@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:orientation="horizontal"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:background="@drawable/bg_white"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="177dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="39dp">
+
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/icon_zy"
+            android:layout_gravity="center_vertical"
+            android:layout_width="15dp"
+            android:layout_height="15dp" />
+            <TextView
+                android:text="今日作业"
+                android:textStyle="bold"
+                android:textColor="#1E232A"
+                android:textSize="15sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/line_10"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+    </LinearLayout>
+</LinearLayout>

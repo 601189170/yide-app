@@ -3,12 +3,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent">
-  <TextView
-      android:id="@+id/title"
-      android:background="@color/black"
-     android:layout_gravity="center_horizontal"
-      android:layout_width="200dp"
-      android:layout_height="200dp" />
+
  <FrameLayout
 
      android:id="@+id/content"
@@ -18,48 +13,131 @@
 
 
  <LinearLayout
+     android:background="@color/white"
      android:orientation="horizontal"
      android:layout_width="match_parent"
-     android:layout_height="80dp" >
+     android:layout_height="49dp" >
+
   <FrameLayout
-      android:id="@+id/work_layout"
+      android:id="@+id/tab1_layout"
       android:layout_width="0dp"
       android:layout_weight="1"
       android:layout_height="match_parent">
-   <CheckedTextView
-       android:id="@+id/work"
+   <LinearLayout
        android:layout_gravity="center"
-       android:background="@drawable/att_tab"
+       android:orientation="vertical"
        android:layout_width="wrap_content"
-       android:layout_height="wrap_content" />
-  </FrameLayout>
-  <FrameLayout
-      android:id="@+id/adress_layout"
-      android:layout_width="0dp"
-      android:layout_weight="1"
-      android:layout_height="match_parent">
-  <CheckedTextView
-      android:id="@+id/adress"
-      android:layout_gravity="center"
-      android:background="@drawable/att_tab"
-      android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+    <CheckedTextView
+        android:id="@+id/tab1"
 
-      android:layout_height="wrap_content" />
+        android:background="@drawable/home_tab1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="首页"
+        android:layout_marginTop="2dp"
+        android:textSize="10sp"
+        android:textColor="#1E232A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+   </LinearLayout>
+
+
+
+
   </FrameLayout>
   <FrameLayout
-      android:id="@+id/user_layout"
+      android:id="@+id/tab2_layout"
       android:layout_width="0dp"
       android:layout_weight="1"
       android:layout_height="match_parent">
-   <CheckedTextView
-       android:id="@+id/user"
+
+   <LinearLayout
        android:layout_gravity="center"
-       android:background="@drawable/att_tab"
+       android:orientation="vertical"
        android:layout_width="wrap_content"
-
-       android:layout_height="wrap_content" />
+       android:layout_height="wrap_content">
+    <CheckedTextView
+        android:id="@+id/tab2"
+        android:background="@drawable/home_tab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="信息"
+        android:layout_marginTop="2dp"
+        android:textSize="10sp"
+        android:textColor="#1E232A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+   </LinearLayout>
   </FrameLayout>
+  <FrameLayout
+      android:id="@+id/tab3_layout"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="match_parent">
 
+   <com.tencent.qcloud.tim.uikit.component.UnreadCountTextView
+       android:id="@+id/msg_total_unread"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:layout_marginLeft="50dp"
+       android:layout_marginTop="5dp"
+       android:gravity="center"
+       android:includeFontPadding="false"
+       android:minWidth="18.4dp"
+       android:minHeight="18.4dp"
+       android:textColor="#fff"
+       android:textSize="13.6sp"
+       android:visibility="gone" />
+   <LinearLayout
+       android:layout_gravity="center"
+       android:orientation="vertical"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+    <CheckedTextView
+        android:id="@+id/tab3"
+
+        android:background="@drawable/home_tab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="应用"
+        android:layout_marginTop="2dp"
+        android:textSize="10sp"
+        android:textColor="#1E232A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+   </LinearLayout>
+  </FrameLayout>
+  <FrameLayout
+      android:id="@+id/tab4_layout"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="match_parent">
+   <LinearLayout
+       android:layout_gravity="center"
+       android:orientation="vertical"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+    <CheckedTextView
+        android:id="@+id/tab4"
+
+        android:background="@drawable/home_tab4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="帮助"
+        android:layout_marginTop="2dp"
+        android:textSize="10sp"
+        android:textColor="#1E232A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+   </LinearLayout>
+  </FrameLayout>
  </LinearLayout>
 
 </LinearLayout>

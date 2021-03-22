@@ -16,12 +16,8 @@ import static com.yyide.chatim.myrequest.Object2Map.object2Map;
  * Created by Hao on 16/9/6.
  */
 public class GetData {
-    public static final String url = "http://120.76.189.190";
-
-//    public static final String url = "http://192.168.3.130";
-
-
-
+//    public static final String url = "http://120.76.189.190";
+    public static final String url = "https://api.uat.edu.1d1j.net";
     /**
      * 网络请求的解析的密匙key
      **/

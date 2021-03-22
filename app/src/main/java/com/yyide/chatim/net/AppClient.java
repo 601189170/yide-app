@@ -1,13 +1,19 @@
 package com.yyide.chatim.net;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
 
 import com.yyide.chatim.MyApp;
+import com.yyide.chatim.SpData;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import cn.jpush.android.cache.Sp;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -56,6 +62,7 @@ public class AppClient {
         if (mDingRetrofit == null) {
             mDingRetrofit = new Retrofit.Builder()
                     .baseUrl(DingApiStores.API_SERVER_URL)
+
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(getOkHttpClient())
@@ -79,6 +86,7 @@ public class AppClient {
             Cache cache = new Cache(httpCacheDirectory, cacheSize);
             builder.cache(cache);
             builder.addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR);
+//            builder.addInterceptor(new TokenHeaderInterceptor());
             okHttpClient = builder.build();
         }
         return okHttpClient;
@@ -94,11 +102,12 @@ public class AppClient {
             CacheControl cacheControl = cacheBuilder.build();
 
             Request request = chain.request();
-            if (!MyApp.isNetworkAvailable(MyApp.getInstance())) {
+            if (!TextUtils.isEmpty(SpData.User().token)) {
+                Log.e("TAG", "intercept: "+ JSON.toJSONString(SpData.User().token));
                 request = request.newBuilder()
+                .addHeader("Authorization", SpData.User().token)
                         .cacheControl(cacheControl)
                         .build();
-
             }
             Response originalResponse = chain.proceed(request);
             if (MyApp.isNetworkAvailable(MyApp.getInstance())) {
@@ -116,5 +125,22 @@ public class AppClient {
             }
         }
     };
+
+    public static class TokenHeaderInterceptor implements Interceptor {
+
+        @Override
+        public Response intercept(Chain chain) throws IOException{
+            String token = SpData.User().token;
+            if (TextUtils.isEmpty(token)) {
+                Request originalRequest = chain.request();
+                return chain.proceed(originalRequest);
+            }else {
+                Request originalRequest = chain.request();
+                Request updateRequest = originalRequest.newBuilder().header("access_token", token).build();
+                return chain.proceed(updateRequest);
+            }
+        }
+
+    }
 
 }

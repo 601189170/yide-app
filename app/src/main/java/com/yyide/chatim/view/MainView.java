@@ -3,7 +3,15 @@ package com.yyide.chatim.view;
 
 
 import com.yyide.chatim.base.BaseView;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
+import com.yyide.chatim.model.ListScheduleRsp;
+import com.yyide.chatim.model.LoginRsp;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.model.SelectUserRsp;
+import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.VideoEntity;
+import com.yyide.chatim.model.listTimeDataRsp;
 
 import java.util.List;
 
@@ -13,8 +21,25 @@ import java.util.List;
  */
 public interface MainView extends BaseView {
 
-    void getVideoSuccess(List<VideoEntity> videoEntity);
+    void getData(SelectUserRsp rsp);
 
-    void getVideoFail(String msg);
+    void getDataFail(String msg);
+
+    void UserLogoutData(UserLogoutRsp rsp);
+
+    void UserLogoutDataFail(String msg);
+
+    void getUserSchool(GetUserSchoolRsp rsp);
+
+    void getUserSchoolDataFail(String rsp);
+
+    void selectSchByTeaid(SelectSchByTeaidRsp rsp);
+
+    void selectSchByTeaidDataFail(String rsp);
+
+    void listAllScheduleByTeacherId(ListAllScheduleByTeacherIdRsp rsp);
+
+    void listAllScheduleByTeacherIdDataFail(String rsp);
+
 
 }

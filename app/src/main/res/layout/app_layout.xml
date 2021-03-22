@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+
+              android:layout_height="match_parent">
+  <FrameLayout
+      android:background="@color/white"
+      android:layout_width="match_parent"
+      android:layout_height="44dp">
+    <TextView
+        android:textColor="#222222"
+        android:text="应用"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_marginRight="12dp"
+        android:layout_gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+      <TextView
+          android:background="@drawable/app_nomal"
+          android:layout_gravity="center_vertical"
+          android:layout_width="14dp"
+          android:layout_height="13dp" />
+
+      <TextView
+          android:text="管理"
+          android:layout_marginLeft="5dp"
+          android:textSize="14sp"
+          android:textColor="#222222"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+    </LinearLayout>
+
+  </FrameLayout>
+  <!--<ScrollView-->
+      <!--android:layout_width="match_parent"-->
+      <!--android:layout_height="match_parent">-->
+
+  <LinearLayout
+
+      android:layout_marginTop="10dp"
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+  <LinearLayout
+    android:layout_marginLeft="12dp"
+      android:layout_marginRight="12dp"
+    android:orientation="vertical"
+      android:background="@drawable/bg_white"
+      android:layout_width="match_parent"
+      android:layout_height="200dp">
+      <TextView
+          android:text="我的应用"
+          android:textSize="15sp"
+          android:textColor="#333333"
+          android:textStyle="bold"
+          android:layout_marginLeft="21dp"
+          android:layout_marginTop="20dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+    <GridView
+
+        android:id="@+id/mygrid"
+        android:numColumns="4"
+        android:horizontalSpacing="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="23dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </GridView>
+  </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="11dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="49dp">
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recy"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+      </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    <ListView
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp"
+        android:dividerHeight="0dp"
+        android:divider="@color/transparent"
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+  </LinearLayout>
+
+  <!--</ScrollView>-->
+</LinearLayout>

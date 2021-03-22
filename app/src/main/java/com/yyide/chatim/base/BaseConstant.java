@@ -1,6 +1,8 @@
 package com.yyide.chatim.base;
 
 
+import okhttp3.MediaType;
+
 /**
  * Created by Hao on 17/10/26.
  * 常量
@@ -32,11 +34,26 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-    public static final String URL_IP = "http://120.76.189.190"; //用mina 未接收到数据的时候 调用190 获取学校 名称等id
+    public static final String URL_IP = "https://api.uat.edu.1d1j.net";
 
 
+    /*Base宽*/
+    public static int BaseWith =171;
+
+    /*Base高*/
+    public static int BaseHeight =177;
+
+    public static int CheakId =1;
+
+    public static final MediaType JSON= MediaType.parse("application/json; charset=utf-8");
 
 
-
-
+    /**
+     * request Code 从相册选择照片不裁切
+     **/
+    public final static int SELECT_ORIGINAL_PIC = 126;
+    /**
+     * request Code 拍取照片不裁切
+     **/
+    public final static int REQ_CODE = 127;
 }

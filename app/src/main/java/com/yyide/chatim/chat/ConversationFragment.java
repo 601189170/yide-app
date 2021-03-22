@@ -12,7 +12,6 @@ import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
 import com.tencent.imsdk.v2.V2TIMConversation;
-
 import com.tencent.imsdk.v2.V2TIMConversationResult;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
@@ -29,8 +28,6 @@ import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.MyApp;
 import com.yyide.chatim.R;
-
-
 import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.utils.Constants;
 
@@ -41,6 +38,7 @@ import androidx.annotation.Nullable;
 
 
 public class ConversationFragment extends BaseFragment {
+
 
     private View mBaseView;
     private ConversationLayout mConversationLayout;
@@ -69,14 +67,13 @@ public class ConversationFragment extends BaseFragment {
 
             @Override
             public void onError(int code, String desc) {
-                ToastUtil.toastShortMessage("onError==>"+desc);
+                ToastUtil.toastShortMessage("onError==>" + desc);
             }
 
             @Override
             public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
 //                v2TIMConversationResult.getConversationList();
-                ToastUtil.toastShortMessage("onSuccess==》"+JSON.toJSONString(v2TIMConversationResult.getConversationList()));
-
+//                ToastUtil.toastShortMessage("onSuccess==》"+JSON.toJSONString(v2TIMConversationResult.getConversationList()));
             }
         });
 
@@ -104,11 +101,13 @@ public class ConversationFragment extends BaseFragment {
 
         initTitleAction();
         initPopMenuAction();
-//        TitleBarLayout titleBarLayout = mConversationLayout.findViewById(R.id.conversation_title);
+        TitleBarLayout titleBarLayout = mConversationLayout.findViewById(R.id.conversation_title);
+        titleBarLayout.setVisibility(View.GONE);
+
 ////取控件当前的布局参数
 //        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleBarLayout.getLayoutParams();
 ////设置宽度值
-////        params.width = dip2px(getActivity(), width);
+////      params.width = dip2px(getActivity(), width);
 //        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
 ////设置高度值
 //        params.height = SizeUtils.dp2px(100);
@@ -213,7 +212,7 @@ public class ConversationFragment extends BaseFragment {
     }
 
     private void startChatActivity(ConversationInfo conversationInfo) {
-        Log.e("TAG", "startChatActivity==>: "+JSON.toJSONString(conversationInfo) );
+        Log.e("TAG", "startChatActivity==>: " + JSON.toJSONString(conversationInfo));
         ChatInfo chatInfo = new ChatInfo();
         chatInfo.setType(conversationInfo.isGroup() ? V2TIMConversation.V2TIM_GROUP : V2TIMConversation.V2TIM_C2C);
         chatInfo.setId(conversationInfo.getId());
@@ -223,5 +222,9 @@ public class ConversationFragment extends BaseFragment {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         MyApp.getInstance().startActivity(intent);
     }
+
+
+
+
 
 }
