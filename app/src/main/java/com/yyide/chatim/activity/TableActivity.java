@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
@@ -34,12 +35,17 @@ public class TableActivity extends BaseActivity {
     TextView line2;
     @BindView(R.id.content)
     FrameLayout content;
+    @BindView(R.id.back_layout)
+    LinearLayout backLayout;
+    @BindView(R.id.title)
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_title);
         ButterKnife.bind(this);
+        title.setText("课表");
         setTab(0);
     }
 
@@ -72,7 +78,7 @@ public class TableActivity extends BaseActivity {
             case 0:
                 if (fg1 == null) {
                     fg1 = new MyTableFragment();
-                        ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
+                    ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
                 } else
                     ft.show(fg1);
                 tab1.setChecked(true);
@@ -91,7 +97,7 @@ public class TableActivity extends BaseActivity {
         ft.commitAllowingStateLoss();
     }
 
-    @OnClick({R.id.tab1, R.id.tab2})
+    @OnClick({R.id.tab1, R.id.tab2, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1:
@@ -100,6 +106,11 @@ public class TableActivity extends BaseActivity {
             case R.id.tab2:
                 setTab(1);
                 break;
+            case R.id.back_layout:
+                finish();
+                break;
         }
     }
+
+
 }

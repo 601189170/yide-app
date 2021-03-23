@@ -1,31 +1,46 @@
 package com.yyide.chatim.activity;
 
 
-import android.annotation.SuppressLint;
-import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Vibrator;
+import android.view.View;
+import android.widget.CheckedTextView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.myrequest.DecryptUtils;
-import com.yyide.chatim.myrequest.L;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import cn.bingoogolapple.qrcode.core.QRCodeView;
-import cn.bingoogolapple.qrcode.zbar.ZBarView;
+import butterknife.OnClick;
 
 public class ResetPassWordActivity extends BaseActivity {
 
+
+    @BindView(R.id.back)
+    TextView back;
+    @BindView(R.id.back_layout)
+    LinearLayout backLayout;
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.phone)
+    EditText phone;
+    @BindView(R.id.code)
+    EditText code;
+    @BindView(R.id.post_code)
+    TextView postCode;
+    @BindView(R.id.new_password)
+    EditText newPassword;
+    @BindView(R.id.eye)
+    CheckedTextView eye;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
-
+        ButterKnife.bind(this);
+        title.setText("忘记密码");
 
     }
 
@@ -40,5 +55,15 @@ public class ResetPassWordActivity extends BaseActivity {
     }
 
 
-
+    @OnClick({R.id.back, R.id.back_layout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.back_layout:
+                finish();
+                break;
+        }
+    }
 }

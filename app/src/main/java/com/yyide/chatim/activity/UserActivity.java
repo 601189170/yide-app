@@ -8,13 +8,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -53,13 +52,17 @@ public class UserActivity extends BaseActivity {
     TextView face;
     @BindView(R.id.layout6)
     FrameLayout layout6;
+    @BindView(R.id.back_layout)
+    LinearLayout backLayout;
+    @BindView(R.id.title)
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_layout);
         ButterKnife.bind(this);
-
+        title.setText("我的信息");
 
     }
 
@@ -74,17 +77,17 @@ public class UserActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout1, R.id.layout2, R.id.layout3, R.id.layout4, R.id.layout5, R.id.layout6})
+    @OnClick({R.id.layout1, R.id.layout2, R.id.layout3, R.id.layout4, R.id.layout5, R.id.layout6,R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1:
                 new BottomHeadMenuPop(this);
                 break;
             case R.id.layout2:
-                startActivity(new Intent(this,CheckPhoneActivity.class));
+                startActivity(new Intent(this, CheckPhoneActivity.class));
                 break;
             case R.id.layout3:
-                startActivity(new Intent(this,SexActivity.class));
+                startActivity(new Intent(this, SexActivity.class));
                 break;
             case R.id.layout4:
                 break;
@@ -92,10 +95,13 @@ public class UserActivity extends BaseActivity {
                 break;
             case R.id.layout6:
                 break;
+            case R.id.back_layout:
+                finish();
+                break;
         }
     }
 
-        @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         switch (requestCode) {
@@ -137,4 +143,6 @@ public class UserActivity extends BaseActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

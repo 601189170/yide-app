@@ -17,7 +17,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.yyide.chatim.R;
-import com.yyide.chatim.myrequest.GetData;
+import com.yyide.chatim.net.GetData;
 
 
 import java.io.File;

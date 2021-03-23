@@ -11,8 +11,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.myrequest.DecryptUtils;
-import com.yyide.chatim.myrequest.L;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
@@ -43,8 +42,7 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
     }
     @Override
     public void onScanQRCodeSuccess(String result) {
-        L.d(result);
-        L.d(DecryptUtils.decrypt(result));
+
         vibrate();
 //        ToastUtils.showShort("onScanQRCodeSuccess==>"+result.toString());
 //        if (result.contains("id:")) {

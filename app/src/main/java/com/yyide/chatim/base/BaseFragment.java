@@ -51,7 +51,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MyApp.getInstance().queue.cancelAll(this);
+
         onUnsubscribe();
     }
 

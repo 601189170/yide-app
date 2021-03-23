@@ -88,7 +88,9 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -161,19 +163,40 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity android:name=".chat.ChatActivity"></activity>
-        <activity android:name=".activity.ResetPassWordActivity"></activity>
-        <activity android:name=".activity.UserActivity"></activity>
-        <activity android:name=".activity.SexActivity"></activity>
-        <activity android:name=".activity.CheckPhoneActivity"></activity>
-        <activity android:name=".activity.PersonInfoActivity"></activity>
-        <activity android:name=".activity.PowerActivity"></activity>
-        <activity android:name=".activity.FriendProfileActivity"></activity>
-        <activity android:name=".activity.TableActivity"></activity>
-        <activity android:name=".activity.NoteBookActivity"></activity>
-        <activity android:name=".ScanActivity">
-
-
+        <activity android:name=".chat.ChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            ></activity>
+        <activity android:name=".activity.ResetPassWordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.UserActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.SexActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.CheckPhoneActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.PersonInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.PowerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.FriendProfileActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.TableActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".activity.NoteBookActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+        <activity android:name=".ScanActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan">
         </activity>
     </application>
 

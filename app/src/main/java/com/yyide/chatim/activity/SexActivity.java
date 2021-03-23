@@ -4,6 +4,7 @@ package com.yyide.chatim.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
@@ -26,13 +27,17 @@ public class SexActivity extends BaseActivity {
     TextView type2;
     @BindView(R.id.layout2)
     FrameLayout layout2;
+    @BindView(R.id.back_layout)
+    LinearLayout backLayout;
+    @BindView(R.id.title)
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sex_layout);
         ButterKnife.bind(this);
-
+        title.setText("性別");
 
     }
 
@@ -47,7 +52,7 @@ public class SexActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout1, R.id.layout2})
+    @OnClick({R.id.layout1, R.id.layout2,R.id.back, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1:
@@ -58,6 +63,11 @@ public class SexActivity extends BaseActivity {
                 type1.setVisibility(View.GONE);
                 type2.setVisibility(View.VISIBLE);
                 break;
+            case R.id.back_layout:
+                finish();
+                break;
         }
     }
+
+
 }

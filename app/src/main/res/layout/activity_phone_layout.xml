@@ -6,26 +6,11 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     >
-    <FrameLayout
-        android:background="@color/white"
+    <include
         android:layout_width="match_parent"
-        android:layout_height="44dp">
-        <TextView
-            android:textColor="#222222"
-            android:text="更换手机号"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/back"
-            android:layout_marginLeft="12dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/create_c2c"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        layout="@layout/title_layout2"
+        ></include>
     <FrameLayout
         android:background="#F5F8FC"
         android:layout_width="match_parent"

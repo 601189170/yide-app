@@ -17,12 +17,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.rtmp.TXLiveBase;
 
 import com.yyide.chatim.chat.helper.ConfigHelper;
-import com.yyide.chatim.myrequest.AuthcodeTwo;
-import com.yyide.chatim.myrequest.BaseBeanReq;
-import com.yyide.chatim.myrequest.FastJsonRequest;
-import com.yyide.chatim.myrequest.GetData;
-import com.yyide.chatim.myrequest.MyHashMap;
-import com.yyide.chatim.myrequest.OkHttpStack;
+
 import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.utils.PrivateConstants;
 
@@ -30,7 +25,7 @@ import com.yyide.chatim.utils.PrivateConstants;
 import cn.jpush.android.api.JPushInterface;
 import okhttp3.OkHttpClient;
 
-import static com.yyide.chatim.myrequest.Object2Map.object2Map;
+
 
 /**
  * Created by Administrator on 2020/12/14.
@@ -43,13 +38,13 @@ public class MyApp extends Application {
     private final String licenceUrl = "";
     private final String licenseKey = "";
 
-    public RequestQueue queue;
+
     OkHttpClient mOkHttpClient = new OkHttpClient();
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-        queue = Volley.newRequestQueue(this, new OkHttpStack());
+
         //blankj初始化
         Utils.init(this);
 //        MultiDex.install(this);
@@ -97,19 +92,5 @@ public class MyApp extends Application {
         return instance;
     }
 
-    public <T> void requestData(Object tag, BaseBeanReq<T> object, Response.Listener<T> listener,
-                                Response.ErrorListener errorListener) {
-        MyHashMap map = new MyHashMap();
-        map.putAll(object2Map(object));
-        String encryStr = AuthcodeTwo.authcodeEncode(map.toString(), GetData.URL_KEY);
-        FastJsonRequest<T> request = new FastJsonRequest<>(GetData.requestUrl(object),
-                object.myTypeReference(), listener, errorListener,
-                encryStr);
-        request.setShouldCache(true);
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                15000, 1,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        request.setTag(tag);
-        queue.add(request);
-    }
+
 }

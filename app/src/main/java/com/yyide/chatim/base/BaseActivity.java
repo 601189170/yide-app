@@ -131,7 +131,7 @@ public class BaseActivity extends AppCompatActivity {
         onUnsubscribe();
 
 
-        MyApp.getInstance().queue.cancelAll(this);
+
         super.onDestroy();
     }
 
