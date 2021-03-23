@@ -12,7 +12,7 @@ import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.contact.ContactItemBean;
 import com.tencent.qcloud.tim.uikit.modules.contact.ContactListView;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.chat.ChatActivity;
@@ -93,10 +93,10 @@ public class StartC2CChatActivity extends BaseActivity {
             chatName = mSelectedItem.getNickname();
         }
         chatInfo.setChatName(chatName);
-        Intent intent = new Intent(MyApp.getInstance(), ChatActivity.class);
+        Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
         intent.putExtra(Constants.CHAT_INFO, chatInfo);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        MyApp.getInstance().startActivity(intent);
+        BaseApplication.getInstance().startActivity(intent);
 
         finish();
     }

@@ -17,7 +17,7 @@ import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
 import com.tencent.qcloud.tim.uikit.component.action.PopMenuAdapter;
 import com.tencent.qcloud.tim.uikit.utils.ScreenUtil;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 
 import java.util.ArrayList;
@@ -49,37 +49,37 @@ public class Menu {
             public void onActionClick(int position, Object data) {
                 PopMenuAction action = (PopMenuAction) data;
                 if (TextUtils.equals(action.getActionName(), mActivity.getResources().getString(R.string.add_friend))) {
-                    Intent intent = new Intent(MyApp.getInstance(), AddMoreActivity.class);
+                    Intent intent = new Intent(BaseApplication.getInstance(), AddMoreActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(TUIKitConstants.GroupType.GROUP, false);
                     mActivity.startActivity(intent);
                 }
                 if (TextUtils.equals(action.getActionName(), mActivity.getResources().getString(R.string.add_group))) {
-                    Intent intent = new Intent(MyApp.getInstance(), AddMoreActivity.class);
+                    Intent intent = new Intent(BaseApplication.getInstance(), AddMoreActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(TUIKitConstants.GroupType.GROUP, true);
                     mActivity.startActivity(intent);
                 }
                 if (TextUtils.equals(action.getActionName(), mActivity.getResources().getString(R.string.start_conversation))) {
-                    Intent intent = new Intent(MyApp.getInstance(), StartC2CChatActivity.class);
+                    Intent intent = new Intent(BaseApplication.getInstance(), StartC2CChatActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     mActivity.startActivity(intent);
                 }
 
                 if (TextUtils.equals(action.getActionName(), mActivity.getResources().getString(R.string.create_private_group))) {
-                    Intent intent = new Intent(MyApp.getInstance(), StartGroupChatActivity.class);
+                    Intent intent = new Intent(BaseApplication.getInstance(), StartGroupChatActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(TUIKitConstants.GroupType.TYPE, TUIKitConstants.GroupType.PRIVATE);
                     mActivity.startActivity(intent);
                 }
                 if (TextUtils.equals(action.getActionName(), mActivity.getResources().getString(R.string.create_group_chat))) {
-                    Intent intent = new Intent(MyApp.getInstance(), StartGroupChatActivity.class);
+                    Intent intent = new Intent(BaseApplication.getInstance(), StartGroupChatActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(TUIKitConstants.GroupType.TYPE, TUIKitConstants.GroupType.PUBLIC);
                     mActivity.startActivity(intent);
                 }
                 if (TextUtils.equals(action.getActionName(), mActivity.getResources().getString(R.string.create_chat_room))) {
-                    Intent intent = new Intent(MyApp.getInstance(), StartGroupChatActivity.class);
+                    Intent intent = new Intent(BaseApplication.getInstance(), StartGroupChatActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(TUIKitConstants.GroupType.TYPE, TUIKitConstants.GroupType.CHAT_ROOM);
                     mActivity.startActivity(intent);

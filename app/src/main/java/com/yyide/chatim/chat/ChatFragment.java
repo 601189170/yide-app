@@ -26,7 +26,7 @@ import com.tencent.qcloud.tim.uikit.modules.group.info.GroupInfo;
 import com.tencent.qcloud.tim.uikit.modules.group.info.StartGroupMemberSelectActivity;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.FriendProfileActivity;
 import com.yyide.chatim.utils.Constants;
@@ -106,10 +106,10 @@ public class ChatFragment extends BaseFragment {
             mTitleBar.setOnRightClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MyApp.getInstance(), FriendProfileActivity.class);
+                    Intent intent = new Intent(BaseApplication.getInstance(), FriendProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(TUIKitConstants.ProfileType.CONTENT, mChatInfo);
-                    MyApp.getInstance().startActivity(intent);
+                    BaseApplication.getInstance().startActivity(intent);
                 }
             });
         }
@@ -138,7 +138,7 @@ public class ChatFragment extends BaseFragment {
         mChatLayout.getInputLayout().setStartActivityListener(new InputLayout.onStartActivityListener() {
             @Override
             public void onStartGroupMemberSelectActivity() {
-                Intent intent = new Intent(MyApp.getInstance(), StartGroupMemberSelectActivity.class);
+                Intent intent = new Intent(BaseApplication.getInstance(), StartGroupMemberSelectActivity.class);
                 GroupInfo groupInfo = new GroupInfo();
                 groupInfo.setId(mChatInfo.getId());
                 groupInfo.setChatName(mChatInfo.getChatName());
@@ -215,15 +215,15 @@ public class ChatFragment extends BaseFragment {
         switch (atInfoType) {
             case V2TIMGroupAtInfo.TIM_AT_ME:
                 mChatLayout.getAtInfoLayout().setVisibility(VISIBLE);
-                mChatLayout.getAtInfoLayout().setText(MyApp.getInstance().getString(R.string.ui_at_me));
+                mChatLayout.getAtInfoLayout().setText(BaseApplication.getInstance().getString(R.string.ui_at_me));
                 break;
             case V2TIMGroupAtInfo.TIM_AT_ALL:
                 mChatLayout.getAtInfoLayout().setVisibility(VISIBLE);
-                mChatLayout.getAtInfoLayout().setText(MyApp.getInstance().getString(R.string.ui_at_all));
+                mChatLayout.getAtInfoLayout().setText(BaseApplication.getInstance().getString(R.string.ui_at_all));
                 break;
             case V2TIMGroupAtInfo.TIM_AT_ALL_AT_ME:
                 mChatLayout.getAtInfoLayout().setVisibility(VISIBLE);
-                mChatLayout.getAtInfoLayout().setText(MyApp.getInstance().getString(R.string.ui_at_all_me));
+                mChatLayout.getAtInfoLayout().setText(BaseApplication.getInstance().getString(R.string.ui_at_all_me));
                 break;
             default:
                 mChatLayout.getAtInfoLayout().setVisibility(GONE);

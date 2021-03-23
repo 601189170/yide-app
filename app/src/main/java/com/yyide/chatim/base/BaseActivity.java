@@ -17,7 +17,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.LoginActivity;
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.utils.ClickUtils;
@@ -54,7 +54,7 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onForceOffline() {
             ToastUtil.toastLongMessage("您的帐号已在其它终端登录");
-            logout(MyApp.getInstance());
+            logout(BaseApplication.getInstance());
         }
     };
 
@@ -100,7 +100,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onStart();
         boolean login = UserInfo.getInstance().isAutoLogin();
         if (!login) {
-            BaseActivity.logout(MyApp.getInstance());
+            BaseActivity.logout(BaseApplication.getInstance());
         }
     }
 

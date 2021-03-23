@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Toast;
 
 
-import com.yyide.chatim.MyApp;
 import com.yyide.chatim.utils.LoadingTools;
 
 import androidx.fragment.app.Fragment;

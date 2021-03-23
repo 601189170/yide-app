@@ -19,7 +19,7 @@ import com.tencent.qcloud.tim.uikit.modules.group.info.GroupInfo;
 import com.tencent.qcloud.tim.uikit.modules.group.member.GroupMemberInfo;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.chat.ChatActivity;
@@ -179,10 +179,10 @@ public class StartGroupChatActivity extends BaseActivity {
                 chatInfo.setType(V2TIMConversation.V2TIM_GROUP);
                 chatInfo.setId(data.toString());
                 chatInfo.setChatName(groupInfo.getGroupName());
-                Intent intent = new Intent(MyApp.getInstance(), ChatActivity.class);
+                Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
                 intent.putExtra(Constants.CHAT_INFO, chatInfo);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                MyApp.getInstance().startActivity(intent);
+                BaseApplication.getInstance().startActivity(intent);
                 finish();
             }
 

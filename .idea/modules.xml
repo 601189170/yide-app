@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/chatim.iml" filepath="$PROJECT_DIR$/chatim.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jiguang/jiguang.iml" filepath="$PROJECT_DIR$/jiguang/jiguang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/yideapp.iml" filepath="$PROJECT_DIR$/.idea/yideapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" filepath="$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" />
     </modules>
   </component>
 </project>

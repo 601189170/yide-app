@@ -4,7 +4,7 @@ package com.yyide.chatim.net;
 import android.text.TextUtils;
 
 
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.utils.LogUtil;
 
 import retrofit2.adapter.rxjava.HttpException;
@@ -41,7 +41,7 @@ public abstract class ApiCallback<M> extends Subscriber<M> {
         } else {
             msg = e.getMessage();
         }
-        if (! MyApp.isNetworkAvailable(MyApp.getInstance())) {
+        if (! BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
             msg = "请检查网络连接";
         }
         if (!TextUtils.isEmpty(msg)){
