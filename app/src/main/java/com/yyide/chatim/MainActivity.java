@@ -126,7 +126,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private final static int REQ_CODE = 127;
     private Uri imageUri;
     private long firstTime = 0;
-
+    private UserInfo mUserInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,7 +137,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         // 未读消息监视器
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
-
+        mUserInfo = UserInfo.getInstance();
         EventBus.getDefault().register(this);
         setTab(0);
 //        startActivity(new Intent(this, ResetPassWordActivity.class));
@@ -375,12 +375,22 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
         if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
             SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
-            initIm(rsp.data.get(0).userId,SpData.UserSig());
+
+
+//            handleData(rsp.data.get(0).userId,SpData.UserSig());
         }
 
 
     }
-
+    private void handleData(int userId,String UserSig) {
+        if (mUserInfo != null && mUserInfo.isAutoLogin()) {
+//            login();
+//            initIm(userId,UserSig);
+            Log.e(TAG, "handleData: Im已经激活，无需激活" );
+        } else {
+            initIm(userId,UserSig);
+        }
+    }
     @Override
     public void getUserSchoolDataFail(String rsp) {
         Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));

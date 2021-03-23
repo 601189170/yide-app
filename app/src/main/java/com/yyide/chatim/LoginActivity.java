@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.chat.signature.GenerateTestUserSig;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.getUserSigRsp;
@@ -250,7 +252,7 @@ public class LoginActivity extends Activity {
                 .post(body)
                 .build();
         //发起请求
-        getUnsafeOkHttpClient().newCall(request).enqueue(new Callback() {
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e(TAG, "getUserSigonFailure: " + e.toString());
@@ -263,9 +265,7 @@ public class LoginActivity extends Activity {
                 getUserSigRsp bean = JSON.parseObject(data, getUserSigRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
-//                    initIm(userEdit.getText().toString(),bean.data);
-
+                    getUserSchool();
                 } else {
 
                 }
@@ -274,46 +274,57 @@ public class LoginActivity extends Activity {
     }
 
 
-    private static OkHttpClient getUnsafeOkHttpClient() {
-        try {
-            // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustAllCerts = new TrustManager[] {
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
+    //获取学校信息
+    void getUserSchool() {
 
-                        @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-                        }
+        //请求组合创建
+        Request request = new Request.Builder()
+//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.URL_IP+"/management/cloud-system/user/getUserSchool")
+                .addHeader("Authorization", SpData.User().token)
+                .build();
+        //发起请求
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "getUserSigonFailure: " + e.toString());
+            }
 
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return new java.security.cert.X509Certificate[]{};
-                        }
-                    }
-            };
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                Log.e(TAG, "getUserSig==>: " + data);
+                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
+                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+                if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
+                    SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
 
-            // Install the all-trusting trust manager
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-            // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.sslSocketFactory(sslSocketFactory);
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
+                    initIm(rsp.data.get(0).userId,SpData.UserSig());
                 }
-            });
-
-            OkHttpClient okHttpClient = builder.build();
-            return okHttpClient;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+            }
+        });
     }
+    void initIm(int userid,String userSig) {
+        TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
+            @Override
+            public void onError(String module, final int code, final String desc) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    }
+                });
+                DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
+            }
 
+            @Override
+            public void onSuccess(Object data) {
+                UserInfo.getInstance().setAutoLogin(true);
+                UserInfo.getInstance().setUserSig(userSig);
+                UserInfo.getInstance().setUserId(String.valueOf(userid));
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功" );
+            }
+        });
+    }
 }

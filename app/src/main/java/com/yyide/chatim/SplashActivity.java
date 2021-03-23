@@ -146,6 +146,7 @@ public class SplashActivity extends Activity {
             @Override
             public void onSuccess(Object data) {
                 Log.e(TAG, "UserInfo==》: "+JSON.toJSONString(UserInfo.getInstance()) );
+
                 startMain();
             }
         });
