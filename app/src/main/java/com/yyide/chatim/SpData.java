@@ -30,8 +30,10 @@ public class SpData {
     public static String USERPHONE = "USERPHONE";
     public static String SCHOOLINFO = "SCHOOLINFO";
     public static String SCHOOLID = "SCHOOLID";
+    public static String USERSIG = "USERSIG";
     public static String USERNAME = "USERNAME";
     public static String USERPHOTO = "USERPHOTO";
+
 
 
     public static LoginRsp User() {
@@ -42,6 +44,9 @@ public class SpData {
     }
     public static String SchoolId() {
         return SPUtils.getInstance().getString(SCHOOLID,"");
+    }
+    public static String UserSig() {
+        return SPUtils.getInstance().getString(USERSIG,"");
     }
     public static String UserName() {
         return SPUtils.getInstance().getString(USERNAME,"");

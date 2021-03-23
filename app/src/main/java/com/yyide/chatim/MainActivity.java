@@ -27,11 +27,15 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.SPUtils;
 
+import com.tencent.qcloud.tim.uikit.TUIKit;
+import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
 import com.yyide.chatim.home.HomeFragment;
@@ -45,6 +49,7 @@ import com.yyide.chatim.model.ScheduleRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.presenter.EventType;
 import com.yyide.chatim.presenter.MainPresenter;
@@ -139,7 +144,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 //        new Handler().postDelayed(new Runnable() {
 //                @Override
 //            public void run() {
-//                mvpPresenter.Login("13659896596","896596");
+    //                mvpPresenter.Login("13659896596","896596");
 //            }
 //        },5000);
 
@@ -148,7 +153,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
 //        mvpPresenter.ToUserLogout();
 
-//        mvpPresenter.getUserSchool();
+        mvpPresenter.getUserSchool();
 //        mvpPresenter.SelectSchByTeaid();
 
 
@@ -161,6 +166,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         //初始化imageUri
 //        selectFromTake();
+
+
     }
 
 //    /**
@@ -368,7 +375,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
         if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
             SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+            initIm(rsp.data.get(0).userId,SpData.UserSig());
         }
+
 
     }
 
@@ -396,6 +405,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public void listAllScheduleByTeacherIdDataFail(String rsp) {
         Log.e("TAG", "listAllScheduleByTeacherIdDataFail==》: " + JSON.toJSONString(rsp));
     }
+
 
 
 
@@ -558,6 +568,27 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 break;
         }
     }
+    void initIm(int userid,String userSig) {
+        TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
+            @Override
+            public void onError(String module, final int code, final String desc) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    }
+                });
+                DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
+            }
 
+            @Override
+            public void onSuccess(Object data) {
+                UserInfo.getInstance().setAutoLogin(true);
+                UserInfo.getInstance().setUserSig(userSig);
+                UserInfo.getInstance().setUserId(String.valueOf(userid));
+
+                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功" );
+            }
+        });
+    }
 
 }

@@ -15,6 +15,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.VideoEntity;
+import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MainView;

@@ -15,6 +15,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.model.mobileRsp;
@@ -36,6 +37,7 @@ import rx.Observable;
 public interface DingApiStores {
 //    String API_SERVER_URL = "http://120.76.189.190:8027";
     String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
+//    String API_SERVER_URL = "https://192.168.3.120:8010";
 
     @GET("/java-painted-screen/api/wechatPaintedScreenManage/selectDeviceOperation")
     Observable<GetStuasRsp> getData();
@@ -70,4 +72,10 @@ public interface DingApiStores {
     //班级列表接口
     @POST("/school/cloud-school/classes/listAllBySchoolId")
     Observable<listAllBySchoolIdRsp> listAllBySchoolId();
+
+
+    //计算UserSig
+//    @POST("/management/cloud-system/im/getUserSig")
+    @POST("/cloud-system/im/getUserSig")
+    Observable<getUserSigRsp> getUserSig();
 }

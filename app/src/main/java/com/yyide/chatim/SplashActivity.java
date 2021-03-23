@@ -54,10 +54,7 @@ public class SplashActivity extends Activity {
         Log.e(TAG, "loginName: "+JSON.toJSONString(loginName) );
         Log.e(TAG, "passWord: "+JSON.toJSONString(passWord) );
         if (!TextUtils.isEmpty(loginName)&&!TextUtils.isEmpty((passWord))){
-
                 Tologin(loginName,passWord);
-
-
         }else {
             startLogin();
         }
@@ -85,8 +82,6 @@ public class SplashActivity extends Activity {
                         .build();
             }
         }
-
-
 
 
         //请求组合创建
