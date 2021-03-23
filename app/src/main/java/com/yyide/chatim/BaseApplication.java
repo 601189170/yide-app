@@ -6,10 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.v2.V2TIMManager;
@@ -31,9 +27,9 @@ import okhttp3.OkHttpClient;
  * Created by Administrator on 2020/12/14.
  */
 
-public class MyApp extends Application {
-    private static MyApp instance;
-    private static final String TAG = MyApp.class.getSimpleName();
+public class BaseApplication extends Application {
+    private static BaseApplication instance;
+    private static final String TAG = BaseApplication.class.getSimpleName();
 
     private final String licenceUrl = "";
     private final String licenseKey = "";
@@ -88,7 +84,7 @@ public class MyApp extends Application {
         }
         return false;
     }
-    public static MyApp getInstance() {
+    public static BaseApplication getInstance() {
         return instance;
     }
 

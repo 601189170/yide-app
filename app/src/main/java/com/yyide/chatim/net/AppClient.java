@@ -6,14 +6,13 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
 
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.SpData;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import cn.jpush.android.cache.Sp;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -81,7 +80,7 @@ public class AppClient {
                 builder.addInterceptor(loggingInterceptor);
             }
             //cache url
-            File httpCacheDirectory = new File(MyApp.getInstance().getExternalCacheDir(), "responses");
+            File httpCacheDirectory = new File(BaseApplication.getInstance().getExternalCacheDir(), "responses");
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
             Cache cache = new Cache(httpCacheDirectory, cacheSize);
             builder.cache(cache);
@@ -110,7 +109,7 @@ public class AppClient {
                         .build();
             }
             Response originalResponse = chain.proceed(request);
-            if (MyApp.isNetworkAvailable(MyApp.getInstance())) {
+            if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
                 int maxAge = 0; // read from cache
                 return originalResponse.newBuilder()
                         .removeHeader("Pragma")

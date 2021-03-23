@@ -2,14 +2,11 @@ package com.yyide.chatim.utils;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 
 
-import com.yyide.chatim.MyApp;
+import com.yyide.chatim.BaseApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +23,19 @@ public class Utils {
     public static boolean checkPermission(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(MyApp.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(BaseApplication.getInstance(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(MyApp.getInstance(), Manifest.permission.CAMERA)) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(BaseApplication.getInstance(), Manifest.permission.CAMERA)) {
                 permissions.add(Manifest.permission.CAMERA);
             }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(MyApp.getInstance(), Manifest.permission.RECORD_AUDIO)) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(BaseApplication.getInstance(), Manifest.permission.RECORD_AUDIO)) {
                 permissions.add(Manifest.permission.RECORD_AUDIO);
             }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(MyApp.getInstance(), Manifest.permission.READ_PHONE_STATE)) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(BaseApplication.getInstance(), Manifest.permission.READ_PHONE_STATE)) {
                 permissions.add(Manifest.permission.READ_PHONE_STATE);
             }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(MyApp.getInstance(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(BaseApplication.getInstance(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
             }
             if (permissions.size() != 0) {
