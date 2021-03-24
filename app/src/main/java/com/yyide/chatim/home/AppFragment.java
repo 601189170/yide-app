@@ -1,22 +1,22 @@
 package com.yyide.chatim.home;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.AppAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;
 import com.yyide.chatim.base.BaseFragment;
+import com.yyide.chatim.leave.LeaveActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +36,14 @@ public class AppFragment extends BaseFragment {
     RecyclerView recy;
     @BindView(R.id.listview)
     ListView listview;
+    @BindView(R.id.right_btn)
+    LinearLayout rightBtn;
     private View mBaseView;
     RecylAppAdapter recylAppAdapter;
 
     AppAdapter appAdapter;
-    boolean sc=true;
+    boolean sc = true;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -53,9 +56,9 @@ public class AppFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recylAppAdapter=new RecylAppAdapter();
+        recylAppAdapter = new RecylAppAdapter();
         recy.setAdapter(recylAppAdapter);
-        List<String> list=new ArrayList<>();
+        List<String> list = new ArrayList<>();
         list.add("教学工作");
         list.add("家校沟通");
         list.add("教务管理");
@@ -70,7 +73,7 @@ public class AppFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
 
-                sc=false;
+                sc = false;
                 recylAppAdapter.setPosition(position);
                 listview.setSelection(position);
 //                listview.setSelectionFromTop(position);
@@ -78,13 +81,13 @@ public class AppFragment extends BaseFragment {
             }
         });
 
-        appAdapter=new AppAdapter();
+        appAdapter = new AppAdapter();
         listview.setAdapter(appAdapter);
         appAdapter.notifyData(list);
         listview.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                sc=true;
+                sc = true;
                 return false;
             }
         });
@@ -104,17 +107,15 @@ public class AppFragment extends BaseFragment {
 //                    mLeft.setSelectionFromTop(firstVisibleItem, 40);
 //                    scrollPosition = firstVisibleItem;
 //                }
-                    if (sc){
-                        recylAppAdapter.setPosition(firstVisiblePosition);
-                    }
-
+                if (sc) {
+                    recylAppAdapter.setPosition(firstVisiblePosition);
+                }
 
 
 //                Log.e("TAG", "firstVisiblePosition: "+ JSON.toJSONString(firstVisiblePosition));
 
             }
         });
-
 
 
 //        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -124,6 +125,12 @@ public class AppFragment extends BaseFragment {
 //                Log.e("TAG", "onItemClick: "+ JSON.toJSONString(firstVisiblePosition));
 //            }
 //        });
+        rightBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mActivity,LeaveActivity.class));
+            }
+        });
     }
 
 

@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <LinearLayout
+        android:id="@+id/right_btn"
         android:layout_marginRight="12dp"
         android:layout_gravity="right|center_vertical"
         android:orientation="horizontal"
@@ -57,6 +58,7 @@
       android:layout_width="match_parent"
       android:layout_height="200dp">
       <TextView
+
           android:text="我的应用"
           android:textSize="15sp"
           android:textColor="#333333"
