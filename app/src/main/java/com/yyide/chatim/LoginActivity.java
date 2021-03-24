@@ -247,7 +247,7 @@ public class LoginActivity extends Activity {
         //请求组合创建
         Request request = new Request.Builder()
 //                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url("http://192.168.3.147:8888/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.URL_IP+"/management/cloud-system/im/getUserSig")
                 .addHeader("Authorization", SpData.User().token)
                 .post(body)
                 .build();

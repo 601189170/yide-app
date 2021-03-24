@@ -35,6 +35,7 @@ public class BaseConstant {
      * 请求ip==>baseUrl
      */
     public static final String URL_IP = "https://api.uat.edu.1d1j.net";
+//    public static final String URL_IP = "http://192.168.3.147:8888";
 
 
     /*Base宽*/
