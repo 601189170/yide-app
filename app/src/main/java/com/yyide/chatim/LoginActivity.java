@@ -43,8 +43,10 @@ import javax.net.ssl.X509TrustManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -61,7 +63,7 @@ import okhttp3.Response;
  * <p>
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     @BindView(R.id.user_edit)
@@ -75,15 +77,16 @@ public class LoginActivity extends BaseActivity {
     OkHttpClient mOkHttpClient = new OkHttpClient();
     public String phone = "";
 
-    @Override
-    public int getContentViewID() {
-        return R.layout.login_for_dev_activity;
-    }
-
+//    @Override
+//    public int getContentViewID() {
+//        return R.layout.login_for_dev_activity;
+//    }
+private Unbinder unbinder;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.login_for_dev_activity);
+        unbinder = ButterKnife.bind(this);
         mLoginView = findViewById(R.id.login_btn);
         // 用户名可以是任意非空字符，但是前提需要按照下面文档修改代码里的 SDKAPPID 与 PRIVATEKEY
         // https://github.com/tencentyun/TIMSDK/tree/master/Android
@@ -123,6 +126,14 @@ public class LoginActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(unbinder != null){
+            unbinder.unbind();
+        }
     }
 
     /**
