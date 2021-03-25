@@ -70,13 +70,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
    </LinearLayout>
-  </FrameLayout>
-  <FrameLayout
-      android:id="@+id/tab3_layout"
-      android:layout_width="0dp"
-      android:layout_weight="1"
-      android:layout_height="match_parent">
-
    <com.tencent.qcloud.tim.uikit.component.UnreadCountTextView
        android:id="@+id/msg_total_unread"
        android:layout_width="wrap_content"
@@ -92,6 +85,14 @@
        android:textColor="#fff"
        android:textSize="13.6sp"
        android:visibility="gone" />
+  </FrameLayout>
+  <FrameLayout
+      android:id="@+id/tab3_layout"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="match_parent">
+
+
    <LinearLayout
        android:layout_gravity="center"
        android:orientation="vertical"

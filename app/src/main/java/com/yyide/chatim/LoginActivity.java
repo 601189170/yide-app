@@ -300,7 +300,7 @@ public class LoginActivity extends BaseActivity {
                 Log.e(TAG, "getUserSig==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
+                if (rsp.data.size() > 0 ) {
                     SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
 
 

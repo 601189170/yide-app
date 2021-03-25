@@ -56,14 +56,92 @@
     <FrameLayout
 
         android:layout_width="match_parent"
-        android:layout_height="168dp">
-    <GridView
-        android:id="@+id/grid"
-        android:numColumns="4"
+        android:layout_height="100dp">
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:layout_height="match_parent">
 
-    </GridView>
+        <FrameLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+
+            android:layout_height="0dp">
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:text="开始时间"
+                android:textSize="15sp"
+                android:textColor="#212121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_gravity="center_vertical|right"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+            <TextView
+
+                android:layout_gravity="center_vertical"
+                android:text="2021.03"
+                android:textSize="12sp"
+                android:gravity="right"
+                android:textColor="#666666"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_marginLeft="12dp"
+                    android:layout_gravity="center_vertical"
+                   android:background="@drawable/icon_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </FrameLayout>
+        <TextView
+            android:background="#DCDFE6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+        <FrameLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+
+            android:layout_height="0dp">
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:text="结束时间"
+                android:textSize="15sp"
+                android:textColor="#212121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+
+                android:layout_gravity="center_vertical|right"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+
+                    android:layout_gravity="center_vertical"
+                    android:text="请选择"
+                    android:textSize="12sp"
+                    android:gravity="right"
+                    android:textColor="#666666"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_marginLeft="12dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/icon_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
 
     </FrameLayout>
 

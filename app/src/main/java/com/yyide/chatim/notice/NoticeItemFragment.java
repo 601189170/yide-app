@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.utils.GlideUtil;
@@ -62,5 +64,7 @@ public class NoticeItemFragment extends Fragment {
                 GlideUtil.loadImage(getContext(), "https://www.thecrazyprogrammer.com/wp-content/uploads/2017/05/Android-Glide-Tutorial-with-Example-1.png", baseViewHolder.findView(R.id.iv_pic));
             }
         };
+
+
     }
 }

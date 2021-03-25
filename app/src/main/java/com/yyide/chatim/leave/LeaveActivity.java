@@ -1,6 +1,7 @@
 package com.yyide.chatim.leave;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -10,15 +11,13 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.chat.ConversationFragment;
-import com.yyide.chatim.home.TodoMsgFragment;
+import com.yyide.chatim.notice.NoticeDetailActivity;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LeaveActivity extends BaseActivity {
@@ -51,6 +50,8 @@ public class LeaveActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         title.setText("请假");
         setTab(0);
+
+//        startActivity(new Intent(this, NoticeDetailActivity.class));
     }
 
     void setTab(int position) {
@@ -71,7 +72,7 @@ public class LeaveActivity extends BaseActivity {
         switch (position) {
             case 0:
                 if (fg1 == null) {
-                    fg1 = new MyLeaveFragment();
+                    fg1 = new MyLeaveFragmentByStudent();
                     ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
                 } else
                     ft.show(fg1);
