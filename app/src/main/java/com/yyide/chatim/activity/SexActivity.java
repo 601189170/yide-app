@@ -33,12 +33,14 @@ public class SexActivity extends BaseActivity {
     TextView title;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.activity_sex_layout;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sex_layout);
-        ButterKnife.bind(this);
         title.setText("性別");
-
     }
 
     @Override

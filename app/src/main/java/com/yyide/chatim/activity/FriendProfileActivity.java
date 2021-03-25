@@ -22,9 +22,13 @@ import androidx.annotation.Nullable;
 public class FriendProfileActivity extends BaseActivity {
 
     @Override
+    public int getContentViewID() {
+        return R.layout.contact_friend_profile_activity;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contact_friend_profile_activity);
         FriendProfileLayout layout = findViewById(R.id.friend_profile);
 
         layout.initData(getIntent().getSerializableExtra(TUIKitConstants.ProfileType.CONTENT));

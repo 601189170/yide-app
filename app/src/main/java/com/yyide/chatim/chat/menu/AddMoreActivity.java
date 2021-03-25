@@ -32,13 +32,16 @@ public class AddMoreActivity extends BaseActivity {
     private boolean mIsGroup;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.contact_add_activity;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getIntent() != null) {
             mIsGroup = getIntent().getExtras().getBoolean(TUIKitConstants.GroupType.GROUP);
         }
-
-        setContentView(R.layout.contact_add_activity);
 
         mTitleBar = findViewById(R.id.add_friend_titlebar);
         mTitleBar.setTitle(mIsGroup ? getResources().getString(R.string.add_group) : getResources().getString(R.string.add_friend), TitleBarLayout.POSITION.LEFT);

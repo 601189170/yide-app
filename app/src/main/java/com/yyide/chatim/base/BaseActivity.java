@@ -30,6 +30,9 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import retrofit2.Call;
 import rx.Observable;
 import rx.Subscriber;
@@ -43,12 +46,12 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 /**
  * 登录状态的Activity都要集成该类，来完成被踢下线等监听处理。
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     public Activity mActivity;
     private CompositeSubscription mCompositeSubscription;
     private List<Call> calls;
     private static final String TAG = BaseActivity.class.getSimpleName();
-
+    private Unbinder unbinder;
     // 监听做成静态可以让每个子类重写时都注册相同的一份。
     private static IMEventListener mIMEventListener = new IMEventListener() {
         @Override
@@ -57,6 +60,8 @@ public class BaseActivity extends AppCompatActivity {
             logout(BaseApplication.getInstance());
         }
     };
+
+    public abstract int getContentViewID();
 
     public static void logout(Context context) {
         DemoLog.i(TAG, "logout");
@@ -73,7 +78,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         DemoLog.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-
+        setContentView(getContentViewID());
+        unbinder = ButterKnife.bind(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.status_bar_color));
@@ -83,9 +89,7 @@ public class BaseActivity extends AppCompatActivity {
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
             getWindow().getDecorView().setSystemUiVisibility(vis);
         }
-
         TUIKit.addIMEventListener(mIMEventListener);
-
         //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
         //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
 
@@ -119,7 +123,6 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-
         DemoLog.i(TAG, "onStop");
         super.onStop();
     }
@@ -129,9 +132,9 @@ public class BaseActivity extends AppCompatActivity {
         DemoLog.i(TAG, "onDestroy");
         callCancel();
         onUnsubscribe();
-
-
-
+        if(unbinder != null){
+            unbinder.unbind();
+        }
         super.onDestroy();
     }
 
@@ -159,7 +162,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-
     public void addSubscription(Observable observable, Subscriber subscriber) {
         if (mCompositeSubscription == null) {
             mCompositeSubscription = new CompositeSubscription();
@@ -184,9 +186,6 @@ public class BaseActivity extends AppCompatActivity {
             mCompositeSubscription.unsubscribe();
     }
 
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -197,7 +196,6 @@ public class BaseActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     public void toastShow(int resId) {
@@ -211,7 +209,6 @@ public class BaseActivity extends AppCompatActivity {
     public ProgressDialog progressDialog;
 
     public ProgressDialog showProgressDialog() {
-
         progressDialog = new ProgressDialog(mActivity);
 //        progressDialog.setContentView(R.layout.dialog_loading1);
 //        progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.bg_progress2));

@@ -33,9 +33,13 @@ public class StartC2CChatActivity extends BaseActivity {
     private List<ContactItemBean> mContacts = new ArrayList<>();
 
     @Override
+    public int getContentViewID() {
+        return R.layout.popup_start_c2c_chat_activity;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.popup_start_c2c_chat_activity);
 
         mTitleBar = findViewById(R.id.start_c2c_chat_title);
         mTitleBar.setTitle(getResources().getString(R.string.sure), TitleBarLayout.POSITION.RIGHT);

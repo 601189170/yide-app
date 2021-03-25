@@ -10,8 +10,4 @@ public interface BaseView {
     void hideLoading();
 
     void showError();
-
-
-
-
 }

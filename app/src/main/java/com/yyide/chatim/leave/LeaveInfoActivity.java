@@ -31,10 +31,13 @@ public class LeaveInfoActivity extends BaseActivity {
     TextView endTime;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.activity_leaveinfo_layout;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leaveinfo_layout);
-        ButterKnife.bind(this);
         title.setText("详情");
 
     }

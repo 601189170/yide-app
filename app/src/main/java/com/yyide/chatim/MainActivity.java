@@ -62,6 +62,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -78,14 +79,10 @@ import okhttp3.Response;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView {
 
-
     @BindView(R.id.content)
     FrameLayout content;
-
-
     //for receive customer msg from jpush server
     public static boolean isForeground = false;
-
     @BindView(R.id.tab1)
     CheckedTextView tab1;
     @BindView(R.id.tab1_layout)
@@ -104,8 +101,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     FrameLayout tab4Layout;
     @BindView(R.id.msg_total_unread)
     UnreadCountTextView msgTotalUnread;
-
-
 
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION";
@@ -127,14 +122,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private Uri imageUri;
     private long firstTime = 0;
     private UserInfo mUserInfo;
+
+    @Override
+    public int getContentViewID() {
+        return R.layout.activity_main;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         registerMessageReceiver();  // used for receive msg
         permission();
-
         // 未读消息监视器
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
         mUserInfo = UserInfo.getInstance();
@@ -166,8 +164,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         //初始化imageUri
 //        selectFromTake();
-
-
     }
 
 //    /**
@@ -264,8 +260,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         return super.onKeyDown(keyCode, event);
     }
 
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventType messageEvent) {
         if (messageEvent.i == BaseConstant.CheakId) {
@@ -276,7 +270,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             setTab(0);
         }
     }
-
 
     /**
      * @Author: Berlin
@@ -318,7 +311,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     @Override
     public void updateUnread(int count) {
         Log.e("Chatim", "updateUnread==>: " + count);
-
         if (count > 0) {
             msgTotalUnread.setVisibility(View.VISIBLE);
         } else {

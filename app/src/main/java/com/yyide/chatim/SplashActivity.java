@@ -83,7 +83,6 @@ public class SplashActivity extends Activity {
             }
         }
 
-
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.URL_IP + "/management/cloud-system/login")

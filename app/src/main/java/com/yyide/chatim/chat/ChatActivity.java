@@ -25,10 +25,13 @@ public class ChatActivity extends BaseActivity {
     private ChatInfo mChatInfo;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.chat_activity;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chat_activity);
-
         chat(getIntent());
     }
 

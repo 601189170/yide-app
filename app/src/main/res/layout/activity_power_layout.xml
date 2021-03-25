@@ -3,60 +3,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F8FC"
     android:layout_height="match_parent"
-    >
+    android:background="#F5F8FC"
+    android:orientation="vertical">
+
     <include
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         layout="@layout/title_layout2"
-        ></include>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
-    <include
-        layout="@layout/tk_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></include>
-    <include
-        layout="@layout/jz_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></include>
-    <include
-        layout="@layout/jzg_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></include>
+            <include
+                layout="@layout/tk_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    <FrameLayout
-        android:background="@color/white"
-        android:layout_marginTop="10dp"
-        android:id="@+id/layout10"
-        android:paddingLeft="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <TextView
-            android:text="班主任可发送班级通知公告"
-            android:textSize="15sp"
-            android:layout_gravity="center_vertical"
-            android:textColor="#212121"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <CheckedTextView
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="22dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
-    </LinearLayout>
+            <include
+                layout="@layout/jz_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include
+                layout="@layout/jzg_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@+id/layout10"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:paddingLeft="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="班主任可发送班级通知公告"
+                    android:textColor="#212121"
+                    android:textSize="15sp" />
+
+                <CheckedTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginEnd="22dp" />
+            </FrameLayout>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

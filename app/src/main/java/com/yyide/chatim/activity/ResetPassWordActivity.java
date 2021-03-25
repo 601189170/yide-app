@@ -36,10 +36,13 @@ public class ResetPassWordActivity extends BaseActivity {
     CheckedTextView eye;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.activity_reset_password;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reset_password);
-        ButterKnife.bind(this);
         title.setText("忘记密码");
 
     }

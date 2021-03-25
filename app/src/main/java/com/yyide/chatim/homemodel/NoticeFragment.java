@@ -1,5 +1,6 @@
 package com.yyide.chatim.homemodel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,15 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
+import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.model.SchoolRsp;
+import com.yyide.chatim.notice.NoticeDetailActivity;
 
 import java.io.IOException;
 
 import androidx.annotation.Nullable;
+
+import butterknife.BindView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -27,14 +32,14 @@ import okhttp3.Response;
 public class NoticeFragment extends BaseFragment {
 
     private View mBaseView;
+    @BindView(R.id.announRoll)
+    RollPagerView mRollPagerView;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.notice_fragmnet, container, false);
-
-
         return mBaseView;
     }
 
@@ -42,9 +47,13 @@ public class NoticeFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        mvpPresenter.getMyData();
-
-
-
+        mRollPagerView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), NoticeDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     void listTimeData(int schoolId, String schoolName) {

@@ -45,10 +45,13 @@ public class StartGroupChatActivity extends BaseActivity {
     private boolean mCreating;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.popup_start_group_chat_activity;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.popup_start_group_chat_activity);
-
         init();
     }
 

@@ -16,6 +16,7 @@ import com.yyide.chatim.home.TodoMsgFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -41,14 +42,17 @@ public class LeaveActivity extends BaseActivity {
     FrameLayout content;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.activity_leave_layout;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leave_layout);
-        ButterKnife.bind(this);
         title.setText("请假");
         setTab(0);
-
     }
+
     void setTab(int position) {
         tab1.setChecked(false);
         tab2.setChecked(false);
@@ -86,6 +90,7 @@ public class LeaveActivity extends BaseActivity {
         }
         ft.commitAllowingStateLoss();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -97,7 +102,7 @@ public class LeaveActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.back, R.id.back_layout,R.id.tab1,R.id.tab2})
+    @OnClick({R.id.back, R.id.back_layout, R.id.tab1, R.id.tab2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:

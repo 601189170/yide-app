@@ -41,10 +41,13 @@ public class TableActivity extends BaseActivity {
     TextView title;
 
     @Override
+    public int getContentViewID() {
+        return R.layout.activity_table_title;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_table_title);
-        ButterKnife.bind(this);
         title.setText("课表");
         setTab(0);
     }

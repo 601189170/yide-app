@@ -24,13 +24,16 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
 
     @BindView(R.id.zbarview)
     ZBarView zbarview;
-    Unbinder unbinder;
     int i;
+
+    @Override
+    public int getContentViewID() {
+        return R.layout.activity_scan;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scan);
-        unbinder = ButterKnife.bind(this);
         zbarview.setDelegate(this);
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -118,7 +121,6 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
             zbarview.stopCamera();
             zbarview.onDestroy();
         }
-        unbinder.unbind();
     }
 
 
