@@ -197,6 +197,12 @@
         <activity
             android:name=".notice.NoticeConfirmDetailActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StudentHonorListActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.StudentHonorSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
     </application>
 
 </manifest>

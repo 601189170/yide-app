@@ -73,4 +73,5 @@
     <color name="alfph">#50000000</color>
     <color name="line_10">#EEF2F8</color>
     <color name="line_11">#DCDFE6</color>
+    <color name="transparent">#00000000</color>
 </resources>

@@ -16,6 +16,7 @@ import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.StudentHonorListActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.homemodel.AttenceFragment;
@@ -98,7 +99,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
 
-    @OnClick({R.id.user_img, R.id.scan})
+    @OnClick({R.id.user_img, R.id.scan,R.id.student_honor_content})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -106,6 +107,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             case R.id.scan:
                 startActivity(new Intent(getActivity(), ScanActivity.class));
+                break;
+            case R.id.student_honor_content:
+                startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
+                break;
+            default:
                 break;
         }
     }
