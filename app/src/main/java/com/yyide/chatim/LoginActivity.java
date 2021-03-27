@@ -97,8 +97,9 @@ private Unbinder unbinder;
         mLoginView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
+//                Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
 //                TologinBymobile(mUserAccount.getText().toString(),"15920012647");
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
         type.setText("验证码登录");

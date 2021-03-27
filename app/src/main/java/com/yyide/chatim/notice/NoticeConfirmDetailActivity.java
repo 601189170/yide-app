@@ -1,6 +1,7 @@
 package com.yyide.chatim.notice;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,10 +16,12 @@ import com.yyide.chatim.notice.presenter.NoticeConfirmDetailPresenter;
 import com.yyide.chatim.notice.view.NoticeConfirmDetailView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDetailPresenter> implements NoticeConfirmDetailView {
-
-    @BindView(R.id.tablelayout)
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.tablayout)
     TabLayout mTablayout;
     @BindView(R.id.viewpager)
     ViewPager2 mViewpager;
@@ -31,6 +34,7 @@ public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        title.setText(R.string.notice_confirm_detail_title);
         initViewPager();
     }
 
@@ -63,6 +67,11 @@ public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDe
                 }
             }
         }).attach();
+    }
+
+    @OnClick(R.id.back_layout)
+    public void click(){
+        finish();
     }
 
     @Override

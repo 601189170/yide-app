@@ -3,9 +3,7 @@ package com.yyide.chatim.notice;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,10 +55,10 @@ public class NoticeItemFragment extends Fragment {
     }
 
     private void initAdapter(){
-        adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.fragment_item) {
+        adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.fragment_notice_item) {
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, String str) {
-                baseViewHolder.setText(R.id.tv_notice_name, str);
+                baseViewHolder.setText(R.id.tv_notice_scope_name, str);
                 GlideUtil.loadImage(getContext(), "https://www.thecrazyprogrammer.com/wp-content/uploads/2017/05/Android-Glide-Tutorial-with-Example-1.png", baseViewHolder.findView(R.id.iv_pic));
             }
         };

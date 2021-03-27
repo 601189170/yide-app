@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.yyide.chatim"
         minSdkVersion 21
@@ -63,6 +63,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildToolsVersion '28.0.2'
 //    // 在MobSDK的扩展中注册SMSSDK的相关信息
 //    MobSDK {
 //        appKey "19aa2f667f410"

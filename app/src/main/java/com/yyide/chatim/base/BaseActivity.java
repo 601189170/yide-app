@@ -26,14 +26,12 @@ import com.yyide.chatim.utils.ClickUtils;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.LogUtil;
-import com.yyide.chatim.utils.StatusBarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -78,35 +76,39 @@ public abstract class BaseActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    //无参跳转
+    protected void jupm(Context context, Class activity) {
+        startActivity(new Intent(context, activity));
+    }
+
+    //带参跳转
+    protected void jupm(Context context, Class activity, String key, String obj) {
+        Intent intent = new Intent(context, activity);
+        intent.putExtra(key, obj);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         DemoLog.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        super.setContentView(getBaseActivityLayout());
         setContentView(getContentViewID());
         unbinder = ButterKnife.bind(this);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            getWindow().setStatusBarColor(getResources().getColor(R.color.status_bar_color));
-//            getWindow().setNavigationBarColor(getResources().getColor(R.color.navigation_bar_color));
-//            int vis = getWindow().getDecorView().getSystemUiVisibility();
-//            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-//            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-//            getWindow().getDecorView().setSystemUiVisibility(vis);
-//        }
-
-        StatusBarUtils.setWindowStatusBarColor(this, R.color.white, true);
-        int statusBarHeight = StatusBarUtils.getStatusBarHeight(this);
-        ConstraintLayout linearLayout = findViewById(R.id.root_content);
-        linearLayout.setPadding(0, statusBarHeight, 0, 0);
-        Log.e(TAG, "onCreate: statusBarHeight= "+statusBarHeight);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+            int vis = getWindow().getDecorView().getSystemUiVisibility();
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            getWindow().getDecorView().setSystemUiVisibility(vis);
+        }
         TUIKit.addIMEventListener(mIMEventListener);
         //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
         //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
 
         //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
-        //ImmersionBar.with(this).init();
+//        ImmersionBar.with(this).init();
 
     }
 

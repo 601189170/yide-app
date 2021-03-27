@@ -52,9 +52,17 @@
     <color name="blue9">#389CFF</color>
     <color name="blue11">#2C8AFF</color>
     <color name="linelv">#F6F8FE</color>
+    <color name="color_cccccc">#CCCCCC</color>
 
     <color name="red">#FE5D61</color>
     <color name="news">#6ea4ff</color>
+
+    <!--字体颜色-->
+    <color name="text_666666">#ff666666</color>
+    <color name="text_909399">#ff909399</color>
+    <color name="text_303133">#ff303133</color>
+    <color name="text_212121">#ff212121</color>
+    <color name="text_999999">#ff999999</color>
 
     <color name="linetalbe">#B6D0F3</color>
     <color name="hint">#BFBFBF</color>
@@ -73,5 +81,5 @@
     <color name="alfph">#50000000</color>
     <color name="line_10">#EEF2F8</color>
     <color name="line_11">#DCDFE6</color>
-    <color name="transparent">#00000000</color>
+    <color name="line_E4E7ED">#E4E7ED</color>
 </resources>

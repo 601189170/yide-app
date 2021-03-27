@@ -77,7 +77,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         super.onViewCreated(view, savedInstanceState);
 //        showProgressDialog2();
 
-
         userImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
