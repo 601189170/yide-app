@@ -80,6 +80,7 @@
     <string name="live_voice_room_already_agree">已同意</string>
     <string name="live_voice_room_main_title" formatted="false">%1s(%2d)</string>
     <string name="live_is_over">直播已结束</string>
+    <string name="student_honor_count">%d荣誉</string>
 
     <!--通知模块-->
     <string name="notice_announcement_title">通知公告</string>
