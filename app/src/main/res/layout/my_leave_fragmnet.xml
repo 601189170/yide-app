@@ -64,6 +64,8 @@
     <GridView
         android:id="@+id/grid"
         android:numColumns="4"
+
+
         android:horizontalSpacing="@dimen/dp_8"
         android:verticalSpacing="16dp"
         android:layout_gravity="center"
