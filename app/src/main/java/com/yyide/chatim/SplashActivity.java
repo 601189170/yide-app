@@ -81,6 +81,11 @@ public class SplashActivity extends Activity {
                         .add("password", password)
                         .build();
             }
+        }else {
+            body = new FormBody.Builder()
+                    .add("username", username)
+                    .add("password", password)
+                    .build();
         }
 
         //请求组合创建

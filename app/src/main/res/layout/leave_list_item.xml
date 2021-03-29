@@ -30,9 +30,14 @@
         android:layout_height="wrap_content" />
     </LinearLayout>
     <TextView
+        android:id="@+id/stuas"
         android:text="审批中"
         android:textSize="14sp"
         android:textColor="#333333"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
         android:layout_gravity="right|center_vertical"
         android:layout_marginRight="20dp"
         android:layout_width="wrap_content"

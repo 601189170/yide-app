@@ -57,7 +57,8 @@ public class TableFragment extends BaseFragment{
                 startActivity(new Intent(mActivity, TableActivity.class));
             }
         });
-
+//        listTimeData(SpData.Schoolinfo().data.get(0).parentId);
+//        listTimeData(1819);
     }
 
 
@@ -83,8 +84,8 @@ public class TableFragment extends BaseFragment{
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                String data = response.body().string();
-//                Log.e("TAG", "mOkHttpClient==>: " + data);
+                String data = response.body().string();
+                Log.e("TAG", "listTimeDatamOkHttpClient==>: " + data);
 //                SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
 //                if (bean.code==BaseConstant.REQUEST_SUCCES2){
 //                    Tologin(bean.data.username,bean.data.password, String.valueOf(schoolId));

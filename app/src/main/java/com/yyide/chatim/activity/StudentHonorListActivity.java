@@ -50,7 +50,7 @@ public class StudentHonorListActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_student_honor_list);
+//        setContentView(R.layout.activity_student_honor_list);
         ButterKnife.bind(this);
         studentHonorBeanList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {

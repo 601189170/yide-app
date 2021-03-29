@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/yideapp.iml" filepath="$PROJECT_DIR$/.idea/modules/yideapp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" filepath="$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jiguang/jiguang.iml" filepath="$PROJECT_DIR$/jiguang/jiguang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yideapp.iml" filepath="$PROJECT_DIR$/yideapp.iml" />
+      <module fileurl="file://D:\yyideApp\yideapp\.idea\modules\yideapp.iml" filepath="D:\yyideApp\yideapp\.idea\modules\yideapp.iml" />
+      <module fileurl="file://D:\yyideApp\yideapp\.idea\modules\app\yideapp.app.iml" filepath="D:\yyideApp\yideapp\.idea\modules\app\yideapp.app.iml" />
+      <module fileurl="file://D:\yyideApp\yideapp\.idea\modules\jiguang\yideapp.jiguang.iml" filepath="D:\yyideApp\yideapp\.idea\modules\jiguang\yideapp.jiguang.iml" />
     </modules>
   </component>
 </project>

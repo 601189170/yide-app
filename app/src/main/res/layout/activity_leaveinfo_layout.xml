@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+
     android:background="@color/white"
     android:layout_height="match_parent"
     >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,12 +91,12 @@
             android:textSize="14sp"
             android:textColor="#999999"
             android:text="请假时间"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="15dp"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     <LinearLayout
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -138,6 +144,7 @@
             android:textColor="#333333"
             android:text="家里有急事需要处理，请一天假"
             android:layout_marginTop="12dp"
+            android:layout_marginBottom="19dp"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -147,9 +154,9 @@
         android:layout_width="match_parent"
         android:layout_height="10dp" />
     <LinearLayout
-        android:layout_weight="1"
+
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
         <TextView
             android:text="流程"
             android:textSize="20sp"
@@ -160,4 +167,44 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-</LinearLayout>
+        <TextView
+            android:background="#F5F8FC"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:background="@color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="52dp">
+
+        <TextView
+            android:gravity="center"
+            android:text="拒绝"
+            android:textSize="16sp"
+            android:textColor="#212121"
+            android:background="@drawable/bg_corners_gray_20"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <TextView
+
+            android:layout_width="20dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="同意"
+            android:gravity="center"
+
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_corners_blue_20"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</FrameLayout>

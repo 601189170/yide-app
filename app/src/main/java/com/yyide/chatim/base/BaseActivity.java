@@ -122,10 +122,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(View.inflate(this, layoutResID, null));
     }
 
-    @Override
-    public void setContentView(View view) {
-        ((ViewGroup) this.findViewById(R.id.root_content)).addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-    }
+//    @Override
+//    public void setContentView(View view) {
+//        ((ViewGroup) this.findViewById(R.id.root_content)).addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//    }
 
     @Override
     protected void onStart() {

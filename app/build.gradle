@@ -18,6 +18,7 @@ android {
         }
 
         manifestPlaceholders = [
+//              Master Secret    e2cfe288703428279f01ecb0
                 JPUSH_PKGNAME : "com.yyide.chatim",
                 JPUSH_APPKEY  : "143ab02bc474008f39f26f97", //极光开发平台上注册的包名对应的appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.

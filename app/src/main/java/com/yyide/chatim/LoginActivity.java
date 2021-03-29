@@ -97,9 +97,9 @@ private Unbinder unbinder;
         mLoginView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
+                Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
 //                TologinBymobile(mUserAccount.getText().toString(),"15920012647");
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         });
         type.setText("验证码登录");
@@ -263,7 +263,8 @@ private Unbinder unbinder;
         //请求组合创建
         Request request = new Request.Builder()
 //                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP+"/management/cloud-system/im/getUserSig")
+//                .url(BaseConstant.URL_IP+"/management/cloud-system/im/getUserSig")
+                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
                 .addHeader("Authorization", SpData.User().token)
                 .post(body)
                 .build();

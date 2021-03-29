@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 
+import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.v2.V2TIMManager;
@@ -72,6 +73,8 @@ public class BaseApplication extends Application {
 
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+
+
     }
 
     public static boolean isNetworkAvailable(Context context) {

@@ -135,6 +135,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         permission();
         // 未读消息监视器
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
+
         mUserInfo = UserInfo.getInstance();
         EventBus.getDefault().register(this);
         setTab(0);
