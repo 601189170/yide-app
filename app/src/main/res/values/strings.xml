@@ -80,5 +80,14 @@
     <string name="live_voice_room_already_agree">Agreed</string>
     <string name="live_voice_room_main_title" formatted="false">%1s(%2d)</string>
     <string name="live_is_over">Live over</string>
-    <string name="student_honor_count">%d荣誉</string>
+    <string name="notice_scope_title">Notice scope</string>
+    <string name="notice_confirm_detail_title">Notice detail</string>
+    <string name="notice_announcement_title">"Notice announcement "</string>
+    <string name="notice_create_title">Notice create</string>
+    <string name="notice_to_confirm">Notice to confirm</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="notice_tab_my_notice">My Notice</string>
+    <string name="notice_tab_my_release">My Release</string>
+    <string name="notice_template_title">Notice template</string>
+    <string name="notice_select_number">Notice select number</string>
 </resources>

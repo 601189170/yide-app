@@ -1,0 +1,97 @@
+package com.yyide.chatim.notice;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.yyide.chatim.R;
+import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.notice.presenter.NoticeAnnouncementPresenter;
+import com.yyide.chatim.notice.view.NoticeAnnouncementView;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+
+/**
+ * 通知公告
+ * author lrz
+ * time 2021/03/24
+ */
+public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnouncementPresenter> implements NoticeAnnouncementView {
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.tablayout)
+    TabLayout mTablayout;
+    @BindView(R.id.viewpager)
+    ViewPager2 mViewpager;
+
+    @Override
+    public int getContentViewID() {
+        return R.layout.activity_notice_announcement;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        title.setText(R.string.notice_announcement_title);
+        initViewPager();
+    }
+
+    private void initViewPager() {
+        mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        mViewpager.setAdapter(new FragmentStateAdapter(this) {
+            @NonNull
+            @Override
+            public Fragment createFragment(int position) {
+                if (position == 0) {
+                    return NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
+                } else {
+                    return NoticeAnnouncementListFragment.newInstance("my_release");//我的发布
+                }
+            }
+
+            @Override
+            public int getItemCount() {
+                return 2;
+            }
+        });
+        new TabLayoutMediator(mTablayout, mViewpager, true, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                //这里需要根据position修改tab的样式和文字等
+                if (position == 0) {
+                    tab.setText(R.string.notice_tab_my_notice);
+                } else {
+                    tab.setText(R.string.notice_tab_my_release);
+                }
+            }
+        }).attach();
+    }
+
+    @OnClick(R.id.back_layout)
+    public void click() {
+        finish();
+    }
+
+    @OnClick(R.id.fab)
+    public void fabClick() {
+        startActivity(new Intent(this, NoticeTemplateActivity.class));
+    }
+
+    @Override
+    protected NoticeAnnouncementPresenter createPresenter() {
+        return null;
+    }
+
+    @Override
+    public void showError() {
+
+    }
+}

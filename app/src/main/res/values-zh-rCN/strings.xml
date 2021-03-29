@@ -80,5 +80,15 @@
     <string name="live_voice_room_already_agree">已同意</string>
     <string name="live_voice_room_main_title" formatted="false">%1s(%2d)</string>
     <string name="live_is_over">直播已结束</string>
-    <string name="student_honor_count">%d荣誉</string>
+
+    <!--通知模块-->
+    <string name="notice_announcement_title">通知公告</string>
+    <string name="notice_template_title">通知模板</string>
+    <string name="notice_scope_title">通知范围</string>
+    <string name="notice_confirm_detail_title">确认详情</string>
+    <string name="notice_create_title">创建通知</string>
+    <string name="notice_to_confirm">去确认</string>
+    <string name="notice_tab_my_notice">我的通知</string>
+    <string name="notice_tab_my_release">我的发布</string>
+    <string name="notice_select_number">已选择(%d)</string>
 </resources>
