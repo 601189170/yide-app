@@ -177,23 +177,20 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener{
         switch (v.getId()){
 
             case R.id.layout1:
-
-                new BottomMenuPop(context);
+                new SwichClassPop(context);
                 break;
             case R.id.layout2:
+                new SwichSchoolPop(context);
                 break;
             case R.id.layout3:
-
                 context.startActivity(new Intent(context, UserActivity.class));
                 break;
             case R.id.layout4:
-
                 context.startActivity(new Intent(context, ResetPassWordActivity.class));
                 break;
             case R.id.layout5:
                 break;
             case R.id.layout6:
-                hide();
                 context.startActivity(new Intent(context, PowerActivity.class));
                 break;
             case R.id.layout7:
