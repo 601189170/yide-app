@@ -46,7 +46,7 @@
             android:layout_height="21dp" />
     </FrameLayout>
     <FrameLayout
-
+        android:id="@+id/layout_message"
         android:background="#FFF0F0"
         android:layout_width="match_parent"
         android:layout_height="45dp" >
@@ -62,7 +62,7 @@
             android:layout_width="40dp"
             android:layout_height="21dp" />
 
-        <TextView
+        <com.paradoxie.autoscrolltextview.VerticalTextview
             android:text="罗小黑的主监护人提交的请假需要你审批"
             android:id="@+id/spmsg"
             android:textSize="14sp"

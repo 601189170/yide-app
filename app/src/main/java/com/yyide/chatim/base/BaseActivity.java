@@ -133,7 +133,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onStart();
         boolean login = UserInfo.getInstance().isAutoLogin();
         if (!login) {
-            BaseActivity.logout(BaseApplication.getInstance());
+//            BaseActivity.logout(BaseApplication.getInstance());
         }
     }
 

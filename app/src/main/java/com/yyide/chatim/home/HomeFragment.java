@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
+import com.paradoxie.autoscrolltextview.VerticalTextview;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.StudentHonorListActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
@@ -29,6 +31,8 @@ import com.yyide.chatim.homemodel.WorkFragment;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.view.HomeFragmentView;
+
+import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
@@ -60,7 +64,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @BindView(R.id.school_name)
     TextView schoolName;
     @BindView(R.id.spmsg)
-    TextView spmsg;
+    VerticalTextview spmsg;
+    @BindView(R.id.layout_message)
+    FrameLayout layoutMessage;
     private View mBaseView;
 
     private long firstTime = 0;
@@ -88,8 +94,40 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
         setFragment();
 
-
         mvpPresenter.getUserSchool();
+
+        initVerticalTextview();
+
+    }
+
+    void initVerticalTextview() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("罗小黑的主监护人提交的请假需要你审批");
+        list.add("罗小黑的主监护人提交的请假需要你审批");
+        list.add("罗小黑的主监护人提交的请假需要你审批");
+//        spmsg.setText(20, 0, Color.WHITE);//设置属性
+        spmsg.setTextStillTime(3000);//设置停留时长间隔
+        spmsg.setAnimTime(300);//设置进入和退出的时间间隔
+        if (spmsg != null) {
+            if (null != list && list.size() > 0) {
+                spmsg.setVisibility(View.VISIBLE);
+                spmsg.setTextList(list);
+            } else {
+                spmsg.setVisibility(View.GONE);
+            }
+        }
+        layoutMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),MessageNoticeActivity.class));
+            }
+        });
+        spmsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),MessageNoticeActivity.class));
+            }
+        });
     }
 
     @Override
@@ -98,7 +136,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
 
-    @OnClick({R.id.user_img, R.id.scan,R.id.student_honor_content})
+    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -112,6 +150,22 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (spmsg != null) {
+            spmsg.startAutoScroll();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (spmsg != null) {
+            spmsg.stopAutoScroll();
         }
     }
 
@@ -143,38 +197,40 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         setSchoolInfo(rsp);
 
     }
-    void setSchoolInfo(GetUserSchoolRsp rsp){
-        int ids =0;
-        if (!TextUtils.isEmpty(SpData.SchoolId())){
-            ids= Integer.parseInt(SpData.SchoolId());
-            String  qhSchool="";
-            String  qhName="";
-            String  qhPhoto="";
+
+    void setSchoolInfo(GetUserSchoolRsp rsp) {
+        int ids = 0;
+        if (!TextUtils.isEmpty(SpData.SchoolId())) {
+            ids = Integer.parseInt(SpData.SchoolId());
+            String qhSchool = "";
+            String qhName = "";
+            String qhPhoto = "";
             for (GetUserSchoolRsp.DataBean datum : SpData.Schoolinfo().data) {
-                if (datum.schoolId==ids){
-                    qhSchool=datum.schoolName;
-                    qhName=datum.username;
-                    if (datum.imgList.size()>0){
-                        qhPhoto=datum.imgList.get(0);
-                        SPUtils.getInstance().put(SpData.USERPHOTO,qhPhoto);
+                if (datum.schoolId == ids) {
+                    qhSchool = datum.schoolName;
+                    qhName = datum.username;
+                    if (datum.imgList.size() > 0) {
+                        qhPhoto = datum.imgList.get(0);
+                        SPUtils.getInstance().put(SpData.USERPHOTO, qhPhoto);
                     }
 
                 }
             }
             schoolName.setText(qhSchool);
             userName.setText(qhName);
-            SPUtils.getInstance().put(SpData.USERNAME,qhName);
-        }else {
+            SPUtils.getInstance().put(SpData.USERNAME, qhName);
+        } else {
 
             schoolName.setText(rsp.data.get(0).schoolName);
             userName.setText(rsp.data.get(0).username);
-            SPUtils.getInstance().put(SpData.USERNAME,rsp.data.get(0).username);
-            if (rsp.data.get(0).imgList.size()>0){
-                SPUtils.getInstance().put(SpData.USERPHOTO,rsp.data.get(0).imgList.get(0));
+            SPUtils.getInstance().put(SpData.USERNAME, rsp.data.get(0).username);
+            if (rsp.data.get(0).imgList.size() > 0) {
+                SPUtils.getInstance().put(SpData.USERPHOTO, rsp.data.get(0).imgList.get(0));
             }
         }
 
     }
+
     @Override
     public void getUserSchoolDataFail(String rsp) {
         Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));

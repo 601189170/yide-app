@@ -14,6 +14,7 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -63,7 +64,7 @@ import okhttp3.Response;
  * <p>
  */
 
-public class LoginActivity extends AppCompatActivity {
+    public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     @BindView(R.id.user_edit)
@@ -117,6 +118,10 @@ private Unbinder unbinder;
             }
         });
 //        getcode("15920012647");
+        if (AppUtils.isAppDebug()){
+            userEdit.setText("13659896596");
+            passwordEdit.setText("896596");
+        }
     }
 
 
@@ -181,9 +186,9 @@ private Unbinder unbinder;
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, username);
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, password);
-//                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
 //                    initIm();
-                    getUserSig();
+//                    getUserSig();
                 } else {
                     ToastUtils.showShort(bean.msg);
                 }
@@ -263,8 +268,8 @@ private Unbinder unbinder;
         //请求组合创建
         Request request = new Request.Builder()
 //                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-//                .url(BaseConstant.URL_IP+"/management/cloud-system/im/getUserSig")
-                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
+                .url(BaseConstant.URL_IP+"/management/cloud-system/im/getUserSig")
+//                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
                 .addHeader("Authorization", SpData.User().token)
                 .post(body)
                 .build();
@@ -313,11 +318,13 @@ private Unbinder unbinder;
                 Log.e(TAG, "getUserSig==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.data.size() > 0 ) {
-                    SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+                if (rsp.data!=null) {
+                    if (rsp.data.size() > 0) {
+                        SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
 
 
-                    initIm(rsp.data.get(0).userId,SpData.UserSig());
+                        initIm(rsp.data.get(0).userId, SpData.UserSig());
+                    }
                 }
             }
         });

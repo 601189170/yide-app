@@ -49,6 +49,7 @@ import com.yyide.chatim.model.ScheduleRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.presenter.EventType;
@@ -70,6 +71,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.cache.Sp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -160,74 +163,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
 //        CheacklistSchedule("99","1","10");
 
-//        Log.e(TAG, "getNativePhoneNumber==》: "+new PhoneInfoUtils(this).getPhoneInfo());
-//        selectFromGallery();
 
-        //初始化imageUri
-//        selectFromTake();
+        //注册极光用户
+        RegistJiGuang();
     }
-
-//    /**
-//     * 拍取照片不裁切
-//     */
-//    private void selectFromTake() {
-//        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//用来打开相机的Intent
-//        if (takePhotoIntent.resolveActivity(getPackageManager()) != null) {//这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
-//            startActivityForResult(takePhotoIntent, REQ_CODE);//启动相机
-//        }
-//    }
-
-
-    //    private void selectFromGallery() {
-//        // TODO Auto-generatedmethod stub
-//        Intent intent = new Intent();
-//        intent.setAction(Intent.ACTION_PICK);//Pick an item fromthe data
-//        intent.setType("image/*");//从所有图片中进行选择
-//        startActivityForResult(intent, SELECT_ORIGINAL_PIC);
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        // TODO Auto-generated method stub
-//        switch (requestCode) {
-//
-//            case SELECT_ORIGINAL_PIC:
-//                if (resultCode == RESULT_OK) {//从相册选择照片不裁切
-//                    try {
-//                        Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
-//                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//                        Cursor cursor = getContentResolver().query(selectedImage,
-//                                filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
-//                        cursor.moveToFirst();
-//                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                        String picturePath = cursor.getString(columnIndex);  //获取照片路径
-//                        cursor.close();
-//
-//                        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-//                        Log.e(TAG, "onActivityResult: " + JSON.toJSONString(bitmap));
-////                        img.setImageBitmap(bitmap);
-//
-//                    } catch (Exception e) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace();
-//                    }
-//                }
-//                break;
-//
-//
-//        }
-//        if (requestCode == REQ_CODE && resultCode == RESULT_OK) {
-//            /*缩略图信息是储存在返回的intent中的Bundle中的，
-//            * 对应Bundle中的键为data，因此从Intent中取出
-//            * Bundle再根据data取出来Bitmap即可*/
-//            Bundle extras = data.getExtras();
-//            Bitmap bitmap = (Bitmap) extras.get("data");
-//            img.setImageBitmap(bitmap);
-////            Log.e(TAG, "img==》: " + JSON.toJSONString(extras));
-//        }
-//
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
+    void RegistJiGuang(){
+        int userId = SpData.getUserId();
+        String rid = JPushInterface.getRegistrationID(getApplicationContext());
+        int alias = userId;
+        String equipmentType = "1";
+        mvpPresenter.addUserEquipmentInfo(userId,rid, String.valueOf(alias),equipmentType);
+    }
 
 
     @Override
@@ -409,7 +355,15 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         Log.e("TAG", "listAllScheduleByTeacherIdDataFail==》: " + JSON.toJSONString(rsp));
     }
 
+    @Override
+    public void addUserEquipmentInfo(addUserEquipmentInfoRsp rsp) {
+        Log.e("TAG", "addUserEquipmentInfo==》: " + JSON.toJSONString(rsp));
+    }
 
+    @Override
+    public void addUserEquipmentInfoFail(String rsp) {
+        Log.e("TAG", "addUserEquipmentInfoFail==》: " + JSON.toJSONString(rsp));
+    }
 
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -423,6 +377,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         //请求组合创建
         Request request = new Request.Builder()
+//                .url(BaseConstant.URL_IP + "/brand/class-brand-management/android/class/selectClassesInfo")
                 .url(BaseConstant.URL_IP + "/timetable/cloud-timetable/schedule/listSchedule")
                 .addHeader("Authorization", SpData.User().token)
                 .post(requestBody)

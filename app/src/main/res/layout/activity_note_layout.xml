@@ -76,11 +76,64 @@
         android:background="#F5F8FC"
         android:layout_width="match_parent"
         android:layout_height="10dp" />
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="62dp">
+        <ImageView
+            android:id="@+id/img"
+            android:background="@drawable/icon_leave"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_gravity="center_vertical"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30" />
+        <TextView
+            android:text="深圳宝安实验中学"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/text_18"
+            android:textColor="#222222"
+            android:layout_marginLeft="62dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+
+    </FrameLayout>
+    <TextView
+        android:layout_marginLeft="62dp"
+        android:background="@color/line_11"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="62dp">
+        <TextView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_18"
+            android:background="@drawable/icon_zzjg" />
+        <TextView
+            android:text="组织架构"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="62dp"
+            android:textColor="@color/text_212121"
+            android:textSize="@dimen/text_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
     <ListView
         android:id="@+id/listview"
+        android:dividerHeight="0dp"
+        android:divider="@color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
     </ListView>
+
+
 
 </LinearLayout>

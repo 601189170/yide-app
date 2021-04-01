@@ -15,13 +15,19 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
+import com.yyide.chatim.model.listByAppRsp;
+import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.model.mobileRsp;
 
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -61,7 +67,7 @@ public interface DingApiStores {
     Observable<SelectUserRsp> getSelectUser();
     //查询登入用户学校
     @GET("/management/cloud-system/user/getUserSchool")
-    Observable<GetUserSchoolRsp> getUserSchool(@Header("access_token") String accesToken);
+    Observable<GetUserSchoolRsp> getUserSchool();
     //查询老师课程信息
     @POST("/timetable/cloud-timetable/schedule/selectSchByTeaid")
     Observable<SelectSchByTeaidRsp> selectSchByTeaid();
@@ -78,4 +84,19 @@ public interface DingApiStores {
 //    @POST("/management/cloud-system/im/getUserSig")
     @POST("/cloud-system/im/getUserSig")
     Observable<getUserSigRsp> getUserSig();
+
+    //通过班级查询生成课表
+    @Headers({"Content-Type: application/json","Accept: application/json"})//需要添加头
+    @POST("/timetable/cloud-timetable/timetable/listTimeDataByApp")
+    Observable<listTimeDataByAppRsp> listTimeDataByApp(@Body RequestBody info);
+
+    //添加用户设备基本信息
+    @Headers({"Content-Type: application/json","Accept: application/json"})//需要添加头
+    @POST("/management/cloud-backstage/jpush/addUserEquipmentInfo")
+    Observable<addUserEquipmentInfoRsp> addUserEquipmentInfo(@Body RequestBody info);
+
+
+    //查询组织架构列表信息
+    @POST("/school/cloud-school/department/listByApp")
+    Observable<listByAppRsp> listByApp();
 }

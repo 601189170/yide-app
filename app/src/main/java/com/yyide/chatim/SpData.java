@@ -33,6 +33,7 @@ public class SpData {
     public static String USERSIG = "USERSIG";
     public static String USERNAME = "USERNAME";
     public static String USERPHOTO = "USERPHOTO";
+    public static String USERID = "USERID";
 
 
 
@@ -56,5 +57,8 @@ public class SpData {
     }
     public static String UserPhone() {
         return SPUtils.getInstance().getString(USERPHONE, "");
+    }
+    public static int getUserId() {
+        return SPUtils.getInstance().getInt(USERID);
     }
 }

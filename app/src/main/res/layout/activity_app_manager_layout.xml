@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#F7FAFC"
+    android:layout_height="match_parent"
+    >
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/title_layout2"
+        ></include>
+        <FrameLayout
+            android:id="@+id/fz"
+            android:paddingLeft="@dimen/dp_20"
+            android:paddingRight="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50">
+            <TextView
+                android:text="分组排序"
+                android:textColor="@color/text_212121"
+                android:textSize="15sp"
+
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_gravity="right|center_vertical"
+
+                android:background="@drawable/icon_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+</LinearLayout>

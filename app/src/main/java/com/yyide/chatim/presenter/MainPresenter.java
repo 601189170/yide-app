@@ -15,6 +15,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.VideoEntity;
+import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.net.ApiCallback;
@@ -22,8 +23,10 @@ import com.yyide.chatim.view.MainView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.jpush.android.cache.Sp;
+import okhttp3.RequestBody;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -76,7 +79,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void getUserSchool() {
         mvpView.showLoading();
-        addSubscription(dingApiStores.getUserSchool(SpData.User().token), new ApiCallback<GetUserSchoolRsp>() {
+        addSubscription(dingApiStores.getUserSchool(), new ApiCallback<GetUserSchoolRsp>() {
             @Override
             public void onSuccess(GetUserSchoolRsp model) {
                 mvpView.getUserSchool(model);
@@ -135,5 +138,30 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
+    public void addUserEquipmentInfo(int userId,String registrationId,String alias,String equipmentType) {
+        mvpView.showLoading();
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("userId", String.valueOf(userId));
+        map.put("registrationId", registrationId);
+        map.put("alias", alias);
+        map.put("equipmentType", equipmentType);
+        String json = JSON.toJSONString(map,true);
+        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(json));
+        addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<addUserEquipmentInfoRsp>() {
+            @Override
+            public void onSuccess(addUserEquipmentInfoRsp model) {
+                mvpView.addUserEquipmentInfo(model);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                mvpView.addUserEquipmentInfoFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
 }

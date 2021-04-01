@@ -28,7 +28,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
 
     public void getUserSchool() {
         mvpView.showLoading();
-        addSubscription(dingApiStores.getUserSchool(SpData.User().token), new ApiCallback<GetUserSchoolRsp>() {
+        addSubscription(dingApiStores.getUserSchool(), new ApiCallback<GetUserSchoolRsp>() {
             @Override
             public void onSuccess(GetUserSchoolRsp model) {
                 mvpView.getUserSchool(model);

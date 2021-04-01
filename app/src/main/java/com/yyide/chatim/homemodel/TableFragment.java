@@ -11,12 +11,13 @@ import android.widget.FrameLayout;
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.Talble.Presenter.TablePresenter;
 import com.yyide.chatim.activity.TableActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ClassRsp;
-import com.yyide.chatim.presenter.ClassTablePresenter;
+import com.yyide.chatim.model.listTimeDataByAppRsp;
+import com.yyide.chatim.Talble.View.listTimeDataByAppView;
 
 import java.io.IOException;
 
@@ -30,14 +31,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class TableFragment extends BaseFragment{
+public class TableFragment extends BaseMvpFragment<TablePresenter> implements listTimeDataByAppView {
 
     @BindView(R.id.tablelayout)
     FrameLayout tablelayout;
     private View mBaseView;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
-
+    private static final String TAG = "TableFragment";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +60,14 @@ public class TableFragment extends BaseFragment{
         });
 //        listTimeData(SpData.Schoolinfo().data.get(0).parentId);
 //        listTimeData(1819);
+        mvpPresenter.listTimeDataByApp(1819);
+//        listTimeData();
     }
 
+    @Override
+    protected TablePresenter createPresenter() {
+        return new TablePresenter(this);
+    }
 
 
     void listTimeData(int classId) {
@@ -97,4 +104,14 @@ public class TableFragment extends BaseFragment{
 
 
 
+    @Override
+    public void listTimeDataByApp(listTimeDataByAppRsp rsp) {
+        Log.e(TAG, "listTimeDataByApp==>>: "+JSON.toJSONString(rsp) );
+
+    }
+
+    @Override
+    public void listTimeDataByAppFail(String rsp) {
+
+    }
 }

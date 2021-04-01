@@ -16,13 +16,14 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_width="wrap_content"
-            android:layout_height="26dp">
+            android:layout_height="wrap_content">
 
 
 
         <TextView
-
+            android:gravity="center_vertical"
             android:background="@drawable/table_icon"
             android:layout_width="26dp"
             android:layout_height="26dp" />
@@ -49,7 +50,7 @@
         </LinearLayout>
         <TextView
             android:text="初二03班"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="55dp"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -62,11 +63,12 @@
             android:text="11:00-12:00"
             android:textColor="@color/white"
             android:textSize="10sp"
-            android:layout_marginTop="95dp"
+            android:layout_marginTop="90dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <FrameLayout
-            android:layout_marginTop="112dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="23dp"
 
             android:orientation="horizontal"
 

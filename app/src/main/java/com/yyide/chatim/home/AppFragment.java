@@ -8,15 +8,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.AppManagerActivity;
+import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.adapter.AppAdapter;
+import com.yyide.chatim.adapter.AppItemAdapter;
+import com.yyide.chatim.adapter.MyAppItemAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.leave.LeaveActivity;
+import com.yyide.chatim.model.APPBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +49,7 @@ public class AppFragment extends BaseFragment {
 
     AppAdapter appAdapter;
     boolean sc = true;
-
+    MyAppItemAdapter adapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +61,29 @@ public class AppFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        adapter=new MyAppItemAdapter();
+        mygrid.setAdapter(adapter);
+        mygrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (adapter.list.get(position).id.equals("99")){
+//                    startActivity(new Intent(mActivity,));
+
+                        startActivity(new Intent(mActivity, AppManagerActivity.class));
+
+                }
+            }
+        });
+
+        List<APPBean> myAPPlist=new ArrayList<>();
+        myAPPlist.add(new APPBean("请假","1","1"));
+        myAPPlist.add(new APPBean("请假","1","1"));
+        myAPPlist.add(new APPBean("请假","1","1"));
+        myAPPlist.add(new APPBean("请假","1","1"));
+        myAPPlist.add(new APPBean("请假","1","1"));
+        myAPPlist.add(new APPBean("编辑","99","1"));
+
+        adapter.notifyData(myAPPlist);
 
         recylAppAdapter = new RecylAppAdapter();
         recy.setAdapter(recylAppAdapter);

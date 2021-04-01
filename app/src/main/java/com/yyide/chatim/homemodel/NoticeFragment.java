@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.adapter.NoiceAnnounAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.model.SchoolRsp;
@@ -36,6 +37,9 @@ public class NoticeFragment extends BaseFragment {
     RollPagerView mRollPagerView;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
+
+    NoiceAnnounAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +51,10 @@ public class NoticeFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        mvpPresenter.getMyData();
+        adapter=new NoiceAnnounAdapter(mRollPagerView);
+        mRollPagerView.setHintView(null);
+        mRollPagerView.setPlayDelay(5000);
+        mRollPagerView.setAdapter(adapter);
         mRollPagerView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -54,6 +62,7 @@ public class NoticeFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+
     }
 
     void listTimeData(int schoolId, String schoolName) {

@@ -72,8 +72,9 @@
 
         android:id="@+id/mygrid"
         android:numColumns="4"
+        android:verticalSpacing="@dimen/dp_10"
         android:horizontalSpacing="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="23dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"

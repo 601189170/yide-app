@@ -17,6 +17,7 @@ import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -244,7 +245,7 @@ public class SwichSchoolPop extends PopupWindow {
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(mUser);
-                Log.e("TAG", "UserInfo==》: " + UserInfo.getInstance().getUserId());
+                Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
                 if (popupWindow!= null&&popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }

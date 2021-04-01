@@ -11,6 +11,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.VideoEntity;
+import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
 
@@ -42,7 +43,9 @@ public interface MainView extends BaseView {
 
     void listAllScheduleByTeacherIdDataFail(String rsp);
 
+    void addUserEquipmentInfo(addUserEquipmentInfoRsp rsp);
 
+    void addUserEquipmentInfoFail(String rsp);
 
 
 }
