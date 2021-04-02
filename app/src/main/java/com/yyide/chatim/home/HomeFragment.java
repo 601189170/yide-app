@@ -87,8 +87,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             @Override
             public void onClick(View v) {
                 new LeftMenuPop(mActivity);
-
-
             }
         });
 

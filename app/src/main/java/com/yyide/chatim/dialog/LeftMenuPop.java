@@ -43,15 +43,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener{
 
     private void init() {
 
-
-
         View mView = LayoutInflater.from(context).inflate(R.layout.layout_leftuser_pop, null);
 //        final PopupWindow popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
 //                ViewGroup.LayoutParams.MATCH_PARENT, true);
         popupWindow= new PopupWindow(mView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         popupWindow.setAnimationStyle(R.style.popwin_anim_style);
-
-
 
         LinearLayout layout = (LinearLayout)mView.findViewById(R.id.layout);
 

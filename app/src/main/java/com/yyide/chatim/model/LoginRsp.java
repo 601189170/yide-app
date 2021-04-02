@@ -10,8 +10,8 @@ public class LoginRsp {
      */
 
     public String msg;
+    public String message;
     public int code;
     public String token;
-
 
 }

@@ -96,15 +96,15 @@
                     android:id="@+id/tv_faculty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
                     android:background="@drawable/btn_selector"
                     android:paddingStart="@dimen/dp_12"
                     android:paddingTop="@dimen/dp_5"
                     android:paddingEnd="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_5"
+                    android:layout_marginEnd="@dimen/dp_8"
                     android:text="教职工"
                     android:textSize="@dimen/text_12"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_student"
                     app:layout_constraintTop_toTopOf="@+id/tv_parents" />
 
                 <TextView
@@ -123,6 +123,23 @@
                     app:layout_constraintBottom_toBottomOf="@+id/tv_notice_obj"
                     app:layout_constraintEnd_toStartOf="@+id/tv_faculty"
                     app:layout_constraintTop_toTopOf="@+id/tv_notice_obj" />
+
+                <TextView
+                    android:id="@+id/tv_student"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_selector"
+                    android:paddingStart="@dimen/dp_12"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingEnd="@dimen/dp_12"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:text="学生"
+                    android:textColor="@color/text_666666"
+                    android:textSize="@dimen/text_12"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_faculty"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_faculty" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
