@@ -166,6 +166,42 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         //注册极光用户
         RegistJiGuang();
+
+//        getUserSchool();
+    }
+
+    //获取学校信息
+    void getUserSchool() {
+
+        //请求组合创建
+        Request request = new Request.Builder()
+//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.URL_IP+"/management/cloud-system/user/getUserSchoolByApp")
+                .addHeader("Authorization", SpData.User().token)
+                .build();
+        //发起请求
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "getUserSigonFailure: " + e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                Log.e(TAG, "getUserSchool333==>: " + data);
+                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
+                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+                if (rsp.data!=null) {
+                    if (rsp.data.size() > 0) {
+                        SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+
+
+                        initIm(rsp.data.get(0).userId, SpData.UserSig());
+                    }
+                }
+            }
+        });
     }
     void RegistJiGuang(){
         int userId = SpData.getUserId();

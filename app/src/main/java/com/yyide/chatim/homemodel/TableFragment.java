@@ -60,7 +60,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         });
 //        listTimeData(SpData.Schoolinfo().data.get(0).parentId);
 //        listTimeData(1819);
-        mvpPresenter.listTimeDataByApp(1819);
+//        mvpPresenter.listTimeDataByApp(1819);
 //        listTimeData();
     }
 

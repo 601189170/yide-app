@@ -99,6 +99,7 @@ private Unbinder unbinder;
             @Override
             public void onClick(View view) {
                 Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
+
 //                TologinBymobile(mUserAccount.getText().toString(),"15920012647");
 //                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
@@ -119,8 +120,8 @@ private Unbinder unbinder;
         });
 //        getcode("15920012647");
         if (AppUtils.isAppDebug()){
-            userEdit.setText("13659896596");
-            passwordEdit.setText("896596");
+            userEdit.setText("14712341234");
+            passwordEdit.setText("341234");
         }
     }
 
@@ -315,7 +316,7 @@ private Unbinder unbinder;
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
-                Log.e(TAG, "getUserSig==>: " + data);
+                Log.e(TAG, "getUserSchool333==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
                 if (rsp.data!=null) {
