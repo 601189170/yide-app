@@ -6,11 +6,11 @@ package com.yyide.chatim.presenter;
 
 public class EventType {
 
+   public String code;
+   public String message;
 
-   public int i;
-
-   public String nn;
-   public String str;
-   public String str2;
-
+   public EventType(String code, String message) {
+      this.code = code;
+      this.message = message;
+   }
 }

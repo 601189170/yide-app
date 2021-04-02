@@ -296,7 +296,6 @@ private Unbinder unbinder;
         });
     }
 
-
     //获取学校信息
     void getUserSchool() {
 
@@ -322,14 +321,14 @@ private Unbinder unbinder;
                 if (rsp.data!=null) {
                     if (rsp.data.size() > 0) {
                         SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
-
-
+                        SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(0)));
                         initIm(rsp.data.get(0).userId, SpData.UserSig());
                     }
                 }
             }
         });
     }
+
     void initIm(int userid,String userSig) {
         TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
             @Override

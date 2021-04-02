@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
         Log.e(TAG, "loginName: "+JSON.toJSONString(loginName) );
         Log.e(TAG, "passWord: "+JSON.toJSONString(passWord) );
         if (!TextUtils.isEmpty(loginName)&&!TextUtils.isEmpty((passWord))){
-                Tologin(loginName,passWord);
+            Tologin(loginName,passWord);
         }else {
             startLogin();
         }
@@ -114,6 +114,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
     }
+
     private void handleData() {
         if (mUserInfo != null && mUserInfo.isAutoLogin()) {
             login();

@@ -86,7 +86,6 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content" />
                 <TextView
-                    android:text="深圳中学 老师"
                     android:id="@+id/user_class"
                     android:textColor="#666666"
                     android:layout_marginRight="11dp"
@@ -128,7 +127,6 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:text="初三02班"
                     android:id="@+id/user_sf"
                     android:textColor="#666666"
                     android:layout_marginRight="11dp"

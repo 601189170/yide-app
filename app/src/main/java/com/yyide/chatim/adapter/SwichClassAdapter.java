@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ import java.util.List;
  */
 
 public class SwichClassAdapter extends BaseAdapter {
-   public List<String> list=new ArrayList<>();
-   public int index=-1;
+    public List<GetUserSchoolRsp.DataBean.FormBean> list = new ArrayList<>();
+    public int index = -1;
 
     @Override
     public int getCount() {
@@ -26,7 +27,7 @@ public class SwichClassAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public GetUserSchoolRsp.DataBean.FormBean getItem(int position) {
         return list.get(position);
     }
 
@@ -43,17 +44,18 @@ public class SwichClassAdapter extends BaseAdapter {
         TextView className = VHUtil.ViewHolder.get(view, R.id.className);
 
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
-        className.setText("初三03班");
-
-        select.setVisibility(index==position?View.VISIBLE:View.GONE);
+        className.setText(getItem(position).classesName);
+        select.setVisibility(index == position ? View.VISIBLE : View.GONE);
         return view;
     }
-    public void notifyData( List<String> list) {
+
+    public void notifyData(List<GetUserSchoolRsp.DataBean.FormBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }
-    public void setIndex(int index){
-        this.index=index;
+
+    public void setIndex(int index) {
+        this.index = index;
         notifyDataSetChanged();
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -15,9 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.dialog.BottomHeadMenuPop;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.utils.GlideUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,8 +48,8 @@ public class UserActivity extends BaseActivity {
     TextView date;
     @BindView(R.id.layout4)
     FrameLayout layout4;
-    @BindView(R.id.yx)
-    TextView yx;
+    @BindView(R.id.tv_email)
+    TextView email;
     @BindView(R.id.layout5)
     FrameLayout layout5;
     @BindView(R.id.face)
@@ -66,7 +70,17 @@ public class UserActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText("我的信息");
+        initData();
+    }
 
+    private void initData() {
+        GetUserSchoolRsp.DataBean userInfo = SpData.getIdentityInfo();
+        GlideUtil.loadImage(this, userInfo.img, img);
+        sex.setText(TextUtils.isEmpty(userInfo.sex) ? userInfo.sex : "");
+        phone.setText(TextUtils.isEmpty(userInfo.username) ? userInfo.username : "");
+        date.setText(TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "");
+        email.setText(TextUtils.isEmpty(userInfo.email) ? userInfo.email : "");
+        face.setText(TextUtils.isEmpty(userInfo.email) ? userInfo.email : "");
     }
 
     @Override
@@ -80,7 +94,7 @@ public class UserActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout1, R.id.layout2, R.id.layout3, R.id.layout4, R.id.layout5, R.id.layout6,R.id.back_layout})
+    @OnClick({R.id.layout1, R.id.layout2, R.id.layout3, R.id.layout4, R.id.layout5, R.id.layout6, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1:
@@ -136,8 +150,8 @@ public class UserActivity extends BaseActivity {
         }
         if (requestCode == BaseConstant.REQ_CODE && resultCode == RESULT_OK) {
             /*缩略图信息是储存在返回的intent中的Bundle中的，
-            * 对应Bundle中的键为data，因此从Intent中取出
-            * Bundle再根据data取出来Bitmap即可*/
+             * 对应Bundle中的键为data，因此从Intent中取出
+             * Bundle再根据data取出来Bitmap即可*/
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
             img.setImageBitmap(bitmap);

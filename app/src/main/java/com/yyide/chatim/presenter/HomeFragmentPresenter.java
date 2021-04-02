@@ -23,9 +23,6 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         attachView(view);
     }
 
-
-
-
     public void getUserSchool() {
         mvpView.showLoading();
         addSubscription(dingApiStores.getUserSchool(), new ApiCallback<GetUserSchoolRsp>() {

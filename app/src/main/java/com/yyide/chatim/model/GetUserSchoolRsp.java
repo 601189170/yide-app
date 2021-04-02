@@ -1,9 +1,11 @@
 package com.yyide.chatim.model;
 
+import android.text.TextUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetUserSchoolRsp {
-
 
     /**
      * code : 200
@@ -16,8 +18,6 @@ public class GetUserSchoolRsp {
     public boolean success;
     public String msg;
     public List<DataBean> data;
-
-   
 
     public static class DataBean {
         /**
@@ -47,14 +47,44 @@ public class GetUserSchoolRsp {
          * introduce : null
          * img : null
          */
+        //家长：0 ,学生：1 ,校长：2 ,班主任：3,老师：4,班牌账号：5，管理员账号：6
+        public static final String TYPE_PARENTS = "0";
+        public static final String TYPE_STUDENT = "1";
+        public static final String TYPE_PRESIDENT = "2";
+        public static final String TYPE_CLASS_TEACHER = "3";
+        public static final String TYPE_TEACHER = "4";
+        public static final String TYPE_BRAND_AUTH = "5";
+        public static final String TYPE_ADMIN = "6";
+
+        public String getIdentity() {
+            String identity = "";
+            if (!TextUtils.isEmpty(status)) {
+                if(TYPE_PARENTS.equals(status)){
+                    identity = "家长";
+                } else if (TYPE_STUDENT.equals(status)) {
+                    identity = "学生";
+                } else if (TYPE_PRESIDENT.equals(status)) {
+                    identity = "校长";
+                } else if (TYPE_CLASS_TEACHER.equals(status)) {
+                    identity = "班主任";
+                } else if (TYPE_TEACHER.equals(status)) {
+                    identity = "老师";
+                } else if (TYPE_BRAND_AUTH.equals(status)) {
+                    identity = "班牌账号";
+                } else if (TYPE_ADMIN.equals(status)) {
+                    identity = "管理员账号";
+                }
+            }
+            return identity;
+        }
 
         public String realname;
         public String username;
         public String password;
         public int userId;
         public int schoolId;
-        public Object classesId;
-        public Object classesName;
+        public String classesId;
+        public String classesName;
         public int parentId;
         public String schoolName;
         public String schoolType;
@@ -63,15 +93,15 @@ public class GetUserSchoolRsp {
         public Object depIds;
         public String status;
         public Object depId;
-        public Object depName;
+        public String depName;
         public Object dataPerDepIds;
         public List<String> imgList;
-        public Object birthdayDate;
-        public Object sex;
-        public Object email;
+        public String birthdayDate;
+        public String sex;
+        public String email;
         public Object schedule;
         public Object introduce;
-        public Object img;
+        public String img;
         public List<FormBean> form;
 
         public static class FormBean {
@@ -87,7 +117,15 @@ public class GetUserSchoolRsp {
             public String classesTeacher;
             public int teacherId;
 
-            
+
         }
+    }
+
+    public void getClassInfo(){
+
+    }
+
+    public void getIdentity(){
+
     }
 }

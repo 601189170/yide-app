@@ -35,6 +35,7 @@ import com.yyide.chatim.view.HomeFragmentView;
 import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -68,7 +69,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @BindView(R.id.layout_message)
     FrameLayout layoutMessage;
     private View mBaseView;
-
     private long firstTime = 0;
 
     @Nullable
@@ -83,17 +83,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         super.onViewCreated(view, savedInstanceState);
 //        showProgressDialog2();
 
-        userImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new LeftMenuPop(mActivity);
-            }
-        });
-
         setFragment();
 
         mvpPresenter.getUserSchool();
-
         initVerticalTextview();
 
     }
@@ -117,13 +109,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         layoutMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),MessageNoticeActivity.class));
+                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
             }
         });
         spmsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),MessageNoticeActivity.class));
+                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
             }
         });
     }
@@ -133,12 +125,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-
     @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
-//                new LeftMenuPop(mActivity);
+                LeftMenuPop leftMenuPop = new LeftMenuPop(mActivity);
                 break;
             case R.id.scan:
                 startActivity(new Intent(getActivity(), ScanActivity.class));
@@ -193,7 +184,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
         }
         setSchoolInfo(rsp);
-
     }
 
     void setSchoolInfo(GetUserSchoolRsp rsp) {
@@ -207,23 +197,30 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 if (datum.schoolId == ids) {
                     qhSchool = datum.schoolName;
                     qhName = datum.username;
-                    if (datum.imgList.size() > 0) {
+                    if (datum.imgList != null && datum.imgList.size() > 0) {
                         qhPhoto = datum.imgList.get(0);
                         SPUtils.getInstance().put(SpData.USERPHOTO, qhPhoto);
                     }
-
                 }
             }
             schoolName.setText(qhSchool);
             userName.setText(qhName);
             SPUtils.getInstance().put(SpData.USERNAME, qhName);
+            //保存信息
+            if(SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 0){
+                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(0)));
+                if(SpData.Schoolinfo().data.get(0).form != null && SpData.Schoolinfo().data.get(0).form.size() > 0){
+                    SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(0).form.get(0)));
+                }
+            }
         } else {
-
-            schoolName.setText(rsp.data.get(0).schoolName);
-            userName.setText(rsp.data.get(0).username);
-            SPUtils.getInstance().put(SpData.USERNAME, rsp.data.get(0).username);
-            if (rsp.data.get(0).imgList.size() > 0) {
-                SPUtils.getInstance().put(SpData.USERPHOTO, rsp.data.get(0).imgList.get(0));
+            if (rsp.data != null && rsp.data.get(0) != null) {
+                schoolName.setText(rsp.data.get(0).schoolName);
+                userName.setText(rsp.data.get(0).username);
+                SPUtils.getInstance().put(SpData.USERNAME, rsp.data.get(0).username);
+                if (rsp.data.get(0).imgList.size() > 0) {
+                    SPUtils.getInstance().put(SpData.USERPHOTO, rsp.data.get(0).imgList.get(0));
+                }
             }
         }
 

@@ -31,7 +31,7 @@ public interface MainView extends BaseView {
 
     void UserLogoutDataFail(String msg);
 
-    void getUserSchool(GetUserSchoolRsp rsp);
+//    void getUserSchool(GetUserSchoolRsp rsp);
 
     void getUserSchoolDataFail(String rsp);
 

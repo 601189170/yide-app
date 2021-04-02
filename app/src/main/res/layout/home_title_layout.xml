@@ -18,18 +18,17 @@
             android:layout_marginLeft="12dp"
             android:layout_width="30dp"
             android:layout_height="match_parent" >
+
             <TextView
-                android:text="user"
-                android:textSize="10sp"
+                android:id="@+id/user_name"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
-                android:id="@+id/user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textSize="10sp" />
         </FrameLayout>
 
         <TextView
-            android:text="深圳中学"
             android:textSize="18sp"
             android:layout_gravity="center"
             android:textColor="#222222"

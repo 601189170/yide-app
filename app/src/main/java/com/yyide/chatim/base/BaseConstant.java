@@ -44,8 +44,6 @@ public class BaseConstant {
     /*Base高*/
     public static int BaseHeight =177;
 
-    public static int CheakId =1;
-
     public static final MediaType JSON= MediaType.parse("application/json; charset=utf-8");
 
 
@@ -57,4 +55,10 @@ public class BaseConstant {
      * request Code 拍取照片不裁切
      **/
     public final static int REQ_CODE = 127;
+
+    /**
+     * EventBus 常量
+     */
+    public static final String TYPE_CHECK_HELP_CENTER = "type_check_help_center";
+    public static final String CheakId = "1";
 }

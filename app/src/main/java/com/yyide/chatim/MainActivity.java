@@ -7,32 +7,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.SPUtils;
 
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.chat.info.UserInfo;
@@ -43,15 +35,12 @@ import com.yyide.chatim.home.HomeFragmentXZ;
 import com.yyide.chatim.home.MessageFragment;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ScheduleRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.addUserEquipmentInfoRsp;
-import com.yyide.chatim.model.getUserSigRsp;
-import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.presenter.EventType;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.utils.DemoLog;
@@ -63,16 +52,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.cache.Sp;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -155,7 +141,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
 //        mvpPresenter.ToUserLogout();
 
-        mvpPresenter.getUserSchool();
+//        mvpPresenter.getUserSchool();
 //        mvpPresenter.SelectSchByTeaid();
 
 
@@ -163,46 +149,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
 //        CheacklistSchedule("99","1","10");
 
-
         //注册极光用户
         RegistJiGuang();
-
 //        getUserSchool();
     }
 
-    //获取学校信息
-    void getUserSchool() {
-
-        //请求组合创建
-        Request request = new Request.Builder()
-//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP+"/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().token)
-                .build();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "getUserSigonFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e(TAG, "getUserSchool333==>: " + data);
-                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
-                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.data!=null) {
-                    if (rsp.data.size() > 0) {
-                        SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
-
-
-                        initIm(rsp.data.get(0).userId, SpData.UserSig());
-                    }
-                }
-            }
-        });
-    }
     void RegistJiGuang(){
         int userId = SpData.getUserId();
         String rid = JPushInterface.getRegistrationID(getApplicationContext());
@@ -211,12 +162,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         mvpPresenter.addUserEquipmentInfo(userId,rid, String.valueOf(alias),equipmentType);
     }
 
-
     @Override
     protected MainPresenter createPresenter() {
         return new MainPresenter(this);
     }
-
 
     @Override
     protected void onStop() {
@@ -245,12 +194,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventType messageEvent) {
-        if (messageEvent.i == BaseConstant.CheakId) {
+        if (BaseConstant.CheakId.equals(messageEvent.code)) {
             IdType = 2;
             ActivityUtils.finishAllActivities();
             startActivity(new Intent(this, MainActivity.class));
             Log.e("TAG", "messageEvent: " + IdType);
             setTab(0);
+        } else if(BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.code)){
+            setTab(3);
         }
     }
 
@@ -344,19 +295,20 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         Log.e("TAG", "UserLogoutDataFail==》: " + JSON.toJSONString(msg));
     }
 
-    @Override
-    public void getUserSchool(GetUserSchoolRsp rsp) {
-        Log.e("TAG", "GetUserSchoolRsp==》: " + JSON.toJSONString(rsp));
-        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-        if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
-            SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+//    @Override
+//    public void getUserSchool(GetUserSchoolRsp rsp) {
+//        Log.e("TAG", "GetUserSchoolRsp==》: " + JSON.toJSONString(rsp));
+//        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+//        if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
+//            SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+//
+//
+////            handleData(rsp.data.get(0).userId,SpData.UserSig());
+//        }
+//
+//
+//    }
 
-
-//            handleData(rsp.data.get(0).userId,SpData.UserSig());
-        }
-
-
-    }
     private void handleData(int userId,String UserSig) {
         if (mUserInfo != null && mUserInfo.isAutoLogin()) {
 //            login();
@@ -366,6 +318,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             initIm(userId,UserSig);
         }
     }
+
     @Override
     public void getUserSchoolDataFail(String rsp) {
         Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
@@ -400,7 +353,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public void addUserEquipmentInfoFail(String rsp) {
         Log.e("TAG", "addUserEquipmentInfoFail==》: " + JSON.toJSONString(rsp));
     }
-
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
 

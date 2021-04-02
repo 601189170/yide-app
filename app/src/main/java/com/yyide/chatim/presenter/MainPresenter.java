@@ -77,25 +77,25 @@ public class MainPresenter extends BasePresenter<MainView> {
         });
     }
 
-    public void getUserSchool() {
-        mvpView.showLoading();
-        addSubscription(dingApiStores.getUserSchool(), new ApiCallback<GetUserSchoolRsp>() {
-            @Override
-            public void onSuccess(GetUserSchoolRsp model) {
-                mvpView.getUserSchool(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getUserSchoolDataFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
+//    public void getUserSchool() {
+//        mvpView.showLoading();
+//        addSubscription(dingApiStores.getUserSchool(), new ApiCallback<GetUserSchoolRsp>() {
+//            @Override
+//            public void onSuccess(GetUserSchoolRsp model) {
+//                mvpView.getUserSchool(model);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                mvpView.getUserSchoolDataFail(msg);
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                mvpView.hideLoading();
+//            }
+//        });
+//    }
 
 
     public void SelectSchByTeaid() {
@@ -138,6 +138,7 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
+
     public void addUserEquipmentInfo(int userId,String registrationId,String alias,String equipmentType) {
         mvpView.showLoading();
         Map<String,String> map = new HashMap<String, String>();

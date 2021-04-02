@@ -88,6 +88,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 adapter.setIndex(position);
+                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(position)));
                 selectUserSchool(adapter.list.get(position).schoolId,adapter.getItem(position).schoolName);
             }
         });
@@ -148,11 +149,7 @@ public class SwichSchoolPop extends PopupWindow {
             }
         });
         popupWindow.showAtLocation(mView,Gravity.NO_GRAVITY,0,0);
-
-
-
     }
-
 
     void selectUserSchool(int schoolId, String schoolName) {
         SchoolRsp rsp=new SchoolRsp();
