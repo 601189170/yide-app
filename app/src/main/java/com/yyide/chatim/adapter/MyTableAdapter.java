@@ -5,8 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
@@ -18,7 +20,7 @@ import java.util.List;
  */
 
 public class MyTableAdapter extends BaseAdapter {
-   public List<String> list=new ArrayList<>();
+   public List<SelectSchByTeaidRsp.DataBean> list=new ArrayList<>();
 
 
     @Override
@@ -27,7 +29,7 @@ public class MyTableAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public SelectSchByTeaidRsp.DataBean getItem(int position) {
         return list.get(position);
     }
 
@@ -40,11 +42,16 @@ public class MyTableAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mytable_item, null, false);
-        ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
+        TextView seciton = VHUtil.ViewHolder.get(view, R.id.seciton);
+        TextView className = VHUtil.ViewHolder.get(view, R.id.className);
+        TextView time = VHUtil.ViewHolder.get(view, R.id.time);
+        className.setText(getItem(position).classesName);
+        seciton.setText("第"+getItem(position).section+"节");
+        time.setText(getItem(position).fromDateTime+"-"+getItem(position).toDateTime);
 
         return view;
     }
-    public void notifyData( List<String> list) {
+    public void notifyData( List<SelectSchByTeaidRsp.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

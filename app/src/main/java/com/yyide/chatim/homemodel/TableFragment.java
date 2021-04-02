@@ -7,38 +7,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.Talble.Presenter.TablePresenter;
+import com.yyide.chatim.Talble.View.listTimeDataByAppView;
 import com.yyide.chatim.activity.TableActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.ClassRsp;
-import com.yyide.chatim.model.listTimeDataByAppRsp;
-import com.yyide.chatim.Talble.View.listTimeDataByAppView;
-
-import java.io.IOException;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
 
 import androidx.annotation.Nullable;
 import butterknife.BindView;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 public class TableFragment extends BaseMvpFragment<TablePresenter> implements listTimeDataByAppView {
 
     @BindView(R.id.tablelayout)
     FrameLayout tablelayout;
+    @BindView(R.id.subjectName)
+    TextView subjectName;
+    @BindView(R.id.className)
+    TextView className;
+    @BindView(R.id.time)
+    TextView time;
+    @BindView(R.id.tips)
+    TextView tips;
     private View mBaseView;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
     private static final String TAG = "TableFragment";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +60,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
             }
         });
 //        listTimeData(SpData.Schoolinfo().data.get(0).parentId);
-//        listTimeData(1819);
-//        mvpPresenter.listTimeDataByApp(1819);
+//        listTimeData(1983);
+        mvpPresenter.SelectSchByTeaid();
 //        listTimeData();
     }
 
@@ -70,48 +71,26 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     }
 
 
-    void listTimeData(int classId) {
-        ClassRsp rsp = new ClassRsp();
-        rsp.classId = classId;
-        RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
-
-        //请求组合创建
-        Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + "/timetable/cloud-timetable/timetable/listTimeDataByApp")
-                .addHeader("Authorization", SpData.User().token)
-                .post(requestBody)
-                .build();
-        //发起请求
-
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("TAG", "onFailure: " + e.toString());
+    @Override
+    public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
+        Log.e(TAG, "SelectSchByTeaid: " + JSON.toJSONString(rsp));
+        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+            if (rsp.data.size()>0){
+                setTableMsg(rsp.data.get(0));
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e("TAG", "listTimeDatamOkHttpClient==>: " + data);
-//                SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
-//                if (bean.code==BaseConstant.REQUEST_SUCCES2){
-//                    Tologin(bean.data.username,bean.data.password, String.valueOf(schoolId));
-//                }
-            }
-        });
+        }
     }
 
-
-
-
-    @Override
-    public void listTimeDataByApp(listTimeDataByAppRsp rsp) {
-        Log.e(TAG, "listTimeDataByApp==>>: "+JSON.toJSONString(rsp) );
-
+    void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
+        subjectName.setText(rsp.subjectName);
+        className.setText(rsp.classesName);
+        time.setText(rsp.fromDateTime+"-"+rsp.toDateTime);
+        tips.setText(rsp.subjectName);
     }
 
     @Override
-    public void listTimeDataByAppFail(String rsp) {
+    public void SelectSchByTeaidFail(String msg) {
 
     }
 }

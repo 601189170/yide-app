@@ -24,6 +24,7 @@
           android:layout_width="30dp"
           android:layout_height="30dp" />
         <TextView
+            android:id="@+id/className"
             android:layout_marginLeft="8dp"
             android:text="初一"
             android:textSize="18sp"
@@ -31,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
           <TextView
+              android:id="@+id/seciton"
               android:text="01-02节"
               android:textColor="#222222"
               android:textSize="14sp"
@@ -42,6 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
           <TextView
+              android:id="@+id/time"
               android:layout_marginRight="13dp"
               android:textColor="#2C8AFF"
               android:textSize="14sp"

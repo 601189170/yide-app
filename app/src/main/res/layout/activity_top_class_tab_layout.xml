@@ -12,6 +12,7 @@
     android:layout_height="96dp">
  <FrameLayout
      android:layout_marginTop="15dp"
+     android:id="@+id/classlayout"
      android:background="@drawable/bg_stoke_gray_corners2"
      android:layout_width="115dp"
      android:layout_height="30dp">

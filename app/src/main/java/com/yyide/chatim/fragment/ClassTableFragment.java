@@ -19,6 +19,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ClassRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
+import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.presenter.ClassTablePresenter;
 import com.yyide.chatim.view.ClassTableView;
 
@@ -71,16 +72,17 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 //        mvpPresenter.getMyData();
 
         createLeftView(10);
-        createItemCourseView("111", 0, 1, 0);
-        createItemCourseView("222", 1, 1, 0);
-        createItemCourseView("语文", 2, 1, 0);
-        createItemCourseView("數學", 3, 2, 0);
-        createItemCourseView("英語", 5, 1, 0);
-        createItemCourseView("英語", 6, 1, 0);
-        createItemCourseView("英語", 7, 2, 0);
-        createItemCourseView("英語", 9, 1, 0);
-        createItemCourseView("物理", 0, 1, 1);
-        createItemCourseView("物理", 9, 1, 1);
+
+//        createItemCourseView("111", 0, 1, 0);
+//        createItemCourseView("222", 1, 1, 0);
+//        createItemCourseView("语文", 2, 1, 0);
+//        createItemCourseView("數學", 3, 2, 0);
+//        createItemCourseView("英語", 5, 1, 0);
+//        createItemCourseView("英語", 6, 1, 0);
+//        createItemCourseView("英語", 7, 2, 0);
+//        createItemCourseView("英語", 9, 1, 0);
+//        createItemCourseView("物理", 0, 1, 1);
+//        createItemCourseView("物理", 9, 1, 1);
         titleLayout.setVisibility(View.GONE);
         adapter = new TableTimeAdapter();
         grid.setAdapter(adapter);
@@ -109,7 +111,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 //            }
 //        });
         mvpPresenter.listAllBySchoolId();
-
+        mvpPresenter.listTimeDataByApp(630);
     }
 
     @Override
@@ -174,7 +176,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //创建单个课程视图
     private void createItemCourseView(String name, int selection, int length, int week) {
 
-        int CouseWith = 121;
+        int CouseWith = 42;
         int CouseHeight = 181;
         final View v = LayoutInflater.from(mActivity).inflate(R.layout.course_card, null); //加载单个课程布局
 //            v.setY(height * (course.getStart()-1)); //设置开始高度,即第几节课开始
@@ -197,7 +199,10 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     @Override
     public void listAllBySchoolId(listAllBySchoolIdRsp rsp) {
+        Log.e("TAG", "listAllBySchoolId==>: "+JSON.toJSONString(rsp) );
+        if (rsp.code==BaseConstant.REQUEST_SUCCES2){
 
+        }
     }
 
     @Override
@@ -205,6 +210,30 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     }
 
+    @Override
+    public void listTimeDataByApp(listTimeDataByAppRsp rsp) {
+        Log.e("TAG", "listTimeDataByApp==>: "+JSON.toJSONString(rsp) );
+
+        if (rsp.code==BaseConstant.REQUEST_SUCCES2){
+            setTable(rsp);
+        }
+    }
+
+    @Override
+    public void listTimeDataByAppFail(String rsp) {
+
+    }
+    void setTable(listTimeDataByAppRsp rsp){
+        for (listTimeDataByAppRsp.DataBean.SubListBean subListBean : rsp.data.subList) {
+//            createItemCourseView("111", 0, 1, 0);
+            if (subListBean.weekTime==7){
+                Log.e("TAG", "setTable==》7: "+JSON.toJSONString(subListBean) );
+            }
+
+            createItemCourseView(subListBean.subjectName, subListBean.section,1,subListBean.weekTime);
+        }
+
+    }
 
     void listTimeData(int classId) {
         ClassRsp rsp = new ClassRsp();

@@ -120,8 +120,8 @@ private Unbinder unbinder;
         });
 //        getcode("15920012647");
         if (AppUtils.isAppDebug()){
-            userEdit.setText("14712341234");
-            passwordEdit.setText("341234");
+            userEdit.setText("13511111111");
+            passwordEdit.setText("111111");
         }
     }
 

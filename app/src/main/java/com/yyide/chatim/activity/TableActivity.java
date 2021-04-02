@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.ClassTableFragment;
+import com.yyide.chatim.fragment.ClassTableFragment2;
 import com.yyide.chatim.fragment.MyTableFragment;
 
 import androidx.fragment.app.Fragment;
@@ -89,7 +90,7 @@ public class TableActivity extends BaseActivity {
                 break;
             case 1:
                 if (fg2 == null) {
-                    fg2 = new ClassTableFragment();
+                    fg2 = new ClassTableFragment2();
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
                     ft.show(fg2);

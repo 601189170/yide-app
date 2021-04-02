@@ -3,6 +3,9 @@ package com.yyide.chatim.utils;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
+
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Hao on 2017/7/18.
@@ -179,18 +183,19 @@ public class TimeUtil {
 
         Calendar calendar = Calendar.getInstance();
 
-        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
 
         // 获取本周的第一天
         int firstDayOfWeek = calendar.getFirstDayOfWeek();
-
+        Log.e("TAG", "getWeekDay: "+firstDayOfWeek );
         List<WeekDay> list = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             calendar.set(Calendar.DAY_OF_WEEK, firstDayOfWeek + i);
+
             WeekDay weekDay = new WeekDay();
             // 获取星期的显示名称，例如：周一、星期一、Monday等等
             weekDay.week = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.CHINA);
-            weekDay.day = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+            weekDay.day = new SimpleDateFormat("MM/dd").format(calendar.getTime());
 
             list.add(weekDay);
         }
@@ -426,4 +431,23 @@ public class TimeUtil {
 
         return belongCalendar(now, beginTime, endTime);
     }
+
+   public void ToDoTime(String time){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ");
+        DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df2.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = null;
+        try {
+            date = df.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String value = df2.format(date);
+        Log.e("TAG", "ToDoTime: "+ JSON.toJSONString(value));
+
+
+
+    }
+
+
 }

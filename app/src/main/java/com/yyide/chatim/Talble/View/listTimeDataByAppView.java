@@ -4,6 +4,7 @@ package com.yyide.chatim.Talble.View;
 
 import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 
 /**
@@ -13,10 +14,10 @@ import com.yyide.chatim.model.listTimeDataByAppRsp;
 public interface listTimeDataByAppView extends BaseView {
 
 
-    void listTimeDataByApp(listTimeDataByAppRsp rsp);
-
-    void listTimeDataByAppFail(String rsp);
 
 
 
+    void SelectSchByTeaid(SelectSchByTeaidRsp rsp);
+
+    void SelectSchByTeaidFail(String msg);
 }

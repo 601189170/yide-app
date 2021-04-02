@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F8FC"
+    android:layout_height="match_parent">
+    <include
+        layout="@layout/activity_top_class_tab_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+    </include>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:paddingLeft="@dimen/dp_12"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/left_layout"
+                android:orientation="vertical"
+                android:layout_width="30dp"
+                android:layout_height="match_parent">
+
+            </RelativeLayout>
+            <GridView
+                android:id="@+id/listsection"
+                android:verticalSpacing="1dp"
+                android:numColumns="1"
+                android:layout_width="21dp"
+                android:layout_height="match_parent">
+
+            </GridView>
+        <com.yyide.chatim.widget.MyGridView
+
+            android:id="@+id/tablegrid"
+            android:horizontalSpacing="1dp"
+            android:verticalSpacing="1dp"
+            android:numColumns="7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.yyide.chatim.widget.MyGridView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

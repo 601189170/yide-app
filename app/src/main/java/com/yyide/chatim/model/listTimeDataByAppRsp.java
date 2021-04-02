@@ -116,7 +116,7 @@ public class listTimeDataByAppRsp {
             public Object timetableScheduleType;
             public String fromDateTime;
             public String toDateTime;
-            public String section;
+            public int section;
             public int weekTime;
             public String subjectName;
             public String classesTeacher;

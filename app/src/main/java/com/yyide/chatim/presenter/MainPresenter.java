@@ -98,25 +98,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 //    }
 
 
-    public void SelectSchByTeaid() {
-        mvpView.showLoading();
-        addSubscription(dingApiStores.selectSchByTeaid(), new ApiCallback<SelectSchByTeaidRsp>() {
-            @Override
-            public void onSuccess(SelectSchByTeaidRsp model) {
-                mvpView.selectSchByTeaid(model);
-            }
 
-            @Override
-            public void onFailure(String msg) {
-                mvpView.selectSchByTeaidDataFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
 
 
     public void listAllScheduleByTeacherId() {

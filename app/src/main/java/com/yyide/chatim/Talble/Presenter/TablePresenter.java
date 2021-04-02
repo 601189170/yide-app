@@ -4,10 +4,14 @@ package com.yyide.chatim.Talble.Presenter;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.TableJSON;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.Talble.View.listTimeDataByAppView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 
@@ -24,19 +28,22 @@ public class TablePresenter extends BasePresenter<listTimeDataByAppView> {
 
 
 
-    public void listTimeDataByApp(int classid) {
+
+
+    public void SelectSchByTeaid() {
         mvpView.showLoading();
-        TableJSON info=new TableJSON(classid);
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(info));
-        addSubscription(dingApiStores.listTimeDataByApp(body), new ApiCallback<listTimeDataByAppRsp>() {
+//        Map<String,String> map = new HashMap<String, String>();
+//        map.put("classesId",classesId);
+//        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        addSubscription(dingApiStores.selectSchByTeaid(), new ApiCallback<SelectSchByTeaidRsp>() {
             @Override
-            public void onSuccess(listTimeDataByAppRsp model) {
-                mvpView.listTimeDataByApp(model);
+            public void onSuccess(SelectSchByTeaidRsp model) {
+                mvpView.SelectSchByTeaid(model);
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.listTimeDataByAppFail(msg);
+                mvpView.SelectSchByTeaidFail(msg);
             }
 
             @Override
@@ -45,8 +52,6 @@ public class TablePresenter extends BasePresenter<listTimeDataByAppView> {
             }
         });
     }
-
-
 
 
 

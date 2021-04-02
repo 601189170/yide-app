@@ -70,6 +70,7 @@ public interface DingApiStores {
     @GET("/management/cloud-system/user/getUserSchoolByApp")
     Observable<GetUserSchoolRsp> getUserSchool();
     //查询老师课程信息
+    @Headers({"Content-Type: application/json","Accept: application/json"})//需要添加头
     @POST("/timetable/cloud-timetable/schedule/selectSchByTeaid")
     Observable<SelectSchByTeaidRsp> selectSchByTeaid();
     //查询该老师教哪几个班级

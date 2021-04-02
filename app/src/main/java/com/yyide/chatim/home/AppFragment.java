@@ -68,9 +68,9 @@ public class AppFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (adapter.list.get(position).id.equals("99")){
 //                    startActivity(new Intent(mActivity,));
-
-                        startActivity(new Intent(mActivity, AppManagerActivity.class));
-
+//                    startActivity(new Intent(mActivity, AppManagerActivity.class));
+                }else {
+                    startActivity(new Intent(mActivity,LeaveActivity.class));
                 }
             }
         });
@@ -157,7 +157,8 @@ public class AppFragment extends BaseFragment {
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mActivity,LeaveActivity.class));
+//                startActivity(new Intent(mActivity,LeaveActivity.class));
+                startActivity(new Intent(mActivity, AppManagerActivity.class));
             }
         });
     }

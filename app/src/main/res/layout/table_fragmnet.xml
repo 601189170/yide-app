@@ -41,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
                 <TextView
+                    android:id="@+id/subjectName"
                     android:text="语文课"
                     android:textColor="@color/white"
                     android:textSize="12sp"
@@ -49,6 +50,7 @@
             </LinearLayout>
         </LinearLayout>
         <TextView
+            android:id="@+id/className"
             android:text="初二03班"
             android:layout_marginTop="55dp"
             android:layout_gravity="center_horizontal"
@@ -59,11 +61,12 @@
             android:layout_height="wrap_content" />
 *
         <TextView
+            android:id="@+id/time"
             android:layout_gravity="center_horizontal"
             android:text="11:00-12:00"
             android:textColor="@color/white"
             android:textSize="10sp"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="85dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <FrameLayout
@@ -82,6 +85,7 @@
             android:layout_marginLeft="15dp"
             android:layout_height="14dp" />
             <TextView
+                android:id="@+id/tips"
                 android:textColor="@color/white"
                 android:textSize="11sp"
                 android:layout_marginLeft="35dp"
