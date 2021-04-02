@@ -11,6 +11,7 @@ import com.yyide.chatim.model.ListScheduleRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.NewsDetailsEntity;
 import com.yyide.chatim.model.NewsEntity;
+import com.yyide.chatim.model.SearchRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
@@ -66,7 +67,7 @@ public interface DingApiStores {
     @POST("/cloud-system/user/selectUser")
     Observable<SelectUserRsp> getSelectUser();
     //查询登入用户学校
-    @GET("/management/cloud-system/user/getUserSchool")
+    @GET("/management/cloud-system/user/getUserSchoolByApp")
     Observable<GetUserSchoolRsp> getUserSchool();
     //查询老师课程信息
     @POST("/timetable/cloud-timetable/schedule/selectSchByTeaid")
@@ -99,4 +100,8 @@ public interface DingApiStores {
     //查询组织架构列表信息
     @POST("/school/cloud-school/department/listByApp")
     Observable<listByAppRsp> listByApp();
+
+    //查询应用
+    @POST("/backstage/cloud-backstage/application/search")
+    Observable<SearchRsp> Search();
 }
