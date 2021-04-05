@@ -33,7 +33,6 @@ import butterknife.OnClick;
 
 public class HelpFragment extends BaseFragment {
 
-
     @BindView(R.id.rmtext)
     TextView rmtext;
     @BindView(R.id.jjtext)

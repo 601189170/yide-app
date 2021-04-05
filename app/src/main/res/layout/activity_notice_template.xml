@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F8FC"
-    tools:context=".notice.NoticeTemplateActivity">
+    tools:context=".activity.notice.NoticeTemplateActivity">
 
     <include
         android:id="@+id/top"

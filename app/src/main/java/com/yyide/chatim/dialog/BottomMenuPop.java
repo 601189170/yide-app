@@ -2,13 +2,10 @@ package com.yyide.chatim.dialog;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -25,7 +22,6 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -36,17 +32,13 @@ import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.SelectUserSchoolRsp;
-import com.yyide.chatim.presenter.EventType;
 import com.yyide.chatim.utils.DemoLog;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;

@@ -9,13 +9,15 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.EventMessage;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SexActivity extends BaseActivity {
-
 
     @BindView(R.id.back)
     TextView back;
@@ -53,17 +55,20 @@ public class SexActivity extends BaseActivity {
         super.onPause();
     }
 
-
     @OnClick({R.id.layout1, R.id.layout2,R.id.back, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.layout1:
+            case R.id.layout1://男
                 type1.setVisibility(View.VISIBLE);
                 type2.setVisibility(View.GONE);
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_USER_SEX, "0"));
+                finish();
                 break;
-            case R.id.layout2:
+            case R.id.layout2://女
                 type1.setVisibility(View.GONE);
                 type2.setVisibility(View.VISIBLE);
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_USER_SEX, "1"));
+                finish();
                 break;
             case R.id.back_layout:
                 finish();

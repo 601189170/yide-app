@@ -27,8 +27,7 @@ import com.yyide.chatim.activity.PowerActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.presenter.EventType;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.utils.GlideUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -58,19 +57,19 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 
         LinearLayout layout = (LinearLayout) mView.findViewById(R.id.layout);
 
-        FrameLayout bg = (FrameLayout) mView.findViewById(R.id.bg);
-        TextView head_name = (TextView) mView.findViewById(R.id.head_name);
-        TextView user_identity = (TextView) mView.findViewById(R.id.user_sf);
-        TextView user_class = (TextView) mView.findViewById(R.id.user_class);
-        ImageView head_img = (ImageView) mView.findViewById(R.id.head_img);
-        LinearLayout layout1 = (LinearLayout) mView.findViewById(R.id.layout1);
-        LinearLayout layout2 = (LinearLayout) mView.findViewById(R.id.layout2);
-        LinearLayout layout3 = (LinearLayout) mView.findViewById(R.id.layout3);
-        LinearLayout layout4 = (LinearLayout) mView.findViewById(R.id.layout4);
-        LinearLayout layout5 = (LinearLayout) mView.findViewById(R.id.layout5);
-        LinearLayout layout6 = (LinearLayout) mView.findViewById(R.id.layout6);
-        LinearLayout layout7 = (LinearLayout) mView.findViewById(R.id.layout7);
-        LinearLayout layout8 = (LinearLayout) mView.findViewById(R.id.layout8);
+        FrameLayout bg = mView.findViewById(R.id.bg);
+        TextView head_name = mView.findViewById(R.id.head_name);
+        TextView user_identity = mView.findViewById(R.id.user_sf);
+        TextView user_class = mView.findViewById(R.id.user_class);
+        ImageView head_img = mView.findViewById(R.id.head_img);
+        LinearLayout layout1 = mView.findViewById(R.id.layout1);
+        LinearLayout layout2 = mView.findViewById(R.id.layout2);
+        LinearLayout layout3 = mView.findViewById(R.id.layout3);
+        LinearLayout layout4 = mView.findViewById(R.id.layout4);
+        LinearLayout layout5 = mView.findViewById(R.id.layout5);
+        LinearLayout layout6 = mView.findViewById(R.id.layout6);
+        LinearLayout layout7 = mView.findViewById(R.id.layout7);
+        LinearLayout layout8 = mView.findViewById(R.id.layout8);
         mView.findViewById(R.id.exit).setOnClickListener(this);
         layout1.setOnClickListener(this);
         layout2.setOnClickListener(this);
@@ -91,19 +90,10 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         Log.e("TAG", "UserName: " + JSON.toJSONString(SpData.UserName()));
         Log.e("TAG", "UserPhoto: " + JSON.toJSONString(SpData.UserPhoto()));
 //        new BottomMenuPop(context);
-        layout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        bg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                bg.setBackgroundColor(context.getResources().getColor(R.color.float_transparent));
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+        layout.setOnTouchListener((v, event) -> true);
+        bg.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
 
@@ -118,32 +108,26 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         popupWindow.setBackgroundDrawable(null);
         popupWindow.getContentView().setFocusable(true);
         popupWindow.getContentView().setFocusableInTouchMode(true);
-        popupWindow.getContentView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (popupWindow != null && popupWindow.isShowing()) {
-                        popupWindow.dismiss();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        popupWindow.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                //如果设置了背景变暗，那么在dissmiss的时候需要还原
-                if (mWindow != null) {
-                    WindowManager.LayoutParams params = mWindow.getAttributes();
-                    params.alpha = 1.0f;
-                    mWindow.setAttributes(params);
-                }
+        popupWindow.getContentView().setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
+
+                return true;
+            }
+            return false;
+        });
+
+        popupWindow.setOnDismissListener(() -> {
+            //如果设置了背景变暗，那么在dissmiss的时候需要还原
+            if (mWindow != null) {
+                WindowManager.LayoutParams params = mWindow.getAttributes();
+                params.alpha = 1.0f;
+                mWindow.setAttributes(params);
+            }
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
         if (context != null) {
@@ -202,7 +186,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 context.startActivity(new Intent(context, ResetPassWordActivity.class));
                 break;
             case R.id.layout5://帮助中心
-                EventBus.getDefault().post(new EventType(BaseConstant.TYPE_CHECK_HELP_CENTER, ""));
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_CHECK_HELP_CENTER, ""));
                 break;
             case R.id.layout6://权限设置
                 context.startActivity(new Intent(context, PowerActivity.class));
@@ -219,4 +203,6 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 break;
         }
     }
+
+
 }

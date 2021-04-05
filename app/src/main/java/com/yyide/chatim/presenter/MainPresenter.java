@@ -57,6 +57,7 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
+
     public void ToUserLogout() {
         mvpView.showLoading();
         addSubscription(dingApiStores.Logout(), new ApiCallback<UserLogoutRsp>() {

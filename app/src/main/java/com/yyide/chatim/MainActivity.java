@@ -41,7 +41,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.addUserEquipmentInfoRsp;
-import com.yyide.chatim.presenter.EventType;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.view.MainView;
@@ -193,14 +193,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(EventType messageEvent) {
-        if (BaseConstant.CheakId.equals(messageEvent.code)) {
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.CheakId.equals(messageEvent.getCode())) {
             IdType = 2;
             ActivityUtils.finishAllActivities();
             startActivity(new Intent(this, MainActivity.class));
             Log.e("TAG", "messageEvent: " + IdType);
             setTab(0);
-        } else if(BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.code)){
+        } else if(BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())){
             setTab(3);
         }
     }

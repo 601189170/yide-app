@@ -1,7 +1,6 @@
 package com.yyide.chatim.leave;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.notice.NoticeDetailActivity;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

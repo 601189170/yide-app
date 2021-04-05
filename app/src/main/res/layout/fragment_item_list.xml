@@ -8,5 +8,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".notice.NoticeItemFragment"
+    tools:context=".activity.notice.NoticeItemFragment"
     tools:listitem="@layout/fragment_notice_item" />

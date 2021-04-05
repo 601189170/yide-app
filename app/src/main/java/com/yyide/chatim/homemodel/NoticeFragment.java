@@ -17,7 +17,7 @@ import com.yyide.chatim.adapter.NoiceAnnounAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.model.SchoolRsp;
-import com.yyide.chatim.notice.NoticeAnnouncementActivity;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 
 import java.io.IOException;
 

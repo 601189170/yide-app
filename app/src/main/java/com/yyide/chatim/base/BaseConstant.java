@@ -60,5 +60,10 @@ public class BaseConstant {
      * EventBus 常量
      */
     public static final String TYPE_CHECK_HELP_CENTER = "type_check_help_center";
+    public static final String TYPE_UPDATE_USER_PHONE = "type_update_user_phone";
+    public static final String TYPE_UPDATE_USER_EMAIL = "type_update_user_email";
+    public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
+    public static final String TYPE_UPDATE_USER_BIRTHDAY = "type_update_user_birthday";
+
     public static final String CheakId = "1";
 }
