@@ -1,38 +1,39 @@
 package com.yyide.chatim.net;
 
 
-
-import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
-import com.yyide.chatim.model.ListScheduleRsp;
 import com.yyide.chatim.model.LoginRsp;
-import com.yyide.chatim.model.NewsDetailsEntity;
-import com.yyide.chatim.model.NewsEntity;
+import com.yyide.chatim.model.NoticeDetailRsp;
+import com.yyide.chatim.model.NoticeHomeRsp;
+import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SearchRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.TeacherlistRsp;
+import com.yyide.chatim.model.TemplateListRsp;
+import com.yyide.chatim.model.TemplateTypeRsp;
+import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
-import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.model.mobileRsp;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -154,7 +155,7 @@ public interface DingApiStores {
     //type 1 我收到的 2 我发布的
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/notice/getMyNotice")
-    Observable<NoticeListRsp> getMyNotice(@Query("type") int type,@Query("page") int page,@Query("size") int size);
+    Observable<NoticeListRsp> getMyNotice(@Query("type") int type, @Query("page") int page, @Query("size") int size);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeDetails
     //获取我的公告详情
