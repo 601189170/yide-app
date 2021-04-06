@@ -19,7 +19,8 @@
     <string name="password_login">密码登录</string>
     <string name="official_website">访问官网</string>
     <string name="debug_mode_summary">IM 账号直接登录界面，此只在 Debug 模式下显示</string>
-    <string name="account_hint">任意非空字符即可，请参考类注释</string>
+    <string name="account_hint">手机号/用户名</string>
+    <string name="account_pwd_hint">请输入登录密码</string>
 
     // "我"相关
     <string name="profile">我</string>

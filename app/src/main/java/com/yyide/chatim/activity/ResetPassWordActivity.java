@@ -50,7 +50,12 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title.setText("忘记密码");
+        boolean isForgot = getIntent().getBooleanExtra("isForgot", false);
+        if (isForgot) {
+            title.setText("忘记密码");
+        } else {
+            title.setText("修改密码");
+        }
         time = new TimeCount(60000, 1000);
     }
 
@@ -94,12 +99,13 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
                 }
                 break;
             case R.id.eye:
-                if(!eye.isSelected()){
+                if (!eye.isSelected()) {
                     eye.setSelected(true);
                     newPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 } else {
                     eye.setSelected(false);
-                    newPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());                }
+                    newPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
                 break;
         }
     }
@@ -150,6 +156,8 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        time.onFinish();
+        if (time != null) {
+            time.cancel();
+        }
     }
 }

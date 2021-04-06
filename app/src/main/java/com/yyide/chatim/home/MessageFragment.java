@@ -52,10 +52,7 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-/////////-******
         setTab(0);
-
-
     }
 
     void setTab(int position) {

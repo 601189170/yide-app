@@ -58,6 +58,7 @@ public class SwichSchoolPop extends PopupWindow {
     Window mWindow;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
+
     public SwichSchoolPop(Activity context) {
         this.context = context;
         init();
@@ -68,19 +69,19 @@ public class SwichSchoolPop extends PopupWindow {
 
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_school_class_pop, null);
 
-         popupWindow= new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
+        popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
 
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
 
 
-        FrameLayout layout = (FrameLayout)mView.findViewById(R.id.layout);
+        FrameLayout layout = (FrameLayout) mView.findViewById(R.id.layout);
 
-        FrameLayout bg = (FrameLayout)mView.findViewById(R.id.bg);
-        ListView listview = (ListView)mView.findViewById(R.id.listview);
-        SwichSchoolAdapter adapter=new SwichSchoolAdapter();
+        FrameLayout bg = (FrameLayout) mView.findViewById(R.id.bg);
+        ListView listview = (ListView) mView.findViewById(R.id.listview);
+        SwichSchoolAdapter adapter = new SwichSchoolAdapter();
         listview.setAdapter(adapter);
-        if (SpData.Schoolinfo()!=null){
+        if (SpData.Schoolinfo() != null && SpData.Schoolinfo().data != null) {
             adapter.notifyData(SpData.Schoolinfo().data);
         }
 
@@ -89,7 +90,7 @@ public class SwichSchoolPop extends PopupWindow {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 adapter.setIndex(position);
                 SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(position)));
-                selectUserSchool(adapter.list.get(position).schoolId,adapter.getItem(position).schoolName);
+                selectUserSchool(adapter.list.get(position).schoolId, adapter.getItem(position).schoolName);
             }
         });
 
@@ -104,7 +105,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if(popupWindow!=null && popupWindow.isShowing()){
+                    if (popupWindow != null && popupWindow.isShowing()) {
                         popupWindow.dismiss();
                     }
                     return true;
@@ -116,7 +117,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onClick(View v) {
 
-                if (popupWindow!= null&&popupWindow.isShowing()) {
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
 
@@ -124,9 +125,9 @@ public class SwichSchoolPop extends PopupWindow {
         });
         // 获取当前Activity的window
         Activity activity = (Activity) mView.getContext();
-        if(activity!=null ){
+        if (activity != null) {
             //如果设置的值在0 - 1的范围内，则用设置的值，否则用默认值
-            mWindow= activity.getWindow();
+            mWindow = activity.getWindow();
             WindowManager.LayoutParams params = mWindow.getAttributes();
             params.alpha = 0.7f;
             mWindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -137,24 +138,24 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onDismiss() {
                 //如果设置了背景变暗，那么在dissmiss的时候需要还原
-                Log.e("TAG", "onDismiss==>: " );
-                if(mWindow!=null){
+                Log.e("TAG", "onDismiss==>: ");
+                if (mWindow != null) {
                     WindowManager.LayoutParams params = mWindow.getAttributes();
                     params.alpha = 1.0f;
                     mWindow.setAttributes(params);
                 }
-                if(popupWindow!=null && popupWindow.isShowing()){
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
             }
         });
-        popupWindow.showAtLocation(mView,Gravity.NO_GRAVITY,0,0);
+        popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
     }
 
     void selectUserSchool(int schoolId, String schoolName) {
-        SchoolRsp rsp=new SchoolRsp();
-        rsp.schoolId=schoolId;
-        rsp.schoolName=schoolName;
+        SchoolRsp rsp = new SchoolRsp();
+        rsp.schoolId = schoolId;
+        rsp.schoolName = schoolName;
         RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
 
         //请求组合创建
@@ -176,14 +177,14 @@ public class SwichSchoolPop extends PopupWindow {
                 String data = response.body().string();
                 Log.e("TAG", "mOkHttpClient==>: " + data);
                 SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
-                if (bean.code==BaseConstant.REQUEST_SUCCES2){
-                    Tologin(bean.data.username,bean.data.password, String.valueOf(schoolId));
+                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+                    Tologin(bean.data.username, bean.data.password, String.valueOf(schoolId));
                 }
             }
         });
     }
 
-    void Tologin(String username, String password,String schoolId) {
+    void Tologin(String username, String password, String schoolId) {
         RequestBody body = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
@@ -200,12 +201,13 @@ public class SwichSchoolPop extends PopupWindow {
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", "onFailure: " + e.toString());
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
                 Log.e("TAG", "mOkHttpClient==>: " + data);
                 LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-                if (bean.code==BaseConstant.REQUEST_SUCCES2){
+                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, username);
@@ -213,15 +215,14 @@ public class SwichSchoolPop extends PopupWindow {
                     SPUtils.getInstance().put(SpData.SCHOOLID, schoolId);
 
                     initIm(username);
-                }else {
+                } else {
                     ToastUtils.showShort(bean.msg);
                 }
             }
         });
     }
 
-
-    void initIm(String mUser){
+    void initIm(String mUser) {
         UserInfo.getInstance().setUserId(mUser);
         // 获取userSig函数
         final String userSig = GenerateTestUserSig.genTestUserSig(mUser);
@@ -243,7 +244,7 @@ public class SwichSchoolPop extends PopupWindow {
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(mUser);
                 Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
-                if (popupWindow!= null&&popupWindow.isShowing()) {
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
 

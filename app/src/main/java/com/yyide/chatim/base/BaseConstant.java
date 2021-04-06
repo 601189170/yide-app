@@ -65,5 +65,7 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
     public static final String TYPE_UPDATE_USER_BIRTHDAY = "type_update_user_birthday";
 
+    public static final String TYPE_UPDATE_CLASS_HOME = "type_update_class_home";
+
     public static final String CheakId = "1";
 }

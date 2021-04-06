@@ -2,6 +2,7 @@ package com.yyide.chatim.dialog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,40 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
-import com.tencent.qcloud.tim.uikit.TUIKit;
-import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.SchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.chat.info.UserInfo;
-import com.yyide.chatim.chat.signature.GenerateTestUserSig;
-import com.yyide.chatim.model.LoginRsp;
-import com.yyide.chatim.model.SchoolRsp;
-import com.yyide.chatim.model.SelectUserSchoolRsp;
-import com.yyide.chatim.utils.DemoLog;
+import com.yyide.chatim.utils.TakePicUtil;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 /**
@@ -57,6 +33,7 @@ public class BottomHeadMenuPop extends PopupWindow {
     Window mWindow;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
+
     public BottomHeadMenuPop(Activity context) {
         this.context = context;
         init();
@@ -67,23 +44,23 @@ public class BottomHeadMenuPop extends PopupWindow {
 
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_head_pop, null);
 
-         popupWindow= new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
+        popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
 
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
 
 
-        FrameLayout layout = (FrameLayout)mView.findViewById(R.id.layout);
+        FrameLayout layout = (FrameLayout) mView.findViewById(R.id.layout);
 
-        FrameLayout bg = (FrameLayout)mView.findViewById(R.id.bg);
-        TextView s1 = (TextView)mView.findViewById(R.id.s1);
-        TextView s2 = (TextView)mView.findViewById(R.id.s2);
-        TextView s3 = (TextView)mView.findViewById(R.id.s3);
+        FrameLayout bg = (FrameLayout) mView.findViewById(R.id.bg);
+        TextView s1 = (TextView) mView.findViewById(R.id.s1);
+        TextView s2 = (TextView) mView.findViewById(R.id.s2);
+        TextView s3 = (TextView) mView.findViewById(R.id.s3);
         s1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectFromTake();
-                if(popupWindow!=null && popupWindow.isShowing()){
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
             }
@@ -92,7 +69,7 @@ public class BottomHeadMenuPop extends PopupWindow {
             @Override
             public void onClick(View v) {
                 selectFromGallery();
-                if(popupWindow!=null && popupWindow.isShowing()){
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
             }
@@ -100,7 +77,7 @@ public class BottomHeadMenuPop extends PopupWindow {
         s3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(popupWindow!=null && popupWindow.isShowing()){
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
             }
@@ -114,7 +91,7 @@ public class BottomHeadMenuPop extends PopupWindow {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if(popupWindow!=null && popupWindow.isShowing()){
+                    if (popupWindow != null && popupWindow.isShowing()) {
                         popupWindow.dismiss();
                     }
                     return true;
@@ -126,7 +103,7 @@ public class BottomHeadMenuPop extends PopupWindow {
             @Override
             public void onClick(View v) {
 
-                if (popupWindow!= null&&popupWindow.isShowing()) {
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
 
@@ -134,9 +111,9 @@ public class BottomHeadMenuPop extends PopupWindow {
         });
         // 获取当前Activity的window
         Activity activity = (Activity) mView.getContext();
-        if(activity!=null ){
+        if (activity != null) {
             //如果设置的值在0 - 1的范围内，则用设置的值，否则用默认值
-            mWindow= activity.getWindow();
+            mWindow = activity.getWindow();
             WindowManager.LayoutParams params = mWindow.getAttributes();
             params.alpha = 0.7f;
             mWindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -147,19 +124,18 @@ public class BottomHeadMenuPop extends PopupWindow {
             @Override
             public void onDismiss() {
                 //如果设置了背景变暗，那么在dissmiss的时候需要还原
-                Log.e("TAG", "onDismiss==>: " );
-                if(mWindow!=null){
+                Log.e("TAG", "onDismiss==>: ");
+                if (mWindow != null) {
                     WindowManager.LayoutParams params = mWindow.getAttributes();
                     params.alpha = 1.0f;
                     mWindow.setAttributes(params);
                 }
-                if(popupWindow!=null && popupWindow.isShowing()){
+                if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
             }
         });
-        popupWindow.showAtLocation(mView,Gravity.NO_GRAVITY,0,0);
-
+        popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
 
 
     }
@@ -173,16 +149,29 @@ public class BottomHeadMenuPop extends PopupWindow {
         if (takePhotoIntent.resolveActivity(context.getPackageManager()) != null) {//这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
             context.startActivityForResult(takePhotoIntent, BaseConstant.REQ_CODE);//启动相机
         }
+//        TakePicUtil.takePicture(context);
+
     }
 
 
-        private void selectFromGallery() {
-        // TODO Auto-generatedmethod stub
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_PICK);//Pick an item fromthe data
-        intent.setType("image/*");//从所有图片中进行选择
+    private void selectFromGallery() {
+//        // TODO Auto-generatedmethod stub
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_PICK);//Pick an item fromthe data
+//        intent.setType("image/*");//从所有图片中进行选择
+//        context.startActivityForResult(intent, BaseConstant.SELECT_ORIGINAL_PIC);
+//        TakePicUtil.albumPhoto(context, false);
+        Intent intent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent = new Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        } else {
+            intent = new Intent(
+                    Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+        }
         context.startActivityForResult(intent, BaseConstant.SELECT_ORIGINAL_PIC);
     }
-
 
 }

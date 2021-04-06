@@ -92,4 +92,5 @@
     <string name="notice_tab_my_release">My Release</string>
     <string name="notice_template_title">Notice template</string>
     <string name="notice_select_number">Notice select %d</string>
+    <string name="account_pwd_hint">"account "</string>
 </resources>

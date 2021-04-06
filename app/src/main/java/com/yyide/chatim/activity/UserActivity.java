@@ -1,7 +1,5 @@
 package com.yyide.chatim.activity;
 
-
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,21 +9,26 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.dialog.BottomHeadMenuPop;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.UserPresenter;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.UserView;
 
@@ -33,14 +36,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class UserActivity extends BaseMvpActivity<UserPresenter> implements UserView {
+public class UserActivity extends BaseMvpActivity<UserPresenter> implements UserView, OnDateSetListener {
 
     @BindView(R.id.back)
     TextView back;
@@ -74,6 +73,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     TextView title;
 
     private GetUserSchoolRsp.DataBean userInfo;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_user_layout;
@@ -83,7 +83,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        title.setText("我的信息");
+        title.setText("");
         initData();
     }
 
@@ -94,9 +94,9 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     private void initData() {
         userInfo = SpData.getIdentityInfo();
-        if(userInfo != null){
+        if (userInfo != null) {
             GlideUtil.loadImage(this, userInfo.img, img);
-            sex.setText(!TextUtils.isEmpty(userInfo.sex) ? userInfo.sex : "未设置");
+            sex.setText(!TextUtils.isEmpty(userInfo.sex) ? ("0".equals(userInfo.sex) ? "男" : "女") : "未设置");
             phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
             date.setText(!TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "未设置");
             email.setText(!TextUtils.isEmpty(userInfo.email) ? userInfo.email : "未设置");
@@ -117,17 +117,17 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @OnClick({R.id.layout1, R.id.layout2, R.id.layout3, R.id.layout4, R.id.layout5, R.id.layout6, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.layout1:
+            case R.id.layout1://头像
                 new BottomHeadMenuPop(this);
                 break;
-            case R.id.layout2://头像
-                startActivity(new Intent(this, CheckPhoneActivity.class));
+            case R.id.layout2://手机号
+                //startActivity(new Intent(this, CheckPhoneActivity.class));
                 break;
             case R.id.layout3://性别
                 startActivity(new Intent(this, SexActivity.class));
                 break;
             case R.id.layout4://生日
-                showDatePickerDialog();
+                showTime();
                 break;
             case R.id.layout5://邮箱Email
                 startActivity(new Intent(this, EmailActivity.class));
@@ -140,54 +140,65 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         }
     }
 
+    private TimePickerDialog mDialogAll;
+
+    private void showTime() {
+        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
+        long tenYears2 = 50L * 365 * 1000 * 60 * 60 * 24L;
+        mDialogAll = new TimePickerDialog.Builder()
+                .setCallBack(this)
+                .setCancelStringId("取消")
+                .setSureStringId("确定")
+                .setTitleStringId("选择日期时间")
+                .setYearText("年")
+                .setMonthText("月")
+                .setDayText("日")
+                .setHourText("时")
+                .setMinuteText("分")
+                .setCyclic(false)
+                .setMinMillseconds(System.currentTimeMillis() - tenYears2)
+                .setMaxMillseconds(System.currentTimeMillis() + tenYears)
+                .setCurrentMillseconds(System.currentTimeMillis())
+                .setThemeColor(getResources().getColor(R.color.colorPrimary))
+                .setType(Type.ALL)
+                .setWheelItemTextNormalColor(getResources().getColor(R.color.text_212121))
+                .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorPrimary))
+                .setWheelItemTextSize(12)
+                .build();
+        mDialogAll.show(getSupportFragmentManager(), "all");
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_USER_EMAIL.equals(messageEvent.getCode())) {
             email.setText(messageEvent.getMessage());
+            userInfo.email = messageEvent.getMessage();
+            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+            updateInfo("0".equals(sex.getText().toString().trim()) ? "0" : "1", messageEvent.getMessage(), date.getText().toString().trim());
         } else if (BaseConstant.TYPE_UPDATE_USER_SEX.equals(messageEvent.getCode())) {
             if ("0".equals(messageEvent.getMessage())) {//男
                 sex.setText("男");
-            } else if("1".equals(messageEvent.getMessage())){//女
+                userInfo.sex = "0";
+            } else if ("1".equals(messageEvent.getMessage())) {//女
                 sex.setText("女");
+                userInfo.sex = "1";
             }
-        } else if (BaseConstant.TYPE_UPDATE_USER_PHONE.equals(messageEvent.getCode())) {
-
-        }
-//        ToastUtils.showShort(messageEvent.getMessage());
-        if (!TextUtils.isEmpty(messageEvent.getMessage())) {
-            //mvpPresenter.update(userInfo.);
+            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
         }
     }
 
-    private void showDatePickerDialog() {
-        Calendar myCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                String myFormat = "yyyy-MM-dd";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CHINA);
-                String time = sdf.format(myCalendar.getTime());
-                date.setText(time);
-            }
-
-        };
-
-        new DatePickerDialog(this, dateSetListener, myCalendar
-                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    private void updateInfo(String sexStr, String emailStr, String birthdayDate) {
+        if (userInfo != null) {
+            mvpPresenter.update(userInfo.userId + "",
+                    TextUtils.isEmpty(sexStr) ? (TextUtils.isEmpty(userInfo.sex) ? "" : userInfo.sex) : sexStr,
+                    TextUtils.isEmpty(birthdayDate) ? (TextUtils.isEmpty(userInfo.birthdayDate) ? "" : userInfo.birthdayDate) : birthdayDate,
+                    TextUtils.isEmpty(emailStr) ? (TextUtils.isEmpty(userInfo.email) ? "" : userInfo.email) : emailStr);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
         switch (requestCode) {
-
             case BaseConstant.SELECT_ORIGINAL_PIC:
                 if (resultCode == RESULT_OK) {//从相册选择照片不裁切
                     try {
@@ -203,7 +214,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                         Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
 //                        Log.e("TAG", "onActivityResult==>: " + JSON.toJSONString(bitmap));
                         img.setImageBitmap(bitmap);
-
+                        mvpPresenter.uploadFile(picturePath);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -236,12 +247,29 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     }
 
     @Override
-    public void updateSuccess() {
-
+    public void updateSuccess(String msg) {
+        ToastUtils.showShort(msg);
     }
 
     @Override
     public void updateFail(String msg) {
+        ToastUtils.showShort(msg);
+    }
 
+    @Override
+    public void uploadFileSuccess(String imgUrl) {
+
+    }
+
+    @Override
+    public void uploadFileFail(String msg) {
+        ToastUtils.showShort(msg);
+    }
+
+    @Override
+    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+        date.setText(DateUtils.stampToDate(millseconds));
+        userInfo.birthdayDate = DateUtils.stampToDate(millseconds);
+        SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
     }
 }

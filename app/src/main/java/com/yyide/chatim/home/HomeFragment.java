@@ -11,6 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.paradoxie.autoscrolltextview.VerticalTextview;
@@ -19,7 +21,6 @@ import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.StudentHonorListActivity;
-import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.homemodel.AttenceFragment;
@@ -30,12 +31,12 @@ import com.yyide.chatim.homemodel.StudentHonorFragment;
 import com.yyide.chatim.homemodel.TableFragment;
 import com.yyide.chatim.homemodel.WorkFragment;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.view.HomeFragmentView;
 
 import java.util.ArrayList;
-
-import androidx.annotation.Nullable;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -83,19 +84,24 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        showProgressDialog2();
-
         setFragment();
-
         mvpPresenter.getUserSchool();
-        initVerticalTextview();
-
+        //mvpPresenter.getHomeNotice();
+        initVerticalTextview(null);
     }
 
-    void initVerticalTextview() {
+    void initVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
         ArrayList<String> list = new ArrayList<>();
-        list.add("罗小黑的主监护人提交的请假需要你审批");
-        list.add("罗小黑的主监护人提交的请假需要你审批");
-        list.add("罗小黑的主监护人提交的请假需要你审批");
+//        if(noticeHomeRsps != null){
+//            for (NoticeHomeRsp.DataBean item : noticeHomeRsps){
+//                list.add(item.getContent());
+//            }
+//        }
+        list.add("罗欣的主监护人提交的请假需要你审批");
+        list.add("李克用的主监护人提交的请假需要你审批");
+        list.add("王保华的主监护人提交的请假需要你审批");
+        list.add("秦鑫的主监护人提交的请假需要你审批");
+        list.add("张玉明的主监护人提交的请假需要你审批");
 //        spmsg.setText(20, 0, Color.WHITE);//设置属性
         spmsg.setTextStillTime(3000);//设置停留时长间隔
         spmsg.setAnimTime(300);//设置进入和退出的时间间隔
@@ -107,17 +113,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 spmsg.setVisibility(View.GONE);
             }
         }
-        layoutMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-            }
-        });
-        spmsg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-            }
+        spmsg.setOnItemClickListener(i -> {
+            startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
         });
     }
 
@@ -126,7 +123,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content,R.id.notice_content})
+    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.layout_message})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -138,8 +135,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             case R.id.student_honor_content:
                 startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
                 break;
-            case R.id.notice_content:
-                startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
+            case R.id.layout_message:
+                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
                 break;
             default:
                 break;
@@ -211,9 +208,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             userName.setText(qhName);
             SPUtils.getInstance().put(SpData.USERNAME, qhName);
             //保存信息
-            if(SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 0){
+            if (SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 0) {
                 SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(0)));
-                if(SpData.Schoolinfo().data.get(0).form != null && SpData.Schoolinfo().data.get(0).form.size() > 0){
+                if (SpData.Schoolinfo().data.get(0).form != null && SpData.Schoolinfo().data.get(0).form.size() > 0) {
                     SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(0).form.get(0)));
                 }
             }
@@ -233,5 +230,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void getUserSchoolDataFail(String rsp) {
         Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
+    }
+
+    @Override
+    public void getIndexMyNotice(NoticeHomeRsp rsp) {
+        if(rsp != null && rsp.getData() != null && rsp.getData().size() > 0){
+            initVerticalTextview(rsp.getData());
+        }
     }
 }

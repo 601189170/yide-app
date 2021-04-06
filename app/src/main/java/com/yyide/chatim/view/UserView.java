@@ -10,6 +10,8 @@ import com.yyide.chatim.model.mobileRsp;
  * 作者：Rance on 2021年4月5日
  */
 public interface UserView extends BaseView {
-    void updateSuccess();
+    void updateSuccess(String msg);
     void updateFail(String msg);
+    void uploadFileSuccess(String imgUrl);
+    void uploadFileFail(String msg);
 }

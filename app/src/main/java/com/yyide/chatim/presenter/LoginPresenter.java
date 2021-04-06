@@ -66,7 +66,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     //获取验证码
     public void getcode(String a) {
         mvpView.showLoading();
-        addSubscription(dingApiStores.getcode(a), new ApiCallback<SmsVerificationRsp>() {
+        addSubscription(dingApiStores.getCode(a), new ApiCallback<SmsVerificationRsp>() {
             @Override
             public void onSuccess(SmsVerificationRsp model) {
                 mvpView.getcode(model);
