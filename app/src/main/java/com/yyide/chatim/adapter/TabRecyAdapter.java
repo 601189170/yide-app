@@ -1,0 +1,137 @@
+package com.yyide.chatim.adapter;
+
+
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
+
+import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.R;
+import com.yyide.chatim.model.NoteTabBean;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+
+/**
+ * Created by Administrator on 2018/6/15.
+ */
+
+public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHolder> {
+
+    public int index;
+
+    public int position = -1;
+
+    public List<NoteTabBean> list=new ArrayList<>();
+
+    public NoteTabBean getItem(int i) {
+        return list.get(i);
+    }
+
+
+
+
+    @Override
+    public TabRecyAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.tab_recy_item,
+                viewGroup, false);
+
+        ViewHolder viewHolder = new ViewHolder(view);
+
+        viewHolder.item = view.findViewById(R.id.item);
+
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(final TabRecyAdapter.ViewHolder viewHolder, final int i) {
+
+
+        if (!getItem(i).islast){
+            viewHolder.item.setText(getItem(i).name+"  >");
+            viewHolder.item.setChecked(true);
+        }else {
+            viewHolder.item.setText(getItem(i).name);
+            viewHolder.item.setChecked(false);
+        }
+
+
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public ViewHolder(View arg0) {
+            super(arg0);
+            item = arg0.findViewById(R.id.item);
+            item.setOnClickListener(this);
+        }
+
+
+        CheckedTextView item;
+
+
+
+        @Override
+        public void onClick(View v) {
+            position = getAdapterPosition();
+            if (mOnItemClickListener != null) {
+                //注意这里使用getTag方法获取position
+                mOnItemClickListener.onItemClick(v, getAdapterPosition());
+            }
+            notifyDataSetChanged();
+        }
+    }
+    public void notifydata(List<NoteTabBean> list){
+        this.list=list;
+        notifyDataSetChanged();
+    }
+    public void setPosition(int index){
+        this.index=index;
+        notifyDataSetChanged();
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+    private OnItemClickListener mOnItemClickListener = null;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
+    public void remove(int position){
+
+        List<NoteTabBean> noteTabBeans=new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            if (i<=position){
+                noteTabBeans.add(list.get(i));
+            }
+        }
+        resetList(noteTabBeans);
+    }
+
+    public void resetList(List<NoteTabBean> list){
+        this.list=list;
+        notifyDataSetChanged();
+    }
+//    List<Integer> removeData=new ArrayList<>();
+//        for (int i = 0; i < list.size(); i++) {
+//        if (i>position){
+//            removeData.add(i);
+//        }
+//    }
+}

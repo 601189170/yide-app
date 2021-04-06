@@ -82,6 +82,7 @@ public class ClassTableFragment2 extends BaseMvpFragment<ClassTablePresenter> im
 
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
+
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -103,9 +104,8 @@ public class ClassTableFragment2 extends BaseMvpFragment<ClassTablePresenter> im
         Date date = new Date(System.currentTimeMillis());
         for (int i = 0; i < timeAdapter.list.size(); i++) {
             if (timeAdapter.list.get(i).day.equals(simpleDateFormat.format(date))) {
-
                 timeAdapter.setPosition(i);
-
+                timeAdapter.setToday(i);
                 tableItemAdapter.setIndex(i);
             }
         }

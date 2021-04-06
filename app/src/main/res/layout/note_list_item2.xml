@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="50dp">
+        <org.raphets.roundimageview.RoundImageView
+            android:id="@+id/img"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_gravity="center_vertical"
+
+            app:leftBottom_corner_radius="12dp"
+            app:leftTop_corner_radius="12dp"
+            app:rightBottom_corner_radius="12dp"
+            app:rightTop_corner_radius="12dp"
+            app:type="round" />
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_marginLeft="@dimen/dp_14"
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/text_15"
+        android:textColor="@color/text_212121"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

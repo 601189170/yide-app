@@ -7,66 +7,105 @@ public class listByAppRsp {
 
     /**
      * code : 200
-     * success : true
+     * data : [{"createdBy":"admin","createdDateTime":"2021-04-02T03:23:36.000+0000","current":1,"delInd":"0","id":1193,"isExitInd":"Y","level":0,"list":[{"id":1194,"delInd":"0","createdBy":"18166666666","createdDateTime":"2021-04-02T03:24:28.000+0000","updatedDateTime":"2021-04-02T03:24:28.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":524,"name":"安卓","parentId":1193,"parentName":"APP测试学校","type":"0","sort":0,"level":1,"list":[],"peopleNum":3,"isExitInd":"Y"},{"id":1195,"delInd":"0","createdBy":"18166666666","createdDateTime":"2021-04-02T03:24:28.000+0000","updatedDateTime":"2021-04-02T03:24:28.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":524,"name":"iOS","parentId":1193,"parentName":"APP测试学校","type":"0","sort":0,"level":1,"list":[],"peopleNum":2,"isExitInd":"Y"},{"id":1199,"delInd":"0","createdBy":"18166666666","createdDateTime":"2021-04-02T05:41:05.000+0000","updatedDateTime":"2021-04-02T05:41:05.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":524,"name":"学生会","parentId":1193,"parentName":"APP测试学校","type":"1","sort":0,"level":1,"list":[],"peopleNum":4,"isExitInd":"Y"}],"name":"APP测试学校","parentName":"APP测试学校","peopleNum":0,"schoolId":524,"size":10,"sort":0,"total":0,"type":"0","updatedDateTime":"2021-04-02T03:23:36.000+0000","versionStamp":0}]
      * msg : 查询成功
-     * data : [{"id":173,"delInd":"0","createdBy":"1","createdDateTime":"2021-02-20T05:36:08.000+0000","updatedBy":null,"updatedDateTime":"2021-02-20T05:36:08.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":158,"name":"发的发生","parentId":null,"parentName":"发的发生","type":"0","headId":null,"headName":null,"sort":0,"level":0,"list":[],"peopleNum":0,"isExitInd":"Y"}]
+     * success : true
      */
 
     public int code;
-    public boolean success;
     public String msg;
+    public boolean success;
     public List<DataBean> data;
 
+   
 
     public static class DataBean {
         /**
-         * id : 173
-         * delInd : 0
-         * createdBy : 1
-         * createdDateTime : 2021-02-20T05:36:08.000+0000
-         * updatedBy : null
-         * updatedDateTime : 2021-02-20T05:36:08.000+0000
-         * versionStamp : 0
-         * total : 0
-         * size : 10
+         * createdBy : admin
+         * createdDateTime : 2021-04-02T03:23:36.000+0000
          * current : 1
-         * schoolId : 158
-         * name : 发的发生
-         * parentId : null
-         * parentName : 发的发生
-         * type : 0
-         * headId : null
-         * headName : null
-         * sort : 0
-         * level : 0
-         * list : []
-         * peopleNum : 0
+         * delInd : 0
+         * id : 1193
          * isExitInd : Y
+         * level : 0
+         * list : [{"id":1194,"delInd":"0","createdBy":"18166666666","createdDateTime":"2021-04-02T03:24:28.000+0000","updatedDateTime":"2021-04-02T03:24:28.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":524,"name":"安卓","parentId":1193,"parentName":"APP测试学校","type":"0","sort":0,"level":1,"list":[],"peopleNum":3,"isExitInd":"Y"},{"id":1195,"delInd":"0","createdBy":"18166666666","createdDateTime":"2021-04-02T03:24:28.000+0000","updatedDateTime":"2021-04-02T03:24:28.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":524,"name":"iOS","parentId":1193,"parentName":"APP测试学校","type":"0","sort":0,"level":1,"list":[],"peopleNum":2,"isExitInd":"Y"},{"id":1199,"delInd":"0","createdBy":"18166666666","createdDateTime":"2021-04-02T05:41:05.000+0000","updatedDateTime":"2021-04-02T05:41:05.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":524,"name":"学生会","parentId":1193,"parentName":"APP测试学校","type":"1","sort":0,"level":1,"list":[],"peopleNum":4,"isExitInd":"Y"}]
+         * name : APP测试学校
+         * parentName : APP测试学校
+         * peopleNum : 0
+         * schoolId : 524
+         * size : 10
+         * sort : 0
+         * total : 0
+         * type : 0
+         * updatedDateTime : 2021-04-02T03:23:36.000+0000
+         * versionStamp : 0
          */
 
-        public int id;
-        public String delInd;
         public String createdBy;
         public String createdDateTime;
-        public Object updatedBy;
+        public int current;
+        public String delInd;
+        public int id;
+        public String isExitInd;
+        public int level;
+        public String name;
+        public String parentName;
+        public int peopleNum;
+        public int schoolId;
+        public int size;
+        public int sort;
+        public int total;
+        public String type;
         public String updatedDateTime;
         public int versionStamp;
-        public int total;
-        public int size;
-        public int current;
-        public int schoolId;
-        public String name;
-        public Object parentId;
-        public String parentName;
-        public String type;
-        public Object headId;
-        public Object headName;
-        public int sort;
-        public int level;
-        public int peopleNum;
-        public String isExitInd;
-        public List<?> list;
+        public List<ListBean> list;
 
-     
+      
+
+        public static class ListBean {
+            /**
+             * id : 1194.0
+             * delInd : 0
+             * createdBy : 18166666666
+             * createdDateTime : 2021-04-02T03:24:28.000+0000
+             * updatedDateTime : 2021-04-02T03:24:28.000+0000
+             * versionStamp : 0.0
+             * total : 0.0
+             * size : 10.0
+             * current : 1.0
+             * schoolId : 524.0
+             * name : 安卓
+             * parentId : 1193.0
+             * parentName : APP测试学校
+             * type : 0
+             * sort : 0.0
+             * level : 1.0
+             * list : []
+             * peopleNum : 3.0
+             * isExitInd : Y
+             */
+
+            public double id;
+            public String delInd;
+            public String createdBy;
+            public String createdDateTime;
+            public String updatedDateTime;
+            public double versionStamp;
+            public double total;
+            public double size;
+            public double current;
+            public double schoolId;
+            public String name;
+            public double parentId;
+            public String parentName;
+            public String type;
+            public double sort;
+            public double level;
+            public double peopleNum;
+            public String isExitInd;
+            public List<?> list;
+
+            
+        }
     }
 }

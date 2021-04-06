@@ -5,6 +5,7 @@ package com.yyide.chatim.presenter;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.listByAppRsp;
+import com.yyide.chatim.model.selectListByAppRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.HomeFragmentView;
 import com.yyide.chatim.view.NoteBookView;

@@ -88,6 +88,7 @@
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30" />
         <TextView
+            android:id="@+id/pName"
             android:text="深圳宝安实验中学"
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/text_18"
@@ -130,10 +131,38 @@
         android:dividerHeight="0dp"
         android:divider="@color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
     </ListView>
 
+    <FrameLayout
 
+        android:layout_width="match_parent"
+        android:layout_height="62dp">
+        <TextView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_18"
+            android:background="@drawable/icon_zzjg" />
+        <TextView
+            android:text="学生/家长"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="62dp"
+            android:textColor="@color/text_212121"
+            android:textSize="@dimen/text_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/listview2"
+        android:dividerHeight="0dp"
+        android:divider="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
 
 </LinearLayout>
