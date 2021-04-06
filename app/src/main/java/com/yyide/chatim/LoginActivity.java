@@ -250,7 +250,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (unbinder != null) {
+        if(unbinder != null){
             unbinder.unbind();
         }
 
@@ -333,6 +333,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
+                Log.e(TAG, "mOkHttpClient==>: " + data);
                 SmsVerificationRsp bean = JSON.parseObject(data, SmsVerificationRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
@@ -434,7 +435,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "getUserSchool333==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.data != null) {
+                if (rsp.data!=null) {
                     if (rsp.data.size() > 0) {
                         SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
                         SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(0)));
@@ -445,7 +446,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    void initIm(int userid, String userSig) {
+    void initIm(int userid,String userSig) {
         TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
@@ -462,8 +463,8 @@ public class LoginActivity extends AppCompatActivity {
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userid));
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功" );
             }
         });
     }

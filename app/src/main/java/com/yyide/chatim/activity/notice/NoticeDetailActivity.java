@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.notice;
 
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,12 +10,14 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeDetailPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeDetailView;
+import com.yyide.chatim.model.NoticeDetailRsp;
+import com.yyide.chatim.model.NoticeListRsp;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter> implements NoticeDetailView {
-
+    private static final String TAG = "NoticeDetailActivity";
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.tv_notice_title)
@@ -36,6 +39,8 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     private int TYPE_UNCONFIRM = 2;//未确认
     private int TYPE_STATISTICAL = 3;//通知统计
 
+    private int id;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_notice_detail;
@@ -47,6 +52,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         title.setText(R.string.notice_confirm_detail_title);
         tv_notice_content.setMovementMethod(ScrollingMovementMethod.getInstance());
         int type = getIntent().getIntExtra("type", 0);
+        id = getIntent().getIntExtra("id", 0);
         initView(type);
         initData();
     }
@@ -72,6 +78,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 //        tv_notice_author.setText();
 //        tv_notice_time.setText();
 //        tv_notice_content.setText();
+        mvpPresenter.noticeDetail(1);
     }
 
     @OnClick(R.id.back_layout)
@@ -105,5 +112,22 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void noticeDetail(NoticeDetailRsp noticeDetailRsp) {
+        NoticeDetailRsp.DataBean data = noticeDetailRsp.getData();
+        Log.e(TAG, "noticeDetail: "+noticeDetailRsp.toString() );
+        if (data != null){
+            tv_notice_title.setText(data.getTitle().toString());
+            tv_notice_author.setText(data.getProductionTarget().toString());
+            tv_notice_time.setText(data.getProductionTime().toString());
+            tv_notice_content.setText(data.getContent());
+        }
+    }
+
+    @Override
+    public void noticeDetailFail(String msg) {
+
     }
 }

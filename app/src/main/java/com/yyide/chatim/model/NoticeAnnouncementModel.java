@@ -3,7 +3,7 @@ package com.yyide.chatim.model;
 import java.io.Serializable;
 
 public class NoticeAnnouncementModel implements Serializable {
-
+    private int id;
     private String noticeTitle;
     private String noticeAuthor;
     private String noticeContent;
@@ -16,6 +16,20 @@ public class NoticeAnnouncementModel implements Serializable {
         this.noticeTime = noticeTime;
     }
 
+    public NoticeAnnouncementModel(int id, String noticeTitle, String noticeAuthor, String noticeContent, String noticeTime) {
+        this.id = id;
+        this.noticeTitle = noticeTitle;
+        this.noticeAuthor = noticeAuthor;
+        this.noticeContent = noticeContent;
+        this.noticeTime = noticeTime;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getNoticeTitle() {
         return noticeTitle;
     }
