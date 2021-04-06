@@ -25,9 +25,12 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.SwichClassAdapter;
 import com.yyide.chatim.adapter.SwichSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.SelectUserSchoolRsp;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +92,7 @@ public class SwichClassPop extends PopupWindow {
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_CLASS_HOME, ""));
 //                ActivityUtils.finishAllActivities();
 //                Intent intent = new Intent(context, MainActivity.class);
 //                context.startActivity(intent);

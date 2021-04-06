@@ -370,8 +370,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 .addHeader("Authorization", SpData.User().token)
                 .post(requestBody)
                 .build();
-        //发起请求
 
+        //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

@@ -44,12 +44,8 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listview"
-        android:dividerHeight="0dp"
-        android:divider="@color/transparent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </ListView>
+        android:layout_height="match_parent"/>
 </LinearLayout>

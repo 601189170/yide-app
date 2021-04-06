@@ -1,17 +1,23 @@
 package com.yyide.chatim;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
@@ -20,10 +26,9 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.info.UserInfo;
-import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
@@ -32,21 +37,14 @@ import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.Utils;
 
 import java.io.IOException;
-import java.security.cert.CertificateException;
-import java.security.interfaces.RSAKey;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -64,7 +62,7 @@ import okhttp3.Response;
  * <p>
  */
 
-    public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     @BindView(R.id.user_edit)
@@ -73,59 +71,173 @@ import okhttp3.Response;
     EditText passwordEdit;
     @BindView(R.id.type)
     CheckedTextView type;
-    private Button mLoginView;
-    private EditText mUserAccount;
+    @BindView(R.id.eye)
+    ImageView eye;
+    @BindView(R.id.ll_sms)
+    LinearLayout ll_sms;
+    @BindView(R.id.ll_pwd)
+    LinearLayout ll_pwd;
+    @BindView(R.id.post_code)
+    TextView postCode;
+    @BindView(R.id.code)
+    EditText vCode;
+
+    private TimeCount time;
+    private boolean isPwd;
     OkHttpClient mOkHttpClient = new OkHttpClient();
     public String phone = "";
 
-//    @Override
-//    public int getContentViewID() {
-//        return R.layout.login_for_dev_activity;
-//    }
-private Unbinder unbinder;
+    private Unbinder unbinder;
+    private AlphaAnimation alphaAniShow, alphaAniHide;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_for_dev_activity);
         unbinder = ButterKnife.bind(this);
-        mLoginView = findViewById(R.id.login_btn);
-        // 用户名可以是任意非空字符，但是前提需要按照下面文档修改代码里的 SDKAPPID 与 PRIVATEKEY
-        // https://github.com/tencentyun/TIMSDK/tree/master/Android
-        mUserAccount = findViewById(R.id.login_user);
-        mUserAccount.setText(UserInfo.getInstance().getUserId());
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         Utils.checkPermission(this);
-        mLoginView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
-
-//                TologinBymobile(mUserAccount.getText().toString(),"15920012647");
-//                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            }
-        });
-        type.setText("验证码登录");
-        type.setChecked(false);
-        type.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!type.isChecked()){
-                    type.setChecked(true);
-                    type.setText("账号密码登录");
-                }else {
-                    type.setChecked(false);
-                    type.setText("验证码登录");
-                }
-            }
-        });
 //        getcode("15920012647");
-        if (AppUtils.isAppDebug()){
-            userEdit.setText("13511111111");
-            passwordEdit.setText("111111");
+        if (AppUtils.isAppDebug()) {
+            userEdit.setText("13522222222");
+            passwordEdit.setText("222222");
+        }
+        time = new TimeCount(60000, 1000);
+        alphaAnimation();
+    }
+
+    //透明度动画
+    private void alphaAnimation() {
+        //显示
+        alphaAniShow = new AlphaAnimation(0, 1);//百分比透明度，从0%到100%显示
+        alphaAniShow.setDuration(800);//一秒
+
+        //隐藏
+        alphaAniHide = new AlphaAnimation(1, 0);
+        alphaAniHide.setDuration(800);
+    }
+
+    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code})
+    void click(View view) {
+        switch (view.getId()) {
+            case R.id.forgot:
+                Intent intent = new Intent(this, ResetPassWordActivity.class);
+                intent.putExtra("isForgot", true);
+                startActivity(intent);
+                break;
+            case R.id.tv_login:
+                login();
+                break;
+            case R.id.eye:
+                if (!eye.isSelected()) {
+                    eye.setSelected(true);
+                    passwordEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    eye.setSelected(false);
+                    passwordEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                break;
+            case R.id.post_code:
+                String mobile = userEdit.getText().toString().trim();
+                if (TextUtils.isEmpty(mobile)) {
+                    ToastUtils.showShort("请输入手机号码");
+                } else {
+                    getcode(mobile);
+                }
+                break;
+            case R.id.type:
+                isValidateCode();
+                break;
         }
     }
 
+    private void isValidateCode() {
+        if (!isPwd) {
+            isPwd = true;
+            type.setText("账号密码登录");
+            ll_pwd.startAnimation(alphaAniHide);
+            //这个地方为什么要做动画的监听呢，因为隐藏和显示不一样，
+            //必须在动画结束之后再隐藏你的控件，这样才不会显得很突兀
+            alphaAniHide.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    ll_pwd.setVisibility(View.GONE);
+                    passwordEdit.setText("");
+                    ll_sms.startAnimation(alphaAniShow);
+                    ll_sms.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        } else {
+            isPwd = false;
+            type.setText("验证码登录");
+            ll_sms.startAnimation(alphaAniHide);
+            //这个地方为什么要做动画的监听呢，因为隐藏和显示不一样，
+            //必须在动画结束之后再隐藏你的控件，这样才不会显得很突兀
+            alphaAniHide.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    ll_sms.setVisibility(View.GONE);
+                    ll_pwd.startAnimation(alphaAniShow);
+                    ll_pwd.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        }
+    }
+
+    private void login() {
+        if (ll_sms.isShown()) {//处理登录逻辑
+            String validateCode = vCode.getText().toString().trim();
+            String mobile = userEdit.getText().toString().trim();
+            if (TextUtils.isEmpty(mobile)) {
+                ToastUtils.showShort("请输入手机号码");
+            } else if (TextUtils.isEmpty(validateCode)) {
+                ToastUtils.showShort("请输入验证码");
+            } else {
+                TologinBymobile(validateCode, mobile);
+            }
+        } else {
+            Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
+        }
+    }
+
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onFinish() {// 计时完毕
+            postCode.setText("获取验证码");
+            postCode.setClickable(true);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {// 计时过程
+            postCode.setClickable(false);//防止重复点击
+            postCode.setText(millisUntilFinished / 1000 + "s");
+        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -138,8 +250,12 @@ private Unbinder unbinder;
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(unbinder != null){
+        if (unbinder != null) {
             unbinder.unbind();
+        }
+
+        if (time != null) {
+            time.cancel();
         }
     }
 
@@ -187,7 +303,7 @@ private Unbinder unbinder;
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, username);
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, password);
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
 //                    initIm();
 //                    getUserSig();
                 } else {
@@ -217,11 +333,11 @@ private Unbinder unbinder;
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
-                Log.e(TAG, "mOkHttpClient==>: " + data);
                 SmsVerificationRsp bean = JSON.parseObject(data, SmsVerificationRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
-                    Log.e(TAG, "SmsVerificationRsp: " + JSON.toJSONString(bean));
+                    ToastUtils.showShort("验证码已发送");
+                    time.start();
                 }
             }
         });
@@ -256,7 +372,7 @@ private Unbinder unbinder;
                     SPUtils.getInstance().put(SpData.USERPHONE, phone);
                     getUserSig();
                 } else {
-                    ToastUtils.showShort(bean.msg);
+                    ToastUtils.showShort(bean.message);
                 }
             }
         });
@@ -269,7 +385,7 @@ private Unbinder unbinder;
         //请求组合创建
         Request request = new Request.Builder()
 //                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP+"/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
 //                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
                 .addHeader("Authorization", SpData.User().token)
                 .post(body)
@@ -302,7 +418,7 @@ private Unbinder unbinder;
         //请求组合创建
         Request request = new Request.Builder()
 //                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP+"/management/cloud-system/user/getUserSchool")
+                .url(BaseConstant.URL_IP + "/management/cloud-system/user/getUserSchool")
                 .addHeader("Authorization", SpData.User().token)
                 .build();
         //发起请求
@@ -318,7 +434,7 @@ private Unbinder unbinder;
                 Log.e(TAG, "getUserSchool333==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.data!=null) {
+                if (rsp.data != null) {
                     if (rsp.data.size() > 0) {
                         SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
                         SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(0)));
@@ -329,7 +445,7 @@ private Unbinder unbinder;
         });
     }
 
-    void initIm(int userid,String userSig) {
+    void initIm(int userid, String userSig) {
         TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
@@ -346,8 +462,8 @@ private Unbinder unbinder;
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userid));
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功" );
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
             }
         });
     }

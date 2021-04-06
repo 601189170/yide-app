@@ -1,11 +1,11 @@
 package com.yyide.chatim.presenter;
 
 
-
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
+import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
@@ -43,9 +43,24 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         });
     }
 
+    public void getHomeNotice() {
+        mvpView.showLoading();
+        addSubscription(dingApiStores.getIndexMyNotice(), new ApiCallback<NoticeHomeRsp>() {
+            @Override
+            public void onSuccess(NoticeHomeRsp model) {
+                mvpView.getIndexMyNotice(model);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getUserSchoolDataFail(msg);
+            }
 
-
-
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
 
 }

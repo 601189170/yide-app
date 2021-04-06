@@ -21,12 +21,12 @@ import java.util.List;
  */
 
 public class SwichSchoolAdapter extends BaseAdapter {
-    public List<GetUserSchoolRsp.DataBean> list=new ArrayList<>();
-   public int index=-1;
+    public List<GetUserSchoolRsp.DataBean> list = new ArrayList<>();
+    public int index = -1;
 
     @Override
     public int getCount() {
-        return list.size();
+        return list == null ? 0 : list.size();
     }
 
     @Override
@@ -49,25 +49,27 @@ public class SwichSchoolAdapter extends BaseAdapter {
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
         school_name.setText(getItem(position).schoolName);
         school_info.setText(getItem(position).realname);
-        int ids =0;
-        if (!TextUtils.isEmpty(SpData.SchoolId())){
-            ids= Integer.parseInt(SpData.SchoolId());
+        int ids = 0;
+        if (!TextUtils.isEmpty(SpData.SchoolId())) {
+            ids = Integer.parseInt(SpData.SchoolId());
         }
 
-        if (list.get(position).schoolId==ids){
+        if (list.get(position).schoolId == ids) {
             select.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             select.setVisibility(View.GONE);
         }
 //        select.setVisibility(index==position?View.VISIBLE:View.GONE);
         return view;
     }
-    public void notifyData( List<GetUserSchoolRsp.DataBean> list) {
+
+    public void notifyData(List<GetUserSchoolRsp.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }
-    public void setIndex(int index){
-        this.index=index;
+
+    public void setIndex(int index) {
+        this.index = index;
         notifyDataSetChanged();
     }
 }
