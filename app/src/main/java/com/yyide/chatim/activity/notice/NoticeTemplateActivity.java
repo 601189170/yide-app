@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.notice;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeTemplatePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeTemplateView;
+import com.yyide.chatim.model.TemplateTypeRsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +24,15 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresenter> implements NoticeTemplateView {
-
+    private static final String TAG = "NoticeTemplateActivity";
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.tablayout)
     TabLayout mTablayout;
     @BindView(R.id.viewpager)
     ViewPager2 mViewpager;
-
+    int currentIndex;
+    List<TemplateTypeRsp.DataBean.RecordsBean> list = new ArrayList<>();
     @Override
     public int getContentViewID() {
         return R.layout.activity_notice_template;
@@ -39,23 +42,25 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText(R.string.notice_template_title);
-        initViewPager();
+        //initViewPager();
+        mvpPresenter.getTemplateType();
     }
 
     private void initViewPager() {
         mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        List<String> list = new ArrayList<>();
-        list.add("全部");
-        list.add("热门");
-        list.add("活动");
-        list.add("安全");
-        list.add("假期");
+
+//        list.add("全部");
+//        list.add("热门");
+//        list.add("活动");
+//        list.add("安全");
+//        list.add("假期");
 
         mViewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
             public Fragment createFragment(int position) {
-                return NoticeTemplateListFragment.newInstance("");//我的通知
+                TemplateTypeRsp.DataBean.RecordsBean recordsBean = list.get(currentIndex);
+                return NoticeTemplateListFragment.newInstance("",recordsBean.getTemplateName(),recordsBean.getId()+"");//我的通知
             }
 
             @Override
@@ -67,7 +72,9 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 //这里需要根据position修改tab的样式和文字等
-                tab.setText(list.get(position));
+                Log.e(TAG, "onConfigureTab: "+position );
+                currentIndex = position;
+                tab.setText(list.get(position).getTemplateName());
             }
         }).attach();
     }
@@ -84,11 +91,27 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
 
     @Override
     protected NoticeTemplatePresenter createPresenter() {
-        return null;
+        return new NoticeTemplatePresenter(this);
     }
 
     @Override
     public void showError() {
 
+    }
+
+    @Override
+    public void templateType(TemplateTypeRsp templateTypeRsp) {
+        Log.e(TAG, "templateType: "+templateTypeRsp.toString() );
+        if (templateTypeRsp.getCode() == 200){
+            list.clear();
+            List<TemplateTypeRsp.DataBean.RecordsBean> records = templateTypeRsp.getData().getRecords();
+            list.addAll(records);
+            initViewPager();
+        }
+    }
+
+    @Override
+    public void templateTypeFail(String msg) {
+        Log.e(TAG, "templateTypeFail: "+msg );
     }
 }

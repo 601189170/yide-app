@@ -19,6 +19,7 @@ import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.StudentHonorListActivity;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.homemodel.AttenceFragment;
@@ -125,7 +126,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content})
+    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content,R.id.notice_content})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -136,6 +137,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             case R.id.student_honor_content:
                 startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
+                break;
+            case R.id.notice_content:
+                startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
                 break;
             default:
                 break;
