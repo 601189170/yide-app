@@ -22,6 +22,9 @@ import com.yyide.chatim.model.selectListByAppRsp;
 import com.yyide.chatim.presenter.NoteBookPresenter;
 import com.yyide.chatim.view.NoteBookView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -78,6 +81,18 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
                 startActivity(intent);
             }
         });
+        listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent=new Intent();
+//                Log.e("TAG", "onItemClick: "+JSON.toJSONString(adapter.list.get(position).id) );
+//                intent.putExtra("departmentId",adapter.list.get(position).id);
+                intent.putExtra("list",JSON.toJSONString(adapter2.getItem(position).list));
+                intent.putExtra("id",JSON.toJSONString(adapter2.getItem(position).id));
+                intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
+                startActivity(intent);
+            }
+        });
 //        mvpPresenter.selectListByApp();
     }
 
@@ -118,15 +133,33 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     public void listByApp(listByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-            for (listByAppRsp.DataBean datum : rsp.data) {
-                //type==> 0 行政部門 1：學生會或家委會
-                if (datum.type.equals("0")) {
-                    adapter.notifyData(datum.list);
-                } else {
-                    adapter2.notifyData(datum.list);
+            List<listByAppRsp.DataBean.ListBean> listBeans1=new ArrayList<>();
+            List<listByAppRsp.DataBean.ListBean> listBeans2=new ArrayList<>();
+            if (rsp.data.size()>0){
+                pName.setText(rsp.data.get(0).parentName);
+
+                for (listByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
+                    if (listBean.type.equals("0")){
+                        listBeans1.add(listBean);
+//                        adapter.notifyData(listBean);
+                    }else {
+                        listBeans2.add(listBean);
+//                        adapter2.notifyData(listBean.list);
+                    }
                 }
-                pName.setText(datum.parentName);
             }
+            adapter.notifyData(listBeans1);
+            adapter2.notifyData(listBeans2);
+//            for (listByAppRsp.DataBean datum : rsp.data) {
+//
+//                //type==> 0 行政部門 1：學生會或家委會
+//                if (datum.type.equals("0")) {
+//                    adapter.notifyData(datum.list);
+//                } else {
+//                    adapter2.notifyData(datum.list);
+//                }
+//                pName.setText(datum.parentName);
+//            }
 
         }
     }

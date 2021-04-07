@@ -1,5 +1,6 @@
 package com.yyide.chatim.net;
 
+
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -17,7 +18,6 @@ import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
 import com.yyide.chatim.model.UpdateUserInfo;
-import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
@@ -186,4 +186,9 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/backstage/cloud-backstage/application/search")
     Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeBacklog
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/notice/getMyNoticeBacklog")
+    Observable<HomeNoticeRsp> getMyNoticeBacklog();
+
 }

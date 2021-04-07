@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -13,9 +14,13 @@ import com.alibaba.fastjson.JSON;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.notice.presenter.NoticeHomePresenter;
+import com.yyide.chatim.activity.notice.view.NoticeHomeView;
 import com.yyide.chatim.adapter.NoiceAnnounAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 
@@ -30,11 +35,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class NoticeFragment extends BaseFragment {
-
+public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> implements NoticeHomeView {
+    private static final String TAG = "NoticeFragment";
     private View mBaseView;
-    @BindView(R.id.announRoll)
-    RollPagerView mRollPagerView;
+    @BindView(R.id.notice_content)
+    TextView notice_content;
+
+    @BindView(R.id.notice_time)
+    TextView notice_time;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
 
@@ -51,18 +59,24 @@ public class NoticeFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        mvpPresenter.getMyData();
-        adapter=new NoiceAnnounAdapter(mRollPagerView);
-        mRollPagerView.setHintView(null);
-        mRollPagerView.setPlayDelay(5000);
-        mRollPagerView.setAdapter(adapter);
-        mRollPagerView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), NoticeAnnouncementActivity.class);
-                startActivity(intent);
-            }
-        });
+//        adapter=new NoiceAnnounAdapter(mRollPagerView);
+//        mRollPagerView.setHintView(null);
+//        mRollPagerView.setPlayDelay(5000);
+//        mRollPagerView.setAdapter(adapter);
+//        mRollPagerView.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), NoticeAnnouncementActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+        mvpPresenter.getHomeNotice();
 
+    }
+
+    @Override
+    protected NoticeHomePresenter createPresenter() {
+        return new NoticeHomePresenter(this);
     }
 
     void listTimeData(int schoolId, String schoolName) {
@@ -95,5 +109,22 @@ public class NoticeFragment extends BaseFragment {
 //                }
             }
         });
+    }
+
+    @Override
+    public void noticeHome(HomeNoticeRsp homeNoticeRsp) {
+        Log.e(TAG, "noticeHome: "+homeNoticeRsp );
+        if (homeNoticeRsp.getCode() == 200) {
+            HomeNoticeRsp.DataBean data = homeNoticeRsp.getData();
+            if (data != null){
+                notice_content.setText(data.getContent());
+                notice_time.setText(data.getProductionTime().toString());
+            }
+        }
+    }
+
+    @Override
+    public void noticeHomeFail(String msg) {
+        Log.e(TAG, "noticeHomeFail: "+msg );
     }
 }

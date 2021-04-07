@@ -1,5 +1,6 @@
 package com.yyide.chatim.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.NoteByListActivity;
+import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.adapter.NotelistAdapter;
 import com.yyide.chatim.adapter.NotelistAdapter2;
 import com.yyide.chatim.base.BaseConstant;
@@ -75,7 +77,11 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                     NoteByListActivity activity= (NoteByListActivity) getActivity();
                     activity.initDeptFragment();
                 }else {
-                    ToastUtils.showShort("跳转个人说明");
+//                    ToastUtils.showShort("跳转个人说明");
+                    Intent intent=new Intent();
+                    intent.putExtra("data",JSON.toJSONString(adapter2.getItem(position)));
+                    intent.setClass(mActivity,PersonInfoActivity.class);
+                    startActivity(intent);
                 }
 
 
