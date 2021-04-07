@@ -73,7 +73,7 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initDeptFragment();
+//                initDeptFragment();
             }
         });
 
@@ -147,12 +147,20 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         Fragment noteByListFragment = new NoteByListFragment();
 
         FragmentManager manager = getSupportFragmentManager();
-
+        NoteTabBean noteTabBean =new NoteTabBean();
+        noteTabBean.tag=index+"";
 
                 Bundle bundle = new Bundle();
                 if (listBean!=null){
                     bundle.putString("id", String.valueOf(listBean.id));
                     bundle.putString("data", String.valueOf(listBean.list));
+                    noteTabBean.name=listBean.name;
+                    if (listBean.list.size()==0){
+                        noteTabBean.islast=true;
+                    }else {
+                        noteTabBean.islast=false;
+                    }
+
                 }else {
                     bundle.putString("id", "");
                     bundle.putString("data", "");
@@ -170,7 +178,8 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
 //        if (index==2){
 //            listTab.add(new NoteTabBean("tag"+index,index+"",true));
 //        }else {
-            listTab.add(new NoteTabBean("tag"+index,index+"",false));
+//            listTab.add(new NoteTabBean("tag"+index,index+"",false));
+            listTab.add(noteTabBean);
 //        }
 
 

@@ -103,7 +103,7 @@ public class listByAppRsp {
             public double level;
             public double peopleNum;
             public String isExitInd;
-            public List<?> list;
+            public List<ListBean> list;
 
             
         }

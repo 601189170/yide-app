@@ -16,6 +16,8 @@
     <FrameLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
 
         android:layout_height="53dp">
         <TextView

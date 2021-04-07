@@ -2,6 +2,7 @@ package com.yyide.chatim.adapter;
 
 
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,10 +57,16 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
 
 
         if (!getItem(i).islast){
-            viewHolder.item.setText(getItem(i).name+"  >");
+            if (!TextUtils.isEmpty(getItem(i).name)){
+                viewHolder.item.setText(getItem(i).name+"  >");
+            }
+
             viewHolder.item.setChecked(true);
         }else {
-            viewHolder.item.setText(getItem(i).name);
+            if (!TextUtils.isEmpty(getItem(i).name)){
+                viewHolder.item.setText(getItem(i).name);
+            }
+
             viewHolder.item.setChecked(false);
         }
 

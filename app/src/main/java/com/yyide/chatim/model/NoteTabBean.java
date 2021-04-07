@@ -19,5 +19,8 @@ public class NoteTabBean {
 
         this.islast=islast;
     }
+    public NoteTabBean(){
+
+    }
 
 }
