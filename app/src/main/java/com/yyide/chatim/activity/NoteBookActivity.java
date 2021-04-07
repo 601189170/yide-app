@@ -72,30 +72,44 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent();
+//                Intent intent=new Intent();
 //                Log.e("TAG", "onItemClick: "+JSON.toJSONString(adapter.list.get(position).id) );
 //                intent.putExtra("departmentId",adapter.list.get(position).id);
-                intent.putExtra("list",JSON.toJSONString(adapter.getItem(position).list));
-                intent.putExtra("id",JSON.toJSONString(adapter.getItem(position).id));
-                intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
-                startActivity(intent);
+//                intent.putExtra("list",JSON.toJSONString(adapter.getItem(position).list));
+//                intent.putExtra("id",JSON.toJSONString(adapter.getItem(position).id));
+//                intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
+//                startActivity(intent);
+                setPostData(adapter.getItem(position).list, String.valueOf(adapter.getItem(position).id),adapter.getItem(position).name);
+
             }
         });
         listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent();
-//                Log.e("TAG", "onItemClick: "+JSON.toJSONString(adapter.list.get(position).id) );
-//                intent.putExtra("departmentId",adapter.list.get(position).id);
-                intent.putExtra("list",JSON.toJSONString(adapter2.getItem(position).list));
-                intent.putExtra("id",JSON.toJSONString(adapter2.getItem(position).id));
-                intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
-                startActivity(intent);
+                setPostData(adapter2.getItem(position).list, String.valueOf(adapter2.getItem(position).id),adapter2.getItem(position).name);
+
+//                Intent intent=new Intent();
+//
+////                Log.e("TAG", "onItemClick: "+JSON.toJSONString(adapter.list.get(position).id) );
+//                intent.putExtra("list",JSON.toJSONString(adapter2.getItem(position).list));
+//                intent.putExtra("id",JSON.toJSONString(adapter2.getItem(position).id));
+//                intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
+//                startActivity(intent);
             }
         });
 //        mvpPresenter.selectListByApp();
     }
-
+    void setPostData(List<listByAppRsp.DataBean.ListBean.ZBListBean> list,String id,String name){
+        Intent intent=new Intent();
+        for (int i = 0; i < list.size(); i++) {
+            intent.putExtra(i+"",list.get(i));
+        }
+        intent.putExtra("id",id);
+        intent.putExtra("name",name);
+        intent.putExtra("size",list.size());
+        intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
+        startActivity(intent);
+    }
     @Override
     protected NoteBookPresenter createPresenter() {
         return new NoteBookPresenter(this);

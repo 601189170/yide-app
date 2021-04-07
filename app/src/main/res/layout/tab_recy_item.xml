@@ -5,9 +5,9 @@
    <FrameLayout
        android:layout_width="wrap_content"
        android:layout_height="match_parent">
-      <CheckedTextView
+      <TextView
           android:id="@+id/item"
-
+          android:text="dssd"
           android:textAlignment="center"
           android:gravity="center"
           android:textColor="@color/tab_color_recy"
@@ -17,7 +17,7 @@
 
 
 
-      </CheckedTextView>
+      </TextView>
    </FrameLayout>
 
 

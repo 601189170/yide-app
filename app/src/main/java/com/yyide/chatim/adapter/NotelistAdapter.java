@@ -7,7 +7,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.utils.VHUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019/3/29.
@@ -15,16 +19,16 @@ import com.yyide.chatim.utils.VHUtil;
 
 public class NotelistAdapter extends BaseAdapter {
 
-    public String[] list={"我的信息","修改密码","帮助中心","权限设置","清理缓存","版本更新","关于"};
+    public List<listByAppRsp.DataBean.ListBean.ZBListBean> list=new ArrayList<>();
 
     @Override
     public int getCount() {
-        return list.length;
+        return list.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return list[position];
+    public listByAppRsp.DataBean.ListBean.ZBListBean getItem(int position) {
+        return list.get(position);
     }
 
     @Override
@@ -37,9 +41,12 @@ public class NotelistAdapter extends BaseAdapter {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.note_list_item, null, false);
         TextView item = VHUtil.ViewHolder.get(view, R.id.item);
-        item.setText(getItem(position));
+        item.setText(getItem(position).name);
         return view;
     }
-
+    public void notifydata(List<listByAppRsp.DataBean.ListBean.ZBListBean> list){
+        this.list=list;
+        notifyDataSetChanged();
+    }
 
 }

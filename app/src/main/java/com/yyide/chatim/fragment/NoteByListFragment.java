@@ -22,8 +22,12 @@ import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.NoteTabBean;
 import com.yyide.chatim.model.TeacherlistRsp;
+import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.presenter.NoteBookByListPresenter;
 import com.yyide.chatim.view.NoteByListBookView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -42,15 +46,22 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
     String id;
     NotelistAdapter2 adapter2;
 
-    String data;
-    int type;
 
+    int type;
+    int sum;
+    List<listByAppRsp.DataBean.ListBean.ZBListBean> listBean=new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.layout_notebylist_fragmnet, container, false);
         id=getArguments().getString("id");
-        data=getArguments().getString("data");
+        sum=getArguments().getInt("size");
+        listBean.clear();
+        for (int i=0;i<sum;i++){
 
+            listByAppRsp.DataBean.ListBean.ZBListBean bean= (listByAppRsp.DataBean.ListBean.ZBListBean) getArguments().getSerializable(i+"");
+            Log.e("TAG", "ZBListBeanfragment: "+JSON.toJSONString(bean) );
+            listBean.add(bean);
+        }
 
         return mBaseView;
     }
@@ -61,21 +72,37 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         adapter=new NotelistAdapter();
         adapter2=new NotelistAdapter2();
 
-        if (TextUtils.isEmpty(data)){
+        if (listBean.size()==0){
             type=2;
             listview.setAdapter(adapter2);
+
             mvpPresenter.NoteBookByList(id,"","","","10","1");
         }else {
             type=1;
             listview.setAdapter(adapter);
+            adapter.notifydata(listBean);
         }
+
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if (type==1){
                     NoteByListActivity activity= (NoteByListActivity) getActivity();
-                    activity.initDeptFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("size",adapter.list.get(position).list.size());
+                    bundle.putString("id", String.valueOf(adapter.list.get(position).id));
+                    bundle.putString("name", String.valueOf(adapter.list.get(position).name));
+                    if (adapter.list.get(position).list.size()==0){
+                        bundle.putBoolean("islast",true);
+                    }else {
+                        bundle.putBoolean("islast",false);
+                    }
+
+                    for (int i = 0; i < adapter.list.get(position).list.size(); i++) {
+                        bundle.putSerializable(i+"", adapter.list.get(position).list.get(i));
+                    }
+                    activity.initDeptFragment2(bundle);
                 }else {
 //                    ToastUtils.showShort("跳转个人说明");
                     Intent intent=new Intent();

@@ -61,13 +61,13 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
                 viewHolder.item.setText(getItem(i).name+"  >");
             }
 
-            viewHolder.item.setChecked(true);
+            viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.blue));
         }else {
             if (!TextUtils.isEmpty(getItem(i).name)){
                 viewHolder.item.setText(getItem(i).name);
             }
+            viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.black10));
 
-            viewHolder.item.setChecked(false);
         }
 
 
@@ -89,7 +89,7 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
         }
 
 
-        CheckedTextView item;
+        TextView item;
 
 
 
