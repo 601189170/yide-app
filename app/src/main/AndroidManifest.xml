@@ -62,11 +62,13 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/NoTitleFullscreen"
-        android:requestLegacyExternalStorage="true"
         tools:replace="android:icon">
+        <activity android:name=".activity.ScanLoginActivity"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

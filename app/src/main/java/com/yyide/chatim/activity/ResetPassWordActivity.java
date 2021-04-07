@@ -129,17 +129,18 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
     }
 
     @Override
-    public void updateSuccess() {
-
+    public void updateSuccess(String msg) {
+        ToastUtils.showShort(msg);
+        finish();
     }
 
     @Override
     public void updateFail(String msg) {
-
+        ToastUtils.showShort(msg);
     }
 
     @Override
-    public void getSmsSuccess() {
+    public void getSmsSuccess(String msg) {
         time.start();
     }
 

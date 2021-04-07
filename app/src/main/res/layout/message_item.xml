@@ -9,12 +9,12 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="12-12-12"
             android:textColor="#C0C4CC"
             android:textSize="12sp" />
 

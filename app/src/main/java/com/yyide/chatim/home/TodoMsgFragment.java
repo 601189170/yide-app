@@ -62,6 +62,7 @@ public class TodoMsgFragment extends BaseFragment {
                         .setText(R.id.tv_leave_type, o.getDesc())
                         .setText(R.id.tv_start_time, o.getStartTime())
                         .setText(R.id.tv_leave_status, "审批状态：" + (o.getStatus() == 1 ? "待审批" : "已审批"))
+                        .setText(R.id.tv_date, o.getStartTime())
                         .setText(R.id.tv_end_time, o.getEndTime());
                 TextView textView = holder.getView(R.id.tv_refused);
                 TextView textView2 = holder.getView(R.id.tv_agree);
@@ -72,11 +73,17 @@ public class TodoMsgFragment extends BaseFragment {
                     textView.setVisibility(View.VISIBLE);
                     textView2.setVisibility(View.VISIBLE);
                 }
-                textView.setOnClickListener(v -> {
-
+                textView.setOnClickListener(v -> {//拒绝
+                    o.setStatus(1);
+                    o.setAgentStatus(1);
+                    list.remove(o);
+                    adapter.remove(o);
+                    notifyDataSetChanged();
                 });
-                textView2.setOnClickListener(v -> {
-
+                textView2.setOnClickListener(v -> {//同意
+                    o.setStatus(2);
+                    o.setAgentStatus(2);
+                    adapter.notifyDataSetChanged();
                 });
 
             }
@@ -86,9 +93,9 @@ public class TodoMsgFragment extends BaseFragment {
         setTab(0);
     }
 
+    private List<AgentInformationRsp> list = new ArrayList<>();
     private void initData() {
-        List<AgentInformationRsp> list = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             AgentInformationRsp item = new AgentInformationRsp();
             switch (i) {
                 case 0:
@@ -96,29 +103,44 @@ public class TodoMsgFragment extends BaseFragment {
                     item.setContent("张宇的主监护人提交的请假需要你审批");
                     item.setStatus(1);
                     break;
-                case 2:
+                case 1:
                     item.setTitle("请假");
                     item.setContent("刘星的主监护人提交的请假需要你审批");
                     item.setStatus(1);
                     break;
-                case 3:
+                case 2:
                     item.setTitle("请假");
                     item.setContent("李沐的主监护人提交的请假需要你审批");
                     item.setStatus(1);
                     break;
-                case 4:
+                case 3:
                     item.setTitle("请假");
                     item.setContent("刘德云的主监护人提交的请假需要你审批");
                     item.setStatus(2);
                     break;
-                case 5:
+                case 4:
                     item.setTitle("请假");
                     item.setContent("张明宇的主监护人提交的请假需要你审批");
                     item.setStatus(1);
                     break;
-                case 6:
+                case 5:
                     item.setTitle("请假");
                     item.setContent("王珂的主监护人提交的请假需要你审批");
+                    item.setStatus(2);
+                    break;
+                case 6:
+                    item.setTitle("请假");
+                    item.setContent("张檬的主监护人提交的请假需要你审批");
+                    item.setStatus(2);
+                    break;
+                case 7:
+                    item.setTitle("请假");
+                    item.setContent("刘博的主监护人提交的请假需要你审批");
+                    item.setStatus(1);
+                    break;
+                case 8:
+                    item.setTitle("请假");
+                    item.setContent("程昱的主监护人提交的请假需要你审批");
                     item.setStatus(2);
                     break;
             }
@@ -130,17 +152,35 @@ public class TodoMsgFragment extends BaseFragment {
         adapter.setList(list);
     }
 
+    private List<AgentInformationRsp> initData(int status){
+        List<AgentInformationRsp> dataList = new ArrayList<>();
+        if(list != null){
+            for (AgentInformationRsp item: list){
+                if(status == item.getStatus()){
+                    dataList.add(item);
+                }
+            }
+        }
+        return dataList;
+    }
+
     @OnClick({R.id.tab1, R.id.tab2, R.id.tab3})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1:
                 setTab(0);
+                //设置模拟数据
+                adapter.setList(list);
                 break;
             case R.id.tab2:
                 setTab(1);
+                //设置模拟数据
+                adapter.setList(initData(1));
                 break;
             case R.id.tab3:
                 setTab(2);
+                //设置模拟数据
+                adapter.setList(initData(2));
                 break;
         }
     }

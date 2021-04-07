@@ -258,7 +258,11 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     @Override
     public void uploadFileSuccess(String imgUrl) {
-
+        GlideUtil.loadImage(this, imgUrl, img);
+        if(userInfo != null){
+            userInfo.img = imgUrl;
+            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+        }
     }
 
     @Override

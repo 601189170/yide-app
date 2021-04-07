@@ -96,8 +96,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.white));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             int vis = getWindow().getDecorView().getSystemUiVisibility();
             vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -225,14 +225,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void toastShow(int resId) {
-        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
-    }
-
-    public void toastShow(String resId) {
-        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
     }
 
     public ProgressDialog progressDialog;

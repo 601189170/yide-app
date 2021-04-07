@@ -1,6 +1,5 @@
 package com.yyide.chatim.net;
 
-
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -18,6 +17,7 @@ import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
 import com.yyide.chatim.model.UpdateUserInfo;
+import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
@@ -139,11 +139,13 @@ public interface DingApiStores {
 
     //用户头像上传
     @Multipart
-    @POST("/management/cloud-system/user/toOss")
-    Observable<ResultBean> uploadImg(@Part MultipartBody.Part info);
+    @POST("/management/cloud-system/user/androidToOss")
+    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info);
 
-//    @GET("/management/cloud-system/app/user/scan/")
-//    Observable<ResultBean> scanCodeLogin(@Query(""));
+    //扫码登录
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @POST("/management/cloud-system/authentication/scan")
+    Observable<ResultBean> scanCodeLogin(@Body RequestBody info);
 
     //获取首页代办
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
@@ -175,4 +177,13 @@ public interface DingApiStores {
     @POST("/management/cloud-system/message/temp/selectMessagePage")
     Observable<TemplateListRsp> selectMessagePage(@Body RequestBody requestBody);
 
+    //我的应用
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/application/me")
+    Observable<TemplateListRsp> getMyApp(@Body RequestBody requestBody);
+
+    //查询应用列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/backstage/cloud-backstage/application/search")
+    Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
 }

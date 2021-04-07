@@ -101,7 +101,7 @@ public class AppClient {
             CacheControl cacheControl = cacheBuilder.build();
 
             Request request = chain.request();
-            if (!TextUtils.isEmpty(SpData.User().token)) {
+            if (SpData.User() != null && !TextUtils.isEmpty(SpData.User().token)) {
                 Log.e("TAG", "intercept: "+ JSON.toJSONString(SpData.User().token));
                 request = request.newBuilder()
                 .addHeader("Authorization", SpData.User().token)

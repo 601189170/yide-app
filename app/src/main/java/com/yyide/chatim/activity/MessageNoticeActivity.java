@@ -13,7 +13,9 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.model.AgentInformationRsp;
 import com.yyide.chatim.model.HelpRsp;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
 
@@ -38,7 +40,7 @@ public class MessageNoticeActivity extends BaseActivity {
     TextView title;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-
+    private BaseQuickAdapter adapter;
     @Override
     public int getContentViewID() {
         return R.layout.activity_message_notice_layout;
@@ -53,31 +55,105 @@ public class MessageNoticeActivity extends BaseActivity {
     }
     private void initAdapter() {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        BaseQuickAdapter adapter = new BaseQuickAdapter<HelpRsp, BaseViewHolder>(R.layout.item_message_notice) {
+        adapter = new BaseQuickAdapter<AgentInformationRsp, BaseViewHolder>(R.layout.item_message_notice) {
             @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpRsp o) {
-//                baseViewHolder
-//                        .setText(R.id.title,"如何维护组织架构?")
-//                        .setText(R.id.info, o.msg);
+            protected void convert(@NotNull BaseViewHolder baseViewHolder, AgentInformationRsp o) {
+                baseViewHolder.setText(R.id.tv_leave, o.getContent())
+                        .setText(R.id.tv_leave_type, o.getDesc())
+                        .setText(R.id.tv_start_time, o.getStartTime())
+                        .setText(R.id.tv_leave_status, "审批状态：" + (o.getStatus() == 1 ? "待审批" : "已审批"))
+                        .setText(R.id.tv_date, o.getStartTime())
+                        .setText(R.id.tv_end_time, o.getEndTime());
+                TextView textView = baseViewHolder.getView(R.id.tv_refused);
+                TextView textView2 = baseViewHolder.getView(R.id.tv_agree);
+                if (o.getStatus() == 2) {
+                    textView.setVisibility(View.GONE);
+                    textView2.setVisibility(View.GONE);
+                } else {
+                    textView.setVisibility(View.VISIBLE);
+                    textView2.setVisibility(View.VISIBLE);
+                }
+                textView.setOnClickListener(v -> {//拒绝
+                    o.setStatus(1);
+                    o.setAgentStatus(1);
+                    list.remove(o);
+                    adapter.remove(o);
+                    notifyDataSetChanged();
+                });
+                textView2.setOnClickListener(v -> {//同意
+                    o.setStatus(2);
+                    o.setAgentStatus(2);
+                    adapter.notifyDataSetChanged();
+                });
             }
         };
 
         recyclerview.setAdapter(adapter);
         recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,20)));
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter<?, ?> adapter, View view, int position) {
-                HelpRsp model = (HelpRsp) adapter.getData().get(position);
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            HelpRsp model = (HelpRsp) adapter1.getData().get(position);
 
-//                ToastUtils.showShort(model.msg);
-//                startActivity(new Intent(mActivity, HelpInfoActivity.class));
-            }
         });
-        List<HelpRsp> list=new ArrayList<>();
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
+        initData();
+        adapter.setList(list);
+    }
+
+    private List<AgentInformationRsp> list = new ArrayList<>();
+    private void initData() {
+        for (int i = 0; i < 9; i++) {
+            AgentInformationRsp item = new AgentInformationRsp();
+            switch (i) {
+                case 0:
+                    item.setTitle("请假");
+                    item.setContent("张宇的主监护人提交的请假需要你审批");
+                    item.setStatus(1);
+                    break;
+                case 1:
+                    item.setTitle("请假");
+                    item.setContent("刘星的主监护人提交的请假需要你审批");
+                    item.setStatus(1);
+                    break;
+                case 2:
+                    item.setTitle("请假");
+                    item.setContent("李沐的主监护人提交的请假需要你审批");
+                    item.setStatus(1);
+                    break;
+                case 3:
+                    item.setTitle("请假");
+                    item.setContent("刘德云的主监护人提交的请假需要你审批");
+                    item.setStatus(2);
+                    break;
+                case 4:
+                    item.setTitle("请假");
+                    item.setContent("张明宇的主监护人提交的请假需要你审批");
+                    item.setStatus(1);
+                    break;
+                case 5:
+                    item.setTitle("请假");
+                    item.setContent("王珂的主监护人提交的请假需要你审批");
+                    item.setStatus(2);
+                    break;
+                case 6:
+                    item.setTitle("请假");
+                    item.setContent("张檬的主监护人提交的请假需要你审批");
+                    item.setStatus(2);
+                    break;
+                case 7:
+                    item.setTitle("请假");
+                    item.setContent("刘博的主监护人提交的请假需要你审批");
+                    item.setStatus(1);
+                    break;
+                case 8:
+                    item.setTitle("请假");
+                    item.setContent("程昱的主监护人提交的请假需要你审批");
+                    item.setStatus(2);
+                    break;
+            }
+            item.setDesc("请假类型：事假");
+            item.setStartTime("开始时间：" + DateUtils.stampToDate(System.currentTimeMillis()));
+            item.setEndTime("结束时间：" + DateUtils.stampToDate(System.currentTimeMillis() + 1000 * 60 * 60 * 24));
+            list.add(item);
+        }
         adapter.setList(list);
     }
 

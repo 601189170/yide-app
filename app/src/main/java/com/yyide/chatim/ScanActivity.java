@@ -6,19 +6,35 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.yyide.chatim.activity.ScanLoginActivity;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.net.DingApiStores;
+import com.yyide.chatim.view.ScanLoginView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
 
@@ -45,22 +61,21 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
     }
     @Override
     public void onScanQRCodeSuccess(String result) {
-
         vibrate();
+        jupm(this, ScanLoginActivity.class, "result", result);
 //        ToastUtils.showShort("onScanQRCodeSuccess==>"+result.toString());
 //        if (result.contains("id:")) {
 //            ResultRsp bean = JSON.parseObject(result, ResultRsp.class);
 //        if (isshow)
 //            Identity(DecryptUtils.decrypt(result));
 //        }
-        if (zbarview!=null) new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                zbarview.startSpot();
-            }
-        },3000);
-
+//        if (zbarview!=null) new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                zbarview.startSpot();
+//            }
+//        },3000);
+        finish();
     }
 
     @Override
@@ -68,15 +83,10 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
 
     }
 
-
     @Override
     public void onScanQRCodeOpenCameraError() {
 //        Toast.makeText(activity, "打开相机出错", Toast.LENGTH_SHORT).show();
     }
-
-
-
-
 
     public void stopSM() {
         if (zbarview != null) {
@@ -98,7 +108,6 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
             i = 1;
 
         }
-
 
     }
 
@@ -122,8 +131,6 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
             zbarview.onDestroy();
         }
     }
-
-
 
     @SuppressLint("MissingPermission")
     private void vibrate() {

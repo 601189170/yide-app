@@ -30,7 +30,7 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
             @Override
             public void onSuccess(ResultBean model) {
                 if (model.isSuccess()) {
-                    mvpView.getSmsSuccess();
+                    mvpView.getSmsSuccess(model.getMsg());
                 } else {
                     mvpView.getSmsFail(model.getMsg());
                 }
@@ -38,7 +38,7 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
 
             @Override
             public void onFailure(String msg) {
-
+                mvpView.getSmsFail(msg);
             }
 
             @Override
@@ -57,12 +57,17 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
         addSubscription(dingApiStores.forgotPwd(body), new ApiCallback<ResultBean>() {
             @Override
             public void onSuccess(ResultBean model) {
+                if (model.isSuccess()) {
+                    mvpView.updateSuccess(model.getMsg());
+                } else {
+                    mvpView.updateFail(model.getMsg());
+                }
 
             }
 
             @Override
             public void onFailure(String msg) {
-
+                mvpView.updateFail(msg);
             }
 
             @Override

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
@@ -99,10 +100,14 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         Utils.checkPermission(this);
 //        getcode("15920012647");
-        if (AppUtils.isAppDebug()) {
-            userEdit.setText("13522222222");
-            passwordEdit.setText("222222");
-        }
+//        if (AppUtils.isAppDebug()) {
+//            userEdit.setText("13522222222");
+//            passwordEdit.setText("222222");
+//        }
+        String username = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
+        String password = SPUtils.getInstance().getString(BaseConstant.PASSWORD);
+        userEdit.setText(TextUtils.isEmpty(username) ? "" : username);
+        passwordEdit.setText(TextUtils.isEmpty(password) ? "" : password);
         time = new TimeCount(60000, 1000);
         alphaAnimation();
     }
@@ -206,9 +211,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
+        String validateCode = vCode.getText().toString().trim();
+        String mobile = userEdit.getText().toString().trim();
+        String password = passwordEdit.getText().toString().trim();
         if (ll_sms.isShown()) {//处理登录逻辑
-            String validateCode = vCode.getText().toString().trim();
-            String mobile = userEdit.getText().toString().trim();
             if (TextUtils.isEmpty(mobile)) {
                 ToastUtils.showShort("请输入手机号码");
             } else if (TextUtils.isEmpty(validateCode)) {
@@ -217,7 +223,13 @@ public class LoginActivity extends AppCompatActivity {
                 TologinBymobile(validateCode, mobile);
             }
         } else {
-            Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
+            if (TextUtils.isEmpty(mobile)) {
+                ToastUtils.showShort("请输入手机号码");
+            } else if (TextUtils.isEmpty(password)) {
+                ToastUtils.showShort("请输入密码");
+            } else {
+                Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
+            }
         }
     }
 
@@ -250,7 +262,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(unbinder != null){
+        if (unbinder != null) {
             unbinder.unbind();
         }
 
@@ -303,11 +315,11 @@ public class LoginActivity extends AppCompatActivity {
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, username);
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, password);
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
 //                    initIm();
-//                    getUserSig();
+                    getUserSig();
                 } else {
-                    ToastUtils.showShort(bean.msg);
+                    ToastUtils.showShort(bean.message);
                 }
             }
         });
@@ -435,7 +447,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e(TAG, "getUserSchool333==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.data!=null) {
+                if (rsp.data != null) {
                     if (rsp.data.size() > 0) {
                         SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
                         SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(0)));
@@ -446,7 +458,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    void initIm(int userid,String userSig) {
+    void initIm(int userid, String userSig) {
         TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
@@ -463,8 +475,8 @@ public class LoginActivity extends AppCompatActivity {
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userid));
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功" );
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
             }
         });
     }

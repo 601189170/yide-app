@@ -6,6 +6,7 @@ import com.tencent.imsdk.utils.FileUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.UpdateUserInfo;
+import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.utils.FileUtils;
 import com.yyide.chatim.view.UserView;
@@ -17,6 +18,7 @@ import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Header;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -67,14 +69,17 @@ public class UserPresenter extends BasePresenter<UserView> {
             return;
         }
         mvpView.showLoading();
-        String base64File = FileUtils.encodeBase64File(filePath);
         RequestBody fileRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part requestImgPart = MultipartBody.Part.createFormData("base64File", base64File, fileRequestBody);
-        addSubscription(dingApiStores.uploadImg(requestImgPart), new ApiCallback() {
+//        MultipartBody.Part requestImgPart = MultipartBody.Part.create(fileRequestBody);
+        // 创建MultipartBody.Part，用于封装文件数据
+        MultipartBody.Part requestImgPart =
+                MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody);
+
+        addSubscription(dingApiStores.uploadImg(requestImgPart), new ApiCallback<UploadRep>() {
             @Override
-            public void onSuccess(Object model) {
+            public void onSuccess(UploadRep model) {
                 mvpView.hideLoading();
-                mvpView.uploadFileSuccess("");
+                mvpView.uploadFileSuccess(model.getUrl());
             }
 
             @Override

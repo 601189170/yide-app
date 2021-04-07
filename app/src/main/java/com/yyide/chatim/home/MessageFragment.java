@@ -39,13 +39,10 @@ public class MessageFragment extends BaseFragment {
     LinearLayout note;
     private View mBaseView;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.message_fragmnet, container, false);
-
-
         return mBaseView;
     }
 

@@ -28,6 +28,7 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends BaseFragm
         if (mvpPresenter != null) {
             mvpPresenter.detachView();
         }
+        hideLoading();
     }
 
     public void showLoading() {

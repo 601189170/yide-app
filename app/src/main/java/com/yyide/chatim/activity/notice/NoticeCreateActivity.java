@@ -122,6 +122,5 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
 
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-        toastShow(millseconds + "");
     }
 }

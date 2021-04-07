@@ -23,6 +23,7 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends BaseActiv
         if (mvpPresenter != null) {
             mvpPresenter.detachView();
         }
+        hideLoading();
     }
 
     public void showLoading() {

@@ -11,6 +11,7 @@ public class ResultBean {
     private int code;
     private boolean success;
     private String msg;
+    private String message;
 
     public int getCode() {
         return code;
@@ -34,5 +35,13 @@ public class ResultBean {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

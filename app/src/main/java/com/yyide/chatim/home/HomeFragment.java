@@ -33,6 +33,7 @@ import com.yyide.chatim.homemodel.WorkFragment;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
+import com.yyide.chatim.utils.StringUtils;
 import com.yyide.chatim.view.HomeFragmentView;
 
 import java.util.ArrayList;
@@ -88,6 +89,16 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mvpPresenter.getUserSchool();
         //mvpPresenter.getHomeNotice();
         initVerticalTextview(null);
+    }
+
+    @Override
+    public void showLoading() {
+        super.showLoading();
+    }
+
+    @Override
+    public void hideLoading() {
+        super.hideLoading();
     }
 
     void initVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
@@ -197,7 +208,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             for (GetUserSchoolRsp.DataBean datum : SpData.Schoolinfo().data) {
                 if (datum.schoolId == ids) {
                     qhSchool = datum.schoolName;
-                    qhName = datum.username;
+                    qhName = datum.realname;
                     if (datum.imgList != null && datum.imgList.size() > 0) {
                         qhPhoto = datum.imgList.get(0);
                         SPUtils.getInstance().put(SpData.USERPHOTO, qhPhoto);
@@ -205,7 +216,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 }
             }
             schoolName.setText(qhSchool);
-            userName.setText(qhName);
+            userName.setText(StringUtils.subString(qhName, 2));
             SPUtils.getInstance().put(SpData.USERNAME, qhName);
             //保存信息
             if (SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 0) {

@@ -21,8 +21,12 @@ import com.yyide.chatim.adapter.AppItemAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;
 import com.yyide.chatim.base.BaseFragment;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.leave.LeaveActivity;
 import com.yyide.chatim.model.APPBean;
+import com.yyide.chatim.presenter.AppPresenter;
+import com.yyide.chatim.view.AppView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 
-public class AppFragment extends BaseFragment {
+public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView {
 
 
     @BindView(R.id.mygrid)
@@ -163,5 +167,28 @@ public class AppFragment extends BaseFragment {
         });
     }
 
+    @Override
+    protected AppPresenter createPresenter() {
+        return new AppPresenter(this);
+    }
 
+    @Override
+    public void showLoading() {
+        super.showLoading();
+    }
+
+    @Override
+    public void hideLoading() {
+        super.hideLoading();
+    }
+
+    @Override
+    public void getMyAppListSuccess() {
+
+    }
+
+    @Override
+    public void getMyAppFail(String msg) {
+
+    }
 }
