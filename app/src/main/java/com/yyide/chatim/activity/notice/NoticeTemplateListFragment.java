@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.notice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,7 +39,7 @@ import butterknife.BindView;
  */
 public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateListFragmentPresenter> implements NoticeTemplateListFragmentView {
     private static final String TAG = "NoticeTemplateListFragm";
-    List<TemplateListRsp.DataBean.RecordsBean.MessagesBean> list = new ArrayList<>();
+    List<TemplateListRsp.DataBean.RecordsBean> list = new ArrayList<>();
     BaseQuickAdapter adapter;
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
@@ -51,7 +52,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
     private String mParam1;
 
     private String name;
-    private String tempId;
+    private long tempId;
 
     public NoticeTemplateListFragment() {
         // Required empty public constructor
@@ -65,12 +66,12 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
      * @return A new instance of fragment NoticeAnnouncementListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NoticeTemplateListFragment newInstance(String param1,String name,String tempId) {
+    public static NoticeTemplateListFragment newInstance(String param1,String name,long tempId) {
         NoticeTemplateListFragment fragment = new NoticeTemplateListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, name);
-        args.putString(ARG_PARAM3, tempId);
+        args.putLong(ARG_PARAM3, tempId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,7 +82,8 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             name = getArguments().getString(ARG_PARAM2);
-            tempId = getArguments().getString(ARG_PARAM3);
+            tempId = getArguments().getLong(ARG_PARAM3);
+            Log.e(TAG,"name:"+name+",tempId:"+tempId);
         }
     }
 
@@ -96,19 +98,25 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new BaseQuickAdapter<TemplateListRsp.DataBean.RecordsBean.MessagesBean, BaseViewHolder>(R.layout.item_notice_template) {
+        adapter = new BaseQuickAdapter<TemplateListRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_template) {
             @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, TemplateListRsp.DataBean.RecordsBean.MessagesBean o) {
+            protected void convert(@NotNull BaseViewHolder baseViewHolder, TemplateListRsp.DataBean.RecordsBean o) {
                 baseViewHolder
-                        .setText(R.id.tv_title, o.getTitle().toString())
+                        .setText(R.id.tv_title, o.getName())
                         .setText(R.id.tv_desc, o.getName())
-                        .setText(R.id.tv_notice_content, o.getTitle().toString());
+                        .setText(R.id.tv_notice_content, o.getContent());
             }
         };
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                NoticeAnnouncementModel model = (NoticeAnnouncementModel) adapter.getData().get(position);
+                Log.e(TAG, "onItemClick: "+position );
+                TemplateListRsp.DataBean.RecordsBean recordsBean = (TemplateListRsp.DataBean.RecordsBean)adapter.getData().get(position);
+                Intent intent = new Intent(getActivity(), NoticeCreateActivity.class);
+                intent.putExtra("name",recordsBean.getName());
+                intent.putExtra("content",recordsBean.getContent());
+                intent.putExtra("template",true);
+                startActivity(intent);
             }
         });
 
@@ -142,8 +150,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
             List<TemplateListRsp.DataBean.RecordsBean> records = data.getRecords();
             if (!records.isEmpty()){
                 list.clear();
-                TemplateListRsp.DataBean.RecordsBean recordsBean = records.get(0);
-                List<TemplateListRsp.DataBean.RecordsBean.MessagesBean> messages = recordsBean.getMessages();
+                List<TemplateListRsp.DataBean.RecordsBean> messages = records;
                 list.addAll(messages);
                 adapter.setList(list);
             }

@@ -1,6 +1,8 @@
 package com.yyide.chatim.net;
 
 
+import com.yyide.chatim.model.AddUserAnnouncementResponse;
+import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.ClassesBannerRsp;
@@ -159,11 +161,12 @@ public interface DingApiStores {
     Observable<NoticeHomeRsp> getIndexMyNotice();
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNotice
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyAnnouncement
     //通知公告列表
     //type 1 我收到的 2 我发布的
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/notice/getMyNotice")
-    Observable<NoticeListRsp> getMyNotice(@Query("type") int type, @Query("page") int page, @Query("size") int size);
+    @GET("/management/cloud-system/user/announcement/getMyAnnouncement")
+    Observable<NoticeListRsp> getMyNotice(@Query("type") int type, @Query("current") int page, @Query("size") int size);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeDetails
     //获取我的公告详情
@@ -198,10 +201,24 @@ public interface DingApiStores {
     @POST("/backstage/cloud-backstage/application/search")
     Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
 
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyNoticeBacklog
+
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeBacklog
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/notice/getMyNoticeBacklog")
+    @GET("/management/cloud-system/user/announcement/getMyNoticeBacklog")
     Observable<HomeNoticeRsp> getMyNoticeBacklog();
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/addUserAnnouncement
+    //添加公告
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/user/announcement/addUserAnnouncement")
+    Observable<AddUserAnnouncementResponse> addUserAnnouncement(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/delAnnouncement
+    //删除我发布的通告
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/announcement/delAnnouncement")
+    Observable<BaseRsp> delAnnouncement(@Query("id") int id);
 
     //查询是否有备课
     @Headers({"Content-Type: application/json", "Accept: application/json"})

@@ -1,5 +1,7 @@
 package com.yyide.chatim.activity.notice.presenter;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.activity.notice.view.NoticeAnnouncementFragmentView;
 import com.yyide.chatim.activity.notice.view.NoticeTemplateListFragmentView;
@@ -18,12 +20,15 @@ public class NoticeTemplateListFragmentPresenter extends BasePresenter<NoticeTem
         attachView(view);
     }
 
-    public void noticeTemplateList(String name,String tempId){
+    public void noticeTemplateList(String name,long tempId){
+        Log.e("NoticeTemplateListFragm", "noticeTemplateList: "+name +","+tempId);
         mvpView.showLoading();
         Map map = new HashMap<String,Object>();
-        map.put("name",name);
+        map.put("name",null);
         map.put("tempId",tempId);
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        String toJSONString = JSON.toJSONString(map);
+        Log.e("NoticeTemplateListFragm", "noticeTemplateList: "+toJSONString );
+        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),toJSONString);
         addSubscription(dingApiStores.selectMessagePage(body),new ApiCallback<TemplateListRsp>(){
             @Override
             public void onSuccess(TemplateListRsp model) {

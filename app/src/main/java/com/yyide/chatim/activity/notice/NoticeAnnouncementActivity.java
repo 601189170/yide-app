@@ -53,7 +53,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
                 if (position == 0) {
                     return NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
                 } else {
-                    return NoticeAnnouncementListFragment.newInstance("my_release");//我的发布
+                    return PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
                 }
             }
 

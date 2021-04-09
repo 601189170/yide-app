@@ -1,5 +1,6 @@
 package com.yyide.chatim.utils;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import java.text.ParseException;
@@ -19,6 +20,22 @@ public class DateUtils {
         Date date = new Date(s);
         res = simpleDateFormat.format(date);
         return res;
+    }
+
+    /**
+     * 接收到后台传来的时间格式2019-04-30T15:59:59.000+0000，转换指定格式的时间
+     * @param createTime
+     * @return
+     */
+    public static String switchCreateTime(String createTime,String dateFormat) {
+        String formatStr2 = "";
+        if (TextUtils.isEmpty(createTime)){
+            return formatStr2;
+        }
+        Long time = Long.valueOf(createTime);
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        return simpleDateFormat.format(new Date(time*1000L));
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.yyide.chatim.model;
 
-import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,6 +13,7 @@ import java.util.List;
  * @Version: 1.0
  */
 public class NoticeListRsp {
+
 
     /**
      * code : 200
@@ -58,7 +59,7 @@ public class NoticeListRsp {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable {
+    public static class DataBean {
         /**
          * records : [{"title":null,"productionTarget":null,"productionTime":null,"content":"这是推送内容","id":3,"signId":null,"timingTime":null,"type":"待办","status":"0","totalNumber":null,"readNumber":null},{"title":null,"productionTarget":null,"productionTime":null,"content":"这是推送内容","id":4,"signId":null,"timingTime":null,"type":"待办","status":"1","totalNumber":null,"readNumber":null},{"title":null,"productionTarget":null,"productionTime":1617349545000,"content":"这是推送内容","id":2,"signId":null,"timingTime":null,"type":"待办","status":"1","totalNumber":null,"readNumber":null}]
          * total : 3
@@ -123,7 +124,7 @@ public class NoticeListRsp {
             this.records = records;
         }
 
-        public static class RecordsBean implements Serializable {
+        public static class RecordsBean {
             /**
              * title : null
              * productionTarget : null
@@ -143,12 +144,12 @@ public class NoticeListRsp {
             private String productionTime;
             private String content;
             private int id;
-            private String signId;
+            private long signId;
             private String timingTime;
             private String type;
             private String status;
-            private Object totalNumber;
-            private Object readNumber;
+            private int totalNumber;
+            private int readNumber;
 
             public String getTitle() {
                 return title;
@@ -190,15 +191,15 @@ public class NoticeListRsp {
                 this.id = id;
             }
 
-            public Object getSignId() {
+            public long getSignId() {
                 return signId;
             }
 
-            public void setSignId(String signId) {
+            public void setSignId(long signId) {
                 this.signId = signId;
             }
 
-            public Object getTimingTime() {
+            public String getTimingTime() {
                 return timingTime;
             }
 
@@ -222,19 +223,19 @@ public class NoticeListRsp {
                 this.status = status;
             }
 
-            public Object getTotalNumber() {
+            public int getTotalNumber() {
                 return totalNumber;
             }
 
-            public void setTotalNumber(Object totalNumber) {
+            public void setTotalNumber(int totalNumber) {
                 this.totalNumber = totalNumber;
             }
 
-            public Object getReadNumber() {
+            public int getReadNumber() {
                 return readNumber;
             }
 
-            public void setReadNumber(Object readNumber) {
+            public void setReadNumber(int readNumber) {
                 this.readNumber = readNumber;
             }
 

@@ -1,11 +1,16 @@
 package com.yyide.chatim.activity.notice;
 
+import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.ToastUtils;
 import com.jzxiang.pickerview.TimePickerDialog;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -17,6 +22,12 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeCreatePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeCreateView;
+import com.yyide.chatim.model.AddUserAnnouncementBody;
+import com.yyide.chatim.model.AddUserAnnouncementResponse;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,6 +45,12 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
     TextView tv_faculty;
     @BindView(R.id.tv_student)
     TextView tv_student;
+    @BindView(R.id.et_input_title)
+    EditText et_input_title;//标题
+    @BindView(R.id.et_input_before_class)
+    EditText et_input_content;//内容
+
+    private static final String TAG = "NoticeCreateActivity";
 
     @Override
     public int getContentViewID() {
@@ -50,9 +67,19 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
                 cl_timing_time.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
             }
         });
+
+        Intent intent = getIntent();
+        boolean template = intent.getBooleanExtra("template", false);
+        if (template){
+            //表示从模板过来
+            String name = intent.getStringExtra("name");
+            String content = intent.getStringExtra("content");
+            et_input_title.setText(name);
+            et_input_content.setText(content);
+        }
     }
 
-    @OnClick({R.id.tv_parents, R.id.tv_faculty, R.id.cl_timing_time})
+    @OnClick({R.id.tv_parents, R.id.tv_faculty, R.id.cl_timing_time, R.id.ll_bottom})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.tv_parents:
@@ -70,7 +97,49 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
             case R.id.cl_timing_time://选择发布时间
                 showTime();
                 break;
+            case R.id.ll_bottom://提交公告
+                commit();
+                break;
+            default:
+                break;
         }
+    }
+
+    /**
+     * type : 3
+     * title : 这是标题
+     * content : 内容1 内容2
+     * equipmentType : 1
+     * sendTarget : 1
+     * departmentIds : ["430"]
+     * classesIds : []
+     * classCardIds : []
+     * isTiming : false
+     * timingTime :
+     */
+    private void commit() {
+        String title = et_input_title.getText().toString();
+        String content = et_input_content.getText().toString();
+        boolean isTiming = mSwitch.isChecked();
+        AddUserAnnouncementBody body = new AddUserAnnouncementBody();
+        body.setType("3");
+        body.setTitle(title);
+        body.setContent(content);
+        body.setEquipmentType("1");
+        body.setSendTarget("1");
+        List<String> departmentIds = new ArrayList();
+        departmentIds.add("430");
+        body.setDepartmentIds(departmentIds);
+        List<String> classCardIds = new ArrayList();
+        body.setClassCardIds(classCardIds);
+        List<String> classesIds = new ArrayList();
+        body.setClassesIds(classesIds);
+        body.setIsTiming(isTiming);
+        body.setTimingTime(new Date());
+        String jsonString = JSON.toJSONString(body);
+        Log.e(TAG, "commit: " + jsonString);
+        mvpPresenter.addUserAnnouncement(jsonString);
+
     }
 
     private TimePickerDialog mDialogAll;
@@ -122,5 +191,21 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
 
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+    }
+
+    @Override
+    public void addUserAnnouncement(AddUserAnnouncementResponse addUserAnnouncementResponse) {
+        if (addUserAnnouncementResponse.getCode() == 200) {
+            String success = addUserAnnouncementResponse.getData().getSuccess();
+            ToastUtils.showShort(success);
+            finish();
+            return;
+        }
+        ToastUtils.showShort(addUserAnnouncementResponse.getMsg());
+    }
+
+    @Override
+    public void addUserAnnouncementFail(String msg) {
+        ToastUtils.showShort(msg);
     }
 }

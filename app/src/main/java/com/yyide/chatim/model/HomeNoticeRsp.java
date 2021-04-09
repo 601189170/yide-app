@@ -1,7 +1,5 @@
 package com.yyide.chatim.model;
 
-import java.io.Serializable;
-
 /**
  * @Description: HomeNoticeRsp
  * @Author: liu tao
@@ -13,11 +11,12 @@ import java.io.Serializable;
  */
 public class HomeNoticeRsp {
 
+
     /**
      * code : 200
      * success : true
      * msg : 成功
-     * data : {"title":null,"productionTarget":null,"productionTime":null,"content":"测试1，测试2。","id":15,"signId":123,"timingTime":null,"type":"测试1","status":"0","totalNumber":6,"readNumber":1,"sendObject":"1"}
+     * data : {"id":222,"delInd":"0","createdBy":null,"createdDateTime":"2021-04-08T08:35:37.647+0000","updatedBy":null,"updatedDateTime":"2021-04-08T08:35:37.647+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"这是标题","productionTarget":"小明班主任","productionTime":null,"content":"内容1 内容2","signId":310241259811766272,"timingTime":null,"type":"3","status":"0","totalNumber":1,"readNumber":0,"sendObject":"小明班主任"}
      */
 
     private int code;
@@ -57,28 +56,46 @@ public class HomeNoticeRsp {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable {
+    public static class DataBean {
         /**
-         * title : null
-         * productionTarget : null
+         * id : 222
+         * delInd : 0
+         * createdBy : null
+         * createdDateTime : 2021-04-08T08:35:37.647+0000
+         * updatedBy : null
+         * updatedDateTime : 2021-04-08T08:35:37.647+0000
+         * versionStamp : 0
+         * total : 0
+         * size : 10
+         * current : 1
+         * title : 这是标题
+         * productionTarget : 小明班主任
          * productionTime : null
-         * content : 测试1，测试2。
-         * id : 15
-         * signId : 123
+         * content : 内容1 内容2
+         * signId : 310241259811766272
          * timingTime : null
-         * type : 测试1
+         * type : 3
          * status : 0
-         * totalNumber : 6
-         * readNumber : 1
-         * sendObject : 1
+         * totalNumber : 1
+         * readNumber : 0
+         * sendObject : 小明班主任
          */
 
-        private Object title;
-        private Object productionTarget;
+        private int id;
+        private String delInd;
+        private Object createdBy;
+        private String createdDateTime;
+        private Object updatedBy;
+        private String updatedDateTime;
+        private int versionStamp;
+        private int total;
+        private int size;
+        private int current;
+        private String title;
+        private String productionTarget;
         private Object productionTime;
         private String content;
-        private int id;
-        private int signId;
+        private long signId;
         private Object timingTime;
         private String type;
         private String status;
@@ -86,19 +103,99 @@ public class HomeNoticeRsp {
         private int readNumber;
         private String sendObject;
 
-        public Object getTitle() {
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getDelInd() {
+            return delInd;
+        }
+
+        public void setDelInd(String delInd) {
+            this.delInd = delInd;
+        }
+
+        public Object getCreatedBy() {
+            return createdBy;
+        }
+
+        public void setCreatedBy(Object createdBy) {
+            this.createdBy = createdBy;
+        }
+
+        public String getCreatedDateTime() {
+            return createdDateTime;
+        }
+
+        public void setCreatedDateTime(String createdDateTime) {
+            this.createdDateTime = createdDateTime;
+        }
+
+        public Object getUpdatedBy() {
+            return updatedBy;
+        }
+
+        public void setUpdatedBy(Object updatedBy) {
+            this.updatedBy = updatedBy;
+        }
+
+        public String getUpdatedDateTime() {
+            return updatedDateTime;
+        }
+
+        public void setUpdatedDateTime(String updatedDateTime) {
+            this.updatedDateTime = updatedDateTime;
+        }
+
+        public int getVersionStamp() {
+            return versionStamp;
+        }
+
+        public void setVersionStamp(int versionStamp) {
+            this.versionStamp = versionStamp;
+        }
+
+        public int getTotal() {
+            return total;
+        }
+
+        public void setTotal(int total) {
+            this.total = total;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
+        }
+
+        public int getCurrent() {
+            return current;
+        }
+
+        public void setCurrent(int current) {
+            this.current = current;
+        }
+
+        public String getTitle() {
             return title;
         }
 
-        public void setTitle(Object title) {
+        public void setTitle(String title) {
             this.title = title;
         }
 
-        public Object getProductionTarget() {
+        public String getProductionTarget() {
             return productionTarget;
         }
 
-        public void setProductionTarget(Object productionTarget) {
+        public void setProductionTarget(String productionTarget) {
             this.productionTarget = productionTarget;
         }
 
@@ -118,19 +215,11 @@ public class HomeNoticeRsp {
             this.content = content;
         }
 
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getSignId() {
+        public long getSignId() {
             return signId;
         }
 
-        public void setSignId(int signId) {
+        public void setSignId(long signId) {
             this.signId = signId;
         }
 
@@ -185,11 +274,20 @@ public class HomeNoticeRsp {
         @Override
         public String toString() {
             return "DataBean{" +
-                    "title=" + title +
-                    ", productionTarget=" + productionTarget +
+                    "id=" + id +
+                    ", delInd='" + delInd + '\'' +
+                    ", createdBy=" + createdBy +
+                    ", createdDateTime='" + createdDateTime + '\'' +
+                    ", updatedBy=" + updatedBy +
+                    ", updatedDateTime='" + updatedDateTime + '\'' +
+                    ", versionStamp=" + versionStamp +
+                    ", total=" + total +
+                    ", size=" + size +
+                    ", current=" + current +
+                    ", title='" + title + '\'' +
+                    ", productionTarget='" + productionTarget + '\'' +
                     ", productionTime=" + productionTime +
                     ", content='" + content + '\'' +
-                    ", id=" + id +
                     ", signId=" + signId +
                     ", timingTime=" + timingTime +
                     ", type='" + type + '\'' +

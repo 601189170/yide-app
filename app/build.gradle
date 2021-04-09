@@ -74,6 +74,11 @@ android {
 //    MobSDK {
 //        fp true //严格模式
 //    }
+
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 dependencies {

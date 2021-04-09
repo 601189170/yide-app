@@ -32,7 +32,9 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
     @BindView(R.id.viewpager)
     ViewPager2 mViewpager;
     int currentIndex;
+
     List<TemplateTypeRsp.DataBean.RecordsBean> list = new ArrayList<>();
+    List<NoticeTemplateListFragment> listFragments = new ArrayList<>();
     @Override
     public int getContentViewID() {
         return R.layout.activity_notice_template;
@@ -60,7 +62,8 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
             @Override
             public Fragment createFragment(int position) {
                 TemplateTypeRsp.DataBean.RecordsBean recordsBean = list.get(currentIndex);
-                return NoticeTemplateListFragment.newInstance("",recordsBean.getTemplateName(),recordsBean.getId()+"");//我的通知
+                Log.e(TAG, "createFragment: "+position );
+                return listFragments.get(position);//我的通知
             }
 
             @Override
@@ -73,6 +76,7 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 //这里需要根据position修改tab的样式和文字等
                 Log.e(TAG, "onConfigureTab: "+position );
+                TemplateTypeRsp.DataBean.RecordsBean recordsBean = list.get(currentIndex);
                 currentIndex = position;
                 tab.setText(list.get(position).getTemplateName());
             }
@@ -106,6 +110,9 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
             list.clear();
             List<TemplateTypeRsp.DataBean.RecordsBean> records = templateTypeRsp.getData().getRecords();
             list.addAll(records);
+            for (TemplateTypeRsp.DataBean.RecordsBean recordsBean : list) {
+                listFragments.add(NoticeTemplateListFragment.newInstance("",recordsBean.getTemplateName()+"",recordsBean.getId()));
+            }
             initViewPager();
         }
     }

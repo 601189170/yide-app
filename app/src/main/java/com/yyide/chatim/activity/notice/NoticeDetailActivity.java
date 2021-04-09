@@ -40,6 +40,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     private int TYPE_STATISTICAL = 3;//通知统计
 
     private int id;
+    private String status;
 
     @Override
     public int getContentViewID() {
@@ -53,24 +54,32 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         tv_notice_content.setMovementMethod(ScrollingMovementMethod.getInstance());
         int type = getIntent().getIntExtra("type", 0);
         id = getIntent().getIntExtra("id", 0);
+        status = getIntent().getStringExtra("status");
+        Log.e(TAG, "onCreate: type:" + type + ",id:" + id + ",status:" + status);
         initView(type);
         initData();
     }
 
     private void initView(int type) {
-       if(type == TYPE_CONFIRM){
-           tv_confirm_number.setVisibility(View.GONE);
-           tv_notice_confirm.setVisibility(View.GONE);
-           tv_confirm.setVisibility(View.VISIBLE);
-       } else if(type == TYPE_UNCONFIRM){
-           tv_confirm_number.setVisibility(View.GONE);
-           tv_notice_confirm.setVisibility(View.GONE);
-           tv_confirm.setVisibility(View.VISIBLE);
-       } else if(type == TYPE_STATISTICAL){//TYPE_STATISTICAL
-           tv_confirm.setVisibility(View.GONE);
-           tv_confirm_number.setVisibility(View.VISIBLE);
-           tv_notice_confirm.setVisibility(View.VISIBLE);
-       }
+        if ("1".equals(status) && type == 1) {
+            tv_confirm.setSelected(false);
+            tv_confirm.setClickable(false);
+            tv_confirm.setBackground(this.getDrawable(R.drawable.bg_corners_gray2_18));
+            tv_confirm.setTextColor(this.getResources().getColor(R.color.black10));
+        }
+        if (type == TYPE_CONFIRM) {
+            tv_confirm_number.setVisibility(View.GONE);
+            tv_notice_confirm.setVisibility(View.GONE);
+            tv_confirm.setVisibility(View.VISIBLE);
+        } else if (type == TYPE_UNCONFIRM) {
+            tv_confirm_number.setVisibility(View.GONE);
+            tv_notice_confirm.setVisibility(View.GONE);
+            tv_confirm.setVisibility(View.VISIBLE);
+        } else if (type == TYPE_STATISTICAL) {//TYPE_STATISTICAL
+            tv_confirm.setVisibility(View.GONE);
+            tv_confirm_number.setVisibility(View.VISIBLE);
+            tv_notice_confirm.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData() {
@@ -78,14 +87,16 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 //        tv_notice_author.setText();
 //        tv_notice_time.setText();
 //        tv_notice_content.setText();
-        mvpPresenter.noticeDetail(1);
+        mvpPresenter.noticeDetail(id);
     }
 
     @OnClick(R.id.back_layout)
-    public void click() { finish(); }
+    public void click() {
+        finish();
+    }
 
     @OnClick(R.id.tv_confirm)
-    public void confirm(){
+    public void confirm() {
 
     }
 
@@ -117,11 +128,11 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     @Override
     public void noticeDetail(NoticeDetailRsp noticeDetailRsp) {
         NoticeDetailRsp.DataBean data = noticeDetailRsp.getData();
-        Log.e(TAG, "noticeDetail: "+noticeDetailRsp.toString() );
-        if (data != null){
-            tv_notice_title.setText(data.getTitle().toString());
-            tv_notice_author.setText(data.getProductionTarget().toString());
-            tv_notice_time.setText(data.getProductionTime().toString());
+        Log.e(TAG, "noticeDetail: " + noticeDetailRsp.toString());
+        if (data != null) {
+            tv_notice_title.setText(data.getTitle());
+            tv_notice_author.setText(data.getProductionTarget());
+            tv_notice_time.setText(data.getProductionTime());
             tv_notice_content.setText(data.getContent());
         }
     }

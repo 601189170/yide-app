@@ -105,8 +105,8 @@ public class LoginActivity extends BaseActivity {
         Utils.checkPermission(this);
 //        getcode("15920012647");
 //        if (AppUtils.isAppDebug()) {
-//            userEdit.setText("13522222222");
-//            passwordEdit.setText("222222");
+            userEdit.setText("13267182222");
+            passwordEdit.setText("182222");
 //        }
         String username = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         String password = SPUtils.getInstance().getString(BaseConstant.PASSWORD);

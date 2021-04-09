@@ -114,6 +114,8 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
             if (data != null){
                 notice_content.setText(data.getContent());
                 notice_time.setText(data.getProductionTime().toString());
+            }else {
+                notice_content.setText("暂无消息公告");
             }
         }
     }

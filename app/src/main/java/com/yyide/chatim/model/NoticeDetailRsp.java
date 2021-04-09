@@ -1,6 +1,6 @@
 package com.yyide.chatim.model;
 
-import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Description: java类作用描述
@@ -13,11 +13,12 @@ import java.io.Serializable;
  */
 public class NoticeDetailRsp {
 
+
     /**
      * code : 200
      * success : true
      * msg : 成功
-     * data : {"title":null,"productionTarget":null,"productionTime":null,"content":"测试1，测试2。","id":16,"signId":null,"timingTime":null,"type":"测试1","status":"0","totalNumber":null,"readNumber":null}
+     * data : {"id":3,"delInd":"0","createdBy":null,"createdDateTime":"2021-04-09T02:55:49.327+0000","updatedBy":null,"updatedDateTime":"2021-04-09T02:55:49.327+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":null,"productionTarget":null,"productionTime":null,"content":"这是推送内容","signId":null,"timingTime":null,"type":"待办","status":"1","totalNumber":274,"readNumber":12,"sendObject":null}
      */
 
     private int code;
@@ -57,54 +58,154 @@ public class NoticeDetailRsp {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable {
+    public static class DataBean {
         /**
+         * id : 3
+         * delInd : 0
+         * createdBy : null
+         * createdDateTime : 2021-04-09T02:55:49.327+0000
+         * updatedBy : null
+         * updatedDateTime : 2021-04-09T02:55:49.327+0000
+         * versionStamp : 0
+         * total : 0
+         * size : 10
+         * current : 1
          * title : null
          * productionTarget : null
          * productionTime : null
-         * content : 测试1，测试2。
-         * id : 16
+         * content : 这是推送内容
          * signId : null
          * timingTime : null
-         * type : 测试1
-         * status : 0
-         * totalNumber : null
-         * readNumber : null
+         * type : 待办
+         * status : 1
+         * totalNumber : 274
+         * readNumber : 12
+         * sendObject : null
          */
 
-        private Object title;
-        private Object productionTarget;
-        private Object productionTime;
-        private String content;
         private int id;
-        private Object signId;
-        private Object timingTime;
+        private String delInd;
+        private String createdBy;
+        private Date createdDateTime;
+        private String updatedBy;
+        private Date updatedDateTime;
+        private int versionStamp;
+        private int total;
+        private int size;
+        private int current;
+        private String title;
+        private String productionTarget;
+        private String productionTime;
+        private String content;
+        private String signId;
+        private String timingTime;
         private String type;
         private String status;
-        private Object totalNumber;
-        private Object readNumber;
+        private int totalNumber;
+        private int readNumber;
+        private String sendObject;
 
-        public Object getTitle() {
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getDelInd() {
+            return delInd;
+        }
+
+        public void setDelInd(String delInd) {
+            this.delInd = delInd;
+        }
+
+        public String getCreatedBy() {
+            return createdBy;
+        }
+
+        public void setCreatedBy(String createdBy) {
+            this.createdBy = createdBy;
+        }
+
+        public Date getCreatedDateTime() {
+            return createdDateTime;
+        }
+
+        public void setCreatedDateTime(Date createdDateTime) {
+            this.createdDateTime = createdDateTime;
+        }
+
+        public String getUpdatedBy() {
+            return updatedBy;
+        }
+
+        public void setUpdatedBy(String updatedBy) {
+            this.updatedBy = updatedBy;
+        }
+
+        public Date getUpdatedDateTime() {
+            return updatedDateTime;
+        }
+
+        public void setUpdatedDateTime(Date updatedDateTime) {
+            this.updatedDateTime = updatedDateTime;
+        }
+
+        public int getVersionStamp() {
+            return versionStamp;
+        }
+
+        public void setVersionStamp(int versionStamp) {
+            this.versionStamp = versionStamp;
+        }
+
+        public int getTotal() {
+            return total;
+        }
+
+        public void setTotal(int total) {
+            this.total = total;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
+        }
+
+        public int getCurrent() {
+            return current;
+        }
+
+        public void setCurrent(int current) {
+            this.current = current;
+        }
+
+        public String getTitle() {
             return title;
         }
 
-        public void setTitle(Object title) {
+        public void setTitle(String title) {
             this.title = title;
         }
 
-        public Object getProductionTarget() {
+        public String getProductionTarget() {
             return productionTarget;
         }
 
-        public void setProductionTarget(Object productionTarget) {
+        public void setProductionTarget(String productionTarget) {
             this.productionTarget = productionTarget;
         }
 
-        public Object getProductionTime() {
+        public String getProductionTime() {
             return productionTime;
         }
 
-        public void setProductionTime(Object productionTime) {
+        public void setProductionTime(String productionTime) {
             this.productionTime = productionTime;
         }
 
@@ -116,27 +217,19 @@ public class NoticeDetailRsp {
             this.content = content;
         }
 
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public Object getSignId() {
+        public String getSignId() {
             return signId;
         }
 
-        public void setSignId(Object signId) {
+        public void setSignId(String signId) {
             this.signId = signId;
         }
 
-        public Object getTimingTime() {
+        public String getTimingTime() {
             return timingTime;
         }
 
-        public void setTimingTime(Object timingTime) {
+        public void setTimingTime(String timingTime) {
             this.timingTime = timingTime;
         }
 
@@ -156,36 +249,54 @@ public class NoticeDetailRsp {
             this.status = status;
         }
 
-        public Object getTotalNumber() {
+        public int getTotalNumber() {
             return totalNumber;
         }
 
-        public void setTotalNumber(Object totalNumber) {
+        public void setTotalNumber(int totalNumber) {
             this.totalNumber = totalNumber;
         }
 
-        public Object getReadNumber() {
+        public int getReadNumber() {
             return readNumber;
         }
 
-        public void setReadNumber(Object readNumber) {
+        public void setReadNumber(int readNumber) {
             this.readNumber = readNumber;
+        }
+
+        public String getSendObject() {
+            return sendObject;
+        }
+
+        public void setSendObject(String sendObject) {
+            this.sendObject = sendObject;
         }
 
         @Override
         public String toString() {
             return "DataBean{" +
-                    "title=" + title +
-                    ", productionTarget=" + productionTarget +
-                    ", productionTime=" + productionTime +
+                    "id=" + id +
+                    ", delInd='" + delInd + '\'' +
+                    ", createdBy='" + createdBy + '\'' +
+                    ", createdDateTime=" + createdDateTime +
+                    ", updatedBy='" + updatedBy + '\'' +
+                    ", updatedDateTime=" + updatedDateTime +
+                    ", versionStamp=" + versionStamp +
+                    ", total=" + total +
+                    ", size=" + size +
+                    ", current=" + current +
+                    ", title='" + title + '\'' +
+                    ", productionTarget='" + productionTarget + '\'' +
+                    ", productionTime='" + productionTime + '\'' +
                     ", content='" + content + '\'' +
-                    ", id=" + id +
-                    ", signId=" + signId +
-                    ", timingTime=" + timingTime +
+                    ", signId='" + signId + '\'' +
+                    ", timingTime='" + timingTime + '\'' +
                     ", type='" + type + '\'' +
                     ", status='" + status + '\'' +
                     ", totalNumber=" + totalNumber +
                     ", readNumber=" + readNumber +
+                    ", sendObject='" + sendObject + '\'' +
                     '}';
         }
     }

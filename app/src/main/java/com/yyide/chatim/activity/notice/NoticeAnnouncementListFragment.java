@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -20,10 +22,14 @@ import com.yyide.chatim.model.NoticeAnnouncementModel;
 import com.yyide.chatim.activity.notice.presenter.NoticeAnnouncementFragmentPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeAnnouncementFragmentView;
 import com.yyide.chatim.model.NoticeListRsp;
+import com.yyide.chatim.utils.DateUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -93,12 +99,25 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
                         .setText(R.id.tv_notice_time, o.getNoticeTime())
                         .setText(R.id.tv_notice_author, o.getNoticeAuthor())
                         .setText(R.id.tv_notice_content, o.getNoticeContent());
+                if ("1".equals(o.getStatus())){
+                    TextView view1 = baseViewHolder.getView(R.id.tv_confirm);
+                    view1.setText("已确认");
+                    view1.setBackground(getActivity().getDrawable(R.drawable.bg_corners_gray2_18));
+                    view1.setTextColor(getActivity().getResources().getColor(R.color.black10));
+                    ImageView iconView = baseViewHolder.getView(R.id.iv_pic);
+                    iconView.setImageDrawable(getActivity().getDrawable(R.drawable.ic_announcement_mark_read));
+                }
                 baseViewHolder.getView(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
-                        intent.putExtra("type", 1);
+                        if (mParam1.equals("my_notice")){
+                            intent.putExtra("type",1);
+                        }else {
+                            intent.putExtra("type",2);
+                        }
                         intent.putExtra("id",o.getId());
+                        intent.putExtra("status",o.getStatus());
                         startActivity(intent);
                     }
                 });
@@ -138,7 +157,10 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
 
         if (!records.isEmpty()){
             for (NoticeListRsp.DataBean.RecordsBean record : records) {
-                list.add(new NoticeAnnouncementModel(record.getId(),record.getTitle(),record.getProductionTarget(),record.getContent(),record.getProductionTime()));
+                //yyyy-MM-dd HH:mm 03.06 09:00
+                Log.e(TAG,"ProductionTime:"+record.getProductionTime());
+                String productionTime = DateUtils.switchCreateTime(record.getProductionTime(),"MM.dd HH:mm");
+                list.add(new NoticeAnnouncementModel(record.getId(),record.getTitle(),record.getProductionTarget(),record.getContent(),productionTime,record.getStatus()));
             }
 
             adapter.setList(list);

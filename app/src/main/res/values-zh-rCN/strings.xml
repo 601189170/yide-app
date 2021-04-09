@@ -93,4 +93,6 @@
     <string name="notice_tab_my_notice">我的通知</string>
     <string name="notice_tab_my_release">我的发布</string>
     <string name="notice_select_number">已选择(%d)</string>
+    <string name="notice_send_obj">发送对象：%s</string>
+    <string name="notice_confirm_number">（%d/%d）已确认</string>
 </resources>
