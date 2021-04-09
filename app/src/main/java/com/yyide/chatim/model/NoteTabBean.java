@@ -10,8 +10,8 @@ public class NoteTabBean {
 
     public String name;
 
-    public boolean islast;
-    public NoteTabBean(String name,String tag,boolean islast){
+    public String islast;
+    public NoteTabBean(String name,String tag,String islast){
 
         this.name=name;
 

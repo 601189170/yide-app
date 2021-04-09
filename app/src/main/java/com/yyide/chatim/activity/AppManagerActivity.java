@@ -13,6 +13,8 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.HelpItemRep;
+import com.yyide.chatim.utils.StatusBarUtils;
+import com.yyide.chatim.view.SpacesItemDecoration;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,7 +63,7 @@ public class AppManagerActivity extends BaseActivity {
         };
 
         recyclerview.setAdapter(adapter);
-//        recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,20)));
+        recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,20)));
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter<?, ?> adapter, View view, int position) {

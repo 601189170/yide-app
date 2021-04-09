@@ -42,7 +42,7 @@ public class GenerateTestUserSig {
      * 它是腾讯云用于区分客户的唯一标识。
      */
 //    public static final int SDKAPPID = 1400457918;
-    public static final int SDKAPPID = 1400491015;
+        public static final int SDKAPPID = 1400491015;
 
 
     /**

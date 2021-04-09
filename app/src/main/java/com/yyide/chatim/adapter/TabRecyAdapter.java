@@ -56,7 +56,7 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
     public void onBindViewHolder(final TabRecyAdapter.ViewHolder viewHolder, final int i) {
 
 
-        if (!getItem(i).islast){
+        if (getItem(i).islast.equals("2")){
             if (!TextUtils.isEmpty(getItem(i).name)){
                 viewHolder.item.setText(getItem(i).name+"  >");
             }

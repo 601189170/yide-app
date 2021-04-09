@@ -12,7 +12,15 @@
        android:divider="@color/transparent"
        android:dividerHeight="0dp"
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="wrap_content">
+
+   </ListView>
+   <ListView
+       android:id="@+id/listview2"
+       android:divider="@color/transparent"
+       android:dividerHeight="0dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
 
    </ListView>
 </LinearLayout>

@@ -171,7 +171,9 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
             bundle.putSerializable(i+"", listBean.get(i));
         }
         if (listBean.size()==0){
-            noteTabBean.islast=true;
+            noteTabBean.islast="1";
+        }else {
+            noteTabBean.islast="2";
         }
 
         bundle.putInt("size",listBean.size());
@@ -201,7 +203,7 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         NoteTabBean noteTabBean =new NoteTabBean();
         noteTabBean.tag=index+"";
         noteTabBean.name=bundle.getString("name");
-        noteTabBean.islast=bundle.getBoolean("islast");
+        noteTabBean.islast=bundle.getString("islast");
         Log.e("TAG", "initDeptFragment2==》: "+JSON.toJSONString(bundle) );
         noteByListFragment.setArguments(bundle);
 
