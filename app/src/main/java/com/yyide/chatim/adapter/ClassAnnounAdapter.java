@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
@@ -28,21 +29,21 @@ import retrofit2.http.POST;
 
 public class ClassAnnounAdapter extends LoopPagerAdapter {
 
-    public List<String> list = new ArrayList<>();
+    public List<ClassesBannerRsp.DataBean> list = new ArrayList<>();
     Activity context;
-
 
 
     public ClassAnnounAdapter(RollPagerView viewPager) {
         super(viewPager);
     }
+
     public ClassAnnounAdapter(RollPagerView viewPager, Activity context) {
         super(viewPager);
-        this.context=context;
+        this.context = context;
 
     }
 
-    private String getItem(int position) {
+    private ClassesBannerRsp.DataBean getItem(int position) {
         return list.get(position);
     }
 
@@ -53,21 +54,17 @@ public class ClassAnnounAdapter extends LoopPagerAdapter {
 
         ImageView img = VHUtil.ViewHolder.get(view, R.id.img);
 
-        GlideUtil.loadImage(view.getContext(),getItem(position),img);
-
-
+        GlideUtil.loadImage(view.getContext(), getItem(position).getUrl(), img);
 
         return view;
     }
-
-
 
     @Override
     public int getRealCount() {
         return list.size();
     }
 
-    public void notifyData(List<String> list) {
+    public void notifyData(List<ClassesBannerRsp.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

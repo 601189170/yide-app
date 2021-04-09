@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.yyide.chatim.utils.LoadingTools;
 
 import androidx.fragment.app.Fragment;
+
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Subscription;
@@ -27,6 +28,7 @@ public class BaseFragment extends Fragment {
     public Activity mActivity;
 
     private SweetAlertDialog pd;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -34,18 +36,6 @@ public class BaseFragment extends Fragment {
         mActivity = getActivity();
         pd = new LoadingTools().pd(mActivity);
     }
-
-
-
-
-    public void toastShow(int resId) {
-        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
-    }
-
-    public void toastShow(String resId) {
-        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
-    }
-
 
     @Override
     public void onDestroy() {
@@ -70,37 +60,18 @@ public class BaseFragment extends Fragment {
         mCompositeSubscription.add(subscription);
     }
 
-    public ProgressDialog progressDialog;
-
-    public ProgressDialog showProgressDialog() {
-        progressDialog = new ProgressDialog(mActivity);
-        progressDialog.setMessage("加载中");
-        progressDialog.show();
-        return progressDialog;
-    }
     public void showProgressDialog2() {
-        if (pd==null)
+        if (pd == null)
             pd = new LoadingTools().pd(mActivity);
-        if (pd!=null)
-        pd.show();
+        if (pd != null)
+            pd.show();
     }
+
     public void dismissProgressDialog2() {
         if (pd != null && pd.isShowing()) {
             // progressDialog.hide();会导致android.view.WindowLeaked
             pd.dismiss();
         }
     }
-    public ProgressDialog showProgressDialog(CharSequence message) {
-        progressDialog = new ProgressDialog(mActivity);
-        progressDialog.setMessage(message);
-        progressDialog.show();
-        return progressDialog;
-    }
 
-    public void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            // progressDialog.hide();会导致android.view.WindowLeaked
-            progressDialog.dismiss();
-        }
-    }
 }

@@ -171,13 +171,4 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
-    public void showLoading() {
-        super.showLoading();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoading();
-    }
 }

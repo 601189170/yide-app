@@ -2,29 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
 
-    android:orientation="horizontal"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
 
     <FrameLayout
-        android:background="@drawable/bg_white"
-        android:orientation="vertical"
         android:layout_width="0dp"
+        android:layout_height="177dp"
         android:layout_weight="1"
-        android:layout_height="177dp">
+        android:background="@drawable/bg_white"
+        android:orientation="vertical">
+
         <com.jude.rollviewpager.RollPagerView
             android:id="@+id/announRoll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-             />
-        <GridView
-            android:id="@+id/grid"
-            android:layout_marginBottom="12dp"
-            android:numColumns="3"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_width="60dp"
-            android:layout_height="6dp">
+            android:layout_height="match_parent" />
 
-        </GridView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/grid"
+            android:layout_width="wrap_content"
+            android:layout_height="6dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="12dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
     </FrameLayout>
 </LinearLayout>

@@ -25,6 +25,7 @@ import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.utils.ClickUtils;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
+import com.yyide.chatim.utils.LoadingTools;
 import com.yyide.chatim.utils.LogUtil;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import rx.Observable;
 import rx.Subscriber;
@@ -54,6 +56,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private List<Call> calls;
     private static final String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
+    private SweetAlertDialog pd;
+
     // 监听做成静态可以让每个子类重写时都注册相同的一份。
     private static IMEventListener mIMEventListener = new IMEventListener() {
         @Override
@@ -93,6 +97,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         DemoLog.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(getContentViewID());
+        mActivity = this;
         unbinder = ButterKnife.bind(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -104,6 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(vis);
         }
         TUIKit.addIMEventListener(mIMEventListener);
+        pd = new LoadingTools().pd(mActivity);
         //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
         //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
 
@@ -161,7 +167,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         DemoLog.i(TAG, "onDestroy");
         callCancel();
         onUnsubscribe();
-        if(unbinder != null){
+        if (unbinder != null) {
             unbinder.unbind();
         }
         super.onDestroy();
@@ -227,28 +233,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public ProgressDialog progressDialog;
-
-    public ProgressDialog showProgressDialog() {
-        progressDialog = new ProgressDialog(mActivity);
-//        progressDialog.setContentView(R.layout.dialog_loading1);
-//        progressDialog.setIndeterminateDrawable(getResources().getDrawable(R.drawable.bg_progress2));
-        progressDialog.setMessage("加载中");
-        progressDialog.show();
-        return progressDialog;
+    public void showLoading() {
+        showProgressDialog2();
     }
 
-    public ProgressDialog showProgressDialog(CharSequence message) {
-        progressDialog = new ProgressDialog(mActivity);
-        progressDialog.setMessage(message);
-        progressDialog.show();
-        return progressDialog;
+    public void hideLoading() {
+        dismissProgressDialog2();
     }
 
-    public void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
+    public void showProgressDialog2() {
+        if (pd == null)
+            pd = new LoadingTools().pd(mActivity);
+        if (pd != null)
+            pd.show();
+    }
+
+    public void dismissProgressDialog2() {
+        if (pd != null && pd.isShowing()) {
             // progressDialog.hide();会导致android.view.WindowLeaked
-            progressDialog.dismiss();
+            pd.dismiss();
         }
     }
 

@@ -289,7 +289,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     void Tologin(String username, String password) {
-        showProgressDialog();
+        showLoading();
         RequestBody body = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
@@ -303,7 +303,7 @@ public class LoginActivity extends BaseActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                dismissProgressDialog();
+                hideLoading();
                 Log.e(TAG, "onFailure: " + e.toString());
             }
 
@@ -336,18 +336,18 @@ public class LoginActivity extends BaseActivity {
                 .url(BaseConstant.URL_IP + "/management/cloud-system/app/smsVerification")
                 .post(body)
                 .build();
-        showProgressDialog();
+        showLoading();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                dismissProgressDialog();
+                hideLoading();
                 Log.e(TAG, "onFailure: " + e.toString());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                dismissProgressDialog();
+                hideLoading();
                 String data = response.body().string();
                 Log.e(TAG, "mOkHttpClient==>: " + data);
                 SmsVerificationRsp bean = JSON.parseObject(data, SmsVerificationRsp.class);
@@ -371,12 +371,12 @@ public class LoginActivity extends BaseActivity {
                 .url(BaseConstant.URL_IP + "/management/cloud-system/authentication/mobile")
                 .post(body)
                 .build();
-        showProgressDialog();
+        showLoading();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                dismissProgressDialog();
+                hideLoading();
                 Log.e(TAG, "onFailure: " + e.toString());
             }
 
@@ -413,7 +413,7 @@ public class LoginActivity extends BaseActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                dismissProgressDialog();
+                hideLoading();
                 Log.e(TAG, "getUserSigonFailure: " + e.toString());
             }
 
@@ -444,7 +444,7 @@ public class LoginActivity extends BaseActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                dismissProgressDialog();
+                hideLoading();
                 Log.e(TAG, "getUserSigonFailure: " + e.toString());
             }
 
@@ -477,7 +477,7 @@ public class LoginActivity extends BaseActivity {
         TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
-                dismissProgressDialog();
+                hideLoading();
                 runOnUiThread(new Runnable() {
                     public void run() {
                         ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
@@ -488,7 +488,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onSuccess(Object data) {
-                dismissProgressDialog();
+                hideLoading();
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userid));

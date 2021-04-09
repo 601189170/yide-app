@@ -137,19 +137,16 @@ public class SwichClassPop extends PopupWindow {
             mWindow.setAttributes(params);
         }
 
-        popupWindow.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                //如果设置了背景变暗，那么在dissmiss的时候需要还原
-                Log.e("TAG", "onDismiss==>: ");
-                if (mWindow != null) {
-                    WindowManager.LayoutParams params = mWindow.getAttributes();
-                    params.alpha = 1.0f;
-                    mWindow.setAttributes(params);
-                }
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+        popupWindow.setOnDismissListener(() -> {
+            //如果设置了背景变暗，那么在dissmiss的时候需要还原
+            Log.e("TAG", "onDismiss==>: ");
+            if (mWindow != null) {
+                WindowManager.LayoutParams params = mWindow.getAttributes();
+                params.alpha = 1.0f;
+                mWindow.setAttributes(params);
+            }
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);

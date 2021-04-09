@@ -64,7 +64,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             @Override
             public void onPageSelected(int position) {
-                int dex = announAdapter.list.size() % (viewPager.getCurrentItem());
+                int dex = position % announAdapter.list.size() + 1;
                 Log.e("TAG", "onPageSelected==>: " + dex);
                 indexAdapter.setIndex(dex);
             }

@@ -3,6 +3,7 @@ package com.yyide.chatim.net;
 
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -232,8 +233,8 @@ public interface DingApiStores {
     @POST("/backstage/cloud-backstage/app/support/selectByIntroduction")
     Observable<HelpItemRep> getHelpIntroduction(@Body RequestBody requestBody);
 
-    //帮助中心入门指南
+    //获取班级相册
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/android/videoalbum/list")
-    Observable<HelpItemRep> getClassPhotoList(@Body RequestBody requestBody);
+    Observable<ClassesBannerRsp> getClassPhotoList(@Body RequestBody requestBody);
 }
