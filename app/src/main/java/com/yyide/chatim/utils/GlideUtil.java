@@ -10,7 +10,6 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.net.GetData;
 
 
-
 /**
  * Created by Hao on 2017/11/21.
  */
@@ -25,11 +24,14 @@ public class GlideUtil {
         RequestOptions myOptions = new RequestOptions()
                 .centerInside().placeholder(R.mipmap.de1).error(R.mipmap.de1);
         Glide.with(context).load(GlideUtil.DataUrl(url)).apply(myOptions).into(imageView);
-
     }
 
-
-
+    //圆图
+    public static void loadCircleImage(Context context, String url, ImageView imageView) {
+        RequestOptions myOptions = new RequestOptions()
+                .circleCrop().placeholder(R.mipmap.de1).error(R.mipmap.de1);
+        Glide.with(context).load(GlideUtil.DataUrl(url)).apply(myOptions).into(imageView);
+    }
 
     //dp转px
     public static int dip2px(Context context, float dpValue) {

@@ -74,10 +74,10 @@ public class SwichClassPop extends PopupWindow {
         SwichClassAdapter adapter = new SwichClassAdapter();
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
-        if (SpData.Schoolinfo() != null && SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 0 && SpData.Schoolinfo().data.get(0).form != null) {
-            adapter.notifyData(SpData.Schoolinfo().data.get(0).form);
-            for (int i = 0; i < SpData.Schoolinfo().data.get(0).form.size(); i++) {
-                if (SpData.getClassInfo() != null && SpData.Schoolinfo().data.get(0).form.get(i).classesId.equals(SpData.getClassInfo().classesId)) {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
+            adapter.notifyData(SpData.getIdentityInfo().form);
+            for (int i = 0; i < SpData.getIdentityInfo().form.size(); i++) {
+                if (SpData.getClassInfo() != null && SpData.getIdentityInfo().form.get(i).classesId == SpData.getClassInfo().classesId) {
                     index = i;
                     break;
                 }
@@ -88,7 +88,7 @@ public class SwichClassPop extends PopupWindow {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 adapter.setIndex(position);
-                SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(0).form.get(position)));
+                SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.getIdentityInfo().form.get(position)));
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }

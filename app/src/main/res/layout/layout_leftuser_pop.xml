@@ -24,17 +24,34 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="14dp">
 
+                <FrameLayout
+                    android:id="@+id/user_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="7dp"
+                    android:background="@drawable/corners4">
 
-                <org.raphets.roundimageview.RoundImageView
-                    android:id="@+id/head_img"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="right|center_vertical"
-                    app:leftBottom_corner_radius="12dp"
-                    app:leftTop_corner_radius="12dp"
-                    app:rightBottom_corner_radius="12dp"
-                    app:rightTop_corner_radius="12dp"
-                    app:type="round" />
+                    <org.raphets.roundimageview.RoundImageView
+                        android:id="@+id/head_img"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="right|center_vertical"
+                        app:leftBottom_corner_radius="12dp"
+                        app:leftTop_corner_radius="12dp"
+                        app:rightBottom_corner_radius="12dp"
+                        app:rightTop_corner_radius="12dp"
+                        app:type="round" />
+
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/head_name"

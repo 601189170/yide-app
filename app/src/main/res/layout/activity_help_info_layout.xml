@@ -3,50 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
     android:layout_height="match_parent"
-    >
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <include
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         layout="@layout/title_layout2"
-        ></include>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
-        android:background="#F5F8FC"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_10" />
+        android:layout_height="@dimen/dp_10"
+        android:background="#F5F8FC" />
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingLeft="@dimen/dp_24"
         android:paddingTop="@dimen/dp_20"
-        android:paddingRight="@dimen/dp_30"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:paddingRight="@dimen/dp_30">
 
         <TextView
-            android:text="01. 如何维护组织架构？"
-            android:textStyle="bold"
-            android:id="@+id/title"
+            android:id="@+id/tv_helpTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textColor="#48494D"
             android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textStyle="bold" />
+
         <TextView
-            android:background="#E4E7ED"
-            android:layout_marginTop="@dimen/dp_20"
             android:layout_width="match_parent"
-            android:layout_height="1dp" />
-        <TextView
-            android:layout_marginBottom="@dimen/dp_20"
-            android:textSize="@dimen/sp_14"
-            android:textColor="#606266"
-            android:text="发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公发布公告如何发布公布公告如何发布公告发布公"
+            android:layout_height="1dp"
             android:layout_marginTop="@dimen/dp_20"
+            android:background="#E4E7ED" />
+
+        <TextView
+            android:id="@+id/tc_content"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:textColor="#606266"
+            android:textSize="@dimen/sp_14" />
     </LinearLayout>
 
 

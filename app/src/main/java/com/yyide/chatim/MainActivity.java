@@ -35,6 +35,7 @@ import com.yyide.chatim.home.HomeFragmentXZ;
 import com.yyide.chatim.home.MessageFragment;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
+import com.yyide.chatim.jiguang.TagAliasOperatorHelper;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ScheduleRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
@@ -155,12 +156,38 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     void RegistJiGuang(){
-        int userId = SpData.getUserId();
+        int userId = SpData.getIdentityInfo().userId;
         String rid = JPushInterface.getRegistrationID(getApplicationContext());
         int alias = userId;
         String equipmentType = "1";
         mvpPresenter.addUserEquipmentInfo(userId,rid, String.valueOf(alias),equipmentType);
     }
+
+    // 这是来自 JPush Example 的设置别名的 Activity 里的代码，更详细的示例请参考 JPush Example。一般 App 的设置的调用入口，在任何方便的地方调用都可以。
+//    private void handleAction(int sequence, TagAliasOperatorHelper.TagAliasBean tagAliasBean) {
+//        if(tagAliasBean == null){
+//            Log.w(TAG,"tagAliasBean was null");
+//            return;
+//        }
+//        if(tagAliasBean.isAliasAction){
+//            switch (tagAliasBean.action){
+//                case ACTION_GET:
+//                    JPushInterface.getAlias(getApplicationContext(),sequence);
+//                    break;
+//                case ACTION_DELETE:
+//                    JPushInterface.deleteAlias(getApplicationContext(),sequence);
+//                    break;
+//                case ACTION_SET:
+//                    JPushInterface.setAlias(getApplicationContext(),sequence,tagAliasBean.alias);
+//                    break;
+//                default:
+//                    Log.w(TAG,"unsupport alias action type");
+//                    return;
+//            }
+//        }else {
+//            //tag operation
+//        }
+//    }
 
     @Override
     protected MainPresenter createPresenter() {

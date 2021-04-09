@@ -1,5 +1,6 @@
 package com.yyide.chatim;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
+import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -63,7 +65,7 @@ import okhttp3.Response;
  * <p>
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     @BindView(R.id.user_edit)
@@ -88,15 +90,17 @@ public class LoginActivity extends AppCompatActivity {
     OkHttpClient mOkHttpClient = new OkHttpClient();
     public String phone = "";
 
-    private Unbinder unbinder;
     private AlphaAnimation alphaAniShow, alphaAniHide;
+
+    @Override
+    public int getContentViewID() {
+        return R.layout.login_for_dev_activity;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_for_dev_activity);
-        unbinder = ButterKnife.bind(this);
-
+        mActivity = this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         Utils.checkPermission(this);
 //        getcode("15920012647");
@@ -132,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.tv_login:
+
                 login();
                 break;
             case R.id.eye:
@@ -262,10 +267,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-
         if (time != null) {
             time.cancel();
         }
@@ -288,6 +289,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void Tologin(String username, String password) {
+        showProgressDialog();
         RequestBody body = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
@@ -301,6 +303,7 @@ public class LoginActivity extends AppCompatActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                dismissProgressDialog();
                 Log.e(TAG, "onFailure: " + e.toString());
             }
 
@@ -309,14 +312,12 @@ public class LoginActivity extends AppCompatActivity {
                 String data = response.body().string();
                 Log.e(TAG, "mOkHttpClientlogin==>: " + data);
                 LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, username);
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, password);
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//                    initIm();
                     getUserSig();
                 } else {
                     ToastUtils.showShort(bean.message);
@@ -335,15 +336,18 @@ public class LoginActivity extends AppCompatActivity {
                 .url(BaseConstant.URL_IP + "/management/cloud-system/app/smsVerification")
                 .post(body)
                 .build();
+        showProgressDialog();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                dismissProgressDialog();
                 Log.e(TAG, "onFailure: " + e.toString());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                dismissProgressDialog();
                 String data = response.body().string();
                 Log.e(TAG, "mOkHttpClient==>: " + data);
                 SmsVerificationRsp bean = JSON.parseObject(data, SmsVerificationRsp.class);
@@ -367,10 +371,12 @@ public class LoginActivity extends AppCompatActivity {
                 .url(BaseConstant.URL_IP + "/management/cloud-system/authentication/mobile")
                 .post(body)
                 .build();
+        showProgressDialog();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                dismissProgressDialog();
                 Log.e(TAG, "onFailure: " + e.toString());
             }
 
@@ -407,6 +413,7 @@ public class LoginActivity extends AppCompatActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                dismissProgressDialog();
                 Log.e(TAG, "getUserSigonFailure: " + e.toString());
             }
 
@@ -419,7 +426,7 @@ public class LoginActivity extends AppCompatActivity {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
                     getUserSchool();
                 } else {
-
+                    ToastUtils.showShort(bean.msg);
                 }
             }
         });
@@ -427,17 +434,17 @@ public class LoginActivity extends AppCompatActivity {
 
     //获取学校信息
     void getUserSchool() {
-
         //请求组合创建
         Request request = new Request.Builder()
 //                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP + "/management/cloud-system/user/getUserSchool")
+                .url(BaseConstant.URL_IP + "/management/cloud-system/user/getUserSchoolByApp")
                 .addHeader("Authorization", SpData.User().token)
                 .build();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                dismissProgressDialog();
                 Log.e(TAG, "getUserSigonFailure: " + e.toString());
             }
 
@@ -449,9 +456,17 @@ public class LoginActivity extends AppCompatActivity {
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
                 if (rsp.data != null) {
                     if (rsp.data.size() > 0) {
-                        SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
-                        SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(0)));
-                        initIm(rsp.data.get(0).userId, SpData.UserSig());
+                        for (int i = 0; i < rsp.data.size(); i++) {
+                            if (rsp.data.get(i).isCurrentUser) {
+//                                SPUtils.getInstance().put(SpData.USERID, rsp.data.get(i).userId);
+//                                SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(i).schoolId);
+                                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(i)));
+                                if (rsp.data.get(i) != null && rsp.data.get(i).form != null && rsp.data.get(i).form.size() > 0) {
+                                    SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(rsp.data.get(i).form.get(0)));
+                                }
+                                initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
+                            }
+                        }
                     }
                 }
             }
@@ -462,6 +477,7 @@ public class LoginActivity extends AppCompatActivity {
         TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
+                dismissProgressDialog();
                 runOnUiThread(new Runnable() {
                     public void run() {
                         ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
@@ -472,6 +488,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Object data) {
+                dismissProgressDialog();
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userid));

@@ -1,15 +1,12 @@
 package com.yyide.chatim.activity;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
@@ -30,7 +27,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MessageNoticeActivity extends BaseActivity {
-
 
     @BindView(R.id.back)
     TextView back;

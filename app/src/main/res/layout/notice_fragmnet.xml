@@ -2,55 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
 
-    android:orientation="horizontal"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
 
     <LinearLayout
-        android:background="@drawable/bg_white"
-        android:layout_weight="1"
+        android:id="@+id/ll_notice"
         android:layout_width="0dp"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/bg_white"
+        android:orientation="vertical">
+
         <FrameLayout
 
-            android:background="@drawable/bg_green_top"
             android:layout_width="match_parent"
-            android:layout_height="40dp" >
+            android:layout_height="40dp"
+            android:background="@drawable/bg_green_top">
+
             <TextView
-                android:text="通知公告"
-                android:textSize="15sp"
-                android:textColor="@color/white"
-                android:layout_marginLeft="11dp"
-                android:layout_gravity="center_vertical"
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="11dp"
+                android:text="通知公告"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/notice_time"
-                android:text="2021-01-26"
-                android:textSize="11sp"
-                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="@dimen/dp_10"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/white"
+                android:textSize="11sp" />
         </FrameLayout>
-<!--        <com.jude.rollviewpager.RollPagerView-->
-<!--           android:layout_margin="@dimen/dp_12"-->
+        <!--        <com.jude.rollviewpager.RollPagerView-->
+        <!--           android:layout_margin="@dimen/dp_12"-->
 
-<!--            android:id="@+id/announRoll"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
+        <!--            android:id="@+id/announRoll"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="0dp"-->
 
-<!--            android:layout_weight="1" />-->
+        <!--            android:layout_weight="1" />-->
         <TextView
             android:id="@+id/notice_content"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_12"
-            />
+            android:layout_weight="1"
+            android:text="暂无通告"
+            android:ellipsize="end"
+            android:lines="4" />
     </LinearLayout>
 </LinearLayout>

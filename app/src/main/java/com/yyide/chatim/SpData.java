@@ -33,10 +33,8 @@ public class SpData {
     public static String SCHOOLID = "SCHOOLID";
     public static String USERSIG = "USERSIG";
     public static String USERNAME = "USERNAME";
-    public static String USERPHOTO = "USERPHOTO";
     public static String USERID = "USERID";
     public static String CLASS_INFO = "CLASS_INFO";
-
 
     public static LoginRsp User() {
         return JSON.parseObject(SPUtils.getInstance().getString(LOGINDATA, ""), LoginRsp.class);
@@ -46,12 +44,8 @@ public class SpData {
         return JSON.parseObject(SPUtils.getInstance().getString(SCHOOLINFO, ""), GetUserSchoolRsp.class);
     }
 
-    public static GetUserSchoolRsp.DataBean getIdentityInfo(){
+    public static GetUserSchoolRsp.DataBean getIdentityInfo() {
         return JSON.parseObject(SPUtils.getInstance().getString(IDENTIY_INFO, ""), GetUserSchoolRsp.DataBean.class);
-    }
-
-    public static String SchoolId() {
-        return SPUtils.getInstance().getString(SCHOOLID, "");
     }
 
     public static GetUserSchoolRsp.DataBean.FormBean getClassInfo() {
@@ -62,20 +56,7 @@ public class SpData {
         return SPUtils.getInstance().getString(USERSIG, "");
     }
 
-    public static String UserName() {
-        return SPUtils.getInstance().getString(USERNAME, "");
-    }
-
-    public static String UserPhoto() {
-        return SPUtils.getInstance().getString(USERPHOTO, "");
-    }
-
     public static String UserPhone() {
         return SPUtils.getInstance().getString(USERPHONE, "");
     }
-
-    public static int getUserId() {
-        return SPUtils.getInstance().getInt(USERID);
-    }
-
 }

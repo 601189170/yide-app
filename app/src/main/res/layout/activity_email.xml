@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="保存"
             android:textColor="#222222"
             android:textSize="14dp" />
@@ -82,22 +82,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_input_email" />
-
-
-    <TextView
-        android:id="@+id/tv_push"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_5"
-        android:layout_marginRight="@dimen/dp_20"
-        android:layout_marginBottom="@dimen/dp_5"
-        android:background="@drawable/bg_blue"
-        android:gravity="center"
-        android:text="确认"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_15"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

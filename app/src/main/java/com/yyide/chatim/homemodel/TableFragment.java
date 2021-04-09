@@ -37,15 +37,12 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView tips;
     private View mBaseView;
 
-    OkHttpClient mOkHttpClient = new OkHttpClient();
     private static final String TAG = "TableFragment";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.table_fragmnet, container, false);
-
-
         return mBaseView;
     }
 

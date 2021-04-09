@@ -29,6 +29,7 @@ import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -61,6 +62,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         TextView head_name = mView.findViewById(R.id.head_name);
         TextView user_identity = mView.findViewById(R.id.user_sf);
         TextView user_class = mView.findViewById(R.id.user_class);
+        TextView user_name = mView.findViewById(R.id.user_name);
         ImageView head_img = mView.findViewById(R.id.head_img);
         LinearLayout layout1 = mView.findViewById(R.id.layout1);
         LinearLayout layout2 = mView.findViewById(R.id.layout2);
@@ -82,13 +84,12 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 
         user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
         user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t" + SpData.getIdentityInfo().getIdentity() : "");
-
-        head_name.setText(SpData.UserName());
-        if (!TextUtils.isEmpty(SpData.UserPhoto())) {
-            GlideUtil.loadImage(context, SpData.UserPhoto(), head_img);
+        head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
+        if (!TextUtils.isEmpty(SpData.getIdentityInfo().img)) {
+            GlideUtil.loadImage(context, SpData.getIdentityInfo().img, head_img);
+        } else {
+            user_name.setText(StringUtils.subString(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "", 2));
         }
-        Log.e("TAG", "UserName: " + JSON.toJSONString(SpData.UserName()));
-        Log.e("TAG", "UserPhoto: " + JSON.toJSONString(SpData.UserPhoto()));
 //        new BottomMenuPop(context);
         layout.setOnTouchListener((v, event) -> true);
         bg.setOnClickListener(v -> {

@@ -14,12 +14,13 @@ import com.blankj.utilcode.util.SPUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.utils.DemoLog;
+
 import java.io.IOException;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -47,39 +48,40 @@ public class SplashActivity extends AppCompatActivity {
 
         mFlashView = findViewById(R.id.flash_view);
         mUserInfo = UserInfo.getInstance();
-        Log.e(TAG, "mUserInfo: "+JSON.toJSONString(mUserInfo) );
+        Log.e(TAG, "mUserInfo: " + JSON.toJSONString(mUserInfo));
         initData();
-        Log.e(TAG, "loginName: "+JSON.toJSONString(loginName) );
-        Log.e(TAG, "passWord: "+JSON.toJSONString(passWord) );
-        if (!TextUtils.isEmpty(loginName)&&!TextUtils.isEmpty((passWord))){
-            Tologin(loginName,passWord);
-        }else {
+        Log.e(TAG, "loginName: " + JSON.toJSONString(loginName));
+        Log.e(TAG, "passWord: " + JSON.toJSONString(passWord));
+        if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
+            Tologin(loginName, passWord);
+        } else {
             startLogin();
         }
 //        handleData();
     }
-    void initData(){
+
+    void initData() {
         loginName = SPUtils.getInstance().getString(BaseConstant.LOGINNAME, null);
         passWord = SPUtils.getInstance().getString(BaseConstant.PASSWORD, null);
     }
+
     void Tologin(String username, String password) {
         RequestBody body = null;
-        if (!TextUtils.isEmpty(SpData.SchoolId())){
-            int ids= Integer.parseInt(SpData.SchoolId());
-            String schoolid= String.valueOf(ids);
-            if (!TextUtils.isEmpty(schoolid)){
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().schoolId > 0) {
+            int schoolId = SpData.getIdentityInfo().schoolId;
+            if (schoolId > 0) {
                 body = new FormBody.Builder()
                         .add("username", username)
                         .add("password", password)
-                        .add("schoolId", schoolid)
+                        .add("schoolId", schoolId + "")
                         .build();
-            }else {
+            } else {
                 body = new FormBody.Builder()
                         .add("username", username)
                         .add("password", password)
                         .build();
             }
-        }else {
+        } else {
             body = new FormBody.Builder()
                     .add("username", username)
                     .add("password", password)
@@ -95,18 +97,19 @@ public class SplashActivity extends AppCompatActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                if (!TextUtils.isEmpty(loginName)&&!TextUtils.isEmpty((passWord))){
+                if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
                     startMain();
-                }else {
+                } else {
                     startLogin();
                 }
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
                 Log.e(TAG, "mOkHttpClient==>: " + data);
                 LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-                if (bean.code==BaseConstant.REQUEST_SUCCES2){
+                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     handleData();
@@ -136,7 +139,7 @@ public class SplashActivity extends AppCompatActivity {
                     public void run() {
                         ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
 
-                        Log.e(TAG, "UserInfo: "+JSON.toJSONString(UserInfo.getInstance()) );
+                        Log.e(TAG, "UserInfo: " + JSON.toJSONString(UserInfo.getInstance()));
 
 //                        startMain();
                         startLogin();
@@ -148,7 +151,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Object data) {
-                Log.e(TAG, "UserInfo==》: "+JSON.toJSONString(UserInfo.getInstance()) );
+                Log.e(TAG, "UserInfo==》: " + JSON.toJSONString(UserInfo.getInstance()));
 
                 startMain();
             }

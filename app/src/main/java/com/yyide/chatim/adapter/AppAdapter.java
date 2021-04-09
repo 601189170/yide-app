@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
@@ -20,8 +21,7 @@ import java.util.List;
  */
 
 public class AppAdapter extends BaseAdapter {
-   public List<String> list=new ArrayList<>();
-
+    public List<AppItemBean.DataBean.RecordsBean> list = new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -29,7 +29,7 @@ public class AppAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public AppItemBean.DataBean.RecordsBean getItem(int position) {
         return list.get(position);
     }
 
@@ -44,12 +44,16 @@ public class AppAdapter extends BaseAdapter {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.app_item, null, false);
         TextView title = VHUtil.ViewHolder.get(view, R.id.title);
         GridView grid = VHUtil.ViewHolder.get(view, R.id.grid);
-        title.setText(getItem(position));
-        AppItemAdapter adapter=new AppItemAdapter();
+        title.setText(getItem(position).getName());
+        AppItemAdapter adapter = new AppItemAdapter();
         grid.setAdapter(adapter);
+        if(getItem(position).getList() != null){
+            adapter.notifyData(getItem(position).getList());
+        }
         return view;
     }
-    public void notifyData( List<String> list) {
+
+    public void notifyData(List<AppItemBean.DataBean.RecordsBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

@@ -1,5 +1,6 @@
 package com.yyide.chatim.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class SelectSchByTeaidRsp {
@@ -17,9 +18,8 @@ public class SelectSchByTeaidRsp {
     public String msg;
     public List<DataBean> data;
 
-  
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * id : null
          * delInd : 0
@@ -43,7 +43,7 @@ public class SelectSchByTeaidRsp {
          * toDateTime : 11:15
          */
 
-        public Object id;
+        public int id;
         public String delInd;
         public Object createdBy;
         public String createdDateTime;
@@ -63,7 +63,11 @@ public class SelectSchByTeaidRsp {
         public int weekTime;
         public String fromDateTime;
         public String toDateTime;
-
-
+        public String beforeClass;
+        public String afterClass;
+        public String teachTool;
+        public int subid;
+        public List<String> teachToolList;
+        public List<String> lessonsSubEntityList;
     }
 }

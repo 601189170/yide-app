@@ -96,8 +96,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
             int vis = getWindow().getDecorView().getSystemUiVisibility();
             vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;

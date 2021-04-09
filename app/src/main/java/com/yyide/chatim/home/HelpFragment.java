@@ -2,36 +2,38 @@ package com.yyide.chatim.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.HelpInfoActivity;
 import com.yyide.chatim.activity.HelpListActivity;
-import com.yyide.chatim.base.BaseFragment;
-import com.yyide.chatim.model.HelpRsp;
-import com.yyide.chatim.utils.StatusBarUtils;
-import com.yyide.chatim.view.SpacesItemDecoration;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.HelpItemRep;
+import com.yyide.chatim.presenter.HelpPresenter;
+import com.yyide.chatim.view.HelpView;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
-public class HelpFragment extends BaseFragment {
+public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements HelpView {
 
     @BindView(R.id.rmtext)
     TextView rmtext;
@@ -45,6 +47,7 @@ public class HelpFragment extends BaseFragment {
     FrameLayout tab2;
 
     private View mBaseView;
+    private BaseQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder> adapter;
 
     @Nullable
     @Override
@@ -59,38 +62,34 @@ public class HelpFragment extends BaseFragment {
         rmtext.setText("视频和文字教程,\n帮助你快速上手");
         jjtext.setText("便捷省心的应用\n操作技巧");
         initAdapter();
+        mvpPresenter.getHelpList();
+    }
 
+    @Override
+    protected HelpPresenter createPresenter() {
+        return new HelpPresenter(this);
     }
 
     private void initAdapter() {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        BaseQuickAdapter adapter = new BaseQuickAdapter<HelpRsp, BaseViewHolder>(R.layout.item_help) {
+        adapter = new BaseQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder>(R.layout.item_help) {
             @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpRsp o) {
+            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpItemRep.Records.HelpItemBean itemBean) {
                 baseViewHolder
-                        .setText(R.id.title, "如何维护组织架构?")
-                        .setText(R.id.info, o.msg);
+                        .setText(R.id.title, itemBean.getName())
+                        .setText(R.id.info, itemBean.getMessage());
             }
         };
 
         recyclerview.setAdapter(adapter);
-        recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(mActivity, 20)));
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter<?, ?> adapter, View view, int position) {
-                HelpRsp model = (HelpRsp) adapter.getData().get(position);
-//                ToastUtils.showShort(model.msg);
-                startActivity(new Intent(mActivity, HelpInfoActivity.class));
-            }
+        //recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(mActivity, 20)));
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) adapter.getData().get(position);
+            Intent intent = new Intent(mActivity, HelpInfoActivity.class);
+            intent.putExtra("itemBean", itemBean);
+            startActivity(intent);
         });
-        List<HelpRsp> list = new ArrayList<>();
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        adapter.setList(list);
     }
-
 
     @OnClick({R.id.tab1, R.id.tab2})
     public void onViewClicked(View view) {
@@ -99,8 +98,53 @@ public class HelpFragment extends BaseFragment {
                 startActivity(new Intent(mActivity, HelpListActivity.class));
                 break;
             case R.id.tab2:
-
+                Intent intent = new Intent(mActivity, HelpListActivity.class);
+                intent.putExtra("helpType", "helpAdvanced");
+                startActivity(intent);
                 break;
+        }
+    }
+
+    @Override
+    public void showLoading() {
+        super.showLoading();
+    }
+
+    @Override
+    public void hideLoading() {
+        super.hideLoading();
+    }
+
+    @Override
+    public void getHelpListSuccess(HelpItemRep model) {
+        if (model != null && model.getData() != null) {
+            adapter.setList(model.getData().getRecords());
+        }
+    }
+
+    @Override
+    public void getHelpListFail(String msg) {
+        Log.d("getHelpListFail", "getHelpListFail" + msg);
+    }
+
+    private class HelpListAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder> {
+
+        public HelpListAdapter(List<HelpItemRep.Records.HelpItemBean> data) {
+            super(data);
+            addItemType(1, R.layout.item_help);
+            addItemType(2, R.layout.item_help_video);
+        }
+
+        @Override
+        protected void convert(@NotNull BaseViewHolder holder, HelpItemRep.Records.HelpItemBean itemBean) {
+            switch (holder.getItemViewType()) {
+                case 1:
+                    holder.setText(R.id.title, itemBean.getName()).setText(R.id.info, itemBean.getMessage());
+                    break;
+                case 2:
+                    VideoView videoView = holder.getView(R.id.videoView);
+                    break;
+            }
         }
     }
 }

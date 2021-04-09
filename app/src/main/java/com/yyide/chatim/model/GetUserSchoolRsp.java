@@ -103,6 +103,7 @@ public class GetUserSchoolRsp {
         public Object introduce;
         public String img;
         public List<FormBean> form;
+        public boolean isCurrentUser;
 
         public static class FormBean {
             /**
@@ -112,7 +113,7 @@ public class GetUserSchoolRsp {
              * teacherId : 574
              */
 
-            public String classesId;
+            public int classesId;
             public String classesName;
             public String classesTeacher;
             public int teacherId;

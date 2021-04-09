@@ -1,7 +1,9 @@
 package com.yyide.chatim.presenter;
 
 
+import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
@@ -12,6 +14,11 @@ import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.HomeFragmentView;
 import com.yyide.chatim.view.MainView;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.RequestBody;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -62,5 +69,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
             }
         });
     }
+
+
 
 }

@@ -12,9 +12,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.model.HelpRsp;
-import com.yyide.chatim.utils.StatusBarUtils;
-import com.yyide.chatim.view.SpacesItemDecoration;
+import com.yyide.chatim.model.HelpItemRep;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,9 +51,9 @@ public class AppManagerActivity extends BaseActivity {
     }
     private void initAdapter() {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        BaseQuickAdapter adapter = new BaseQuickAdapter<HelpRsp, BaseViewHolder>(R.layout.item_manager) {
+        BaseQuickAdapter adapter = new BaseQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder>(R.layout.item_manager) {
             @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpRsp o) {
+            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpItemRep.Records.HelpItemBean o) {
 //                baseViewHolder
 //                        .setText(R.id.title,"如何维护组织架构?")
 //                        .setText(R.id.info, o.msg);
@@ -67,17 +65,11 @@ public class AppManagerActivity extends BaseActivity {
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter<?, ?> adapter, View view, int position) {
-                HelpRsp model = (HelpRsp) adapter.getData().get(position);
+//                HelpRsp model = (HelpRsp) adapter.getData().get(position);
 //                ToastUtils.showShort(model.msg);
 //                startActivity(new Intent(mActivity, HelpInfoActivity.class));
             }
         });
-        List<HelpRsp> list=new ArrayList<>();
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        list.add(new HelpRsp());
-        adapter.setList(list);
     }
 
     @Override

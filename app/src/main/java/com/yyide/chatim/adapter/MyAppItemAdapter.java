@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.APPBean;
+import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -19,17 +21,16 @@ import java.util.List;
  */
 
 public class MyAppItemAdapter extends BaseAdapter {
-//   public List<String> list=new ArrayList<>();
-   public List<APPBean> list=new ArrayList<>();
-
+    //   public List<String> list=new ArrayList<>();
+    public List<AppListRsp.DataBean> list = new ArrayList<>();
 
     @Override
     public int getCount() {
-        return list.size();
+        return list != null ? list.size() : 0;
     }
 
     @Override
-    public APPBean getItem(int position) {
+    public AppListRsp.DataBean getItem(int position) {
         return list.get(position);
     }
 
@@ -44,14 +45,21 @@ public class MyAppItemAdapter extends BaseAdapter {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.icon_item, null, false);
         ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
         TextView name = VHUtil.ViewHolder.get(view, R.id.name);
-        name.setText(getItem(position).name);
-        if (getItem(position).id.equals("99")){
-            item.setBackground(view.getContext().getResources().getDrawable(R.drawable.icon_bj));
+        AppListRsp.DataBean dataBean = getItem(position);
+        if(dataBean != null){
+            if (!TextUtils.isEmpty(dataBean.getImg())) {
+                GlideUtil.loadImage(view.getContext(), dataBean.getImg(), item);
+            }
+            name.setText(dataBean.getName());
         }
+//        if (getItem(position).id.equals("99")) {
+//            item.setBackground(view.getContext().getResources().getDrawable(R.drawable.icon_bj));
+//        }
 
         return view;
     }
-    public void notifyData( List<APPBean> list) {
+
+    public void notifyData(List<AppListRsp.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

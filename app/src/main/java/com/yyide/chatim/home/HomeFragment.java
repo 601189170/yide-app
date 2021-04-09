@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
@@ -21,6 +23,7 @@ import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.StudentHonorListActivity;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.homemodel.AttenceFragment;
@@ -134,7 +137,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.layout_message})
+    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.layout_message, R.id.notice_content})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -148,6 +151,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             case R.id.layout_message:
                 startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+                break;
+            case R.id.notice_content:
+                startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
                 break;
             default:
                 break;
@@ -171,71 +177,55 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     void setFragment() {
+        FragmentManager childFragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
         //课表
-        getChildFragmentManager().beginTransaction().add(R.id.table_content, new TableFragment()).commit();
+        fragmentTransaction.add(R.id.table_content, new TableFragment());
         //通知
-        getChildFragmentManager().beginTransaction().add(R.id.notice_content, new NoticeFragment()).commit();
+        fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
         //考勤情况
-        getChildFragmentManager().beginTransaction().add(R.id.kq_content, new AttenceFragment()).commit();
+        fragmentTransaction.add(R.id.kq_content, new AttenceFragment());
         //相册轮播
-        getChildFragmentManager().beginTransaction().add(R.id.banner_content, new BannerFragment()).commit();
+        fragmentTransaction.add(R.id.banner_content, new BannerFragment());
         //作业
-        getChildFragmentManager().beginTransaction().add(R.id.work_content, new WorkFragment()).commit();
+        fragmentTransaction.add(R.id.work_content, new WorkFragment());
         //班级荣誉
-        getChildFragmentManager().beginTransaction().add(R.id.class_honor_content, new ClassHonorFragment()).commit();
+        fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
         //学生荣誉
-        getChildFragmentManager().beginTransaction().add(R.id.student_honor_content, new StudentHonorFragment()).commit();
-
+        fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
+        fragmentTransaction.commit();
     }
 
     @Override
     public void getUserSchool(GetUserSchoolRsp rsp) {
         Log.e("TAG", "getUserSchool==》: " + JSON.toJSONString(rsp));
         SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-        if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
-            SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
+        GetUserSchoolRsp.DataBean dataBean = null;
+        if (rsp.data.size() > 0) {
+            for (int i = 0; i < rsp.data.size(); i++) {
+                if (rsp.data.get(i).isCurrentUser) {
+                    dataBean = rsp.data.get(i);
+                    SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(dataBean));
+                }
+            }
         }
-        setSchoolInfo(rsp);
+        setSchoolInfo(dataBean);
     }
 
-    void setSchoolInfo(GetUserSchoolRsp rsp) {
-        int ids = 0;
-        if (!TextUtils.isEmpty(SpData.SchoolId())) {
-            ids = Integer.parseInt(SpData.SchoolId());
+    void setSchoolInfo(GetUserSchoolRsp.DataBean rsp) {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
             String qhSchool = "";
             String qhName = "";
-            String qhPhoto = "";
             for (GetUserSchoolRsp.DataBean datum : SpData.Schoolinfo().data) {
-                if (datum.schoolId == ids) {
+                if (datum.userId == SpData.getIdentityInfo().userId) {
                     qhSchool = datum.schoolName;
                     qhName = datum.realname;
-                    if (datum.imgList != null && datum.imgList.size() > 0) {
-                        qhPhoto = datum.imgList.get(0);
-                        SPUtils.getInstance().put(SpData.USERPHOTO, qhPhoto);
-                    }
                 }
             }
             schoolName.setText(qhSchool);
             userName.setText(StringUtils.subString(qhName, 2));
             SPUtils.getInstance().put(SpData.USERNAME, qhName);
-            //保存信息
-            if (SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 0) {
-                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(0)));
-                if (SpData.Schoolinfo().data.get(0).form != null && SpData.Schoolinfo().data.get(0).form.size() > 0) {
-                    SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.Schoolinfo().data.get(0).form.get(0)));
-                }
-            }
-        } else {
-            if (rsp.data != null && rsp.data.get(0) != null) {
-                schoolName.setText(rsp.data.get(0).schoolName);
-                userName.setText(rsp.data.get(0).username);
-                SPUtils.getInstance().put(SpData.USERNAME, rsp.data.get(0).username);
-                if (rsp.data.get(0).imgList.size() > 0) {
-                    SPUtils.getInstance().put(SpData.USERPHOTO, rsp.data.get(0).imgList.get(0));
-                }
-            }
         }
-
     }
 
     @Override
@@ -245,7 +235,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     @Override
     public void getIndexMyNotice(NoticeHomeRsp rsp) {
-        if(rsp != null && rsp.getData() != null && rsp.getData().size() > 0){
+        if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
             initVerticalTextview(rsp.getData());
         }
     }

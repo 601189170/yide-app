@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.AppItemBean;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -19,18 +22,16 @@ import java.util.List;
  */
 
 public class AppItemAdapter extends BaseAdapter {
-//   public List<String> list=new ArrayList<>();
-   public String[] list={"电子班牌","电子班牌","电子班牌"};
-
+    public List<AppItemBean.DataBean.RecordsBean.ListBean> list = new ArrayList<>();
 
     @Override
     public int getCount() {
-        return list.length;
+        return list.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return list[position];
+    public AppItemBean.DataBean.RecordsBean.ListBean getItem(int position) {
+        return list.get(position);
     }
 
     @Override
@@ -44,11 +45,14 @@ public class AppItemAdapter extends BaseAdapter {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.icon_item, null, false);
         ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
         TextView name = VHUtil.ViewHolder.get(view, R.id.name);
-        name.setText(getItem(position));
-
+        name.setText(getItem(position).getName());
+        if (!TextUtils.isEmpty(getItem(position).getImg())) {
+            GlideUtil.loadCircleImage(view.getContext(), getItem(position).getImg(), item);
+        }
         return view;
     }
-    public void notifyData( String[] list) {
+
+    public void notifyData(List<AppItemBean.DataBean.RecordsBean.ListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

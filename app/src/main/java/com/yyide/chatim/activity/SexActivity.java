@@ -2,6 +2,7 @@ package com.yyide.chatim.activity;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -43,6 +44,16 @@ public class SexActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText("性別");
+        String sexStr = getIntent().getStringExtra("sex");
+        if (!TextUtils.isEmpty(sexStr)) {
+            if ("男".equals(sexStr)) {
+                type1.setVisibility(View.VISIBLE);
+                type2.setVisibility(View.GONE);
+            } else {
+                type1.setVisibility(View.GONE);
+                type2.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -55,7 +66,7 @@ public class SexActivity extends BaseActivity {
         super.onPause();
     }
 
-    @OnClick({R.id.layout1, R.id.layout2,R.id.back, R.id.back_layout})
+    @OnClick({R.id.layout1, R.id.layout2, R.id.back, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1://男

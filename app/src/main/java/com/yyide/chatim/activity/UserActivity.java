@@ -67,8 +67,6 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     TextView face;
     @BindView(R.id.layout6)
     FrameLayout layout6;
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
 
@@ -83,7 +81,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        title.setText("");
+        title.setText("我的信息");
         initData();
     }
 
@@ -100,7 +98,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
             date.setText(!TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "未设置");
             email.setText(!TextUtils.isEmpty(userInfo.email) ? userInfo.email : "未设置");
-            face.setText(!TextUtils.isEmpty(userInfo.email) ? userInfo.email : "未设置");
+            face.setText("未设置");
         }
     }
 
@@ -124,13 +122,19 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 //startActivity(new Intent(this, CheckPhoneActivity.class));
                 break;
             case R.id.layout3://性别
-                startActivity(new Intent(this, SexActivity.class));
+                Intent intent1 = new Intent(this, SexActivity.class);
+                String sexStr = sex.getText().toString().trim();
+                intent1.putExtra("sex", !"未设置".equals(sexStr) ? sexStr : "");
+                startActivity(intent1);
                 break;
             case R.id.layout4://生日
                 showTime();
                 break;
             case R.id.layout5://邮箱Email
-                startActivity(new Intent(this, EmailActivity.class));
+                Intent intent = new Intent(this, EmailActivity.class);
+                String emailStr = email.getText().toString().trim();
+                intent.putExtra("email", !"未设置".equals(emailStr) ? emailStr : "");
+                startActivity(intent);
                 break;
             case R.id.layout6://设置人脸
                 break;
@@ -149,18 +153,16 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 .setCallBack(this)
                 .setCancelStringId("取消")
                 .setSureStringId("确定")
-                .setTitleStringId("选择日期时间")
+                .setTitleStringId("选择日期")
                 .setYearText("年")
                 .setMonthText("月")
                 .setDayText("日")
-                .setHourText("时")
-                .setMinuteText("分")
                 .setCyclic(false)
                 .setMinMillseconds(System.currentTimeMillis() - tenYears2)
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
                 .setCurrentMillseconds(System.currentTimeMillis())
                 .setThemeColor(getResources().getColor(R.color.colorPrimary))
-                .setType(Type.ALL)
+                .setType(Type.YEAR_MONTH_DAY)
                 .setWheelItemTextNormalColor(getResources().getColor(R.color.text_212121))
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorPrimary))
                 .setWheelItemTextSize(12)
@@ -174,7 +176,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             email.setText(messageEvent.getMessage());
             userInfo.email = messageEvent.getMessage();
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
-            updateInfo("0".equals(sex.getText().toString().trim()) ? "0" : "1", messageEvent.getMessage(), date.getText().toString().trim());
+            updateInfo();
         } else if (BaseConstant.TYPE_UPDATE_USER_SEX.equals(messageEvent.getCode())) {
             if ("0".equals(messageEvent.getMessage())) {//男
                 sex.setText("男");
@@ -184,15 +186,16 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 userInfo.sex = "1";
             }
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+            updateInfo();
         }
     }
 
-    private void updateInfo(String sexStr, String emailStr, String birthdayDate) {
+    private void updateInfo() {
         if (userInfo != null) {
             mvpPresenter.update(userInfo.userId + "",
-                    TextUtils.isEmpty(sexStr) ? (TextUtils.isEmpty(userInfo.sex) ? "" : userInfo.sex) : sexStr,
-                    TextUtils.isEmpty(birthdayDate) ? (TextUtils.isEmpty(userInfo.birthdayDate) ? "" : userInfo.birthdayDate) : birthdayDate,
-                    TextUtils.isEmpty(emailStr) ? (TextUtils.isEmpty(userInfo.email) ? "" : userInfo.email) : emailStr);
+                    TextUtils.isEmpty(userInfo.sex) ? "" : userInfo.sex,
+                    TextUtils.isEmpty(userInfo.birthdayDate) ? "" : userInfo.birthdayDate,
+                    TextUtils.isEmpty(userInfo.email) ? "" : userInfo.email);
         }
     }
 
@@ -259,7 +262,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void uploadFileSuccess(String imgUrl) {
         GlideUtil.loadImage(this, imgUrl, img);
-        if(userInfo != null){
+        if (userInfo != null) {
             userInfo.img = imgUrl;
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
         }
@@ -275,5 +278,6 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         date.setText(DateUtils.stampToDate(millseconds));
         userInfo.birthdayDate = DateUtils.stampToDate(millseconds);
         SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+        updateInfo();
     }
 }

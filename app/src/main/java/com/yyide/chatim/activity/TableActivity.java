@@ -23,7 +23,6 @@ import butterknife.OnClick;
 
 public class TableActivity extends BaseActivity {
 
-
     @BindView(R.id.back)
     TextView back;
     @BindView(R.id.tab1)
@@ -68,7 +67,6 @@ public class TableActivity extends BaseActivity {
         tab2.setChecked(false);
         line1.setVisibility(View.GONE);
         line2.setVisibility(View.GONE);
-
 
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

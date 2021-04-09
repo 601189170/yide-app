@@ -1,6 +1,5 @@
 package com.yyide.chatim.homemodel;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,18 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
-import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.notice.presenter.NoticeHomePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeHomeView;
 import com.yyide.chatim.adapter.NoiceAnnounAdapter;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.model.SchoolRsp;
-import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 
 import java.io.IOException;
 
@@ -71,7 +67,6 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 //            }
 //        });
         mvpPresenter.getHomeNotice();
-
     }
 
     @Override

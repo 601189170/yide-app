@@ -135,7 +135,6 @@
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
-            android:divider="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

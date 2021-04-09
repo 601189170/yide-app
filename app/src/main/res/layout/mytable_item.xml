@@ -2,96 +2,107 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <LinearLayout
-      android:layout_marginTop="10dp"
-      android:orientation="vertical"
-      android:layout_marginLeft="12dp"
-      android:layout_marginRight="12dp"
-      android:background="@drawable/bg_white6"
-      android:layout_width="match_parent"
-      android:layout_height="220dp">
-      <LinearLayout
-          android:layout_marginTop="12dp"
-          android:layout_marginLeft="12dp"
-          android:orientation="horizontal"
-          android:layout_width="match_parent"
-          android:gravity="center_vertical"
-          android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/bg_white6"
+        android:orientation="vertical">
 
-      <CheckedTextView
-          android:layout_gravity="center_vertical"
-          android:layout_width="30dp"
-          android:layout_height="30dp" />
-        <TextView
-            android:id="@+id/className"
-            android:layout_marginLeft="8dp"
-            android:text="初一"
-            android:textSize="18sp"
-            android:textColor="#222222"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-          <TextView
-              android:id="@+id/seciton"
-              android:text="01-02节"
-              android:textColor="#222222"
-              android:textSize="14sp"
-              android:layout_marginLeft="17dp"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-          <TextView
-              android:id="@+id/time"
-              android:layout_marginRight="13dp"
-              android:textColor="#2C8AFF"
-              android:textSize="14sp"
-              android:text="09:00-11:00"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
-      </LinearLayout>
-
-      <TextView
-          android:layout_marginLeft="50dp"
-          android:layout_marginTop="15dp"
-          android:textSize="12sp"
-          android:textColor="#333333"
-          android:text="教具：三角尺、圆规"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-      <TextView
-          android:layout_marginLeft="50dp"
-          android:layout_marginTop="11dp"
-          android:textSize="12sp"
-          android:textColor="#333333"
-          android:text="作业：完成第三节课后作业，P45页。"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
         <LinearLayout
-            android:layout_marginRight="17dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginBottom="25dp"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <CheckedTextView
+                android:id="@+id/date"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+
+                android:layout_gravity="center_vertical" />
+
             <TextView
-                android:layout_marginTop="5dp"
-                android:background="@drawable/bg_corners_blue100"
-                android:layout_width="6dp"
-                android:layout_height="6dp" />
-            <TextView
-                android:layout_marginLeft="10dp"
-                android:textSize="14sp"
-                android:textColor="#999999"
-                android:text="本节可主要讲解某某某节可主要讲解某某某节可主要讲解某某某节可主要讲解某某某节可主要讲解某某某节可主要讲解某某某节可主要讲解某某节可主要讲解某某某节可主要讲解某某某节可主 要讲解某某某某"
+                android:id="@+id/className"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textColor="#222222"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/seciton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="17dp"
+                android:textColor="#222222"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="13dp"
+                android:textColor="#2C8AFF"
+                android:textSize="14sp" />
         </LinearLayout>
 
-  </LinearLayout>
+        <TextView
+            android:id="@+id/tv_tool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="15dp"
+            android:text="教具："
+            android:textColor="#333333"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_homework"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="11dp"
+            android:text="作业："
+            android:textColor="#333333"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginBottom="25dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_corners_blue100" />
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>

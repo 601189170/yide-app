@@ -1,9 +1,12 @@
 package com.yyide.chatim.net;
 
 
+import com.yyide.chatim.model.AppItemBean;
+import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.HelpItemRep;
 import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.LoginRsp;
@@ -182,15 +185,55 @@ public interface DingApiStores {
     //我的应用
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/application/me")
-    Observable<TemplateListRsp> getMyApp(@Body RequestBody requestBody);
+    Observable<AppListRsp> getMyApp(@Body RequestBody requestBody);
+
+    //获取应用列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/application/group/list")
+    Observable<AppItemBean> getAppList(@Body RequestBody requestBody);
 
     //查询应用列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/backstage/cloud-backstage/application/search")
     Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
+
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeBacklog
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/notice/getMyNoticeBacklog")
     Observable<HomeNoticeRsp> getMyNoticeBacklog();
 
+    //查询是否有备课
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/timetable/cloud-timetable/lessons/searchById")
+    Observable<HomeNoticeRsp> getPreparesLesson(@Body RequestBody requestBody);
+
+    //添加备课
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/timetable/cloud-timetable/lessons/addLessons")
+    Observable<ResultBean> addLessons(@Body RequestBody requestBody);
+
+    //搜索帮助中心详情
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/backstage/cloud-backstage/app/support/search")
+    Observable<ResultBean> searchHelpDetail(@Body RequestBody requestBody);
+
+    //查询帮助中心详情默认返回前十条
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/backstage/cloud-backstage/app/support/selectByHot")
+    Observable<HelpItemRep> getHelpList(@Body RequestBody requestBody);
+
+    //帮助中心进阶
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/backstage/cloud-backstage/app/support/selectByAdvanced")
+    Observable<HelpItemRep> getHelpAdvanced(@Body RequestBody requestBody);
+
+    //帮助中心入门指南
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/backstage/cloud-backstage/app/support/selectByIntroduction")
+    Observable<HelpItemRep> getHelpIntroduction(@Body RequestBody requestBody);
+
+    //帮助中心入门指南
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/android/videoalbum/list")
+    Observable<HelpItemRep> getClassPhotoList(@Body RequestBody requestBody);
 }

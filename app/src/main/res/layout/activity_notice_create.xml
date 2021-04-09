@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_input_title" />
 
     <EditText
-        android:id="@+id/et_input_content"
+        android:id="@+id/et_input_before_class"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:background="@color/white"
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/ll_bottom"
-        app:layout_constraintTop_toBottomOf="@+id/et_input_content">
+        app:layout_constraintTop_toBottomOf="@+id/et_input_before_class">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
                 android:paddingBottom="@dimen/dp_17"
-                app:layout_constraintTop_toBottomOf="@+id/et_input_content">
+                app:layout_constraintTop_toBottomOf="@+id/et_input_before_class">
 
                 <TextView
                     android:id="@+id/tv_notice_obj"

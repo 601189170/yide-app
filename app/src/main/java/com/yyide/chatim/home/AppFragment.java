@@ -3,42 +3,37 @@ package com.yyide.chatim.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
-import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.adapter.AppAdapter;
-import com.yyide.chatim.adapter.AppItemAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;
-import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.base.BasePresenter;
-import com.yyide.chatim.leave.LeaveActivity;
-import com.yyide.chatim.model.APPBean;
+import com.yyide.chatim.model.AppItemBean;
+import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.presenter.AppPresenter;
 import com.yyide.chatim.view.AppView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 
 public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView {
-
 
     @BindView(R.id.mygrid)
     GridView mygrid;
@@ -54,6 +49,8 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     AppAdapter appAdapter;
     boolean sc = true;
     MyAppItemAdapter adapter;
+    private String TAG = AppFragment.class.getSimpleName();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -65,65 +62,37 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter=new MyAppItemAdapter();
+        adapter = new MyAppItemAdapter();
         mygrid.setAdapter(adapter);
-        mygrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (adapter.list.get(position).id.equals("99")){
+        mygrid.setOnItemClickListener((parent, view1, position, id) -> {
+//            if (adapter.list.get(position).id.equals("99")) {
 //                    startActivity(new Intent(mActivity,));
 //                    startActivity(new Intent(mActivity, AppManagerActivity.class));
-                }else {
-                    startActivity(new Intent(mActivity,LeaveActivity.class));
-                }
-            }
+//            } else {
+//                startActivity(new Intent(mActivity, LeaveActivity.class));
+//            }
         });
-
-        List<APPBean> myAPPlist=new ArrayList<>();
-        myAPPlist.add(new APPBean("请假","1","1"));
-        myAPPlist.add(new APPBean("请假","1","1"));
-        myAPPlist.add(new APPBean("请假","1","1"));
-        myAPPlist.add(new APPBean("请假","1","1"));
-        myAPPlist.add(new APPBean("请假","1","1"));
-        myAPPlist.add(new APPBean("编辑","99","1"));
-
-        adapter.notifyData(myAPPlist);
 
         recylAppAdapter = new RecylAppAdapter();
         recy.setAdapter(recylAppAdapter);
-        List<String> list = new ArrayList<>();
-        list.add("教学工作");
-        list.add("家校沟通");
-        list.add("教务管理");
-        list.add("校园生活");
-        list.add("智能硬件");
-        list.add("德育评价");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recy.setLayoutManager(linearLayoutManager);
-        recylAppAdapter.notifydata(list);
-        recylAppAdapter.setOnItemClickListener(new RecylAppAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-                sc = false;
-                recylAppAdapter.setPosition(position);
-                listview.setSelection(position);
+        recylAppAdapter.setOnItemClickListener((view12, position) -> {
+            sc = false;
+            recylAppAdapter.setPosition(position);
+            listview.setSelection(position);
 //                listview.setSelectionFromTop(position);
 //                listview.smoothScrollToPosition(position);
-            }
         });
-
         appAdapter = new AppAdapter();
         listview.setAdapter(appAdapter);
-        appAdapter.notifyData(list);
-        listview.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                sc = true;
-                return false;
-            }
+//        appAdapter.notifyData(list);
+        listview.setOnTouchListener((v, event) -> {
+            sc = true;
+            return false;
         });
+
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -150,7 +119,6 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
             }
         });
 
-
 //        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -165,6 +133,8 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 startActivity(new Intent(mActivity, AppManagerActivity.class));
             }
         });
+        mvpPresenter.getMyAppList();
+        mvpPresenter.getAppList();
     }
 
     @Override
@@ -183,12 +153,27 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     }
 
     @Override
-    public void getMyAppListSuccess() {
-
+    public void getMyAppListSuccess(AppListRsp model) {
+        if (model != null && model.getData() != null) {
+            adapter.notifyData(model.getData());
+        }
     }
 
     @Override
     public void getMyAppFail(String msg) {
+//        ToastUtils.showShort(msg);
+        Log.d(TAG, "getMyAppFail :" + msg);
+    }
 
+    @Override
+    public void getAppListSuccess(AppItemBean model) {
+        Log.d(TAG, "getMyAppFail :" + model);
+        recylAppAdapter.notifydata(model.getData().getRecords());
+        appAdapter.notifyData(model.getData().getRecords());
+    }
+
+    @Override
+    public void getAppListFail(String msg) {
+        Log.d(TAG, "getMyAppFail :" + msg);
     }
 }

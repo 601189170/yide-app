@@ -32,7 +32,8 @@ public class EmailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText("邮箱");
-
+        String emailStr = getIntent().getStringExtra("email");
+        email.setText(emailStr);
     }
 
     @OnClick(R.id.back_layout)
@@ -40,7 +41,7 @@ public class EmailActivity extends BaseActivity {
         finish();
     }
 
-    @OnClick(R.id.tv_push)
+    @OnClick(R.id.save)
     void confirm() {
         String emailStr = email.getText().toString().trim();
         if (TextUtils.isEmpty(emailStr)) {

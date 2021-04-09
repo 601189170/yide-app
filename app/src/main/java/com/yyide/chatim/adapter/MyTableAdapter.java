@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -20,7 +23,7 @@ import java.util.List;
  */
 
 public class MyTableAdapter extends BaseAdapter {
-   public List<SelectSchByTeaidRsp.DataBean> list=new ArrayList<>();
+    public List<SelectSchByTeaidRsp.DataBean> list = new ArrayList<>();
 
 
     @Override
@@ -45,13 +48,40 @@ public class MyTableAdapter extends BaseAdapter {
         TextView seciton = VHUtil.ViewHolder.get(view, R.id.seciton);
         TextView className = VHUtil.ViewHolder.get(view, R.id.className);
         TextView time = VHUtil.ViewHolder.get(view, R.id.time);
-        className.setText(getItem(position).classesName);
-        seciton.setText("第"+getItem(position).section+"节");
-        time.setText(getItem(position).fromDateTime+"-"+getItem(position).toDateTime);
+        TextView tool = VHUtil.ViewHolder.get(view, R.id.tv_tool);
+        TextView homework = VHUtil.ViewHolder.get(view, R.id.tv_homework);
+        TextView desc = VHUtil.ViewHolder.get(view, R.id.desc);
+        TextView date = VHUtil.ViewHolder.get(view, R.id.date);
+
+        SelectSchByTeaidRsp.DataBean item = getItem(position);
+        tool.setText("教具：" + (TextUtils.isEmpty(item.teachTool) ? "" : item.teachTool));
+        if (item.lessonsSubEntityList != null && item.lessonsSubEntityList.size() > 0) {
+            homework.setText("作业：" + item.lessonsSubEntityList.get(0));
+        }
+        //开始时间
+        long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
+        //结束时间
+        long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
+        Calendar c = Calendar.getInstance();
+        String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+        long mMillisecond = DateUtils.getWhenPoint(minute);
+        if (mMillisecond > toDateTime) {//课后
+            desc.setText(item.afterClass);
+            date.setText("课后");
+        } else if (mMillisecond < fromDataTime) {//课前
+            desc.setText(item.beforeClass);
+            date.setText("课前");
+        } else {//正在上课
+            date.setText("正在上课");
+        }
+        className.setText(item.classesName);
+        seciton.setText("第" + item.section + "节");
+        time.setText(item.fromDateTime + "-" + item.toDateTime);
 
         return view;
     }
-    public void notifyData( List<SelectSchByTeaidRsp.DataBean> list) {
+
+    public void notifyData(List<SelectSchByTeaidRsp.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

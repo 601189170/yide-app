@@ -49,12 +49,7 @@ public class SwichSchoolAdapter extends BaseAdapter {
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
         school_name.setText(getItem(position).schoolName);
         school_info.setText(getItem(position).realname);
-        int ids = 0;
-        if (!TextUtils.isEmpty(SpData.SchoolId())) {
-            ids = Integer.parseInt(SpData.SchoolId());
-        }
-
-        if (list.get(position).schoolId == ids) {
+        if (list.get(position).userId == SpData.getIdentityInfo().userId) {
             select.setVisibility(View.VISIBLE);
         } else {
             select.setVisibility(View.GONE);

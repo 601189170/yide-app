@@ -7,12 +7,12 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.model.HelpItemRep;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class HelpInfoActivity extends BaseActivity {
-
 
     @BindView(R.id.back)
     TextView back;
@@ -20,6 +20,10 @@ public class HelpInfoActivity extends BaseActivity {
     LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.tv_helpTitle)
+    TextView tv_helpTitle;
+    @BindView(R.id.tc_content)
+    TextView tc_content;
 
     @Override
     public int getContentViewID() {
@@ -30,7 +34,11 @@ public class HelpInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText("入门指南");
-
+        HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) getIntent().getSerializableExtra("itemBean");
+        if (itemBean != null) {
+            tv_helpTitle.setText(itemBean.getName());
+            tc_content.setText(itemBean.getMessage());
+        }
     }
 
     @Override

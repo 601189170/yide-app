@@ -89,8 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="20dp"
-                android:visibility="gone"
-                android:background="@drawable/icon_right" />
+                android:background="@drawable/icon_right"
+                android:visibility="gone" />
 
         </FrameLayout>
 

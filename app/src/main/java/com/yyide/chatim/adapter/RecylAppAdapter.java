@@ -1,7 +1,6 @@
 package com.yyide.chatim.adapter;
 
 
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +8,13 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.AppItemBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import retrofit2.http.PUT;
 
 
@@ -27,13 +28,11 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
 
     public int position = -1;
 
-    public List<String> list=new ArrayList<>();
+    public List<AppItemBean.DataBean.RecordsBean> list = new ArrayList<>();
 
-    public String getItem(int i) {
+    public AppItemBean.DataBean.RecordsBean getItem(int i) {
         return list.get(i);
     }
-
-
 
 
     @Override
@@ -48,24 +47,20 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
         viewHolder.line = view.findViewById(R.id.line);
 
 
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final RecylAppAdapter.ViewHolder viewHolder, final int i) {
-
-        if (i==index){
+        if (i == index) {
             viewHolder.item.setChecked(true);
             viewHolder.line.setVisibility(View.VISIBLE);
 
-        }else {
+        } else {
             viewHolder.line.setVisibility(View.GONE);
             viewHolder.item.setChecked(false);
         }
-        viewHolder.item.setText(getItem(i));
-
-
+        viewHolder.item.setText(getItem(i).getName());
     }
 
     @Override
@@ -96,18 +91,23 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
             notifyDataSetChanged();
         }
     }
-    public void notifydata(List<String> list){
-        this.list=list;
+
+    public void notifydata(List<AppItemBean.DataBean.RecordsBean> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
-    public void setPosition(int index){
-        this.index=index;
+
+    public void setPosition(int index) {
+        this.index = index;
         notifyDataSetChanged();
     }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
+
     private OnItemClickListener mOnItemClickListener = null;
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }

@@ -6,6 +6,7 @@
     android:layout_marginStart="@dimen/dp_12"
     android:layout_marginTop="@dimen/dp_10"
     android:layout_marginEnd="@dimen/dp_12"
+    android:foreground="?android:selectableItemBackground"
     android:background="@color/white"
     app:cardCornerRadius="6dp"
     app:cardElevation="5dp">

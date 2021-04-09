@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.jiguang.TagAliasOperatorHelper;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ListScheduleRsp;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.cache.Sp;
 import okhttp3.RequestBody;
 
@@ -148,4 +150,6 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
+
+
 }

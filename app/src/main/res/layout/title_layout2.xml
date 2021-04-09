@@ -38,5 +38,16 @@
             android:textColor="#222222"
             android:textSize="18dp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:textColor="#222222"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="right"
+            android:textSize="@dimen/text_15"
+            android:text="保存"/>
     </FrameLayout>
 </LinearLayout>

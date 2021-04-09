@@ -65,10 +65,18 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/NoTitleFullscreen"
+        android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".activity.ScanLoginActivity"></activity>
+        <activity
+            android:name=".activity.PreparesLessonActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".activity.BookSearchActivity" />
+        <activity
+            android:name=".activity.ScanLoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -162,7 +170,8 @@
 
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
