@@ -5,28 +5,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.ClassAnnounAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
-import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.HomeBannerRsp;
+import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.presenter.HomeBannerPresenter;
-import com.yyide.chatim.utils.InitPieChart;
 import com.yyide.chatim.view.HomeBannerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.List;
+
 import butterknife.BindView;
-import okhttp3.OkHttpClient;
 
 
 public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> implements HomeBannerView {
@@ -34,7 +31,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
     @BindView(R.id.grid)
-    GridView grid;
+    RecyclerView mHot;
     private View mBaseView;
     ClassAnnounAdapter announAdapter;
     IndexAdapter indexAdapter;
@@ -56,16 +53,9 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         announAdapter = new ClassAnnounAdapter(announRoll);
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
-        grid.setAdapter(indexAdapter);
+        mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, true));
+        mHot.setAdapter(indexAdapter);
         ViewPager viewPager = announRoll.getViewPager();
-        List<String> list = new ArrayList<>();
-        list.add("http://120.76.189.190/upload/202006/10/1591775760673251938.jpg");
-        list.add("http://120.76.189.190/upload/202006/10/1591775786553875903.jpg");
-        list.add("http://120.76.189.190/upload/202006/10/1591775770677904123.jpg");
-        announAdapter.notifyData(list);
-        if (list.size() > 0) {
-            indexAdapter.setIndex(0);
-        }
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -74,7 +64,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             @Override
             public void onPageSelected(int position) {
-                int dex = (viewPager.getCurrentItem()) % announAdapter.list.size();
+                int dex = announAdapter.list.size() % (viewPager.getCurrentItem());
                 Log.e("TAG", "onPageSelected==>: " + dex);
                 indexAdapter.setIndex(dex);
             }
@@ -84,7 +74,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             }
         });
-        mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
+        mvpPresenter.getClassPhotoList(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId + "" : "", SpData.getIdentityInfo().schoolId);
     }
 
     @Override
@@ -94,9 +84,17 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
 
     @Override
-    public void getClassBannerListSuccess(HomeBannerRsp model) {
+    public void getClassBannerListSuccess(ClassesBannerRsp model) {
         if (model != null && model.getData() != null) {
+            if (model.getData().size() >= 5) {
+                List<ClassesBannerRsp.DataBean> dataBeans = model.getData().subList(0, 5);
+                announAdapter.notifyData(dataBeans);
+                indexAdapter.setList(dataBeans);
+            } else {
+                announAdapter.notifyData(model.getData());
+                indexAdapter.setList(model.getData());
 
+            }
         }
     }
 
