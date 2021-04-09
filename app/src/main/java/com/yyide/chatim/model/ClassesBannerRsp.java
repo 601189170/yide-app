@@ -2,7 +2,7 @@ package com.yyide.chatim.model;
 
 import java.util.List;
 
-public class HomeBannerRsp {
+public class ClassesBannerRsp {
 
     private String msg;
     private Integer code;
@@ -36,6 +36,7 @@ public class HomeBannerRsp {
         private Integer classifyId;
         private String name;
         private String url;
+        private String type;
 
         public Integer getClassifyId() {
             return classifyId;
@@ -59,6 +60,14 @@ public class HomeBannerRsp {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
     }
 }
