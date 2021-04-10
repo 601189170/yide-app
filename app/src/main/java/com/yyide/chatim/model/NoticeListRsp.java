@@ -137,6 +137,7 @@ public class NoticeListRsp {
              * status : 0
              * totalNumber : null
              * readNumber : null
+             * sendObject
              */
 
             private String title;
@@ -150,6 +151,16 @@ public class NoticeListRsp {
             private String status;
             private int totalNumber;
             private int readNumber;
+
+            public String getSendObject() {
+                return sendObject;
+            }
+
+            public void setSendObject(String sendObject) {
+                this.sendObject = sendObject;
+            }
+
+            private String sendObject;
 
             public String getTitle() {
                 return title;
@@ -253,6 +264,7 @@ public class NoticeListRsp {
                         ", status='" + status + '\'' +
                         ", totalNumber=" + totalNumber +
                         ", readNumber=" + readNumber +
+                        ", sendObject=" + sendObject +
                         '}';
             }
         }

@@ -6,6 +6,7 @@ import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.ClassesBannerRsp;
+import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -219,6 +220,17 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/announcement/delAnnouncement")
     Observable<BaseRsp> delAnnouncement(@Query("id") int id);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/updateMyNoticeDetails
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/notice/updateMyNoticeDetails")
+    Observable<BaseRsp> updateMyNoticeDetails(@Query("id") int id);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getConfirmDetails
+    //确认详情（多少人未确认）
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/announcement/getConfirmDetails")
+    Observable<ConfirmDetailRsp> getConfirmDetails(@Query("confirmType") int confirmType, @Query("signId") long signId, @Query("current") int current, @Query("size") int size);
 
     //查询是否有备课
     @Headers({"Content-Type: application/json", "Accept: application/json"})

@@ -93,6 +93,7 @@
     <string name="notice_template_title">Notice template</string>
     <string name="notice_select_number">Notice select %d</string>
     <string name="account_pwd_hint">"account "</string>
-    <string name="notice_send_obj">发送对象：$s</string>
-    <string name="notice_confirm_number">（$d/$d）已确认</string>
+    <string name="notice_send_obj">发送对象：%s</string>
+    <string name="notice_confirm_number">（%d/%d）已确认</string>
+    <string name="notice_confirm_number_text">已确认（%d/%d）</string>
 </resources>

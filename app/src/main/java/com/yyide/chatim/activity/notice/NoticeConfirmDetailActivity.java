@@ -1,6 +1,8 @@
 package com.yyide.chatim.activity.notice;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,13 +21,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDetailPresenter> implements NoticeConfirmDetailView {
+    private static final String TAG = "NoticeConfirmDetailActivity";
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.tablayout)
     TabLayout mTablayout;
     @BindView(R.id.viewpager)
     ViewPager2 mViewpager;
-
+    private long signId;
+    private int totalNumber;
+    private int readNumber;
     @Override
     public int getContentViewID() {
         return R.layout.activity_confirm_detail;
@@ -35,6 +40,11 @@ public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText(R.string.notice_confirm_detail_title);
+        Intent intent = getIntent();
+        totalNumber = intent.getIntExtra("totalNumber", 0);
+        readNumber = intent.getIntExtra("readNumber", 0);
+        signId = intent.getLongExtra("signId", 0);
+        Log.e(TAG, "onCreate: totalNumber="+ totalNumber+", readNumber="+readNumber+",signId="+signId);
         initViewPager();
     }
 
@@ -45,9 +55,9 @@ public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDe
             @Override
             public Fragment createFragment(int position) {
                 if(position == 0){
-                    return NoticeItemFragment.newInstance();
+                    return NoticeItemFragment.newInstance(0,signId,totalNumber-readNumber);
                 } else {
-                    return NoticeItemFragment.newInstance();
+                    return NoticeItemFragment.newInstance(1,signId,readNumber);
                 }
             }
 
@@ -61,9 +71,9 @@ public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDe
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 //这里需要根据position修改tab的样式和文字等
                 if(position == 0){
-                    tab.setText("未确认(10)");
+                    tab.setText("未确认("+(totalNumber-readNumber)+")");
                 } else {
-                    tab.setText("已确认(20)");
+                    tab.setText("已确认("+readNumber+")");
                 }
             }
         }).attach();

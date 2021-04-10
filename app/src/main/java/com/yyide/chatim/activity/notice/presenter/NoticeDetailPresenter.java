@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.notice.presenter;
 
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeDetailView;
+import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.net.ApiCallback;
 
@@ -21,6 +22,26 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
             @Override
             public void onFailure(String msg) {
                 mvpView.noticeDetailFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void updateMyNoticeDetails(int id){
+        mvpView.showLoading();
+        addSubscription(dingApiStores.updateMyNoticeDetails(id), new ApiCallback<BaseRsp>() {
+            @Override
+            public void onSuccess(BaseRsp model) {
+                mvpView.updateMyNotice(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.updateFail(msg);
             }
 
             @Override

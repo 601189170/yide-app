@@ -97,7 +97,7 @@ public class NoticeDetailRsp {
         private String productionTarget;
         private String productionTime;
         private String content;
-        private String signId;
+        private long signId;
         private String timingTime;
         private String type;
         private String status;
@@ -217,11 +217,11 @@ public class NoticeDetailRsp {
             this.content = content;
         }
 
-        public String getSignId() {
+        public long getSignId() {
             return signId;
         }
 
-        public void setSignId(String signId) {
+        public void setSignId(long signId) {
             this.signId = signId;
         }
 

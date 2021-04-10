@@ -89,7 +89,16 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
-
+    //发送对象 ： 1家长 2学生 3部门
+    private String getSendObj(String sendObj){
+        if ("1".equals(sendObj))
+            return "家长";
+        if ("2".equals(sendObj))
+            return "学生";
+        if ("3".equals(sendObj))
+            return "部门";
+        return "学生";
+    }
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -104,7 +113,8 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
                 String confirm_number_format = getActivity().getResources().getString(R.string.notice_confirm_number);
                 String notice_send_obj = getActivity().getResources().getString(R.string.notice_send_obj);
                 String confirmNumber = String.format(confirm_number_format, readNumber, totalNumber);
-                String sendObj = String.format(notice_send_obj, record.getProductionTarget());
+                String sendObject = record.getSendObject();
+                String sendObj = String.format(notice_send_obj, getSendObj(sendObject));
                 baseViewHolder
                         .setText(R.id.tv_notice, record.getTitle())
                         .setText(R.id.tv_notice_time, productionTime)

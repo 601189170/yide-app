@@ -1,17 +1,22 @@
 package com.yyide.chatim.activity.notice;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeDetailPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeDetailView;
+import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.model.NoticeListRsp;
+import com.yyide.chatim.utils.DateUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,6 +46,10 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 
     private int id;
     private String status;
+
+    private long signId;
+    private int totalNumber;
+    private int readNumber;
 
     @Override
     public int getContentViewID() {
@@ -97,7 +106,18 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 
     @OnClick(R.id.tv_confirm)
     public void confirm() {
+        //去确认
+        mvpPresenter.updateMyNoticeDetails(id);
+    }
 
+    @OnClick(R.id.tv_notice_confirm)
+    public void confirmStatistics(){
+        //进入通知统计界面
+        Intent intent = new Intent(this,NoticeConfirmDetailActivity.class);
+        intent.putExtra("totalNumber",totalNumber);
+        intent.putExtra("readNumber",readNumber);
+        intent.putExtra("signId",signId);
+        startActivity(intent);
     }
 
     @Override
@@ -129,16 +149,55 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     public void noticeDetail(NoticeDetailRsp noticeDetailRsp) {
         NoticeDetailRsp.DataBean data = noticeDetailRsp.getData();
         Log.e(TAG, "noticeDetail: " + noticeDetailRsp.toString());
-        if (data != null) {
-            tv_notice_title.setText(data.getTitle());
-            tv_notice_author.setText(data.getProductionTarget());
-            tv_notice_time.setText(data.getProductionTime());
-            tv_notice_content.setText(data.getContent());
+        if (noticeDetailRsp.getCode() == 200){
+            if (data != null) {
+                String productionTime = DateUtils.switchCreateTime(data.getProductionTime(), "MM.dd HH:mm");
+                tv_notice_title.setText(data.getTitle());
+                tv_notice_author.setText(data.getProductionTarget());
+                tv_notice_time.setText(productionTime);
+                tv_notice_content.setText(data.getContent());
+
+                //notice_confirm_number_text
+                String string = getString(R.string.notice_confirm_number_text);
+                String confirm_number = String.format(string, data.getReadNumber(), data.getTotalNumber());
+                tv_confirm_number.setText(confirm_number);
+                signId = data.getSignId();
+                totalNumber = data.getTotalNumber();
+                readNumber = data.getReadNumber();
+
+            }
+            return;
         }
+        ToastUtils.showShort("获取数据失败！");
+        new Handler().postDelayed(() -> {
+            finish();
+        },1000);
     }
 
     @Override
     public void noticeDetailFail(String msg) {
+        ToastUtils.showShort(msg);
+        new Handler().postDelayed(() -> {
+            finish();
+        },1000);
 
+    }
+
+    @Override
+    public void updateMyNotice(BaseRsp baseRsp) {
+            if (baseRsp.getCode() == 200){
+                ToastUtils.showShort("确认"+baseRsp.getMsg());
+                new Handler().postDelayed(() -> {
+                    finish();
+                },1000);
+            }
+    }
+
+    @Override
+    public void updateFail(String msg) {
+        ToastUtils.showShort(msg);
+        new Handler().postDelayed(() -> {
+            finish();
+        },1000);
     }
 }

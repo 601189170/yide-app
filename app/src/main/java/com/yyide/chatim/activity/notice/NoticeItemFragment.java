@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,20 +15,39 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.notice.presenter.NoticeConfirmListFragmentPresenter;
+import com.yyide.chatim.activity.notice.presenter.NoticeTemplateListFragmentPresenter;
+import com.yyide.chatim.activity.notice.view.NoticeConfirmListFragmentView;
+import com.yyide.chatim.activity.notice.view.NoticeTemplateListFragmentView;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.utils.GlideUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A fragment representing a list of Items.
  */
-public class NoticeItemFragment extends Fragment {
+public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmentPresenter> implements NoticeConfirmListFragmentView {
+    private static final String TAG = "NoticeItemFragment";
     BaseQuickAdapter adapter;
-
+    private static final String ARG_PARAM1 = "confirmType";
+    private static final String ARG_PARAM2 = "signId";
+    private static final String ARG_PARAM3 = "size";
+    private int confirmType;
+    private long signId;
+    private int size;
+    private List<ConfirmDetailRsp.DataBean.RecordsBean> recordsBeans = new ArrayList<>();
     // TODO: Customize parameter initialization
-    public static NoticeItemFragment newInstance() {
+    public static NoticeItemFragment newInstance(int confirmType,long signId,int size) {
         NoticeItemFragment fragment = new NoticeItemFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_PARAM1, confirmType);
+        args.putLong(ARG_PARAM2, signId);
+        args.putInt(ARG_PARAM3, size);
         fragment.setArguments(args);
         return fragment;
     }
@@ -35,6 +55,12 @@ public class NoticeItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            confirmType = getArguments().getInt(ARG_PARAM1);
+            signId = getArguments().getLong(ARG_PARAM2);
+            size = getArguments().getInt(ARG_PARAM3);
+            Log.e(TAG,"confirmType:"+confirmType+",signId:"+signId+",size:"+size);
+        }
     }
 
     @Override
@@ -43,6 +69,7 @@ public class NoticeItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         // Set the adapter
         if (view instanceof RecyclerView) {
+            initAdapter();
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -52,15 +79,43 @@ public class NoticeItemFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.e(TAG, "onViewCreated: ");
+        mvpPresenter.getConfirmDetails(confirmType,signId,1,size);
+    }
+
     private void initAdapter(){
-        adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.fragment_notice_item) {
+        adapter = new BaseQuickAdapter<ConfirmDetailRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.fragment_notice_item) {
             @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, String str) {
-                baseViewHolder.setText(R.id.tv_notice_scope_name, str);
+            protected void convert(@NotNull BaseViewHolder baseViewHolder, ConfirmDetailRsp.DataBean.RecordsBean str) {
+                baseViewHolder.setText(R.id.tv_notice_scope_name, str.getUserName());
                 GlideUtil.loadImage(getContext(), "https://www.thecrazyprogrammer.com/wp-content/uploads/2017/05/Android-Glide-Tutorial-with-Example-1.png", baseViewHolder.findView(R.id.iv_pic));
             }
         };
 
 
+    }
+
+    @Override
+    public void noticeConfirmList(ConfirmDetailRsp confirmDetailRsp) {
+        Log.e(TAG, "noticeConfirmList: "+confirmDetailRsp.toString() );
+        if (confirmDetailRsp.getCode() == 200) {
+            List<ConfirmDetailRsp.DataBean.RecordsBean> records = confirmDetailRsp.getData().getRecords();
+            recordsBeans.addAll(records);
+            adapter.setList(recordsBeans);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void noticeConfirmListFail(String msg) {
+
+    }
+
+    @Override
+    protected NoticeConfirmListFragmentPresenter createPresenter() {
+        return new NoticeConfirmListFragmentPresenter(this);
     }
 }
