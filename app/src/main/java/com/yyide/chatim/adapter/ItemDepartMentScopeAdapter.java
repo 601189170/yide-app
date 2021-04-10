@@ -79,7 +79,7 @@ public class ItemDepartMentScopeAdapter extends RecyclerView.Adapter<ItemDepartM
                 gradesBean.setChecked(isChecked);
                 List<DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX> classes = gradesBean.getList();
                 for (int i1 = 0; i1 < classes.size(); i1++) {
-                    classes.get(i).setChecked(isChecked);
+                    classes.get(i1).setChecked(isChecked);
                 }
             }
             new Handler().post(() -> notifyDataSetChanged());

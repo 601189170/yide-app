@@ -220,7 +220,10 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e(TAG, "onActivityResult: requestCode:"+requestCode+", resultCode:"+resultCode );
-        if (requestCode == REQUEST_CODE){
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            if (data == null){
+                return;
+            }
             ArrayList<String> ids = data.getStringArrayListExtra("ids");
             Log.e(TAG, "onActivityResult: "+ids );
             departmentIds.clear();
