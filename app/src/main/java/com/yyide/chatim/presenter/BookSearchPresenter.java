@@ -17,8 +17,12 @@ public class BookSearchPresenter extends BasePresenter<BookSearchView> {
         attachView(view);
     }
 
-    public void getMyAppList(){
-        RequestBody body = RequestBody.create(BaseConstant.JSON, "");
+    public void searchBook(String search) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", search);
+        map.put("size", 1000);
+        map.put("current", 1);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         mvpView.showLoading();
         addSubscription(dingApiStores.getMyApp(body), new ApiCallback() {
             @Override

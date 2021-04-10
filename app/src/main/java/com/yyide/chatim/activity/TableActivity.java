@@ -11,14 +11,13 @@ import android.widget.TextView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.ClassTableFragment;
-import com.yyide.chatim.fragment.ClassTableFragment2;
 import com.yyide.chatim.fragment.MyTableFragment;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TableActivity extends BaseActivity {
@@ -39,7 +38,6 @@ public class TableActivity extends BaseActivity {
     LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
-
     @Override
     public int getContentViewID() {
         return R.layout.activity_table_title;
@@ -88,7 +86,7 @@ public class TableActivity extends BaseActivity {
                 break;
             case 1:
                 if (fg2 == null) {
-                    fg2 = new ClassTableFragment2();
+                    fg2 = new ClassTableFragment();
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
                     ft.show(fg2);

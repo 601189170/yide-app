@@ -1,6 +1,7 @@
 package com.yyide.chatim.homemodel;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         announAdapter = new ClassAnnounAdapter(announRoll);
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
-        mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, true));
+        mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
         ViewPager viewPager = announRoll.getViewPager();
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -64,8 +65,8 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             @Override
             public void onPageSelected(int position) {
-                int dex = position % announAdapter.list.size() + 1;
-                Log.e("TAG", "onPageSelected==>: " + dex);
+                int dex = position % announAdapter.list.size();
+                //Log.e("TAG", "onPageSelected==>: " + dex);
                 indexAdapter.setIndex(dex);
             }
 
@@ -74,7 +75,9 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             }
         });
-        mvpPresenter.getClassPhotoList(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId + "" : "", SpData.getIdentityInfo().schoolId);
+        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
+            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
+        }
     }
 
     @Override

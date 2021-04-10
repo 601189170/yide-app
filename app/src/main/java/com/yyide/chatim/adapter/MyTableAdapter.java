@@ -16,6 +16,7 @@ import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class MyTableAdapter extends BaseAdapter {
         TextView tool = VHUtil.ViewHolder.get(view, R.id.tv_tool);
         TextView homework = VHUtil.ViewHolder.get(view, R.id.tv_homework);
         TextView desc = VHUtil.ViewHolder.get(view, R.id.desc);
-        TextView date = VHUtil.ViewHolder.get(view, R.id.date);
+        TextView dateS = VHUtil.ViewHolder.get(view, R.id.date);
 
         SelectSchByTeaidRsp.DataBean item = getItem(position);
         tool.setText("教具：" + (TextUtils.isEmpty(item.teachTool) ? "" : item.teachTool));
@@ -64,15 +65,21 @@ public class MyTableAdapter extends BaseAdapter {
         long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
         Calendar c = Calendar.getInstance();
         String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+        int weekDay = c.get(Calendar.DAY_OF_WEEK);
         long mMillisecond = DateUtils.getWhenPoint(minute);
-        if (mMillisecond > toDateTime) {//课后
-            desc.setText(item.afterClass);
-            date.setText("课后");
-        } else if (mMillisecond < fromDataTime) {//课前
+        if(item.weekTime > (weekDay - 1)){//课前
             desc.setText(item.beforeClass);
-            date.setText("课前");
-        } else {//正在上课
-            date.setText("正在上课");
+            dateS.setText("课前");
+        } else {
+            if (mMillisecond > toDateTime) {//课后
+                desc.setText(item.afterClass);
+                dateS.setText("课后");
+            } else if (mMillisecond < fromDataTime) {//课前
+                desc.setText(item.beforeClass);
+                dateS.setText("课前");
+            } else {//正在上课
+                dateS.setText("正在上课");
+            }
         }
         className.setText(item.classesName);
         seciton.setText("第" + item.section + "节");

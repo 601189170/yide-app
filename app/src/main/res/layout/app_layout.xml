@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="应用"
+            android:text="工作台"
             android:textColor="#222222"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -62,7 +62,6 @@
             android:orientation="vertical">
 
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="21dp"
@@ -73,11 +72,11 @@
                 android:textStyle="bold" />
 
             <GridView
-
                 android:id="@+id/mygrid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
+                android:listSelector= "@android:color/transparent"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="23dp"

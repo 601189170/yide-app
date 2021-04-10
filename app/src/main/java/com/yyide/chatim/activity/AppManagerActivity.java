@@ -1,9 +1,12 @@
 package com.yyide.chatim.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,23 +14,25 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.model.HelpItemRep;
-import com.yyide.chatim.utils.StatusBarUtils;
-import com.yyide.chatim.view.SpacesItemDecoration;
+import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.model.AppItemBean;
+import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.presenter.AppMannagerPresenter;
+import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.view.AppView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AppManagerActivity extends BaseActivity {
-
+public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> implements AppView {
 
     @BindView(R.id.back)
     TextView back;
@@ -39,6 +44,7 @@ public class AppManagerActivity extends BaseActivity {
     FrameLayout fz;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
+    private BaseQuickAdapter<AppListRsp.DataBean, BaseViewHolder> baseQuickAdapter;
 
     @Override
     public int getContentViewID() {
@@ -50,26 +56,39 @@ public class AppManagerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         title.setText("应用管理");
         initAdapter();
+        mvpPresenter.getMyAppList();
     }
+
+    @Override
+    protected AppMannagerPresenter createPresenter() {
+        return new AppMannagerPresenter(this);
+    }
+
     private void initAdapter() {
-        recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        BaseQuickAdapter adapter = new BaseQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder>(R.layout.item_manager) {
+        recyclerview.setLayoutManager(new GridLayoutManager(this, 4));
+        baseQuickAdapter = new BaseQuickAdapter<AppListRsp.DataBean, BaseViewHolder>(R.layout.item_manager) {
             @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpItemRep.Records.HelpItemBean o) {
-//                baseViewHolder
-//                        .setText(R.id.title,"如何维护组织架构?")
-//                        .setText(R.id.info, o.msg);
+            protected void convert(@NotNull BaseViewHolder holder, AppListRsp.DataBean item) {
+                ImageView iv_app_icon = holder.getView(R.id.iv_app_icon);
+                TextView name = holder.getView(R.id.tv_name);
+                if (!TextUtils.isEmpty(item.getImg())) {
+                    GlideUtil.loadCircleImage(AppManagerActivity.this, item.getImg(), iv_app_icon);
+                }
+                name.setText(item.getName());
+                if ("editor".equals(item.getAppType())) {
+                    iv_app_icon.setBackground(getResources().getDrawable(R.drawable.icon_bj));
+                }
             }
         };
 
-        recyclerview.setAdapter(adapter);
-        recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,20)));
-        adapter.setOnItemClickListener(new OnItemClickListener() {
+        recyclerview.setAdapter(baseQuickAdapter);
+        baseQuickAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter<?, ?> adapter, View view, int position) {
-//                HelpRsp model = (HelpRsp) adapter.getData().get(position);
-//                ToastUtils.showShort(model.msg);
-//                startActivity(new Intent(mActivity, HelpInfoActivity.class));
+                AppListRsp.DataBean item = (AppListRsp.DataBean) adapter.getItem(position);
+                if ("editor".equals(item.getAppType())) {
+                    startActivity(new Intent(AppManagerActivity.this, AppAddActivity.class));
+                }
             }
         });
     }
@@ -84,7 +103,6 @@ public class AppManagerActivity extends BaseActivity {
         super.onPause();
     }
 
-
     @OnClick({R.id.back, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -95,5 +113,40 @@ public class AppManagerActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void getMyAppListSuccess(AppListRsp model) {
+        hideLoading();
+        if (model != null && model.getData() != null) {
+            List<AppListRsp.DataBean> data = model.getData();
+            AppListRsp.DataBean itemBean = new AppListRsp.DataBean();
+            itemBean.setAppType("editor");
+            itemBean.setName("添加");
+            if (data == null) {
+                data = new ArrayList<>();
+            }
+            data.add(itemBean);
+            baseQuickAdapter.setList(data);
+        }
+    }
+
+    @Override
+    public void getMyAppFail(String msg) {
+    }
+
+    @Override
+    public void getAppListSuccess(AppItemBean model) {
+
+    }
+
+    @Override
+    public void getAppListFail(String msg) {
+
+    }
+
+    @Override
+    public void showError() {
+
     }
 }

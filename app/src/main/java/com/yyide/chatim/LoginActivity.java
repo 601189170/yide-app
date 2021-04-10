@@ -320,6 +320,7 @@ public class LoginActivity extends BaseActivity {
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     getUserSig();
                 } else {
+                    hideLoading();
                     ToastUtils.showShort(bean.message);
                 }
             }
@@ -391,6 +392,7 @@ public class LoginActivity extends BaseActivity {
                     SPUtils.getInstance().put(SpData.USERPHONE, phone);
                     getUserSig();
                 } else {
+                    hideLoading();
                     ToastUtils.showShort(bean.message);
                 }
             }
@@ -426,6 +428,7 @@ public class LoginActivity extends BaseActivity {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
                     getUserSchool();
                 } else {
+                    hideLoading();
                     ToastUtils.showShort(bean.msg);
                 }
             }

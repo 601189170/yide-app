@@ -3,6 +3,7 @@ package com.yyide.chatim.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.BarringInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.yyide.chatim.adapter.AppAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.leave.LeaveActivity;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.presenter.AppPresenter;
@@ -58,19 +60,19 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         return mBaseView;
     }
 
-    @SuppressLint("NewApi")
+    @SuppressLint({"NewApi", "ClickableViewAccessibility"})
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         adapter = new MyAppItemAdapter();
         mygrid.setAdapter(adapter);
         mygrid.setOnItemClickListener((parent, view1, position, id) -> {
-//            if (adapter.list.get(position).id.equals("99")) {
-//                    startActivity(new Intent(mActivity,));
-//                    startActivity(new Intent(mActivity, AppManagerActivity.class));
-//            } else {
-//                startActivity(new Intent(mActivity, LeaveActivity.class));
-//            }
+            if ("editor".equals(adapter.list.get(position).getAppType())) {
+                Intent intent = new Intent(mActivity, AppManagerActivity.class);
+                startActivity(intent);
+            } else {
+                startActivity(new Intent(mActivity, LeaveActivity.class));
+            }
         });
 
         recylAppAdapter = new RecylAppAdapter();
@@ -102,30 +104,13 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 int firstVisiblePosition = view.getFirstVisiblePosition();
-//                view.getF
-
-//                if (scrollPosition != firstVisibleItem) {
-//                    adapter.setSelectItem(firstVisibleItem);
-//                    mLeft.setSelectionFromTop(firstVisibleItem, 40);
-//                    scrollPosition = firstVisibleItem;
-//                }
                 if (sc) {
                     recylAppAdapter.setPosition(firstVisiblePosition);
                 }
 
-
-//                Log.e("TAG", "firstVisiblePosition: "+ JSON.toJSONString(firstVisiblePosition));
-
             }
         });
 
-//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                int firstVisiblePosition = parent.getFirstVisiblePosition();
-//                Log.e("TAG", "onItemClick: "+ JSON.toJSONString(firstVisiblePosition));
-//            }
-//        });
         rightBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +140,15 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @Override
     public void getMyAppListSuccess(AppListRsp model) {
         if (model != null && model.getData() != null) {
-            adapter.notifyData(model.getData());
+            List<AppListRsp.DataBean> data = model.getData();
+            AppListRsp.DataBean itemBean = new AppListRsp.DataBean();
+            itemBean.setAppType("editor");
+            itemBean.setName("编辑");
+            if(data == null){
+                data = new ArrayList<>();
+            }
+            data.add(itemBean);
+            adapter.notifyData(data);
         }
     }
 

@@ -3,6 +3,7 @@ package com.yyide.chatim.dialog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -151,13 +152,15 @@ public class SwichSchoolPop extends PopupWindow {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(school));
 //                SPUtils.getInstance().put(SpData.USERID, school.userId);
                 String data = response.body().string();
                 Log.e("TAG", "mOkHttpClient==>: " + data);
                 SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+                    SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(school));
                     Tologin(bean.data.username, bean.data.password, String.valueOf(school.schoolId));
+                } else {
+                    ToastUtils.showShort(bean.message);
                 }
                 context.runOnUiThread(() -> {
                     if (popupWindow != null && popupWindow.isShowing()) {

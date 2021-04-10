@@ -3,6 +3,7 @@ package com.yyide.chatim.presenter;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.TableJSON;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
@@ -16,7 +17,6 @@ import okhttp3.RequestBody;
  * 邮箱：rance935@163.com
  */
 public class ClassTablePresenter extends BasePresenter<ClassTableView> {
-
 
     public ClassTablePresenter(ClassTableView view) {
         attachView(view);
@@ -44,10 +44,10 @@ public class ClassTablePresenter extends BasePresenter<ClassTableView> {
         });
     }
 
-    public void listTimeDataByApp(int classid) {
+    public void listTimeDataByApp(String classid) {
         mvpView.showLoading();
-        TableJSON info=new TableJSON(classid);
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(info));
+        TableJSON info = new TableJSON(classid);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(info));
         addSubscription(dingApiStores.listTimeDataByApp(body), new ApiCallback<listTimeDataByAppRsp>() {
             @Override
             public void onSuccess(listTimeDataByAppRsp model) {
@@ -57,6 +57,48 @@ public class ClassTablePresenter extends BasePresenter<ClassTableView> {
             @Override
             public void onFailure(String msg) {
                 mvpView.listTimeDataByAppFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    //大学组织结构
+    public void selectClassByAllSchool() {
+        mvpView.showLoading();
+        addSubscription(dingApiStores.selectClassByAllSchool(), new ApiCallback<SelectTableClassesRsp>() {
+            @Override
+            public void onSuccess(SelectTableClassesRsp model) {
+                mvpView.selectTableClassListSuccess(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.selectTableClassListFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    //小初高
+    public void selectListBySchoolAll() {
+        mvpView.showLoading();
+        addSubscription(dingApiStores.selectListBySchoolAll(), new ApiCallback<SelectTableClassesRsp>() {
+            @Override
+            public void onSuccess(SelectTableClassesRsp model) {
+                mvpView.selectTableClassListSuccess(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.selectTableClassListFail(msg);
             }
 
             @Override

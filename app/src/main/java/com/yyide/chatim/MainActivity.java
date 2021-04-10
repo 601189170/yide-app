@@ -149,18 +149,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 //        mvpPresenter.listAllScheduleByTeacherId();
 
 //        CheacklistSchedule("99","1","10");
-
         //注册极光用户
         RegistJiGuang();
 //        getUserSchool();
     }
 
     void RegistJiGuang(){
-        int userId = SpData.getIdentityInfo().userId;
-        String rid = JPushInterface.getRegistrationID(getApplicationContext());
-        int alias = userId;
-        String equipmentType = "1";
-        mvpPresenter.addUserEquipmentInfo(userId,rid, String.valueOf(alias),equipmentType);
+        if(SpData.getIdentityInfo() != null){
+            int userId = SpData.getIdentityInfo().userId;
+            String rid = JPushInterface.getRegistrationID(getApplicationContext());
+            int alias = userId;
+            String equipmentType = "1";
+            mvpPresenter.addUserEquipmentInfo(userId,rid, String.valueOf(alias),equipmentType);
+        }
     }
 
     // 这是来自 JPush Example 的设置别名的 Activity 里的代码，更详细的示例请参考 JPush Example。一般 App 的设置的调用入口，在任何方便的地方调用都可以。

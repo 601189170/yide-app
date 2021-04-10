@@ -1,12 +1,17 @@
 package com.yyide.chatim.home;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -72,14 +77,21 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
 
     private void initAdapter() {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new BaseQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder>(R.layout.item_help) {
-            @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpItemRep.Records.HelpItemBean itemBean) {
-                baseViewHolder
-                        .setText(R.id.title, itemBean.getName())
-                        .setText(R.id.info, itemBean.getMessage());
-            }
-        };
+//        adapter = new BaseQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder>(R.layout.item_help) {
+//            @Override
+//            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpItemRep.Records.HelpItemBean itemBean) {
+//                if ("0".equals(itemBean.getStatus())) {//富文本
+//                    baseViewHolder
+//                            .setText(R.id.title, itemBean.getName())
+//                            .setText(R.id.info, Html.fromHtml(itemBean.getMessage()));
+//
+//                } else if ("1".equals(itemBean.getStatus())) {//视频
+//                    baseViewHolder.setText(R.id.title, itemBean.getName());
+//                }
+//
+//            }
+//        };
+        adapter = new HelpListAdapter(null);
 
         recyclerview.setAdapter(adapter);
         //recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(mActivity, 20)));
@@ -128,7 +140,6 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
     }
 
     private class HelpListAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder> {
-
         public HelpListAdapter(List<HelpItemRep.Records.HelpItemBean> data) {
             super(data);
             addItemType(1, R.layout.item_help);
@@ -139,10 +150,25 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
         protected void convert(@NotNull BaseViewHolder holder, HelpItemRep.Records.HelpItemBean itemBean) {
             switch (holder.getItemViewType()) {
                 case 1:
-                    holder.setText(R.id.title, itemBean.getName()).setText(R.id.info, itemBean.getMessage());
+                    holder.setText(R.id.title, itemBean.getName()).setText(R.id.info, Html.fromHtml(itemBean.getMessage()));
                     break;
                 case 2:
+                    ImageView imageView = holder.getView(R.id.iv_start);
+                    holder.setText(R.id.title, itemBean.getName());
                     VideoView videoView = holder.getView(R.id.videoView);
+                    videoView.setVideoURI(Uri.parse(itemBean.getVideo()));
+                    videoView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!videoView.isPlaying()) {
+                                imageView.setVisibility(View.GONE);
+                                videoView.start();
+                            } else {
+                                imageView.setVisibility(View.VISIBLE);
+                                videoView.pause();
+                            }
+                        }
+                    });
                     break;
             }
         }

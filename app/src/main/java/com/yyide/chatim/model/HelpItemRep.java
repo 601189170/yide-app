@@ -81,7 +81,7 @@ public class HelpItemRep {
             private String hotInd;
             private int sort;
             private String message;
-            private String status;
+            private String status;//0是富文本，1是视频
             private String video;
 
             public void setId(int id) {

@@ -5,9 +5,9 @@ package com.yyide.chatim.model;
  */
 
 public class TableJSON {
-    public int classId;
+    public String classId;
 
-    public TableJSON(int classId) {
+    public TableJSON(String classId) {
 
         this.classId = classId;
 

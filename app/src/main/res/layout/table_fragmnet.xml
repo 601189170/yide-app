@@ -36,7 +36,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="下节课"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
 
@@ -44,7 +43,6 @@
                     android:id="@+id/subjectName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="语文课"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -59,7 +57,6 @@
             android:paddingStart="@dimen/dp_10"
             android:paddingEnd="@dimen/dp_10"
             android:singleLine="true"
-            android:text="初二03班"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -70,7 +67,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="85dp"
-            android:text="11:00-12:00"
             android:textColor="@color/white"
             android:textSize="10sp" />
 
@@ -96,7 +92,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="15dp"
-                android:text="这几课讲第三章第一节的课文《背影背影背影》章第一节弟第一节……"
                 android:textColor="@color/white"
                 android:textSize="11sp" />
         </FrameLayout>

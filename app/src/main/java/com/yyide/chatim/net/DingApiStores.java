@@ -2,6 +2,7 @@ package com.yyide.chatim.net;
 
 
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
+import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
@@ -21,6 +22,7 @@ import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SearchRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.StudentScopeRsp;
@@ -40,11 +42,13 @@ import com.yyide.chatim.model.mobileRsp;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -54,7 +58,6 @@ import rx.Observable;
  */
 
 //    https://api.uat.edu.1d1j.net/management/cloud-system/login
-
 public interface DingApiStores {
     //    String API_SERVER_URL = "http://120.76.189.190:8027";
     String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
@@ -103,12 +106,6 @@ public interface DingApiStores {
     @POST("/school/cloud-school/classes/listAllBySchoolId")
     Observable<listAllBySchoolIdRsp> listAllBySchoolId();
 
-
-    //计算UserSig
-//    @POST("/management/cloud-system/im/getUserSig")
-    @POST("/cloud-system/im/getUserSig")
-    Observable<getUserSigRsp> getUserSig();
-
     //通过班级查询生成课表
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/timetable/cloud-timetable/timetable/listTimeDataByApp")
@@ -118,7 +115,6 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-backstage/jpush/addUserEquipmentInfo")
     Observable<addUserEquipmentInfoRsp> addUserEquipmentInfo(@Body RequestBody info);
-
 
     //查询组织架构列表信息
     @POST("/school/cloud-school/department/listByApp")
@@ -203,7 +199,6 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/backstage/cloud-backstage/application/search")
     Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
-
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyNoticeBacklog
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeBacklog
@@ -280,4 +275,32 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/android/videoalbum/list")
     Observable<ClassesBannerRsp> getClassPhotoList(@Body RequestBody requestBody);
+
+    //获取班级相册
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/school/cloud-school/app/teacher/selectAllList")
+    Observable<ResultBean> searchBook(@Body RequestBody requestBody);
+
+    //学校所有班级-大学
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/school/cloud-school/departmentClass/selectClassByAllSchool")
+    Observable<SelectTableClassesRsp> selectClassByAllSchool();
+
+    //学校所有班级-小初高
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/school/cloud-school/section/selectListBySchoolAll")
+    Observable<SelectTableClassesRsp> selectListBySchoolAll();
+
+    //获取应用列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/application/me/list")
+    Observable<AppAddRsp> getAppAddList(@Body RequestBody requestBody);
+
+    //添加应用列表
+    @POST("/management/cloud-system/app/application/me/add/{id}")
+    Observable<ResultBean> addApp(@Path("id") int id);
+
+    //删除应用
+    @POST("/management/cloud-system/app/application/me/del/{id}")
+    Observable<ResultBean> deleteApp(@Path("id") int id);
 }

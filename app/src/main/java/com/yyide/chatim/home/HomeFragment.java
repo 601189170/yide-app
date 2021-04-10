@@ -36,8 +36,11 @@ import com.yyide.chatim.homemodel.WorkFragment;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
 import com.yyide.chatim.view.HomeFragmentView;
+
+import org.raphets.roundimageview.RoundImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     FrameLayout classHonorContent;
     @BindView(R.id.student_honor_content)
     FrameLayout studentHonorContent;
+    @BindView(R.id.head_img)
+    RoundImageView head_img;
     @BindView(R.id.user_name)
     TextView userName;
     @BindView(R.id.school_name)
@@ -203,9 +208,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         GetUserSchoolRsp.DataBean dataBean = null;
         if (rsp.data.size() > 0) {
             for (int i = 0; i < rsp.data.size(); i++) {
-                if (rsp.data.get(i).isCurrentUser) {
+                if (rsp.data.get(i).isCurrentUser) {//保存切换身份信息
                     dataBean = rsp.data.get(i);
                     SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(dataBean));
+                    if(dataBean != null && dataBean.form != null && dataBean.form.size() > 0){//保存班级信息
+                        SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(dataBean.form.get(0)));
+                    }
                 }
             }
         }
@@ -216,14 +224,22 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
             String qhSchool = "";
             String qhName = "";
+            String imgUrl = "";
             for (GetUserSchoolRsp.DataBean datum : SpData.Schoolinfo().data) {
                 if (datum.userId == SpData.getIdentityInfo().userId) {
                     qhSchool = datum.schoolName;
                     qhName = datum.realname;
+                    imgUrl = datum.img;
                 }
             }
+            if (!TextUtils.isEmpty(imgUrl)) {
+                userName.setVisibility(View.GONE);
+                GlideUtil.loadImage(getActivity(), imgUrl, head_img);
+            } else {
+                head_img.setVisibility(View.GONE);
+                userName.setText(StringUtils.subString(qhName, 2));
+            }
             schoolName.setText(qhSchool);
-            userName.setText(StringUtils.subString(qhName, 2));
             SPUtils.getInstance().put(SpData.USERNAME, qhName);
         }
     }

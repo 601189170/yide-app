@@ -39,31 +39,29 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter> implements NoteByListBookView {
 
-
     @BindView(R.id.back)
     TextView back;
-
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.content)
     FrameLayout content;
-    int index = 1;
-
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     TabRecyAdapter tabRecyAdapter;
-    List<NoteTabBean> listTab=new ArrayList<>();
-    List<listByAppRsp.DataBean.ListBean.ZBListBean> listBean=new ArrayList<>();
+    List<NoteTabBean> listTab = new ArrayList<>();
+    List<listByAppRsp.DataBean.ListBean.ZBListBean> listBean = new ArrayList<>();
 
     String id;
     String name;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_notebylist_layout;
@@ -74,35 +72,30 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         super.onCreate(savedInstanceState);
 //        String data=getIntent().getStringExtra("list");
 
+        int sum = getIntent().getIntExtra("size", 0);
+        id = getIntent().getStringExtra("id");
+        name = getIntent().getStringExtra("name");
+        for (int i = 0; i < sum; i++) {
+            listByAppRsp.DataBean.ListBean.ZBListBean bean = (listByAppRsp.DataBean.ListBean.ZBListBean) getIntent().getSerializableExtra(i + "");
+            Log.e("TAG", "ZBListBean: " + JSON.toJSONString(bean));
+            listBean.add(bean);
+        }
 
-        int sum=getIntent().getIntExtra("size",0);
-         id=getIntent().getStringExtra("id");
-        name=getIntent().getStringExtra("name");
-         for (int i=0;i<sum;i++){
-             listByAppRsp.DataBean.ListBean.ZBListBean bean= (listByAppRsp.DataBean.ListBean.ZBListBean) getIntent().getSerializableExtra(i+"");
-             Log.e("TAG", "ZBListBean: "+JSON.toJSONString(bean) );
-             listBean.add(bean);
-         }
-
-        Log.e("TAG", "listBean==》sum: "+JSON.toJSONString(listBean) );
-
-
+        Log.e("TAG", "listBean==》sum: " + JSON.toJSONString(listBean));
 
         title.setText("通讯录");
-        tabRecyAdapter=new TabRecyAdapter();
-
+        tabRecyAdapter = new TabRecyAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerview.setLayoutManager(linearLayoutManager);
 
         recyclerview.setAdapter(tabRecyAdapter);
-        recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,10)));
+        //recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,10)));
 
         tabRecyAdapter.setOnItemClickListener(new TabRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
                 if (position == 0) {//点击回到一级部门,清除所有回退栈
                     if (tabRecyAdapter.list.size() > 1) {
                         getSupportFragmentManager().popBackStackImmediate(tabRecyAdapter.list.get(1).tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -127,7 +120,6 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
 //        mvpPresenter.NoteBookByList("1194","","","","10","1");
     }
 
-
     @Override
     protected NoteBookByListPresenter createPresenter() {
         return new NoteBookByListPresenter(this);
@@ -143,118 +135,100 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         super.onPause();
     }
 
-
-    @OnClick({R.id.back, R.id.back_layout})
+    @OnClick({R.id.tv_book, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_layout:
-                finish();
-                break;
-            case R.id.back:
+            case R.id.tv_book:
                 finish();
                 break;
         }
     }
 
     public void initDeptFragment() {
-        int num=getSupportFragmentManager().getBackStackEntryCount();
-        int index=num;
+        int num = getSupportFragmentManager().getBackStackEntryCount();
+        int index = num;
         Fragment noteByListFragment = new NoteByListFragment();
 
         FragmentManager manager = getSupportFragmentManager();
-        NoteTabBean noteTabBean =new NoteTabBean();
-        noteTabBean.tag=index+"";
-        noteTabBean.name=name;
+        NoteTabBean noteTabBean = new NoteTabBean();
+        noteTabBean.tag = index + "";
+        noteTabBean.name = name;
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         for (int i = 0; i < listBean.size(); i++) {
-            bundle.putSerializable(i+"", listBean.get(i));
+            bundle.putSerializable(i + "", listBean.get(i));
         }
-        if (listBean.size()==0){
-            noteTabBean.islast="1";
-        }else {
-            noteTabBean.islast="2";
+        if (listBean.size() == 0) {
+            noteTabBean.islast = "1";
+        } else {
+            noteTabBean.islast = "2";
         }
 
-        bundle.putInt("size",listBean.size());
+        bundle.putInt("size", listBean.size());
         noteByListFragment.setArguments(bundle);
-
 
         manager.beginTransaction()
                 .replace(R.id.content, noteByListFragment)
                 .addToBackStack(String.valueOf(index))
                 .commit();
-
-
-
-            listTab.add(noteTabBean);
-
-
-
-        tabRecyAdapter.notifydata(listTab);
-
-    }
-    public void initDeptFragment2(Bundle bundle) {
-        int num=getSupportFragmentManager().getBackStackEntryCount();
-        int index=num;
-        Fragment noteByListFragment = new NoteByListFragment();
-
-        FragmentManager manager = getSupportFragmentManager();
-        NoteTabBean noteTabBean =new NoteTabBean();
-        noteTabBean.tag=index+"";
-        noteTabBean.name=bundle.getString("name");
-        noteTabBean.islast=bundle.getString("islast");
-        Log.e("TAG", "initDeptFragment2==》: "+JSON.toJSONString(bundle) );
-        noteByListFragment.setArguments(bundle);
-
-
-        manager.beginTransaction()
-                .replace(R.id.content, noteByListFragment)
-                .addToBackStack(String.valueOf(index))
-                .commit();
-
 
 
         listTab.add(noteTabBean);
+        tabRecyAdapter.notifydata(listTab);
 
-        Log.e("TAG", "initDeptFragment2==>: "+JSON.toJSONString(listTab) );
+    }
+
+    public void initDeptFragment2(Bundle bundle) {
+        int num = getSupportFragmentManager().getBackStackEntryCount();
+        int index = num;
+        Fragment noteByListFragment = new NoteByListFragment();
+
+        FragmentManager manager = getSupportFragmentManager();
+        NoteTabBean noteTabBean = new NoteTabBean();
+        noteTabBean.tag = index + "";
+        noteTabBean.name = bundle.getString("name");
+        noteTabBean.islast = bundle.getString("islast");
+        Log.e("TAG", "initDeptFragment2==》: " + JSON.toJSONString(bundle));
+        noteByListFragment.setArguments(bundle);
+
+        manager.beginTransaction()
+                .replace(R.id.content, noteByListFragment)
+                .addToBackStack(String.valueOf(index))
+                .commit();
+
+        listTab.add(noteTabBean);
+
+        Log.e("TAG", "initDeptFragment2==>: " + JSON.toJSONString(listTab));
 
         tabRecyAdapter.notifydata(listTab);
 
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             isBack();
-
-
-
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
-
     }
 
-    void BackSp(){
+    void BackSp() {
 
-        int num=getSupportFragmentManager().getBackStackEntryCount();
-        for (int i=0;i<num;i++){
-            if (i==num-1){
-                FragmentManager.BackStackEntry backStackEntry=getSupportFragmentManager().getBackStackEntryAt(i);
-                String name=backStackEntry.getName();
+        int num = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < num; i++) {
+            if (i == num - 1) {
+                FragmentManager.BackStackEntry backStackEntry = getSupportFragmentManager().getBackStackEntryAt(i);
+                String name = backStackEntry.getName();
                 for (NoteTabBean noteTabBean : tabRecyAdapter.list) {
-                    if (noteTabBean.tag.equals(name)){
+                    if (noteTabBean.tag.equals(name)) {
                         tabRecyAdapter.remove(i);
 //                        listTab.remove(i);
                     }
                 }
             }
         }
-
     }
 
     void isBack() {
@@ -263,7 +237,6 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         } else {
             finish();
         }
-
     }
 
     @Override
@@ -273,8 +246,8 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
 
     @Override
     public void TeacherlistRsp(TeacherlistRsp rsp) {
-        Log.e("TAG", "TeacherlistRsp: "+JSON.toJSONString(rsp) );
-        if (rsp.code== BaseConstant.REQUEST_SUCCES2){
+        Log.e("TAG", "TeacherlistRsp: " + JSON.toJSONString(rsp));
+        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
 
         }
 

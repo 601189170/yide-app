@@ -31,7 +31,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
+
 import butterknife.BindView;
 
 
@@ -47,14 +52,14 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     MyTableAdapter adapter;
     TableTimeAdapter timeAdapter;
+    private List<SelectSchByTeaidRsp.DataBean> list = new ArrayList<>();
+    private int weekDay;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.layout_mytable_fragmnet, container, false);
         return mBaseView;
     }
-
-    private String weekDay;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             if (timeAdapter.list.get(i).day.equals(simpleDateFormat.format(date))) {
                 timeAdapter.setPosition(i);
                 timeAdapter.setToday(i);
-//                weekDay = timeAdapter.list.get(i).day;
+                weekDay = i + 1;
             }
         }
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,18 +86,29 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 timeAdapter.setPosition(position);
 //                weekDay = timeAdapter.getItem(position).day;
+                adapter.notifyData(getTableList(list, position + 1));
             }
         });
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SelectSchByTeaidRsp.DataBean item = adapter.getItem(position);
-                Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
-                intent.putExtra("dataBean", item);
-                startActivity(intent);
-            }
+
+        listview.setOnItemClickListener((parent, view1, position, id) -> {
+            SelectSchByTeaidRsp.DataBean item = adapter.getItem(position);
+            Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
+            intent.putExtra("dataBean", item);
+            startActivity(intent);
         });
         classlayout.setVisibility(View.GONE);
+    }
+
+    private List<SelectSchByTeaidRsp.DataBean> getTableList(List<SelectSchByTeaidRsp.DataBean> list, int weekTime) {
+        List<SelectSchByTeaidRsp.DataBean> dataBeans = new ArrayList<>();
+        if (list != null) {
+            for (SelectSchByTeaidRsp.DataBean item : list) {
+                if (item.weekTime == weekTime) {
+                    dataBeans.add(item);
+                }
+            }
+        }
+        return dataBeans;
     }
 
     @Override
@@ -110,8 +126,9 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     @Override
     public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
         Log.e("TAG", "SelectSchByTeaid: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-            adapter.notifyData(rsp.data);
+        if (rsp.code == BaseConstant.REQUEST_SUCCES2 && rsp.data != null) {
+            list = rsp.data;
+            adapter.notifyData(getTableList(rsp.data, weekDay));
         }
     }
 

@@ -30,8 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
-                    android:background="@drawable/corners4">
+                    android:layout_marginBottom="7dp">
 
                     <org.raphets.roundimageview.RoundImageView
                         android:id="@+id/head_img"
@@ -50,6 +49,7 @@
                         android:layout_height="50dp"
                         android:gravity="center"
                         android:textColor="@color/white"
+                        android:background="@drawable/corners4"
                         android:textSize="16sp" />
                 </FrameLayout>
 

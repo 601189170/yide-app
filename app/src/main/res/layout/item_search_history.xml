@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_search_history"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/radius_15"
+    android:gravity="center"
+    android:paddingStart="@dimen/dp_12"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingEnd="@dimen/dp_12"
+    android:paddingBottom="@dimen/dp_10"
+    android:textColor="#ff606266"
+    android:textSize="@dimen/text_12" />
+

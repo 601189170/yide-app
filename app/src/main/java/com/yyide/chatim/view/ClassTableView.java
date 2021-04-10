@@ -4,6 +4,7 @@ package com.yyide.chatim.view;
 import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
+import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
@@ -22,5 +23,8 @@ public interface ClassTableView extends BaseView {
     void listTimeDataByApp(listTimeDataByAppRsp rsp);
 
     void listTimeDataByAppFail(String rsp);
+
+    void selectTableClassListSuccess(SelectTableClassesRsp model);
+    void selectTableClassListFail(String msg);
 
 }

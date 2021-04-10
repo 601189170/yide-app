@@ -72,7 +72,7 @@ public class ConversationFragment extends BaseFragment {
 
             @Override
             public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-//                v2TIMConversationResult.getConversationList();
+                v2TIMConversationResult.getConversationList();
                 //ToastUtil.toastShortMessage("onSuccess==》"+JSON.toJSONString(v2TIMConversationResult.getConversationList()));
             }
         });

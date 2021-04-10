@@ -19,6 +19,7 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 
 import androidx.annotation.Nullable;
+
 import butterknife.BindView;
 import okhttp3.OkHttpClient;
 
@@ -38,6 +39,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     private View mBaseView;
 
     private static final String TAG = "TableFragment";
+    private SelectSchByTeaidRsp.DataBean dataBean;
 
     @Nullable
     @Override
@@ -53,7 +55,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         tablelayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mActivity, TableActivity.class));
+                Intent intent = new Intent(mActivity, TableActivity.class);
+                startActivity(intent);
             }
         });
 //        listTimeData(SpData.Schoolinfo().data.get(0).parentId);
@@ -67,22 +70,23 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         return new TablePresenter(this);
     }
 
-
     @Override
     public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
         Log.e(TAG, "SelectSchByTeaid: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-            if (rsp.data.size()>0){
+            if (rsp.data.size() > 0) {
+                dataBean = rsp.data.get(0);
                 setTableMsg(rsp.data.get(0));
+            } else {
+                className.setText("暂无课程");
             }
-
         }
     }
 
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
-        time.setText(rsp.fromDateTime+"-"+rsp.toDateTime);
+        time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
         tips.setText(rsp.subjectName);
     }
 

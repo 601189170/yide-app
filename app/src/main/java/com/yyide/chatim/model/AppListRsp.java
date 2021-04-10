@@ -40,12 +40,13 @@ public class AppListRsp {
         this.data = data;
     }
 
-    public class DataBean {
+    public static class DataBean {
         private int id;
         private String name;
         private int sort;
         private String img;//":"http://cloud-yide.oss-cn-shenzhen.aliyuncs.com/application/88d8ec52342e4567b49f7f9714bf62ea-1585.jpg",
         private String path;//:"111"
+        private String appType;
 
         public int getId() {
             return id;
@@ -85,6 +86,14 @@ public class AppListRsp {
 
         public void setPath(String path) {
             this.path = path;
+        }
+
+        public String getAppType() {
+            return appType;
+        }
+
+        public void setAppType(String appType) {
+            this.appType = appType;
         }
     }
 

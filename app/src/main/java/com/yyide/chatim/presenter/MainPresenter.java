@@ -1,7 +1,6 @@
 package com.yyide.chatim.presenter;
 
 
-
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -12,6 +11,7 @@ import com.yyide.chatim.jiguang.TagAliasOperatorHelper;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ListScheduleRsp;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
@@ -60,6 +60,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         });
     }
 
+
     public void ToUserLogout() {
         mvpView.showLoading();
         addSubscription(dingApiStores.Logout(), new ApiCallback<UserLogoutRsp>() {
@@ -101,9 +102,6 @@ public class MainPresenter extends BasePresenter<MainView> {
 //    }
 
 
-
-
-
     public void listAllScheduleByTeacherId() {
         mvpView.showLoading();
         addSubscription(dingApiStores.listAllScheduleByTeacherId(), new ApiCallback<ListAllScheduleByTeacherIdRsp>() {
@@ -124,15 +122,15 @@ public class MainPresenter extends BasePresenter<MainView> {
         });
     }
 
-    public void addUserEquipmentInfo(int userId,String registrationId,String alias,String equipmentType) {
+    public void addUserEquipmentInfo(int userId, String registrationId, String alias, String equipmentType) {
         mvpView.showLoading();
-        Map<String,String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         map.put("userId", String.valueOf(userId));
         map.put("registrationId", registrationId);
         map.put("alias", alias);
         map.put("equipmentType", equipmentType);
-        String json = JSON.toJSONString(map,true);
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(json));
+        String json = JSON.toJSONString(map, true);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(json));
         addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<addUserEquipmentInfoRsp>() {
             @Override
             public void onSuccess(addUserEquipmentInfoRsp model) {

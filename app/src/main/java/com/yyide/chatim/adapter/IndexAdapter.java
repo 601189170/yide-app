@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,8 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class IndexAdapter extends BaseQuickAdapter<ClassesBannerRsp.DataBean, BaseViewHolder> {
 
-    public int index = 0;
-    private int size = 5;
+    private int index = 0;
 
     public IndexAdapter() {
         super(R.layout.index_item);
@@ -36,8 +36,8 @@ public class IndexAdapter extends BaseQuickAdapter<ClassesBannerRsp.DataBean, Ba
             item1.setVisibility(View.GONE);
             item2.setVisibility(View.VISIBLE);
         } else {
-            item1.setVisibility(View.VISIBLE);
             item2.setVisibility(View.GONE);
+            item1.setVisibility(View.VISIBLE);
         }
     }
 }

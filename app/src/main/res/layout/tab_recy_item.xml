@@ -7,6 +7,7 @@
        android:id="@+id/item"
        android:layout_width="wrap_content"
        android:layout_height="match_parent"
+       android:layout_marginStart="@dimen/dp_8"
        android:gravity="center"
        android:textColor="@color/blue11"
        android:textSize="@dimen/text_16"/>

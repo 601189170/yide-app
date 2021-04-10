@@ -59,7 +59,7 @@ public class GetUserSchoolRsp {
         public String getIdentity() {
             String identity = "";
             if (!TextUtils.isEmpty(status)) {
-                if(TYPE_PARENTS.equals(status)){
+                if (TYPE_PARENTS.equals(status)) {
                     identity = "家长";
                 } else if (TYPE_STUDENT.equals(status)) {
                     identity = "学生";
@@ -87,7 +87,7 @@ public class GetUserSchoolRsp {
         public String classesName;
         public int parentId;
         public String schoolName;
-        public String schoolType;
+        public String schoolType;//Y 大学 N小初高
         public int teacherId;
         public Object dataPerInd;
         public Object depIds;
@@ -113,7 +113,7 @@ public class GetUserSchoolRsp {
              * teacherId : 574
              */
 
-            public int classesId;
+            public String classesId;
             public String classesName;
             public String classesTeacher;
             public int teacherId;
@@ -122,11 +122,11 @@ public class GetUserSchoolRsp {
         }
     }
 
-    public void getClassInfo(){
+    public void getClassInfo() {
 
     }
 
-    public void getIdentity(){
+    public void getIdentity() {
 
     }
 }

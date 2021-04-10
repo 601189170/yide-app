@@ -18,7 +18,6 @@ public class SelectSchByTeaidRsp {
     public String msg;
     public List<DataBean> data;
 
-
     public static class DataBean implements Serializable {
         /**
          * id : null
@@ -59,6 +58,7 @@ public class SelectSchByTeaidRsp {
         public String classesTeacher;
         public int teacherId;
         public int schoolId;
+        public String schoolType;
         public String section;
         public int weekTime;
         public String fromDateTime;
