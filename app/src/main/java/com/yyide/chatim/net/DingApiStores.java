@@ -7,6 +7,7 @@ import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
+import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -22,6 +23,7 @@ import com.yyide.chatim.model.SearchRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
+import com.yyide.chatim.model.StudentScopeRsp;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
@@ -231,6 +233,18 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/announcement/getConfirmDetails")
     Observable<ConfirmDetailRsp> getConfirmDetails(@Query("confirmType") int confirmType, @Query("signId") long signId, @Query("current") int current, @Query("size") int size);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/message/notice/scope/getSectionList
+    //查询学段
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/message/notice/scope/getSectionList")
+    Observable<StudentScopeRsp> getSectionList(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/message/notice/scope/getDepartmentList
+    //获取部门列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/message/notice/scope/getDepartmentList")
+    Observable<DepartmentScopeRsp> getDepartmentList(@Body RequestBody requestBody);
 
     //查询是否有备课
     @Headers({"Content-Type: application/json", "Accept: application/json"})

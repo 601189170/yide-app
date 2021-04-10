@@ -7,6 +7,7 @@ import com.jzxiang.pickerview.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -14,16 +15,19 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
+import com.tencent.openqq.protocol.imsdk.msg;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeCreatePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeCreateView;
 import com.yyide.chatim.model.AddUserAnnouncementBody;
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
+import com.yyide.chatim.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,7 +53,16 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
     EditText et_input_title;//标题
     @BindView(R.id.et_input_before_class)
     EditText et_input_content;//内容
+   @BindView(R.id.tv_show_ids)
+    TextView tv_show_ids;//内容
 
+    private static int REQUEST_CODE = 100;
+
+    private int sendObj = 0;//发送对象 ： 1家长 2学生 3部门
+    private String timingTime = "";
+    List<String> departmentIds = new ArrayList();
+    List<String> classCardIds = new ArrayList();
+    List<String> classesIds = new ArrayList();
     private static final String TAG = "NoticeCreateActivity";
 
     @Override
@@ -79,20 +92,35 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         }
     }
 
-    @OnClick({R.id.tv_parents, R.id.tv_faculty, R.id.cl_timing_time, R.id.ll_bottom})
+    @OnClick({R.id.tv_parents, R.id.tv_faculty,R.id.tv_student, R.id.cl_timing_time, R.id.ll_bottom})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.tv_parents:
+                sendObj = 1;
                 tv_parents.setTextColor(Color.parseColor("#FFFFFF"));
                 tv_parents.setBackground(getDrawable(R.drawable.btn_select_bg));
                 tv_faculty.setTextColor(Color.parseColor("#666666"));
                 tv_faculty.setBackground(getDrawable(R.drawable.btn_unselect_bg));
+                tv_student.setTextColor(Color.parseColor("#666666"));
+                tv_student.setBackground(getDrawable(R.drawable.btn_unselect_bg));
                 break;
             case R.id.tv_faculty:
+                sendObj = 3;
                 tv_parents.setTextColor(Color.parseColor("#666666"));
                 tv_parents.setBackground(getDrawable(R.drawable.btn_unselect_bg));
+                tv_student.setTextColor(Color.parseColor("#666666"));
+                tv_student.setBackground(getDrawable(R.drawable.btn_unselect_bg));
                 tv_faculty.setTextColor(Color.parseColor("#FFFFFF"));
                 tv_faculty.setBackground(getDrawable(R.drawable.btn_select_bg));
+                break;
+            case R.id.tv_student:
+                sendObj = 2;
+                tv_parents.setTextColor(Color.parseColor("#666666"));
+                tv_parents.setBackground(getDrawable(R.drawable.btn_unselect_bg));
+                tv_faculty.setTextColor(Color.parseColor("#666666"));
+                tv_faculty.setBackground(getDrawable(R.drawable.btn_unselect_bg));
+                tv_student.setTextColor(Color.parseColor("#FFFFFF"));
+                tv_student.setBackground(getDrawable(R.drawable.btn_select_bg));
                 break;
             case R.id.cl_timing_time://选择发布时间
                 showTime();
@@ -121,21 +149,23 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         String title = et_input_title.getText().toString();
         String content = et_input_content.getText().toString();
         boolean isTiming = mSwitch.isChecked();
+        if (isTiming && TextUtils.isEmpty(timingTime)){
+            ToastUtils.showShort("请选择发布时间");
+            return;
+        }
         AddUserAnnouncementBody body = new AddUserAnnouncementBody();
         body.setType("3");
         body.setTitle(title);
         body.setContent(content);
         body.setEquipmentType("1");
-        body.setSendTarget("1");
-        List<String> departmentIds = new ArrayList();
-        departmentIds.add("430");
+        body.setSendTarget(""+sendObj);
         body.setDepartmentIds(departmentIds);
-        List<String> classCardIds = new ArrayList();
         body.setClassCardIds(classCardIds);
-        List<String> classesIds = new ArrayList();
         body.setClassesIds(classesIds);
         body.setIsTiming(isTiming);
-        body.setTimingTime(new Date());
+        if (isTiming){
+            body.setTimingTime(timingTime);
+        }
         String jsonString = JSON.toJSONString(body);
         Log.e(TAG, "commit: " + jsonString);
         mvpPresenter.addUserAnnouncement(jsonString);
@@ -176,7 +206,45 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
 
     @OnClick(R.id.constraintLayout_select)
     public void select() {
-        jupm(this, NoticeScopeActivity.class);
+        if (sendObj == 0){
+            ToastUtils.showShort("请选择通知对象！");
+            return;
+        }
+        Intent intent = new Intent(this,NoticeScopeActivity.class);
+        intent.putExtra("sendObj",sendObj);
+        startActivityForResult(intent,REQUEST_CODE);
+        //jupm(this, NoticeScopeActivity.class);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG, "onActivityResult: requestCode:"+requestCode+", resultCode:"+resultCode );
+        if (requestCode == REQUEST_CODE){
+            ArrayList<String> ids = data.getStringArrayListExtra("ids");
+            Log.e(TAG, "onActivityResult: "+ids );
+            departmentIds.clear();
+            classCardIds.clear();
+            classesIds.clear();
+            if (sendObj == 1 || sendObj == 2){
+                classesIds.addAll(ids);
+            }else {
+                departmentIds.addAll(ids);
+            }
+            if (ids.isEmpty()){
+                tv_show_ids.setText("未選擇");
+            }else {
+                tv_show_ids.setText(""+list2String(ids));
+            }
+        }
+    }
+
+    private String list2String(ArrayList<String> list){
+        StringBuffer buffer = new StringBuffer();
+        for (String s : list) {
+            buffer.append(s+" ");
+        }
+        return buffer.toString();
     }
 
     @Override
@@ -191,6 +259,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
 
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+        timingTime = DateUtils.switchCreateTime(millseconds + "", "yyyy-MM-dd HH:mm:ss");
     }
 
     @Override

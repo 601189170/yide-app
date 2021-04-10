@@ -33,7 +33,7 @@ public class AddUserAnnouncementBody {
     private String equipmentType;
     private String sendTarget;
     private boolean isTiming;
-    private Date timingTime;
+    private String timingTime;
     private List<String> departmentIds;
     private List<String> classesIds;
     private List<String> classCardIds;
@@ -86,11 +86,11 @@ public class AddUserAnnouncementBody {
         this.isTiming = isTiming;
     }
 
-    public Date getTimingTime() {
+    public String getTimingTime() {
         return timingTime;
     }
 
-    public void setTimingTime(Date timingTime) {
+    public void setTimingTime(String timingTime) {
         this.timingTime = timingTime;
     }
 
