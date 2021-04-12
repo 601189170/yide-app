@@ -235,9 +235,9 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
                 departmentIds.addAll(ids);
             }
             if (ids.isEmpty()){
-                tv_show_ids.setText("未選擇");
+                tv_show_ids.setText("未选择");
             }else {
-                tv_show_ids.setText(""+list2String(ids));
+                tv_show_ids.setText("已选择("+ids.size()+")");
             }
         }
     }
