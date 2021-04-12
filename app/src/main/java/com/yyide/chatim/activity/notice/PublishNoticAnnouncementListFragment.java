@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,7 +122,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
                         .setText(R.id.tv_notice_author, record.getProductionTarget())
                         .setText(R.id.tv_confirm_number, confirmNumber)
                         .setText(R.id.tv_send_obj, sendObj)
-                        .setText(R.id.tv_notice_content, record.getContent());
+                        .setText(R.id.tv_notice_content, Html.fromHtml(record.getContent()));
                 int id = record.getId();
                 baseViewHolder.getView(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
                     @Override

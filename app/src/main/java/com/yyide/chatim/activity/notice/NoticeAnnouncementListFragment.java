@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,7 +99,7 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
                         .setText(R.id.tv_notice, o.getNoticeTitle())
                         .setText(R.id.tv_notice_time, o.getNoticeTime())
                         .setText(R.id.tv_notice_author, o.getNoticeAuthor())
-                        .setText(R.id.tv_notice_content, o.getNoticeContent());
+                        .setText(R.id.tv_notice_content, Html.fromHtml(o.getNoticeContent()));
                 if ("1".equals(o.getStatus())){
                     TextView view1 = baseViewHolder.getView(R.id.tv_confirm);
                     view1.setText("已确认");
