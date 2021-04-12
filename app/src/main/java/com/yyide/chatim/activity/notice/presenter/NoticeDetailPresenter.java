@@ -11,24 +11,43 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
         attachView(view);
     }
 
-    public void noticeDetail(int id){
+    public void noticeDetail(int id,int type){
         mvpView.showLoading();
-        addSubscription(dingApiStores.getMyNoticeDetails(id), new ApiCallback<NoticeDetailRsp>() {
-            @Override
-            public void onSuccess(NoticeDetailRsp model) {
-                mvpView.noticeDetail(model);
-            }
+        if (type == 1){
+            addSubscription(dingApiStores.getMyNoticeDetails(id), new ApiCallback<NoticeDetailRsp>() {
+                @Override
+                public void onSuccess(NoticeDetailRsp model) {
+                    mvpView.noticeDetail(model);
+                }
 
-            @Override
-            public void onFailure(String msg) {
-                mvpView.noticeDetailFail(msg);
-            }
+                @Override
+                public void onFailure(String msg) {
+                    mvpView.noticeDetailFail(msg);
+                }
 
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
+                @Override
+                public void onFinish() {
+                    mvpView.hideLoading();
+                }
+            });
+        }else {
+            addSubscription(dingApiStores.getMyReleaseNotice(id), new ApiCallback<NoticeDetailRsp>() {
+                @Override
+                public void onSuccess(NoticeDetailRsp model) {
+                    mvpView.noticeDetail(model);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    mvpView.noticeDetailFail(msg);
+                }
+
+                @Override
+                public void onFinish() {
+                    mvpView.hideLoading();
+                }
+            });
+        }
     }
 
     public void updateMyNoticeDetails(int id){

@@ -45,6 +45,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     private int TYPE_STATISTICAL = 3;//通知统计
 
     private int id;
+    private int type;
     private String status;
 
     private long signId;
@@ -61,7 +62,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         super.onCreate(savedInstanceState);
         title.setText(R.string.notice_confirm_detail_title);
         tv_notice_content.setMovementMethod(ScrollingMovementMethod.getInstance());
-        int type = getIntent().getIntExtra("type", 0);
+        type = getIntent().getIntExtra("type", 0);
         id = getIntent().getIntExtra("id", 0);
         status = getIntent().getStringExtra("status");
         Log.e(TAG, "onCreate: type:" + type + ",id:" + id + ",status:" + status);
@@ -96,7 +97,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 //        tv_notice_author.setText();
 //        tv_notice_time.setText();
 //        tv_notice_content.setText();
-        mvpPresenter.noticeDetail(id);
+        mvpPresenter.noticeDetail(id,type);
     }
 
     @OnClick(R.id.back_layout)
