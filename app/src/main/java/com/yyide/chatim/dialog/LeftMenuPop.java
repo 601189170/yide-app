@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -195,8 +196,10 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 context.startActivity(new Intent(context, PowerActivity.class));
                 break;
             case R.id.layout7://清理缓存
+                ToastUtils.showShort("缓存已清理");
                 break;
             case R.id.layout8://版本更新
+                ToastUtils.showShort("已是最新版本");
                 break;
             case R.id.exit://退出登录
                 SPUtils.getInstance().clear();

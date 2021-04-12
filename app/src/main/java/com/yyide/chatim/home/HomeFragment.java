@@ -23,6 +23,7 @@ import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.StudentHonorListActivity;
+import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
@@ -80,7 +81,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @BindView(R.id.layout_message)
     FrameLayout layoutMessage;
     private View mBaseView;
-    private long firstTime = 0;
 
     @Nullable
     @Override
@@ -146,13 +146,14 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
-                LeftMenuPop leftMenuPop = new LeftMenuPop(mActivity);
+                new LeftMenuPop(mActivity);
                 break;
             case R.id.scan:
                 startActivity(new Intent(getActivity(), ScanActivity.class));
                 break;
             case R.id.student_honor_content:
-                startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
+                //startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
+                startActivity(new Intent(getActivity(), WebViewActivity.class));
                 break;
             case R.id.layout_message:
                 startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
@@ -184,19 +185,19 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     void setFragment() {
         FragmentManager childFragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
-        //课表
+        //班级课表
         fragmentTransaction.add(R.id.table_content, new TableFragment());
         //通知
         fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
-        //考勤情况
+        //班级考勤情况
         fragmentTransaction.add(R.id.kq_content, new AttenceFragment());
-        //相册轮播
+        //班级相册轮播
         fragmentTransaction.add(R.id.banner_content, new BannerFragment());
-        //作业
+        //班级作业
         fragmentTransaction.add(R.id.work_content, new WorkFragment());
         //班级荣誉
         fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
-        //学生荣誉
+        //班级学生荣誉
         fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
         fragmentTransaction.commit();
     }
@@ -211,8 +212,20 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 if (rsp.data.get(i).isCurrentUser) {//保存切换身份信息
                     dataBean = rsp.data.get(i);
                     SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(dataBean));
-                    if(dataBean != null && dataBean.form != null && dataBean.form.size() > 0){//保存班级信息
-                        SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(dataBean.form.get(0)));
+                    if (dataBean != null && dataBean.form != null && dataBean.form.size() > 0) {//保存班级信息
+                        if (SpData.getClassInfo() != null) {//处理切换班级
+                            GetUserSchoolRsp.DataBean.FormBean classBean = null;
+                            for (GetUserSchoolRsp.DataBean.FormBean item : dataBean.form) {
+                                if (item.classesId.equals(SpData.getClassInfo().classesId)) {
+                                    classBean = item;
+                                }
+                            }
+                            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classBean == null ? dataBean.form.get(0) : classBean));
+                        } else {
+                            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(dataBean.form.get(0)));
+                        }
+                    } else {//处理切换后没有班级的情况
+                        SPUtils.getInstance().put(SpData.CLASS_INFO, "");
                     }
                 }
             }
@@ -255,4 +268,5 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             initVerticalTextview(rsp.getData());
         }
     }
+
 }

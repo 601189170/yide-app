@@ -21,11 +21,13 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.presenter.AppAddPresenter;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.AppAddView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
@@ -39,6 +41,8 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
     RecyclerView recyclerview;
     private int pageSize = 20;
     private int pageNum = 1;
+    private AppAddRsp.DataBean.RecordsBean recordsBean;
+    private int positionIndex;
 
     private BaseQuickAdapter<AppAddRsp.DataBean.RecordsBean, BaseViewHolder> baseQuickAdapter;
 
@@ -52,7 +56,7 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
         super.onCreate(savedInstanceState);
         title.setText("添加");
         initView();
-        mvpPresenter.getAppAddList(20, 1);
+        mvpPresenter.getAppAddList(pageSize, pageNum);
     }
 
     @Override
@@ -73,7 +77,11 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
                 holder.setText(R.id.tv_name, item.getName());
                 if (item.getIsAdd()) {
                     tv_add.setClickable(false);
+                    tv_add.setText("已添加");
                     tv_add.setBackgroundResource(R.drawable.app_add_bg);
+                    tv_add.setCompoundDrawablePadding(0);
+                    tv_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                    tv_add.setTextColor(getResources().getColor(R.color.text_999999));
                 } else {
                     tv_add.setClickable(true);
                     tv_add.setText("添加");
@@ -81,7 +89,11 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
                     tv_add.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.icon_app_add), null, null, null);
                     tv_add.setTextColor(getResources().getColor(R.color.colorPrimary));
                     tv_add.setBackgroundResource(R.drawable.app_add_bg_blue);
-                    tv_add.setOnClickListener(v -> mvpPresenter.addApp(item.getId()));
+                    tv_add.setOnClickListener(v -> {
+                        recordsBean = item;
+                        positionIndex = holder.getAdapterPosition();
+                        mvpPresenter.addApp(item.getId());
+                    });
                 }
             }
         };
@@ -117,6 +129,14 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
     @Override
     public void addAppSuccess(ResultBean model) {
         ToastUtils.showShort(model.getMsg());
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            if (recordsBean != null) {
+                recordsBean.setIsAdd(true);
+//                baseQuickAdapter.notifyItemChanged(positionIndex, recordsBean);
+                baseQuickAdapter.notifyDataSetChanged();
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP_MANAGER, ""));
+            }
+        }
     }
 
     @Override

@@ -107,7 +107,7 @@ public class AppAddRsp {
             private Integer sort;
             private String img;
             private String path;
-            private Boolean isAdd;
+            private Boolean isAdd;//true 已添加  false 未添加
 
             public Integer getId() {
                 return id;

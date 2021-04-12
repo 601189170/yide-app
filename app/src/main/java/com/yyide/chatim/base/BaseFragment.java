@@ -15,6 +15,8 @@ import com.yyide.chatim.utils.LoadingTools;
 
 import androidx.fragment.app.Fragment;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Subscription;
@@ -40,7 +42,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        EventBus.getDefault().unregister(this);
         onUnsubscribe();
     }
 

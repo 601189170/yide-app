@@ -100,7 +100,31 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
             et_input_after_class.setText(dataBean.afterClass);
             et_tool.setText(dataBean.teachTool);
             if (dataBean.lessonsSubEntityList != null && dataBean.lessonsSubEntityList.size() > 0) {
-                et_input_homework1.setText(dataBean.lessonsSubEntityList.get(0));
+                for (int i = 0; i < dataBean.lessonsSubEntityList.size(); i++) {
+                    switch (i) {
+                        case 0:
+                            et_input_homework1.setText(dataBean.lessonsSubEntityList.get(i));
+                            break;
+                        case 1:
+                            et_input_homework2.setText(dataBean.lessonsSubEntityList.get(i));
+                            cl_homework2.setVisibility(View.VISIBLE);
+                            break;
+                        case 2:
+                            et_input_homework3.setText(dataBean.lessonsSubEntityList.get(i));
+                            cl_homework3.setVisibility(View.VISIBLE);
+                            break;
+                        case 3:
+                            et_input_homework4.setText(dataBean.lessonsSubEntityList.get(i));
+                            cl_homework4.setVisibility(View.VISIBLE);
+                            break;
+                        case 4:
+                            et_input_homework5.setText(dataBean.lessonsSubEntityList.get(i));
+                            cl_homework5.setVisibility(View.VISIBLE);
+                            cl_add.setVisibility(View.GONE);
+                            break;
+                    }
+
+                }
             }
         }
     }

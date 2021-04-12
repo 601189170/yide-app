@@ -5,7 +5,9 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.net.ApiCallback;
+import com.yyide.chatim.view.AppManagerView;
 import com.yyide.chatim.view.AppView;
 
 import java.util.HashMap;
@@ -13,8 +15,8 @@ import java.util.Map;
 
 import okhttp3.RequestBody;
 
-public class AppMannagerPresenter extends BasePresenter<AppView> {
-    public AppMannagerPresenter(AppView view) {
+public class AppMannagerPresenter extends BasePresenter<AppManagerView> {
+    public AppMannagerPresenter(AppManagerView view) {
         attachView(view);
     }
 
@@ -39,22 +41,17 @@ public class AppMannagerPresenter extends BasePresenter<AppView> {
         });
     }
 
-    public void getAppList() {
-//        {"size": 10,"current": 1}
-        Map<String, Object> map = new HashMap<>();
-        map.put("size", 100);
-        map.put("current", 1);
-        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+    public void deleteApp(int id) {
         mvpView.showLoading();
-        addSubscription(dingApiStores.getAppList(body), new ApiCallback<AppItemBean>() {
+        addSubscription(dingApiStores.deleteApp(id), new ApiCallback<ResultBean>() {
             @Override
-            public void onSuccess(AppItemBean model) {
-                mvpView.getAppListSuccess(model);
+            public void onSuccess(ResultBean model) {
+                mvpView.deleteSuccess(model);
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getAppListFail(msg);
+                mvpView.deleteFail(msg);
             }
 
             @Override

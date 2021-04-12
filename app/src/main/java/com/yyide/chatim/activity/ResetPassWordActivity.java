@@ -56,7 +56,7 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
         } else {
             title.setText("修改密码");
         }
-        time = new TimeCount(60000, 1000);
+        time = new TimeCount(120000, 1000);
     }
 
     @Override
@@ -74,8 +74,6 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
             ToastUtils.showShort("请输入验证码");
         } else if (TextUtils.isEmpty(newPwd)) {
             ToastUtils.showShort("请输入新密码");
-        } else if (newPwd.length() < 6) {
-            ToastUtils.showShort("请输入6位数以上的密码");
         } else {
             mvpPresenter.updatePwd(mobile, sms, newPwd);
         }

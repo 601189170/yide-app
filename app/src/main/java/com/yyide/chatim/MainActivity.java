@@ -37,6 +37,7 @@ import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
 import com.yyide.chatim.jiguang.TagAliasOperatorHelper;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.ScheduleRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
@@ -56,6 +57,7 @@ import java.io.IOException;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -133,7 +135,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 //        new Handler().postDelayed(new Runnable() {
 //                @Override
 //            public void run() {
-    //                mvpPresenter.Login("13659896596","896596");
+        //                mvpPresenter.Login("13659896596","896596");
 //            }
 //        },5000);
 
@@ -154,41 +156,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 //        getUserSchool();
     }
 
-    void RegistJiGuang(){
-        if(SpData.getIdentityInfo() != null){
+    void RegistJiGuang() {
+        if (SpData.getIdentityInfo() != null) {
             int userId = SpData.getIdentityInfo().userId;
             String rid = JPushInterface.getRegistrationID(getApplicationContext());
-            int alias = userId;
             String equipmentType = "1";
-            mvpPresenter.addUserEquipmentInfo(userId,rid, String.valueOf(alias),equipmentType);
+            mvpPresenter.addUserEquipmentInfo(rid, userId + "", equipmentType);
         }
     }
-
-    // 这是来自 JPush Example 的设置别名的 Activity 里的代码，更详细的示例请参考 JPush Example。一般 App 的设置的调用入口，在任何方便的地方调用都可以。
-//    private void handleAction(int sequence, TagAliasOperatorHelper.TagAliasBean tagAliasBean) {
-//        if(tagAliasBean == null){
-//            Log.w(TAG,"tagAliasBean was null");
-//            return;
-//        }
-//        if(tagAliasBean.isAliasAction){
-//            switch (tagAliasBean.action){
-//                case ACTION_GET:
-//                    JPushInterface.getAlias(getApplicationContext(),sequence);
-//                    break;
-//                case ACTION_DELETE:
-//                    JPushInterface.deleteAlias(getApplicationContext(),sequence);
-//                    break;
-//                case ACTION_SET:
-//                    JPushInterface.setAlias(getApplicationContext(),sequence,tagAliasBean.alias);
-//                    break;
-//                default:
-//                    Log.w(TAG,"unsupport alias action type");
-//                    return;
-//            }
-//        }else {
-//            //tag operation
-//        }
-//    }
 
     @Override
     protected MainPresenter createPresenter() {
@@ -208,12 +183,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-                if (secondTime - firstTime < 2000) {
-                    ActivityUtils.finishAllActivities();
-                } else {
-                    Toast.makeText(getApplicationContext(), "再按一次返回键退出", Toast.LENGTH_SHORT).show();
-                    firstTime = System.currentTimeMillis();
-                }
+            if (secondTime - firstTime < 2000) {
+                ActivityUtils.finishAllActivities();
+            } else {
+                Toast.makeText(getApplicationContext(), "再按一次返回键退出", Toast.LENGTH_SHORT).show();
+                firstTime = System.currentTimeMillis();
+            }
             return true;
         }
 
@@ -228,7 +203,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             startActivity(new Intent(this, MainActivity.class));
             Log.e("TAG", "messageEvent: " + IdType);
             setTab(0);
-        } else if(BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())){
+        } else if (BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())) {
             setTab(3);
         }
     }
@@ -323,30 +298,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         Log.e("TAG", "UserLogoutDataFail==》: " + JSON.toJSONString(msg));
     }
 
-//    @Override
-//    public void getUserSchool(GetUserSchoolRsp rsp) {
-//        Log.e("TAG", "GetUserSchoolRsp==》: " + JSON.toJSONString(rsp));
-//        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-//        if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {
-//            SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + "");
-//
-//
-////            handleData(rsp.data.get(0).userId,SpData.UserSig());
-//        }
-//
-//
-//    }
-
-    private void handleData(int userId,String UserSig) {
-        if (mUserInfo != null && mUserInfo.isAutoLogin()) {
-//            login();
-//            initIm(userId,UserSig);
-            Log.e(TAG, "handleData: Im已经激活，无需激活" );
-        } else {
-            initIm(userId,UserSig);
-        }
-    }
-
     @Override
     public void getUserSchoolDataFail(String rsp) {
         Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
@@ -373,7 +324,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    public void addUserEquipmentInfo(addUserEquipmentInfoRsp rsp) {
+    public void addUserEquipmentInfo(ResultBean rsp) {
         Log.e("TAG", "addUserEquipmentInfo==》: " + JSON.toJSONString(rsp));
     }
 
@@ -518,11 +469,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Override
     protected void onDestroy() {
-
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
-
     }
 
     @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout})
@@ -541,28 +490,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 setTab(3);
                 break;
         }
-    }
-    void initIm(int userid,String userSig) {
-        TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
-            @Override
-            public void onError(String module, final int code, final String desc) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
-                    }
-                });
-                DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
-            }
-
-            @Override
-            public void onSuccess(Object data) {
-                UserInfo.getInstance().setAutoLogin(true);
-                UserInfo.getInstance().setUserSig(userSig);
-                UserInfo.getInstance().setUserId(String.valueOf(userid));
-
-                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功" );
-            }
-        });
     }
 
 }

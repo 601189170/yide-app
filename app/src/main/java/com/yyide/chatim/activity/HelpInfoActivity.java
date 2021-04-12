@@ -2,6 +2,7 @@ package com.yyide.chatim.activity;
 
 
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,7 +38,7 @@ public class HelpInfoActivity extends BaseActivity {
         HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) getIntent().getSerializableExtra("itemBean");
         if (itemBean != null) {
             tv_helpTitle.setText(itemBean.getName());
-            tc_content.setText(itemBean.getMessage());
+            tc_content.setText(Html.fromHtml(itemBean.getMessage()));
         }
     }
 

@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.TableAdapter;
@@ -44,7 +45,7 @@ import butterknife.OnClick;
 import okhttp3.OkHttpClient;
 
 
-public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> implements ClassTableView {
+public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> implements ClassTableView, SwichTableClassPop.SelectClasses {
 
     @BindView(R.id.grid)
     GridView grid;
@@ -126,7 +127,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 mvpPresenter.selectListBySchoolAll();
             }
         }
-        new SwichTableClassPop(getActivity());
     }
 
     @Override
@@ -215,17 +215,30 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     }
 
+    private SwichTableClassPop swichTableClassPop;
+
     @Override
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            Log.d("selectTableClassListSuccess", JSON.toJSONString(model));
+            if (model.getData() != null && model.getData().size() > 0) {
+                if (swichTableClassPop == null) {
+                    swichTableClassPop = new SwichTableClassPop(getActivity(), model.getData());
+                }
+                swichTableClassPop.setSelectClasses(this);
+            } else {
+                ToastUtils.showShort("暂无班级");
+            }
         }
     }
 
     @Override
     public void selectTableClassListFail(String msg) {
         Log.d("selectTableClassListSuccess", msg);
-
     }
 
+    @Override
+    public void OnSelectClassesListener(int classesId, String classesName) {
+        className.setText(classesName);
+        mvpPresenter.listTimeDataByApp(classesId + "");
+    }
 }

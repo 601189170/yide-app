@@ -96,7 +96,6 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
             } else {
                 announAdapter.notifyData(model.getData());
                 indexAdapter.setList(model.getData());
-
             }
         }
     }

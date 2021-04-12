@@ -19,26 +19,26 @@ android {
 
         manifestPlaceholders = [
 //              Master Secret    e2cfe288703428279f01ecb0
-                JPUSH_PKGNAME : "com.yyide.chatim",
-                JPUSH_APPKEY  : "143ab02bc474008f39f26f97", //极光开发平台上注册的包名对应的appkey.
-                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
-                //meizu_config_start
-                MEIZU_APPKEY  : "MZ-魅族的APPKEY",
-                MEIZU_APPID   : "MZ-魅族的APPID",
-                //meizu_config_end
-                //xiaomi_config_start
-                XIAOMI_APPID  : "MI-小米的APPID",
-                XIAOMI_APPKEY : "MI-小米的APPKEY",
-                //xiaomi_config_end
-                //oppo_config_start
-                OPPO_APPKEY   : "OP-oppo的APPKEY",
-                OPPO_APPID    : "OP-oppo的APPID",
-                OPPO_APPSECRET: "OP-oppo的APPSECRET",
-                //oppo_config_end
-                //vivo_config_start
-                VIVO_APPKEY   : "vivo的APPKEY",
-                VIVO_APPID    : "vivo的APPID",
-                //vivo_config_end
+JPUSH_PKGNAME : "com.yyide.chatim",
+JPUSH_APPKEY  : "143ab02bc474008f39f26f97", //极光开发平台上注册的包名对应的appkey.
+JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+//meizu_config_start
+MEIZU_APPKEY  : "MZ-魅族的APPKEY",
+MEIZU_APPID   : "MZ-魅族的APPID",
+//meizu_config_end
+//xiaomi_config_start
+XIAOMI_APPID  : "MI-小米的APPID",
+XIAOMI_APPKEY : "MI-小米的APPKEY",
+//xiaomi_config_end
+//oppo_config_start
+OPPO_APPKEY   : "OP-oppo的APPKEY",
+OPPO_APPID    : "OP-oppo的APPID",
+OPPO_APPSECRET: "OP-oppo的APPSECRET",
+//oppo_config_end
+//vivo_config_start
+VIVO_APPKEY   : "vivo的APPKEY",
+VIVO_APPID    : "vivo的APPID",
+//vivo_config_end
 
         ]
     }
@@ -101,6 +101,9 @@ dependencies {
 //    implementation 'com.tencent.imsdk:tuikit-live:5.1.2'
     implementation 'com.tencent.imsdk:tuikit:5.1.2'
 
+    //——TimePickerView 时间选择器，支持年月日时分，年月日，年月，时分等格式。
+    //——OptionsPickerView 选项选择器，支持一，二，三级选项选择，并且可以设置是否联动
+    implementation 'com.contrarywind:wheelview:4.1.0'
     implementation 'com.alibaba:fastjson:1.1.70.android'
     implementation 'com.alibaba:fastjson:1.2.54'
     implementation 'com.jakewharton:butterknife:8.8.1'

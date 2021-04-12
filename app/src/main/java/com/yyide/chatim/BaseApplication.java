@@ -36,8 +36,6 @@ public class BaseApplication extends Application {
     private final String licenceUrl = "";
     private final String licenseKey = "";
 
-
-    OkHttpClient mOkHttpClient = new OkHttpClient();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -71,12 +69,11 @@ public class BaseApplication extends Application {
          */
         TUIKit.init(this, GenerateTestUserSig.SDKAPPID, new ConfigHelper().getConfigs());
 
-
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
-
-
     }
+
+
 
     public static boolean isNetworkAvailable(Context context) {
         if(context !=null){

@@ -68,7 +68,8 @@
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".activity.AppAddActivity"></activity>
+        <activity android:name=".activity.WebViewActivity"></activity>
+        <activity android:name=".activity.AppAddActivity" />
         <activity
             android:name=".activity.PreparesLessonActivity"
             android:screenOrientation="portrait"

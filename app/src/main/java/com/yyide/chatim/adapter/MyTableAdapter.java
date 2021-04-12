@@ -57,7 +57,11 @@ public class MyTableAdapter extends BaseAdapter {
         SelectSchByTeaidRsp.DataBean item = getItem(position);
         tool.setText("教具：" + (TextUtils.isEmpty(item.teachTool) ? "" : item.teachTool));
         if (item.lessonsSubEntityList != null && item.lessonsSubEntityList.size() > 0) {
-            homework.setText("作业：" + item.lessonsSubEntityList.get(0));
+            StringBuffer lessons = new StringBuffer();
+            for (int i = 0; i < item.lessonsSubEntityList.size(); i++) {
+                lessons.append(item.lessonsSubEntityList.get(i) + "\n");
+            }
+            homework.setText(lessons.toString());
         }
         //开始时间
         long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
@@ -67,7 +71,7 @@ public class MyTableAdapter extends BaseAdapter {
         String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
         int weekDay = c.get(Calendar.DAY_OF_WEEK);
         long mMillisecond = DateUtils.getWhenPoint(minute);
-        if(item.weekTime > (weekDay - 1)){//课前
+        if (item.weekTime > (weekDay - 1)) {//课前
             desc.setText(item.beforeClass);
             dateS.setText("课前");
         } else {
@@ -78,6 +82,7 @@ public class MyTableAdapter extends BaseAdapter {
                 desc.setText(item.beforeClass);
                 dateS.setText("课前");
             } else {//正在上课
+                desc.setText(item.beforeClass);
                 dateS.setText("正在上课");
             }
         }

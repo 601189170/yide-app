@@ -3,6 +3,7 @@ package com.yyide.chatim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -73,7 +74,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
             protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpItemRep.Records.HelpItemBean o) {
                 baseViewHolder
                         .setText(R.id.title, o.getName())
-                        .setText(R.id.info, o.getMessage());
+                        .setText(R.id.info, Html.fromHtml(o.getMessage()));
             }
         };
 

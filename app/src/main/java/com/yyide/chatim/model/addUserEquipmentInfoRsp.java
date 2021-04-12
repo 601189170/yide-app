@@ -1,7 +1,5 @@
 package com.yyide.chatim.model;
 
-import java.util.List;
-
 public class addUserEquipmentInfoRsp {
 
 

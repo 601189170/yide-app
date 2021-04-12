@@ -7,6 +7,7 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ListScheduleRsp;
 import com.yyide.chatim.model.LoginRsp;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
@@ -43,7 +44,7 @@ public interface MainView extends BaseView {
 
     void listAllScheduleByTeacherIdDataFail(String rsp);
 
-    void addUserEquipmentInfo(addUserEquipmentInfoRsp rsp);
+    void addUserEquipmentInfo(ResultBean rsp);
 
     void addUserEquipmentInfoFail(String rsp);
 

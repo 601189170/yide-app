@@ -9,24 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.SPUtils;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.contrarywind.adapter.WheelAdapter;
+import com.contrarywind.view.WheelView;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.SwichClassAdapter;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.widget.WheelView;
+import com.yyide.chatim.model.SelectTableClassesRsp;
+import com.yyide.chatim.widget.ArrayWheelAdapter;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,40 +31,59 @@ public class SwichTableClassPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
+    private List<SelectTableClassesRsp.DataBean> dataBeansList;
+    private SelectClasses mSelectClasses;
 
-    public SwichTableClassPop(Activity context) {
+    public void setSelectClasses(SelectClasses selectClasses) {
+        this.mSelectClasses = selectClasses;
+    }
+
+    public interface SelectClasses {
+        void OnSelectClassesListener(int id, String classesName);
+    }
+
+    public SwichTableClassPop(Activity context, List<SelectTableClassesRsp.DataBean> dataBeansList) {
         this.context = context;
+        this.dataBeansList = dataBeansList;
         init();
     }
 
     private void init() {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bttom_table_class_pop, null);
-        //院系
-//        WheelView departments = mView.findViewById(R.id.departments);
-//        //班级
-//        WheelView tableClass = mView.findViewById(R.id.tableClass);
-        TextView cancel = mView.findViewById(R.id.cancel);
-        cancel.setOnClickListener(v -> {
+        TextView confirm = mView.findViewById(R.id.confirm);
+        ConstraintLayout bg = mView.findViewById(R.id.bg);
+        WheelView wheelView = mView.findViewById(R.id.departments);
+        WheelView wheelViewClasses = mView.findViewById(R.id.tableClass);
+
+        confirm.setOnClickListener(v -> {
+            String item = (String) wheelViewClasses.getAdapter().getItem(wheelViewClasses.getCurrentItem());
+            //getItemData();
+            if(mSelectClasses != null){
+                mSelectClasses.OnSelectClassesListener(0, item);
+            }
+        });
+        bg.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }
         });
-        List<String> list1 = new ArrayList<>();
-        list1.add("院系1");
-        list1.add("院系2");
-        list1.add("院系3");
-//        departments.setItems(list1);
-//        departments.setOnWheelViewListener(new WheelView.OnWheelViewListener(){
-//            @Override
-//            public void onSelected(int selectedIndex, String item) {
-//                super.onSelected(selectedIndex, item);
-//                List<String> list = new ArrayList<>();
-//                list1.add("班级" + selectedIndex);
-//                list1.add("班级" + selectedIndex);
-//                list1.add("班级" + selectedIndex);
-//                tableClass.setItems(list);
-//            }
-//        });
+
+        wheelView.setCyclic(false);
+        wheelViewClasses.setCyclic(false);
+        wheelViewClasses.setCurrentItem(-1);
+        wheelView.setAdapter(new ArrayWheelAdapter(dataBeansList));
+        wheelView.setCurrentItem(-1);
+        wheelView.setOnItemSelectedListener(index -> {
+            if (dataBeansList != null && dataBeansList.size() > 0 && dataBeansList.get(index) != null) {
+                wheelViewClasses.setAdapter(new ArrayWheelAdapter(dataBeansList.get(index).getList()));
+            }
+        });
+        if (dataBeansList != null && dataBeansList.size() > 0 && dataBeansList.get(0) != null) {
+            wheelViewClasses.setAdapter((WheelAdapter) new ArrayWheelAdapter(dataBeansList.get(0).getList()));
+        }
+        wheelViewClasses.setOnItemSelectedListener(index -> {
+            SelectTableClassesRsp.DataBean item = (SelectTableClassesRsp.DataBean) wheelViewClasses.getAdapter().getItem(index);
+        });
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
@@ -119,6 +131,13 @@ public class SwichTableClassPop extends PopupWindow {
             }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
+    }
+
+    private void getListOption(List<SelectTableClassesRsp.DataBean> dataBeans) {
+        if (dataBeans == null) return;
+        for (SelectTableClassesRsp.DataBean item : dataBeans) {
+
+        }
     }
 
 }

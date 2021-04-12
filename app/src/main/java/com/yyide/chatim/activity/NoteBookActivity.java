@@ -29,6 +29,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> implements NoteBookView {
+
+    @BindView(R.id.edit)
+    TextView edit;
     @BindView(R.id.back)
     TextView back;
     @BindView(R.id.back_layout)

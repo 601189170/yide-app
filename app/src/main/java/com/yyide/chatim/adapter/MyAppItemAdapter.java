@@ -53,7 +53,7 @@ public class MyAppItemAdapter extends BaseAdapter {
             name.setText(dataBean.getName());
         }
         if ("editor".equals(getItem(position).getAppType())) {
-            item.setBackground(view.getContext().getResources().getDrawable(R.drawable.icon_bj));
+            item.setImageResource(R.drawable.icon_bj);
         }
         return view;
     }

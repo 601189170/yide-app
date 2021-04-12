@@ -6,6 +6,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.jiguang.TagAliasOperatorHelper;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -122,18 +123,16 @@ public class MainPresenter extends BasePresenter<MainView> {
         });
     }
 
-    public void addUserEquipmentInfo(int userId, String registrationId, String alias, String equipmentType) {
+    public void addUserEquipmentInfo(String registrationId, String alias, String equipmentType) {
         mvpView.showLoading();
         Map<String, String> map = new HashMap<String, String>();
-        map.put("userId", String.valueOf(userId));
         map.put("registrationId", registrationId);
         map.put("alias", alias);
         map.put("equipmentType", equipmentType);
-        String json = JSON.toJSONString(map, true);
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(json));
-        addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<addUserEquipmentInfoRsp>() {
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<ResultBean>() {
             @Override
-            public void onSuccess(addUserEquipmentInfoRsp model) {
+            public void onSuccess(ResultBean model) {
                 mvpView.addUserEquipmentInfo(model);
             }
 

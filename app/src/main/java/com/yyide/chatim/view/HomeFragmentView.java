@@ -1,7 +1,6 @@
 package com.yyide.chatim.view;
 
 
-
 import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;

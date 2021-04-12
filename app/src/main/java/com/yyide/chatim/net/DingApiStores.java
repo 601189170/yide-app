@@ -31,6 +31,7 @@ import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
 import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
+import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
@@ -78,8 +79,9 @@ public interface DingApiStores {
     Observable<mobileRsp> loginmobile(@Query("validateCode") String a, @Query("mobile") String b);
 
     //获取验证码
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-system/app/smsVerification")
-    Observable<SmsVerificationRsp> getCode(@Query("phone") String a);
+    Observable<SmsVerificationRsp> getCode(@Body RequestBody info);
 
     //登出
     @POST("/management/cloud-system/login/userLogout")
@@ -113,8 +115,8 @@ public interface DingApiStores {
 
     //添加用户设备基本信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @POST("/management/cloud-backstage/jpush/addUserEquipmentInfo")
-    Observable<addUserEquipmentInfoRsp> addUserEquipmentInfo(@Body RequestBody info);
+    @POST("/management/cloud-system/user/equipment/addUserEquipmentInfo")
+    Observable<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
 
     //查询组织架构列表信息
     @POST("/school/cloud-school/department/listByApp")
@@ -309,6 +311,10 @@ public interface DingApiStores {
     //删除应用
     @POST("/management/cloud-system/app/application/me/del/{id}")
     Observable<ResultBean> deleteApp(@Path("id") int id);
+
+    //获取班级作业信息
+    @GET("/timetable/cloud-timetable/schedule/selectSchByClassId?")
+    Observable<SelectSchByTeaidRsp> getClassesHomeworkInfo(@Query("classId") String id);
 
     //https://api.uat.edu.1d1j.net/school/cloud-school/app/teacher/selectAllList
     //通讯录搜索-所有

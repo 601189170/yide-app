@@ -77,7 +77,10 @@ public class SwichClassPop extends PopupWindow {
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
             adapter.notifyData(SpData.getIdentityInfo().form);
             for (int i = 0; i < SpData.getIdentityInfo().form.size(); i++) {
-                if (SpData.getClassInfo() != null && SpData.getIdentityInfo().form.get(i).classesId == SpData.getClassInfo().classesId) {
+                if (SpData.getClassInfo() != null
+                        && SpData.getIdentityInfo().form != null
+                        && SpData.getClassInfo().classesId != null
+                        && SpData.getIdentityInfo().form.get(i).classesId.equals(SpData.getClassInfo().classesId)) {
                     index = i;
                     break;
                 }
@@ -92,10 +95,10 @@ public class SwichClassPop extends PopupWindow {
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_CLASS_HOME, ""));
-//                ActivityUtils.finishAllActivities();
-//                Intent intent = new Intent(context, MainActivity.class);
-//                context.startActivity(intent);
+                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_CLASS_HOME, ""));
+                ActivityUtils.finishAllActivities();
+                Intent intent = new Intent(context, MainActivity.class);
+                context.startActivity(intent);
             }
         });
 

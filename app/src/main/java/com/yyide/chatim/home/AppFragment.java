@@ -22,12 +22,18 @@ import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.adapter.AppAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.leave.LeaveActivity;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.AppPresenter;
 import com.yyide.chatim.view.AppView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +70,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
         adapter = new MyAppItemAdapter();
         mygrid.setAdapter(adapter);
         mygrid.setOnItemClickListener((parent, view1, position, id) -> {
@@ -121,6 +128,14 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         mvpPresenter.getMyAppList();
         mvpPresenter.getAppList();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_APP_MANAGER.equals(messageEvent.getCode())) {
+            mvpPresenter.getMyAppList();
+        }
+    }
+
 
     @Override
     protected AppPresenter createPresenter() {

@@ -112,7 +112,7 @@ public class LoginActivity extends BaseActivity {
         String password = SPUtils.getInstance().getString(BaseConstant.PASSWORD);
         userEdit.setText(TextUtils.isEmpty(username) ? "" : username);
         passwordEdit.setText(TextUtils.isEmpty(password) ? "" : password);
-        time = new TimeCount(60000, 1000);
+        time = new TimeCount(120000, 1000);
         alphaAnimation();
     }
 
@@ -136,7 +136,6 @@ public class LoginActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.tv_login:
-
                 login();
                 break;
             case R.id.eye:
@@ -165,7 +164,6 @@ public class LoginActivity extends BaseActivity {
     private void isValidateCode() {
         if (!isPwd) {
             isPwd = true;
-            type.setText("账号密码登录");
             ll_pwd.startAnimation(alphaAniHide);
             //这个地方为什么要做动画的监听呢，因为隐藏和显示不一样，
             //必须在动画结束之后再隐藏你的控件，这样才不会显得很突兀
@@ -179,6 +177,7 @@ public class LoginActivity extends BaseActivity {
                 public void onAnimationEnd(Animation animation) {
                     ll_pwd.setVisibility(View.GONE);
                     passwordEdit.setText("");
+                    type.setText("账号密码登录");
                     ll_sms.startAnimation(alphaAniShow);
                     ll_sms.setVisibility(View.VISIBLE);
                 }
@@ -190,7 +189,6 @@ public class LoginActivity extends BaseActivity {
             });
         } else {
             isPwd = false;
-            type.setText("验证码登录");
             ll_sms.startAnimation(alphaAniHide);
             //这个地方为什么要做动画的监听呢，因为隐藏和显示不一样，
             //必须在动画结束之后再隐藏你的控件，这样才不会显得很突兀
@@ -203,6 +201,7 @@ public class LoginActivity extends BaseActivity {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     ll_sms.setVisibility(View.GONE);
+                    type.setText("验证码登录");
                     ll_pwd.startAnimation(alphaAniShow);
                     ll_pwd.setVisibility(View.VISIBLE);
                 }
