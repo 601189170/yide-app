@@ -309,4 +309,10 @@ public interface DingApiStores {
     //删除应用
     @POST("/management/cloud-system/app/application/me/del/{id}")
     Observable<ResultBean> deleteApp(@Path("id") int id);
+
+    //https://api.uat.edu.1d1j.net/school/cloud-school/app/teacher/selectAllList
+    //通讯录搜索-所有
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/school/cloud-school/app/teacher/selectAllList")
+    Observable<UserInfoRsp> selectAllList(@Body RequestBody requestBody);
 }

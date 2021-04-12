@@ -29,11 +29,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> implements NoteBookView {
-
-
-    @BindView(R.id.edit)
-    EditText edit;
-
     @BindView(R.id.back)
     TextView back;
     @BindView(R.id.back_layout)
@@ -50,8 +45,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     NoBookItemAdapter adapter2;
     @BindView(R.id.pName)
     TextView pName;
-    public String TAG = "tag";
-
+    public String TAG="tag";
     @Override
     public int getContentViewID() {
         return R.layout.activity_note_layout;
@@ -80,14 +74,14 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
 //                intent.putExtra("id",JSON.toJSONString(adapter.getItem(position).id));
 //                intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
 //                startActivity(intent);
-                setPostData(adapter.getItem(position).list, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name);
+                setPostData(adapter.getItem(position).list, String.valueOf(adapter.getItem(position).id),adapter.getItem(position).name);
 
             }
         });
         listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                setPostData(adapter2.getItem(position).list, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name);
+                setPostData(adapter2.getItem(position).list, String.valueOf(adapter2.getItem(position).id),adapter2.getItem(position).name);
 
 //                Intent intent=new Intent();
 //
@@ -100,19 +94,17 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         });
 //        mvpPresenter.selectListByApp();
     }
-
-    void setPostData(List<listByAppRsp.DataBean.ListBean.ZBListBean> list, String id, String name) {
-        Intent intent = new Intent();
+    void setPostData(List<listByAppRsp.DataBean.ListBean.ZBListBean> list,String id,String name){
+        Intent intent=new Intent();
         for (int i = 0; i < list.size(); i++) {
-            intent.putExtra(i + "", list.get(i));
+            intent.putExtra(i+"",list.get(i));
         }
-        intent.putExtra("id", id);
-        intent.putExtra("name", name);
-        intent.putExtra("size", list.size());
-        intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
+        intent.putExtra("id",id);
+        intent.putExtra("name",name);
+        intent.putExtra("size",list.size());
+        intent.setClass(NoteBookActivity.this,NoteByListActivity.class);
         startActivity(intent);
     }
-
     @Override
     protected NoteBookPresenter createPresenter() {
         return new NoteBookPresenter(this);
@@ -129,14 +121,19 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     }
 
 
-    @OnClick({R.id.back_layout, R.id.ll_search})
+    @OnClick({R.id.back_layout, R.id.title,R.id.ll_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_layout:
                 finish();
                 break;
+            case R.id.title:
+                finish();
+                break;
             case R.id.ll_search:
-                jupm(this, BookSearchActivity.class);
+                startActivity(new Intent(this,BookSearchActivity.class));
+                break;
+            default:
                 break;
         }
     }
@@ -150,16 +147,16 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     public void listByApp(listByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-            List<listByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
-            List<listByAppRsp.DataBean.ListBean> listBeans2 = new ArrayList<>();
-            if (rsp.data.size() > 0) {
+            List<listByAppRsp.DataBean.ListBean> listBeans1=new ArrayList<>();
+            List<listByAppRsp.DataBean.ListBean> listBeans2=new ArrayList<>();
+            if (rsp.data.size()>0){
                 pName.setText(rsp.data.get(0).parentName);
 
                 for (listByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
-                    if (listBean.type.equals("0")) {
+                    if (listBean.type.equals("0")){
                         listBeans1.add(listBean);
 //                        adapter.notifyData(listBean);
-                    } else {
+                    }else {
                         listBeans2.add(listBean);
 //                        adapter2.notifyData(listBean.list);
                     }
@@ -188,7 +185,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
 
     @Override
     public void selectListByAppRsp(selectListByAppRsp rsp) {
-        Log.e(TAG, "selectListByAppRsp: " + JSON.toJSONString(rsp));
+        Log.e(TAG, "selectListByAppRsp: "+ JSON.toJSONString(rsp) );
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.yyide.chatim.view;
 
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.view.View;
 
@@ -24,5 +25,14 @@ public class SpacesItemDecoration  extends RecyclerView.ItemDecoration {
         // Add top margin only for the first item to avoid double space between items
         if (parent.getChildPosition(view) == 0)
             outRect.top = space;
+    }
+
+    public static int px2dp(float dpValue) {
+        return (int) (0.5f + dpValue / Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    public static int dip2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }
