@@ -29,6 +29,7 @@ import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
 import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
+import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.addUserEquipmentInfoRsp;
 import com.yyide.chatim.model.getUserSigRsp;
@@ -286,4 +287,10 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/android/videoalbum/list")
     Observable<ClassesBannerRsp> getClassPhotoList(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/school/cloud-school/app/teacher/selectAllList
+    //通讯录搜索-所有
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/school/cloud-school/app/teacher/selectAllList")
+    Observable<UserInfoRsp> selectAllList(@Body RequestBody requestBody);
 }

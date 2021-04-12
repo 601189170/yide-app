@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.v2.V2TIMManager;
+import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.rtmp.TXLiveBase;
 
@@ -46,7 +47,7 @@ public class BaseApplication extends Application {
         Utils.init(this);
 //        MultiDex.install(this);
 
-
+        MMKV.initialize(this); //初始化mmkv
 
         /**
          * TUIKit的初始化函数

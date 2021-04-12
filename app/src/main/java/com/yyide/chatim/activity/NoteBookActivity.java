@@ -29,11 +29,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> implements NoteBookView {
-
-
-    @BindView(R.id.edit)
-    EditText edit;
-
     @BindView(R.id.back)
     TextView back;
     @BindView(R.id.back_layout)
@@ -126,7 +121,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     }
 
 
-    @OnClick({R.id.back_layout, R.id.title})
+    @OnClick({R.id.back_layout, R.id.title,R.id.ll_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_layout:
@@ -134,6 +129,11 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
                 break;
             case R.id.title:
                 finish();
+                break;
+            case R.id.ll_search:
+                startActivity(new Intent(this,BookSearchActivity.class));
+                break;
+            default:
                 break;
         }
     }
