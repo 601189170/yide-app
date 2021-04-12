@@ -28,10 +28,10 @@
 
     <ImageView
         android:id="@+id/btn_level"
-        android:layout_width="@dimen/dp_10"
-        android:layout_height="@dimen/dp_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_18"
-        android:src="@drawable/icon_right"
+        android:src="@drawable/icon_up"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_title"

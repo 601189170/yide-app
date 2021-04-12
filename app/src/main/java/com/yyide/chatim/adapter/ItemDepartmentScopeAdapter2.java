@@ -55,6 +55,7 @@ public class ItemDepartmentScopeAdapter2 extends RecyclerView.Adapter<ItemDepart
         holder.checkBox.setChecked(bean.isChecked());
         if (!bean.getList().isEmpty()){
             holder.btn_level.setVisibility(View.VISIBLE);
+            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
             holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             ItemDepartMentScopeAdapter3 adapter = new ItemDepartMentScopeAdapter3(context, bean.getList());
 //            holder.mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
@@ -62,8 +63,12 @@ public class ItemDepartmentScopeAdapter2 extends RecyclerView.Adapter<ItemDepart
         }
         holder.itemView.setOnClickListener(v -> {
             if (unfold) {
+                unfold = false;
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
                 holder.mRecyclerView.setVisibility(View.GONE);
             } else {
+                unfold = true;
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
                 holder.mRecyclerView.setVisibility(View.VISIBLE);
             }
 

@@ -2,6 +2,7 @@ package com.yyide.chatim.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,15 +56,21 @@ public class ItemStudentScopeAdapter2 extends RecyclerView.Adapter<ItemStudentSc
         holder.checkBox.setChecked(bean.isChecked());
         if (!bean.getClasses().isEmpty()){
             holder.btn_level.setVisibility(View.VISIBLE);
+            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
             holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             ItemStudentScopeAdapter3 adapter = new ItemStudentScopeAdapter3(context, bean.getClasses());
 //            holder.mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
             holder.mRecyclerView.setAdapter(adapter);
         }
         holder.itemView.setOnClickListener(v -> {
+            Log.e("TAG", "onBindViewHolder: "+unfold );
             if (unfold) {
+                unfold = false;
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
                 holder.mRecyclerView.setVisibility(View.GONE);
             } else {
+                unfold = true;
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
                 holder.mRecyclerView.setVisibility(View.VISIBLE);
             }
 

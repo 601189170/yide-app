@@ -2,6 +2,7 @@ package com.yyide.chatim.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public class ItemStudentScopeAdapter extends RecyclerView.Adapter<ItemStudentSco
         holder.checkBox.setChecked(bean.isChecked());
         if (!bean.getGrades().isEmpty()) {
             holder.btn_level.setVisibility(View.VISIBLE);
+            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
             holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             ItemStudentScopeAdapter2 adapter = new ItemStudentScopeAdapter2(context, bean.getGrades());
 //            holder.mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
@@ -62,9 +64,14 @@ public class ItemStudentScopeAdapter extends RecyclerView.Adapter<ItemStudentSco
         }
 
         holder.itemView.setOnClickListener(v -> {
+            Log.e("TAG", "onBindViewHolder: "+unfold );
             if (unfold) {
+                unfold = false;
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
                 holder.mRecyclerView.setVisibility(View.GONE);
             } else {
+                unfold = true;
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
                 holder.mRecyclerView.setVisibility(View.VISIBLE);
             }
 
@@ -78,7 +85,7 @@ public class ItemStudentScopeAdapter extends RecyclerView.Adapter<ItemStudentSco
                 gradesBean.setChecked(isChecked);
                 List<StudentScopeRsp.DataBean.ListBean.GradesBean.ClassesBean> classes = gradesBean.getClasses();
                 for (int i1 = 0; i1 < classes.size(); i1++) {
-                    classes.get(i).setChecked(isChecked);
+                    classes.get(i1).setChecked(isChecked);
                 }
             }
             new Handler().post(() -> notifyDataSetChanged());
