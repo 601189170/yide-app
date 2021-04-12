@@ -17,7 +17,7 @@ public class DepartmentScopeRsp {
      * code : 200
      * success : true
      * msg : data
-     * data : [{"id":430,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-22T08:21:49.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-22T08:21:49.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"深圳宝安西乡中学","parentId":427,"type":"1","headId":272,"headName":"范德萨","sort":0,"level":0,"list":[{"id":585,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:30.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:30.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"问问3地方","parentId":430,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":596,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:15.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发第三方13","parentId":585,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":597,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-29T13:42:01.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-29T13:42:01.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发发送到热1","parentId":596,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[]}]},{"id":1265,"delInd":"0","createdBy":"13267182222","createdDateTime":"2021-04-06T08:31:58.000+0000","updatedBy":null,"updatedDateTime":"2021-04-06T08:31:58.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"给大富大贵","parentId":585,"type":"0","headId":null,"headName":null,"sort":0,"level":1,"list":[]}]},{"id":534,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-17T12:56:41.000+0000","updatedBy":"636","updatedDateTime":"2021-03-18T01:14:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"宿管处","parentId":430,"type":"0","headId":null,"headName":null,"sort":0,"level":2,"list":[]},{"id":541,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T01:18:01.000+0000","updatedBy":"636","updatedDateTime":"2021-03-18T01:19:21.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"aa","parentId":430,"type":"0","headId":null,"headName":null,"sort":0,"level":2,"list":[{"id":1107,"delInd":"0","createdBy":"13267182222","createdDateTime":"2021-03-30T12:41:26.000+0000","updatedBy":null,"updatedDateTime":"2021-03-30T12:41:26.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"ahhh","parentId":541,"type":"1","headId":null,"headName":null,"sort":0,"level":3,"list":[]}]},{"id":542,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T01:19:29.000+0000","updatedBy":"636","updatedDateTime":"2021-03-18T01:19:36.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"aa","parentId":430,"type":"0","headId":null,"headName":null,"sort":0,"level":2,"list":[]}]}]
+     * data : [{"id":430,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-22T08:21:49.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-22T08:21:49.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"深圳宝安西乡中学","parentId":427,"type":"1","headId":272,"headName":"范德萨","sort":0,"level":0,"list":[{"id":585,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:30.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:30.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"问问3地方","parentId":430,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":596,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:15.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发第三方13","parentId":585,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":597,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-29T13:42:01.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-29T13:42:01.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发发送到热1","parentId":596,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[]}]}]}]}]
      */
 
     private int code;
@@ -77,7 +77,7 @@ public class DepartmentScopeRsp {
          * headName : 范德萨
          * sort : 0
          * level : 0
-         * list : [{"id":585,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:30.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:30.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"问问3地方","parentId":430,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":596,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:15.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发第三方13","parentId":585,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":597,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-29T13:42:01.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-29T13:42:01.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发发送到热1","parentId":596,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[]}]},{"id":1265,"delInd":"0","createdBy":"13267182222","createdDateTime":"2021-04-06T08:31:58.000+0000","updatedBy":null,"updatedDateTime":"2021-04-06T08:31:58.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"给大富大贵","parentId":585,"type":"0","headId":null,"headName":null,"sort":0,"level":1,"list":[]}]},{"id":534,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-17T12:56:41.000+0000","updatedBy":"636","updatedDateTime":"2021-03-18T01:14:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"宿管处","parentId":430,"type":"0","headId":null,"headName":null,"sort":0,"level":2,"list":[]},{"id":541,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T01:18:01.000+0000","updatedBy":"636","updatedDateTime":"2021-03-18T01:19:21.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"aa","parentId":430,"type":"0","headId":null,"headName":null,"sort":0,"level":2,"list":[{"id":1107,"delInd":"0","createdBy":"13267182222","createdDateTime":"2021-03-30T12:41:26.000+0000","updatedBy":null,"updatedDateTime":"2021-03-30T12:41:26.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"ahhh","parentId":541,"type":"1","headId":null,"headName":null,"sort":0,"level":3,"list":[]}]},{"id":542,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T01:19:29.000+0000","updatedBy":"636","updatedDateTime":"2021-03-18T01:19:36.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"aa","parentId":430,"type":"0","headId":null,"headName":null,"sort":0,"level":2,"list":[]}]
+         * list : [{"id":585,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:30.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:30.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"问问3地方","parentId":430,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":596,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:15.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发第三方13","parentId":585,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":597,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-29T13:42:01.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-29T13:42:01.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发发送到热1","parentId":596,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[]}]}]}]
          */
 
         private int id;
@@ -98,7 +98,7 @@ public class DepartmentScopeRsp {
         private String headName;
         private int sort;
         private int level;
-        public List<ListBeanXX> list;
+        private List<ListBeanXX> list;
         private boolean checked;
 
         public boolean isChecked() {
@@ -280,7 +280,7 @@ public class DepartmentScopeRsp {
              * headName : null
              * sort : 0
              * level : 0
-             * list : [{"id":596,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:15.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发第三方13","parentId":585,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":597,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-29T13:42:01.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-29T13:42:01.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发发送到热1","parentId":596,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[]}]},{"id":1265,"delInd":"0","createdBy":"13267182222","createdDateTime":"2021-04-06T08:31:58.000+0000","updatedBy":null,"updatedDateTime":"2021-04-06T08:31:58.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"给大富大贵","parentId":585,"type":"0","headId":null,"headName":null,"sort":0,"level":1,"list":[]}]
+             * list : [{"id":596,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-18T12:53:15.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-18T12:53:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发第三方13","parentId":585,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[{"id":597,"delInd":"0","createdBy":"636","createdDateTime":"2021-03-29T13:42:01.000+0000","updatedBy":"13267182222","updatedDateTime":"2021-03-29T13:42:01.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"schoolId":234,"name":"发发送到热1","parentId":596,"type":"0","headId":0,"headName":null,"sort":0,"level":0,"list":[]}]}]
              */
 
             private int id;
@@ -717,7 +717,6 @@ public class DepartmentScopeRsp {
                     public void setChecked(boolean checked) {
                         this.checked = checked;
                     }
-
                     public int getId() {
                         return id;
                     }
@@ -872,15 +871,5 @@ public class DepartmentScopeRsp {
                 }
             }
         }
-    }
-
-    @Override
-    public String toString() {
-        return "DepartmentScopeRsp{" +
-                "code=" + code +
-                ", success=" + success +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
     }
 }
