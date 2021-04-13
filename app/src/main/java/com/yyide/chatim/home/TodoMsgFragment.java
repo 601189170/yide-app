@@ -1,24 +1,37 @@
 package com.yyide.chatim.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.MessageAdapter;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.chat.ConversationFragment;
+import com.yyide.chatim.fragment.TodoMsgPageFragment;
 import com.yyide.chatim.model.AgentInformationRsp;
+import com.yyide.chatim.model.NoticeHomeRsp;
+import com.yyide.chatim.model.TodoRsp;
+import com.yyide.chatim.presenter.TodoFragmentPresenter;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.view.TodoFragmentView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,18 +45,16 @@ import butterknife.OnClick;
 
 
 public class TodoMsgFragment extends BaseFragment {
-
+    private static final String TAG = "TodoMsgFragment";
     @BindView(R.id.tab1)
     CheckedTextView tab1;
     @BindView(R.id.tab2)
     CheckedTextView tab2;
     @BindView(R.id.tab3)
     CheckedTextView tab3;
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
     private View mBaseView;
-    private BaseQuickAdapter adapter;
-
+    @BindView(R.id.content)
+    FrameLayout content;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -54,114 +65,7 @@ public class TodoMsgFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new BaseQuickAdapter<AgentInformationRsp, BaseViewHolder>(R.layout.message_item) {
-            @Override
-            protected void convert(@NotNull BaseViewHolder holder, AgentInformationRsp o) {
-                holder.setText(R.id.tv_leave, o.getContent())
-                        .setText(R.id.tv_leave_type, o.getDesc())
-                        .setText(R.id.tv_start_time, o.getStartTime())
-                        .setText(R.id.tv_leave_status, "审批状态：" + (o.getStatus() == 1 ? "待审批" : "已审批"))
-                        .setText(R.id.tv_date, o.getStartTime())
-                        .setText(R.id.tv_end_time, o.getEndTime());
-                TextView textView = holder.getView(R.id.tv_refused);
-                TextView textView2 = holder.getView(R.id.tv_agree);
-                if (o.getStatus() == 2) {
-                    textView.setVisibility(View.GONE);
-                    textView2.setVisibility(View.GONE);
-                } else {
-                    textView.setVisibility(View.VISIBLE);
-                    textView2.setVisibility(View.VISIBLE);
-                }
-                textView.setOnClickListener(v -> {//拒绝
-                    o.setStatus(1);
-                    o.setAgentStatus(1);
-                    list.remove(o);
-                    adapter.remove(o);
-                    notifyDataSetChanged();
-                });
-                textView2.setOnClickListener(v -> {//同意
-                    o.setStatus(2);
-                    o.setAgentStatus(2);
-                    adapter.notifyDataSetChanged();
-                });
-
-            }
-        };
-        recyclerview.setAdapter(adapter);
-        initData();
         setTab(0);
-    }
-
-    private List<AgentInformationRsp> list = new ArrayList<>();
-    private void initData() {
-        for (int i = 0; i < 9; i++) {
-            AgentInformationRsp item = new AgentInformationRsp();
-            switch (i) {
-                case 0:
-                    item.setTitle("请假");
-                    item.setContent("张宇的主监护人提交的请假需要你审批");
-                    item.setStatus(1);
-                    break;
-                case 1:
-                    item.setTitle("请假");
-                    item.setContent("刘星的主监护人提交的请假需要你审批");
-                    item.setStatus(1);
-                    break;
-                case 2:
-                    item.setTitle("请假");
-                    item.setContent("李沐的主监护人提交的请假需要你审批");
-                    item.setStatus(1);
-                    break;
-                case 3:
-                    item.setTitle("请假");
-                    item.setContent("刘德云的主监护人提交的请假需要你审批");
-                    item.setStatus(2);
-                    break;
-                case 4:
-                    item.setTitle("请假");
-                    item.setContent("张明宇的主监护人提交的请假需要你审批");
-                    item.setStatus(1);
-                    break;
-                case 5:
-                    item.setTitle("请假");
-                    item.setContent("王珂的主监护人提交的请假需要你审批");
-                    item.setStatus(2);
-                    break;
-                case 6:
-                    item.setTitle("请假");
-                    item.setContent("张檬的主监护人提交的请假需要你审批");
-                    item.setStatus(2);
-                    break;
-                case 7:
-                    item.setTitle("请假");
-                    item.setContent("刘博的主监护人提交的请假需要你审批");
-                    item.setStatus(1);
-                    break;
-                case 8:
-                    item.setTitle("请假");
-                    item.setContent("程昱的主监护人提交的请假需要你审批");
-                    item.setStatus(2);
-                    break;
-            }
-            item.setDesc("请假类型：事假");
-            item.setStartTime("开始时间：" + DateUtils.stampToDate(System.currentTimeMillis()));
-            item.setEndTime("结束时间：" + DateUtils.stampToDate(System.currentTimeMillis() + 1000 * 60 * 60 * 24));
-            list.add(item);
-        }
-        adapter.setList(list);
-    }
-
-    private List<AgentInformationRsp> initData(int status){
-        List<AgentInformationRsp> dataList = new ArrayList<>();
-        if(list != null){
-            for (AgentInformationRsp item: list){
-                if(status == item.getStatus()){
-                    dataList.add(item);
-                }
-            }
-        }
-        return dataList;
     }
 
     @OnClick({R.id.tab1, R.id.tab2, R.id.tab3})
@@ -169,18 +73,12 @@ public class TodoMsgFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tab1:
                 setTab(0);
-                //设置模拟数据
-                adapter.setList(list);
                 break;
             case R.id.tab2:
                 setTab(1);
-                //设置模拟数据
-                adapter.setList(initData(1));
                 break;
             case R.id.tab3:
                 setTab(2);
-                //设置模拟数据
-                adapter.setList(initData(2));
                 break;
         }
     }
@@ -189,18 +87,42 @@ public class TodoMsgFragment extends BaseFragment {
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
+        Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
+        Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
+
+        if (fg1 != null) ft.hide(fg1);
+        if (fg2 != null) ft.hide(fg2);
+        if (fg3 != null) ft.hide(fg3);
+
         switch (position) {
             case 0:
+                if (fg1 == null) {
+                    fg1 = TodoMsgPageFragment.newInstance("3");
+                    ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
+                } else
+                    ft.show(fg1);
                 tab1.setChecked(true);
                 break;
             case 1:
+                if (fg2 == null) {
+                    fg2 = TodoMsgPageFragment.newInstance("0");
+                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
+                } else
+                    ft.show(fg2);
                 tab2.setChecked(true);
                 break;
             case 2:
+                if (fg3 == null) {
+                    fg3 = TodoMsgPageFragment.newInstance("1");
+                    ft.add(R.id.content, fg3, String.valueOf(tab3.getId()));
+                } else
+                    ft.show(fg3);
                 tab3.setChecked(true);
                 break;
         }
-
+        ft.commitAllowingStateLoss();
     }
-
 }

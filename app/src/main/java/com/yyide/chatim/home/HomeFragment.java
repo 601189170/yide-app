@@ -51,7 +51,7 @@ import butterknife.OnClick;
 
 
 public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> implements HomeFragmentView {
-
+    private static final String TAG = "HomeFragment";
     @BindView(R.id.user_img)
     FrameLayout userImg;
     @BindView(R.id.scan)
@@ -81,7 +81,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @BindView(R.id.layout_message)
     FrameLayout layoutMessage;
     private View mBaseView;
-
+    ArrayList<String> list = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -95,8 +95,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 //        showProgressDialog2();
         setFragment();
         mvpPresenter.getUserSchool();
-        //mvpPresenter.getHomeNotice();
-        initVerticalTextview(null);
+        mvpPresenter.getHomeNotice();
+        //initVerticalTextview(null);
     }
 
     @Override
@@ -110,28 +110,34 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     void initVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
-        ArrayList<String> list = new ArrayList<>();
-//        if(noticeHomeRsps != null){
-//            for (NoticeHomeRsp.DataBean item : noticeHomeRsps){
-//                list.add(item.getContent());
-//            }
-//        }
-        list.add("罗欣的主监护人提交的请假需要你审批");
-        list.add("李克用的主监护人提交的请假需要你审批");
-        list.add("王保华的主监护人提交的请假需要你审批");
-        list.add("秦鑫的主监护人提交的请假需要你审批");
-        list.add("张玉明的主监护人提交的请假需要你审批");
+        if(noticeHomeRsps != null){
+            list.clear();
+            for (NoticeHomeRsp.DataBean item : noticeHomeRsps){
+                list.add(item.getContent());
+            }
+        }
+//        list.add("罗欣的主监护人提交的请假需要你审批");
+//        list.add("李克用的主监护人提交的请假需要你审批");
+//        list.add("王保华的主监护人提交的请假需要你审批");
+//        list.add("秦鑫的主监护人提交的请假需要你审批");
+//        list.add("张玉明的主监护人提交的请假需要你审批");
 //        spmsg.setText(20, 0, Color.WHITE);//设置属性
+        Log.e(TAG, "initVerticalTextview: " + list);
         spmsg.setTextStillTime(3000);//设置停留时长间隔
         spmsg.setAnimTime(300);//设置进入和退出的时间间隔
         if (spmsg != null) {
             if (null != list && list.size() > 0) {
                 spmsg.setVisibility(View.VISIBLE);
                 spmsg.setTextList(list);
+                spmsg.startAutoScroll();
+                if (list.size()<2){
+                    spmsg.stopAutoScroll();
+                }
             } else {
                 spmsg.setVisibility(View.GONE);
             }
         }
+
         spmsg.setOnItemClickListener(i -> {
             startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
         });
@@ -169,7 +175,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
-        if (spmsg != null) {
+        if (spmsg != null && list.size()>1) {
             spmsg.startAutoScroll();
         }
     }
@@ -177,7 +183,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onPause() {
         super.onPause();
-        if (spmsg != null) {
+        if (spmsg != null && list.size()>1) {
             spmsg.stopAutoScroll();
         }
     }
@@ -264,6 +270,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     @Override
     public void getIndexMyNotice(NoticeHomeRsp rsp) {
+        Log.e(TAG, "getIndexMyNotice: "+rsp.toString() );
         if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
             initVerticalTextview(rsp.getData());
         }

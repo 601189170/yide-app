@@ -29,6 +29,7 @@ import com.yyide.chatim.model.StudentScopeRsp;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserInfoRsp;
@@ -39,6 +40,8 @@ import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.mobileRsp;
+
+import java.util.HashMap;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -51,6 +54,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -323,4 +327,10 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/school/cloud-school/app/teacher/selectAllList")
     Observable<UserInfoRsp> selectAllList(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticePage
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/notice/getMyNoticePage")
+    Observable<TodoRsp> getMyNoticePage(@QueryMap HashMap<String,Object> map);
+
 }
