@@ -49,6 +49,24 @@ public class DateUtils {
         return simpleDateFormat.format(time);
     }
 
+    public static String switchTime(Date time,String format){
+        if (TextUtils.isEmpty(format)){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        return simpleDateFormat.format(time);
+    }
+
+    /**
+     * 日期转换
+     * @param time
+     * @return
+     */
+    public static String formatTime(String time){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(time);
+    }
+
     /**
      * 获取日期毫秒数
      * @param dateValue

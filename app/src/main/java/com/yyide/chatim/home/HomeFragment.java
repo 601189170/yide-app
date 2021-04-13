@@ -165,7 +165,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
                 break;
             case R.id.notice_content:
-                startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
+                //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
                 break;
             default:
                 break;

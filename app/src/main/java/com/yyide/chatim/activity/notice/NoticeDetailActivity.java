@@ -153,7 +153,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         Log.e(TAG, "noticeDetail: " + noticeDetailRsp.toString());
         if (noticeDetailRsp.getCode() == 200){
             if (data != null) {
-                String productionTime = DateUtils.switchCreateTime(data.getProductionTime(), "MM.dd HH:mm");
+                String productionTime = DateUtils.switchTime(data.getCreatedDateTime(), "MM.dd HH:mm");
                 tv_notice_title.setText(data.getTitle());
                 tv_notice_author.setText(data.getProductionTarget());
                 tv_notice_time.setText(productionTime);
@@ -166,7 +166,6 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
                 signId = data.getSignId();
                 totalNumber = data.getTotalNumber();
                 readNumber = data.getReadNumber();
-
             }
             return;
         }

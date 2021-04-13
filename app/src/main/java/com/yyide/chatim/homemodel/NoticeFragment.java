@@ -1,10 +1,12 @@
 package com.yyide.chatim.homemodel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,6 +14,8 @@ import androidx.annotation.Nullable;
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
+import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeHomePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeHomeView;
 import com.yyide.chatim.adapter.NoiceAnnounAdapter;
@@ -19,6 +23,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.model.SchoolRsp;
+import com.yyide.chatim.utils.DateUtils;
 
 import java.io.IOException;
 
@@ -40,9 +45,15 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @BindView(R.id.notice_time)
     TextView notice_time;
 
+    @BindView(R.id.ll_notice)
+    LinearLayout ll_notice;
+
     OkHttpClient mOkHttpClient = new OkHttpClient();
 
     NoiceAnnounAdapter adapter;
+
+    private boolean jump = false;
+    private HomeNoticeRsp.DataBean data;
 
     @Nullable
     @Override
@@ -67,6 +78,16 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 //            }
 //        });
         mvpPresenter.getHomeNotice();
+
+        ll_notice.setOnClickListener(v -> {
+            if (jump && data != null){
+                Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
+                intent.putExtra("type",1);
+                intent.putExtra("id",data.getId());
+                intent.putExtra("status",data.getStatus());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -110,11 +131,13 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     public void noticeHome(HomeNoticeRsp homeNoticeRsp) {
         Log.e(TAG, "noticeHome: "+homeNoticeRsp );
         if (homeNoticeRsp.getCode() == 200) {
-            HomeNoticeRsp.DataBean data = homeNoticeRsp.getData();
+            data = homeNoticeRsp.getData();
             if (data != null){
+                jump = true;
                 notice_content.setText(data.getContent());
-                notice_time.setText(data.getProductionTime().toString());
+                notice_time.setText(DateUtils.switchTime(data.getCreatedDateTime(),"yyyy-MM-dd"));
             }else {
+                jump = false;
                 notice_content.setText("暂无消息公告");
             }
         }

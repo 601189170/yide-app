@@ -1,5 +1,7 @@
 package com.yyide.chatim.model;
 
+import java.util.Date;
+
 /**
  * @Description: HomeNoticeRsp
  * @Author: liu tao
@@ -84,7 +86,7 @@ public class HomeNoticeRsp {
         private int id;
         private String delInd;
         private Object createdBy;
-        private String createdDateTime;
+        private Date createdDateTime;
         private Object updatedBy;
         private String updatedDateTime;
         private int versionStamp;
@@ -127,11 +129,11 @@ public class HomeNoticeRsp {
             this.createdBy = createdBy;
         }
 
-        public String getCreatedDateTime() {
+        public Date getCreatedDateTime() {
             return createdDateTime;
         }
 
-        public void setCreatedDateTime(String createdDateTime) {
+        public void setCreatedDateTime(Date createdDateTime) {
             this.createdDateTime = createdDateTime;
         }
 
