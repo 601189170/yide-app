@@ -182,15 +182,17 @@ public interface DingApiStores {
     Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") int id);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/notice/temp/getTemplateTypePage
+    //https://api.uat.edu.1d1j.net/management/cloud-system/announcement/type/getAnnouncementTypePage
     //消息模板分类类型
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/notice/temp/getTemplateTypePage")
+    @POST("/management/cloud-system/announcement/type/getAnnouncementTypePage")
     Observable<TemplateTypeRsp> getTemplateTypePage(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/message/temp/selectMessagePage
+    //https://api.uat.edu.1d1j.net/management/cloud-system/announcement/queryAnnouncementTempPage
     //获取消息模板
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/message/temp/selectMessagePage")
+    @POST("/management/cloud-system/announcement/queryAnnouncementTempPage")
     Observable<TemplateListRsp> selectMessagePage(@Body RequestBody requestBody);
 
     //我的应用

@@ -24,8 +24,8 @@ public class NoticeTemplateListFragmentPresenter extends BasePresenter<NoticeTem
         Log.e("NoticeTemplateListFragm", "noticeTemplateList: "+name +","+tempId);
         mvpView.showLoading();
         Map map = new HashMap<String,Object>();
-        map.put("name",null);
-        map.put("tempId",tempId);
+        map.put("title",null);
+        map.put("id",tempId);
         String toJSONString = JSON.toJSONString(map);
         Log.e("NoticeTemplateListFragm", "noticeTemplateList: "+toJSONString );
         RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),toJSONString);

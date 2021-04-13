@@ -87,8 +87,63 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         adapter = new NoticeScopeAdapter(this, noticeScopeBeans);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
+        adapter.setOnCheckBoxChangeListener(() -> {
+            //选中改变，更新底部的数据显示
+            if (sendObj == 1 || sendObj == 2) {
+                showNoticeScopeNumber(getAllCheckedClassIds(noticeScopeBeans, new ArrayList<String>()).size());
+            } else {
+                showNoticeScopeNumber(getAllCheckedDepartmentIds(noticeScopeBeans, new ArrayList<String>()).size());
+            }
+        });
         initView();
         //notifyPrice();
+    }
+
+    private void showNoticeScopeNumber(int totalNumber) {
+        tv_selected_member.setText(String.format(getString(R.string.notice_scope_number_text), totalNumber));
+    }
+
+    /**
+     * 获取班级ids,不获取上级id
+     *
+     * @param beanList
+     * @param ids
+     * @return
+     */
+    private List<String> getAllCheckedClassIds(List<NoticeScopeBean> beanList, List<String> ids) {
+        for (NoticeScopeBean bean : beanList) {
+            if ((bean.getList() == null || bean.getList().isEmpty()) && bean.isChecked() && bean.getType().equals("2")) {
+                int id = bean.getId();
+                ids.add("" + id);
+            } else if (bean.getList() != null && !bean.getList().isEmpty()) {
+                getAllCheckedClassIds(bean.getList(), ids);
+            } else {
+                continue;
+            }
+        }
+        return ids;
+    }
+
+    /**
+     * 获取部门ids,获取全部id
+     *
+     * @param beanList
+     * @param ids
+     * @return
+     */
+    private List<String> getAllCheckedDepartmentIds(List<NoticeScopeBean> beanList, List<String> ids) {
+        for (NoticeScopeBean bean : beanList) {
+            if (bean.isChecked()) {
+                int id = bean.getId();
+                ids.add("" + id);
+            }
+            if (bean.getList() != null && !bean.getList().isEmpty()) {
+                getAllCheckedDepartmentIds(bean.getList(), ids);
+            } else {
+                continue;
+            }
+        }
+        return ids;
     }
 
     /**
@@ -133,9 +188,14 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
 //            }
 //            notifyPrice();
 //        });
-
+        showNoticeScopeNumber(0);
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             recursionChecked(noticeScopeBeans, isChecked);
+            if (sendObj == 1 || sendObj == 2) {
+                showNoticeScopeNumber(getAllCheckedClassIds(noticeScopeBeans, new ArrayList<String>()).size());
+            } else {
+                showNoticeScopeNumber(getAllCheckedDepartmentIds(noticeScopeBeans, new ArrayList<String>()).size());
+            }
         });
     }
 
@@ -167,8 +227,18 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     @OnClick(R.id.btn_complete)
     public void complete() {
         ArrayList<String> classesIds = new ArrayList<>();
-        List<String> ids = getIds(noticeScopeBeans, classesIds);
-        classesIds.addAll(ids);
+        //List<String> ids = getIds(noticeScopeBeans, classesIds);
+        if (sendObj == 1 || sendObj == 2) {
+            List<String> allCheckedClassIds = getAllCheckedClassIds(noticeScopeBeans, new ArrayList<String>());
+            classesIds.addAll(allCheckedClassIds);
+        } else {
+            List<String> allCheckedDepartmentIds = getAllCheckedDepartmentIds(noticeScopeBeans, new ArrayList<String>());
+            classesIds.addAll(allCheckedDepartmentIds);
+        }
+        if (classesIds.isEmpty()){
+            ToastUtils.showShort("请选择通知范围");
+            return;
+        }
         //返回上一页
         Intent intent = getIntent();
         intent.putExtra("ids", classesIds);
@@ -176,13 +246,13 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         finish();
     }
 
-    private List<String> getIds(List<NoticeScopeBean> noticeScopeBeans,List<String> ids){
+    private List<String> getIds(List<NoticeScopeBean> noticeScopeBeans, List<String> ids) {
         for (NoticeScopeBean noticeScopeBean : noticeScopeBeans) {
             int id = noticeScopeBean.getId();
-            ids.add(""+id);
+            ids.add("" + id);
             List<NoticeScopeBean> list = noticeScopeBean.getList();
-            if ( list!= null && !list.isEmpty()){
-                getIds(list,ids);
+            if (list != null && !list.isEmpty()) {
+                getIds(list, ids);
             }
         }
         return ids;
@@ -200,22 +270,25 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
             noticeScopeBeans.clear();
             for (StudentScopeRsp.DataBean.ListBean listBean : studentScopeRsp.getData().getList()) {
                 List<StudentScopeRsp.DataBean.ListBean.GradesBean> grades = listBean.getGrades();
-                NoticeScopeBean noticeScopeBean = new NoticeScopeBean(listBean.getId(), listBean.getName());
+                //第一层
+                NoticeScopeBean noticeScopeBean = new NoticeScopeBean(listBean.getId(), listBean.getName(), listBean.getType());
                 if (grades.isEmpty()) {
+                    noticeScopeBean.setHasNext(false);
                     noticeScopeBeans.add(noticeScopeBean);
                     continue;
                 }
                 List<NoticeScopeBean> noticeScopeBeans1 = new ArrayList<>();
                 for (StudentScopeRsp.DataBean.ListBean.GradesBean grade : grades) {
                     List<StudentScopeRsp.DataBean.ListBean.GradesBean.ClassesBean> classes = grade.getClasses();
-                    NoticeScopeBean noticeScopeBean1 = new NoticeScopeBean(grade.getId(), grade.getName());
+                    NoticeScopeBean noticeScopeBean1 = new NoticeScopeBean(grade.getId(), grade.getName(), grade.getType());
                     if (classes.isEmpty()) {
+                        noticeScopeBean1.setHasNext(false);
                         noticeScopeBeans1.add(noticeScopeBean1);
                         continue;
                     }
                     List<NoticeScopeBean> noticeScopeBeans2 = new ArrayList<>();
                     for (StudentScopeRsp.DataBean.ListBean.GradesBean.ClassesBean aClass : classes) {
-                        noticeScopeBeans2.add(new NoticeScopeBean(aClass.getId(), aClass.getName()));
+                        noticeScopeBeans2.add(new NoticeScopeBean(aClass.getId(), aClass.getName(), aClass.getType(), false));
                     }
                     noticeScopeBean1.setList(noticeScopeBeans2);
                     noticeScopeBeans1.add(noticeScopeBean1);

@@ -78,7 +78,7 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
                 Log.e(TAG, "onConfigureTab: "+position );
                 TemplateTypeRsp.DataBean.RecordsBean recordsBean = list.get(currentIndex);
                 currentIndex = position;
-                tab.setText(list.get(position).getTemplateName());
+                tab.setText(list.get(position).getTempName());
             }
         }).attach();
     }
@@ -110,8 +110,13 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
             list.clear();
             List<TemplateTypeRsp.DataBean.RecordsBean> records = templateTypeRsp.getData().getRecords();
             list.addAll(records);
+            if (list.size()>4){
+                mTablayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+            }else {
+                mTablayout.setTabMode(TabLayout.MODE_FIXED);
+            }
             for (TemplateTypeRsp.DataBean.RecordsBean recordsBean : list) {
-                listFragments.add(NoticeTemplateListFragment.newInstance("",recordsBean.getTemplateName()+"",recordsBean.getId()));
+                listFragments.add(NoticeTemplateListFragment.newInstance("",recordsBean.getTempName()+"",recordsBean.getId()));
             }
             initViewPager();
         }

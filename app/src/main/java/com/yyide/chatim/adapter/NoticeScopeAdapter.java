@@ -37,6 +37,12 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
     private List<NoticeScopeBean> data;
     private boolean unfold = false;
 
+    public void setOnCheckBoxChangeListener(OnCheckBoxChangeListener onCheckBoxChangeListener) {
+        this.onCheckBoxChangeListener = onCheckBoxChangeListener;
+    }
+
+    private OnCheckBoxChangeListener onCheckBoxChangeListener;
+
     public NoticeScopeAdapter(Context context, List<NoticeScopeBean> data) {
         this.context = context;
         this.data = data;
@@ -64,6 +70,9 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
             NoticeScopeAdapter adapter = new NoticeScopeAdapter(context, bean.getList());
 //            holder.mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
             holder.mRecyclerView.setAdapter(adapter);
+            adapter.setOnCheckBoxChangeListener(()->{
+                onCheckBoxChangeListener.change();
+            });
             holder.itemView.setOnClickListener(v -> {
                 Log.e("TAG", "onBindViewHolder: "+unfold );
                 if (unfold) {
@@ -81,9 +90,14 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
         //选中层级
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             recursionChecked(bean,isChecked);
+            onCheckBoxChangeListener.change();
             new Handler().post(() -> notifyDataSetChanged());
         });
 
+    }
+
+    public interface OnCheckBoxChangeListener{
+        void change();
     }
 
     /**

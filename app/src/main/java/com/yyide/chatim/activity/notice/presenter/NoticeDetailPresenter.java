@@ -1,5 +1,7 @@
 package com.yyide.chatim.activity.notice.presenter;
 
+import android.util.Log;
+
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeDetailView;
 import com.yyide.chatim.model.BaseRsp;
@@ -12,6 +14,7 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
     }
 
     public void noticeDetail(int id,int type){
+        Log.e("NoticeDetailPresenter", "noticeDetail: "+id+",type="+type );
         mvpView.showLoading();
         if (type == 1){
             addSubscription(dingApiStores.getMyNoticeDetails(id), new ApiCallback<NoticeDetailRsp>() {

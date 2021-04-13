@@ -7,6 +7,7 @@ import com.jzxiang.pickerview.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -88,7 +89,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
             String name = intent.getStringExtra("name");
             String content = intent.getStringExtra("content");
             et_input_title.setText(name);
-            et_input_content.setText(content);
+            et_input_content.setText(Html.fromHtml(content));
         }
     }
 
@@ -97,6 +98,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         switch (view.getId()) {
             case R.id.tv_parents:
                 sendObj = 1;
+               showCheckedNumber(classesIds);
                 tv_parents.setTextColor(Color.parseColor("#FFFFFF"));
                 tv_parents.setBackground(getDrawable(R.drawable.btn_select_bg));
                 tv_faculty.setTextColor(Color.parseColor("#666666"));
@@ -106,6 +108,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
                 break;
             case R.id.tv_faculty:
                 sendObj = 3;
+                showCheckedNumber(departmentIds);
                 tv_parents.setTextColor(Color.parseColor("#666666"));
                 tv_parents.setBackground(getDrawable(R.drawable.btn_unselect_bg));
                 tv_student.setTextColor(Color.parseColor("#666666"));
@@ -115,6 +118,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
                 break;
             case R.id.tv_student:
                 sendObj = 2;
+                showCheckedNumber(classesIds);
                 tv_parents.setTextColor(Color.parseColor("#666666"));
                 tv_parents.setBackground(getDrawable(R.drawable.btn_unselect_bg));
                 tv_faculty.setTextColor(Color.parseColor("#666666"));
@@ -147,7 +151,15 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
      */
     private void commit() {
         String title = et_input_title.getText().toString();
+        if (TextUtils.isEmpty(title)){
+            ToastUtils.showShort("标题不能为空，请输入标题！");
+            return;
+        }
         String content = et_input_content.getText().toString();
+        if (TextUtils.isEmpty(content)){
+            ToastUtils.showShort("通知内容不能为空，请输入内容！");
+            return;
+        }
         boolean isTiming = mSwitch.isChecked();
         if (isTiming && TextUtils.isEmpty(timingTime)){
             ToastUtils.showShort("请选择发布时间");
@@ -165,6 +177,10 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         body.setIsTiming(isTiming);
         if (isTiming){
             body.setTimingTime(timingTime);
+        }
+        if (classesIds.isEmpty() && departmentIds.isEmpty() && classCardIds.isEmpty()){
+            ToastUtils.showShort("请选择通知范围");
+            return;
         }
         String jsonString = JSON.toJSONString(body);
         Log.e(TAG, "commit: " + jsonString);
@@ -239,6 +255,14 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
             }else {
                 tv_show_ids.setText("已选择("+ids.size()+")");
             }
+        }
+    }
+
+    private void showCheckedNumber(List<String> ids){
+        if (ids.isEmpty()){
+            tv_show_ids.setText("未选择");
+        }else {
+            tv_show_ids.setText("已选择("+ids.size()+")");
         }
     }
 

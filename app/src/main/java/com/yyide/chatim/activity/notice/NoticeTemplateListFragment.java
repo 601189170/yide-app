@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.notice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,9 +103,9 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, TemplateListRsp.DataBean.RecordsBean o) {
                 baseViewHolder
-                        .setText(R.id.tv_title, o.getName())
-                        .setText(R.id.tv_desc, o.getName())
-                        .setText(R.id.tv_notice_content, o.getContent());
+                        .setText(R.id.tv_title, o.getTitle())
+                        //.setText(R.id.tv_desc, o.getName())
+                        .setText(R.id.tv_notice_content, Html.fromHtml(o.getContent()));
             }
         };
         adapter.setOnItemClickListener(new OnItemClickListener() {
@@ -113,7 +114,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
                 Log.e(TAG, "onItemClick: "+position );
                 TemplateListRsp.DataBean.RecordsBean recordsBean = (TemplateListRsp.DataBean.RecordsBean)adapter.getData().get(position);
                 Intent intent = new Intent(getActivity(), NoticeCreateActivity.class);
-                intent.putExtra("name",recordsBean.getName());
+                intent.putExtra("name",recordsBean.getTitle());
                 intent.putExtra("content",recordsBean.getContent());
                 intent.putExtra("template",true);
                 startActivity(intent);

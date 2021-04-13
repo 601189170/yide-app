@@ -1,6 +1,5 @@
 package com.yyide.chatim.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,8 +16,8 @@ public class TemplateTypeRsp {
     /**
      * code : 200
      * success : true
-     * msg : 成功
-     * data : {"records":[{"id":1,"templateName":"2"}],"total":1,"size":10,"current":1,"searchCount":true,"pages":1}
+     * msg : 查询成功
+     * data : {"records":[{"id":1,"delInd":"0","createdBy":"","createdDateTime":null,"updatedBy":null,"updatedDateTime":null,"versionStamp":0,"total":0,"size":10,"current":1,"tempName":"安全"},{"id":2,"delInd":"0","createdBy":"","createdDateTime":null,"updatedBy":null,"updatedDateTime":null,"versionStamp":0,"total":0,"size":10,"current":1,"tempName":"假期"},{"id":3,"delInd":"0","createdBy":"","createdDateTime":null,"updatedBy":null,"updatedDateTime":null,"versionStamp":0,"total":0,"size":10,"current":1,"tempName":"全部"}],"total":3,"size":10,"current":1,"searchCount":true,"pages":1}
      */
 
     private int code;
@@ -58,10 +57,10 @@ public class TemplateTypeRsp {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable {
+    public static class DataBean {
         /**
-         * records : [{"id":1,"templateName":"2"}]
-         * total : 1
+         * records : [{"id":1,"delInd":"0","createdBy":"","createdDateTime":null,"updatedBy":null,"updatedDateTime":null,"versionStamp":0,"total":0,"size":10,"current":1,"tempName":"安全"},{"id":2,"delInd":"0","createdBy":"","createdDateTime":null,"updatedBy":null,"updatedDateTime":null,"versionStamp":0,"total":0,"size":10,"current":1,"tempName":"假期"},{"id":3,"delInd":"0","createdBy":"","createdDateTime":null,"updatedBy":null,"updatedDateTime":null,"versionStamp":0,"total":0,"size":10,"current":1,"tempName":"全部"}]
+         * total : 3
          * size : 10
          * current : 1
          * searchCount : true
@@ -123,14 +122,32 @@ public class TemplateTypeRsp {
             this.records = records;
         }
 
-        public static class RecordsBean implements Serializable {
+        public static class RecordsBean {
             /**
              * id : 1
-             * templateName : 2
+             * delInd : 0
+             * createdBy :
+             * createdDateTime : null
+             * updatedBy : null
+             * updatedDateTime : null
+             * versionStamp : 0
+             * total : 0
+             * size : 10
+             * current : 1
+             * tempName : 安全
              */
 
             private int id;
-            private String templateName;
+            private String delInd;
+            private String createdBy;
+            private Object createdDateTime;
+            private Object updatedBy;
+            private Object updatedDateTime;
+            private int versionStamp;
+            private int total;
+            private int size;
+            private int current;
+            private String tempName;
 
             public int getId() {
                 return id;
@@ -140,43 +157,85 @@ public class TemplateTypeRsp {
                 this.id = id;
             }
 
-            public String getTemplateName() {
-                return templateName;
+            public String getDelInd() {
+                return delInd;
             }
 
-            public void setTemplateName(String templateName) {
-                this.templateName = templateName;
+            public void setDelInd(String delInd) {
+                this.delInd = delInd;
             }
 
-            @Override
-            public String toString() {
-                return "RecordsBean{" +
-                        "id=" + id +
-                        ", templateName='" + templateName + '\'' +
-                        '}';
+            public String getCreatedBy() {
+                return createdBy;
+            }
+
+            public void setCreatedBy(String createdBy) {
+                this.createdBy = createdBy;
+            }
+
+            public Object getCreatedDateTime() {
+                return createdDateTime;
+            }
+
+            public void setCreatedDateTime(Object createdDateTime) {
+                this.createdDateTime = createdDateTime;
+            }
+
+            public Object getUpdatedBy() {
+                return updatedBy;
+            }
+
+            public void setUpdatedBy(Object updatedBy) {
+                this.updatedBy = updatedBy;
+            }
+
+            public Object getUpdatedDateTime() {
+                return updatedDateTime;
+            }
+
+            public void setUpdatedDateTime(Object updatedDateTime) {
+                this.updatedDateTime = updatedDateTime;
+            }
+
+            public int getVersionStamp() {
+                return versionStamp;
+            }
+
+            public void setVersionStamp(int versionStamp) {
+                this.versionStamp = versionStamp;
+            }
+
+            public int getTotal() {
+                return total;
+            }
+
+            public void setTotal(int total) {
+                this.total = total;
+            }
+
+            public int getSize() {
+                return size;
+            }
+
+            public void setSize(int size) {
+                this.size = size;
+            }
+
+            public int getCurrent() {
+                return current;
+            }
+
+            public void setCurrent(int current) {
+                this.current = current;
+            }
+
+            public String getTempName() {
+                return tempName;
+            }
+
+            public void setTempName(String tempName) {
+                this.tempName = tempName;
             }
         }
-
-        @Override
-        public String toString() {
-            return "DataBean{" +
-                    "total=" + total +
-                    ", size=" + size +
-                    ", current=" + current +
-                    ", searchCount=" + searchCount +
-                    ", pages=" + pages +
-                    ", records=" + records +
-                    '}';
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "TemplateTypeRsp{" +
-                "code=" + code +
-                ", success=" + success +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
     }
 }
