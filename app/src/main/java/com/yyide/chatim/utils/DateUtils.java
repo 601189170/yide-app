@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateUtils {
 
@@ -23,7 +24,7 @@ public class DateUtils {
     }
 
     /**
-     * 接收到后台传来的时间格式2019-04-30T15:59:59.000+0000，转换指定格式的时间
+     * 时间戳string 转 指定格式的时间
      * @param createTime
      * @return
      */
@@ -36,6 +37,16 @@ public class DateUtils {
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
         return simpleDateFormat.format(new Date(time*1000L));
+    }
+
+    /**
+     * //pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8"
+     * @param time
+     * @return
+     */
+    public static String switchTime(Date time){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return simpleDateFormat.format(time);
     }
 
     /**

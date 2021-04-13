@@ -23,6 +23,7 @@ import com.yyide.chatim.activity.notice.NoticeTemplateListFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.TodoFragmentPresenter;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.TodoFragmentView;
 
 import org.jetbrains.annotations.NotNull;
@@ -72,12 +73,14 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         adapter = new BaseQuickAdapter<TodoRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.message_item) {
             @Override
             protected void convert(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
+
                 holder.setText(R.id.tv_leave, o.getContent())
+                        .setText(R.id.tv_title,o.getTitle())
                         .setText(R.id.tv_leave_type, "请假类型：没有字段")
-                        .setText(R.id.tv_start_time, o.getCreatedDateTime())
+                        .setText(R.id.tv_start_time,"开始时间:"+DateUtils.switchTime(o.getCreatedDateTime()) )
                         .setText(R.id.tv_leave_status, "审批状态：" + (o.getStatus().equals("0") ? "待审批" : "已审批"))
-                        .setText(R.id.tv_date, o.getCreatedDateTime())
-                        .setText(R.id.tv_end_time, o.getCreatedDateTime());
+                        .setText(R.id.tv_date, DateUtils.switchTime(o.getCreatedDateTime()))
+                        .setText(R.id.tv_end_time, "结束时间："+DateUtils.switchTime(o.getCreatedDateTime()));
                 TextView textView = holder.getView(R.id.tv_refused);
                 TextView textView2 = holder.getView(R.id.tv_agree);
                 if (o.getStatus().equals("1")) {

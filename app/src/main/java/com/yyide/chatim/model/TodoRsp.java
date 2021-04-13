@@ -1,5 +1,6 @@
 package com.yyide.chatim.model;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -150,7 +151,7 @@ public class TodoRsp {
             private int id;
             private String delInd;
             private Object createdBy;
-            private String createdDateTime;
+            private Date createdDateTime;
             private Object updatedBy;
             private String updatedDateTime;
             private int versionStamp;
@@ -193,11 +194,11 @@ public class TodoRsp {
                 this.createdBy = createdBy;
             }
 
-            public String getCreatedDateTime() {
+            public Date getCreatedDateTime() {
                 return createdDateTime;
             }
 
-            public void setCreatedDateTime(String createdDateTime) {
+            public void setCreatedDateTime(Date createdDateTime) {
                 this.createdDateTime = createdDateTime;
             }
 
