@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.notice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -156,7 +157,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
                 tv_notice_title.setText(data.getTitle());
                 tv_notice_author.setText(data.getProductionTarget());
                 tv_notice_time.setText(productionTime);
-                tv_notice_content.setText(data.getContent());
+                tv_notice_content.setText(Html.fromHtml(data.getContent()));
 
                 //notice_confirm_number_text
                 String string = getString(R.string.notice_confirm_number_text);

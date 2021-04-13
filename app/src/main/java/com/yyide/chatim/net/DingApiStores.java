@@ -178,7 +178,7 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyReleaseNotice
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/notice/getMyReleaseNotice")
+    @GET("/management/cloud-system/user/announcement/getMyReleaseNotice")
     Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") int id);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/notice/temp/getTemplateTypePage
