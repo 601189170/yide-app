@@ -1,5 +1,7 @@
 package com.yyide.chatim.home;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.paradoxie.autoscrolltextview.VerticalTextview;
+import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
@@ -82,6 +86,16 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     FrameLayout layoutMessage;
     private View mBaseView;
     ArrayList<String> list = new ArrayList<>();
+    public FragmentListener mListener;
+
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof FragmentListener){
+            mListener = (FragmentListener)activity;
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -139,7 +153,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         }
 
         spmsg.setOnItemClickListener(i -> {
-            startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+            //startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+            mListener.jumpFragment(1);
         });
     }
 
@@ -148,7 +163,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.layout_message, R.id.notice_content})
+    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -161,12 +176,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 //startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
                 startActivity(new Intent(getActivity(), WebViewActivity.class));
                 break;
-            case R.id.layout_message:
-                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-                break;
-            case R.id.notice_content:
-                //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
-                break;
+//            case R.id.layout_message:
+//                //startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+//                break;
+//            case R.id.notice_content:
+//                //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
+//                break;
             default:
                 break;
         }
@@ -274,6 +289,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
             initVerticalTextview(rsp.getData());
         }
+    }
+
+    public static interface FragmentListener{
+        void jumpFragment(int index);
     }
 
 }

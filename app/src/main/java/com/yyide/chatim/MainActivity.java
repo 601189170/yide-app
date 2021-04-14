@@ -69,7 +69,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView {
+public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView, HomeFragment.FragmentListener {
 
     @BindView(R.id.content)
     FrameLayout content;
@@ -130,7 +130,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         mUserInfo = UserInfo.getInstance();
         EventBus.getDefault().register(this);
-        setTab(0);
+        setTab(0,0);
 //        startActivity(new Intent(this, ResetPassWordActivity.class));
 //        new Handler().postDelayed(new Runnable() {
 //                @Override
@@ -202,9 +202,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             ActivityUtils.finishAllActivities();
             startActivity(new Intent(this, MainActivity.class));
             Log.e("TAG", "messageEvent: " + IdType);
-            setTab(0);
+            setTab(0,0);
         } else if (BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())) {
-            setTab(3);
+            setTab(3,0);
         }
     }
 
@@ -369,6 +369,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         });
     }
 
+    @Override
+    public void jumpFragment(int index) {
+        setTab(index,1);
+    }
+
     public class MessageReceiver extends BroadcastReceiver {
 
         @Override
@@ -405,7 +410,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         super.onResume();
     }
 
-    void setTab(int position) {
+    void setTab(int position,int type) {
 
         tab1.setChecked(false);
         tab2.setChecked(false);
@@ -441,9 +446,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             case 1:
                 if (fg2 == null) {
                     fg2 = new MessageFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type",type);
+                    fg2.setArguments(bundle);
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
-                } else
+                } else{
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type",type);
+                    fg2.setArguments(bundle);
                     ft.show(fg2);
+                }
                 tab2.setChecked(true);
                 break;
             case 2:
@@ -478,16 +490,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1_layout:
-                setTab(0);
+                setTab(0,0);
                 break;
             case R.id.tab2_layout:
-                setTab(1);
+                setTab(1,0);
                 break;
             case R.id.tab3_layout:
-                setTab(2);
+                setTab(2,0);
                 break;
             case R.id.tab4_layout:
-                setTab(3);
+                setTab(3,0);
                 break;
         }
     }

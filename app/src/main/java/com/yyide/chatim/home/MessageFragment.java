@@ -2,6 +2,7 @@ package com.yyide.chatim.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import butterknife.OnClick;
 
 
 public class MessageFragment extends BaseFragment {
-
+    private static final String TAG = "MessageFragment";
     @BindView(R.id.tab1)
     CheckedTextView tab1;
     @BindView(R.id.tab2)
@@ -49,7 +50,22 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setTab(0);
+        int type = getArguments().getInt("type", 0);
+        Log.e(TAG, "onViewCreated: "+type );
+        setTab(type);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e(TAG, "onHiddenChanged: hidden = "+hidden );
+        if (!hidden){
+            int type = getArguments().getInt("type", 0);
+            Log.e(TAG, "onHiddenChanged: "+type );
+            if (type != 0){
+                setTab(type);
+            }
+        }
     }
 
     void setTab(int position) {
