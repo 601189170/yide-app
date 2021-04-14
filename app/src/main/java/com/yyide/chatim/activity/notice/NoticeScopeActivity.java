@@ -297,6 +297,9 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 noticeScopeBeans.add(noticeScopeBean);
             }
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
+            if (noticeScopeBeans.isEmpty()){
+                ToastUtils.showShort("没有找到通知范围数据！");
+            }
             adapter.notifyDataSetChanged();
         }
     }

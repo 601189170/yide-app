@@ -59,6 +59,7 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);//禁止复用
         NoticeScopeBean bean = data.get(position);
         holder.tv_title.setText(bean.getName());
         holder.checkBox.setChecked(bean.isChecked());
