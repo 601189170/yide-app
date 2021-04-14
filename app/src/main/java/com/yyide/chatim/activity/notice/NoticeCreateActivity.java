@@ -23,6 +23,7 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.tencent.openqq.protocol.imsdk.msg;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeCreatePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeCreateView;
@@ -175,6 +176,8 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         body.setClassCardIds(classCardIds);
         body.setClassesIds(classesIds);
         body.setIsTiming(isTiming);
+        int schoolId = SpData.getIdentityInfo().schoolId;
+        body.setSchoolId(schoolId);
         if (isTiming){
             body.setTimingTime(timingTime);
         }

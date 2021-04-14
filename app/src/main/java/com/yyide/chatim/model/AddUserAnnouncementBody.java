@@ -38,6 +38,16 @@ public class AddUserAnnouncementBody {
     private List<String> classesIds;
     private List<String> classCardIds;
 
+    public long getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(long schoolId) {
+        this.schoolId = schoolId;
+    }
+
+    private long schoolId;
+
     public String getType() {
         return type;
     }
