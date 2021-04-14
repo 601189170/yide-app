@@ -126,15 +126,8 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
         };
 
         mRecyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e(TAG, "onResume:" );
         mvpPresenter.noticeList(1,1,10);
     }
-
 
     @Override
     protected NoticeAnnouncementFragmentPresenter createPresenter() {
@@ -149,7 +142,7 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
         if (!records.isEmpty()){
             for (NoticeListRsp.DataBean.RecordsBean record : records) {
                 //yyyy-MM-dd HH:mm 03.06 09:00
-                String productionTime = DateUtils.switchCreateTime(record.getProductionTime(),"MM.dd HH:mm");
+                String productionTime = DateUtils.formatTime(record.getProductionTime(),null,null);
                 list.add(new NoticeAnnouncementModel(record.getId(),record.getTitle(),record.getProductionTarget(),record.getContent(),productionTime,record.getStatus()));
             }
             adapter.setList(list);

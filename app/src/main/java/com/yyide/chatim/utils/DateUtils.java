@@ -2,6 +2,7 @@ package com.yyide.chatim.utils;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,8 +64,39 @@ public class DateUtils {
      * @return
      */
     public static String formatTime(String time){
+        if (TextUtils.isEmpty(time)){
+            return "";
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return simpleDateFormat.format(time);
+    }
+
+    /**
+     * 将指定格式的时间转换目标格式的时间格式
+     * @param time 初始时间
+     * @param source 原始格式
+     * @param target 目标格式
+     * @return 转换后的时间
+     */
+    public static String formatTime(String time, String source, String target) {
+        if (TextUtils.isEmpty(time)){
+            return "";
+        }
+        if (TextUtils.isEmpty(source)) {
+            source = "yyyy-MM-dd HH:mm:ss";
+        }
+        if (TextUtils.isEmpty(target)) {
+            target = "MM.dd HH:mm";
+        }
+        SimpleDateFormat resourceFormat = new SimpleDateFormat(source);
+        Date date = null;
+        try {
+            date = resourceFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(target);
+        return simpleDateFormat2.format(date);
     }
 
     /**

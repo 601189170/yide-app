@@ -108,7 +108,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         adapter = new BaseQuickAdapter<NoticeListRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_my_publish_announcement) {
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, NoticeListRsp.DataBean.RecordsBean record) {
-                String productionTime = DateUtils.switchCreateTime(record.getProductionTime(), "MM.dd HH:mm");
+                String productionTime = DateUtils.formatTime(record.getProductionTime(), null,null);
                 int readNumber = record.getReadNumber();
                 int totalNumber = record.getTotalNumber();
                 String confirm_number_format = getActivity().getResources().getString(R.string.notice_confirm_number);

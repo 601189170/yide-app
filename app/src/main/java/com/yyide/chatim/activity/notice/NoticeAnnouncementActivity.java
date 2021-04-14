@@ -15,6 +15,10 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeAnnouncementPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeAnnouncementView;
+import com.yyide.chatim.base.BaseMvpFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,6 +41,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
         return R.layout.activity_notice_announcement;
     }
 
+    List<BaseMvpFragment> fragments = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,15 +50,20 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     }
 
     private void initViewPager() {
+        NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
+        fragments.add(my_notice);
+        PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
+        fragments.add(my_release);
+
         mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
             public Fragment createFragment(int position) {
                 if (position == 0) {
-                    return NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
+                    return fragments.get(0);
                 } else {
-                    return PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
+                    return fragments.get(1);
                 }
             }
 
