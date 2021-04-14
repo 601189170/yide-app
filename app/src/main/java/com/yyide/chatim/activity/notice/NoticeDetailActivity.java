@@ -189,6 +189,9 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
             if (baseRsp.getCode() == 200){
                 ToastUtils.showShort("确认"+baseRsp.getMsg());
                 new Handler().postDelayed(() -> {
+                    Intent intent = getIntent();
+                    intent.putExtra("update",true);
+                    setResult(RESULT_OK,intent);
                     finish();
                 },1000);
             }

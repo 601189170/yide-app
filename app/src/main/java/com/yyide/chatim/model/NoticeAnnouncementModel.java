@@ -72,4 +72,16 @@ public class NoticeAnnouncementModel implements Serializable {
     public void setNoticeTime(String noticeTime) {
         this.noticeTime = noticeTime;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeAnnouncementModel{" +
+                "id=" + id +
+                ", noticeTitle='" + noticeTitle + '\'' +
+                ", noticeAuthor='" + noticeAuthor + '\'' +
+                ", noticeContent='" + noticeContent + '\'' +
+                ", noticeTime='" + noticeTime + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

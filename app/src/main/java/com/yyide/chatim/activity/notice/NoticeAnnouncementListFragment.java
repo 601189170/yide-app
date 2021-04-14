@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.notice;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +53,8 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
     // TODO: Rename and change types of parameters
     private String mParam1;
 
+    private static final int REQUEST_CODE = 100;
+
     public NoticeAnnouncementListFragment() {
         // Required empty public constructor
     }
@@ -95,6 +98,7 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
         adapter = new BaseQuickAdapter<NoticeAnnouncementModel, BaseViewHolder>(R.layout.item_notice_announcement) {
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, NoticeAnnouncementModel o) {
+                Log.e(TAG, "convert: "+o.toString());
                 baseViewHolder
                         .setText(R.id.tv_notice, o.getNoticeTitle())
                         .setText(R.id.tv_notice_time, o.getNoticeTime())
@@ -107,6 +111,13 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
                     view1.setTextColor(getActivity().getResources().getColor(R.color.black10));
                     ImageView iconView = baseViewHolder.getView(R.id.iv_pic);
                     iconView.setImageDrawable(getActivity().getDrawable(R.drawable.ic_announcement_mark_read));
+                }else {
+                    TextView view1 = baseViewHolder.getView(R.id.tv_confirm);
+                    view1.setText("去确认");
+                    view1.setBackground(getActivity().getDrawable(R.drawable.bg_corners_blue_18));
+                    view1.setTextColor(getActivity().getResources().getColor(R.color.white));
+                    ImageView iconView = baseViewHolder.getView(R.id.iv_pic);
+                    iconView.setImageDrawable(getActivity().getDrawable(R.drawable.ic_announcement));
                 }
                 baseViewHolder.getView(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -119,7 +130,8 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
                         }
                         intent.putExtra("id",o.getId());
                         intent.putExtra("status",o.getStatus());
-                        startActivity(intent);
+                        //startActivity(intent);
+                        startActivityForResult(intent,REQUEST_CODE);
                     }
                 });
             }
@@ -152,5 +164,14 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
     @Override
     public void noticeListFail(String msg) {
         Log.e(TAG, "noticeListFail: "+msg );
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG, "onActivityResult: requestCode:"+requestCode+", resultCode:"+resultCode );
+        if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK){
+            mvpPresenter.noticeList(1,1,10);
+        }
     }
 }
