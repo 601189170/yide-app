@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -17,16 +18,19 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PreparesLessonActivity;
 import com.yyide.chatim.adapter.MyTableAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.presenter.MyTablePresenter;
 import com.yyide.chatim.view.MyTableView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -48,6 +52,8 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     GridView grid;
     @BindView(R.id.classlayout)
     FrameLayout classlayout;
+    @BindView(R.id.className)
+    TextView className;
     private View mBaseView;
 
     MyTableAdapter adapter;
@@ -64,6 +70,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
         adapter = new MyTableAdapter();
         listview.setAdapter(adapter);
 //        List<SelectSchByTeaidRsp.DataBean> list=new ArrayList<>();
@@ -81,13 +88,10 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
                 weekDay = i + 1;
             }
         }
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                timeAdapter.setPosition(position);
+        grid.setOnItemClickListener((parent, view12, position, id) -> {
+            timeAdapter.setPosition(position);
 //                weekDay = timeAdapter.getItem(position).day;
-                adapter.notifyData(getTableList(list, position + 1));
-            }
+            adapter.notifyData(getTableList(list, position + 1));
         });
 
         listview.setOnItemClickListener((parent, view1, position, id) -> {
@@ -121,6 +125,12 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         if (BaseConstant.TYPE_PREPARES_SAVE.equals(messageEvent.getCode())) {
             mvpPresenter.SelectSchByTeaid();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

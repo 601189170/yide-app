@@ -3,7 +3,7 @@ package com.yyide.chatim.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class TeacherlistRsp implements Serializable{
+public class TeacherlistRsp implements Serializable {
 
 
     /**
@@ -18,7 +18,7 @@ public class TeacherlistRsp implements Serializable{
     public String msg;
     public DataBean data;
 
-    
+
     public static class DataBean {
         /**
          * records : [{"id":585,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"name":"丁老师","phone":"13511111111","userName":"fgsfgwfw","email":"","sex":"","healthStatus":"","maritalStatus":"","jobNumber":"","national":"","hometown":"","cardType":"","birthday":null,"cardNo":"","politicalStatus":"","bloodType":"","highestEducation":"","jobTitle":"","timeInWork":null,"entryTime":null,"position":"","extensionNumber":"","icCardNo":"","faceInformation":"3","address":"","specialty":"","schoolId":524,"userId":1983,"remarks":"","departmentName":null,"departmentId":1194,"departments":[{"id":878,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"departmentId":1194,"departmentName":"安卓","teacherId":585,"schoolId":524}],"subjects":[{"id":1471,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3398,"teacherId":585,"schoolId":524},{"id":1472,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3399,"teacherId":585,"schoolId":524},{"id":1473,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3400,"teacherId":585,"schoolId":524},{"id":1474,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3401,"teacherId":585,"schoolId":524},{"id":1475,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3402,"teacherId":585,"schoolId":524}],"roles":[]},{"id":586,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:01.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:01.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"name":"刘老师","phone":"13522222222","userName":"fwfwfw","email":"","sex":"","healthStatus":"","maritalStatus":"","jobNumber":"","national":"","hometown":"","cardType":"","birthday":null,"cardNo":"","politicalStatus":"","bloodType":"","highestEducation":"","jobTitle":"","timeInWork":null,"entryTime":null,"position":"","extensionNumber":"","icCardNo":"","faceInformation":"3","address":"","specialty":"","schoolId":524,"userId":1984,"remarks":"","departmentName":null,"departmentId":1194,"departments":[{"id":879,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:01.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"departmentId":1194,"departmentName":"安卓","teacherId":586,"schoolId":524}],"subjects":[{"id":1476,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:00.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3403,"teacherId":586,"schoolId":524},{"id":1477,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:00.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3404,"teacherId":586,"schoolId":524},{"id":1478,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:01.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3405,"teacherId":586,"schoolId":524},{"id":1479,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:01.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3406,"teacherId":586,"schoolId":524},{"id":1480,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:01.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3407,"teacherId":586,"schoolId":524}],"roles":[]},{"id":587,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"name":"刘涛","phone":"13533333333","userName":"fgergwrgwg","email":"","sex":"","healthStatus":"","maritalStatus":"","jobNumber":"","national":"","hometown":"","cardType":"","birthday":null,"cardNo":"","politicalStatus":"","bloodType":"","highestEducation":"","jobTitle":"","timeInWork":null,"entryTime":null,"position":"","extensionNumber":"","icCardNo":"","faceInformation":"3","address":"","specialty":"","schoolId":524,"userId":1985,"remarks":"","departmentName":null,"departmentId":1194,"departments":[{"id":880,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"departmentId":1194,"departmentName":"安卓","teacherId":587,"schoolId":524}],"subjects":[{"id":1481,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3406,"teacherId":587,"schoolId":524},{"id":1482,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3407,"teacherId":587,"schoolId":524},{"id":1483,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3408,"teacherId":587,"schoolId":524},{"id":1484,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3409,"teacherId":587,"schoolId":524},{"id":1485,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:26:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:26:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"subjectId":3405,"teacherId":587,"schoolId":524}],"roles":[]}]
@@ -36,7 +36,7 @@ public class TeacherlistRsp implements Serializable{
         public int pages;
         public List<RecordsBean> records;
 
-       
+
         public static class RecordsBean {
             /**
              * id : 585
@@ -52,31 +52,31 @@ public class TeacherlistRsp implements Serializable{
              * name : 丁老师
              * phone : 13511111111
              * userName : fgsfgwfw
-             * email : 
-             * sex : 
-             * healthStatus : 
-             * maritalStatus : 
-             * jobNumber : 
-             * national : 
-             * hometown : 
-             * cardType : 
+             * email :
+             * sex :
+             * healthStatus :
+             * maritalStatus :
+             * jobNumber :
+             * national :
+             * hometown :
+             * cardType :
              * birthday : null
-             * cardNo : 
-             * politicalStatus : 
-             * bloodType : 
-             * highestEducation : 
-             * jobTitle : 
+             * cardNo :
+             * politicalStatus :
+             * bloodType :
+             * highestEducation :
+             * jobTitle :
              * timeInWork : null
              * entryTime : null
-             * position : 
-             * extensionNumber : 
-             * icCardNo : 
+             * position :
+             * extensionNumber :
+             * icCardNo :
              * faceInformation : 3
-             * address : 
-             * specialty : 
+             * address :
+             * specialty :
              * schoolId : 524
              * userId : 1983
-             * remarks : 
+             * remarks :
              * departmentName : null
              * departmentId : 1194
              * departments : [{"id":878,"delInd":"0","createdBy":"1982","createdDateTime":"2021-04-02T03:25:31.000+0000","updatedBy":null,"updatedDateTime":"2021-04-02T03:25:31.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"departmentId":1194,"departmentName":"安卓","teacherId":585,"schoolId":524}]
@@ -99,6 +99,9 @@ public class TeacherlistRsp implements Serializable{
             public String userName;
             public String email;
             public String sex;
+            public String classesName;//班级名称
+            public String primaryGuardianPhone;//主监护人
+            public String deputyGuardianPhone;//副监护人
             public String healthStatus;
             public String maritalStatus;
             public String jobNumber;
@@ -127,8 +130,8 @@ public class TeacherlistRsp implements Serializable{
             public List<DepartmentsBean> departments;
             public List<SubjectsBean> subjects;
             public List<?> roles;
+            public String userType;//用户类型 1老师 2学生
 
-         
 
             public static class DepartmentsBean {
                 /**
@@ -163,7 +166,7 @@ public class TeacherlistRsp implements Serializable{
                 public int teacherId;
                 public int schoolId;
 
-             
+
             }
 
             public static class SubjectsBean {
@@ -194,11 +197,11 @@ public class TeacherlistRsp implements Serializable{
                 public int size;
                 public int current;
                 public int subjectId;
+                public List<SubjectsBean> subjects;
                 public int teacherId;
                 public int schoolId;
 
 
-               
             }
         }
     }

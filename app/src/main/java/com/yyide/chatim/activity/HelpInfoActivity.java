@@ -15,8 +15,6 @@ import butterknife.OnClick;
 
 public class HelpInfoActivity extends BaseActivity {
 
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)

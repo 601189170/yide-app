@@ -88,7 +88,6 @@
             android:background="@color/blue11"
             android:layout_height="3dp" />
     </FrameLayout>
-
 </LinearLayout>
 
     <FrameLayout

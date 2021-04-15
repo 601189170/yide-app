@@ -122,13 +122,20 @@ public interface DingApiStores {
     @POST("/management/cloud-system/user/equipment/addUserEquipmentInfo")
     Observable<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
 
-    //查询组织架构列表信息
+    //查询组织架构列表信息 大学组织结构
     @POST("/school/cloud-school/department/listByApp")
     Observable<listByAppRsp> listByApp();
 
+    //查询组织架构列表信息 小初高组织结构
+    @POST("/school/cloud-school/section/selectListByApp")
+    Observable<listByAppRsp> selectListByApp();
+
+    @POST("/school/cloud-school/departmentClass/selectListByApp")
+    Observable<listByAppRsp> universitySelectListByApp();
+
     //查询应用
     @POST("/backstage/cloud-backstage/application/search")
-    Observable<SearchRsp> Search();
+    Observable<SearchRsp> search();
 
     //更新用户信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
@@ -145,9 +152,9 @@ public interface DingApiStores {
     @POST("/management/cloud-system/app/user/updatepwd")
     Observable<ResultBean> forgotPwd(@Body RequestBody info);
 
-    //修改密码
+    //教职工列表接口
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @POST("/school/cloud-school/teacher/list")
+    @POST("/school/cloud-school/app/teacher/list")
     Observable<TeacherlistRsp> teacherlist(@Body RequestBody info);
 
     //用户头像上传
@@ -265,6 +272,11 @@ public interface DingApiStores {
     @POST("/timetable/cloud-timetable/lessons/addLessons")
     Observable<ResultBean> addLessons(@Body RequestBody requestBody);
 
+    //修改备课
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/timetable/cloud-timetable/lessons/updateLessons")
+    Observable<ResultBean> updateLessons(@Body RequestBody requestBody);
+
     //搜索帮助中心详情
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/backstage/cloud-backstage/app/support/search")
@@ -325,12 +337,22 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/school/cloud-school/app/teacher/selectAllList
     //通讯录搜索-所有
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/school/cloud-school/app/teacher/selectAllList")
+    @POST("/school/cloud-school/app/user/list")
     Observable<UserInfoRsp> selectAllList(@Body RequestBody requestBody);
+
+    //通讯录搜索-小初高
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/teacher/cloud-teacher/app/student/list")
+    Observable<TeacherlistRsp> getStudentList(@Body RequestBody requestBody);
+
+    //获取首页学生作品
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/android/studentWork/list")
+    Observable<UserInfoRsp> getStudentWorkList(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticePage
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/notice/getMyNoticePage")
-    Observable<TodoRsp> getMyNoticePage(@QueryMap HashMap<String,Object> map);
+    Observable<TodoRsp> getMyNoticePage(@QueryMap HashMap<String, Object> map);
 
 }

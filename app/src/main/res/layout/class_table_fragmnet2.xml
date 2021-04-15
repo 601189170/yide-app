@@ -26,6 +26,7 @@
                 android:id="@+id/left_layout"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 android:orientation="vertical">
 
             </RelativeLayout>

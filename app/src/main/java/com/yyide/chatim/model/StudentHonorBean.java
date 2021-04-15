@@ -13,14 +13,16 @@ public class StudentHonorBean {
     private String url;
     private String name;
     private String time;
+    private int img;
 
     public StudentHonorBean() {
     }
 
-    public StudentHonorBean(String url, String name, String time) {
+    public StudentHonorBean(String url, String name, String time, int img) {
         this.url = url;
         this.name = name;
         this.time = time;
+        this.img = img;
     }
 
     public String getUrl() {
@@ -45,6 +47,14 @@ public class StudentHonorBean {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getImg() {
+        return img;
+    }
+
+    public void setImg(int img) {
+        this.img = img;
     }
 
     @Override

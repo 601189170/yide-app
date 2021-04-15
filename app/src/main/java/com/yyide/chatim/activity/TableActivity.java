@@ -22,8 +22,6 @@ import butterknife.OnClick;
 
 public class TableActivity extends BaseActivity {
 
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.tab1)
     CheckedTextView tab1;
     @BindView(R.id.line1)

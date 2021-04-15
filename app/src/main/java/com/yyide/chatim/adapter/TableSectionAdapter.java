@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class TableSectionAdapter extends BaseAdapter {
-   public List<Integer> list=new ArrayList<>();
+    public List<Integer> list = new ArrayList<>();
 
 
     @Override
@@ -41,10 +41,11 @@ public class TableSectionAdapter extends BaseAdapter {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_section, null, false);
         TextView text_view = VHUtil.ViewHolder.get(view, R.id.text_view);
-        text_view.setText(getItem(position)+"");
+        text_view.setText(getItem(position) + 1 + "");
         return view;
     }
-    public void notifyData( List<Integer> list) {
+
+    public void notifyData(List<Integer> list) {
         this.list = list;
         notifyDataSetChanged();
     }

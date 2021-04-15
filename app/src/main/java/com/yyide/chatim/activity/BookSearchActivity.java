@@ -91,7 +91,7 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         recyclerviewHistory.setAdapter(itemBookSearchHistoryAdapter);
         itemBookSearchHistoryAdapter.setOnClickedListener(position -> {
             String tag = tags.get(position);
-            mvpPresenter.getMyAppList(1, 20, tag);
+            mvpPresenter.getMyAppList(tag);
         });
 
         editText.setOnEditorActionListener((v, actionId, event) -> {
@@ -106,7 +106,7 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
                     return true;
                 }
                 saveHistory(keyWord);
-                mvpPresenter.getMyAppList(1, 20, keyWord);
+                mvpPresenter.getMyAppList(keyWord);
                 return true;
             }
             return false;

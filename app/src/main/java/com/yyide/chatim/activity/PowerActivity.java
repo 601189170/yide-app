@@ -16,9 +16,6 @@ import butterknife.OnClick;
 
 public class PowerActivity extends BaseActivity {
 
-
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)
@@ -59,12 +56,9 @@ public class PowerActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.back, R.id.back_layout})
+    @OnClick({R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.back:
-                finish();
-                break;
             case R.id.back_layout:
                 finish();
                 break;

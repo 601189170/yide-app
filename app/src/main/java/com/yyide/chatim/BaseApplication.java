@@ -5,23 +5,17 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-
-import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.rtmp.TXLiveBase;
-
 import com.yyide.chatim.chat.helper.ConfigHelper;
-
 import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.utils.PrivateConstants;
 
-
 import cn.jpush.android.api.JPushInterface;
-import okhttp3.OkHttpClient;
 
 
 
@@ -72,8 +66,6 @@ public class BaseApplication extends Application {
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
     }
-
-
 
     public static boolean isNetworkAvailable(Context context) {
         if(context !=null){

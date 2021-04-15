@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -16,9 +17,13 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.tabs.TabLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
+import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.adapter.AppAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;
@@ -51,9 +56,10 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     ListView listview;
     @BindView(R.id.right_btn)
     LinearLayout rightBtn;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private View mBaseView;
     RecylAppAdapter recylAppAdapter;
-
     AppAdapter appAdapter;
     boolean sc = true;
     MyAppItemAdapter adapter;
@@ -78,10 +84,9 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 Intent intent = new Intent(mActivity, AppManagerActivity.class);
                 startActivity(intent);
             } else {
-                startActivity(new Intent(mActivity, LeaveActivity.class));
+                startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
             }
         });
-
         recylAppAdapter = new RecylAppAdapter();
         recy.setAdapter(recylAppAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
@@ -102,10 +107,22 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
             return false;
         });
 
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            mvpPresenter.getMyAppList();
+            mvpPresenter.getAppList();
+        });
+
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                //判断ListView是否滑动到第一个Item的顶部
+                if (mSwipeRefreshLayout != null && listview.getChildCount() > 0 && listview.getFirstVisiblePosition() == 0
+                        && listview.getChildAt(0).getTop() >= listview.getPaddingTop()) {
+                    //解决滑动冲突，当滑动到第一个item，下拉刷新才起作用
+                    mSwipeRefreshLayout.setEnabled(true);
+                } else {
+                    mSwipeRefreshLayout.setEnabled(false);
+                }
             }
 
             @Override
@@ -114,16 +131,12 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 if (sc) {
                     recylAppAdapter.setPosition(firstVisiblePosition);
                 }
-
             }
         });
 
-        rightBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        rightBtn.setOnClickListener(v -> {
 //                startActivity(new Intent(mActivity,LeaveActivity.class));
-                startActivity(new Intent(mActivity, AppManagerActivity.class));
-            }
+            startActivity(new Intent(mActivity, AppManagerActivity.class));
         });
         mvpPresenter.getMyAppList();
         mvpPresenter.getAppList();
@@ -159,7 +172,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
             AppListRsp.DataBean itemBean = new AppListRsp.DataBean();
             itemBean.setAppType("editor");
             itemBean.setName("编辑");
-            if(data == null){
+            if (data == null) {
                 data = new ArrayList<>();
             }
             data.add(itemBean);
@@ -175,6 +188,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
 
     @Override
     public void getAppListSuccess(AppItemBean model) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.d(TAG, "getMyAppFail :" + model);
         recylAppAdapter.notifydata(model.getData().getRecords());
         appAdapter.notifyData(model.getData().getRecords());
@@ -182,6 +196,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
 
     @Override
     public void getAppListFail(String msg) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.d(TAG, "getMyAppFail :" + msg);
     }
 }

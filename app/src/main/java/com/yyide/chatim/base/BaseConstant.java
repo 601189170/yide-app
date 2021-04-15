@@ -56,6 +56,9 @@ public class BaseConstant {
      **/
     public final static int REQ_CODE = 127;
 
+    public final static String JG_ALIAS_NAME = "aliasName";
+    public final static String JG_SEQUENCE = "sequence";
+
     /**
      * EventBus 常量
      */
@@ -63,7 +66,11 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_USER_PHONE = "type_update_user_phone";
     public static final String TYPE_UPDATE_USER_EMAIL = "type_update_user_email";
     public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
-    public static final String TYPE_UPDATE_USER_BIRTHDAY = "type_update_user_birthday";
+    public static final String TYPE_SELECT_MESSAGE_TODO = "type_select_message_todo";
+
+    public static final String TYPE_UPDATE_HOME = "type_update_home";
+
+    public static final String TYPE_UPDATE_IMG = "type_update_img";
 
     public static final String TYPE_PREPARES_SAVE = "type_prepares_save";
     public static final String TYPE_UPDATE_CLASS_HOME = "type_update_class_home";

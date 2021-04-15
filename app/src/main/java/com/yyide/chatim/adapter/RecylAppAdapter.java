@@ -76,10 +76,8 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
             item.setOnClickListener(this);
         }
 
-
         CheckedTextView item;
         TextView line;
-
 
         @Override
         public void onClick(View v) {

@@ -21,9 +21,14 @@ import com.yyide.chatim.activity.notice.view.NoticeHomeView;
 import com.yyide.chatim.adapter.NoiceAnnounAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.utils.DateUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
@@ -65,18 +70,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mvpPresenter.getMyData();
-//        adapter=new NoiceAnnounAdapter(mRollPagerView);
-//        mRollPagerView.setHintView(null);
-//        mRollPagerView.setPlayDelay(5000);
-//        mRollPagerView.setAdapter(adapter);
-//        mRollPagerView.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), NoticeAnnouncementActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        EventBus.getDefault().register(this);
         mvpPresenter.getHomeNotice();
 
         ll_notice.setOnClickListener(v -> {
@@ -90,41 +84,23 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            Log.d("HomeRefresh", NoticeFragment.class.getSimpleName());
+            mvpPresenter.getHomeNotice();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     protected NoticeHomePresenter createPresenter() {
         return new NoticeHomePresenter(this);
-    }
-
-    void listTimeData(int schoolId, String schoolName) {
-        SchoolRsp rsp=new SchoolRsp();
-        rsp.schoolId=schoolId;
-        rsp.schoolName=schoolName;
-        RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
-
-        //请求组合创建
-        Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + "/timetable/cloud-timetable/timetable/listTimeData")
-                .addHeader("Authorization", SpData.User().token)
-                .post(requestBody)
-                .build();
-        //发起请求
-
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("TAG", "onFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-//                String data = response.body().string();
-//                Log.e("TAG", "mOkHttpClient==>: " + data);
-//                SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
-//                if (bean.code==BaseConstant.REQUEST_SUCCES2){
-//                    Tologin(bean.data.username,bean.data.password, String.valueOf(schoolId));
-//                }
-            }
-        });
     }
 
     @Override

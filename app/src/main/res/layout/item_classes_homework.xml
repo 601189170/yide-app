@@ -8,31 +8,6 @@
     android:paddingBottom="@dimen/dp_20">
 
     <TextView
-        android:id="@+id/tv_now"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/dp_12"
-        android:drawableStart="@drawable/icon_zy"
-        android:drawablePadding="6dp"
-        android:text="今日作业"
-        android:textColor="#ff1e232a"
-        android:textSize="@dimen/text_15"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/dp_12"
-        android:layout_marginRight="10dp"
-        android:background="@color/line_10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_now" />
-
-    <TextView
         android:id="@+id/tv_homework_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

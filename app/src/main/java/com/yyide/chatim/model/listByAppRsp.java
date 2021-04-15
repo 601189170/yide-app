@@ -1,6 +1,7 @@
 package com.yyide.chatim.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class listByAppRsp {
@@ -18,7 +19,6 @@ public class listByAppRsp {
     public boolean success;
     public List<DataBean> data;
 
-   
 
     public static class DataBean {
         /**
@@ -61,9 +61,7 @@ public class listByAppRsp {
         public int versionStamp;
         public List<ListBean> list;
 
-      
-
-        public static class ListBean {
+        public static class ListBean implements Serializable {
             /**
              * id : 1194.0
              * delInd : 0
@@ -104,29 +102,8 @@ public class listByAppRsp {
             public double level;
             public double peopleNum;
             public String isExitInd;
-            public List<ZBListBean> list;
+            public List<ListBean> list;
 
-            public static class ZBListBean implements Serializable {
-                public String createdBy;
-                public String createdDateTime;
-                public double current;
-                public String delInd;
-                public int id;
-                public String isExitInd;
-                public double level;
-                public String name;
-                public double parentId;
-                public String parentName;
-                public double peopleNum;
-                public double schoolId;
-                public double size;
-                public double sort;
-                public double total;
-                public String type;
-                public String updatedDateTime;
-                public double versionStamp;
-                public List<ZBListBean> list;
-            }
         }
     }
 }

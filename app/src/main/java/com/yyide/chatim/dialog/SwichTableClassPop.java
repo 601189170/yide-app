@@ -33,6 +33,7 @@ public class SwichTableClassPop extends PopupWindow {
     Window mWindow;
     private List<SelectTableClassesRsp.DataBean> dataBeansList;
     private SelectClasses mSelectClasses;
+    private ArrayWheelAdapter classesWheelAdapter;
 
     public void setSelectClasses(SelectClasses selectClasses) {
         this.mSelectClasses = selectClasses;
@@ -56,10 +57,14 @@ public class SwichTableClassPop extends PopupWindow {
         WheelView wheelViewClasses = mView.findViewById(R.id.tableClass);
 
         confirm.setOnClickListener(v -> {
-            String item = (String) wheelViewClasses.getAdapter().getItem(wheelViewClasses.getCurrentItem());
-            //getItemData();
-            if(mSelectClasses != null){
-                mSelectClasses.OnSelectClassesListener(0, item);
+            if (classesWheelAdapter.getData() != null && classesWheelAdapter.getData().size() >= wheelViewClasses.getCurrentItem()) {
+                SelectTableClassesRsp.DataBean itemData = (SelectTableClassesRsp.DataBean) classesWheelAdapter.getData().get(wheelViewClasses.getCurrentItem());
+                if (mSelectClasses != null && itemData != null) {
+                    mSelectClasses.OnSelectClassesListener(itemData.getId(), itemData.getName());
+                }
+            }
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
         bg.setOnClickListener(v -> {
@@ -67,7 +72,6 @@ public class SwichTableClassPop extends PopupWindow {
                 popupWindow.dismiss();
             }
         });
-
         wheelView.setCyclic(false);
         wheelViewClasses.setCyclic(false);
         wheelViewClasses.setCurrentItem(-1);
@@ -75,14 +79,16 @@ public class SwichTableClassPop extends PopupWindow {
         wheelView.setCurrentItem(-1);
         wheelView.setOnItemSelectedListener(index -> {
             if (dataBeansList != null && dataBeansList.size() > 0 && dataBeansList.get(index) != null) {
-                wheelViewClasses.setAdapter(new ArrayWheelAdapter(dataBeansList.get(index).getList()));
+                classesWheelAdapter = new ArrayWheelAdapter(dataBeansList.get(index).getList());
+                wheelViewClasses.setAdapter(classesWheelAdapter);
             }
         });
         if (dataBeansList != null && dataBeansList.size() > 0 && dataBeansList.get(0) != null) {
-            wheelViewClasses.setAdapter((WheelAdapter) new ArrayWheelAdapter(dataBeansList.get(0).getList()));
+            classesWheelAdapter = new ArrayWheelAdapter(dataBeansList.get(0).getList());
+            wheelViewClasses.setAdapter(classesWheelAdapter);
         }
         wheelViewClasses.setOnItemSelectedListener(index -> {
-            SelectTableClassesRsp.DataBean item = (SelectTableClassesRsp.DataBean) wheelViewClasses.getAdapter().getItem(index);
+
         });
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,

@@ -1,14 +1,17 @@
 package com.yyide.chatim.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
@@ -47,9 +50,17 @@ public class AppAdapter extends BaseAdapter {
         title.setText(getItem(position).getName());
         AppItemAdapter adapter = new AppItemAdapter();
         grid.setAdapter(adapter);
-        if(getItem(position).getList() != null){
+        if (getItem(position).getList() != null) {
             adapter.notifyData(getItem(position).getList());
         }
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+                intent.putExtra("url", adapter.getItem(position).getPath());
+                view.getContext().startActivity(intent);
+            }
+        });
         return view;
     }
 

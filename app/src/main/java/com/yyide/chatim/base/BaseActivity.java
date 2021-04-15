@@ -170,6 +170,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (unbinder != null) {
             unbinder.unbind();
         }
+        hideLoading();
         super.onDestroy();
     }
 

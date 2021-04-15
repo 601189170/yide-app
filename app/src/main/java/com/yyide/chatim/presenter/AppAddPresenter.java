@@ -22,7 +22,7 @@ public class AppAddPresenter extends BasePresenter<AppAddView> {
     }
 
     public void getAppAddList(int size, int pageNum) {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         Map<String, Integer> map = new HashMap<>();
         map.put("size", size);
         map.put("current", pageNum);
@@ -46,7 +46,7 @@ public class AppAddPresenter extends BasePresenter<AppAddView> {
     }
 
     public void addApp(int id) {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.addApp(id), new ApiCallback<ResultBean>() {
             @Override
             public void onSuccess(ResultBean model) {

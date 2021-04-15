@@ -147,17 +147,45 @@ public class UserInfoRsp {
         private String specialty;
         private int schoolId;
         private String remarks;
-        private Object classesId;
-        private Object classesName;
-        private Object primaryGuardianPhone;
-        private Object deputyGuardianPhone;
-        private Object studentNo;
+        private String classesId;
+        private String classesName;
+        private String primaryGuardianPhone;
+        private String deputyGuardianPhone;
+        private String departmentName;
+        private String studentNo;
         private Object accountTypes;
         private Object birthPlace;
         private Object enrollmentDate;
         private Object onlyChild;
         private Object personalIllness;
         private Object accommodation;
+        private String userType;//用户类型 1老师 2学生
+        private List<TeacherlistRsp.DataBean.RecordsBean.SubjectsBean> subjects;
+
+
+        public String getUserType() {
+            return userType;
+        }
+
+        public void setUserType(String userType) {
+            this.userType = userType;
+        }
+
+        public List<TeacherlistRsp.DataBean.RecordsBean.SubjectsBean> getSubjects() {
+            return subjects;
+        }
+
+        public void setSubjects(List<TeacherlistRsp.DataBean.RecordsBean.SubjectsBean> subjects) {
+            this.subjects = subjects;
+        }
+
+        public String getDepartmentName() {
+            return departmentName;
+        }
+
+        public void setDepartmentName(String departmentName) {
+            this.departmentName = departmentName;
+        }
 
         public int getId() {
             return id;
@@ -459,31 +487,31 @@ public class UserInfoRsp {
             return classesId;
         }
 
-        public void setClassesId(Object classesId) {
+        public void setClassesId(String classesId) {
             this.classesId = classesId;
         }
 
-        public Object getClassesName() {
+        public String getClassesName() {
             return classesName;
         }
 
-        public void setClassesName(Object classesName) {
+        public void setClassesName(String classesName) {
             this.classesName = classesName;
         }
 
-        public Object getPrimaryGuardianPhone() {
+        public String getPrimaryGuardianPhone() {
             return primaryGuardianPhone;
         }
 
-        public void setPrimaryGuardianPhone(Object primaryGuardianPhone) {
+        public void setPrimaryGuardianPhone(String primaryGuardianPhone) {
             this.primaryGuardianPhone = primaryGuardianPhone;
         }
 
-        public Object getDeputyGuardianPhone() {
+        public String getDeputyGuardianPhone() {
             return deputyGuardianPhone;
         }
 
-        public void setDeputyGuardianPhone(Object deputyGuardianPhone) {
+        public void setDeputyGuardianPhone(String deputyGuardianPhone) {
             this.deputyGuardianPhone = deputyGuardianPhone;
         }
 
@@ -491,7 +519,7 @@ public class UserInfoRsp {
             return studentNo;
         }
 
-        public void setStudentNo(Object studentNo) {
+        public void setStudentNo(String studentNo) {
             this.studentNo = studentNo;
         }
 

@@ -21,12 +21,12 @@
             android:orientation="horizontal">
 
 
-            <CheckedTextView
+            <ImageView
                 android:id="@+id/date"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:background="#C6C9CC" />
 
             <TextView
                 android:id="@+id/className"
@@ -67,12 +67,14 @@
             android:text="教具："
             android:textColor="#333333"
             android:textSize="12sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:layout_gravity="center">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

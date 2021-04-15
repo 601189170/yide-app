@@ -43,7 +43,7 @@ public class UserPresenter extends BasePresenter<UserView> {
             @Override
             public void onSuccess(UpdateUserInfo model) {
                 mvpView.hideLoading();
-                if(model.getCode() == -1){
+                if (model.getCode() == -1) {
                     mvpView.updateFail(model.getMsg());
                 } else {
                     mvpView.updateSuccess(model.getMsg());
@@ -63,8 +63,7 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void uploadFile(String filePath) {
-        final File file = new File(filePath);
+    public void uploadFile(File file) {
         if (file == null) {
             return;
         }
@@ -78,13 +77,15 @@ public class UserPresenter extends BasePresenter<UserView> {
         addSubscription(dingApiStores.uploadImg(requestImgPart), new ApiCallback<UploadRep>() {
             @Override
             public void onSuccess(UploadRep model) {
-                mvpView.hideLoading();
-                mvpView.uploadFileSuccess(model.getUrl());
+                if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+                    mvpView.uploadFileSuccess(model.getUrl());
+                } else {
+                    mvpView.uploadFileFail(model.getMessage());
+                }
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.hideLoading();
                 mvpView.uploadFileFail(msg);
             }
 

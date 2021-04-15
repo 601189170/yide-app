@@ -100,7 +100,7 @@ dependencies {
     //implementation 'com.github.loperSeven:DateTimePicker:0.1.0'
 //    implementation 'com.tencent.imsdk:tuikit-live:5.1.2'
     implementation 'com.tencent.imsdk:tuikit:5.1.2'
-
+    implementation 'com.nineoldandroids:library:2.4.0'
     //——TimePickerView 时间选择器，支持年月日时分，年月日，年月，时分等格式。
     //——OptionsPickerView 选项选择器，支持一，二，三级选项选择，并且可以设置是否联动
     implementation 'com.contrarywind:wheelview:4.1.0'
@@ -117,7 +117,8 @@ dependencies {
     // 腾讯bugly--sdk
     implementation 'com.tencent.bugly:crashreport:latest.release'
 //    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
-
+    //视频bo'fa//
+    implementation 'com.shuyu:GSYVideoPlayer:8.1.2'
     //Utils
     implementation 'com.blankj:utilcode:1.30.6'
 //    implementation 'com.blankj:utilcode:1.9.6'

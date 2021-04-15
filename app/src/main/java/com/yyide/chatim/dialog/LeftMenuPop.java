@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tencent.qcloud.tim.uikit.TUIKit;
+import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -204,6 +206,19 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             case R.id.exit://退出登录
                 SPUtils.getInstance().clear();
                 dismiss();
+                //退出登录IM
+//                TUIKit.logout(new IUIKitCallBack(){
+//
+//                    @Override
+//                    public void onSuccess(Object data) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(String module, int errCode, String errMsg) {
+//
+//                    }
+//                });
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();
                 break;

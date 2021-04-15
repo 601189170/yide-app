@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
@@ -28,6 +29,8 @@ import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.BookSearchActivity;
+import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.utils.Constants;
 
@@ -35,10 +38,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import butterknife.OnClick;
 
 
 public class ConversationFragment extends BaseFragment {
-
 
     private View mBaseView;
     private ConversationLayout mConversationLayout;
@@ -80,6 +85,14 @@ public class ConversationFragment extends BaseFragment {
         // 从布局文件中获取会话列表面板
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
         mMenu = new Menu(getActivity(), (TitleBarLayout) mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
+        ConstraintLayout constraintLayout = mBaseView.findViewById(R.id.cl_message);
+        LinearLayout ll_search = mBaseView.findViewById(R.id.ll_search);
+        constraintLayout.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+        });
+        ll_search.setOnClickListener(view -> {
+            startActivity(new Intent(getActivity(), BookSearchActivity.class));
+        });
         // 会话列表面板的默认UI和交互初始化
         mConversationLayout.initDefault();
         mConversationLayout.getConversationList();
@@ -115,7 +128,6 @@ public class ConversationFragment extends BaseFragment {
 //        titleBarLayout.setBackgroundColor(R.color.black);
 //使设置好的布局参数应用到控件
 //        imageView.setLayoutParams(params);
-
 
     }
 
@@ -222,9 +234,5 @@ public class ConversationFragment extends BaseFragment {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         BaseApplication.getInstance().startActivity(intent);
     }
-
-
-
-
 
 }

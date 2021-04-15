@@ -40,6 +40,8 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.OkHttpClient;
@@ -83,21 +85,15 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
 
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                timeAdapter.setPosition(position);
-                index = position;
-                tableItemAdapter.setIndex(index);
-            }
+        grid.setOnItemClickListener((parent, view1, position, id) -> {
+            timeAdapter.setPosition(position);
+            index = position;
+            tableItemAdapter.setIndex(index);
         });
-        tablegrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                index = position % 7;
-                tableItemAdapter.setIndex(index);
-                timeAdapter.setPosition(index);
-            }
+        tablegrid.setOnItemClickListener((parent, view12, position, id) -> {
+            index = position % 7;
+            tableItemAdapter.setIndex(index);
+            timeAdapter.setPosition(index);
         });
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
@@ -123,7 +119,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         if (identityInfo != null) {
             if ("Y".equalsIgnoreCase(identityInfo.schoolType)) {
                 mvpPresenter.selectClassByAllSchool();
-            } else {
+            } else if ("N".equalsIgnoreCase(identityInfo.schoolType)) {
                 mvpPresenter.selectListBySchoolAll();
             }
         }
@@ -166,9 +162,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 //            setData(rsp);
 
         }
-        createLeftTypeView(0, 1, 1);
-        createLeftTypeView(1, 2, 2);
-        createLeftTypeView(3, 3, 3);
+//        createLeftTypeView(0, 1, 1);
+//        createLeftTypeView(1, 2, 2);
+//        createLeftTypeView(3, 3, 3);
     }
 
     //创建"第上下午"视图
@@ -221,15 +217,14 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             if (model.getData() != null && model.getData().size() > 0) {
-                if (swichTableClassPop == null) {
-                    swichTableClassPop = new SwichTableClassPop(getActivity(), model.getData());
-                }
+                swichTableClassPop = new SwichTableClassPop(getActivity(), model.getData());
                 swichTableClassPop.setSelectClasses(this);
             } else {
                 ToastUtils.showShort("暂无班级");
             }
         }
     }
+
 
     @Override
     public void selectTableClassListFail(String msg) {

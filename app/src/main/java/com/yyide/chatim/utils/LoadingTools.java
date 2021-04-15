@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.KeyEvent;
+import android.view.Window;
+
+import com.yyide.chatim.R;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -15,6 +18,8 @@ public class LoadingTools {
 
     public SweetAlertDialog pd(Context context) {
         final SweetAlertDialog sd = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        Window window = sd.getWindow();
+        window.setWindowAnimations(R.style.NoAnimationDialog); // 添加动画
         sd.getProgressHelper().setBarColor(Color.parseColor("#37A4FF"));
         sd.setTitleText("Loading");
         sd.setCancelable(true);

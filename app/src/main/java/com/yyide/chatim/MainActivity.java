@@ -17,14 +17,15 @@ import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
-
-import com.tencent.qcloud.tim.uikit.TUIKit;
-import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
+import com.blankj.utilcode.util.SPUtils;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.chat.info.UserInfo;
@@ -35,15 +36,13 @@ import com.yyide.chatim.home.HomeFragmentXZ;
 import com.yyide.chatim.home.MessageFragment;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
-import com.yyide.chatim.jiguang.TagAliasOperatorHelper;
+import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ResultBean;
-import com.yyide.chatim.model.ScheduleRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
-import com.yyide.chatim.model.addUserEquipmentInfoRsp;
-import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.view.MainView;
@@ -52,22 +51,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-
 import cn.jpush.android.api.JPushInterface;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView, HomeFragment.FragmentListener {
 
@@ -130,30 +116,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         mUserInfo = UserInfo.getInstance();
         EventBus.getDefault().register(this);
-        setTab(0,0);
-//        startActivity(new Intent(this, ResetPassWordActivity.class));
-//        new Handler().postDelayed(new Runnable() {
-//                @Override
-//            public void run() {
-        //                mvpPresenter.Login("13659896596","896596");
-//            }
-//        },5000);
-
-
-//        mvpPresenter.getselectUser();
-
-//        mvpPresenter.ToUserLogout();
-
-//        mvpPresenter.getUserSchool();
-//        mvpPresenter.SelectSchByTeaid();
-
-
-//        mvpPresenter.listAllScheduleByTeacherId();
-
-//        CheacklistSchedule("99","1","10");
+        setTab(0, 0);
         //注册极光用户
-        RegistJiGuang();
-//        getUserSchool();
+//        RegistJiGuang();
+        //注册极光别名
+        registerAlias();
     }
 
     void RegistJiGuang() {
@@ -197,14 +164,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.CheakId.equals(messageEvent.getCode())) {
-            IdType = 2;
-            ActivityUtils.finishAllActivities();
-            startActivity(new Intent(this, MainActivity.class));
-            Log.e("TAG", "messageEvent: " + IdType);
-            setTab(0,0);
-        } else if (BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())) {
-            setTab(3,0);
+        if (BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())) {
+            setTab(3, 0);
+        } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
+            setTab(1, 0);
         }
     }
 
@@ -244,6 +207,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         filter.addAction(MESSAGE_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);
     }
+
+    //这是来自 JPush Example 的设置别名的 Activity 里的代码，更详细的示例请参考 JPush Example。一般 App 的设置的调用入口，在任何方便的地方调用都可以。
+    private void registerAlias() {
+        int sequence = SPUtils.getInstance().getInt(BaseConstant.JG_SEQUENCE, 1);
+        String alias = SPUtils.getInstance().getString(BaseConstant.JG_ALIAS_NAME);
+        GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
+        if (identityInfo != null) {
+            if (SpData.getIdentityInfo().userId > 0 && !String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
+                JPushInterface.setAlias(this, ++sequence, SpData.getIdentityInfo().userId + "");
+            }
+        }
+    }
+
 
     @Override
     public void updateUnread(int count) {
@@ -331,42 +307,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     @Override
     public void addUserEquipmentInfoFail(String rsp) {
         Log.e("TAG", "addUserEquipmentInfoFail==》: " + JSON.toJSONString(rsp));
-    }
-
-    OkHttpClient mOkHttpClient = new OkHttpClient();
-
-    void CheacklistSchedule(String teacherId, String current, String size) {
-        ScheduleRsp rsp = new ScheduleRsp();
-        rsp.teacherId = teacherId;
-        rsp.current = current;
-        rsp.size = size;
-        RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
-
-        //请求组合创建
-        Request request = new Request.Builder()
-//                .url(BaseConstant.URL_IP + "/brand/class-brand-management/android/class/selectClassesInfo")
-                .url(BaseConstant.URL_IP + "/timetable/cloud-timetable/schedule/listSchedule")
-                .addHeader("Authorization", SpData.User().token)
-                .post(requestBody)
-                .build();
-
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("TAG", "onFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e("TAG", "mOkHttpClientlistSchedule==>: " + data);
-//                SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
-//                if (bean.code==BaseConstant.REQUEST_SUCCES2){
-//                    Tologin(bean.data.username,bean.data.password, String.valueOf(schoolId));
-//                }
-            }
-        });
     }
 
     @Override

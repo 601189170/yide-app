@@ -23,7 +23,7 @@ public class GlideUtil {
     public static void loadImage(Context context, String url, ImageView imageView) {
         RequestOptions myOptions = new RequestOptions()
                 .centerInside().placeholder(R.mipmap.de1).error(R.mipmap.de1);
-        Glide.with(context).load(GlideUtil.DataUrl(url)).apply(myOptions).into(imageView);
+        Glide.with(context).load(url).into(imageView);
     }
 
     //圆图

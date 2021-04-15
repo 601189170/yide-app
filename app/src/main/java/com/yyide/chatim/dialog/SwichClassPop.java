@@ -119,15 +119,12 @@ public class SwichClassPop extends PopupWindow {
                 return false;
             }
         });
-        bg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        bg.setOnClickListener(v -> {
 
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
-
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
+
         });
         // 获取当前Activity的window
         Activity activity = (Activity) mView.getContext();

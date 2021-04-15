@@ -33,31 +33,31 @@ public class SelectTableClassesRsp {
     }
 
     public static class DataBean {
-        private Integer id;
+        private int id;
         private String delInd;
         private String createdBy;
         private String createdDateTime;
         private String updatedBy;
         private String updatedDateTime;
-        private Integer versionStamp;
-        private Integer total;
-        private Integer size;
-        private Integer current;
+        private int versionStamp;
+        private int total;
+        private int size;
+        private int current;
         private String name;
-        private Integer schoolId;
+        private int schoolId;
         private String alias;
         private String showType;
-        private Integer gradeId;
-        private Integer headmasterId;
+        private int gradeId;
+        private int headmasterId;
         private Object secondHeadmasterId;
         private String type;
         private List<DataBean> list;
 
-        public Integer getId() {
+        public int getId() {
             return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(int id) {
             this.id = id;
         }
 
@@ -101,35 +101,35 @@ public class SelectTableClassesRsp {
             this.updatedDateTime = updatedDateTime;
         }
 
-        public Integer getVersionStamp() {
+        public int getVersionStamp() {
             return versionStamp;
         }
 
-        public void setVersionStamp(Integer versionStamp) {
+        public void setVersionStamp(int versionStamp) {
             this.versionStamp = versionStamp;
         }
 
-        public Integer getTotal() {
+        public int getTotal() {
             return total;
         }
 
-        public void setTotal(Integer total) {
+        public void setTotal(int total) {
             this.total = total;
         }
 
-        public Integer getSize() {
+        public int getSize() {
             return size;
         }
 
-        public void setSize(Integer size) {
+        public void setSize(int size) {
             this.size = size;
         }
 
-        public Integer getCurrent() {
+        public int getCurrent() {
             return current;
         }
 
-        public void setCurrent(Integer current) {
+        public void setCurrent(int current) {
             this.current = current;
         }
 
@@ -141,11 +141,11 @@ public class SelectTableClassesRsp {
             this.name = name;
         }
 
-        public Integer getSchoolId() {
+        public int getSchoolId() {
             return schoolId;
         }
 
-        public void setSchoolId(Integer schoolId) {
+        public void setSchoolId(int schoolId) {
             this.schoolId = schoolId;
         }
 
@@ -165,19 +165,19 @@ public class SelectTableClassesRsp {
             this.showType = showType;
         }
 
-        public Integer getGradeId() {
+        public int getGradeId() {
             return gradeId;
         }
 
-        public void setGradeId(Integer gradeId) {
+        public void setGradeId(int gradeId) {
             this.gradeId = gradeId;
         }
 
-        public Integer getHeadmasterId() {
+        public int getHeadmasterId() {
             return headmasterId;
         }
 
-        public void setHeadmasterId(Integer headmasterId) {
+        public void setHeadmasterId(int headmasterId) {
             this.headmasterId = headmasterId;
         }
 

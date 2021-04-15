@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_F5F8FC"
@@ -25,7 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="12dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="14dp"
@@ -43,75 +45,87 @@
         </LinearLayout>
 
     </FrameLayout>
-    <!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <!--        <androidx.core.widget.NestedScrollView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:scrollbarSize="4dp"-->
+        <!--            android:scrollbars="vertical">-->
+
+        <!--            <LinearLayout-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent">-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/bg_white"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="21dp"
-                android:layout_marginTop="20dp"
-                android:text="我的应用"
-                android:textColor="#333333"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/bg_white"
+                android:orientation="vertical">
 
-            <GridView
-                android:id="@+id/mygrid"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="21dp"
+                    android:layout_marginTop="20dp"
+                    android:text="我的应用"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <com.yyide.chatim.widget.MyGridView
+                    android:id="@+id/mygrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="23dp"
+                    android:horizontalSpacing="0dp"
+                    android:numColumns="4"
+                    android:verticalSpacing="@dimen/dp_10" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:listSelector= "@android:color/transparent"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="23dp"
-                android:horizontalSpacing="30dp"
-                android:numColumns="4"
-                android:verticalSpacing="@dimen/dp_10">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            </GridView>
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recy"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="11dp"
-            android:background="@color/white">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recy"
+            <ListView
+                android:id="@+id/listview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:divider="@color/transparent"
+                android:dividerHeight="0dp"
+                android:paddingBottom="10dp"
+                android:scrollbarSize="5px"
+                android:scrollbars="none" />
 
-            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
-
-        <ListView
-            android:id="@+id/listview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:divider="@color/transparent"
-            android:dividerHeight="0dp">
-
-        </ListView>
-    </LinearLayout>
-
-    <!--</ScrollView>-->
+        <!--            </LinearLayout>-->
+        <!--        </androidx.core.widget.NestedScrollView>-->
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

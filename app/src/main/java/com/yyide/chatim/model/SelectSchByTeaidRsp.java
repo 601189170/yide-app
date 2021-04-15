@@ -67,6 +67,7 @@ public class SelectSchByTeaidRsp {
         public String afterClass;
         public String teachTool;
         public int subid;
+        public int lessonsId;
         public List<String> teachToolList;
         public List<String> lessonsSubEntityList;
     }

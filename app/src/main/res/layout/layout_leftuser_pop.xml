@@ -295,6 +295,7 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
@@ -410,6 +411,7 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 

@@ -13,13 +13,21 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.NoteBookActivity;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.chat.ConversationFragment;
+import com.yyide.chatim.homemodel.TableFragment;
+import com.yyide.chatim.model.EventMessage;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -50,19 +58,20 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
         int type = getArguments().getInt("type", 0);
-        Log.e(TAG, "onViewCreated: "+type );
+        Log.e(TAG, "onViewCreated: " + type);
         setTab(type);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Log.e(TAG, "onHiddenChanged: hidden = "+hidden );
-        if (!hidden){
+        Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
+        if (!hidden) {
             int type = getArguments().getInt("type", 0);
-            Log.e(TAG, "onHiddenChanged: "+type );
-            if (type != 0){
+            Log.e(TAG, "onHiddenChanged: " + type);
+            if (type != 0) {
                 setTab(type);
             }
         }
@@ -73,7 +82,6 @@ public class MessageFragment extends BaseFragment {
         tab2.setChecked(false);
         line1.setVisibility(View.GONE);
         line2.setVisibility(View.GONE);
-
 
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -106,7 +114,7 @@ public class MessageFragment extends BaseFragment {
         ft.commitAllowingStateLoss();
     }
 
-    @OnClick({R.id.tab1, R.id.tab2,R.id.note})
+    @OnClick({R.id.tab1, R.id.tab2, R.id.note})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1:
@@ -120,4 +128,19 @@ public class MessageFragment extends BaseFragment {
                 break;
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            Log.d("HomeRefresh", MessageFragment.class.getSimpleName());
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

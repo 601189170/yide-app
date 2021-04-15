@@ -1,6 +1,7 @@
 package com.yyide.chatim.homemodel;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ClassesBannerRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.presenter.WorkPresenter;
 import com.yyide.chatim.view.WorkView;
@@ -22,6 +24,10 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,6 +56,7 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
         if (SpData.getClassInfo() != null) {
             mvpPresenter.getWorkInfo(SpData.getClassInfo().classesId);
         }
@@ -114,4 +121,21 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
     public void getWorkFail(String msg) {
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            Log.d("HomeRefresh", WorkFragment.class.getSimpleName());
+            if (SpData.getClassInfo() != null) {
+                mvpPresenter.getWorkInfo(SpData.getClassInfo().classesId);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

@@ -36,11 +36,18 @@ import butterknife.OnClick;
 public class StudentHonorListActivity extends BaseActivity {
     @BindView(R.id.title_tv)
     TextView title;//标题
-
     @BindView(R.id.honor_content_rv)
     RecyclerView honorContentRv;
 
     List<StudentHonorBean> studentHonorBeanList;
+    private int[] imgs = {R.drawable.student_1,
+            R.drawable.student_2,
+            R.drawable.student_3,
+            R.drawable.student_4,
+            R.drawable.student_5,
+            R.drawable.student_6,
+            R.drawable.student_7,
+            R.drawable.student_8};
 
     @Override
     public int getContentViewID() {
@@ -50,11 +57,10 @@ public class StudentHonorListActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_student_honor_list);
-        ButterKnife.bind(this);
+        title.setText("学生荣誉");
         studentHonorBeanList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            studentHonorBeanList.add(new StudentHonorBean("url","学生"+i,"2021.03.0"+i));
+        for (int i = 0; i < imgs.length; i++) {
+            studentHonorBeanList.add(new StudentHonorBean("url", "学生" + i, "2021.04.2" + i, imgs[i]));
         }
         initView();
     }
@@ -62,9 +68,9 @@ public class StudentHonorListActivity extends BaseActivity {
     private void initView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         honorContentRv.setLayoutManager(layoutManager);
-        ItemStudentHonorAdapter adapter = new ItemStudentHonorAdapter(this,studentHonorBeanList);
+        ItemStudentHonorAdapter adapter = new ItemStudentHonorAdapter(this, studentHonorBeanList);
         honorContentRv.setAdapter(adapter);
-        honorContentRv.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,10)));
+        //honorContentRv.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this, 10)));
     }
 
     @OnClick({R.id.back_iv, R.id.search_iv})
@@ -74,7 +80,7 @@ public class StudentHonorListActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.search_iv:
-                startActivity(new Intent(this,StudentHonorSearchActivity.class));
+                startActivity(new Intent(this, StudentHonorSearchActivity.class));
                 break;
             default:
                 break;

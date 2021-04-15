@@ -32,11 +32,14 @@ import com.yyide.chatim.adapter.SwichSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.chat.signature.GenerateTestUserSig;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.SelectUserSchoolRsp;
 import com.yyide.chatim.utils.DemoLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,7 +62,6 @@ public class SwichSchoolPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
-
     OkHttpClient mOkHttpClient = new OkHttpClient();
 
     public SwichSchoolPop(Activity context) {
@@ -134,8 +136,7 @@ public class SwichSchoolPop extends PopupWindow {
 
     void selectUserSchool(GetUserSchoolRsp.DataBean school) {
         SchoolRsp rsp = new SchoolRsp();
-        rsp.schoolId = school.schoolId;
-        rsp.schoolName = school.schoolName;
+        rsp.userId = school.userId;
         RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
         //请求组合创建
         Request request = new Request.Builder()
@@ -158,7 +159,7 @@ public class SwichSchoolPop extends PopupWindow {
                 SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(school));
-                    Tologin(bean.data.username, bean.data.password, String.valueOf(school.schoolId));
+                    Tologin(String.valueOf(school.userId));
                 } else {
                     ToastUtils.showShort(bean.message);
                 }
@@ -174,11 +175,12 @@ public class SwichSchoolPop extends PopupWindow {
         });
     }
 
-    void Tologin(String username, String password, String schoolId) {
+    void Tologin(String userId) {
+        String userName = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         RequestBody body = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
-                .add("schoolId", schoolId)
+                .add("username", userName)
+                .add("password", SPUtils.getInstance().getString(BaseConstant.PASSWORD))
+                .add("userId", userId)
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
@@ -200,13 +202,9 @@ public class SwichSchoolPop extends PopupWindow {
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                    SPUtils.getInstance().put(BaseConstant.LOGINNAME, username);
-                    SPUtils.getInstance().put(BaseConstant.PASSWORD, password);
-                    SPUtils.getInstance().put(SpData.SCHOOLID, schoolId);
-
-                    initIm(username);
+                    initIm(userName);
                 } else {
-                    ToastUtils.showShort(bean.msg);
+                    ToastUtils.showShort(bean.message);
                 }
             }
         });
@@ -238,10 +236,11 @@ public class SwichSchoolPop extends PopupWindow {
                     popupWindow.dismiss();
                 }
 
-                ActivityUtils.finishAllActivities();
-                Intent intent = new Intent(context, MainActivity.class);
-                context.startActivity(intent);
-
+//                ActivityUtils.finishAllActivities();
+//                Intent intent = new Intent(context, MainActivity.class);
+//                context.startActivity(intent);
+                //刷新首页数据
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
             }
         });
     }

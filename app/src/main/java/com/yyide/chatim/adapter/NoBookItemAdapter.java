@@ -47,7 +47,7 @@ public class NoBookItemAdapter extends BaseAdapter {
 
         return view;
     }
-    public void notifyData( List<listByAppRsp.DataBean.ListBean> list) {
+    public void notifyData(List<listByAppRsp.DataBean.ListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

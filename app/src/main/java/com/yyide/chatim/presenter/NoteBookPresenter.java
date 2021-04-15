@@ -1,7 +1,6 @@
 package com.yyide.chatim.presenter;
 
 
-
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.listByAppRsp;
@@ -19,9 +18,6 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
     public NoteBookPresenter(NoteBookView view) {
         attachView(view);
     }
-
-
-
 
     public void listByApp() {
         mvpView.showLoading();
@@ -43,9 +39,43 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
         });
     }
 
+    public void selectListByApp() {
+        mvpView.showLoading();
+        addSubscription(dingApiStores.selectListByApp(), new ApiCallback<listByAppRsp>() {
+            @Override
+            public void onSuccess(listByAppRsp model) {
+                mvpView.selectListByApp(model);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                mvpView.listByAppDataFail(msg);
+            }
 
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
 
+    public void universitySelectListByApp() {
+        addSubscription(dingApiStores.universitySelectListByApp(), new ApiCallback<listByAppRsp>() {
+            @Override
+            public void onSuccess(listByAppRsp model) {
+                mvpView.universityListByApp(model);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                mvpView.listByAppDataFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
+    }
 
 }

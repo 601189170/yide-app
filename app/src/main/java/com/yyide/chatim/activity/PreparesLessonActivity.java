@@ -224,6 +224,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
         //将参数装入实体类
         PreparesLessonRep lessonRep = new PreparesLessonRep();
         lessonRep.setTimetableSchedulSubId(dataBean.subid);
+        lessonRep.setLessonsId(dataBean.lessonsId);
         lessonRep.setBeforeClass(before_class);
         lessonRep.setAfterClass(after_class);
         List<String> teachToolList = new ArrayList<>();
@@ -256,7 +257,11 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
             lessonsSubEntityList.add(item5);
         }
         lessonRep.setLessonsSubEntityList(lessonsSubEntityList);
-        mvpPresenter.addLessons(lessonRep);
+        if (dataBean.lessonsId <= 0) {//有id表示作业已存在 走修改逻辑
+            mvpPresenter.addLessons(lessonRep);
+        } else {
+            mvpPresenter.updateLessons(lessonRep);
+        }
     }
 
     @Override
@@ -266,8 +271,8 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
 
     @Override
     public void addPreparesLessonSuccess(String msg) {
-        ToastUtils.showShort(msg);
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_PREPARES_SAVE, ""));
+        ToastUtils.showShort(msg);
         finish();
     }
 

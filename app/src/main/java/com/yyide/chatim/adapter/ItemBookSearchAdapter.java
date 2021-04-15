@@ -2,6 +2,8 @@ package com.yyide.chatim.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +47,7 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_book_search,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_book_search, parent, false);
         return new ViewHolder(view);
     }
 
@@ -53,16 +55,32 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserInfoRsp.DataBean bean = data.get(position);
         holder.tv_name.setText(bean.getName());
-        holder.tv_classname.setText(bean.getRemarks());
+        if ("1".equals(bean.getUserType())) {
+            holder.tv_classname.setText(bean.getDepartmentName());
+        } else {
+            holder.tv_classname.setText(bean.getClassesName());
+        }
         holder.iv_call.setOnClickListener(v -> {
             //打电话
+            if (!TextUtils.isEmpty(bean.getPhone())) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                Uri data = Uri.parse("tel:" + bean.getPhone());
+                intent.setData(data);
+                context.startActivity(intent);
+            }
         });
-        holder.iv_user_detail.setOnClickListener(v ->{
+        holder.iv_user_detail.setOnClickListener(v -> {
             TeacherlistRsp.DataBean.RecordsBean recordsBean = new TeacherlistRsp.DataBean.RecordsBean();
             recordsBean.name = bean.getName();
             recordsBean.phone = bean.getPhone();
             recordsBean.email = bean.getEmail();
             recordsBean.sex = bean.getSex();
+            recordsBean.classesName = bean.getClassesName();
+            recordsBean.subjects = bean.getSubjects();
+            recordsBean.primaryGuardianPhone = bean.getPrimaryGuardianPhone();
+            recordsBean.deputyGuardianPhone = bean.getDeputyGuardianPhone();
+            recordsBean.userType = bean.getUserType();
+
             //去详情页
             Intent intent = new Intent();
             intent.putExtra("data", JSON.toJSONString(recordsBean));

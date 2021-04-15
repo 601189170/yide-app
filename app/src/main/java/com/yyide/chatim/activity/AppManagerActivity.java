@@ -1,6 +1,5 @@
 package com.yyide.chatim.activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -45,8 +44,6 @@ import butterknife.OnClick;
 
 public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> implements AppManagerView {
 
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)
@@ -94,6 +91,8 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
                 if ("editor".equals(item.getAppType())) {
                     iv_del.setVisibility(View.GONE);
                     iv_app_icon.setBackground(getResources().getDrawable(R.drawable.icon_bj));
+                } else {
+                    iv_del.setVisibility(View.VISIBLE);
                 }
                 iv_del.setOnClickListener(v -> {
                     dataBean = item;
@@ -135,10 +134,9 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
         super.onDestroy();
     }
 
-    @OnClick({R.id.back, R.id.back_layout})
+    @OnClick({R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.back:
             case R.id.back_layout:
                 finish();
                 break;

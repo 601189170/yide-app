@@ -14,9 +14,6 @@ import butterknife.OnClick;
 
 public class LeaveInfoActivity extends BaseActivity {
 
-
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)

@@ -1,7 +1,6 @@
 package com.yyide.chatim.adapter;
 
 
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,14 +29,11 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
 
     public int position = -1;
 
-    public List<NoteTabBean> list=new ArrayList<>();
+    public List<NoteTabBean> list = new ArrayList<>();
 
     public NoteTabBean getItem(int i) {
         return list.get(i);
     }
-
-
-
 
     @Override
     public TabRecyAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -56,21 +52,19 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
     public void onBindViewHolder(final TabRecyAdapter.ViewHolder viewHolder, final int i) {
 
 
-        if (getItem(i).islast.equals("2")){
-            if (!TextUtils.isEmpty(getItem(i).name)){
-                viewHolder.item.setText(getItem(i).name+"  >");
+        if (getItem(i).islast.equals("2")) {
+            if (!TextUtils.isEmpty(getItem(i).name)) {
+                viewHolder.item.setText(getItem(i).name + " >");
             }
 
-            viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.blue));
-        }else {
-            if (!TextUtils.isEmpty(getItem(i).name)){
+            viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.blue11));
+        } else {
+            if (!TextUtils.isEmpty(getItem(i).name)) {
                 viewHolder.item.setText(getItem(i).name);
             }
             viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.black10));
 
         }
-
-
 
 
     }
@@ -92,7 +86,6 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
         TextView item;
 
 
-
         @Override
         public void onClick(View v) {
             position = getAdapterPosition();
@@ -103,36 +96,41 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
             notifyDataSetChanged();
         }
     }
-    public void notifydata(List<NoteTabBean> list){
-        this.list=list;
+
+    public void notifydata(List<NoteTabBean> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
-    public void setPosition(int index){
-        this.index=index;
+
+    public void setPosition(int index) {
+        this.index = index;
         notifyDataSetChanged();
     }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
+
     private OnItemClickListener mOnItemClickListener = null;
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
-    public void remove(int position){
+    public void remove(int position) {
 
-        List<NoteTabBean> noteTabBeans=new ArrayList<>();
+        List<NoteTabBean> noteTabBeans = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
-            if (i<=position){
+            if (i <= position) {
                 noteTabBeans.add(list.get(i));
             }
         }
         resetList(noteTabBeans);
     }
 
-    public void resetList(List<NoteTabBean> list){
-        this.list=list;
+    public void resetList(List<NoteTabBean> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
 //    List<Integer> removeData=new ArrayList<>();

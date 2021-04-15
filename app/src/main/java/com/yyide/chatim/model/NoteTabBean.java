@@ -11,15 +11,21 @@ public class NoteTabBean {
     public String name;
 
     public String islast;
-    public NoteTabBean(String name,String tag,String islast){
 
-        this.name=name;
+    public String organization;
 
-        this.tag=tag;
+    public NoteTabBean(String name, String tag, String islast, String organization) {
 
-        this.islast=islast;
+        this.name = name;
+
+        this.tag = tag;
+
+        this.islast = islast;
+
+        this.organization = organization;
     }
-    public NoteTabBean(){
+
+    public NoteTabBean() {
 
     }
 

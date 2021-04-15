@@ -43,10 +43,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter> implements NoteByListBookView {
+public class NoteByListActivity extends BaseActivity {
 
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)
@@ -57,10 +55,11 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
     RecyclerView recyclerview;
     TabRecyAdapter tabRecyAdapter;
     List<NoteTabBean> listTab = new ArrayList<>();
-    List<listByAppRsp.DataBean.ListBean.ZBListBean> listBean = new ArrayList<>();
+    List<listByAppRsp.DataBean.ListBean> listBean = new ArrayList<>();
 
     String id;
     String name;
+    private String organization;
 
     @Override
     public int getContentViewID() {
@@ -75,8 +74,9 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         int sum = getIntent().getIntExtra("size", 0);
         id = getIntent().getStringExtra("id");
         name = getIntent().getStringExtra("name");
+        organization = getIntent().getStringExtra("organization");
         for (int i = 0; i < sum; i++) {
-            listByAppRsp.DataBean.ListBean.ZBListBean bean = (listByAppRsp.DataBean.ListBean.ZBListBean) getIntent().getSerializableExtra(i + "");
+            listByAppRsp.DataBean.ListBean bean = (listByAppRsp.DataBean.ListBean) getIntent().getSerializableExtra(i + "");
             Log.e("TAG", "ZBListBean: " + JSON.toJSONString(bean));
             listBean.add(bean);
         }
@@ -121,11 +121,6 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
     }
 
     @Override
-    protected NoteBookByListPresenter createPresenter() {
-        return new NoteBookByListPresenter(this);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
     }
@@ -154,6 +149,7 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         NoteTabBean noteTabBean = new NoteTabBean();
         noteTabBean.tag = index + "";
         noteTabBean.name = name;
+        noteTabBean.organization = organization;
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         for (int i = 0; i < listBean.size(); i++) {
@@ -237,24 +233,5 @@ public class NoteByListActivity extends BaseMvpActivity<NoteBookByListPresenter>
         } else {
             finish();
         }
-    }
-
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public void TeacherlistRsp(TeacherlistRsp rsp) {
-        Log.e("TAG", "TeacherlistRsp: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-
-        }
-
-    }
-
-    @Override
-    public void TeacherlistRspFail(String rsp) {
-
     }
 }

@@ -30,11 +30,14 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.UserPresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.utils.TakePicUtil;
 import com.yyide.chatim.view.UserView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -201,46 +204,57 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case BaseConstant.SELECT_ORIGINAL_PIC:
-                if (resultCode == RESULT_OK) {//从相册选择照片不裁切
-                    try {
-                        Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        Cursor cursor = getContentResolver().query(selectedImage,
-                                filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
-                        cursor.moveToFirst();
-                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String picturePath = cursor.getString(columnIndex);  //获取照片路径
-                        cursor.close();
-
-                        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-//                        Log.e("TAG", "onActivityResult==>: " + JSON.toJSONString(bitmap));
-                        img.setImageBitmap(bitmap);
-                        mvpPresenter.uploadFile(picturePath);
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-                break;
-        }
-        if (requestCode == BaseConstant.REQ_CODE && resultCode == RESULT_OK) {
-            /*缩略图信息是储存在返回的intent中的Bundle中的，
-             * 对应Bundle中的键为data，因此从Intent中取出
-             * Bundle再根据data取出来Bitmap即可*/
-            Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
-            img.setImageBitmap(bitmap);
-//            Log.e(TAG, "img==》: " + JSON.toJSONString(extras));
-        }
-
+//        switch (requestCode) {
+//            case BaseConstant.SELECT_ORIGINAL_PIC:
+//                if (resultCode == RESULT_OK) {//从相册选择照片不裁切
+//                    try {
+//                        Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
+//                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                        Cursor cursor = getContentResolver().query(selectedImage,
+//                                filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
+//                        cursor.moveToFirst();
+//                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                        String picturePath = cursor.getString(columnIndex);  //获取照片路径
+//                        cursor.close();
+//
+//                        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+////                        Log.e("TAG", "onActivityResult==>: " + JSON.toJSONString(bitmap));
+//                        img.setImageBitmap(bitmap);
+//                        //mvpPresenter.uploadFile(picturePath);
+//                    } catch (Exception e) {
+//                        // TODO Auto-generated catch block
+//                        e.printStackTrace();
+//                    }
+//                }
+//                break;
+//        }
+//        if (requestCode == BaseConstant.REQ_CODE && resultCode == RESULT_OK) {
+//            /*缩略图信息是储存在返回的intent中的Bundle中的，
+//             * 对应Bundle中的键为data，因此从Intent中取出
+//             * Bundle再根据data取出来Bitmap即可*/
+//            Bundle extras = data.getExtras();
+//            Bitmap bitmap = (Bitmap) extras.get("data");
+//            img.setImageBitmap(bitmap);
+////            Log.e(TAG, "img==》: " + JSON.toJSONString(extras));
+//        }
         super.onActivityResult(requestCode, resultCode, data);
+        File corpFile = TakePicUtil.onActivityResult(this, requestCode, resultCode, data);
+        mvpPresenter.uploadFile(corpFile);
     }
 
     @Override
     public void showError() {
 
+    }
+
+    @Override
+    public void showLoading() {
+        super.showLoading();
+    }
+
+    @Override
+    public void hideLoading() {
+        super.hideLoading();
     }
 
     @Override
@@ -261,11 +275,12 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     @Override
     public void uploadFileSuccess(String imgUrl) {
-        GlideUtil.loadImage(this, imgUrl, img);
         if (userInfo != null) {
             userInfo.img = imgUrl;
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
         }
+        GlideUtil.loadImage(this, imgUrl, img);
     }
 
     @Override

@@ -16,6 +16,10 @@ public interface NoteBookView extends BaseView {
 
     void listByApp(listByAppRsp rsp);
 
+    void selectListByApp(listByAppRsp rsp);
+
+    void universityListByApp(listByAppRsp rsp);
+
     void listByAppDataFail(String rsp);
 
     void selectListByAppRsp(selectListByAppRsp rsp);

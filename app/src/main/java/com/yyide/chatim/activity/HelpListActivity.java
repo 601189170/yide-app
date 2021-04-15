@@ -10,10 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.listener.OnUpFetchListener;
+import com.chad.library.adapter.base.module.UpFetchModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.adapter.HelpItemAdapter;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.HelpItemRep;
@@ -22,6 +26,7 @@ import com.yyide.chatim.presenter.HelpIntroductionPresenter;
 import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.HelpIntroductionView;
 import com.yyide.chatim.view.SpacesItemDecoration;
+import com.yyide.chatim.view.YDVideo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,9 +41,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter> implements HelpIntroductionView {
-
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)
@@ -47,7 +49,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     RecyclerView recyclerview;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private BaseQuickAdapter adapter;
+    private HelpItemAdapter adapter;
     private int pageNum = 1;
     private int pageSize = 20;
 
@@ -68,17 +70,25 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     }
 
     private void initAdapter() {
+        String type = getIntent().getStringExtra("helpType");
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new BaseQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder>(R.layout.item_help) {
-            @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, HelpItemRep.Records.HelpItemBean o) {
-                baseViewHolder
-                        .setText(R.id.title, o.getName())
-                        .setText(R.id.info, Html.fromHtml(o.getMessage()));
-            }
-        };
-
+        adapter = new HelpItemAdapter(null);
         recyclerview.setAdapter(adapter);
+        adapter.setEmptyView(R.layout.empty);
+        adapter.getUpFetchModule().setUpFetchEnable(true);
+        adapter.getUpFetchModule().setUpFetching(true);
+        adapter.getUpFetchModule().setOnUpFetchListener(new OnUpFetchListener() {
+            @Override
+            public void onUpFetch() {
+                adapter.getUpFetchModule().setUpFetching(true);
+                //pageNum++;
+//                if ("helpAdvanced".equals(type)) {
+//                    mvpPresenter.getHelpAdvancedList(pageSize, pageNum);
+//                } else {
+//                    mvpPresenter.getHelpList(pageSize, pageNum);
+//                }
+            }
+        });
         //recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this, 20)));
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -90,7 +100,6 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
             }
         });
 
-        String type = getIntent().getStringExtra("helpType");
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
             pageNum = 1;
             if ("helpAdvanced".equals(type)) {
@@ -116,8 +125,10 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     public void onPause() {
         super.onPause();
+        if (adapter != null) {
+            adapter.stop();
+        }
     }
-
 
     @OnClick(R.id.back_layout)
     public void onViewClicked() {
@@ -127,6 +138,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     public void getHelpListSuccess(HelpItemRep model) {
         mSwipeRefreshLayout.setRefreshing(false);
+        adapter.getUpFetchModule().setUpFetching(false);
         if (pageNum == 1) {
             if (model != null && model.getData() != null) {
                 adapter.setList(model.getData().getRecords());
@@ -143,12 +155,14 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     public void getHelpListFail(String msg) {
         mSwipeRefreshLayout.setRefreshing(false);
+        adapter.getUpFetchModule().setUpFetching(false);
         Log.d("getHelpListFail", "getHelpListFail:" + msg);
     }
 
     @Override
     public void getHelpAdvancedSuccess(HelpItemRep model) {
         mSwipeRefreshLayout.setRefreshing(false);
+        adapter.getUpFetchModule().setUpFetching(false);
         if (pageNum == 1) {
             if (model != null && model.getData() != null) {
                 adapter.setList(model.getData().getRecords());
@@ -164,6 +178,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     public void getHelpAdvancedFails(String msg) {
         mSwipeRefreshLayout.setRefreshing(false);
+        adapter.getUpFetchModule().setUpFetching(false);
         Log.d("getHelpAdvancedFails", "getHelpAdvancedFails:" + msg);
     }
 
@@ -171,5 +186,4 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     public void showError() {
         mSwipeRefreshLayout.setRefreshing(false);
     }
-
 }

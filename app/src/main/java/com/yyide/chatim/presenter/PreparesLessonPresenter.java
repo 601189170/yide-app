@@ -24,7 +24,7 @@ public class PreparesLessonPresenter extends BasePresenter<PreparesLessonView> {
         addSubscription(dingApiStores.addLessons(body), new ApiCallback<ResultBean>() {
             @Override
             public void onSuccess(ResultBean model) {
-                if(model.isSuccess()){
+                if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
                     mvpView.addPreparesLessonSuccess(model.getMsg());
                 } else {
                     mvpView.addPreparesLessonFail(model.getMsg());
@@ -42,4 +42,30 @@ public class PreparesLessonPresenter extends BasePresenter<PreparesLessonView> {
             }
         });
     }
+
+    public void updateLessons(PreparesLessonRep preparesLessonRep) {
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(preparesLessonRep));
+        mvpView.showLoading();
+        addSubscription(dingApiStores.updateLessons(body), new ApiCallback<ResultBean>() {
+            @Override
+            public void onSuccess(ResultBean model) {
+                if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+                    mvpView.addPreparesLessonSuccess(model.getMsg());
+                } else {
+                    mvpView.addPreparesLessonFail(model.getMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.addPreparesLessonFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
 }

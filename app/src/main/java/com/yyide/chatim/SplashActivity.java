@@ -12,11 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.info.UserInfo;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.utils.DemoLog;
 
@@ -98,11 +100,7 @@ public class SplashActivity extends AppCompatActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
-                    startMain();
-                } else {
-                    startLogin();
-                }
+                startLogin();
             }
 
             @Override
@@ -113,7 +111,45 @@ public class SplashActivity extends AppCompatActivity {
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+                    getUserSchool();
+                } else {
+                    startLogin();
+                }
+            }
+        });
+    }
+
+    //获取学校信息
+    void getUserSchool() {
+        //请求组合创建
+        Request request = new Request.Builder()
+//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.URL_IP + "/management/cloud-system/user/getUserSchoolByApp")
+                .addHeader("Authorization", SpData.User().token)
+                .build();
+        //发起请求
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "getUserSigonFailure: " + e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                Log.e(TAG, "getUserSchool333==>: " + data);
+                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
+                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+                if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+                    if (rsp.data != null) {
+                        SpData.setIdentityInfo(rsp);
+                    } else {
+                        ToastUtils.showShort(rsp.msg);
+                    }
                     handleData();
+                } else {
+                    ToastUtils.showShort(rsp.msg);
+                    startLogin();
                 }
             }
         });
@@ -121,7 +157,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void handleData() {
         if (mUserInfo != null && mUserInfo.isAutoLogin()) {
-            login();
+            loginIM();
         } else {
             mFlashView.postDelayed(new Runnable() {
                 @Override
@@ -132,19 +168,16 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private void login() {
+    private void loginIM() {
         TUIKit.login(mUserInfo.getUserId(), mUserInfo.getUserSig(), new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
-
                         Log.e(TAG, "UserInfo: " + JSON.toJSONString(UserInfo.getInstance()));
-
 //                        startMain();
                         startLogin();
-
                     }
                 });
                 DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
@@ -153,7 +186,6 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object data) {
                 Log.e(TAG, "UserInfo==》: " + JSON.toJSONString(UserInfo.getInstance()));
-
                 startMain();
             }
         });

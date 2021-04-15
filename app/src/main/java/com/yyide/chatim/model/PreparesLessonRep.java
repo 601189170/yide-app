@@ -9,6 +9,8 @@ public class PreparesLessonRep {
 
     private String afterClass;
 
+    private int lessonsId;
+
     private List<String> teachToolList;
 
     private List<LessonsSubEntityList> lessonsSubEntityList;
@@ -43,6 +45,14 @@ public class PreparesLessonRep {
 
     public List<String> getTeachToolList() {
         return this.teachToolList;
+    }
+
+    public int getLessonsId() {
+        return lessonsId;
+    }
+
+    public void setLessonsId(int lessonsId) {
+        this.lessonsId = lessonsId;
     }
 
     public void setLessonsSubEntityList(List<LessonsSubEntityList> lessonsSubEntityList) {

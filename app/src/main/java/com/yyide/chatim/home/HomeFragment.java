@@ -1,9 +1,9 @@
 package com.yyide.chatim.home;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,27 +17,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.paradoxie.autoscrolltextview.VerticalTextview;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.MessageNoticeActivity;
-import com.yyide.chatim.activity.StudentHonorListActivity;
-import com.yyide.chatim.activity.WebViewActivity;
-import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
+import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
-import com.yyide.chatim.homemodel.AttenceFragment;
+import com.yyide.chatim.homemodel.AttendanceFragment;
 import com.yyide.chatim.homemodel.BannerFragment;
 import com.yyide.chatim.homemodel.ClassHonorFragment;
 import com.yyide.chatim.homemodel.NoticeFragment;
 import com.yyide.chatim.homemodel.StudentHonorFragment;
 import com.yyide.chatim.homemodel.TableFragment;
 import com.yyide.chatim.homemodel.WorkFragment;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
@@ -45,6 +44,9 @@ import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
 import com.yyide.chatim.view.HomeFragmentView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.raphets.roundimageview.RoundImageView;
 
 import java.util.ArrayList;
@@ -84,6 +86,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     VerticalTextview spmsg;
     @BindView(R.id.layout_message)
     FrameLayout layoutMessage;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private View mBaseView;
     ArrayList<String> list = new ArrayList<>();
     public FragmentListener mListener;
@@ -91,8 +95,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof FragmentListener){
-            mListener = (FragmentListener)activity;
+        if (activity instanceof FragmentListener) {
+            mListener = (FragmentListener) activity;
         }
     }
 
@@ -106,11 +110,17 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
 //        showProgressDialog2();
         setFragment();
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
         //initVerticalTextview(null);
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+            mvpPresenter.getUserSchool();
+            mvpPresenter.getHomeNotice();
+        });
     }
 
     @Override
@@ -124,9 +134,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     void initVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
-        if(noticeHomeRsps != null){
+        if (noticeHomeRsps != null) {
             list.clear();
-            for (NoticeHomeRsp.DataBean item : noticeHomeRsps){
+            for (NoticeHomeRsp.DataBean item : noticeHomeRsps) {
                 list.add(item.getContent());
             }
         }
@@ -144,7 +154,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 spmsg.setVisibility(View.VISIBLE);
                 spmsg.setTextList(list);
                 spmsg.startAutoScroll();
-                if (list.size()<2){
+                if (list.size() < 2) {
                     spmsg.stopAutoScroll();
                 }
             } else {
@@ -154,6 +164,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
         spmsg.setOnItemClickListener(i -> {
             //startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
             mListener.jumpFragment(1);
         });
     }
@@ -163,7 +174,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content})
+    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -174,14 +185,17 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             case R.id.student_honor_content:
                 //startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
-                startActivity(new Intent(getActivity(), WebViewActivity.class));
                 break;
-//            case R.id.layout_message:
-//                //startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-//                break;
-//            case R.id.notice_content:
-//                //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
-//                break;
+            case R.id.layout_message:
+//                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
+                break;
+            case R.id.notice_content:
+                //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
+                break;
+            case R.id.class_honor_content:
+                startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                break;
             default:
                 break;
         }
@@ -190,7 +204,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
-        if (spmsg != null && list.size()>1) {
+        if (spmsg != null && list.size() > 1) {
             spmsg.startAutoScroll();
         }
     }
@@ -198,7 +212,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onPause() {
         super.onPause();
-        if (spmsg != null && list.size()>1) {
+        if (spmsg != null && list.size() > 1) {
             spmsg.stopAutoScroll();
         }
     }
@@ -211,12 +225,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         //通知
         fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
         //班级考勤情况
-        fragmentTransaction.add(R.id.kq_content, new AttenceFragment());
+        fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
         //班级相册轮播
         fragmentTransaction.add(R.id.banner_content, new BannerFragment());
         //班级作业
         fragmentTransaction.add(R.id.work_content, new WorkFragment());
-        //班级荣誉
+        //班级相册
         fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
         //班级学生荣誉
         fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
@@ -224,37 +238,18 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     @Override
+
     public void getUserSchool(GetUserSchoolRsp rsp) {
-        Log.e("TAG", "getUserSchool==》: " + JSON.toJSONString(rsp));
-        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-        GetUserSchoolRsp.DataBean dataBean = null;
-        if (rsp.data.size() > 0) {
-            for (int i = 0; i < rsp.data.size(); i++) {
-                if (rsp.data.get(i).isCurrentUser) {//保存切换身份信息
-                    dataBean = rsp.data.get(i);
-                    SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(dataBean));
-                    if (dataBean != null && dataBean.form != null && dataBean.form.size() > 0) {//保存班级信息
-                        if (SpData.getClassInfo() != null) {//处理切换班级
-                            GetUserSchoolRsp.DataBean.FormBean classBean = null;
-                            for (GetUserSchoolRsp.DataBean.FormBean item : dataBean.form) {
-                                if (item.classesId.equals(SpData.getClassInfo().classesId)) {
-                                    classBean = item;
-                                }
-                            }
-                            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classBean == null ? dataBean.form.get(0) : classBean));
-                        } else {
-                            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(dataBean.form.get(0)));
-                        }
-                    } else {//处理切换后没有班级的情况
-                        SPUtils.getInstance().put(SpData.CLASS_INFO, "");
-                    }
-                }
-            }
+        mSwipeRefreshLayout.setRefreshing(false);
+        Log.d("TAG", "getUserSchool==》: " + JSON.toJSONString(rsp));
+        if (BaseConstant.REQUEST_SUCCES2 == rsp.code) {
+            SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+            SpData.setIdentityInfo(rsp);
         }
-        setSchoolInfo(dataBean);
+        setSchoolInfo();
     }
 
-    void setSchoolInfo(GetUserSchoolRsp.DataBean rsp) {
+    void setSchoolInfo() {
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
             String qhSchool = "";
             String qhName = "";
@@ -264,13 +259,16 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                     qhSchool = datum.schoolName;
                     qhName = datum.realname;
                     imgUrl = datum.img;
+                    break;
                 }
             }
             if (!TextUtils.isEmpty(imgUrl)) {
                 userName.setVisibility(View.GONE);
+                head_img.setVisibility(View.VISIBLE);
                 GlideUtil.loadImage(getActivity(), imgUrl, head_img);
             } else {
                 head_img.setVisibility(View.GONE);
+                userName.setVisibility(View.VISIBLE);
                 userName.setText(StringUtils.subString(qhName, 2));
             }
             schoolName.setText(qhSchool);
@@ -278,20 +276,42 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_IMG.equals(messageEvent.getCode())) {
+            if (!TextUtils.isEmpty(messageEvent.getMessage())) {
+                userName.setVisibility(View.GONE);
+                head_img.setVisibility(View.VISIBLE);
+                GlideUtil.loadImage(getActivity(), messageEvent.getMessage(), head_img);
+            }
+        } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            mvpPresenter.getUserSchool();
+            mvpPresenter.getHomeNotice();
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public void getUserSchoolDataFail(String rsp) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
     }
 
     @Override
     public void getIndexMyNotice(NoticeHomeRsp rsp) {
-        Log.e(TAG, "getIndexMyNotice: "+rsp.toString() );
+        Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
             initVerticalTextview(rsp.getData());
         }
     }
 
-    public static interface FragmentListener{
+    public static interface FragmentListener {
         void jumpFragment(int index);
     }
 

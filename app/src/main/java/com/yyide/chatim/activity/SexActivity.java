@@ -20,8 +20,6 @@ import butterknife.OnClick;
 
 public class SexActivity extends BaseActivity {
 
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.type1)
     TextView type1;
     @BindView(R.id.layout1)

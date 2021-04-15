@@ -18,11 +18,9 @@ public class BookSearchPresenter extends BasePresenter<BookSearchView> {
         attachView(view);
     }
 
-    public void getMyAppList(int size,int current,String name){
+    public void getMyAppList(String name){
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("name",name);
-        hashMap.put("size",size);
-        hashMap.put("current",current);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(hashMap));
         mvpView.showLoading();
         addSubscription(dingApiStores.selectAllList(body), new ApiCallback<UserInfoRsp>() {

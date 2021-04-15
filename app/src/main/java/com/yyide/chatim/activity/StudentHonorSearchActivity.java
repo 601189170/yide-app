@@ -72,7 +72,7 @@ public class StudentHonorSearchActivity extends BaseActivity {
 
         studentHonorBeanList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            studentHonorBeanList.add(new StudentHonorBean("url", "学生" + i, "2021.03.0" + i));
+            studentHonorBeanList.add(new StudentHonorBean("url", "学生" + i, "2021.03.0" + i, 0));
         }
 
         initView();

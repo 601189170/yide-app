@@ -18,10 +18,19 @@ import com.yyide.chatim.Talble.View.listTimeDataByAppView;
 import com.yyide.chatim.activity.TableActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.GlideUtil;
 
 import androidx.annotation.Nullable;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import okhttp3.OkHttpClient;
@@ -54,6 +63,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        mvpPresenter.getMyData();
+        EventBus.getDefault().register(this);
         tablelayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,17 +91,63 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                 if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
                     for (SelectSchByTeaidRsp.DataBean item : rsp.data) {
                         if (dataBean == null && item.classesId.equals(SpData.getClassInfo().classesId)) {
-                            dataBean = item;
+                            //开始时间
+                            long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
+                            //结束时间
+                            long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
+                            Calendar c = Calendar.getInstance();
+                            String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
+                            int weekDay = c.get(Calendar.DAY_OF_WEEK);
+                            long mMillisecond = DateUtils.getWhenPoint(minute);
+                            if (item.weekTime == (weekDay - 1)) {
+                                if (item.weekTime > (weekDay - 1)) {//课前
+                                    dataBean = item;
+                                    break;
+                                } else {
+                                    if (mMillisecond > toDateTime) {//课后
+                                        className.setText("今日无课");
+                                        break;
+                                    } else if (mMillisecond < fromDataTime) {//课前
+                                        dataBean = item;
+                                        break;
+                                    } else {//正在上课
+                                        dataBean = item;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                className.setText("今日无课");
+                                break;
+                            }
+                        } else {
+                            className.setText("今日无课");
+                            break;
                         }
                     }
                 } else {
-                    dataBean = rsp.data.get(0);
+                    className.setText("今日无课");
                 }
-                setTableMsg(dataBean == null ? rsp.data.get(0) : rsp.data.get(0));
+                if (dataBean != null) {
+                    setTableMsg(dataBean);
+                }
             } else {
-                className.setText("暂无课程");
+                className.setText("今日无课");
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            Log.d("HomeRefresh", TableFragment.class.getSimpleName());
+            mvpPresenter.SelectSchByTeaid();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {

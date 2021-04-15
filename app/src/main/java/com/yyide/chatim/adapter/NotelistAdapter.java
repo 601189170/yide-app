@@ -19,7 +19,7 @@ import java.util.List;
 
 public class NotelistAdapter extends BaseAdapter {
 
-    public List<listByAppRsp.DataBean.ListBean.ZBListBean> list=new ArrayList<>();
+    public List<listByAppRsp.DataBean.ListBean> list=new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -27,7 +27,7 @@ public class NotelistAdapter extends BaseAdapter {
     }
 
     @Override
-    public listByAppRsp.DataBean.ListBean.ZBListBean getItem(int position) {
+    public listByAppRsp.DataBean.ListBean getItem(int position) {
         return list.get(position);
     }
 
@@ -44,7 +44,7 @@ public class NotelistAdapter extends BaseAdapter {
         item.setText(getItem(position).name);
         return view;
     }
-    public void notifydata(List<listByAppRsp.DataBean.ListBean.ZBListBean> list){
+    public void notifydata(List<listByAppRsp.DataBean.ListBean> list){
         this.list=list;
         notifyDataSetChanged();
     }

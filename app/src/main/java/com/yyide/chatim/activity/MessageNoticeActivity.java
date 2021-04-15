@@ -23,13 +23,12 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MessageNoticeActivity extends BaseActivity {
 
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)
@@ -37,6 +36,7 @@ public class MessageNoticeActivity extends BaseActivity {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     private BaseQuickAdapter adapter;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_message_notice_layout;
@@ -49,6 +49,7 @@ public class MessageNoticeActivity extends BaseActivity {
         initAdapter();
 
     }
+
     private void initAdapter() {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BaseQuickAdapter<AgentInformationRsp, BaseViewHolder>(R.layout.item_message_notice) {
@@ -85,16 +86,15 @@ public class MessageNoticeActivity extends BaseActivity {
         };
 
         recyclerview.setAdapter(adapter);
-        recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this,20)));
+        recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this, 20)));
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             HelpRsp model = (HelpRsp) adapter1.getData().get(position);
-
         });
-        initData();
-        adapter.setList(list);
+        //initData();
     }
 
     private List<AgentInformationRsp> list = new ArrayList<>();
+
     private void initData() {
         for (int i = 0; i < 9; i++) {
             AgentInformationRsp item = new AgentInformationRsp();

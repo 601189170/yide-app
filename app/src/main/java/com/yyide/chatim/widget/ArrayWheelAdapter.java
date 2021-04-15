@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,12 +26,15 @@ public class ArrayWheelAdapter<T> implements WheelAdapter {
         this.items = items;
     }
 
-    public SelectTableClassesRsp.DataBean getItemData(int index, String name) {
-        if (items != null && items.size() > 0 && index <= items.size() && !TextUtils.isEmpty(name)) {
-            SelectTableClassesRsp.DataBean dataBean = items.get(index);
-            for (SelectTableClassesRsp.DataBean item : dataBean.getList()) {
-                if (name.equals(item.getName())) {
-                    return item;
+    public List<SelectTableClassesRsp.DataBean> getData() {
+        return items == null ? items = new ArrayList<>() : items;
+    }
+
+    public SelectTableClassesRsp.DataBean getItemData(int index) {
+        if (items != null && items.size() > 0 && index <= items.size()) {
+            for (int i = 0; i < items.size(); i++) {
+                if (i == index) {
+                    return items.get(i);
                 }
             }
         }

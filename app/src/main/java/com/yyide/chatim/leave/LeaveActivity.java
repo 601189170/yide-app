@@ -20,9 +20,6 @@ import butterknife.OnClick;
 
 public class LeaveActivity extends BaseActivity {
 
-
-    @BindView(R.id.back)
-    TextView back;
     @BindView(R.id.back_layout)
     LinearLayout backLayout;
     @BindView(R.id.title)
@@ -101,12 +98,9 @@ public class LeaveActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.back, R.id.back_layout, R.id.tab1, R.id.tab2})
+    @OnClick({R.id.back_layout, R.id.tab1, R.id.tab2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.back:
-                finish();
-                break;
             case R.id.back_layout:
                 finish();
                 break;

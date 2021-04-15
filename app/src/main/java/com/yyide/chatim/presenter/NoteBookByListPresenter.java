@@ -1,7 +1,6 @@
 package com.yyide.chatim.presenter;
 
 
-
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.TeacherlistRsp;
@@ -25,22 +24,19 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
         attachView(view);
     }
 
-
-
-
-    public void NoteBookByList(String departmentId,String name,String phone,String jobNumber,String size,String current) {
+    public void NoteBookByList(String departmentId, String name, String phone, String jobNumber, String size, String current) {
         mvpView.showLoading();
-        Map map=new HashMap();
-        map.put("departmentId",departmentId);
-        map.put("name",name);
-        map.put("phone",phone);
-        map.put("jobNumber",jobNumber);
-        Map map2=new HashMap();
-        map2.put("size",size);
-        map2.put("current",current);
-        map.put("page",map2);
+        Map map = new HashMap();
+        map.put("departmentId", departmentId);
+        map.put("name", name);
+        map.put("phone", phone);
+        map.put("jobNumber", jobNumber);
+        Map map2 = new HashMap();
+        map2.put("size", size);
+        map2.put("current", current);
+        map.put("page", map2);
 
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
 
         addSubscription(dingApiStores.teacherlist(body), new ApiCallback<TeacherlistRsp>() {
             @Override
@@ -60,30 +56,23 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
         });
     }
 
-
-    public void NoteBookByList2(String departmentId,String name,String phone,String jobNumber,String size,String current) {
+    public void getStudentList(String classesIs) {
         mvpView.showLoading();
-        Map map=new HashMap();
-        map.put("departmentId",departmentId);
-        map.put("name",name);
-        map.put("phone",phone);
-        map.put("jobNumber",jobNumber);
-        Map map2=new HashMap();
-        map2.put("size",size);
-        map2.put("current",current);
-        map.put("page",map2);
-
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
-
-        addSubscription(dingApiStores.teacherlist(body), new ApiCallback<TeacherlistRsp>() {
+        Map map = new HashMap();
+        map.put("classesId", classesIs);
+        map.put("name", "");
+        map.put("size", 150);
+        map.put("current", 1);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        addSubscription(dingApiStores.getStudentList(body), new ApiCallback<TeacherlistRsp>() {
             @Override
             public void onSuccess(TeacherlistRsp model) {
-                mvpView.TeacherlistRsp(model);
+                mvpView.studentListRsp(model);
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.TeacherlistRspFail(msg);
+                mvpView.studentListRspFail(msg);
             }
 
             @Override
@@ -92,7 +81,4 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
             }
         });
     }
-
-
-
 }

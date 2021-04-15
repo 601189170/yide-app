@@ -1,7 +1,6 @@
 package com.yyide.chatim.view;
 
 
-
 import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.listByAppRsp;
@@ -16,5 +15,8 @@ public interface NoteByListBookView extends BaseView {
 
     void TeacherlistRspFail(String rsp);
 
+    void studentListRsp(TeacherlistRsp rsp);
+
+    void studentListRspFail(String msg);
 
 }

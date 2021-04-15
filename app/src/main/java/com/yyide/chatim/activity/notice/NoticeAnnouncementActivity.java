@@ -42,6 +42,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     }
 
     List<BaseMvpFragment> fragments = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +55,6 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
         fragments.add(my_notice);
         PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
         fragments.add(my_release);
-
         mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull

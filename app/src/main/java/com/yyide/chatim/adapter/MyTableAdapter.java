@@ -1,5 +1,7 @@
 package com.yyide.chatim.adapter;
 
+import android.graphics.Color;
+import android.media.Image;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +28,6 @@ import java.util.List;
 public class MyTableAdapter extends BaseAdapter {
     public List<SelectSchByTeaidRsp.DataBean> list = new ArrayList<>();
 
-
     @Override
     public int getCount() {
         return list.size();
@@ -52,7 +53,7 @@ public class MyTableAdapter extends BaseAdapter {
         TextView tool = VHUtil.ViewHolder.get(view, R.id.tv_tool);
         TextView homework = VHUtil.ViewHolder.get(view, R.id.tv_homework);
         TextView desc = VHUtil.ViewHolder.get(view, R.id.desc);
-        TextView dateS = VHUtil.ViewHolder.get(view, R.id.date);
+        ImageView dateS = VHUtil.ViewHolder.get(view, R.id.date);
 
         SelectSchByTeaidRsp.DataBean item = getItem(position);
         tool.setText("教具：" + (TextUtils.isEmpty(item.teachTool) ? "" : item.teachTool));
@@ -73,17 +74,17 @@ public class MyTableAdapter extends BaseAdapter {
         long mMillisecond = DateUtils.getWhenPoint(minute);
         if (item.weekTime > (weekDay - 1)) {//课前
             desc.setText(item.beforeClass);
-            dateS.setText("课前");
+            dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
         } else {
             if (mMillisecond > toDateTime) {//课后
                 desc.setText(item.afterClass);
-                dateS.setText("课后");
+                dateS.setBackgroundColor(Color.parseColor("#C6C9CC"));
             } else if (mMillisecond < fromDataTime) {//课前
                 desc.setText(item.beforeClass);
-                dateS.setText("课前");
+                dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
             } else {//正在上课
                 desc.setText(item.beforeClass);
-                dateS.setText("正在上课");
+                dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
             }
         }
         className.setText(item.classesName);

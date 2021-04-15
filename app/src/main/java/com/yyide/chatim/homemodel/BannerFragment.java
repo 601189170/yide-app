@@ -12,8 +12,10 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.ClassAnnounAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ClassesBannerRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.HomeBannerPresenter;
 import com.yyide.chatim.view.HomeBannerView;
 
@@ -22,6 +24,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,14 +51,33 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         return mBaseView;
     }
 
+    private int[] imgs = {R.drawable.student_1,
+            R.drawable.student_2,
+            R.drawable.student_3,
+            R.drawable.student_4,
+            R.drawable.student_5,
+            R.drawable.student_6,
+            R.drawable.student_7,
+            R.drawable.student_8};
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
 //        mvpPresenter.getMyData();
         indexAdapter = new IndexAdapter();
-        announRoll.setHintView(null);
-
         announAdapter = new ClassAnnounAdapter(announRoll);
+        announRoll.setHintView(null);
+        //模拟数据
+        List<ClassesBannerRsp.DataBean> dataBeans = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            ClassesBannerRsp.DataBean item = new ClassesBannerRsp.DataBean();
+            item.setClassifyId(imgs[i]);
+            dataBeans.add(item);
+        }
+        announAdapter.notifyData(dataBeans);
+        indexAdapter.setList(dataBeans);
+
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
@@ -75,9 +101,10 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             }
         });
-        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
-        }
+//        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
+//            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
+//        }
+        //initAdapter();
     }
 
     @Override
@@ -103,5 +130,22 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
     @Override
     public void getClassBannerListFail(String msg) {
         Log.d("getClassBannerListFail", msg);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            Log.d("HomeRefresh", BannerFragment.class.getSimpleName());
+
+            //        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
+//            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
+//        }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

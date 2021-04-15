@@ -26,6 +26,7 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
+import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
@@ -103,11 +104,7 @@ public class LoginActivity extends BaseActivity {
         mActivity = this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         Utils.checkPermission(this);
-//        getcode("15920012647");
-//        if (AppUtils.isAppDebug()) {
-//            userEdit.setText("13267182222");
-//            passwordEdit.setText("182222");
-//        }
+
         String username = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         String password = SPUtils.getInstance().getString(BaseConstant.PASSWORD);
         userEdit.setText(TextUtils.isEmpty(username) ? "" : username);
@@ -146,6 +143,7 @@ public class LoginActivity extends BaseActivity {
                     eye.setSelected(false);
                     passwordEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
+                passwordEdit.setSelection(passwordEdit.length());
                 break;
             case R.id.post_code:
                 String mobile = userEdit.getText().toString().trim();
@@ -456,20 +454,23 @@ public class LoginActivity extends BaseActivity {
                 Log.e(TAG, "getUserSchool333==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.data != null) {
-                    if (rsp.data.size() > 0) {
-                        for (int i = 0; i < rsp.data.size(); i++) {
-                            if (rsp.data.get(i).isCurrentUser) {
-//                                SPUtils.getInstance().put(SpData.USERID, rsp.data.get(i).userId);
-//                                SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(i).schoolId);
-                                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(i)));
-                                if (rsp.data.get(i) != null && rsp.data.get(i).form != null && rsp.data.get(i).form.size() > 0) {
-                                    SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(rsp.data.get(i).form.get(0)));
+                if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+                    if (rsp.data != null) {
+                        if (rsp.data.size() > 0) {
+                            for (int i = 0; i < rsp.data.size(); i++) {
+                                if (rsp.data.get(i).isCurrentUser) {
+                                    SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(i)));
+                                    if (rsp.data.get(i) != null && rsp.data.get(i).form != null && rsp.data.get(i).form.size() > 0) {
+                                        SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(rsp.data.get(i).form.get(0)));
+                                    }
+                                    initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
+                                    break;
                                 }
-                                initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
                             }
                         }
                     }
+                } else {
+                    ToastUtils.showShort(rsp.msg);
                 }
             }
         });

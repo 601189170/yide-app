@@ -145,11 +145,12 @@ public class BottomHeadMenuPop extends PopupWindow {
      * 拍取照片不裁切
      */
     private void selectFromTake() {
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//用来打开相机的Intent
-        if (takePhotoIntent.resolveActivity(context.getPackageManager()) != null) {//这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
-            context.startActivityForResult(takePhotoIntent, BaseConstant.REQ_CODE);//启动相机
-        }
+//        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//用来打开相机的Intent
+//        if (takePhotoIntent.resolveActivity(context.getPackageManager()) != null) {//这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
+//            context.startActivityForResult(takePhotoIntent, BaseConstant.REQ_CODE);//启动相机
+//        }
 //        TakePicUtil.takePicture(context);
+        TakePicUtil.takePicture(context, true);
 
     }
 
@@ -160,18 +161,19 @@ public class BottomHeadMenuPop extends PopupWindow {
 //        intent.setAction(Intent.ACTION_PICK);//Pick an item fromthe data
 //        intent.setType("image/*");//从所有图片中进行选择
 //        context.startActivityForResult(intent, BaseConstant.SELECT_ORIGINAL_PIC);
-//        TakePicUtil.albumPhoto(context, false);
-        Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            intent = new Intent(
-                    Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        } else {
-            intent = new Intent(
-                    Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-        }
-        context.startActivityForResult(intent, BaseConstant.SELECT_ORIGINAL_PIC);
+        TakePicUtil.albumPhoto(context, true);
+
+//        Intent intent;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            intent = new Intent(
+//                    Intent.ACTION_PICK,
+//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        } else {
+//            intent = new Intent(
+//                    Intent.ACTION_GET_CONTENT);
+//            intent.setType("image/*");
+//        }
+//        context.startActivityForResult(intent, BaseConstant.SELECT_ORIGINAL_PIC);
     }
 
 }
