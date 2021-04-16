@@ -31,6 +31,7 @@ import com.yyide.chatim.model.AddUserAnnouncementBody;
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.utils.DateUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -289,7 +290,9 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
 
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-        timingTime = DateUtils.switchCreateTime(millseconds + "", "yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Long time = Long.valueOf(millseconds);
+        timingTime = simpleDateFormat.format(new Date(time));
     }
 
     @Override

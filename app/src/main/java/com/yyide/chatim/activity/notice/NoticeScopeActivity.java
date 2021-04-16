@@ -42,6 +42,9 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     private NoticeScopeAdapter adapter;
     private int sendObj;
 
+    private int classTotal = 0;
+    private int departmentTotal = 0;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_notice_scope;
@@ -101,6 +104,15 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
 
     private void showNoticeScopeNumber(int totalNumber) {
         tv_selected_member.setText(String.format(getString(R.string.notice_scope_number_text), totalNumber));
+        if (totalNumber !=0){
+            if (sendObj == 1 || sendObj == 2) {
+                checkBox.setChecked(totalNumber == classTotal);
+            }else {
+                checkBox.setChecked(totalNumber == departmentTotal);
+            }
+        }else {
+            checkBox.setChecked(false);
+        }
     }
 
     /**
@@ -190,6 +202,11 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
 //        });
         showNoticeScopeNumber(0);
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.e(TAG, "initView: "+checkBox.isChecked());
+            if (!buttonView.isPressed()){
+                Log.e(TAG, "initView: 代码触发，不处理监听事件。" );
+                return;
+            }
             recursionChecked(noticeScopeBeans, isChecked);
             if (sendObj == 1 || sendObj == 2) {
                 showNoticeScopeNumber(getAllCheckedClassIds(noticeScopeBeans, new ArrayList<String>()).size());
@@ -288,6 +305,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                     }
                     List<NoticeScopeBean> noticeScopeBeans2 = new ArrayList<>();
                     for (StudentScopeRsp.DataBean.ListBeanXX.ListBeanX.ListBean aClass : classes) {
+                        classTotal++;
                         noticeScopeBeans2.add(new NoticeScopeBean(aClass.getId(), aClass.getName(), aClass.getType(), false));
                     }
                     noticeScopeBean1.setList(noticeScopeBeans2);
@@ -321,6 +339,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 NoticeScopeBean noticeScopeBean = new NoticeScopeBean(datum.getId(), datum.getName());
                 List<NoticeScopeBean> noticeScopeBeans1 = new ArrayList<>();
                 if (list.isEmpty()) {
+                    departmentTotal++;
                     noticeScopeBeans.add(noticeScopeBean);
                     continue;
                 }
@@ -328,6 +347,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                     List<DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX> list1 = listBeanXX.getList();
                     NoticeScopeBean noticeScopeBean2 = new NoticeScopeBean(listBeanXX.getId(), listBeanXX.getName());
                     if (list1.isEmpty()) {
+                        departmentTotal++;
                         noticeScopeBeans1.add(noticeScopeBean2);
                         continue;
                     }
@@ -336,23 +356,27 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                         List<DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX.ListBean> list2 = listBeanX.getList();
                         NoticeScopeBean noticeScopeBean3 = new NoticeScopeBean(listBeanX.getId(), listBeanX.getName());
                         if (list2.isEmpty()) {
+                            departmentTotal++;
                             noticeScopeBeans2.add(noticeScopeBean3);
                             continue;
                         }
                         List<NoticeScopeBean> noticeScopeBeans3 = new ArrayList<>();
                         for (DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX.ListBean listBean : list2) {
+                            departmentTotal++;
                             NoticeScopeBean noticeScopeBean4 = new NoticeScopeBean(listBean.getId(), listBean.getName());
                             noticeScopeBeans3.add(noticeScopeBean4);
                         }
                         noticeScopeBean3.setList(noticeScopeBeans3);
                         noticeScopeBeans2.add(noticeScopeBean3);
+                        departmentTotal++;
                     }
                     noticeScopeBean2.setList(noticeScopeBeans2);
                     noticeScopeBeans1.add(noticeScopeBean2);
-
+                    departmentTotal++;
                 }
                 noticeScopeBean.setList(noticeScopeBeans1);
                 noticeScopeBeans.add(noticeScopeBean);
+                departmentTotal++;
             }
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
             adapter.notifyDataSetChanged();
