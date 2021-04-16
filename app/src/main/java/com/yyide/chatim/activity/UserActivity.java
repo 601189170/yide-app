@@ -44,8 +44,8 @@ import butterknife.OnClick;
 
 public class UserActivity extends BaseMvpActivity<UserPresenter> implements UserView, OnDateSetListener {
 
-    @BindView(R.id.back)
-    TextView back;
+//    @BindView(R.id.back)
+//    TextView back;
     @BindView(R.id.img)
     ImageView img;
     @BindView(R.id.layout1)
@@ -140,6 +140,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 startActivity(intent);
                 break;
             case R.id.layout6://设置人脸
+                startActivity(new Intent(this,FaceCaptureActivity.class));
                 break;
             case R.id.back_layout:
                 finish();

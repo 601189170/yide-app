@@ -27,4 +27,6 @@
     <root-path
         name="root-path"
         path="" />
+
+    <external-files-path name="my_images" path="Android/data/com.yyide.chatim/files/Pictures" />
 </resources>
