@@ -20,9 +20,9 @@ import java.util.List;
  */
 
 public class TableItemAdapter extends BaseAdapter {
-   public List<listTimeDataByAppRsp.DataBean.SubListBean> list=new ArrayList<>();
+    public List<listTimeDataByAppRsp.DataBean.SubListBean> list = new ArrayList<>();
 
-    public int position=-1;
+    public int position = -1;
 
     @Override
     public int getCount() {
@@ -47,19 +47,21 @@ public class TableItemAdapter extends BaseAdapter {
         LinearLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
         text_view.setText(getItem(position).subjectName);
 
-        if (position%7==this.position){
+        if (position % 7 == this.position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_ls));
-        }else {
+        } else {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_white2));
         }
         return view;
     }
-    public void notifyData( List<listTimeDataByAppRsp.DataBean.SubListBean> list) {
+
+    public void notifyData(List<listTimeDataByAppRsp.DataBean.SubListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }
-    public void setIndex(int position){
-        this.position=position;
+
+    public void setIndex(int position) {
+        this.position = position;
         notifyDataSetChanged();
     }
 

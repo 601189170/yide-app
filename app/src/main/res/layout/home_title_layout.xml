@@ -83,11 +83,12 @@
             android:layout_marginLeft="60dp"
             android:layout_marginRight="45dp"
             android:gravity="center"
-            android:text="罗小黑的主监护人提交的请假需要你审批"
+            android:text="暂无代办消息通知"
             android:textColor="#1F2833"
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_todo"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_gravity="center_vertical|right"

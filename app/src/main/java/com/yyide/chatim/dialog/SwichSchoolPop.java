@@ -69,6 +69,12 @@ public class SwichSchoolPop extends PopupWindow {
         init();
     }
 
+    private OnCheckCallBack mOnCheckCallBack;
+
+    public void setOnCheckCallBack(OnCheckCallBack mOnCheckCallBack) {
+        this.mOnCheckCallBack = mOnCheckCallBack;
+    }
+
     private void init() {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_school_class_pop, null);
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
@@ -153,13 +159,12 @@ public class SwichSchoolPop extends PopupWindow {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-//                SPUtils.getInstance().put(SpData.USERID, school.userId);
                 String data = response.body().string();
                 Log.e("TAG", "mOkHttpClient==>: " + data);
                 SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(school));
-                    Tologin(String.valueOf(school.userId));
+                    Tologin(school.userId);
                 } else {
                     ToastUtils.showShort(bean.message);
                 }
@@ -175,12 +180,12 @@ public class SwichSchoolPop extends PopupWindow {
         });
     }
 
-    void Tologin(String userId) {
+    void Tologin(int userId) {
         String userName = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         RequestBody body = new FormBody.Builder()
                 .add("username", userName)
                 .add("password", SPUtils.getInstance().getString(BaseConstant.PASSWORD))
-                .add("userId", userId)
+                .add("userId", String.valueOf(userId))
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
@@ -202,9 +207,40 @@ public class SwichSchoolPop extends PopupWindow {
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                    initIm(userName);
+                    getUserSchool();
                 } else {
                     ToastUtils.showShort(bean.message);
+                }
+            }
+        });
+    }
+
+    //获取学校信息
+    void getUserSchool() {
+        //请求组合创建
+        Request request = new Request.Builder()
+//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.URL_IP + "/management/cloud-system/user/getUserSchoolByApp")
+                .addHeader("Authorization", SpData.User().token)
+                .build();
+        //发起请求
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", "getUserSigonFailure: " + e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                Log.e("TAG", "getUserSchool333==>: " + data);
+                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
+                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+                if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+                    SpData.setIdentityInfo(rsp);
+                    initIm(SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
+                } else {
+                    ToastUtils.showShort(rsp.msg);
                 }
             }
         });
@@ -217,11 +253,7 @@ public class SwichSchoolPop extends PopupWindow {
         TUIKit.login(mUser, userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
-                context.runOnUiThread(new Runnable() {
-                    public void run() {
-                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
-                    }
-                });
+                context.runOnUiThread(() -> ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc));
                 DemoLog.i("TAG", "imLogin errorCode = " + code + ", errorInfo = " + desc);
             }
 
@@ -235,12 +267,14 @@ public class SwichSchoolPop extends PopupWindow {
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
-
 //                ActivityUtils.finishAllActivities();
 //                Intent intent = new Intent(context, MainActivity.class);
 //                context.startActivity(intent);
                 //刷新首页数据
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+                if (mOnCheckCallBack != null) {
+                    mOnCheckCallBack.onCheckCallBack();
+                }
             }
         });
     }

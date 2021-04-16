@@ -66,7 +66,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:background="#F5F8FC"
             android:padding="@dimen/dp_20"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,13 +76,29 @@
             <TextView
                 android:id="@+id/confirm"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:background="@drawable/bg_white20"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:gravity="center"
                 android:text="确定"
                 android:textColor="@color/blue11"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/cancel"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/bg_white20"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/blue11"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/confirm"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

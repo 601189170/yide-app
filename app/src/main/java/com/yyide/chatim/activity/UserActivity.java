@@ -44,8 +44,6 @@ import butterknife.OnClick;
 
 public class UserActivity extends BaseMvpActivity<UserPresenter> implements UserView, OnDateSetListener {
 
-//    @BindView(R.id.back)
-//    TextView back;
     @BindView(R.id.img)
     ImageView img;
     @BindView(R.id.layout1)

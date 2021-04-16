@@ -13,10 +13,10 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
         attachView(view);
     }
 
-    public void noticeDetail(int id,int type){
-        Log.e("NoticeDetailPresenter", "noticeDetail: "+id+",type="+type );
+    public void noticeDetail(int id, long signId, int type) {
+        Log.e("NoticeDetailPresenter", "noticeDetail: " + id + ",type=" + type);
         mvpView.showLoading();
-        if (type == 1){
+        if (type == 1) {
             addSubscription(dingApiStores.getMyNoticeDetails(id), new ApiCallback<NoticeDetailRsp>() {
                 @Override
                 public void onSuccess(NoticeDetailRsp model) {
@@ -33,7 +33,24 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
                     mvpView.hideLoading();
                 }
             });
-        }else {
+        } else if (type == 4) {
+            addSubscription(dingApiStores.getMyNoticeBySignId(signId), new ApiCallback<NoticeDetailRsp>() {
+                @Override
+                public void onSuccess(NoticeDetailRsp model) {
+                    mvpView.noticeDetail(model);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    mvpView.noticeDetailFail(msg);
+                }
+
+                @Override
+                public void onFinish() {
+                    mvpView.hideLoading();
+                }
+            });
+        } else {
             addSubscription(dingApiStores.getMyReleaseNotice(id), new ApiCallback<NoticeDetailRsp>() {
                 @Override
                 public void onSuccess(NoticeDetailRsp model) {
@@ -53,7 +70,7 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
         }
     }
 
-    public void updateMyNoticeDetails(int id){
+    public void updateMyNoticeDetails(int id) {
         mvpView.showLoading();
         addSubscription(dingApiStores.updateMyNoticeDetails(id), new ApiCallback<BaseRsp>() {
             @Override

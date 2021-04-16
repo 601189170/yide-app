@@ -115,6 +115,7 @@ public class GetUserSchoolRsp {
 
             public String classesId;
             public String classesName;
+            public String teacherInd;
             public String classesTeacher;
             public int teacherId;
 

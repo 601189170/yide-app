@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -170,6 +171,41 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
                 }
             }
         });
+        et_input_after_class.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    view.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                return false;
+            }
+        });
+        
+        et_input_before_class.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    //通知父控件不要干扰
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    view.getParent().requestDisallowInterceptTouchEvent(false);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -225,6 +261,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
         PreparesLessonRep lessonRep = new PreparesLessonRep();
         lessonRep.setTimetableSchedulSubId(dataBean.subid);
         lessonRep.setLessonsId(dataBean.lessonsId);
+        lessonRep.setId(dataBean.lessonsId);
         lessonRep.setBeforeClass(before_class);
         lessonRep.setAfterClass(after_class);
         List<String> teachToolList = new ArrayList<>();

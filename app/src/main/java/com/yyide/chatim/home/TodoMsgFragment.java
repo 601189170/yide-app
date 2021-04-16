@@ -108,7 +108,7 @@ public class TodoMsgFragment extends BaseFragment {
                 break;
             case 1:
                 if (fg2 == null) {
-                    fg2 = TodoMsgPageFragment.newInstance("0");
+                    fg2 = TodoMsgPageFragment.newInstance("2");
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
                     ft.show(fg2);

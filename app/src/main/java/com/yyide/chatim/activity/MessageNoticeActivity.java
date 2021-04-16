@@ -90,7 +90,7 @@ public class MessageNoticeActivity extends BaseActivity {
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             HelpRsp model = (HelpRsp) adapter1.getData().get(position);
         });
-        //initData();
+        initData();
     }
 
     private List<AgentInformationRsp> list = new ArrayList<>();

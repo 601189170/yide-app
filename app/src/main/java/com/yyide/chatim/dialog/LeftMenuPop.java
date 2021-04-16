@@ -30,11 +30,13 @@ import com.yyide.chatim.activity.PowerActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 
 /**
@@ -46,6 +48,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     View mView;
     PopupWindow popupWindow;
     Window mWindow;
+    private TextView user_class;
+    private TextView head_name;
+    private TextView user_identity;
+    private TextView user_name;
+    private ImageView head_img;
 
     public LeftMenuPop(Activity context) {
         this.context = context;
@@ -62,11 +69,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         LinearLayout layout = (LinearLayout) mView.findViewById(R.id.layout);
 
         FrameLayout bg = mView.findViewById(R.id.bg);
-        TextView head_name = mView.findViewById(R.id.head_name);
-        TextView user_identity = mView.findViewById(R.id.user_sf);
-        TextView user_class = mView.findViewById(R.id.user_class);
-        TextView user_name = mView.findViewById(R.id.user_name);
-        ImageView head_img = mView.findViewById(R.id.head_img);
+        head_name = mView.findViewById(R.id.head_name);
+        user_identity = mView.findViewById(R.id.user_sf);
+        user_class = mView.findViewById(R.id.user_class);
+        user_name = mView.findViewById(R.id.user_name);
+        head_img = mView.findViewById(R.id.head_img);
         LinearLayout layout1 = mView.findViewById(R.id.layout1);
         LinearLayout layout2 = mView.findViewById(R.id.layout2);
         LinearLayout layout3 = mView.findViewById(R.id.layout3);
@@ -84,17 +91,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         layout6.setOnClickListener(this);
         layout7.setOnClickListener(this);
         layout8.setOnClickListener(this);
-
-        user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
-        user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t" + SpData.getIdentityInfo().getIdentity() : "");
-        head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
-        if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().img)) {
-            user_name.setVisibility(View.GONE);
-            GlideUtil.loadImage(context, SpData.getIdentityInfo().img, head_img);
-        } else {
-            head_img.setVisibility(View.GONE);
-            user_name.setText(StringUtils.subString(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "", 2));
-        }
+        setData();
 //        new BottomMenuPop(context);
         layout.setOnTouchListener((v, event) -> true);
         bg.setOnClickListener(v -> {
@@ -102,7 +99,6 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 popupWindow.dismiss();
             }
         });
-
         popupWindow.setFocusable(false);//获取焦点
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -147,6 +143,21 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
     }
 
+    private void setData() {
+        user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+        user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t" + SpData.getIdentityInfo().getIdentity() : "");
+        head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
+        if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().img)) {
+            user_name.setVisibility(View.GONE);
+            head_img.setVisibility(View.VISIBLE);
+            GlideUtil.loadImage(context, SpData.getIdentityInfo().img, head_img);
+        } else {
+            head_img.setVisibility(View.GONE);
+            user_name.setVisibility(View.VISIBLE);
+            user_name.setText(StringUtils.subString(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "", 2));
+        }
+    }
+
     public void show() {
         if (popupWindow != null)
             if (context != null) {
@@ -167,7 +178,6 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     }
 
     public boolean isshow() {
-
         if (popupWindow != null && popupWindow.isShowing()) {
             return true;
         } else {
@@ -177,13 +187,15 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        hide();
+        //hide();
         switch (v.getId()) {
             case R.id.layout1://切换班级
-                new SwichClassPop(context);
+                new SwichClassPop(context).setOnCheckCallBack(() -> user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : ""));
                 break;
             case R.id.layout2://切换身份（学校）
-                new SwichSchoolPop(context);
+                new SwichSchoolPop(context).setOnCheckCallBack(() -> {
+                    setData();
+                });
                 break;
             case R.id.layout3://我的信息
                 context.startActivity(new Intent(context, UserActivity.class));
@@ -204,21 +216,23 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 ToastUtils.showShort("已是最新版本");
                 break;
             case R.id.exit://退出登录
-                SPUtils.getInstance().clear();
-                dismiss();
+                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);
+                SPUtils.getInstance().remove(BaseConstant.PASSWORD);
+                SPUtils.getInstance().remove(BaseConstant.JG_ALIAS_NAME);
                 //退出登录IM
-//                TUIKit.logout(new IUIKitCallBack(){
-//
-//                    @Override
-//                    public void onSuccess(Object data) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(String module, int errCode, String errMsg) {
-//
-//                    }
-//                });
+                TUIKit.logout(new IUIKitCallBack() {
+
+                    @Override
+                    public void onSuccess(Object data) {
+                        //Log.d();
+                    }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+                        //Log.d();
+                    }
+                });
+                dismiss();
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();
                 break;

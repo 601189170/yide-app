@@ -31,6 +31,7 @@ import com.yyide.chatim.model.TableRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.presenter.ClassTablePresenter;
+import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.view.ClassTableView;
 
 import java.text.SimpleDateFormat;
@@ -59,7 +60,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     RelativeLayout leftLayout;
     @BindView(R.id.className)
     TextView className;
-
+    @BindView(R.id.tv_week)
+    TextView tv_week;
     private View mBaseView;
     TableTimeAdapter timeAdapter;
     TableItemAdapter tableItemAdapter;
@@ -84,7 +86,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-
+        tv_week.setText(TimeUtil.getWeek() + "周");
         grid.setOnItemClickListener((parent, view1, position, id) -> {
             timeAdapter.setPosition(position);
             index = position;

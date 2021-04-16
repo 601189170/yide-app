@@ -74,6 +74,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HelpItemAdapter(null);
         recyclerview.setAdapter(adapter);
+//        adapter.addFooterView();
         adapter.setEmptyView(R.layout.empty);
         adapter.getUpFetchModule().setUpFetchEnable(true);
         adapter.getUpFetchModule().setUpFetching(true);
@@ -81,12 +82,12 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
             @Override
             public void onUpFetch() {
                 adapter.getUpFetchModule().setUpFetching(true);
-                //pageNum++;
-//                if ("helpAdvanced".equals(type)) {
-//                    mvpPresenter.getHelpAdvancedList(pageSize, pageNum);
-//                } else {
-//                    mvpPresenter.getHelpList(pageSize, pageNum);
-//                }
+                pageNum++;
+                if ("helpAdvanced".equals(type)) {
+                    mvpPresenter.getHelpAdvancedList(pageSize, pageNum);
+                } else {
+                    mvpPresenter.getHelpList(pageSize, pageNum);
+                }
             }
         });
         //recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this, 20)));

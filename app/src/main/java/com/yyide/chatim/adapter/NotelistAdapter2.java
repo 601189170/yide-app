@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.TeacherlistRsp;
+import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.utils.StringUtils;
 import com.yyide.chatim.utils.VHUtil;
 
 import org.raphets.roundimageview.RoundImageView;
@@ -22,8 +24,8 @@ import java.util.List;
 public class NotelistAdapter2 extends BaseAdapter {
 
 
+    List<TeacherlistRsp.DataBean.RecordsBean> list = new ArrayList<>();
 
-    List<TeacherlistRsp.DataBean.RecordsBean> list =new ArrayList<>();
     @Override
     public int getCount() {
         return list.size();
@@ -44,14 +46,15 @@ public class NotelistAdapter2 extends BaseAdapter {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.note_list_item2, null, false);
         TextView item = VHUtil.ViewHolder.get(view, R.id.name);
+        TextView title = VHUtil.ViewHolder.get(view, R.id.tv_name_title);
         RoundImageView img = VHUtil.ViewHolder.get(view, R.id.img);
-
+        title.setText(StringUtils.subString(getItem(position).name, 2));
         item.setText(getItem(position).name);
-//        item.setText("小明小明");
         return view;
     }
-    public void notifdata(List<TeacherlistRsp.DataBean.RecordsBean> list){
-        this.list=list;
+
+    public void notifdata(List<TeacherlistRsp.DataBean.RecordsBean> list) {
+        this.list = list;
         notifyDataSetChanged();
     }
 

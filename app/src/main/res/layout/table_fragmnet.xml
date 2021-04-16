@@ -73,9 +73,7 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_gravity="bottom"
-
             android:layout_marginBottom="23dp"
             android:orientation="horizontal">
 
@@ -93,6 +91,7 @@
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="15dp"
                 android:textColor="@color/white"
+                android:text="未设置课前提醒"
                 android:textSize="11sp" />
         </FrameLayout>
     </FrameLayout>

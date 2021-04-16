@@ -44,7 +44,11 @@ public class SwichClassAdapter extends BaseAdapter {
         TextView className = VHUtil.ViewHolder.get(view, R.id.className);
 
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
-        className.setText(getItem(position).classesName);
+        if ("Y".equals(getItem(position).teacherInd)) {
+            className.setText(getItem(position).classesName + "\t" + "班主任");
+        } else {
+            className.setText(getItem(position).classesName);
+        }
         select.setVisibility(index == position ? View.VISIBLE : View.GONE);
         return view;
     }

@@ -58,6 +58,11 @@ public class SwichClassPop extends PopupWindow {
         init();
     }
 
+    private OnCheckCallBack mOnCheckCallBack;
+    public void setOnCheckCallBack(OnCheckCallBack mOnCheckCallBack) {
+        this.mOnCheckCallBack = mOnCheckCallBack;
+    }
+
     private void init() {
         int index = 0;
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_class_pop, null);
@@ -67,10 +72,10 @@ public class SwichClassPop extends PopupWindow {
 
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
 
-        FrameLayout layout = (FrameLayout) mView.findViewById(R.id.layout);
+        FrameLayout layout = mView.findViewById(R.id.layout);
 
-        FrameLayout bg = (FrameLayout) mView.findViewById(R.id.bg);
-        ListView listview = (ListView) mView.findViewById(R.id.listview);
+        FrameLayout bg = mView.findViewById(R.id.bg);
+        ListView listview = mView.findViewById(R.id.listview);
         SwichClassAdapter adapter = new SwichClassAdapter();
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
@@ -87,19 +92,19 @@ public class SwichClassPop extends PopupWindow {
             }
         }
         adapter.setIndex(index);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapter.setIndex(position);
-                SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.getIdentityInfo().form.get(position)));
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
-                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_CLASS_HOME, ""));
-                ActivityUtils.finishAllActivities();
-                Intent intent = new Intent(context, MainActivity.class);
-                context.startActivity(intent);
+        listview.setOnItemClickListener((parent, view, position, id) -> {
+            adapter.setIndex(position);
+            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.getIdentityInfo().form.get(position)));
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+            if (mOnCheckCallBack != null) {
+                mOnCheckCallBack.onCheckCallBack();
+            }
+//                ActivityUtils.finishAllActivities();
+//                Intent intent = new Intent(context, MainActivity.class);
+//                context.startActivity(intent);
         });
 
         popupWindow.setFocusable(true);
@@ -107,17 +112,14 @@ public class SwichClassPop extends PopupWindow {
         popupWindow.setBackgroundDrawable(null);
         popupWindow.getContentView().setFocusable(true);
         popupWindow.getContentView().setFocusableInTouchMode(true);
-        popupWindow.getContentView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (popupWindow != null && popupWindow.isShowing()) {
-                        popupWindow.dismiss();
-                    }
-                    return true;
+        popupWindow.getContentView().setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
                 }
-                return false;
+                return true;
             }
+            return false;
         });
         bg.setOnClickListener(v -> {
 

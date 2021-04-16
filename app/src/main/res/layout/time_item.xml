@@ -9,12 +9,10 @@
         android:layout_height="39dp">
 
         <CheckedTextView
-
             android:id="@+id/day"
             android:textSize="13sp"
             android:textStyle="bold"
             android:text="今天"
-
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp_5"
 
@@ -22,18 +20,19 @@
             android:textColor="@color/black_white_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <CheckedTextView
 
-            android:layout_marginBottom="@dimen/dp_2"
             android:id="@+id/time"
-            android:textSize="10sp"
-            android:text="03/02"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/dp_2"
+            android:gravity="center"
+            android:text="03/02"
             android:textAlignment="center"
             android:textColor="@color/black_white_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="10sp" />
     </FrameLayout>
 
 

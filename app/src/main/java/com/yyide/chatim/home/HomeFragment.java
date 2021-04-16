@@ -26,6 +26,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
+import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
@@ -82,6 +83,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     TextView userName;
     @BindView(R.id.school_name)
     TextView schoolName;
+    @BindView(R.id.tv_todo)
+    TextView tv_todo;
     @BindView(R.id.spmsg)
     VerticalTextview spmsg;
     @BindView(R.id.layout_message)
@@ -164,7 +167,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
         spmsg.setOnItemClickListener(i -> {
             //startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
+            //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
             mListener.jumpFragment(1);
         });
     }
@@ -238,7 +241,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     @Override
-
     public void getUserSchool(GetUserSchoolRsp rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.d("TAG", "getUserSchool==》: " + JSON.toJSONString(rsp));
@@ -307,7 +309,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void getIndexMyNotice(NoticeHomeRsp rsp) {
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
+            tv_todo.setVisibility(View.VISIBLE);
             initVerticalTextview(rsp.getData());
+        } else {
+            tv_todo.setVisibility(View.GONE);
+            spmsg.setText("暂无代办消息通知");
         }
     }
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 public class SelectUserSchoolRsp {
 
-
     /**
      * code : 200
      * data : {"username":"13659896596","password":"$2a$10$YgBanTvXwFVqsNKi/0V3MO5oSnpWKsvrKBV.yLJHGWcxEgZr9VH12","userId":null,"schoolId":158,"schoolName":"发的发生","teacherId":null,"dataPerInd":null,"depIds":null,"status":null,"depId":null,"depName":null,"dataPerDepIds":null,"imgList":[],"birthdayDate":null,"sex":null,"email":null}
@@ -14,8 +13,6 @@ public class SelectUserSchoolRsp {
     public int code;
     public DataBean data;
     public String message;
-
-  
 
     public static class DataBean {
         /**
@@ -54,6 +51,6 @@ public class SelectUserSchoolRsp {
         public Object email;
         public List<?> imgList;
 
-       
+
     }
 }

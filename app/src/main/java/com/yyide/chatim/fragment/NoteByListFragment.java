@@ -80,7 +80,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
             adapter.notifydata(listBean);
         }
         if (!TextUtils.isEmpty(organization) && "staff".equals(organization)) {
-            mvpPresenter.NoteBookByList(id, "", "", "", "10", "1");
+            mvpPresenter.NoteBookByList(id, "", "", "", "30", "1");
         } else {
             mvpPresenter.getStudentList(id);
         }

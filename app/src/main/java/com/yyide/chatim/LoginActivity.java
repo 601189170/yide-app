@@ -1,6 +1,5 @@
 package com.yyide.chatim;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,14 +18,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
-import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
@@ -42,14 +42,8 @@ import com.yyide.chatim.utils.Utils;
 
 import java.io.IOException;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -128,7 +122,11 @@ public class LoginActivity extends BaseActivity {
     void click(View view) {
         switch (view.getId()) {
             case R.id.forgot:
+                String userName = userEdit.getText().toString().trim();
                 Intent intent = new Intent(this, ResetPassWordActivity.class);
+                if (!TextUtils.isEmpty(userName) && RegexUtils.isMobileExact(userName)) {
+                    intent.putExtra("phone", userName);
+                }
                 intent.putExtra("isForgot", true);
                 startActivity(intent);
                 break;
@@ -455,20 +453,8 @@ public class LoginActivity extends BaseActivity {
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
                 if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-                    if (rsp.data != null) {
-                        if (rsp.data.size() > 0) {
-                            for (int i = 0; i < rsp.data.size(); i++) {
-                                if (rsp.data.get(i).isCurrentUser) {
-                                    SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(rsp.data.get(i)));
-                                    if (rsp.data.get(i) != null && rsp.data.get(i).form != null && rsp.data.get(i).form.size() > 0) {
-                                        SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(rsp.data.get(i).form.get(0)));
-                                    }
-                                    initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    SpData.setIdentityInfo(rsp);
+                    initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
                 } else {
                     ToastUtils.showShort(rsp.msg);
                 }

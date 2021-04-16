@@ -168,6 +168,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             setTab(3, 0);
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
             setTab(1, 0);
+        } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            registerAlias();
         }
     }
 
@@ -311,7 +313,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Override
     public void jumpFragment(int index) {
-        setTab(index,1);
+        setTab(index, 1);
     }
 
     public class MessageReceiver extends BroadcastReceiver {
@@ -350,7 +352,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         super.onResume();
     }
 
-    void setTab(int position,int type) {
+    void setTab(int position, int type) {
 
         tab1.setChecked(false);
         tab2.setChecked(false);
@@ -387,12 +389,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 if (fg2 == null) {
                     fg2 = new MessageFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("type",type);
+                    bundle.putInt("type", type);
                     fg2.setArguments(bundle);
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
-                } else{
+                } else {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("type",type);
+                    bundle.putInt("type", type);
                     fg2.setArguments(bundle);
                     ft.show(fg2);
                 }
@@ -430,16 +432,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1_layout:
-                setTab(0,0);
+                setTab(0, 0);
                 break;
             case R.id.tab2_layout:
-                setTab(1,0);
+                setTab(1, 0);
                 break;
             case R.id.tab3_layout:
-                setTab(2,0);
+                setTab(2, 0);
                 break;
             case R.id.tab4_layout:
-                setTab(3,0);
+                setTab(3, 0);
                 break;
         }
     }

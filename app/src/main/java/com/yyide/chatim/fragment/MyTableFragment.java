@@ -28,6 +28,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.presenter.MyTablePresenter;
+import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.view.MyTableView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,6 +55,8 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     FrameLayout classlayout;
     @BindView(R.id.className)
     TextView className;
+    @BindView(R.id.tv_week)
+    TextView tv_week;
     private View mBaseView;
 
     MyTableAdapter adapter;
@@ -78,7 +81,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         grid.setAdapter(timeAdapter);
 
         mvpPresenter.SelectSchByTeaid();
-
+        tv_week.setText(TimeUtil.getWeek() + "周");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
         Date date = new Date(System.currentTimeMillis());
         for (int i = 0; i < timeAdapter.list.size(); i++) {

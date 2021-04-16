@@ -15,7 +15,7 @@
             android:id="@+id/classlayout"
             android:layout_width="115dp"
             android:layout_height="30dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/bg_stoke_gray_corners2">
 
@@ -35,19 +35,21 @@
                 android:layout_marginRight="11dp"
                 android:background="@drawable/icon_right" />
         </FrameLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp">
 
             <TextView
+                android:id="@+id/tv_week"
                 android:layout_width="50dp"
                 android:layout_height="39dp"
-                android:background="@drawable/bg_corners2"
+                android:background="@drawable/bg_corners3"
                 android:gravity="center"
-                android:text="02周"
                 android:textColor="#2C8AFF"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <GridView
                 android:id="@+id/grid"

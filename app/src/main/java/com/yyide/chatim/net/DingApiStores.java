@@ -65,7 +65,8 @@ import rx.Observable;
 //    https://api.uat.edu.1d1j.net/management/cloud-system/login
 public interface DingApiStores {
     //    String API_SERVER_URL = "http://120.76.189.190:8027";
-    String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
+//    String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
+    String API_SERVER_URL = "https://api.edu.1d1j.cn/";
 //    String API_SERVER_URL = "https://192.168.3.120:8010";
 
     @GET("/java-painted-screen/api/wechatPaintedScreenManage/selectDeviceOperation")
@@ -187,10 +188,14 @@ public interface DingApiStores {
     Observable<NoticeDetailRsp> getMyNoticeDetails(@Query("id") int id);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyReleaseNotice
-
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/announcement/getMyReleaseNotice")
     Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") int id);
+
+
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/announcement/getMyNoticeBySignId")
+    Observable<NoticeDetailRsp> getMyNoticeBySignId(@Query("signId") long id);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/notice/temp/getTemplateTypePage
     //https://api.uat.edu.1d1j.net/management/cloud-system/announcement/type/getAnnouncementTypePage

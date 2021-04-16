@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,30 +25,23 @@
                 android:id="@+id/left_layout"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                android:orientation="vertical">
-
-            </RelativeLayout>
+                android:orientation="vertical"
+                android:visibility="gone" />
 
             <GridView
                 android:id="@+id/listsection"
-                android:layout_width="21dp"
+                android:layout_width="@dimen/dp_50"
                 android:layout_height="match_parent"
                 android:numColumns="1"
-                android:verticalSpacing="1dp">
-
-            </GridView>
+                android:verticalSpacing="1dp" />
 
             <com.yyide.chatim.widget.MyGridView
-
                 android:id="@+id/tablegrid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:horizontalSpacing="1dp"
                 android:numColumns="7"
-                android:verticalSpacing="1dp">
-
-            </com.yyide.chatim.widget.MyGridView>
+                android:verticalSpacing="1dp" />
 
         </LinearLayout>
 

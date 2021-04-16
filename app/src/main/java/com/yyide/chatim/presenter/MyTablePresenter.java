@@ -1,16 +1,10 @@
 package com.yyide.chatim.presenter;
 
 
-import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MyTableView;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import okhttp3.RequestBody;
 
 /**
  * 作者：Rance on 2016/10/25 15:19

@@ -52,6 +52,7 @@ public class SwichTableClassPop extends PopupWindow {
     private void init() {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bttom_table_class_pop, null);
         TextView confirm = mView.findViewById(R.id.confirm);
+        TextView cancel = mView.findViewById(R.id.cancel);
         ConstraintLayout bg = mView.findViewById(R.id.bg);
         WheelView wheelView = mView.findViewById(R.id.departments);
         WheelView wheelViewClasses = mView.findViewById(R.id.tableClass);
@@ -68,6 +69,11 @@ public class SwichTableClassPop extends PopupWindow {
             }
         });
         bg.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
+        });
+        cancel.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }

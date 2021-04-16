@@ -49,8 +49,12 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         boolean isForgot = getIntent().getBooleanExtra("isForgot", false);
+        String mobile = getIntent().getStringExtra("phone");
         if (isForgot) {
             title.setText("忘记密码");
+            if (!TextUtils.isEmpty(mobile)) {
+                phone.setText(mobile);
+            }
         } else {
             title.setText("修改密码");
         }

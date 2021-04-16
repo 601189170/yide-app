@@ -27,7 +27,7 @@ public class TimeUtil {
 
         final long aDayInMillis = 1000 * 60 * 60 * 24;
 
-        final long currentTimeMillis = System.currentTimeMillis()+10*60*1000;
+        final long currentTimeMillis = System.currentTimeMillis() + 10 * 60 * 1000;
 
         Time now = new Time();
         now.set(currentTimeMillis);
@@ -60,40 +60,43 @@ public class TimeUtil {
 
     /**
      * 传入的时间是否已经结束
+     *
      * @param endDate 传入的时间
      * @return 返回
      */
-    public static boolean isDateOver(String endDate){
+    public static boolean isDateOver(String endDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date now = new Date();
             Date old = sdf.parse(endDate);
-            return now.before(old) ;
+            return now.before(old);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return false ;
+        return false;
     }
-    public static boolean isDateOver2(String endDate){
+
+    public static boolean isDateOver2(String endDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
         try {
             Date now = new Date();
             Date old = sdf.parse(endDate);
-            return now.before(old) ;
+            return now.before(old);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return false ;
+        return false;
     }
+
     /**
      * 先用SimpleDateFormat.parse() 方法将日期字符串转化为Date格式
      * 通过Date.getTime()方法，将其转化为毫秒数  String date = "2001-03-15 15：37：05";
      */
-    public static long gettime(String str){
+    public static long gettime(String str) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");//24小时制
         //      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");//12小时制
         long time2 = 0;
-        if (str!=null){
+        if (str != null) {
             try {
                 time2 = simpleDateFormat.parse(str).getTime();
             } catch (ParseException e) {
@@ -104,11 +107,12 @@ public class TimeUtil {
         return time2;
 
     }
-    public static long gettime10(String str){
+
+    public static long gettime10(String str) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");//24小时制
         //      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");//12小时制
         long time2 = 0;
-        if (str!=null){
+        if (str != null) {
             try {
                 time2 = simpleDateFormat.parse(str).getTime();
             } catch (ParseException e) {
@@ -121,11 +125,11 @@ public class TimeUtil {
     }
 
 
-    public static long gettime55(String str){
+    public static long gettime55(String str) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");//24小时制
         //      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");//12小时制
         long time2 = 0;
-        if (str!=null){
+        if (str != null) {
             try {
                 time2 = simpleDateFormat.parse(str).getTime();
             } catch (ParseException e) {
@@ -136,49 +140,58 @@ public class TimeUtil {
         return time2;
 
     }
+
     /*
      * 将时间戳转换为时间
      */
-    public static String stampToDate(long timeMillis){
+    public static String stampToDate(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
-    public static String stampToDate2(long timeMillis){
+
+    public static String stampToDate2(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
-    public static String stampToDate3(long timeMillis){
+
+    public static String stampToDate3(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
-    public static String stampToDate4(long timeMillis){
+
+    public static String stampToDate4(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
-    public static String stampToDate6(long timeMillis){
+
+    public static String stampToDate6(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
-    public static String stampToDate7(long timeMillis){
+
+    public static String stampToDate7(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
-    public static String stampToDate5(long timeMillis){
+
+    public static String stampToDate5(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月-dd日");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
-    public static String stampToDate8(long timeMillis){
+
+    public static String stampToDate8(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }
+
     public static List<WeekDay> getWeekDay() {
 
         Calendar calendar = Calendar.getInstance();
@@ -187,7 +200,7 @@ public class TimeUtil {
 
         // 获取本周的第一天
         int firstDayOfWeek = calendar.getFirstDayOfWeek();
-        Log.e("TAG", "getWeekDay: "+firstDayOfWeek );
+        Log.e("TAG", "getWeekDay: " + firstDayOfWeek);
         List<WeekDay> list = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             calendar.set(Calendar.DAY_OF_WEEK, firstDayOfWeek + i);
@@ -204,7 +217,7 @@ public class TimeUtil {
     }
 
 
-    public static String stampToDate10(long timeMillis){
+    public static String stampToDate10(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
@@ -226,6 +239,7 @@ public class TimeUtil {
 
         return belongCalendar(now, beginTime, endTime);
     }
+
     public static boolean isBelong5(String start, String end) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         Date now = null;
@@ -274,8 +288,9 @@ public class TimeUtil {
 
         return false;
     }
+
     public static boolean isTimeOut2(String endTime) {
-        Log.e("TAG", "isTimeOut2: "+endTime );
+        Log.e("TAG", "isTimeOut2: " + endTime);
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
         try {
             Date endDate = sdf.parse(endTime);
@@ -289,13 +304,16 @@ public class TimeUtil {
 
         return false;
     }
+
     public static class WeekDay {
-        /** 星期的显示名称*/
+        /**
+         * 星期的显示名称
+         */
         public String week;
-        /** 对应的日期*/
+        /**
+         * 对应的日期
+         */
         public String day;
-
-
 
 
         @Override
@@ -304,16 +322,17 @@ public class TimeUtil {
 //					"week='" + week + '\'' +
 //					", day='" + day + '\'' +
 //					'}';
-            return day ;
+            return day;
 
 
         }
     }
-    public static long gettime2(String str){
+
+    public static long gettime2(String str) {
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");//24小时制
-              SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");//12小时制
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");//12小时制
         long time2 = 0;
-        if (str!=null){
+        if (str != null) {
             try {
                 time2 = simpleDateFormat.parse(str).getTime();
             } catch (ParseException e) {
@@ -322,17 +341,18 @@ public class TimeUtil {
         }
         System.out.println(time2);
 
-        Log.e("TAG", "gettime2: "+time2 );
+        Log.e("TAG", "gettime2: " + time2);
         return time2;
 
     }
-    public static long gettime3(String str){
+
+    public static long gettime3(String str) {
 
 
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");//24小时制
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//12小时制
         long time2 = 0;
-        if (str!=null){
+        if (str != null) {
             try {
                 time2 = simpleDateFormat.parse(str).getTime();
             } catch (ParseException e) {
@@ -343,34 +363,42 @@ public class TimeUtil {
         return time2;
 
     }
+
     /**
      * 日期格式字符串转换成时间戳
-//     * @param date 字符串日期
+     * //     * @param date 字符串日期
+     *
      * @param format 如：yyyy-MM-dd HH:mm:ss
      * @return
      */
-    public static long date2TimeStamp(String date_str,String format){
+    public static long date2TimeStamp(String date_str, String format) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format);
-            return sdf.parse(date_str).getTime()/1000;
+            return sdf.parse(date_str).getTime() / 1000;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
+
+    public static int getWeek() {
+        Calendar cd = Calendar.getInstance();
+        cd.setTime(new Date());
+        return cd.get(Calendar.WEEK_OF_YEAR);
+    }
+
     /**
      * 获取系统时间，判断今天是周几
-     * */
+     */
     public static String getWeek(long time) {
 
         Calendar cd = Calendar.getInstance();
         cd.setTime(new Date(time));
 
-        int year  = cd.get(Calendar.YEAR); //获取年份
+        int year = cd.get(Calendar.YEAR); //获取年份
         int month = cd.get(Calendar.MONTH); //获取月份
-        int day   = cd.get(Calendar.DAY_OF_MONTH); //获取日期
-        int week  = cd.get(Calendar.DAY_OF_WEEK); //获取星期
-
+        int day = cd.get(Calendar.DAY_OF_MONTH); //获取日期
+        int week = cd.get(Calendar.DAY_OF_WEEK); //获取星期
         String weekString;
         switch (week) {
             case Calendar.SUNDAY:
@@ -399,6 +427,7 @@ public class TimeUtil {
 
         return weekString;
     }
+
     public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
         Calendar date = Calendar.getInstance();
         date.setTime(nowTime);
@@ -415,6 +444,7 @@ public class TimeUtil {
             return false;
         }
     }
+
     public static boolean isBelong3(String start, String end) {
 
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");//设置日期格式
@@ -432,7 +462,7 @@ public class TimeUtil {
         return belongCalendar(now, beginTime, endTime);
     }
 
-   public void ToDoTime(String time){
+    public void ToDoTime(String time) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ");
         DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         df2.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -443,8 +473,7 @@ public class TimeUtil {
             e.printStackTrace();
         }
         String value = df2.format(date);
-        Log.e("TAG", "ToDoTime: "+ JSON.toJSONString(value));
-
+        Log.e("TAG", "ToDoTime: " + JSON.toJSONString(value));
 
 
     }

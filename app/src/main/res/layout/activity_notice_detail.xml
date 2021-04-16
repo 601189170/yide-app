@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_20"
-        android:text="放假通知"
         android:textColor="#303133"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
@@ -36,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_14"
-        android:text="某某老师发布"
         android:textColor="#909399"
         android:textSize="@dimen/text_12"
         app:layout_constraintStart_toStartOf="@+id/tv_notice_title"
@@ -47,7 +45,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_20"
-        android:text="2021.03.06 16:40"
         android:textColor="#909399"
         android:textSize="@dimen/text_12"
         app:layout_constraintBottom_toBottomOf="@+id/tv_notice_author"
@@ -89,10 +86,10 @@
         android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="horizontal">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/tv_confirm"
@@ -135,8 +132,7 @@
             android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

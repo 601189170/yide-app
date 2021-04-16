@@ -38,6 +38,10 @@ public class SpData {
         return JSON.parseObject(SPUtils.getInstance().getString(LOGINDATA, ""), LoginRsp.class);
     }
 
+    public static void clearUser() {
+        SPUtils.getInstance().remove(LOGINDATA);
+    }
+
     public static GetUserSchoolRsp Schoolinfo() {
         return JSON.parseObject(SPUtils.getInstance().getString(SCHOOLINFO, ""), GetUserSchoolRsp.class);
     }
@@ -100,7 +104,7 @@ public class SpData {
      *
      * @param dataBean
      */
-    private static void setClassesData(GetUserSchoolRsp.DataBean dataBean) {
+    public static void setClassesData(GetUserSchoolRsp.DataBean dataBean) {
         if (dataBean != null && dataBean.form != null && dataBean.form.size() > 0) {//保存班级信息
             if (SpData.getClassInfo() != null) {//处理切换班级
                 GetUserSchoolRsp.DataBean.FormBean classBean = null;
@@ -114,7 +118,7 @@ public class SpData {
                 SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(dataBean.form.get(0)));
             }
         } else {//处理切换后没有班级的情况
-            SPUtils.getInstance().put(SpData.CLASS_INFO, "");
+            SPUtils.getInstance().remove(SpData.CLASS_INFO);
         }
     }
 }

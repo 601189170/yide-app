@@ -3,6 +3,7 @@ package com.yyide.chatim.model;
 import java.util.List;
 
 public class PreparesLessonRep {
+    private int id;
     private int timetableSchedulSubId;
 
     private String beforeClass;
@@ -53,6 +54,14 @@ public class PreparesLessonRep {
 
     public void setLessonsId(int lessonsId) {
         this.lessonsId = lessonsId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setLessonsSubEntityList(List<LessonsSubEntityList> lessonsSubEntityList) {

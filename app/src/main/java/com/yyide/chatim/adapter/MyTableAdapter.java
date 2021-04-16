@@ -1,7 +1,6 @@
 package com.yyide.chatim.adapter;
 
 import android.graphics.Color;
-import android.media.Image;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,10 @@ import android.widget.TextView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,7 +60,11 @@ public class MyTableAdapter extends BaseAdapter {
                 lessons.append(item.lessonsSubEntityList.get(i) + "\n");
             }
             homework.setText(lessons.toString());
+        } else {
+            homework.setText("");
         }
+
+        desc.setText(item.beforeClass);
         //开始时间
         long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
         //结束时间
@@ -73,19 +74,22 @@ public class MyTableAdapter extends BaseAdapter {
         int weekDay = c.get(Calendar.DAY_OF_WEEK);
         long mMillisecond = DateUtils.getWhenPoint(minute);
         if (item.weekTime > (weekDay - 1)) {//课前
-            desc.setText(item.beforeClass);
+//            desc.setText(item.beforeClass);
             dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
-        } else {
+        } else if (item.weekTime == (weekDay - 1)) {
             if (mMillisecond > toDateTime) {//课后
-                desc.setText(item.afterClass);
+//                desc.setText(item.afterClass);
                 dateS.setBackgroundColor(Color.parseColor("#C6C9CC"));
             } else if (mMillisecond < fromDataTime) {//课前
-                desc.setText(item.beforeClass);
+//                desc.setText(item.beforeClass);
                 dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
             } else {//正在上课
-                desc.setText(item.beforeClass);
+//                desc.setText(item.beforeClass);
                 dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
             }
+        } else {
+//            desc.setText(item.afterClass);
+            dateS.setBackgroundColor(Color.parseColor("#C6C9CC"));
         }
         className.setText(item.classesName);
         seciton.setText("第" + item.section + "节");

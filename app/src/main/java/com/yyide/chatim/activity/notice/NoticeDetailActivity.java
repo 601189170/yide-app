@@ -44,6 +44,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     private int TYPE_CONFIRM = 1;//已确认
     private int TYPE_UNCONFIRM = 2;//未确认
     private int TYPE_STATISTICAL = 3;//通知统计
+    private int TYPE_JG_PUSH = 4;//极光推送通知详情
 
     private int id;
     private int type;
@@ -65,6 +66,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         tv_notice_content.setMovementMethod(ScrollingMovementMethod.getInstance());
         type = getIntent().getIntExtra("type", 0);
         id = getIntent().getIntExtra("id", 0);
+        signId = getIntent().getLongExtra("signId", 0);
         status = getIntent().getStringExtra("status");
         Log.e(TAG, "onCreate: type:" + type + ",id:" + id + ",status:" + status);
         initView(type);
@@ -98,7 +100,11 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 //        tv_notice_author.setText();
 //        tv_notice_time.setText();
 //        tv_notice_content.setText();
-        mvpPresenter.noticeDetail(id,type);
+        if (signId > 0) {//推送消息ID
+            mvpPresenter.noticeDetail(id, signId, TYPE_JG_PUSH);
+        } else {
+            mvpPresenter.noticeDetail(id, 0, type);
+        }
     }
 
     @OnClick(R.id.back_layout)
@@ -113,12 +119,12 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     }
 
     @OnClick(R.id.tv_notice_confirm)
-    public void confirmStatistics(){
+    public void confirmStatistics() {
         //进入通知统计界面
-        Intent intent = new Intent(this,NoticeConfirmDetailActivity.class);
-        intent.putExtra("totalNumber",totalNumber);
-        intent.putExtra("readNumber",readNumber);
-        intent.putExtra("signId",signId);
+        Intent intent = new Intent(this, NoticeConfirmDetailActivity.class);
+        intent.putExtra("totalNumber", totalNumber);
+        intent.putExtra("readNumber", readNumber);
+        intent.putExtra("signId", signId);
         startActivity(intent);
     }
 
@@ -151,8 +157,9 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     public void noticeDetail(NoticeDetailRsp noticeDetailRsp) {
         NoticeDetailRsp.DataBean data = noticeDetailRsp.getData();
         Log.e(TAG, "noticeDetail: " + noticeDetailRsp.toString());
-        if (noticeDetailRsp.getCode() == 200){
+        if (noticeDetailRsp.getCode() == 200) {
             if (data != null) {
+                id = data.getId();//出推送过过来的通知确认
                 String productionTime = DateUtils.switchTime(data.getCreatedDateTime(), "MM.dd HH:mm");
                 tv_notice_title.setText(data.getTitle());
                 tv_notice_author.setText(data.getProductionTarget());
@@ -172,7 +179,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         ToastUtils.showShort("获取数据失败！");
         new Handler().postDelayed(() -> {
             finish();
-        },1000);
+        }, 1000);
     }
 
     @Override
@@ -180,21 +187,21 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         ToastUtils.showShort(msg);
         new Handler().postDelayed(() -> {
             finish();
-        },1000);
+        }, 1000);
 
     }
 
     @Override
     public void updateMyNotice(BaseRsp baseRsp) {
-            if (baseRsp.getCode() == 200){
-                ToastUtils.showShort("确认"+baseRsp.getMsg());
-                new Handler().postDelayed(() -> {
-                    Intent intent = getIntent();
-                    intent.putExtra("update",true);
-                    setResult(RESULT_OK,intent);
-                    finish();
-                },1000);
-            }
+        if (baseRsp.getCode() == 200) {
+            ToastUtils.showShort("确认" + baseRsp.getMsg());
+            new Handler().postDelayed(() -> {
+                Intent intent = getIntent();
+                intent.putExtra("update", true);
+                setResult(RESULT_OK, intent);
+                finish();
+            }, 1000);
+        }
     }
 
     @Override
@@ -202,6 +209,6 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         ToastUtils.showShort(msg);
         new Handler().postDelayed(() -> {
             finish();
-        },1000);
+        }, 1000);
     }
 }

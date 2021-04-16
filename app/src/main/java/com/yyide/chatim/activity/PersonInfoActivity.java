@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.TeacherlistRsp;
+import com.yyide.chatim.utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -51,12 +53,22 @@ public class PersonInfoActivity extends BaseActivity {
     LinearLayout ll_classes;
     @BindView(R.id.ll_email)
     LinearLayout ll_email;
+    @BindView(R.id.ll_subject)
+    LinearLayout ll_subject;
     @BindView(R.id.tv_master_phone)
     TextView tv_master_phone;
     @BindView(R.id.tv_vice_phone)
     TextView tv_vice_phone;
     @BindView(R.id.tv_class_name)
     TextView tv_class_name;
+    @BindView(R.id.tv_name_title)
+    TextView tv_name_title;
+    @BindView(R.id.iv_phone)
+    ImageView iv_phone;
+    @BindView(R.id.iv_phone_master)
+    ImageView iv_phone_master;
+    @BindView(R.id.iv_phone_vice)
+    ImageView iv_phone_vice;
     int type = 1;
     int type2 = 1;
     int type3 = 1;
@@ -80,12 +92,15 @@ public class PersonInfoActivity extends BaseActivity {
                 ll_master.setVisibility(View.VISIBLE);
                 ll_vice.setVisibility(View.VISIBLE);
                 ll_classes.setVisibility(View.VISIBLE);
+                ll_subject.setVisibility(View.GONE);
             } else {
                 ll_email.setVisibility(View.VISIBLE);
+                ll_subject.setVisibility(View.VISIBLE);
                 ll_master.setVisibility(View.GONE);
                 ll_vice.setVisibility(View.GONE);
                 ll_classes.setVisibility(View.GONE);
             }
+            tv_name_title.setText(StringUtils.subString(bean.name, 2));
             topname.setText(bean.name);
             name.setText(bean.name);
             adress.setText(bean.address);
@@ -96,11 +111,23 @@ public class PersonInfoActivity extends BaseActivity {
                 }
             }
             //subject.setText(stringBuffer.toString());
-            phone.setText(setMobile(bean.phone));
-            sex.setText("0".equals(bean.sex) ? "男" : "女");
+            sex.setText(!TextUtils.isEmpty(bean.sex) ? "0".equals(bean.sex) ? "男" : "女" : "无");
             tv_class_name.setText(bean.classesName);
-            tv_master_phone.setText(setMobile(bean.primaryGuardianPhone));//主监护人
-            tv_vice_phone.setText(setMobile(bean.deputyGuardianPhone));//副监护人
+            phone.setText(!TextUtils.isEmpty(bean.phone) ? setMobile(bean.phone) : "暂无手机号码");
+            if (TextUtils.isEmpty(bean.phone)) {
+                iv_phone.setVisibility(View.GONE);
+                set.setVisibility(View.GONE);
+            }
+            tv_master_phone.setText(!TextUtils.isEmpty(bean.primaryGuardianPhone) ? setMobile(bean.primaryGuardianPhone) : "暂无手机号码");//主监护人
+            if (TextUtils.isEmpty(bean.primaryGuardianPhone)) {
+                set_master.setVisibility(View.GONE);
+                iv_phone_master.setVisibility(View.GONE);
+            }
+            tv_vice_phone.setText(!TextUtils.isEmpty(bean.deputyGuardianPhone) ? setMobile(bean.deputyGuardianPhone) : "暂无手机号码");//副监护人
+            if (TextUtils.isEmpty(bean.deputyGuardianPhone)) {
+                set_vice.setVisibility(View.GONE);
+                iv_phone_vice.setVisibility(View.GONE);
+            }
         }
         set.setText("显示");
         set.setOnClickListener(v -> {

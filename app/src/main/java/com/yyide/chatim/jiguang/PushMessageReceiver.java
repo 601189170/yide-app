@@ -55,15 +55,15 @@ public class PushMessageReceiver extends JPushMessageReceiver {
             PushModel pushModel = JSON.parseObject(message.notificationExtras, PushModel.class);
             if ("1".equals(pushModel.getPush_type())) {//通知公告消息
                 Intent intent = new Intent(context, NoticeDetailActivity.class);
-                intent.putExtra("type", 1);
-                intent.putExtra("id", pushModel.getSignId());
+                intent.putExtra("type", 2);
+                intent.putExtra("signId", pushModel.getSignId());
+                intent.putExtra("id", pushModel.getId());
                 intent.putExtra("status", 2);
-                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 context.startActivity(intent);
             } else if ("2".equals(pushModel.getPush_type())) {//代办
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
-            } else if ("2".equals(pushModel.getPush_type())) {//系统通知
+            } else if ("3".equals(pushModel.getPush_type())) {//系统通知
                 Intent intent = new Intent(context, MessageNoticeActivity.class);
                 //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
