@@ -1,7 +1,6 @@
 package com.yyide.chatim.activity.notice;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -9,24 +8,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.notice.presenter.NoticeAnnouncementFragmentPresenter;
 import com.yyide.chatim.activity.notice.presenter.PublishAnnouncementFragmentPresenter;
-import com.yyide.chatim.activity.notice.view.NoticeAnnouncementFragmentView;
 import com.yyide.chatim.activity.notice.view.PublishAnnouncementFragmentView;
+import com.yyide.chatim.adapter.PublishNoticeAnnouncementListAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.BaseRsp;
-import com.yyide.chatim.model.NoticeAnnouncementModel;
 import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.DialogUtil;
@@ -43,17 +41,30 @@ import butterknife.BindView;
  * Use the {@link PublishNoticAnnouncementListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<PublishAnnouncementFragmentPresenter> implements PublishAnnouncementFragmentView {
+public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<PublishAnnouncementFragmentPresenter> implements PublishAnnouncementFragmentView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NoticeAnnouncementListF";
     List<NoticeListRsp.DataBean.RecordsBean> list = new ArrayList<>();
-    BaseQuickAdapter adapter;
+    //BaseQuickAdapter adapter;
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    private boolean refresh = false;
+
+    @BindView(R.id.blank_page)
+    LinearLayout blank_page;
+
+    private boolean loading = false;
+    private int curIndex = 1;
+    private int pages = 1;
+
     // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+    private PublishNoticeAnnouncementListAdapter publishNoticeAnnouncementListAdapter;
 
     public PublishNoticAnnouncementListFragment() {
         // Required empty public constructor
@@ -90,72 +101,45 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
-    //发送对象 ： 1家长 2学生 3部门
-    private String getSendObj(String sendObj){
-        if ("1".equals(sendObj))
-            return "家长";
-        if ("2".equals(sendObj))
-            return "学生";
-        if ("3".equals(sendObj))
-            return "部门";
-        return "学生";
-    }
+
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new BaseQuickAdapter<NoticeListRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_my_publish_announcement) {
+        publishNoticeAnnouncementListAdapter = new PublishNoticeAnnouncementListAdapter(getActivity(), list);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView.addOnScrollListener(monScrollListener);
+        mRecyclerView.setAdapter(publishNoticeAnnouncementListAdapter);
+        publishNoticeAnnouncementListAdapter.setOnItemOnClickListener(new PublishNoticeAnnouncementListAdapter.OnItemOnClickListener() {
             @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, NoticeListRsp.DataBean.RecordsBean record) {
-                String productionTime = DateUtils.formatTime(record.getProductionTime(), null,null);
-                int readNumber = record.getReadNumber();
-                int totalNumber = record.getTotalNumber();
-                String confirm_number_format = getActivity().getResources().getString(R.string.notice_confirm_number);
-                String notice_send_obj = getActivity().getResources().getString(R.string.notice_send_obj);
-                String confirmNumber = String.format(confirm_number_format, readNumber, totalNumber);
-                String sendObject = record.getSendObject();
-                String sendObj = String.format(notice_send_obj, getSendObj(sendObject));
-                baseViewHolder
-                        .setText(R.id.tv_notice, record.getTitle())
-                        .setText(R.id.tv_notice_time, productionTime)
-                        .setText(R.id.tv_notice_author, record.getProductionTarget())
-                        .setText(R.id.tv_confirm_number, confirmNumber)
-                        .setText(R.id.tv_send_obj, sendObj)
-                        .setText(R.id.tv_notice_content, Html.fromHtml(record.getContent()));
-                int id = record.getId();
-                baseViewHolder.getView(R.id.btn_delete).setOnClickListener(new View.OnClickListener() {
+            public void onClicked(int position) {
+                NoticeListRsp.DataBean.RecordsBean record = list.get(position);
+                Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
+                intent.putExtra("type", 3);
+                intent.putExtra("id", record.getId());
+                intent.putExtra("status", record.getStatus());
+                startActivity(intent);
+            }
+
+            @Override
+            public void delete(int position) {
+                int id = list.get(position).getId();
+                DialogUtil.hintDialog(getActivity(), "确定删除？", "删除通知公告并将其他相关信息一并删除", null, null, new DialogUtil.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        DialogUtil.hintDialog(getActivity(), "确定删除？", "删除通知公告并将其他相关信息一并删除", null, null, new DialogUtil.OnClickListener() {
-                            @Override
-                            public void onCancel(View view) {
+                    public void onCancel(View view) {
 
-                            }
-
-                            @Override
-                            public void onEnsure(View view) {
-                                Log.e(TAG, "删除: " + id);
-                                mvpPresenter.delAnnouncement(id);
-                            }
-                        });
                     }
-                });
-                baseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
-                        intent.putExtra("type", 3);
-                        intent.putExtra("id", record.getId());
-                        intent.putExtra("status", record.getStatus());
-                        startActivity(intent);
+                    public void onEnsure(View view) {
+                        Log.e(TAG, "删除: " + id);
+                        mvpPresenter.delAnnouncement(id);
                     }
                 });
             }
-        };
-
-        mRecyclerView.setAdapter(adapter);
-        mvpPresenter.noticeList(2, 1, 10);
+        });
+        mvpPresenter.noticeList(2, curIndex, 10);
     }
 
     @Override
@@ -166,17 +150,36 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
     @Override
     public void noticeList(NoticeListRsp noticeListRsp) {
         Log.e(TAG, "noticeList: " + noticeListRsp.toString());
+        pages = noticeListRsp.getData().getPages();
         List<NoticeListRsp.DataBean.RecordsBean> records = noticeListRsp.getData().getRecords();
-        list.clear();
+        publishNoticeAnnouncementListAdapter.setIsLoadMore(!records.isEmpty());
+        publishNoticeAnnouncementListAdapter.setIsLastPage(curIndex == pages);
+        if (refresh){
+            list.clear();
+            refresh = false;
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
         if (!records.isEmpty()) {
             list.addAll(records);
-            adapter.setList(list);
+        }
+        publishNoticeAnnouncementListAdapter.notifyDataSetChanged();
+        showBlankPage();
+    }
+    public void showBlankPage(){
+        if(list.isEmpty()){
+            blank_page.setVisibility(View.VISIBLE);
+        }else {
+            blank_page.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void noticeListFail(String msg) {
         Log.e(TAG, "noticeListFail: " + msg);
+        showBlankPage();
+        publishNoticeAnnouncementListAdapter.setIsLoadMore(false);
+        publishNoticeAnnouncementListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -192,4 +195,33 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
     public void deleteFail(String msg) {
         ToastUtils.showShort("删除成功！");
     }
+
+    @Override
+    public void onRefresh() {
+        curIndex = 1;
+        refresh = true;
+        mvpPresenter.noticeList(2,1,10);
+    }
+
+    private int mLastVisibleItemPosition;
+    private RecyclerView.OnScrollListener monScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                mLastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            }
+            if (publishNoticeAnnouncementListAdapter != null) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == publishNoticeAnnouncementListAdapter.getItemCount()) {
+                    loading = true;
+                    //发送网络请求获取更多数据
+                    if (curIndex>=pages){
+                        //ToastUtils.showShort("没有更多数据了！");
+                        return;
+                    }
+                    mvpPresenter.noticeList(2, ++curIndex, 10);
+                }
+            }
+        }
+    };
 }

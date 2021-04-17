@@ -11,7 +11,7 @@ public class NoticeAnnouncementFragmentPresenter extends BasePresenter<NoticeAnn
     }
 
     public void noticeList(int type, int page, int size) {
-        mvpView.showLoading();
+        //mvpView.showLoading();
         addSubscription(dingApiStores.getMyNotice(type, page, size), new ApiCallback<NoticeListRsp>() {
             @Override
             public void onSuccess(NoticeListRsp model) {
@@ -25,7 +25,7 @@ public class NoticeAnnouncementFragmentPresenter extends BasePresenter<NoticeAnn
 
             @Override
             public void onFinish() {
-                mvpView.hideLoading();
+               // mvpView.hideLoading();
             }
         });
     }

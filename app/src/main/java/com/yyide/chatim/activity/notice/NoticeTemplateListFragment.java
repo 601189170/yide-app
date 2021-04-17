@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -38,12 +40,17 @@ import butterknife.BindView;
  * Use the {@link NoticeTemplateListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateListFragmentPresenter> implements NoticeTemplateListFragmentView {
+public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateListFragmentPresenter> implements NoticeTemplateListFragmentView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NoticeTemplateListFragm";
     List<TemplateListRsp.DataBean.RecordsBean> list = new ArrayList<>();
     BaseQuickAdapter adapter;
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.blank_page)
+    LinearLayout blank_page;
+    private boolean refresh = false;
     // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "name";
@@ -121,6 +128,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.setAdapter(adapter);
         mvpPresenter.noticeTemplateList(name,tempId);
 
@@ -150,16 +158,34 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
             TemplateListRsp.DataBean data = templateListRsp.getData();
             List<TemplateListRsp.DataBean.RecordsBean> records = data.getRecords();
             if (!records.isEmpty()){
+                if (refresh){
+                    refresh = false;
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 list.clear();
                 List<TemplateListRsp.DataBean.RecordsBean> messages = records;
                 list.addAll(messages);
                 adapter.setList(list);
             }
         }
+        showBlankPage();
     }
-
+    public void showBlankPage(){
+        if(list.isEmpty()){
+            blank_page.setVisibility(View.VISIBLE);
+        }else {
+            blank_page.setVisibility(View.GONE);
+        }
+    }
     @Override
     public void noticeTemplateListFail(String msg) {
         Log.e(TAG, "noticeTemplateListFail: " + msg);
+        showBlankPage();
+    }
+
+    @Override
+    public void onRefresh() {
+        refresh = true;
+        mvpPresenter.noticeTemplateList(name,tempId);
     }
 }

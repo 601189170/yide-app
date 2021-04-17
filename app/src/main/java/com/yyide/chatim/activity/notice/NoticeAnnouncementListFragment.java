@@ -2,36 +2,37 @@ package com.yyide.chatim.activity.notice;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.NoticeAnnouncementModel;
 import com.yyide.chatim.activity.notice.presenter.NoticeAnnouncementFragmentPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeAnnouncementFragmentView;
+import com.yyide.chatim.adapter.NoticeAnnouncementListAdapter;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.NoticeAnnouncementModel;
 import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.utils.DateUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,12 +42,19 @@ import butterknife.BindView;
  * Use the {@link NoticeAnnouncementListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnouncementFragmentPresenter> implements NoticeAnnouncementFragmentView {
+public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnouncementFragmentPresenter> implements NoticeAnnouncementFragmentView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NoticeAnnouncementListF";
     List<NoticeAnnouncementModel> list = new ArrayList<>();
-    BaseQuickAdapter adapter;
+    //    BaseQuickAdapter adapter;
     @BindView(R.id.list)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.blank_page)
+    LinearLayout blank_page;
+
     // TODO: Rename parameter arguments, choose names that match
     private static final String ARG_PARAM1 = "param1";
 
@@ -54,6 +62,12 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
     private String mParam1;
 
     private static final int REQUEST_CODE = 100;
+
+    private boolean refresh = false;
+    private boolean loading = false;
+    private int curIndex = 1;
+    private int pages = 1;
+    private NoticeAnnouncementListAdapter noticeAnnouncementListAdapter;
 
     public NoticeAnnouncementListFragment() {
         // Required empty public constructor
@@ -80,7 +94,7 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            Log.e(TAG, "onCreate: "+mParam1 );
+            Log.e(TAG, "onCreate: " + mParam1);
         }
     }
 
@@ -95,50 +109,23 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new BaseQuickAdapter<NoticeAnnouncementModel, BaseViewHolder>(R.layout.item_notice_announcement) {
-            @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, NoticeAnnouncementModel o) {
-                Log.e(TAG, "convert: "+o.toString());
-                baseViewHolder
-                        .setText(R.id.tv_notice, o.getNoticeTitle())
-                        .setText(R.id.tv_notice_time, o.getNoticeTime())
-                        .setText(R.id.tv_notice_author, o.getNoticeAuthor())
-                        .setText(R.id.tv_notice_content, Html.fromHtml(o.getNoticeContent()));
-                if ("1".equals(o.getStatus())){
-                    TextView view1 = baseViewHolder.getView(R.id.tv_confirm);
-                    view1.setText("已确认");
-                    view1.setBackground(getActivity().getDrawable(R.drawable.bg_corners_gray2_18));
-                    view1.setTextColor(getActivity().getResources().getColor(R.color.black10));
-                    ImageView iconView = baseViewHolder.getView(R.id.iv_pic);
-                    iconView.setImageDrawable(getActivity().getDrawable(R.drawable.ic_announcement_mark_read));
-                }else {
-                    TextView view1 = baseViewHolder.getView(R.id.tv_confirm);
-                    view1.setText("去确认");
-                    view1.setBackground(getActivity().getDrawable(R.drawable.bg_corners_blue_18));
-                    view1.setTextColor(getActivity().getResources().getColor(R.color.white));
-                    ImageView iconView = baseViewHolder.getView(R.id.iv_pic);
-                    iconView.setImageDrawable(getActivity().getDrawable(R.drawable.ic_announcement));
-                }
-                baseViewHolder.getView(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
-                        if (mParam1.equals("my_notice")){
-                            intent.putExtra("type",1);
-                        }else {
-                            intent.putExtra("type",2);
-                        }
-                        intent.putExtra("id",o.getId());
-                        intent.putExtra("status",o.getStatus());
-                        //startActivity(intent);
-                        startActivityForResult(intent,REQUEST_CODE);
-                    }
-                });
+        noticeAnnouncementListAdapter = new NoticeAnnouncementListAdapter(getActivity(), list);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView.addOnScrollListener(monScrollListener);
+        mRecyclerView.setAdapter(noticeAnnouncementListAdapter);
+        noticeAnnouncementListAdapter.setOnItemOnClickListener(position -> {
+            Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
+            NoticeAnnouncementModel noticeAnnouncementModel = list.get(position);
+            if (mParam1.equals("my_notice")) {
+                intent.putExtra("type", 1);
+            } else {
+                intent.putExtra("type", 2);
             }
-        };
-
-        mRecyclerView.setAdapter(adapter);
-        mvpPresenter.noticeList(1,1,10);
+            intent.putExtra("id", noticeAnnouncementModel.getId());
+            intent.putExtra("status", noticeAnnouncementModel.getStatus());
+            startActivityForResult(intent, REQUEST_CODE);
+        });
+        mvpPresenter.noticeList(1, curIndex, 10);
     }
 
     @Override
@@ -148,30 +135,79 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
 
     @Override
     public void noticeList(NoticeListRsp noticeListRsp) {
-        Log.e(TAG, "noticeList: "+noticeListRsp.toString() );
+        Log.e(TAG, "noticeList: " + noticeListRsp.toString());
         List<NoticeListRsp.DataBean.RecordsBean> records = noticeListRsp.getData().getRecords();
-        list.clear();
-        if (!records.isEmpty()){
+        pages = noticeListRsp.getData().getPages();
+        noticeAnnouncementListAdapter.setIsLastPage(curIndex == pages);
+        noticeAnnouncementListAdapter.setIsLoadMore(!records.isEmpty());
+        if (refresh) {
+            list.clear();
+            refresh = false;
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        if (!records.isEmpty()) {
             for (NoticeListRsp.DataBean.RecordsBean record : records) {
                 //yyyy-MM-dd HH:mm 03.06 09:00
-                String productionTime = DateUtils.formatTime(record.getProductionTime(),null,null);
-                list.add(new NoticeAnnouncementModel(record.getId(),record.getTitle(),record.getProductionTarget(),record.getContent(),productionTime,record.getStatus()));
+                String productionTime = DateUtils.formatTime(record.getProductionTime(), null, null);
+                list.add(new NoticeAnnouncementModel(record.getId(), record.getTitle(), record.getProductionTarget(), record.getContent(), productionTime, record.getStatus()));
             }
-            adapter.setList(list);
+            //adapter.setList(list);
+        }
+        noticeAnnouncementListAdapter.notifyDataSetChanged();
+        showBlankPage();
+    }
+
+    public void showBlankPage() {
+        if (list.isEmpty()) {
+            blank_page.setVisibility(View.VISIBLE);
+        } else {
+            blank_page.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void noticeListFail(String msg) {
-        Log.e(TAG, "noticeListFail: "+msg );
+        Log.e(TAG, "noticeListFail: " + msg);
+        showBlankPage();
+        noticeAnnouncementListAdapter.setIsLoadMore(false);
+        noticeAnnouncementListAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, "onActivityResult: requestCode:"+requestCode+", resultCode:"+resultCode );
-        if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK){
-            mvpPresenter.noticeList(1,1,10);
+        Log.e(TAG, "onActivityResult: requestCode:" + requestCode + ", resultCode:" + resultCode);
+        if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
+            mvpPresenter.noticeList(1, 1, 10);
         }
     }
+
+    @Override
+    public void onRefresh() {
+        curIndex = 1;
+        refresh = true;
+        mvpPresenter.noticeList(1, 1, 10);
+    }
+
+    private int mLastVisibleItemPosition;
+    private RecyclerView.OnScrollListener monScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                mLastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            }
+            if (noticeAnnouncementListAdapter != null) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == noticeAnnouncementListAdapter.getItemCount()) {
+                    loading = true;
+                    if (curIndex>=pages){
+                        //ToastUtils.showShort("没有更多数据了！");
+                        return;
+                    }
+                    //发送网络请求获取更多数据
+                    mvpPresenter.noticeList(1, ++curIndex, 10);
+                }
+            }
+        }
+    };
 }

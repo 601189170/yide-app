@@ -335,6 +335,9 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         if (departmentScopeRsp.getCode() == 200) {
             noticeScopeBeans.clear();
             for (DepartmentScopeRsp.DataBean datum : departmentScopeRsp.getData()) {
+                if (datum == null){
+                    continue;
+                }
                 List<DepartmentScopeRsp.DataBean.ListBeanXX> list = datum.getList();
                 NoticeScopeBean noticeScopeBean = new NoticeScopeBean(datum.getId(), datum.getName());
                 List<NoticeScopeBean> noticeScopeBeans1 = new ArrayList<>();
@@ -379,6 +382,9 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 departmentTotal++;
             }
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
+            if (noticeScopeBeans.isEmpty()){
+                ToastUtils.showShort("没有找到通知范围数据！");
+            }
             adapter.notifyDataSetChanged();
         }
     }
