@@ -18,7 +18,6 @@ import com.yyide.chatim.utils.PrivateConstants;
 import cn.jpush.android.api.JPushInterface;
 
 
-
 /**
  * Created by Administrator on 2020/12/14.
  */
@@ -65,21 +64,123 @@ public class BaseApplication extends Application {
 
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+
+        //registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
     }
 
     public static boolean isNetworkAvailable(Context context) {
-        if(context !=null){
+        if (context != null) {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo info = cm.getActiveNetworkInfo();
-            if(info !=null){
+            if (info != null) {
                 return info.isAvailable();
             }
         }
         return false;
     }
+
     public static BaseApplication getInstance() {
         return instance;
     }
-
+//
+//    class StatisticActivityLifecycleCallback implements ActivityLifecycleCallbacks {
+//        private int foregroundActivities = 0;
+//        private boolean isChangingConfiguration;
+//        private IMEventListener mIMEventListener = new IMEventListener() {
+//            @Override
+//            public void onNewMessage(V2TIMMessage msg) {
+//                MessageNotification notification = MessageNotification.getInstance();
+//                notification.notify(msg);
+//            }
+//        };
+//
+//        private ConversationManagerKit.MessageUnreadWatcher mUnreadWatcher = new ConversationManagerKit.MessageUnreadWatcher() {
+//            @Override
+//            public void updateUnread(int count) {
+//                // 华为离线推送角标
+//                HUAWEIHmsMessageService.updateBadge(BaseApplication.this, count);
+//            }
+//        };
+//
+//        @Override
+//        public void onActivityCreated(Activity activity, Bundle bundle) {
+//            DemoLog.i(TAG, "onActivityCreated bundle: " + bundle);
+//            if (bundle != null) { // 若bundle不为空则程序异常结束
+//                // 重启整个程序
+//                Intent intent = new Intent(activity, SplashActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//            }
+//        }
+//
+//        @Override
+//        public void onActivityStarted(Activity activity) {
+//            foregroundActivities++;
+//            if (foregroundActivities == 1 && !isChangingConfiguration) {
+//                // 应用切到前台
+//                DemoLog.i(TAG, "application enter foreground");
+//                V2TIMManager.getOfflinePushManager().doForeground(new V2TIMCallback() {
+//                    @Override
+//                    public void onError(int code, String desc) {
+//                        DemoLog.e(TAG, "doForeground err = " + code + ", desc = " + desc);
+//                    }
+//
+//                    @Override
+//                    public void onSuccess() {
+//                        DemoLog.i(TAG, "doForeground success");
+//                    }
+//                });
+//                TUIKit.removeIMEventListener(mIMEventListener);
+//                ConversationManagerKit.getInstance().removeUnreadWatcher(mUnreadWatcher);
+//                //MessageNotification.getInstance().cancelTimeout();
+//            }
+//            isChangingConfiguration = false;
+//        }
+//
+//        @Override
+//        public void onActivityResumed(Activity activity) {
+//
+//        }
+//
+//        @Override
+//        public void onActivityPaused(Activity activity) {
+//
+//        }
+//
+//        @Override
+//        public void onActivityStopped(Activity activity) {
+//            foregroundActivities--;
+//            if (foregroundActivities == 0) {
+//                // 应用切到后台
+//                DemoLog.i(TAG, "application enter background");
+//                int unReadCount = ConversationManagerKit.getInstance().getUnreadTotal();
+//                V2TIMManager.getOfflinePushManager().doBackground(unReadCount, new V2TIMCallback() {
+//                    @Override
+//                    public void onError(int code, String desc) {
+//                        DemoLog.e(TAG, "doBackground err = " + code + ", desc = " + desc);
+//                    }
+//
+//                    @Override
+//                    public void onSuccess() {
+//                        DemoLog.i(TAG, "doBackground success");
+//                    }
+//                });
+//                // 应用退到后台，消息转化为系统通知
+//                TUIKit.addIMEventListener(mIMEventListener);
+//                ConversationManagerKit.getInstance().addUnreadWatcher(mUnreadWatcher);
+//            }
+//            isChangingConfiguration = activity.isChangingConfigurations();
+//        }
+//
+//        @Override
+//        public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+//
+//        }
+//
+//        @Override
+//        public void onActivityDestroyed(Activity activity) {
+//
+//        }
+//    }
 
 }

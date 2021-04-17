@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -15,17 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.ActivityUtils;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PreparesLessonActivity;
 import com.yyide.chatim.adapter.MyTableAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.presenter.MyTablePresenter;
 import com.yyide.chatim.utils.TimeUtil;
@@ -37,10 +32,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 
@@ -100,6 +93,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         listview.setOnItemClickListener((parent, view1, position, id) -> {
             SelectSchByTeaidRsp.DataBean item = adapter.getItem(position);
             Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
+            intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
             intent.putExtra("dataBean", item);
             startActivity(intent);
         });

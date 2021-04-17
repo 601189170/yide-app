@@ -17,9 +17,9 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
+import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.utils.DemoLog;
 
 import java.io.IOException;
@@ -93,7 +93,7 @@ public class SplashActivity extends AppCompatActivity {
 
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + "/management/cloud-system/login")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/login")
                 .post(body)
                 .build();
         //发起请求
@@ -123,8 +123,8 @@ public class SplashActivity extends AppCompatActivity {
     void getUserSchool() {
         //请求组合创建
         Request request = new Request.Builder()
-//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP + "/management/cloud-system/user/getUserSchoolByApp")
+//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
                 .addHeader("Authorization", SpData.User().token)
                 .build();
         //发起请求

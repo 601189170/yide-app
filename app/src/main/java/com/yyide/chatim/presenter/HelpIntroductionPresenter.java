@@ -26,9 +26,7 @@ public class HelpIntroductionPresenter extends BasePresenter<HelpIntroductionVie
         addSubscription(dingApiStores.getHelpIntroduction(body), new ApiCallback<HelpItemRep>() {
             @Override
             public void onSuccess(HelpItemRep model) {
-                if (model.getCode() == 200) {
-                    mvpView.getHelpListSuccess(model);
-                }
+                mvpView.getHelpListSuccess(model);
             }
 
             @Override
@@ -51,14 +49,12 @@ public class HelpIntroductionPresenter extends BasePresenter<HelpIntroductionVie
         addSubscription(dingApiStores.getHelpAdvanced(body), new ApiCallback<HelpItemRep>() {
             @Override
             public void onSuccess(HelpItemRep model) {
-                if (model.getCode() == 200) {
-                    mvpView.getHelpAdvancedSuccess(model);
-                }
+                mvpView.getHelpListSuccess(model);
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getHelpAdvancedFails(msg);
+                mvpView.getHelpListFail(msg);
             }
 
             @Override

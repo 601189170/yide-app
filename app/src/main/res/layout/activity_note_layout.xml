@@ -114,7 +114,6 @@
                     android:textColor="#222222"
                     android:textSize="@dimen/text_18" />
 
-
             </FrameLayout>
 
             <TextView

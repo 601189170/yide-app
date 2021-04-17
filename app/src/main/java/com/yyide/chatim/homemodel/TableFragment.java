@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -29,6 +30,7 @@ import androidx.annotation.Nullable;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
@@ -48,6 +50,10 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView time;
     @BindView(R.id.tips)
     TextView tips;
+    @BindView(R.id.table_next)
+    TextView table_next;
+    @BindView(R.id.iv_tips)
+    ImageView iv_tips;
     private View mBaseView;
 
     private static final String TAG = "TableFragment";
@@ -113,12 +119,16 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                     subjectName.setText("");
                     time.setText("");
                     tips.setText("");
+                    table_next.setVisibility(View.GONE);
+                    iv_tips.setVisibility(View.GONE);
                 }
             } else {
                 className.setText("今日无课");
                 subjectName.setText("");
                 time.setText("");
                 tips.setText("");
+                table_next.setVisibility(View.GONE);
+                iv_tips.setVisibility(View.GONE);
             }
         }
     }
@@ -141,7 +151,9 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
-        tips.setText(rsp.subjectName);
+        tips.setText(rsp.beforeClass);
+        table_next.setVisibility(View.VISIBLE);
+        iv_tips.setVisibility(View.VISIBLE);
     }
 
     @Override

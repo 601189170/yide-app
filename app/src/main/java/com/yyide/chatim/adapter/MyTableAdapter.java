@@ -75,21 +75,21 @@ public class MyTableAdapter extends BaseAdapter {
         long mMillisecond = DateUtils.getWhenPoint(minute);
         if (item.weekTime > (weekDay - 1)) {//课前
 //            desc.setText(item.beforeClass);
-            dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
+            dateS.setImageResource(R.drawable.icon_table);
         } else if (item.weekTime == (weekDay - 1)) {
             if (mMillisecond > toDateTime) {//课后
 //                desc.setText(item.afterClass);
-                dateS.setBackgroundColor(Color.parseColor("#C6C9CC"));
+                dateS.setImageResource(R.drawable.icon_table_un);
             } else if (mMillisecond < fromDataTime) {//课前
 //                desc.setText(item.beforeClass);
-                dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
+                dateS.setImageResource(R.drawable.icon_table);
             } else {//正在上课
 //                desc.setText(item.beforeClass);
-                dateS.setBackgroundColor(Color.parseColor("#FFDC97"));
+                dateS.setImageResource(R.drawable.icon_table_un);
             }
         } else {
 //            desc.setText(item.afterClass);
-            dateS.setBackgroundColor(Color.parseColor("#C6C9CC"));
+            dateS.setImageResource(R.drawable.icon_table_un);
         }
         className.setText(item.classesName);
         seciton.setText("第" + item.section + "节");

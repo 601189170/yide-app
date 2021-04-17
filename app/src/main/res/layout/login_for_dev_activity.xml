@@ -17,7 +17,7 @@
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_gravity="left"
-            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_50"
             android:src="@mipmap/ic_launcher_logo"
             android:visibility="visible" />
 
@@ -52,7 +52,6 @@
                 android:gravity="center_vertical"
                 android:hint="@string/account_hint"
                 android:singleLine="true"
-                android:textCursorDrawable="@drawable/my_cursor"
                 android:textSize="@dimen/text_15" />
 
         </LinearLayout>
@@ -60,7 +59,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/item_split_color" />
+            android:background="@color/color_DCDFE6" />
 
         <LinearLayout
             android:id="@+id/ll_sms"
@@ -104,7 +103,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/item_split_color" />
+            android:background="@color/color_DCDFE6" />
 
         <LinearLayout
             android:id="@+id/ll_pwd"
@@ -132,7 +131,6 @@
                 android:hint="@string/account_pwd_hint"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:textCursorDrawable="@drawable/my_cursor"
                 android:textSize="@dimen/text_15" />
 
             <ImageView
@@ -148,12 +146,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/item_split_color" />
+            android:background="@color/color_DCDFE6" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/item_split_color" />
+            android:background="@color/color_DCDFE6" />
 
         <RelativeLayout
             android:layout_width="match_parent"

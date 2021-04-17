@@ -1,38 +1,32 @@
 package com.yyide.chatim.base;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.gyf.immersionbar.ImmersionBar;
-import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.BaseApplication;
+import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
-import com.yyide.chatim.chat.info.UserInfo;
+import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.utils.ClickUtils;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.LoadingTools;
 import com.yyide.chatim.utils.LogUtil;
 
+
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -44,8 +38,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * 登录状态的Activity都要集成该类，来完成被踢下线等监听处理。
@@ -75,7 +67,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         UserInfo.getInstance().setAutoLogin(false);
 
         Intent intent = new Intent(context, LoginActivity.class);
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constants.LOGOUT, true);
         context.startActivity(intent);
     }
@@ -108,7 +100,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
             getWindow().getDecorView().setSystemUiVisibility(vis);
         }
-        TUIKit.addIMEventListener(mIMEventListener);
+//        TUIKit.addIMEventListener(mIMEventListener);
         pd = new LoadingTools().pd(mActivity);
         //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
         //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
@@ -137,10 +129,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         DemoLog.i(TAG, "onStart");
         super.onStart();
-        boolean login = UserInfo.getInstance().isAutoLogin();
-        if (!login) {
+//        boolean login = UserInfo.getInstance().isAutoLogin();
+//        if (!login) {
 //            BaseActivity.logout(BaseApplication.getInstance());
-        }
+//        }
     }
 
     @Override

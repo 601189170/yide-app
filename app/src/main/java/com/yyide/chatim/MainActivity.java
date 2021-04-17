@@ -28,7 +28,6 @@ import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
 import com.yyide.chatim.home.HomeFragment;
@@ -42,9 +41,9 @@ import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
+import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.presenter.MainPresenter;
-import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.view.MainView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -139,7 +138,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Override
     protected void onStop() {
-        DemoLog.i("TAG", "onStop");
         ConversationManagerKit.getInstance().destroyConversation();
         super.onStop();
     }

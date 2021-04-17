@@ -22,14 +22,8 @@ public class SexActivity extends BaseActivity {
 
     @BindView(R.id.type1)
     TextView type1;
-    @BindView(R.id.layout1)
-    FrameLayout layout1;
     @BindView(R.id.type2)
     TextView type2;
-    @BindView(R.id.layout2)
-    FrameLayout layout2;
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
 
@@ -64,7 +58,7 @@ public class SexActivity extends BaseActivity {
         super.onPause();
     }
 
-    @OnClick({R.id.layout1, R.id.layout2, R.id.back, R.id.back_layout})
+    @OnClick({R.id.layout1, R.id.layout2, R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1://男

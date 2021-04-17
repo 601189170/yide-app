@@ -357,7 +357,7 @@ public class TagAliasOperatorHelper {
                 add("equipmentType", "1").build();
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + "/management/cloud-system/user/equipment/addUserEquipmentInfo")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/equipment/addUserEquipmentInfo")
                 .post(body)
                 .build();
         //发起请求

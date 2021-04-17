@@ -60,11 +60,13 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     public int getContentViewID() {
         return R.layout.activity_book_search;
     }
+
     private List<UserInfoRsp.DataBean> dataBeanList = new ArrayList<>();
 
     private List<String> tags = new ArrayList<>();//存储历史
 
     private static String BOOK_SEARCH_HISTORY = "BOOK_SEARCH_HISTORY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,11 +75,11 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         recyclerview.setAdapter(adapter);
 
         //初始化标签
-        Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY,new HashSet<String>());
-        if (!search_history.isEmpty()){
+        Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<String>());
+        if (!search_history.isEmpty()) {
             tags.addAll(search_history);
         }
-        itemBookSearchHistoryAdapter = new ItemBookSearchHistoryAdapter(this,tags);
+        itemBookSearchHistoryAdapter = new ItemBookSearchHistoryAdapter(this, tags);
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(this);
         //flexDirection 属性决定主轴的方向（即项目的排列方向）。类似 LinearLayout 的 vertical 和 horizontal。
         flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);//主轴为水平方向，起点在左端。
@@ -113,13 +115,13 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         });
     }
 
-    private void saveHistory(String keyWord){
-        Set<String> book_search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY,new HashSet<>());
-        if (book_search_history.isEmpty()){
+    private void saveHistory(String keyWord) {
+        Set<String> book_search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<>());
+        if (book_search_history.isEmpty()) {
             book_search_history = new HashSet<>();
         }
         book_search_history.add(keyWord);
-        MMKV.defaultMMKV().encode(BOOK_SEARCH_HISTORY,book_search_history);
+        MMKV.defaultMMKV().encode(BOOK_SEARCH_HISTORY, book_search_history);
     }
 
     @Override
@@ -136,34 +138,34 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
             hideHistory();
             dataBeanList.addAll(data);
         }
-        if (dataBeanList.isEmpty()){
+        if (dataBeanList.isEmpty()) {
             ToastUtils.showShort("没有搜索到内容...");
             showHistory();
         }
         adapter.notifyDataSetChanged();
     }
 
-    private void showHistory(){
+    private void showHistory() {
         cl_search_content.setVisibility(View.GONE);
         cl_search_history.setVisibility(View.VISIBLE);
-        Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY,new HashSet<>());
-        if (!search_history.isEmpty()){
+        Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<>());
+        if (!search_history.isEmpty()) {
             tags.clear();
             tags.addAll(search_history);
             itemBookSearchHistoryAdapter.notifyDataSetChanged();
         }
     }
 
-    private void hideHistory(){
+    private void hideHistory() {
         cl_search_content.setVisibility(View.VISIBLE);
         cl_search_history.setVisibility(View.GONE);
     }
 
-    private void clearHistory(){
-        Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY,new HashSet<>());
+    private void clearHistory() {
+        Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<>());
         search_history.clear();
         tags.clear();
-        MMKV.defaultMMKV().encode(BOOK_SEARCH_HISTORY,search_history);
+        MMKV.defaultMMKV().encode(BOOK_SEARCH_HISTORY, search_history);
         itemBookSearchHistoryAdapter.notifyDataSetChanged();
     }
 
@@ -172,7 +174,7 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         Log.e(TAG, "selectUserListFail: " + msg);
     }
 
-    @OnClick({R.id.cancel, R.id.btn_delete_search,R.id.btn_delete_search_history})
+    @OnClick({R.id.cancel, R.id.btn_delete_search, R.id.btn_delete_search_history})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.cancel:

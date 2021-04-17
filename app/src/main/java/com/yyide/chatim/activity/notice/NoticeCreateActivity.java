@@ -21,7 +21,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
-import com.tencent.openqq.protocol.imsdk.msg;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseMvpActivity;
@@ -189,7 +188,6 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         String jsonString = JSON.toJSONString(body);
         Log.e(TAG, "commit: " + jsonString);
         mvpPresenter.addUserAnnouncement(jsonString);
-
     }
 
     private TimePickerDialog mDialogAll;
@@ -210,9 +208,9 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
                 .setMinMillseconds(System.currentTimeMillis())
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
                 .setCurrentMillseconds(System.currentTimeMillis())
-                .setThemeColor(getResources().getColor(R.color.text_212121))
+                .setThemeColor(getResources().getColor(R.color.colorPrimary))
                 .setType(Type.ALL)
-                .setWheelItemTextNormalColor(getResources().getColor(R.color.text_666666))
+                .setWheelItemTextNormalColor(getResources().getColor(R.color.text_212121))
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorPrimary))
                 .setWheelItemTextSize(12)
                 .build();

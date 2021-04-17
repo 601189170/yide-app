@@ -22,9 +22,9 @@ import java.util.List;
  */
 
 public class TableTimeAdapter extends BaseAdapter {
-   public List<TimeUtil.WeekDay> list=TimeUtil.getWeekDay();
-    public int position=-1;
-    public int today=-1;
+    public List<TimeUtil.WeekDay> list = TimeUtil.getWeekDay();
+    public int position = -1;
+    public int today = -1;
 
     @Override
     public int getCount() {
@@ -50,19 +50,19 @@ public class TableTimeAdapter extends BaseAdapter {
         FrameLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
 
         time.setText(getItem(position).day);
-        String week=getItem(position).week;
-        String neek=week.replaceAll("星期","");
+        String week = getItem(position).week;
+        String neek = week.replaceAll("星期", "");
 
-        day.setText("周"+neek);
-        if (position==today){
+        day.setText("周" + neek);
+        if (position == today) {
             day.setText("今天");
         }
 
-        if (this.position==position){
+        if (this.position == position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_blue_conners2));
             day.setChecked(true);
             time.setChecked(true);
-        }else {
+        } else {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_corners2));
             day.setChecked(false);
             time.setChecked(false);
@@ -70,16 +70,19 @@ public class TableTimeAdapter extends BaseAdapter {
 
         return view;
     }
-    public void notifyData( List<TimeUtil.WeekDay> list) {
+
+    public void notifyData(List<TimeUtil.WeekDay> list) {
         this.list = list;
         notifyDataSetChanged();
     }
-    public void setPosition(int position){
-        this.position=position;
+
+    public void setPosition(int position) {
+        this.position = position;
         notifyDataSetChanged();
     }
-    public void setToday(int today){
-        this.today=today;
+
+    public void setToday(int today) {
+        this.today = today;
         notifyDataSetChanged();
     }
 

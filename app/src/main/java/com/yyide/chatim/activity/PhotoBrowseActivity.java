@@ -121,7 +121,7 @@ public class PhotoBrowseActivity extends AppCompatActivity {
             public Object instantiateItem(ViewGroup container, int position) {
                 View layout;
                 layout = LayoutInflater.from(PhotoBrowseActivity.this).inflate(R.layout.layout_browse, null);
-//                layout.setOnClickListener(onClickListener);
+                layout.setOnClickListener(onClickListener);
                 container.addView(layout);
                 layout.setTag(position);
 
@@ -138,7 +138,6 @@ public class PhotoBrowseActivity extends AppCompatActivity {
                 return POSITION_NONE;
             }
         };
-
         imageViewPager.setAdapter(adapter);
         imageViewPager.setOffscreenPageLimit(1);
         imageViewPager.setCurrentItem(firstDisplayImageIndex);

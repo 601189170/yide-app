@@ -2,13 +2,11 @@ package com.yyide.chatim.presenter;
 
 
 import com.alibaba.fastjson.JSON;
-import com.tencent.imsdk.utils.FileUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.net.ApiCallback;
-import com.yyide.chatim.utils.FileUtils;
 import com.yyide.chatim.view.UserView;
 
 import java.io.File;

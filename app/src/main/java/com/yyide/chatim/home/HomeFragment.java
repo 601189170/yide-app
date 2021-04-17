@@ -292,7 +292,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         }
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -313,7 +312,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             initVerticalTextview(rsp.getData());
         } else {
             tv_todo.setVisibility(View.GONE);
-            spmsg.setText("暂无代办消息通知");
+            List<NoticeHomeRsp.DataBean> noticeHomeRsps = new ArrayList<>();
+            NoticeHomeRsp.DataBean dataBean = new NoticeHomeRsp.DataBean();
+            dataBean.setContent("暂无代办消息通知");
+            noticeHomeRsps.add(dataBean);
+            initVerticalTextview(noticeHomeRsps);
         }
     }
 

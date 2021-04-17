@@ -10,39 +10,39 @@
         android:id="@+id/search_et"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:background="@drawable/search_box_bg_shape"
         android:layout_marginStart="12dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/search_box_bg_shape"
         android:hint="请输入学生姓名"
+        android:imeOptions="actionSearch"
+        android:paddingStart="33dp"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textColorHint="#BCC1CB"
         android:textSize="13sp"
-        android:paddingStart="33dp"
-        android:layout_marginEnd="52dp"
-        android:imeOptions="actionSearch"
-        android:singleLine="true"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/search_iv"
         android:layout_width="12dp"
         android:layout_height="12dp"
+        android:layout_marginStart="15dp"
         android:src="@drawable/search"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/search_et"
-        android:layout_marginStart="15dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/cancel_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="13dp"
         android:text="@string/cancel"
         android:textColor="#ff222222"
         android:textSize="14sp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="13dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

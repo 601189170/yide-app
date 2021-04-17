@@ -1,5 +1,6 @@
 package com.yyide.chatim.utils;
 
+import android.annotation.SuppressLint;
 import android.text.format.Time;
 import android.util.Log;
 
@@ -192,6 +193,7 @@ public class TimeUtil {
         return simpleDateFormat.format(date);
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static List<WeekDay> getWeekDay() {
 
         Calendar calendar = Calendar.getInstance();
@@ -204,12 +206,11 @@ public class TimeUtil {
         List<WeekDay> list = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             calendar.set(Calendar.DAY_OF_WEEK, firstDayOfWeek + i);
-
             WeekDay weekDay = new WeekDay();
             // 获取星期的显示名称，例如：周一、星期一、Monday等等
             weekDay.week = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.CHINA);
             weekDay.day = new SimpleDateFormat("MM/dd").format(calendar.getTime());
-
+            weekDay.dataTime = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
             list.add(weekDay);
         }
 
@@ -314,6 +315,11 @@ public class TimeUtil {
          * 对应的日期
          */
         public String day;
+
+        /**
+         * 年月日
+         */
+        public String dataTime;
 
 
         @Override

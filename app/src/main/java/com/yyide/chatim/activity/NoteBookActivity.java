@@ -59,7 +59,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title.setText("");
+        title.setText("通讯录");
         mvpPresenter.listByApp();
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
         if (identityInfo != null) {

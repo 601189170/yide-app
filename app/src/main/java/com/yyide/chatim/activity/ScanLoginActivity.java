@@ -54,7 +54,7 @@ public class ScanLoginActivity extends BaseMvpActivity<ScanLoginPresenter> imple
 
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + url)
+                .url(BaseConstant.API_SERVER_URL + url)
                 .addHeader("Authorization", SpData.User().token)
                 .build();
         showLoading();

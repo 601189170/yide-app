@@ -42,13 +42,14 @@ public class SwichClassAdapter extends BaseAdapter {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.swich_class_item, null, false);
 
         TextView className = VHUtil.ViewHolder.get(view, R.id.className);
-
+        TextView name = VHUtil.ViewHolder.get(view, R.id.name);
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
         if ("Y".equals(getItem(position).teacherInd)) {
-            className.setText(getItem(position).classesName + "\t" + "班主任");
+            name.setVisibility(View.VISIBLE);
         } else {
-            className.setText(getItem(position).classesName);
+            name.setVisibility(View.INVISIBLE);
         }
+        className.setText(getItem(position).classesName);
         select.setVisibility(index == position ? View.VISIBLE : View.GONE);
         return view;
     }

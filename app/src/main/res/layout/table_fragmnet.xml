@@ -34,8 +34,10 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/table_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="下一节"
                     android:textColor="@color/white"
                     android:textSize="10sp" />
 
@@ -78,11 +80,12 @@
             android:orientation="horizontal">
 
 
-            <TextView
+            <ImageView
+                android:id="@+id/iv_tips"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginLeft="15dp"
-                android:background="@drawable/icon_ld" />
+                android:src="@drawable/icon_ld" />
 
             <TextView
                 android:id="@+id/tips"
@@ -90,8 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="15dp"
-                android:textColor="@color/white"
                 android:text="未设置课前提醒"
+                android:textColor="@color/white"
                 android:textSize="11sp" />
         </FrameLayout>
     </FrameLayout>

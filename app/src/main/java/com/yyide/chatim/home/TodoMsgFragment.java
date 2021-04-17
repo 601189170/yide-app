@@ -1,44 +1,20 @@
 package com.yyide.chatim.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.yyide.chatim.R;
-import com.yyide.chatim.adapter.MessageAdapter;
-import com.yyide.chatim.base.BaseFragment;
-import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.chat.ConversationFragment;
-import com.yyide.chatim.fragment.TodoMsgPageFragment;
-import com.yyide.chatim.model.AgentInformationRsp;
-import com.yyide.chatim.model.NoticeHomeRsp;
-import com.yyide.chatim.model.TodoRsp;
-import com.yyide.chatim.presenter.TodoFragmentPresenter;
-import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.view.TodoFragmentView;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.yyide.chatim.R;
+import com.yyide.chatim.base.BaseFragment;
+import com.yyide.chatim.fragment.TodoMsgPageFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;

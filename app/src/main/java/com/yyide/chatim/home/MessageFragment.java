@@ -16,9 +16,7 @@ import com.yyide.chatim.activity.NoteBookActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.chat.ConversationFragment;
-import com.yyide.chatim.homemodel.TableFragment;
 import com.yyide.chatim.model.EventMessage;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

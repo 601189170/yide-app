@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingLeft="12dp">
+        android:paddingLeft="12dp"
+        android:paddingEnd="@dimen/dp_12">
 
         <FrameLayout
             android:id="@+id/classlayout"

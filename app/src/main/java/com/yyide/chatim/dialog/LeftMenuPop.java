@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
+
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -30,13 +30,11 @@ import com.yyide.chatim.activity.PowerActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 
 
 /**
@@ -74,6 +72,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         user_class = mView.findViewById(R.id.user_class);
         user_name = mView.findViewById(R.id.user_name);
         head_img = mView.findViewById(R.id.head_img);
+        mView.findViewById(R.id.iv_close).setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
+        });
         LinearLayout layout1 = mView.findViewById(R.id.layout1);
         LinearLayout layout2 = mView.findViewById(R.id.layout2);
         LinearLayout layout3 = mView.findViewById(R.id.layout3);
@@ -198,12 +201,14 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 });
                 break;
             case R.id.layout3://我的信息
+                hide();
                 context.startActivity(new Intent(context, UserActivity.class));
                 break;
             case R.id.layout4://修改密码
                 context.startActivity(new Intent(context, ResetPassWordActivity.class));
                 break;
             case R.id.layout5://帮助中心
+                hide();
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_CHECK_HELP_CENTER, ""));
                 break;
             case R.id.layout6://权限设置

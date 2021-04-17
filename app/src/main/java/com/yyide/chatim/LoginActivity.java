@@ -32,10 +32,10 @@ import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.chat.info.UserInfo;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
+import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.Utils;
@@ -291,7 +291,7 @@ public class LoginActivity extends BaseActivity {
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + "/management/cloud-system/login")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/login")
                 .post(body)
                 .build();
         //发起请求
@@ -329,7 +329,7 @@ public class LoginActivity extends BaseActivity {
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + "/management/cloud-system/app/smsVerification")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/app/smsVerification")
                 .post(body)
                 .build();
         showLoading();
@@ -364,7 +364,7 @@ public class LoginActivity extends BaseActivity {
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.URL_IP + "/management/cloud-system/authentication/mobile")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/authentication/mobile")
                 .post(body)
                 .build();
         showLoading();
@@ -400,8 +400,8 @@ public class LoginActivity extends BaseActivity {
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
-//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
+//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
 //                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
                 .addHeader("Authorization", SpData.User().token)
                 .post(body)
@@ -434,8 +434,8 @@ public class LoginActivity extends BaseActivity {
     void getUserSchool() {
         //请求组合创建
         Request request = new Request.Builder()
-//                .url(BaseConstant.URL_IP + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.URL_IP + "/management/cloud-system/user/getUserSchoolByApp")
+//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
                 .addHeader("Authorization", SpData.User().token)
                 .build();
         //发起请求

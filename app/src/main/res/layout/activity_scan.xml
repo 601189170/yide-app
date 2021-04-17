@@ -29,8 +29,7 @@
         app:qrcv_maskColor="#80000000"
         app:qrcv_rectWidth="800dp"
         app:qrcv_verticalBias="0.5"
-
-        app:qrcv_scanLineColor="@color/green"
+        app:qrcv_scanLineColor="@color/colorPrimary"
         app:qrcv_scanLineMargin="0dp"
         app:qrcv_scanLineSize="2dp"
         app:qrcv_tipTextColor="#80ffffff"

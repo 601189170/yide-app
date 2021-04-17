@@ -21,7 +21,7 @@
     <string name="debug_mode_summary">IM 账号直接登录界面，此只在 Debug 模式下显示</string>
     <string name="account_hint">手机号/用户名</string>
     <string name="account_pwd_hint">请输入登录密码</string>
-
+    <string name="cancel">取消</string>
     // "我"相关
     <string name="profile">我</string>
     <string name="id">账号：%1$s</string>

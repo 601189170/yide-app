@@ -47,9 +47,9 @@
                         android:id="@+id/user_name"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:background="@drawable/corners4"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:background="@drawable/corners4"
                         android:textSize="16sp" />
                 </FrameLayout>
 
@@ -64,6 +64,13 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/iv_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_my_close"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_gravity="right|center_vertical"/>
 
         </FrameLayout>
 
@@ -295,9 +302,9 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingRight="18dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -411,9 +418,9 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingRight="18dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"

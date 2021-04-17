@@ -1,5 +1,7 @@
 package com.yyide.chatim.model;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +63,7 @@ public class listByAppRsp {
         public int versionStamp;
         public List<ListBean> list;
 
-        public static class ListBean implements Serializable {
+        public static class ListBean implements Serializable, MultiItemEntity {
             /**
              * id : 1194.0
              * delInd : 0
@@ -103,7 +105,12 @@ public class listByAppRsp {
             public double peopleNum;
             public String isExitInd;
             public List<ListBean> list;
+            public int itemType;//1部门 2学生
 
+            @Override
+            public int getItemType() {
+                return itemType;
+            }
         }
     }
 }

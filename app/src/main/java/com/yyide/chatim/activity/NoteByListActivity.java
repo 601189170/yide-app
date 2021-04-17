@@ -9,36 +9,21 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.SPUtils;
-import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
-import com.yyide.chatim.R;
-import com.yyide.chatim.adapter.TabRecyAdapter;
-import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.chat.info.UserInfo;
-import com.yyide.chatim.fragment.NoteByListFragment;
-import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.NoteTabBean;
-import com.yyide.chatim.model.TeacherlistRsp;
-import com.yyide.chatim.model.ZBean;
-import com.yyide.chatim.model.listByAppRsp;
-import com.yyide.chatim.presenter.NoteBookByListPresenter;
-import com.yyide.chatim.utils.StatusBarUtils;
-import com.yyide.chatim.view.NoteByListBookView;
-import com.yyide.chatim.view.SpacesItemDecoration;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.R;
+import com.yyide.chatim.adapter.TabRecyAdapter;
+import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.fragment.NoteByListFragment;
+import com.yyide.chatim.model.NoteTabBean;
+import com.yyide.chatim.model.listByAppRsp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -162,6 +147,7 @@ public class NoteByListActivity extends BaseActivity {
         }
 
         bundle.putInt("size", listBean.size());
+        bundle.putString("organization", organization);
         noteByListFragment.setArguments(bundle);
 
         manager.beginTransaction()

@@ -10,7 +10,4 @@ import com.yyide.chatim.model.HelpItemRep;
 public interface HelpIntroductionView extends BaseView {
     void getHelpListSuccess(HelpItemRep model);
     void getHelpListFail(String msg);
-
-    void getHelpAdvancedSuccess(HelpItemRep model);
-    void getHelpAdvancedFails(String msg);
 }

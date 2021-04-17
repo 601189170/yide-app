@@ -95,7 +95,12 @@ public class ConversationFragment extends BaseFragment {
         });
         // 会话列表面板的默认UI和交互初始化
         mConversationLayout.initDefault();
-        mConversationLayout.getConversationList();
+        ConversationListLayout listLayout = mConversationLayout.getConversationList();
+        listLayout.setItemTopTextSize(16); // 设置 item 中 top 文字大小
+        listLayout.setItemBottomTextSize(12);// 设置 item 中 bottom 文字大小
+        listLayout.setItemDateTextSize(10);// 设置 item 中 timeline 文字大小
+        listLayout.setItemAvatarRadius(100); // 设置 adapter item 头像圆角大小
+        listLayout.disableItemUnreadDot(false);// 设置 item 是否不显示未读红点，默认显示
         // 通过API设置ConversataonLayout各种属性的样例，开发者可以打开注释，体验效果
 //        ConversationLayoutHelper.customizeConversation(mConversationLayout);
         mConversationLayout.getConversationList().setOnItemClickListener(new ConversationListLayout.OnItemClickListener() {

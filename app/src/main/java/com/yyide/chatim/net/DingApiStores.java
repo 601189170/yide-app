@@ -62,12 +62,7 @@ import rx.Observable;
  * 邮箱：rance935@163.com
  */
 
-//    https://api.uat.edu.1d1j.net/management/cloud-system/login
 public interface DingApiStores {
-    //    String API_SERVER_URL = "http://120.76.189.190:8027";
-//    String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
-    String API_SERVER_URL = "https://api.edu.1d1j.cn/";
-//    String API_SERVER_URL = "https://192.168.3.120:8010";
 
     @GET("/java-painted-screen/api/wechatPaintedScreenManage/selectDeviceOperation")
     Observable<GetStuasRsp> getData();

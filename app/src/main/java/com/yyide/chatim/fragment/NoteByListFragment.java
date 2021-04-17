@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.NoteByListActivity;
 import com.yyide.chatim.activity.PersonInfoActivity;
+import com.yyide.chatim.adapter.NoteItemAdapter;
 import com.yyide.chatim.adapter.NotelistAdapter;
 import com.yyide.chatim.adapter.NotelistAdapter2;
 import com.yyide.chatim.base.BaseConstant;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 
@@ -37,11 +40,15 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
     ListView listview;
     @BindView(R.id.listview2)
     ListView listview2;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
     private View mBaseView;
 
     NotelistAdapter adapter;
     String id;
     NotelistAdapter2 adapter2;
+
+    private NoteItemAdapter noteItemAdapter;
 
     int type;
     int sum;
@@ -58,6 +65,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         for (int i = 0; i < sum; i++) {
             listByAppRsp.DataBean.ListBean bean = (listByAppRsp.DataBean.ListBean) getArguments().getSerializable(i + "");
             Log.e("TAG", "ZBListBeanfragment: " + JSON.toJSONString(bean));
+            bean.itemType = 1;
             listBean.add(bean);
         }
         return mBaseView;
@@ -79,11 +87,14 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
             type = 1;
             adapter.notifydata(listBean);
         }
+        //initView();
+        //不穿ID表示查询当下你所属部门人员或学生列表
         if (!TextUtils.isEmpty(organization) && "staff".equals(organization)) {
-            mvpPresenter.NoteBookByList(id, "", "", "", "30", "1");
+            mvpPresenter.NoteBookByList("", "", "", "", "30", "1");
         } else {
-            mvpPresenter.getStudentList(id);
+            mvpPresenter.getStudentList("");
         }
+
         listview.setOnItemClickListener((parent, view1, position, id) -> {
             if (type == 1) {
                 NoteByListActivity activity = (NoteByListActivity) getActivity();
@@ -91,6 +102,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                 bundle.putInt("size", adapter.list.get(position).list != null ? adapter.list.get(position).list.size() : 0);
                 bundle.putString("id", String.valueOf(adapter.list.get(position).id));
                 bundle.putString("name", String.valueOf(adapter.list.get(position).name));
+                bundle.putString("organization", organization);
                 if (adapter.list.get(position).list != null && adapter.list.get(position).list.size() == 0) {
                     bundle.putString("islast", "1");
                 } else {
@@ -119,6 +131,12 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         });
     }
 
+    private void initView() {
+        noteItemAdapter = new NoteItemAdapter(listBean);
+        recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerview.setAdapter(noteItemAdapter);
+    }
+
     @Override
     protected NoteBookByListPresenter createPresenter() {
         return new NoteBookByListPresenter(this);
@@ -130,6 +148,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             Log.e("TAG", "records: " + JSON.toJSONString(rsp.data.records));
             adapter2.notifdata(rsp.data.records);
+//            noteItemAdapter.addData(rsp.data.records);
         }
     }
 
@@ -143,6 +162,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             Log.e("TAG", "records: " + JSON.toJSONString(rsp.data.records));
             adapter2.notifdata(rsp.data.records);
+//            noteItemAdapter.addData(rsp.data.records);
         }
     }
 

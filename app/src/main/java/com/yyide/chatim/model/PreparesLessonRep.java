@@ -74,6 +74,8 @@ public class PreparesLessonRep {
 
     public static class LessonsSubEntityList {
         private String information;
+        private String classesId;
+        private String lessonsDate;
 
         public void setInformation(String information) {
             this.information = information;
@@ -81,6 +83,22 @@ public class PreparesLessonRep {
 
         public String getInformation() {
             return this.information;
+        }
+
+        public String getClassesId() {
+            return classesId;
+        }
+
+        public void setClassesId(String classesId) {
+            this.classesId = classesId;
+        }
+
+        public String getLessonsDate() {
+            return lessonsDate;
+        }
+
+        public void setLessonsDate(String lessonsDate) {
+            this.lessonsDate = lessonsDate;
         }
     }
 }

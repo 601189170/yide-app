@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.AppUtils;
 
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.base.BaseConstant;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,10 +58,11 @@ public class AppClient {
         }
         return mZhiHuRetrofit;
     }
+
     public static Retrofit getDingRetrofit() {
         if (mDingRetrofit == null) {
             mDingRetrofit = new Retrofit.Builder()
-                    .baseUrl(DingApiStores.API_SERVER_URL)
+                    .baseUrl(BaseConstant.API_SERVER_URL)
 
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -69,8 +71,9 @@ public class AppClient {
         }
         return mDingRetrofit;
     }
-    public static OkHttpClient getOkHttpClient(){
-        if (okHttpClient == null){
+
+    public static OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             if (AppUtils.isAppDebug()) {
                 // Log信息拦截器
@@ -102,9 +105,9 @@ public class AppClient {
 
             Request request = chain.request();
             if (SpData.User() != null && !TextUtils.isEmpty(SpData.User().token)) {
-                Log.e("TAG", "intercept: "+ JSON.toJSONString(SpData.User().token));
+                Log.e("TAG", "intercept: " + JSON.toJSONString(SpData.User().token));
                 request = request.newBuilder()
-                .addHeader("Authorization", SpData.User().token)
+                        .addHeader("Authorization", SpData.User().token)
                         .cacheControl(cacheControl)
                         .build();
             }
@@ -128,12 +131,12 @@ public class AppClient {
     public static class TokenHeaderInterceptor implements Interceptor {
 
         @Override
-        public Response intercept(Chain chain) throws IOException{
+        public Response intercept(Chain chain) throws IOException {
             String token = SpData.User().token;
             if (TextUtils.isEmpty(token)) {
                 Request originalRequest = chain.request();
                 return chain.proceed(originalRequest);
-            }else {
+            } else {
                 Request originalRequest = chain.request();
                 Request updateRequest = originalRequest.newBuilder().header("access_token", token).build();
                 return chain.proceed(updateRequest);
