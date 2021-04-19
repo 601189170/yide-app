@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.notice.presenter.NoticeScopePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeScopeView;
 import com.yyide.chatim.adapter.NoticeScopeAdapter;
@@ -19,6 +20,7 @@ import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.NoticeScopeBean;
 import com.yyide.chatim.model.StudentScopeRsp;
+import com.yyide.chatim.model.UniversityScopeRsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
 
     private int classTotal = 0;
     private int departmentTotal = 0;
+    private String schoolType;
 
     @Override
     public int getContentViewID() {
@@ -58,12 +61,19 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         sendObj = intent.getIntExtra("sendObj", 1);
         initRecyclerView();
         Log.e(TAG, "onCreate: " + sendObj);
+        schoolType = SpData.getIdentityInfo().schoolType;
+        Log.e(TAG, "schoolType: "+ schoolType);
         if (sendObj == 1 || sendObj == 2) {
             //请求数据
-            mvpPresenter.getSectionList(1, 10);
+            if (schoolType.equals("Y")){
+                mvpPresenter.queryDepartmentClassList();
+            }else {
+                mvpPresenter.getSectionList();
+            }
+
         } else {
             //选择部门
-            mvpPresenter.getDepartmentList(1, 10);
+            mvpPresenter.getDepartmentList();
         }
     }
 
@@ -124,7 +134,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
      */
     private List<String> getAllCheckedClassIds(List<NoticeScopeBean> beanList, List<String> ids) {
         for (NoticeScopeBean bean : beanList) {
-            if ((bean.getList() == null || bean.getList().isEmpty()) && bean.isChecked() && bean.getType().equals("2")) {
+            if ((bean.getList() == null || bean.getList().isEmpty()) && bean.isChecked() && ((schoolType.equals("Y") && bean.getType().equals("1")) ||(!schoolType.equals("Y")&&bean.getType().equals("2")) )) {
                 int id = bean.getId();
                 ids.add("" + id);
             } else if (bean.getList() != null && !bean.getList().isEmpty()) {
@@ -319,6 +329,8 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 ToastUtils.showShort("没有找到通知范围数据！");
             }
             adapter.notifyDataSetChanged();
+        } else {
+            ToastUtils.showShort("请求数据失败:"+studentScopeRsp.getMsg());
         }
     }
 
@@ -386,12 +398,53 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 ToastUtils.showShort("没有找到通知范围数据！");
             }
             adapter.notifyDataSetChanged();
+        } else {
+            ToastUtils.showShort("请求数据失败:"+departmentScopeRsp.getMsg());
         }
     }
 
     @Override
     public void getDepartmentListFail(String msg) {
         Log.e(TAG, "getDepartmentListFail: " + "请求数据失败：" + msg);
+        ToastUtils.showShort("请求数据失败：" + msg);
+    }
+
+    @Override
+    public void getUniversityListSuccess(UniversityScopeRsp universityScopeRsp) {
+        Log.e(TAG, "getUniversityListSuccess: " + universityScopeRsp.toString());
+        if (universityScopeRsp.getCode() == 200) {
+            noticeScopeBeans.clear();
+            for (UniversityScopeRsp.DataBean.ListBeanXX listBean : universityScopeRsp.getData().getList()) {
+                List<UniversityScopeRsp.DataBean.ListBeanXX.ListBeanX> grades = listBean.getList();
+                //第一层
+                NoticeScopeBean noticeScopeBean = new NoticeScopeBean(listBean.getId(), listBean.getName(), listBean.getType());
+                if (grades.isEmpty()) {
+                    noticeScopeBean.setHasNext(false);
+                    noticeScopeBeans.add(noticeScopeBean);
+                    continue;
+                }
+                List<NoticeScopeBean> noticeScopeBeans1 = new ArrayList<>();
+                for (UniversityScopeRsp.DataBean.ListBeanXX.ListBeanX grade : grades) {
+                    NoticeScopeBean noticeScopeBean1 = new NoticeScopeBean(grade.getId(), grade.getName(), grade.getType());
+                    noticeScopeBean1.setHasNext(false);
+                    noticeScopeBeans1.add(noticeScopeBean1);
+                }
+                noticeScopeBean.setList(noticeScopeBeans1);
+                noticeScopeBeans.add(noticeScopeBean);
+            }
+            Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
+            if (noticeScopeBeans.isEmpty()){
+                ToastUtils.showShort("没有找到通知范围数据！");
+            }
+            adapter.notifyDataSetChanged();
+        } else {
+            ToastUtils.showShort("请求数据失败:"+universityScopeRsp.getMsg());
+        }
+    }
+
+    @Override
+    public void getUniversityListFail(String msg) {
+        Log.e(TAG, "getUniversityListFail: " + "请求数据失败：" + msg);
         ToastUtils.showShort("请求数据失败：" + msg);
     }
 }

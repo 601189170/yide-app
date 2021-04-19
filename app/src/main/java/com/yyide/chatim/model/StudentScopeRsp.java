@@ -761,8 +761,111 @@ public class StudentScopeRsp {
                     public void setIsExitInd(String isExitInd) {
                         this.isExitInd = isExitInd;
                     }
+
+                    @Override
+                    public String toString() {
+                        return "ListBean{" +
+                                "id=" + id +
+                                ", delInd='" + delInd + '\'' +
+                                ", createdBy='" + createdBy + '\'' +
+                                ", createdDateTime='" + createdDateTime + '\'' +
+                                ", updatedBy='" + updatedBy + '\'' +
+                                ", updatedDateTime='" + updatedDateTime + '\'' +
+                                ", versionStamp=" + versionStamp +
+                                ", total=" + total +
+                                ", size=" + size +
+                                ", current=" + current +
+                                ", name='" + name + '\'' +
+                                ", schoolId=" + schoolId +
+                                ", alias='" + alias + '\'' +
+                                ", showType='" + showType + '\'' +
+                                ", gradeId=" + gradeId +
+                                ", showName='" + showName + '\'' +
+                                ", headmasterId=" + headmasterId +
+                                ", secondHeadmasterId=" + secondHeadmasterId +
+                                ", type='" + type + '\'' +
+                                ", headmaster='" + headmaster + '\'' +
+                                ", secondHeadmaster='" + secondHeadmaster + '\'' +
+                                ", classesIds=" + classesIds +
+                                ", isExitInd='" + isExitInd + '\'' +
+                                ", checked=" + checked +
+                                '}';
+                    }
+                }
+
+                @Override
+                public String toString() {
+                    return "ListBeanX{" +
+                            "id=" + id +
+                            ", delInd='" + delInd + '\'' +
+                            ", createdBy='" + createdBy + '\'' +
+                            ", createdDateTime='" + createdDateTime + '\'' +
+                            ", updatedBy='" + updatedBy + '\'' +
+                            ", updatedDateTime='" + updatedDateTime + '\'' +
+                            ", versionStamp=" + versionStamp +
+                            ", total=" + total +
+                            ", size=" + size +
+                            ", current=" + current +
+                            ", name='" + name + '\'' +
+                            ", alias='" + alias + '\'' +
+                            ", showType='" + showType + '\'' +
+                            ", showName='" + showName + '\'' +
+                            ", level=" + level +
+                            ", schoolId=" + schoolId +
+                            ", learningSectionId=" + learningSectionId +
+                            ", type='" + type + '\'' +
+                            ", isExitInd='" + isExitInd + '\'' +
+                            ", list=" + list +
+                            ", checked=" + checked +
+                            '}';
                 }
             }
+
+            @Override
+            public String toString() {
+                return "ListBeanXX{" +
+                        "id=" + id +
+                        ", delInd='" + delInd + '\'' +
+                        ", createdBy='" + createdBy + '\'' +
+                        ", createdDateTime='" + createdDateTime + '\'' +
+                        ", updatedBy='" + updatedBy + '\'' +
+                        ", updatedDateTime='" + updatedDateTime + '\'' +
+                        ", versionStamp=" + versionStamp +
+                        ", total=" + total +
+                        ", size=" + size +
+                        ", current=" + current +
+                        ", name='" + name + '\'' +
+                        ", alias='" + alias + '\'' +
+                        ", showType='" + showType + '\'' +
+                        ", showName='" + showName + '\'' +
+                        ", schoolId=" + schoolId +
+                        ", type='" + type + '\'' +
+                        ", isExitInd='" + isExitInd + '\'' +
+                        ", list=" + list +
+                        ", checked=" + checked +
+                        '}';
+            }
         }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "name='" + name + '\'' +
+                    ", type='" + type + '\'' +
+                    ", nextLevelType=" + nextLevelType +
+                    ", isExitInd='" + isExitInd + '\'' +
+                    ", list=" + list +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "StudentScopeRsp{" +
+                "code=" + code +
+                ", success=" + success +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

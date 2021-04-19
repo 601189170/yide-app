@@ -30,6 +30,7 @@ import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
 import com.yyide.chatim.model.TodoRsp;
+import com.yyide.chatim.model.UniversityScopeRsp;
 import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserInfoRsp;
@@ -255,6 +256,12 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/message/notice/scope/getSectionList")
     Observable<StudentScopeRsp> getSectionList(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/message/notice/scope/queryDepartmentClassList
+    //查询学段（大学）
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/message/notice/scope/queryDepartmentClassList")
+    Observable<UniversityScopeRsp> queryDepartmentClassList(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/message/notice/scope/getDepartmentList
     //获取部门列表
