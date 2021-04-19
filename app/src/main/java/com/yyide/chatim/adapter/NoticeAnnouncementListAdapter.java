@@ -1,9 +1,6 @@
 package com.yyide.chatim.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,24 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.PhotoBrowseActivity;
-import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.model.NoticeAnnouncementModel;
-import com.yyide.chatim.model.StudentHonorBean;
 import com.yyide.chatim.view.FootView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * @Description: 学生荣誉证书列表adapter
+ * @Description: adapter
  * @Author: liu tao
  * @CreateDate: 2021/3/25 16:49
  * @UpdateUser: 更新者

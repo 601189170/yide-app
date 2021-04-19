@@ -178,6 +178,7 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
         super.onActivityResult(requestCode, resultCode, data);
         Log.e(TAG, "onActivityResult: requestCode:" + requestCode + ", resultCode:" + resultCode);
         if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
+            refresh = true;//表示数据更新后，需要清除之前的数据
             mvpPresenter.noticeList(1, 1, 10);
         }
     }
