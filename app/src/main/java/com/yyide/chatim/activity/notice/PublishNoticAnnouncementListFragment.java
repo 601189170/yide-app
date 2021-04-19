@@ -213,7 +213,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
 
     @Override
     public void deleteFail(String msg) {
-        ToastUtils.showShort("删除成功！");
+        ToastUtils.showShort("删除失败:"+msg);
     }
 
     @Override
