@@ -2,6 +2,8 @@ package com.yyide.chatim.adapter;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ import butterknife.ButterKnife;
  * @Version: 1.0
  */
 public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
+    private static final String TAG = "PublishNotice";
     private Context context;
     private List<NoticeListRsp.DataBean.RecordsBean> data;
     //上拉加载更多布局
@@ -82,6 +85,24 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
         }else {
             ViewHolder  holder1= (ViewHolder)holder;
             NoticeListRsp.DataBean.RecordsBean noticeAnnouncementModel = data.get(position);
+            String timingTime = noticeAnnouncementModel.getTimingTime();
+            if (!TextUtils.isEmpty(timingTime)) {
+                // DateUtils.formatTime(timingTime,)
+                long[] dateDiff = DateUtils.dateDiff(timingTime);
+                if (dateDiff.length == 3) {
+                    holder1.tv_timed_send_time.setVisibility(View.VISIBLE);
+                    if (dateDiff[0] != 0){
+                        String string = context.getString(R.string.timed_send_long_text);
+                        holder1.tv_timed_send_time.setText(String.format(string,dateDiff[0]));
+                    }else {
+                        String string = context.getString(R.string.timed_send_text);
+                        holder1.tv_timed_send_time.setText(String.format(string,dateDiff[1],dateDiff[2]));
+                    }
+                }
+            } else {
+                holder1.tv_timed_send_time.setVisibility(View.GONE);
+            }
+
             int readNumber = noticeAnnouncementModel.getReadNumber();
             int totalNumber = noticeAnnouncementModel.getTotalNumber();
             String confirm_number_format = context.getResources().getString(R.string.notice_confirm_number);
@@ -162,6 +183,9 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_confirm_number)
         TextView tv_confirm_number;
+
+        @BindView(R.id.tv_timed_send_time)
+        TextView tv_timed_send_time;
 
         public ViewHolder(View view) {
             super(view);

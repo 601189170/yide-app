@@ -97,4 +97,6 @@
     <string name="notice_confirm_number">（%d/%d）已确认</string>
     <string name="notice_confirm_number_text">已确认（%d/%d）</string>
     <string name="notice_scope_number_text">已选择(%d)</string>
+    <string name="timed_send_text">%d小时%d分钟后发送</string>
+    <string name="timed_send_long_text">%d天后发送</string>
 </resources>

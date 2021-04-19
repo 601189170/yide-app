@@ -35,6 +35,24 @@
             android:textSize="@dimen/text_16"
             app:layout_constraintLeft_toRightOf="@+id/iv_pic"
             app:layout_constraintTop_toTopOf="@+id/iv_pic" />
+        <TextView
+            android:id="@+id/tv_timed_send_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timed_send_text"
+            android:textColor="#ff909399"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@id/tv_notice"
+            app:layout_constraintBottom_toBottomOf="@id/tv_notice"
+            app:layout_constraintLeft_toRightOf="@id/tv_notice"
+            android:background="@drawable/timed_send_bg_shape"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_10"
+            android:visibility="gone"
+            />
         <ImageView
             android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
