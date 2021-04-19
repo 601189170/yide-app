@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -91,7 +92,9 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, ConfirmDetailRsp.DataBean.RecordsBean str) {
                 baseViewHolder.setText(R.id.tv_notice_scope_name, str.getUserName());
-                GlideUtil.loadImage(getContext(), "https://www.thecrazyprogrammer.com/wp-content/uploads/2017/05/Android-Glide-Tutorial-with-Example-1.png", baseViewHolder.findView(R.id.iv_pic));
+                //GlideUtil.loadImage(getContext(), "https://www.thecrazyprogrammer.com/wp-content/uploads/2017/05/Android-Glide-Tutorial-with-Example-1.png", baseViewHolder.findView(R.id.iv_pic));
+                ImageView view = baseViewHolder.findView(R.id.iv_pic);
+                view.setImageDrawable(getActivity().getDrawable(R.drawable.icon_leave));
             }
         };
 
