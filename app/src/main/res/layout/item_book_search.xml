@@ -37,26 +37,27 @@
         app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
     <ImageView
+        android:id="@+id/iv_call"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:src="@drawable/icon_call"
+        android:layout_marginEnd="@dimen/dp_20"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_user_detail"
+        app:layout_constraintEnd_toStartOf="@+id/iv_user_detail"
+        app:layout_constraintRight_toLeftOf="@id/iv_call"
+        app:layout_constraintTop_toTopOf="@+id/iv_user_detail" />
+
+    <ImageView
         android:id="@+id/iv_user_detail"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
         android:layout_marginEnd="@dimen/dp_20"
         android:src="@drawable/icon_user_detail"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/iv_call"
-        app:layout_constraintRight_toLeftOf="@id/iv_call"
-        app:layout_constraintTop_toTopOf="@id/iv_call" />
-
-    <ImageView
-        android:id="@+id/iv_call"
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
-        android:layout_marginStart="@dimen/dp_20"
-        android:layout_marginEnd="@dimen/dp_20"
-        android:src="@drawable/icon_call"
         app:layout_constraintBottom_toBottomOf="@id/iv_profile"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_profile" />
+
 
     <View
         android:layout_width="match_parent"

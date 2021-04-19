@@ -1,18 +1,17 @@
 package com.yyide.chatim.activity;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
@@ -38,9 +37,18 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Function;
+import rx.schedulers.Schedulers;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class UserActivity extends BaseMvpActivity<UserPresenter> implements UserView, OnDateSetListener {
 
@@ -138,7 +146,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 startActivity(intent);
                 break;
             case R.id.layout6://设置人脸
-                startActivity(new Intent(this,FaceCaptureActivity.class));
+                startActivity(new Intent(this, FaceCaptureActivity.class));
                 break;
             case R.id.back_layout:
                 finish();
@@ -203,43 +211,41 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode) {
-//            case BaseConstant.SELECT_ORIGINAL_PIC:
-//                if (resultCode == RESULT_OK) {//从相册选择照片不裁切
-//                    try {
-//                        Uri selectedImage = data.getData(); //获取系统返回的照片的Uri
-//                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//                        Cursor cursor = getContentResolver().query(selectedImage,
-//                                filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片
-//                        cursor.moveToFirst();
-//                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                        String picturePath = cursor.getString(columnIndex);  //获取照片路径
-//                        cursor.close();
-//
-//                        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
-////                        Log.e("TAG", "onActivityResult==>: " + JSON.toJSONString(bitmap));
-//                        img.setImageBitmap(bitmap);
-//                        //mvpPresenter.uploadFile(picturePath);
-//                    } catch (Exception e) {
-//                        // TODO Auto-generated catch block
-//                        e.printStackTrace();
-//                    }
-//                }
-//                break;
-//        }
-//        if (requestCode == BaseConstant.REQ_CODE && resultCode == RESULT_OK) {
-//            /*缩略图信息是储存在返回的intent中的Bundle中的，
-//             * 对应Bundle中的键为data，因此从Intent中取出
-//             * Bundle再根据data取出来Bitmap即可*/
-//            Bundle extras = data.getExtras();
-//            Bitmap bitmap = (Bitmap) extras.get("data");
-//            img.setImageBitmap(bitmap);
-////            Log.e(TAG, "img==》: " + JSON.toJSONString(extras));
-//        }
         super.onActivityResult(requestCode, resultCode, data);
         File corpFile = TakePicUtil.onActivityResult(this, requestCode, resultCode, data);
-        mvpPresenter.uploadFile(corpFile);
+        if(corpFile != null){
+            showPicFileByLuban(corpFile);
+        }
     }
+
+    private void showPicFileByLuban(@NonNull File file) {
+        Luban.with(this)
+                .load(file)
+                .ignoreBy(100)
+                .setTargetDir(Environment.getExternalStorageDirectory().getAbsolutePath())
+                .filter(path -> !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif")))
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                        showLoading();
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        mvpPresenter.uploadFile(file);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // TODO 当压缩过程出现问题时调用
+                        hideLoading();
+                        ToastUtils.showShort("图片压缩失败请重试");
+                    }
+                }).launch();
+    }
+
 
     @Override
     public void showError() {

@@ -1,6 +1,10 @@
 package com.yyide.chatim.base;
 
 
+import android.os.Build;
+
+import com.yyide.chatim.BuildConfig;
+
 import okhttp3.MediaType;
 
 /**
@@ -35,17 +39,18 @@ public class BaseConstant {
      * 请求ip==>baseUrl
      */
 //    public static final String API_SERVER_URL = "http://192.168.3.114:8888";
-//    public static final String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
+    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
-    public static final String API_SERVER_URL = "https://api.edu.1d1j.cn";
+    public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
+    public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
     /*Base宽*/
-    public static int BaseWith =171;
+    public static int BaseWith = 171;
 
     /*Base高*/
-    public static int BaseHeight =177;
+    public static int BaseHeight = 177;
 
-    public static final MediaType JSON= MediaType.parse("application/json; charset=utf-8");
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 
     /**

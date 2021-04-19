@@ -14,11 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.model.StudentHonorBean;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.UserInfoRsp;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -60,6 +63,12 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
         } else {
             holder.tv_classname.setText(bean.getClassesName());
         }
+        if(!TextUtils.isEmpty(bean.getPhone())){
+            holder.iv_call.setVisibility(View.VISIBLE);
+        } else {
+            holder.iv_call.setVisibility(View.GONE);
+        }
+
         holder.iv_call.setOnClickListener(v -> {
             //打电话
             if (!TextUtils.isEmpty(bean.getPhone())) {
@@ -67,6 +76,8 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
                 Uri data = Uri.parse("tel:" + bean.getPhone());
                 intent.setData(data);
                 context.startActivity(intent);
+            } else {
+                ToastUtils.showShort("手机号为空，无法波打电话");
             }
         });
         holder.iv_user_detail.setOnClickListener(v -> {

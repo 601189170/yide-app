@@ -64,7 +64,6 @@ public class WebViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         currentUrl = getIntent().getStringExtra("url");
         type = getIntent().getStringExtra("type");
-        currentUrl = "https://cloud.uat.edu.1d1j.net/classcardapp/dist/index.html#/home";
         initView();
 
         initAnimtor();
@@ -201,27 +200,13 @@ public class WebViewActivity extends BaseActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                Uri uri = Uri.parse(request.getUrl().toString());
-//                if (!TextUtils.isEmpty(uri.getScheme()) && !uri.getScheme().startsWith("http")) {
-//                    if (uri.getScheme().equals("okchat")) {
-//                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//                        startActivity(intent);
-//                    }
-//                    return true;
-//                }
+
                 return false;
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                Uri uri = Uri.parse(url);
-//                if (!TextUtils.isEmpty(uri.getScheme()) && !uri.getScheme().startsWith("http")) {
-//                    if (uri.getScheme().equals("okchat")) {
-//                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//                        startActivity(intent);
-//                    }
-//                    return true;
-//                }
+
                 return false;
             }
 
@@ -358,6 +343,11 @@ public class WebViewActivity extends BaseActivity {
     @JavascriptInterface
     public void postMessage(String msg) {
         ToastUtils.showShort("msg" + msg);
+    }
+
+    @JavascriptInterface
+    public void backApp(){
+        finish();
     }
 
     @Override

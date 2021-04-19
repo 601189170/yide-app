@@ -2,12 +2,14 @@ package com.yyide.chatim.utils;
 
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -114,7 +116,7 @@ public class FileUtils {
      * @author guhaizhou@126.com
      * @since JDK 1.6
      */
-    public static String encodeBase64File(String path){
+    public static String encodeBase64File(String path) {
         try {
             File file = new File(path);
             FileInputStream inputFile = new FileInputStream(file);
@@ -122,7 +124,7 @@ public class FileUtils {
             inputFile.read(buffer);
             inputFile.close();
             return Base64.encodeToString(buffer, Base64.DEFAULT);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
@@ -137,16 +139,115 @@ public class FileUtils {
      * @author guhaizhou@126.com
      * @since JDK 1.6
      */
-    public static void decoderBase64File(String base64Code, String savePath){
+    public static void decoderBase64File(String base64Code, String savePath) {
         //byte[] buffer = new BASE64Decoder().decodeBuffer(base64Code);
-        try{
+        try {
             byte[] buffer = Base64.decode(base64Code, Base64.DEFAULT);
             FileOutputStream out = new FileOutputStream(savePath);
             out.write(buffer);
             out.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static final int SIZETYPE_B = 1;//获取文件大小单位为B的double值
+    public static final int SIZETYPE_KB = 2;//获取文件大小单位为KB的double值
+    public static final int SIZETYPE_MB = 3;//获取文件大小单位为MB的double值
+    public static final int SIZETYPE_GB = 4;//获取文件大小单位为GB的double值
+
+    /**
+     * 获取文件指定文件的指定单位的大小
+     *
+     * @param filePath 文件路径
+     * @param sizeType 获取大小的类型1为B、2为KB、3为MB、4为GB
+     * @return double值的大小
+     */
+    public static double getFileOrFilesSize(String filePath, int sizeType) {
+        File file = new File(filePath);
+        long blockSize = 0;
+        try {
+            if (file.isDirectory()) {
+                blockSize = getFileSizes(file);
+            } else {
+                blockSize = getFileSize(file);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("获取文件大小", "获取失败!");
+        }
+        return FormetFileSize(blockSize, sizeType);
+    }
+
+    /**
+     * 获取指定文件夹
+     * @param f
+     * @return
+     * @throws Exception
+     */
+    private static long getFileSizes(File f) throws Exception
+    {
+        long size = 0;
+        File flist[] = f.listFiles();
+        for (int i = 0; i < flist.length; i++){
+            if (flist[i].isDirectory()){
+                size = size + getFileSizes(flist[i]);
+            }
+            else{
+                size =size + getFileSize(flist[i]);
+            }
+        }
+        return size;
+    }
+
+    /**
+     * 获取指定文件大小
+     * @param f
+     * @return
+     * @throws Exception
+     */
+    private static long getFileSize(File file) throws Exception
+    {
+        long size = 0;
+        if (file.exists()){
+            FileInputStream fis = null;
+            fis = new FileInputStream(file);
+            size = fis.available();
+        }
+        else{
+            file.createNewFile();
+            Log.e("获取文件大小","文件不存在!");
+        }
+        return size;
+    }
+
+    /**
+     * 转换文件大小,指定转换的类型
+     *
+     * @param fileS
+     * @param sizeType
+     * @return
+     */
+    private static double FormetFileSize(long fileS, int sizeType) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        double fileSizeLong = 0;
+        switch (sizeType) {
+            case SIZETYPE_B:
+                fileSizeLong = Double.valueOf(df.format((double) fileS));
+                break;
+            case SIZETYPE_KB:
+                fileSizeLong = Double.valueOf(df.format((double) fileS / 1024));
+                break;
+            case SIZETYPE_MB:
+                fileSizeLong = Double.valueOf(df.format((double) fileS / 1048576));
+                break;
+            case SIZETYPE_GB:
+                fileSizeLong = Double.valueOf(df.format((double) fileS / 1073741824));
+                break;
+            default:
+                break;
+        }
+        return fileSizeLong;
     }
 
 }

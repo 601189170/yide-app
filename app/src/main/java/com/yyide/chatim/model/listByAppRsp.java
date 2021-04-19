@@ -55,6 +55,7 @@ public class listByAppRsp {
         public String parentName;
         public int peopleNum;
         public int schoolId;
+        public String schoolLogo;
         public int size;
         public int sort;
         public int total;

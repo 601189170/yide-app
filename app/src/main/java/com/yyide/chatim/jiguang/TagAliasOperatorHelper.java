@@ -10,11 +10,14 @@ import android.util.SparseArray;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.SmsVerificationRsp;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
@@ -349,15 +352,16 @@ public class TagAliasOperatorHelper {
     }
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
-
     private void registerAlias(String alias, String registrationId) {
-        RequestBody body = new FormBody.Builder().
-                add("registrationId", registrationId).
-                add("alias", alias).
-                add("equipmentType", "1").build();
+        Map map = new HashMap();
+        map.put("registrationId", registrationId);
+        map.put("alias", alias);
+        map.put("equipmentType", "1");
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/equipment/addUserEquipmentInfo")
+                .addHeader("Authorization", SpData.User().token)
                 .post(body)
                 .build();
         //发起请求

@@ -53,7 +53,7 @@ public class MyTableAdapter extends BaseAdapter {
         ImageView dateS = VHUtil.ViewHolder.get(view, R.id.date);
 
         SelectSchByTeaidRsp.DataBean item = getItem(position);
-        tool.setText("教具：" + (TextUtils.isEmpty(item.teachTool) ? "" : item.teachTool));
+        tool.setText("教具：" + (TextUtils.isEmpty(item.teachTool) ? "暂无教具" : item.teachTool));
         if (item.lessonsSubEntityList != null && item.lessonsSubEntityList.size() > 0) {
             StringBuffer lessons = new StringBuffer();
             for (int i = 0; i < item.lessonsSubEntityList.size(); i++) {
@@ -61,10 +61,10 @@ public class MyTableAdapter extends BaseAdapter {
             }
             homework.setText(lessons.toString());
         } else {
-            homework.setText("");
+            homework.setText("暂无作业");
         }
 
-        desc.setText(item.beforeClass);
+        desc.setText(TextUtils.isEmpty(item.beforeClass) ? "暂无课前提醒" : item.beforeClass);
         //开始时间
         long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
         //结束时间
@@ -85,7 +85,7 @@ public class MyTableAdapter extends BaseAdapter {
                 dateS.setImageResource(R.drawable.icon_table);
             } else {//正在上课
 //                desc.setText(item.beforeClass);
-                dateS.setImageResource(R.drawable.icon_table_un);
+                dateS.setImageResource(R.drawable.icon_table);
             }
         } else {
 //            desc.setText(item.afterClass);

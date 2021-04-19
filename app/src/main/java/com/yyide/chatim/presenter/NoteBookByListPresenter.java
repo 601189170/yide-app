@@ -24,8 +24,8 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
         attachView(view);
     }
 
-    public void NoteBookByList(String departmentId, String name, String phone, String jobNumber, String size, String current) {
-        mvpView.showLoading();
+    public void NoteBookByList(String departmentId, String name, String phone, String jobNumber, int size, int current) {
+//        mvpView.showLoading();
         Map map = new HashMap();
         map.put("departmentId", departmentId);
         map.put("name", name);
@@ -57,7 +57,7 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
     }
 
     public void getStudentList(String classesIs) {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         Map map = new HashMap();
         map.put("classesId", classesIs);
         map.put("name", "");

@@ -8,9 +8,11 @@ import com.alibaba.fastjson.JSON;
 import com.tencent.imsdk.v2.V2TIMManager;
 
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
+import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
 import androidx.annotation.Nullable;

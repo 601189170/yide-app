@@ -49,9 +49,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
     NotelistAdapter2 adapter2;
 
     private NoteItemAdapter noteItemAdapter;
-
-    int type;
-    int sum;
+    private String islast;
+    private int type;
+    private int sum;
     private String organization;
     List<listByAppRsp.DataBean.ListBean> listBean = new ArrayList<>();
 
@@ -60,6 +60,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         mBaseView = inflater.inflate(R.layout.layout_notebylist_fragmnet, container, false);
         id = getArguments().getString("id");
         sum = getArguments().getInt("size");
+        islast = getArguments().getString("islast");
         organization = getArguments().getString("organization");
         listBean.clear();
         for (int i = 0; i < sum; i++) {
@@ -90,9 +91,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         //initView();
         //不穿ID表示查询当下你所属部门人员或学生列表
         if (!TextUtils.isEmpty(organization) && "staff".equals(organization)) {
-            mvpPresenter.NoteBookByList("", "", "", "", "30", "1");
+            mvpPresenter.NoteBookByList(id, "", "", "", 30, 1);
         } else {
-            mvpPresenter.getStudentList("");
+            mvpPresenter.getStudentList(id);
         }
 
         listview.setOnItemClickListener((parent, view1, position, id) -> {

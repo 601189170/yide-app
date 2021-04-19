@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.Utils;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
@@ -25,6 +26,8 @@ import com.yyide.chatim.utils.LoadingTools;
 import com.yyide.chatim.utils.LogUtil;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +41,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import top.zibin.luban.Luban;
 
 /**
  * 登录状态的Activity都要集成该类，来完成被踢下线等监听处理。
@@ -109,7 +113,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 //        ImmersionBar.with(this).init();
 
     }
-
 
     private int getBaseActivityLayout() {
         return R.layout.activity_base;

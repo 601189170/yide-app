@@ -1,7 +1,9 @@
 package com.yyide.chatim.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -67,7 +69,6 @@ public class NoteByListActivity extends BaseActivity {
         }
 
         Log.e("TAG", "listBean==》sum: " + JSON.toJSONString(listBean));
-
         title.setText("通讯录");
         tabRecyAdapter = new TabRecyAdapter();
 
@@ -82,14 +83,15 @@ public class NoteByListActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 if (position == 0) {//点击回到一级部门,清除所有回退栈
-                    if (tabRecyAdapter.list.size() > 1) {
-                        getSupportFragmentManager().popBackStackImmediate(tabRecyAdapter.list.get(1).tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    }
+//                    if (tabRecyAdapter.list.size() > 1) {
+//                        getSupportFragmentManager().popBackStackImmediate(tabRecyAdapter.list.get(1).tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//                    }
+                    getSupportFragmentManager().popBackStack();
+                    finish();
                 } else {
                     getSupportFragmentManager().popBackStackImmediate(tabRecyAdapter.list.get(position).tag, 0);
+                    tabRecyAdapter.remove(position);
                 }
-                tabRecyAdapter.remove(position);
-
             }
         });
 
@@ -115,24 +117,38 @@ public class NoteByListActivity extends BaseActivity {
         super.onPause();
     }
 
-    @OnClick({R.id.tv_book, R.id.back_layout})
+    @OnClick({R.id.back_layout, R.id.ll_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_layout:
-            case R.id.tv_book:
                 finish();
+                break;
+            case R.id.ll_search:
+                startActivity(new Intent(this, BookSearchActivity.class));
                 break;
         }
     }
 
     public void initDeptFragment() {
+        String schoolName = getIntent().getStringExtra("schoolName");
         int num = getSupportFragmentManager().getBackStackEntryCount();
         int index = num;
-        Fragment noteByListFragment = new NoteByListFragment();
-
         FragmentManager manager = getSupportFragmentManager();
+        Fragment noteByListFragment = new NoteByListFragment();
+        if (!TextUtils.isEmpty(schoolName)) {//第一个条目
+            NoteTabBean noteTab = new NoteTabBean();
+            noteTab.name = schoolName;
+            noteTab.islast = "2";
+            noteTab.tag = index + "";
+            listTab.add(noteTab);
+            manager.beginTransaction()
+                    .replace(R.id.content, noteByListFragment)
+                    .addToBackStack(String.valueOf(index))
+                    .commit();
+        }
+
         NoteTabBean noteTabBean = new NoteTabBean();
-        noteTabBean.tag = index + "";
+        noteTabBean.tag = (index + 1) + "";
         noteTabBean.name = name;
         noteTabBean.organization = organization;
         Bundle bundle = new Bundle();
@@ -152,13 +168,11 @@ public class NoteByListActivity extends BaseActivity {
 
         manager.beginTransaction()
                 .replace(R.id.content, noteByListFragment)
-                .addToBackStack(String.valueOf(index))
+                .addToBackStack(String.valueOf(index + 1))
                 .commit();
-
 
         listTab.add(noteTabBean);
         tabRecyAdapter.notifydata(listTab);
-
     }
 
     public void initDeptFragment2(Bundle bundle) {
@@ -168,7 +182,7 @@ public class NoteByListActivity extends BaseActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         NoteTabBean noteTabBean = new NoteTabBean();
-        noteTabBean.tag = index + "";
+        noteTabBean.tag = (index + 1) + "";
         noteTabBean.name = bundle.getString("name");
         noteTabBean.islast = bundle.getString("islast");
         Log.e("TAG", "initDeptFragment2==》: " + JSON.toJSONString(bundle));
@@ -176,7 +190,7 @@ public class NoteByListActivity extends BaseActivity {
 
         manager.beginTransaction()
                 .replace(R.id.content, noteByListFragment)
-                .addToBackStack(String.valueOf(index))
+                .addToBackStack(String.valueOf(index + 1))
                 .commit();
 
         listTab.add(noteTabBean);
@@ -197,14 +211,13 @@ public class NoteByListActivity extends BaseActivity {
     }
 
     void BackSp() {
-
         int num = getSupportFragmentManager().getBackStackEntryCount();
         for (int i = 0; i < num; i++) {
             if (i == num - 1) {
                 FragmentManager.BackStackEntry backStackEntry = getSupportFragmentManager().getBackStackEntryAt(i);
                 String name = backStackEntry.getName();
                 for (NoteTabBean noteTabBean : tabRecyAdapter.list) {
-                    if (noteTabBean.tag.equals(name)) {
+                    if (name.equals(noteTabBean.tag)) {
                         tabRecyAdapter.remove(i);
 //                        listTab.remove(i);
                     }

@@ -3,6 +3,7 @@ package com.yyide.chatim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.model.selectListByAppRsp;
 import com.yyide.chatim.presenter.NoteBookPresenter;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.NoteBookView;
 
 import java.util.ArrayList;
@@ -73,24 +75,24 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         adapter = new NoBookItemAdapter();
         adapter2 = new NoBookItemAdapter();
         listview.setAdapter(adapter);
-        listview.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter.getItem(position).list, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name, "staff"));
-        listview2.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter2.getItem(position).list, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name, "student"));
+        listview.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter.getItem(position).list, adapter.getItem(position).parentName, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name, "staff"));
+        listview2.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter2.getItem(position).list, adapter.getItem(position).parentName, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name, "student"));
     }
 
     /**
-     *
      * @param list
      * @param id
      * @param name
      * @param organization 教职工staff  学生student
      */
-    void setPostData(List<listByAppRsp.DataBean.ListBean> list, String id, String name, String organization) {
+    void setPostData(List<listByAppRsp.DataBean.ListBean> list, String schoolName, String id, String name, String organization) {
         Intent intent = new Intent();
         for (int i = 0; i < list.size(); i++) {
             intent.putExtra(i + "", list.get(i));
         }
         intent.putExtra("id", id);
         intent.putExtra("name", name);
+        intent.putExtra("schoolName", schoolName);
         intent.putExtra("size", list.size());
         intent.putExtra("schoolType", schoolType);
         intent.putExtra("organization", organization);
@@ -141,6 +143,9 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             List<listByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
             if (rsp.data.size() > 0) {
                 pName.setText(rsp.data.get(0).parentName);
+                if (TextUtils.isEmpty(rsp.data.get(0).schoolLogo)) {
+                    GlideUtil.loadImage(NoteBookActivity.this, rsp.data.get(0).schoolLogo, img);
+                }
                 for (listByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
                     listBeans1.add(listBean);
                 }

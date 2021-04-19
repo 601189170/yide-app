@@ -310,8 +310,6 @@ public class LoginActivity extends BaseActivity {
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                    SPUtils.getInstance().put(BaseConstant.LOGINNAME, username);
-                    SPUtils.getInstance().put(BaseConstant.PASSWORD, password);
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     getUserSig();
                 } else {
@@ -448,6 +446,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+
                 String data = response.body().string();
                 Log.e(TAG, "getUserSchool333==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
@@ -456,6 +455,7 @@ public class LoginActivity extends BaseActivity {
                     SpData.setIdentityInfo(rsp);
                     initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
                 } else {
+                    hideLoading();
                     ToastUtils.showShort(rsp.msg);
                 }
             }
@@ -478,6 +478,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(Object data) {
                 hideLoading();
+                SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
+                SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userid));

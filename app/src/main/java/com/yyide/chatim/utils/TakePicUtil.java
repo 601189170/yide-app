@@ -32,7 +32,7 @@ public class TakePicUtil {
     private static final int CODE_ALBUM_NOCORP = 105;
     private static Config config;
 
-    private static File output = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/OkChat/portraits/" + "temp.png");
+    private static File output = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/chatim/portraits/" + "temp.png");
 
     public static void config(Config c) {
         config = c;
@@ -70,7 +70,7 @@ public class TakePicUtil {
         if (output.getParentFile() != null && !output.getParentFile().exists()) {
             output.getParentFile().mkdirs();
         }
-        Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         if (corp) {
             activity.startActivityForResult(photoPickerIntent, CODE_ALBUM);

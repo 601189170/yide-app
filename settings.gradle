@@ -1,1 +1,2 @@
+include ':tuikit'
 include ':app', ':jiguang'

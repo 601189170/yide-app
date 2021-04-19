@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.paradoxie.autoscrolltextview.VerticalTextview;
+import com.yyide.chatim.BuildConfig;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
@@ -273,7 +274,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 userName.setVisibility(View.VISIBLE);
                 userName.setText(StringUtils.subString(qhName, 2));
             }
-            schoolName.setText(qhSchool);
+            if (BuildConfig.DEBUG) {
+                schoolName.setText(qhSchool + "-UAT");
+            } else {
+                schoolName.setText(qhSchool);
+            }
             SPUtils.getInstance().put(SpData.USERNAME, qhName);
         }
     }

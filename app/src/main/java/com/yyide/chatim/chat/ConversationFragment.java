@@ -13,6 +13,7 @@ import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
 import com.tencent.imsdk.v2.V2TIMConversation;
+import com.tencent.imsdk.v2.V2TIMConversationListener;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
@@ -41,7 +42,6 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import butterknife.OnClick;
-
 
 public class ConversationFragment extends BaseFragment {
 
@@ -82,6 +82,33 @@ public class ConversationFragment extends BaseFragment {
             }
         });
 
+        V2TIMManager.getConversationManager().setConversationListener(new V2TIMConversationListener() {
+            @Override
+            public void onSyncServerStart() {
+                super.onSyncServerStart();
+            }
+
+            @Override
+            public void onSyncServerFinish() {
+                super.onSyncServerFinish();
+            }
+
+            @Override
+            public void onSyncServerFailed() {
+                super.onSyncServerFailed();
+            }
+
+            @Override
+            public void onNewConversation(List<V2TIMConversation> conversationList) {
+                super.onNewConversation(conversationList);
+            }
+
+            @Override
+            public void onConversationChanged(List<V2TIMConversation> conversationList) {
+                super.onConversationChanged(conversationList);
+            }
+        });
+
         // 从布局文件中获取会话列表面板
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
         mMenu = new Menu(getActivity(), (TitleBarLayout) mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
@@ -99,7 +126,7 @@ public class ConversationFragment extends BaseFragment {
         listLayout.setItemTopTextSize(16); // 设置 item 中 top 文字大小
         listLayout.setItemBottomTextSize(12);// 设置 item 中 bottom 文字大小
         listLayout.setItemDateTextSize(10);// 设置 item 中 timeline 文字大小
-        listLayout.setItemAvatarRadius(100); // 设置 adapter item 头像圆角大小
+        listLayout.setItemAvatarRadius(0); // 设置 adapter item 头像圆角大小
         listLayout.disableItemUnreadDot(false);// 设置 item 是否不显示未读红点，默认显示
         // 通过API设置ConversataonLayout各种属性的样例，开发者可以打开注释，体验效果
 //        ConversationLayoutHelper.customizeConversation(mConversationLayout);

@@ -155,6 +155,9 @@ public class BottomHeadMenuPop extends PopupWindow {
     }
 
 
+    /**
+     * 打开手机相册
+     */
     private void selectFromGallery() {
 //        // TODO Auto-generatedmethod stub
 //        Intent intent = new Intent();

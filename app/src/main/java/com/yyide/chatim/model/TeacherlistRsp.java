@@ -197,7 +197,7 @@ public class TeacherlistRsp implements Serializable {
                 public int size;
                 public int current;
                 public int subjectId;
-                public List<SubjectsBean> subjects;
+                public String subjectName;
                 public int teacherId;
                 public int schoolId;
 

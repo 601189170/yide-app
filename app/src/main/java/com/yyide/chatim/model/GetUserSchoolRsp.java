@@ -98,6 +98,7 @@ public class GetUserSchoolRsp {
         public List<String> imgList;
         public String birthdayDate;
         public String sex;//0 男 1女
+        public int teacherDepId;
         public String email;
         public Object schedule;
         public Object introduce;

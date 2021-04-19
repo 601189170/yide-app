@@ -103,16 +103,20 @@ public class PersonInfoActivity extends BaseActivity {
             tv_name_title.setText(StringUtils.subString(bean.name, 2));
             topname.setText(bean.name);
             name.setText(bean.name);
-            adress.setText(bean.address);
+            adress.setText(TextUtils.isEmpty(bean.address) ? "暂无邮箱" : bean.address);
             StringBuffer stringBuffer = new StringBuffer();
             if (bean.subjects != null) {
-                for (TeacherlistRsp.DataBean.RecordsBean.SubjectsBean subjectsBean : bean.subjects) {
-                    stringBuffer.append(subjectsBean.subjects);
+                for (int i = 0; i < bean.subjects.size(); i++) {
+                    if (i == bean.subjects.size()) {
+                        stringBuffer.append(bean.subjects.get(i));
+                    } else {
+                        stringBuffer.append(bean.subjects.get(i).subjectName + "、");
+                    }
                 }
             }
-            //subject.setText(stringBuffer.toString());
+            subject.setText(TextUtils.isEmpty(stringBuffer.toString()) ? "暂无科目" : stringBuffer.toString());
             sex.setText(!TextUtils.isEmpty(bean.sex) ? "0".equals(bean.sex) ? "男" : "女" : "无");
-            tv_class_name.setText(bean.classesName);
+            tv_class_name.setText(TextUtils.isEmpty(bean.classesName) ? "未知班级" : bean.classesName);
             phone.setText(!TextUtils.isEmpty(bean.phone) ? setMobile(bean.phone) : "暂无手机号码");
             if (TextUtils.isEmpty(bean.phone)) {
                 iv_phone.setVisibility(View.GONE);

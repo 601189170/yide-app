@@ -5,6 +5,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import androidx.multidex.MultiDex;
+
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.v2.V2TIMManager;
@@ -36,7 +38,8 @@ public class BaseApplication extends Application {
 
         //blankj初始化
         Utils.init(this);
-//        MultiDex.install(this);
+
+        MultiDex.install(this);
 
         MMKV.initialize(this); //初始化mmkv
 

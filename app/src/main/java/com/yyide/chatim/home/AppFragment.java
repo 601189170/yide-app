@@ -80,12 +80,14 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         adapter = new MyAppItemAdapter();
         mygrid.setAdapter(adapter);
         mygrid.setOnItemClickListener((parent, view1, position, id) -> {
-            if ("editor".equals(adapter.list.get(position).getAppType())) {
-                Intent intent = new Intent(mActivity, AppManagerActivity.class);
-                startActivity(intent);
+            Intent intent;
+            if ("editor".equals(adapter.getItem(position).getAppType())) {
+                intent = new Intent(mActivity, AppManagerActivity.class);
             } else {
-                startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
+                intent = new Intent(getContext(), WebViewActivity.class);
+                intent.putExtra("url", adapter.getItem(position).getPath());
             }
+            startActivity(intent);
         });
         recylAppAdapter = new RecylAppAdapter();
         recy.setAdapter(recylAppAdapter);

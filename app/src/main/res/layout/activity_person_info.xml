@@ -42,10 +42,10 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="24dp"
-                    android:textSize="@dimen/text_18"
                     android:background="@drawable/corners4"
                     android:gravity="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_18" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -188,126 +188,142 @@
                 <LinearLayout
                     android:id="@+id/ll_master"
                     android:layout_width="match_parent"
-                    android:layout_height="84dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="20dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp_15">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="主监护人"
-                            android:textColor="#666666"
-                            android:textSize="13sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/tv_master_phone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="#212121"
-                                android:textSize="15sp" />
+                                android:text="主监护人"
+                                android:textColor="#666666"
+                                android:textSize="13sp" />
 
-                            <TextView
-                                android:id="@+id/set_master"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="16dp"
-                                android:text="显示"
-                                android:textColor="#2C8AFF" />
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_master_phone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#212121"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:id="@+id/set_master"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="显示"
+                                    android:textColor="#2C8AFF" />
+                            </LinearLayout>
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/iv_phone_master"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/icon_phone" />
                     </LinearLayout>
 
                     <View
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <ImageView
-                        android:id="@+id/iv_phone_master"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="12dp"
-                        android:background="@drawable/icon_phone" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:background="#DCDFE6" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="#DCDFE6" />
 
                 <LinearLayout
                     android:id="@+id/ll_vice"
                     android:layout_width="match_parent"
-                    android:layout_height="84dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingLeft="20dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp_15">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="副监护人"
-                            android:textColor="#666666"
-                            android:textSize="13sp" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="20dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/tv_vice_phone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="#212121"
-                                android:textSize="15sp" />
+                                android:text="副监护人"
+                                android:textColor="#666666"
+                                android:textSize="13sp" />
 
-                            <TextView
-                                android:id="@+id/set_vice"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="16dp"
-                                android:text="显示"
-                                android:textColor="#2C8AFF" />
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_vice_phone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#212121"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:id="@+id/set_vice"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="16dp"
+                                    android:text="显示"
+                                    android:textColor="#2C8AFF" />
+                            </LinearLayout>
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/iv_phone_vice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/icon_phone" />
                     </LinearLayout>
 
                     <View
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <ImageView
-                        android:id="@+id/iv_phone_vice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="12dp"
-                        android:background="@drawable/icon_phone" />
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:background="#DCDFE6" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="#DCDFE6" />
 
                 <LinearLayout
                     android:id="@+id/ll_email"
@@ -333,7 +349,8 @@
                             android:id="@+id/adress"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -344,7 +361,6 @@
                         android:layout_marginLeft="20dp"
                         android:background="#DCDFE6" />
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:id="@+id/ll_classes"
@@ -371,7 +387,8 @@
                             android:id="@+id/tv_class_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -407,7 +424,8 @@
                             android:id="@+id/sex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -445,7 +463,8 @@
                             android:id="@+id/subject"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
                             android:textSize="15sp" />
                     </LinearLayout>
