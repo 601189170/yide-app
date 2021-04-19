@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -140,6 +141,23 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
             }
         });
         mvpPresenter.noticeList(2, curIndex, 10);
+        refresh = true;
+        swipeRefreshLayout.setRefreshing(true);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getActivity() instanceof NoticeAnnouncementActivity){
+            NoticeAnnouncementActivity activity = (NoticeAnnouncementActivity) getActivity();
+            boolean other = activity.other2;
+            Log.e(TAG, "onStart2: "+other );
+            if (other){
+                activity.other2 = false;
+                mvpPresenter.noticeList(2, 1, 10);
+                refresh = true;
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        }
     }
 
     @Override
@@ -177,6 +195,8 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
     @Override
     public void noticeListFail(String msg) {
         Log.e(TAG, "noticeListFail: " + msg);
+        refresh = false;
+        swipeRefreshLayout.setRefreshing(false);
         showBlankPage();
         publishNoticeAnnouncementListAdapter.setIsLoadMore(false);
         publishNoticeAnnouncementListAdapter.notifyDataSetChanged();

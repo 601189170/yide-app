@@ -47,6 +47,20 @@
 
         <!--            android:layout_weight="1" />-->
         <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#ff232629"
+            android:textSize="14sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginStart="21dp"
+            android:layout_marginEnd="21dp"
+            android:singleLine="true"
+            android:visibility="gone"
+            />
+        <TextView
             android:id="@+id/notice_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

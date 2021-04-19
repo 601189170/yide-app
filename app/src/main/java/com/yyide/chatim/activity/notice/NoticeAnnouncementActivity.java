@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.notice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -9,9 +10,11 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeAnnouncementPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeAnnouncementView;
@@ -35,7 +38,10 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     TabLayout mTablayout;
     @BindView(R.id.viewpager)
     ViewPager2 mViewpager;
-
+    @BindView(R.id.fab)
+    FloatingActionButton floatingActionButton;
+    boolean other = false;
+    boolean other2 = false;
     @Override
     public int getContentViewID() {
         return R.layout.activity_notice_announcement;
@@ -51,6 +57,10 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     }
 
     private void initViewPager() {
+        //家长身份不能添加公告
+        if (SpData.getIdentityInfo().getIdentity().equals("家长")) {
+            floatingActionButton.setVisibility(View.GONE);
+        }
         NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
         fragments.add(my_notice);
         PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
@@ -92,6 +102,8 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
 
     @OnClick(R.id.fab)
     public void fabClick() {
+        other = true;
+        other2 = true;
         startActivity(new Intent(this, NoticeTemplateActivity.class));
     }
 

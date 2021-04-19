@@ -125,6 +125,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
                 intent.putExtra("content",recordsBean.getContent());
                 intent.putExtra("template",true);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 

@@ -91,6 +91,7 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
     @OnClick(R.id.ll_add)
     public void addClick() {
         jupm(this, NoticeCreateActivity.class);
+        finish();
     }
 
     @Override

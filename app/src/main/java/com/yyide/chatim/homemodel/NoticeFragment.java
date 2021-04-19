@@ -2,6 +2,7 @@ package com.yyide.chatim.homemodel;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,9 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 
     @BindView(R.id.ll_notice)
     LinearLayout ll_notice;
+
+    @BindView(R.id.tv_title)
+    TextView tv_title;
 
     OkHttpClient mOkHttpClient = new OkHttpClient();
 
@@ -112,6 +116,10 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
                 jump = true;
                 notice_content.setText(data.getContent());
                 notice_time.setText(DateUtils.switchTime(data.getCreatedDateTime(),"yyyy-MM-dd"));
+                if (!TextUtils.isEmpty(data.getTitle())) {
+                    tv_title.setVisibility(View.VISIBLE);
+                    tv_title.setText("《"+data.getTitle()+"》");
+                }
             }else {
                 jump = false;
                 notice_content.setText("暂无消息公告");

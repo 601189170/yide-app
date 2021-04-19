@@ -57,6 +57,8 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
     EditText et_input_content;//内容
    @BindView(R.id.tv_show_ids)
     TextView tv_show_ids;//内容
+    @BindView(R.id.tv_show_timed_time)
+    TextView tv_show_timed_time;//显示定时的时间
 
     private static int REQUEST_CODE = 100;
 
@@ -291,6 +293,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Long time = Long.valueOf(millseconds);
         timingTime = simpleDateFormat.format(new Date(time));
+        tv_show_timed_time.setText(timingTime);
     }
 
     @Override

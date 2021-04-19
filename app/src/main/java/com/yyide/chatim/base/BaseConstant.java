@@ -35,9 +35,9 @@ public class BaseConstant {
      * 请求ip==>baseUrl
      */
 //    public static final String API_SERVER_URL = "http://192.168.3.114:8888";
-//    public static final String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
+    public static final String API_SERVER_URL = "https://api.uat.edu.1d1j.net";
     //线上环境
-    public static final String API_SERVER_URL = "https://api.edu.1d1j.cn";
+//    public static final String API_SERVER_URL = "https://api.edu.1d1j.cn";
 
     /*Base宽*/
     public static int BaseWith =171;

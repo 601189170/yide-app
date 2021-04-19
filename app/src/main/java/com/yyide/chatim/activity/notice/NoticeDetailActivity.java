@@ -77,6 +77,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         if ("1".equals(status) && type == 1) {
             tv_confirm.setSelected(false);
             tv_confirm.setClickable(false);
+            tv_confirm.setText("已确认");
             tv_confirm.setBackground(this.getDrawable(R.drawable.bg_corners_gray2_18));
             tv_confirm.setTextColor(this.getResources().getColor(R.color.black10));
         }
@@ -100,6 +101,10 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 //        tv_notice_author.setText();
 //        tv_notice_time.setText();
 //        tv_notice_content.setText();
+        loadNoticeDetail();
+    }
+
+    private void loadNoticeDetail() {
         if (signId > 0) {//推送消息ID
             mvpPresenter.noticeDetail(id, signId, TYPE_JG_PUSH);
         } else {
@@ -109,6 +114,9 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
 
     @OnClick(R.id.back_layout)
     public void click() {
+        Intent intent = getIntent();
+        intent.putExtra("update", true);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
@@ -173,6 +181,15 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
                 signId = data.getSignId();
                 totalNumber = data.getTotalNumber();
                 readNumber = data.getReadNumber();
+                status = data.getStatus();
+                Log.e(TAG, "noticeDetail: status="+status+",type="+type );
+                if ("1".equals(status) && (type == 1||type == TYPE_CONFIRM ||type==TYPE_JG_PUSH && type == TYPE_UNCONFIRM)) {
+                    tv_confirm.setSelected(false);
+                    tv_confirm.setClickable(false);
+                    tv_confirm.setText("已确认");
+                    tv_confirm.setBackground(this.getDrawable(R.drawable.bg_corners_gray2_18));
+                    tv_confirm.setTextColor(this.getResources().getColor(R.color.black10));
+                }
             }
             return;
         }
@@ -195,12 +212,14 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     public void updateMyNotice(BaseRsp baseRsp) {
         if (baseRsp.getCode() == 200) {
             ToastUtils.showShort("确认" + baseRsp.getMsg());
-            new Handler().postDelayed(() -> {
-                Intent intent = getIntent();
-                intent.putExtra("update", true);
-                setResult(RESULT_OK, intent);
-                finish();
-            }, 1000);
+            //请求成功后，刷新界面
+            loadNoticeDetail();
+//            new Handler().postDelayed(() -> {
+//                Intent intent = getIntent();
+//                intent.putExtra("update", true);
+//                setResult(RESULT_OK, intent);
+//                finish();
+//            }, 1000);
         }
     }
 

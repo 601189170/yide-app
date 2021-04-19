@@ -60,9 +60,6 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-
-    private static final int REQUEST_CODE = 100;
-
     private boolean refresh = false;
     private boolean loading = false;
     private int curIndex = 1;
@@ -123,9 +120,33 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
             }
             intent.putExtra("id", noticeAnnouncementModel.getId());
             intent.putExtra("status", noticeAnnouncementModel.getStatus());
-            startActivityForResult(intent, REQUEST_CODE);
+            if (getActivity() instanceof NoticeAnnouncementActivity) {
+                NoticeAnnouncementActivity activity = (NoticeAnnouncementActivity) getActivity();
+                if (!activity.other) {
+                    activity.other = true;
+                }
+            }
+            startActivity(intent);
         });
         mvpPresenter.noticeList(1, curIndex, 10);
+        refresh = true;
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getActivity() instanceof NoticeAnnouncementActivity){
+            NoticeAnnouncementActivity activity = (NoticeAnnouncementActivity) getActivity();
+            boolean other = activity.other;
+            Log.e(TAG, "onStart1: "+other );
+           if (other){
+               activity.other = false;
+               mvpPresenter.noticeList(1, 1, 10);
+               refresh = true;
+               swipeRefreshLayout.setRefreshing(true);
+           }
+        }
     }
 
     @Override
@@ -168,20 +189,14 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
     @Override
     public void noticeListFail(String msg) {
         Log.e(TAG, "noticeListFail: " + msg);
+        refresh = false;
+        swipeRefreshLayout.setRefreshing(false);
         showBlankPage();
         noticeAnnouncementListAdapter.setIsLoadMore(false);
         noticeAnnouncementListAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, "onActivityResult: requestCode:" + requestCode + ", resultCode:" + resultCode);
-        if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
-            refresh = true;//表示数据更新后，需要清除之前的数据
-            mvpPresenter.noticeList(1, 1, 10);
-        }
-    }
+
 
     @Override
     public void onRefresh() {
