@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,10 +18,18 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
 import com.kevin.crop.UCrop;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.model.BaseRsp;
+import com.yyide.chatim.model.FaceOssBean;
+import com.yyide.chatim.presenter.FaceUploadPresenter;
 import com.yyide.chatim.utils.DisplayUtils;
+import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.view.FaceUploadView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +40,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class FaceCaptureActivity extends BaseActivity {
+public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> implements FaceUploadView {
     private static final String TAG = "FaceCaptureActivity";
     @BindView(R.id.title)
     TextView title;
@@ -46,6 +55,10 @@ public class FaceCaptureActivity extends BaseActivity {
     Button btn_start_capture;//已经上传过人脸的，显示重新采集，默认开始采集
 
     private static final int REQUEST_TAKE_PHOTO = 1;
+    private String identity;
+    private String classesId;
+    private int depId;
+    private String realname;
 
     @Override
     public int getContentViewID() {
@@ -56,7 +69,20 @@ public class FaceCaptureActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText("人脸采集");
-        mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.jpeg"));
+        mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.png"));
+        identity = SpData.getIdentityInfo().getIdentity();
+        if (SpData.getClassInfo() != null){
+            classesId = SpData.getClassInfo().classesId;
+        }
+        depId = SpData.getIdentityInfo().teacherDepId;
+        realname = SpData.getIdentityInfo().realname;
+
+        mvpPresenter.getFaceData(identity,realname,classesId,depId+"");
+    }
+
+    @Override
+    protected FaceUploadPresenter createPresenter() {
+        return new FaceUploadPresenter(this);
     }
 
     String currentPhotoPath;
@@ -154,10 +180,17 @@ public class FaceCaptureActivity extends BaseActivity {
                 bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
                 iv_face.setImageBitmap(bmp);
                 tv_face_capture_tip.setVisibility(View.VISIBLE);
+                tv_face_capture_tip.setText("人脸上传中...");
+                btn_start_capture.setText("重新采集");
+                btn_start_capture.setClickable(false);
+                btn_start_capture.setAlpha(0.5f);
                 //去上传人脸图片
             } catch (FileNotFoundException e) {
             } catch (IOException e) {
             }
+            //图片上传
+            mvpPresenter.updateFaceData(identity,realname,classesId,depId+"",imagePath);
+
             File file = new File(currentPhotoPath);
             if (file.exists()) {
                 file.delete();
@@ -210,5 +243,55 @@ public class FaceCaptureActivity extends BaseActivity {
 
         Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
         imageView.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void faceUploadSuccess(BaseRsp baseRsp) {
+        Log.e(TAG, "faceUploadSuccess: " + baseRsp.toString());
+        ToastUtils.showShort(""+baseRsp.getMsg());
+        tv_face_capture_tip.setText("人脸上传成功");
+        mvpPresenter.getFaceData(identity,realname,classesId,depId+"");
+    }
+
+    @Override
+    public void faceUploadFail(String msg) {
+        Log.e(TAG, "faceUploadFail: " + msg);
+        ToastUtils.showShort("提交失败："+msg);
+        tv_face_capture_tip.setText("人脸上传失败");
+        mvpPresenter.getFaceData(identity,realname,classesId,depId+"");
+    }
+
+    @Override
+    public void getFaceDataSuccess(FaceOssBean faceOssBean) {
+        Log.e(TAG, "getFaceDataSuccess: "+faceOssBean.toString() );
+        if (faceOssBean.getCode() == 200) {
+            if (faceOssBean.getData() != null) {
+                FaceOssBean.DataBean data = faceOssBean.getData();
+                String path = data.getPath();
+                if (!TextUtils.isEmpty(path)) {
+                    tv_face_capture_tip.setVisibility(View.VISIBLE);
+                    tv_face_capture_tip.setText(""+data.getStatus());
+                    btn_start_capture.setText("重新采集");
+                    //加载图片
+                    Glide.with(this).load(path).into(iv_face);
+                }
+            }
+        }
+
+        btn_start_capture.setClickable(true);
+        btn_start_capture.setAlpha(1f);
+    }
+
+    @Override
+    public void getFaceDataFail(String msg) {
+        Log.e(TAG, "getFaceDataFail: "+msg );
+        ToastUtils.showShort(""+msg);
+        btn_start_capture.setClickable(true);
+        btn_start_capture.setAlpha(1f);
+    }
+
+    @Override
+    public void showError() {
+
     }
 }

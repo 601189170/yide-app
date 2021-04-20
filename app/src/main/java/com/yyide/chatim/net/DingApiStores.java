@@ -10,6 +10,7 @@ import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.DeviceUpdateRsp;
+import com.yyide.chatim.model.FaceOssBean;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.HelpItemRep;
@@ -43,6 +44,7 @@ import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.mobileRsp;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -53,6 +55,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -361,5 +364,29 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/notice/getMyNoticePage")
     Observable<TodoRsp> getMyNoticePage(@QueryMap HashMap<String, Object> map);
+
+    //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
+    //上传学生face
+    @Multipart
+    @POST("/face/cloud-face/face/toStudentOss")
+    Observable<BaseRsp> toStudentOss(@PartMap Map<String, RequestBody> map,@Part MultipartBody.Part file);
+
+    //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/toTeacherOss
+    //上传教师face
+    @Multipart
+    @POST("/face/cloud-face/teacher/face/toTeacherOss")
+    Observable<BaseRsp> toTeacherOss(@PartMap Map<String, RequestBody> map,@Part MultipartBody.Part file);
+
+    //https://api.uat.edu.1d1j.net/face/cloud-face/face/getStudentOss
+    //查询学生头像
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/face/getStudentOss")
+    Observable<FaceOssBean> getStudentOss(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/getTeacherOss
+    //查询老师头像
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/teacher/face/getTeacherOss")
+    Observable<FaceOssBean> getTeacherOss(@Body RequestBody requestBody);
 
 }
