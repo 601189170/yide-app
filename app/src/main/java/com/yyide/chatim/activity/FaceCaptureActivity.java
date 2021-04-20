@@ -56,7 +56,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
 
     private static final int REQUEST_TAKE_PHOTO = 1;
     private String identity;
-    private String classesId;
+    private int classesId;
     private int depId;
     private String realname;
 
@@ -71,13 +71,11 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         title.setText("人脸采集");
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.png"));
         identity = SpData.getIdentityInfo().getIdentity();
-        if (SpData.getClassInfo() != null){
-            classesId = SpData.getClassInfo().classesId;
-        }
+        classesId = SpData.getIdentityInfo().classesId;
         depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
-
-        mvpPresenter.getFaceData(identity,realname,classesId,depId+"");
+        Log.e("FaceUploadPresenter", "getFaceData: identity="+identity+"，name="+realname +",classId="+classesId+",depId="+depId);
+        mvpPresenter.getFaceData(identity,realname,classesId,depId);
     }
 
     @Override
@@ -189,7 +187,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             } catch (IOException e) {
             }
             //图片上传
-            mvpPresenter.updateFaceData(identity,realname,classesId,depId+"",imagePath);
+            mvpPresenter.updateFaceData(identity,realname,classesId,depId,imagePath);
 
             File file = new File(currentPhotoPath);
             if (file.exists()) {
@@ -249,8 +247,10 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     public void faceUploadSuccess(BaseRsp baseRsp) {
         Log.e(TAG, "faceUploadSuccess: " + baseRsp.toString());
         ToastUtils.showShort(""+baseRsp.getMsg());
-        tv_face_capture_tip.setText("人脸上传成功");
-        mvpPresenter.getFaceData(identity,realname,classesId,depId+"");
+        if (baseRsp.getCode() == 200){
+            tv_face_capture_tip.setText("人脸上传成功");
+        }
+        mvpPresenter.getFaceData(identity,realname,classesId,depId);
     }
 
     @Override
@@ -258,7 +258,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         Log.e(TAG, "faceUploadFail: " + msg);
         ToastUtils.showShort("提交失败："+msg);
         tv_face_capture_tip.setText("人脸上传失败");
-        mvpPresenter.getFaceData(identity,realname,classesId,depId+"");
+        mvpPresenter.getFaceData(identity,realname,classesId,depId);
     }
 
     @Override

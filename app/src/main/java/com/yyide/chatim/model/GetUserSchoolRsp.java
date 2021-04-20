@@ -83,7 +83,7 @@ public class GetUserSchoolRsp {
         public String password;
         public int userId;
         public int schoolId;
-        public String classesId;
+        public int classesId;
         public String classesName;
         public int parentId;
         public String schoolName;

@@ -207,6 +207,8 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         Log.e(TAG, "deleteAnnouncement: " + baseRsp.toString());
         if (baseRsp.getCode() == 200) {
             ToastUtils.showShort("删除成功！");
+            curIndex = 1;
+            refresh = true;
             mvpPresenter.noticeList(2, 1, 10);
         }
     }

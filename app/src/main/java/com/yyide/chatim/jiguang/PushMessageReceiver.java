@@ -58,7 +58,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
                 intent.putExtra("type", 2);
                 intent.putExtra("signId", pushModel.getSignId());
                 intent.putExtra("id", pushModel.getId());
-                intent.putExtra("status", 2);
+                intent.putExtra("status", "2");
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 context.startActivity(intent);
             } else if ("2".equals(pushModel.getPush_type())) {//代办

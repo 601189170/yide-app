@@ -182,8 +182,9 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
                 totalNumber = data.getTotalNumber();
                 readNumber = data.getReadNumber();
                 status = data.getStatus();
-                Log.e(TAG, "noticeDetail: status="+status+",type="+type );
-                if ("1".equals(status) && (type == 1||type == TYPE_CONFIRM ||type==TYPE_JG_PUSH && type == TYPE_UNCONFIRM)) {
+                Log.e(TAG, "noticeDetail: status="+("1".equals(status))+",type="+type );
+                if ("1".equals(status) && (type == 1||type == TYPE_CONFIRM ||type==TYPE_JG_PUSH || type == TYPE_UNCONFIRM)) {
+                    Log.e(TAG, "noticeDetail: "+type );
                     tv_confirm.setSelected(false);
                     tv_confirm.setClickable(false);
                     tv_confirm.setText("已确认");
