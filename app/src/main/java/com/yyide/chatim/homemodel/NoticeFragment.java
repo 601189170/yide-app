@@ -115,7 +115,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
             if (data != null){
                 jump = true;
                 notice_content.setText(data.getContent());
-                notice_time.setText(DateUtils.switchTime(data.getCreatedDateTime(),"yyyy-MM-dd"));
+                notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(),"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd"));
                 if (!TextUtils.isEmpty(data.getTitle())) {
                     tv_title.setVisibility(View.VISIBLE);
                     tv_title.setText("《"+data.getTitle()+"》");

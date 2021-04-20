@@ -168,7 +168,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         if (noticeDetailRsp.getCode() == 200) {
             if (data != null) {
                 id = data.getId();//出推送过过来的通知确认
-                String productionTime = DateUtils.switchTime(data.getCreatedDateTime(), "MM.dd HH:mm");
+                String productionTime = DateUtils.formatTime(data.getProductionTime(), "yyyy-MM-dd HH:mm:ss","yyyy.MM.dd HH:mm");
                 tv_notice_title.setText(data.getTitle());
                 tv_notice_author.setText(data.getProductionTarget());
                 tv_notice_time.setText(productionTime);
