@@ -2,6 +2,7 @@ package com.yyide.chatim.home;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -125,6 +126,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             mvpPresenter.getUserSchool();
             mvpPresenter.getHomeNotice();
         });
+        initVerticalTextview(null);
     }
 
     @Override
@@ -144,12 +146,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 list.add(item.getContent());
             }
         }
-//        list.add("罗欣的主监护人提交的请假需要你审批");
-//        list.add("李克用的主监护人提交的请假需要你审批");
-//        list.add("王保华的主监护人提交的请假需要你审批");
-//        list.add("秦鑫的主监护人提交的请假需要你审批");
-//        list.add("张玉明的主监护人提交的请假需要你审批");
-//        spmsg.setText(20, 0, Color.WHITE);//设置属性
+        list.add("罗欣的主监护人提交的请假需要你审批");
+        list.add("李克用的主监护人提交的请假需要你审批");
+        list.add("王保华的主监护人提交的请假需要你审批");
+        list.add("秦鑫的主监护人提交的请假需要你审批");
+        list.add("张玉明的主监护人提交的请假需要你审批");
+        //spmsg.setText(20, 0, Color.WHITE);//设置属性
         Log.e(TAG, "initVerticalTextview: " + list);
         spmsg.setTextStillTime(3000);//设置停留时长间隔
         spmsg.setAnimTime(300);//设置进入和退出的时间间隔
@@ -198,7 +200,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
                 break;
             case R.id.class_honor_content:
-                startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
                 break;
             default:
                 break;
@@ -313,15 +315,15 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void getIndexMyNotice(NoticeHomeRsp rsp) {
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
-            tv_todo.setVisibility(View.VISIBLE);
-            initVerticalTextview(rsp.getData());
+//            tv_todo.setVisibility(View.VISIBLE);
+//            initVerticalTextview(rsp.getData());
         } else {
-            tv_todo.setVisibility(View.GONE);
-            List<NoticeHomeRsp.DataBean> noticeHomeRsps = new ArrayList<>();
-            NoticeHomeRsp.DataBean dataBean = new NoticeHomeRsp.DataBean();
-            dataBean.setContent("暂无代办消息通知");
-            noticeHomeRsps.add(dataBean);
-            initVerticalTextview(noticeHomeRsps);
+//            tv_todo.setVisibility(View.GONE);
+//            List<NoticeHomeRsp.DataBean> noticeHomeRsps = new ArrayList<>();
+//            NoticeHomeRsp.DataBean dataBean = new NoticeHomeRsp.DataBean();
+//            dataBean.setContent("暂无代办消息通知");
+//            noticeHomeRsps.add(dataBean);
+//            initVerticalTextview(noticeHomeRsps);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.yyide.chatim.homemodel;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,7 @@ import com.yyide.chatim.adapter.ClassAnnounAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.ClassesBannerRsp;
+import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.HomeBannerPresenter;
 import com.yyide.chatim.view.HomeBannerView;
@@ -69,14 +68,14 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         announAdapter = new ClassAnnounAdapter(announRoll);
         announRoll.setHintView(null);
         //模拟数据
-        List<ClassesBannerRsp.DataBean> dataBeans = new ArrayList<>();
+        List<ClassesPhotoBannerRsp.DataBean> dataBeans = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            ClassesBannerRsp.DataBean item = new ClassesBannerRsp.DataBean();
+            ClassesPhotoBannerRsp.DataBean item = new ClassesPhotoBannerRsp.DataBean();
             item.setClassifyId(imgs[i]);
             dataBeans.add(item);
         }
-        announAdapter.notifyData(dataBeans);
-        indexAdapter.setList(dataBeans);
+//        announAdapter.notifyData(dataBeans);
+//        indexAdapter.setList(dataBeans);
 
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
@@ -114,10 +113,10 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
 
     @Override
-    public void getClassBannerListSuccess(ClassesBannerRsp model) {
+    public void getClassBannerListSuccess(ClassesPhotoBannerRsp model) {
         if (model != null && model.getData() != null) {
             if (model.getData().size() >= 5) {
-                List<ClassesBannerRsp.DataBean> dataBeans = model.getData().subList(0, 5);
+                List<ClassesPhotoBannerRsp.DataBean> dataBeans = model.getData().subList(0, 5);
                 announAdapter.notifyData(dataBeans);
                 indexAdapter.setList(dataBeans);
             } else {
@@ -138,7 +137,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
             Log.d("HomeRefresh", BannerFragment.class.getSimpleName());
 
             //        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-//            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
+            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
 //        }
         }
     }

@@ -47,7 +47,7 @@ public class GenerateTestUserSig {
     //线上版本APPID
     public static final int SDKAPPID_RELEASE = 1400510965;
     //UAT- APPID
-    public static final int SDKAPPID_UAT = 1400491015;
+    public static final int SDKAPPID_UAT = 1400511599;
 
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
@@ -70,9 +70,10 @@ public class GenerateTestUserSig {
      * 注意：该方案仅适用于调试Demo，正式上线前请将 UserSig 计算代码和密钥迁移到您的后台服务器上，以避免加密密钥泄露导致的流量盗用。
      * 文档：https://cloud.tencent.com/document/product/269/32688#Server
      */
-//    private static final String SECRETKEY = "";
-//    private static final String SECRETKEY = "c2813cf493e3a65ae0e191903b1dd7695307c08c69af8bc4f54be1fb4fa7c01d";
-    private static final String SECRETKEY = "49868c7c1f10b2af3fe633fff5e868429cd9ec312185490f6ccc6b1667bee7bc";
+    private static final String SECRETKEY_UAT = "b9c1e8f05f49028d17853ef14c82f2d47c93c045a866a0408e974d03c6aeb779";
+    private static final String SECRETKEY_RELEASE = "d4212450f2c178a7c524dec1f0726979597865c52da0db2fff1272aab24f8e32";
+
+    private static final String SECRETKEY = BuildConfig.DEBUG ? SECRETKEY_UAT : SECRETKEY_RELEASE;
 
     /**
      * 计算 UserSig 签名

@@ -49,9 +49,6 @@ public class BottomHeadMenuPop extends PopupWindow {
 
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
 
-
-        FrameLayout layout = (FrameLayout) mView.findViewById(R.id.layout);
-
         FrameLayout bg = (FrameLayout) mView.findViewById(R.id.bg);
         TextView s1 = (TextView) mView.findViewById(R.id.s1);
         TextView s2 = (TextView) mView.findViewById(R.id.s2);

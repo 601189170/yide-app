@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.Space;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
@@ -30,6 +31,7 @@ import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.SelectUserSchoolRsp;
 import com.yyide.chatim.model.UserInfo;
+import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.utils.DemoLog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,7 +73,6 @@ public class SwichSchoolPop extends PopupWindow {
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
-        FrameLayout layout = mView.findViewById(R.id.layout);
         FrameLayout bg = mView.findViewById(R.id.bg);
         ListView listview = mView.findViewById(R.id.listview);
         SwichSchoolAdapter adapter = new SwichSchoolAdapter();
@@ -229,7 +230,7 @@ public class SwichSchoolPop extends PopupWindow {
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
                 if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
                     SpData.setIdentityInfo(rsp);
-                    initIm(SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
+                    getUserSig();
                 } else {
                     ToastUtils.showShort(rsp.msg);
                 }
@@ -237,15 +238,65 @@ public class SwichSchoolPop extends PopupWindow {
         });
     }
 
-    void initIm(String mUser) {
-        UserInfo.getInstance().setUserId(mUser);
+    //计算 UserSig
+    void getUserSig() {
+        RequestBody body = new FormBody.Builder()
+                .build();
+        //请求组合创建
+        Request request = new Request.Builder()
+//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
+//                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
+                .addHeader("Authorization", SpData.User().token)
+                .post(body)
+                .build();
+        //发起请求
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                //Log.e(TAG, "getUserSigonFailure: " + e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                //Log.e(TAG, "getUserSig==>: " + data);
+                getUserSigRsp bean = JSON.parseObject(data, getUserSigRsp.class);
+                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+                    SPUtils.getInstance().put(SpData.USERSIG, bean.data);
+                    initIm(bean.data);
+                } else {
+//                    hideLoading();
+                    ToastUtils.showShort(bean.msg);
+                }
+            }
+        });
+    }
+
+    void initIm(String userSig) {
+        UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
         // 获取userSig函数
-        final String userSig = GenerateTestUserSig.genTestUserSig(mUser);
-        TUIKit.login(mUser, userSig, new IUIKitCallBack() {
+        //final String userSig = GenerateTestUserSig.genTestUserSig(mUser);
+        TUIKit.login(SpData.getIdentityInfo().userId + "", userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
-                context.runOnUiThread(() -> ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc));
+                //context.runOnUiThread(() -> ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc));
                 DemoLog.i("TAG", "imLogin errorCode = " + code + ", errorInfo = " + desc);
+                UserInfo.getInstance().setAutoLogin(true);
+                UserInfo.getInstance().setUserSig(userSig);
+                UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
+                Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                }
+//                ActivityUtils.finishAllActivities();
+//                Intent intent = new Intent(context, MainActivity.class);
+//                context.startActivity(intent);
+                //刷新首页数据
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+                if (mOnCheckCallBack != null) {
+                    mOnCheckCallBack.onCheckCallBack();
+                }
             }
 
             @Override
@@ -253,7 +304,7 @@ public class SwichSchoolPop extends PopupWindow {
 
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
-                UserInfo.getInstance().setUserId(mUser);
+                UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
                 Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();

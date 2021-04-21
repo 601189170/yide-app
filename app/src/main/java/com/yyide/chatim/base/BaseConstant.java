@@ -1,8 +1,6 @@
 package com.yyide.chatim.base;
 
 
-import android.os.Build;
-
 import com.yyide.chatim.BuildConfig;
 
 import okhttp3.MediaType;
@@ -38,12 +36,16 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-//    public static final String API_SERVER_URL = "http://192.168.3.114:8888";
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.114:8888";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-    public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
+    public static final String API_SERVER_URL = !BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
+    //学生作品
+    public static final String STUDENT_HONOR_URL = API_SERVER_URL + "/classcardapp/dist/index.html#/studentHoner";
+    //班级相册
+    public static final String CLASS_PHOTO_URL = API_SERVER_URL + "/classcardapp/dist/index.html#/classPhoto";
     /*Base宽*/
     public static int BaseWith = 171;
 
@@ -51,7 +53,6 @@ public class BaseConstant {
     public static int BaseHeight = 177;
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
 
     /**
      * request Code 从相册选择照片不裁切
@@ -73,6 +74,7 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_USER_EMAIL = "type_update_user_email";
     public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
     public static final String TYPE_SELECT_MESSAGE_TODO = "type_select_message_todo";
+    public static final String TYPE_MAIN = "type_main";
 
     public static final String TYPE_UPDATE_HOME = "type_update_home";
 

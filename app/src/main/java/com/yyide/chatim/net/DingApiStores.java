@@ -6,7 +6,7 @@ import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
-import com.yyide.chatim.model.ClassesBannerRsp;
+import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.DeviceUpdateRsp;
@@ -26,6 +26,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
+import com.yyide.chatim.model.StudentHonorRsp;
 import com.yyide.chatim.model.StudentScopeRsp;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.TemplateListRsp;
@@ -36,8 +37,6 @@ import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
-import com.yyide.chatim.model.addUserEquipmentInfoRsp;
-import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
@@ -49,7 +48,6 @@ import java.util.Map;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -103,6 +101,10 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/timetable/cloud-timetable/schedule/selectSchByTeaid")
     Observable<SelectSchByTeaidRsp> selectSchByTeaid();
+
+    //查询学生课程信息
+    @GET("/timetable/cloud-timetable/schedule/selectClassInfoByClassId?")
+    Observable<SelectSchByTeaidRsp> selectClassInfoByClassId(@Query("classId") String classId);
 
     //查询该老师教哪几个班级
     @POST("/timetable/cloud-timetable/schedule/listAllScheduleByTeacherId")
@@ -310,7 +312,7 @@ public interface DingApiStores {
     //获取班级相册
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/android/videoalbum/list")
-    Observable<ClassesBannerRsp> getClassPhotoList(@Body RequestBody requestBody);
+    Observable<ClassesPhotoBannerRsp> getClassPhotoList(@Body RequestBody requestBody);
 
     //获取班级相册
     @Headers({"Content-Type: application/json", "Accept: application/json"})
@@ -369,13 +371,13 @@ public interface DingApiStores {
     //上传学生face
     @Multipart
     @POST("/face/cloud-face/face/toStudentOss")
-    Observable<BaseRsp> toStudentOss(@PartMap Map<String, RequestBody> map,@Part MultipartBody.Part file);
+    Observable<BaseRsp> toStudentOss(@PartMap Map<String, RequestBody> map, @Part MultipartBody.Part file);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/toTeacherOss
     //上传教师face
     @Multipart
     @POST("/face/cloud-face/teacher/face/toTeacherOss")
-    Observable<BaseRsp> toTeacherOss(@PartMap Map<String, RequestBody> map,@Part MultipartBody.Part file);
+    Observable<BaseRsp> toTeacherOss(@PartMap Map<String, RequestBody> map, @Part MultipartBody.Part file);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/getStudentOss
     //查询学生头像
@@ -389,4 +391,7 @@ public interface DingApiStores {
     @POST("/face/cloud-face/teacher/face/getTeacherOss")
     Observable<FaceOssBean> getTeacherOss(@Body RequestBody requestBody);
 
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/android/studentWork/list")
+    Observable<StudentHonorRsp> getStudentHonorList(@Body RequestBody requestBody);
 }

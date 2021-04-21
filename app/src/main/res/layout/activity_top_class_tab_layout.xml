@@ -14,9 +14,10 @@
 
         <FrameLayout
             android:id="@+id/classlayout"
-            android:layout_width="115dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="@dimen/dp_12"
             android:layout_marginBottom="8dp"
             android:background="@drawable/bg_stoke_gray_corners2">
 
@@ -26,15 +27,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="11dp"
+                android:drawableEnd="@drawable/icon_right"
+                android:drawablePadding="@dimen/dp_10"
+                android:ellipsize="end"
+                android:lines="1"
                 android:textColor="#333333"
                 android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|right"
-                android:layout_marginRight="11dp"
-                android:background="@drawable/icon_right" />
         </FrameLayout>
 
         <LinearLayout

@@ -13,9 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.utils.VHUtil;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,21 +22,21 @@ import java.util.List;
  * Created by Hao on 2017/11/29.
  */
 
-public class ClassAnnounAdapter extends LoopPagerAdapter {
+public class StudentHonorAdapter extends LoopPagerAdapter {
 
-    public List<ClassesPhotoBannerRsp.DataBean> list = new ArrayList<>();
+    public List<String> list = new ArrayList<>();
     Activity context;
 
-    public ClassAnnounAdapter(RollPagerView viewPager) {
+    public StudentHonorAdapter(RollPagerView viewPager) {
         super(viewPager);
     }
 
-    public ClassAnnounAdapter(RollPagerView viewPager, Activity context) {
+    public StudentHonorAdapter(RollPagerView viewPager, Activity context) {
         super(viewPager);
         this.context = context;
     }
 
-    private ClassesPhotoBannerRsp.DataBean getItem(int position) {
+    private String getItem(int position) {
         return list.get(position);
     }
 
@@ -57,7 +55,7 @@ public class ClassAnnounAdapter extends LoopPagerAdapter {
         RoundedCorners roundedCorners = new RoundedCorners(10);
         //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
         RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-        Glide.with(container.getContext()).load(container.getResources().getDrawable((getItem(position).getClassifyId()))).apply(options).into(img);
+        Glide.with(container.getContext()).load(getItem(position)).apply(options).into(img);
         return view;
     }
 
@@ -76,7 +74,7 @@ public class ClassAnnounAdapter extends LoopPagerAdapter {
         return list.size();
     }
 
-    public void notifyData(List<ClassesPhotoBannerRsp.DataBean> list) {
+    public void notifyData(List<String> list) {
         this.list = list;
         notifyDataSetChanged();
     }

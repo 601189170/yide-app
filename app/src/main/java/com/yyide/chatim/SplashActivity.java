@@ -172,14 +172,15 @@ public class SplashActivity extends AppCompatActivity {
         TUIKit.login(mUserInfo.getUserId(), mUserInfo.getUserSig(), new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
-                        Log.e(TAG, "UserInfo: " + JSON.toJSONString(UserInfo.getInstance()));
-//                        startMain();
-                        startLogin();
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    public void run() {
+//                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+//                        Log.e(TAG, "UserInfo: " + JSON.toJSONString(UserInfo.getInstance()));
+////                        startMain();
+//                        startLogin();
+//                    }
+//                });
+                startMain();
                 DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
             }
 

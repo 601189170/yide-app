@@ -24,6 +24,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.tencent.imsdk.v2.V2TIMSignalingInfo;
+import com.tencent.liteav.model.CallModel;
+import com.tencent.liteav.model.TRTCAVCallImpl;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.yyide.chatim.base.BaseConstant;
@@ -44,6 +47,8 @@ import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.presenter.MainPresenter;
+import com.yyide.chatim.utils.Constants;
+import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.view.MainView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,18 +92,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public int IdType = 1;
     public String TAG = "MainActivity";
 
-    private Dialog mDialog;
-    /**
-     * request Code 从相册选择照片不裁切
-     **/
-    private final static int SELECT_ORIGINAL_PIC = 126;
-    /**
-     * request Code 拍取照片不裁切
-     **/
-    private final static int REQ_CODE = 127;
-    private Uri imageUri;
     private long firstTime = 0;
     private UserInfo mUserInfo;
+    private CallModel mCallModel;
 
     @Override
     public int getContentViewID() {
@@ -116,20 +112,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         mUserInfo = UserInfo.getInstance();
         EventBus.getDefault().register(this);
         setTab(0, 0);
-        //注册极光用户
-//        RegistJiGuang();
         //注册极光别名
         registerAlias();
     }
 
-    void RegistJiGuang() {
-        if (SpData.getIdentityInfo() != null) {
-            int userId = SpData.getIdentityInfo().userId;
-            String rid = JPushInterface.getRegistrationID(getApplicationContext());
-            String equipmentType = "1";
-            mvpPresenter.addUserEquipmentInfo(rid, userId + "", equipmentType);
-        }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        DemoLog.i(TAG, "onNewIntent");
+        mCallModel = (CallModel) intent.getSerializableExtra(Constants.CHAT_INFO);
     }
+
 
     @Override
     protected MainPresenter createPresenter() {
@@ -168,6 +161,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             setTab(1, 0);
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             registerAlias();
+        } else if (BaseConstant.TYPE_MAIN.equals(messageEvent.getCode())) {
+            ActivityUtils.finishToActivity(MainActivity.class, false);
+            setTab(0, 0);
         }
     }
 
@@ -219,7 +215,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             }
         }
     }
-
 
     @Override
     public void updateUnread(int count) {
@@ -339,15 +334,29 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    protected void onPause() {
-        isForeground = false;
-        super.onPause();
+    protected void onResume() {
+        Log.i(TAG, "onResume");
+        isForeground = true;
+        super.onResume();
+        if (mCallModel != null) {
+            TRTCAVCallImpl impl = (TRTCAVCallImpl) TRTCAVCallImpl.sharedInstance(BaseApplication.getInstance());
+            impl.stopCall();
+            final V2TIMSignalingInfo info = new V2TIMSignalingInfo();
+            info.setInviteID(mCallModel.callId);
+            info.setInviteeList(mCallModel.invitedList);
+            info.setGroupID(mCallModel.groupId);
+            info.setInviter(mCallModel.sender);
+            info.setData(mCallModel.data);
+            ((TRTCAVCallImpl) (TRTCAVCallImpl.sharedInstance(BaseApplication.getInstance()))).processInvite(
+                    info.getInviteID(), info.getInviter(), info.getGroupID(), info.getInviteeList(), info.getData());
+            mCallModel = null;
+        }
     }
 
     @Override
-    protected void onResume() {
-        isForeground = true;
-        super.onResume();
+    protected void onPause() {
+        isForeground = false;
+        super.onPause();
     }
 
     void setTab(int position, int type) {

@@ -20,7 +20,7 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
     }
 
     public void listByApp() {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.listByApp(), new ApiCallback<listByAppRsp>() {
             @Override
             public void onSuccess(listByAppRsp model) {
@@ -40,7 +40,7 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
     }
 
     public void selectListByApp() {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.selectListByApp(), new ApiCallback<listByAppRsp>() {
             @Override
             public void onSuccess(listByAppRsp model) {

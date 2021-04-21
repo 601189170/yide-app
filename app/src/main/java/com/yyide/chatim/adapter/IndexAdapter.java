@@ -1,13 +1,11 @@
 package com.yyide.chatim.adapter;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.ClassesBannerRsp;
 
 import org.jetbrains.annotations.NotNull;
 

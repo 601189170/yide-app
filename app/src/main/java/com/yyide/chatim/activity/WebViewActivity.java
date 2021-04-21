@@ -1,17 +1,24 @@
 package com.yyide.chatim.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -29,11 +36,15 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
+
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.utils.TakePicUtil;
 
 import java.io.File;
 import java.util.Calendar;
@@ -69,10 +80,6 @@ public class WebViewActivity extends BaseActivity {
         initAnimtor();
 
         initWebView();
-    }
-
-    public void back(View view) {
-        finish();
     }
 
     @SuppressLint("CheckResult")
@@ -274,7 +281,6 @@ public class WebViewActivity extends BaseActivity {
      */
     private void chooseBelow(int resultCode, Intent data) {
         Log.e("WangJ", "返回调用方法--chooseBelow");
-
         if (RESULT_OK == resultCode) {
             updatePhotos();
 

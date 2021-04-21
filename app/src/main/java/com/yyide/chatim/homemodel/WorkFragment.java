@@ -9,12 +9,10 @@ import android.view.ViewGroup;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.ClassAnnounAdapter;
 import com.yyide.chatim.adapter.ClassesHomeworkAnnounAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.presenter.WorkPresenter;
@@ -73,7 +71,7 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
         ViewPager viewPager = rollPagerView.getViewPager();
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

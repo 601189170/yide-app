@@ -222,6 +222,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         Luban.with(this)
                 .load(file)
                 .ignoreBy(100)
+                //.putGear(Luban.THIRD_GEAR)//压缩等级
                 .setTargetDir(Environment.getExternalStorageDirectory().getAbsolutePath())
                 .filter(path -> !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif")))
                 .setCompressListener(new OnCompressListener() {

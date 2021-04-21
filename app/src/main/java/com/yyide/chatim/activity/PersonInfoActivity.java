@@ -87,7 +87,7 @@ public class PersonInfoActivity extends BaseActivity {
         bean = JSON.parseObject(data, TeacherlistRsp.DataBean.RecordsBean.class);
         Log.e("TAG", "PersonInfoActivity: " + JSON.toJSONString(bean));
         if (bean != null) {
-            if (!"staff".equals(organization) || "2".equals(bean.userType)) {
+            if ((!TextUtils.isEmpty(bean.userType) && !"2".equals(bean.userType)) || !"staff".equals(organization)) {
                 ll_email.setVisibility(View.GONE);
                 ll_master.setVisibility(View.VISIBLE);
                 ll_vice.setVisibility(View.VISIBLE);
@@ -110,7 +110,9 @@ public class PersonInfoActivity extends BaseActivity {
                     if (i == bean.subjects.size()) {
                         stringBuffer.append(bean.subjects.get(i));
                     } else {
-                        stringBuffer.append(bean.subjects.get(i).subjectName + "、");
+                        if (bean.subjects.size() > 1) {
+                            stringBuffer.append(bean.subjects.get(i).subjectName + "、");
+                        }
                     }
                 }
             }

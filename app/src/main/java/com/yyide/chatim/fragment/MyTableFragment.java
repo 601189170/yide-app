@@ -15,12 +15,14 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PreparesLessonActivity;
 import com.yyide.chatim.adapter.MyTableAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.presenter.MyTablePresenter;
 import com.yyide.chatim.utils.TimeUtil;
@@ -73,7 +75,6 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
 
-        mvpPresenter.SelectSchByTeaid();
         tv_week.setText(TimeUtil.getWeek() + "周");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
         Date date = new Date(System.currentTimeMillis());
@@ -91,13 +92,17 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         });
 
         listview.setOnItemClickListener((parent, view1, position, id) -> {
-            SelectSchByTeaidRsp.DataBean item = adapter.getItem(position);
-            Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
-            intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
-            intent.putExtra("dataBean", item);
-            startActivity(intent);
+            //处理学生无法点击查看备课
+            if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_STUDENT.equals(SpData.getIdentityInfo().status)) {
+                SelectSchByTeaidRsp.DataBean item = adapter.getItem(position);
+                Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
+                intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
+                intent.putExtra("dataBean", item);
+                startActivity(intent);
+            }
         });
         classlayout.setVisibility(View.GONE);
+        getData();
     }
 
     private List<SelectSchByTeaidRsp.DataBean> getTableList(List<SelectSchByTeaidRsp.DataBean> list, int weekTime) {
@@ -120,6 +125,16 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_PREPARES_SAVE.equals(messageEvent.getCode())) {
+            getData();
+        }
+    }
+
+    private void getData() {
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_STUDENT.equals(SpData.getIdentityInfo().status)) {
+            if (SpData.getClassInfo() != null) {
+                mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
+            }
+        } else {
             mvpPresenter.SelectSchByTeaid();
         }
     }

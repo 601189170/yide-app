@@ -89,6 +89,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
             adapter.notifydata(listBean);
         }
         //initView();
+        if("2".equals(islast)){//代表还要下一级不查询当前Id数据
+            id = "0";
+        }
         //不穿ID表示查询当下你所属部门人员或学生列表
         if (!TextUtils.isEmpty(organization) && "staff".equals(organization)) {
             mvpPresenter.NoteBookByList(id, "", "", "", 30, 1);

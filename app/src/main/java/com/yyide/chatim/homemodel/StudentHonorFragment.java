@@ -7,16 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.StudentHonorListActivity;
-import com.yyide.chatim.adapter.ClassAnnounAdapter;
+import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.adapter.IndexAdapter;
+import com.yyide.chatim.adapter.StudentHonorAdapter;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseFragment;
-import com.yyide.chatim.model.ClassesBannerRsp;
+import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.StudentHonorRsp;
+import com.yyide.chatim.presenter.StudentHonorPresenter;
+import com.yyide.chatim.view.StudentHonorView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,23 +33,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import okhttp3.OkHttpClient;
 
 
-public class StudentHonorFragment extends BaseFragment {
+public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter> implements StudentHonorView {
 
     private View mBaseView;
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
     @BindView(R.id.grid)
     RecyclerView mHot;
-    ClassAnnounAdapter announAdapter;
+    StudentHonorAdapter announAdapter;
     IndexAdapter indexAdapter;
-    private int[] imgs = {R.drawable.student_1,
-            R.drawable.student_2,
-            R.drawable.student_3,
-            R.drawable.student_4,
-            R.drawable.student_5};
 
     @Nullable
     @Override
@@ -62,29 +58,21 @@ public class StudentHonorFragment extends BaseFragment {
         EventBus.getDefault().register(this);
 //        mvpPresenter.getMyData();
         indexAdapter = new IndexAdapter();
-        announAdapter = new ClassAnnounAdapter(announRoll);
+        announAdapter = new StudentHonorAdapter(announRoll);
         announRoll.setHintView(null);
-        announAdapter.setOnItemClickListener(new ClassAnnounAdapter.ItemClickListener() {
-            @Override
-            public void OnItemClickListener() {
-                startActivity(new Intent(getContext(), StudentHonorListActivity.class));
-            }
+        announAdapter.setOnItemClickListener(() -> {
+            //startActivity(new Intent(getContext(), StudentHonorListActivity.class));
+            Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+            intent.putExtra("url", BaseConstant.STUDENT_HONOR_URL);
+            view.getContext().startActivity(intent);
         });
-        //模拟数据
-        List<ClassesBannerRsp.DataBean> dataBeans = new ArrayList<>();
-        for (int i = 0; i < imgs.length; i++) {
-            ClassesBannerRsp.DataBean item = new ClassesBannerRsp.DataBean();
-            item.setClassifyId(imgs[i]);
-            dataBeans.add(item);
-        }
-        announAdapter.notifyData(dataBeans);
-        indexAdapter.setList(dataBeans);
+
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
         ViewPager viewPager = announRoll.getViewPager();
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -102,13 +90,57 @@ public class StudentHonorFragment extends BaseFragment {
 
             }
         });
+
+        if (SpData.getClassInfo() != null) {
+            mvpPresenter.getStudentHonorList(SpData.getClassInfo().classesId);
+        }
+    }
+
+    @Override
+    protected StudentHonorPresenter createPresenter() {
+        return new StudentHonorPresenter(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", ClassHonorFragment.class.getSimpleName());
+            if (SpData.getClassInfo() != null) {
+                mvpPresenter.getStudentHonorList(SpData.getClassInfo().classesId);
+            }
         }
+    }
+
+    @Override
+    public void getStudentHonorSuccess(StudentHonorRsp model) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            List<String> imgs = new ArrayList<>();
+            //StudentHonorRsp.DataBean data = model.getData().getRecords();
+            if (model.getData() != null && model.getData().getRecords() != null) {
+                for (StudentHonorRsp.DataBean.RecordsBean bean : model.getData().getRecords()) {
+                    if (bean.getWorksUrl() != null && bean.getWorksUrl().size() > 0) {
+                        for (String itme : bean.getWorksUrl()) {
+                            imgs.add(itme);
+                        }
+                    }
+                }
+            }
+
+            if (imgs.size() > 5) {
+                List<String> strings = imgs.subList(0, 5);
+                indexAdapter.setList(strings);
+                announAdapter.notifyData(strings);
+            } else {
+                List<String> img = imgs;
+                indexAdapter.setList(img);
+                announAdapter.notifyData(img);
+            }
+        }
+    }
+
+    @Override
+    public void getStudentHonorFail(String msg) {
+
     }
 
     @Override
@@ -116,5 +148,4 @@ public class StudentHonorFragment extends BaseFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
 }

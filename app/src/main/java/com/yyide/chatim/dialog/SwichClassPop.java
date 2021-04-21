@@ -72,8 +72,6 @@ public class SwichClassPop extends PopupWindow {
 
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
 
-        FrameLayout layout = mView.findViewById(R.id.layout);
-
         FrameLayout bg = mView.findViewById(R.id.bg);
         ListView listview = mView.findViewById(R.id.listview);
         SwichClassAdapter adapter = new SwichClassAdapter();

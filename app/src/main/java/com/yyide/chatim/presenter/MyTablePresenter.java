@@ -40,5 +40,23 @@ public class MyTablePresenter extends BasePresenter<MyTableView> {
         });
     }
 
+    public void selectClassInfoByClassId(String classId) {
+//        mvpView.showLoading();
+        addSubscription(dingApiStores.selectClassInfoByClassId(classId), new ApiCallback<SelectSchByTeaidRsp>() {
+            @Override
+            public void onSuccess(SelectSchByTeaidRsp model) {
+                mvpView.SelectSchByTeaid(model);
+            }
 
+            @Override
+            public void onFailure(String msg) {
+                mvpView.SelectSchByTeaidFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
 }

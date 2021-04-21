@@ -12,11 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.NoteBookActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.chat.ConversationFragment;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -60,6 +63,15 @@ public class MessageFragment extends BaseFragment {
         int type = getArguments().getInt("type", 0);
         Log.e(TAG, "onViewCreated: " + type);
         setTab(type);
+        setBookView();
+    }
+
+    private void setBookView() {
+        if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            note.setVisibility(View.GONE);
+        } else {
+            note.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -93,7 +105,7 @@ public class MessageFragment extends BaseFragment {
             case 0:
                 if (fg1 == null) {
                     fg1 = new ConversationFragment();
-                    ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
+                    ft.replace(R.id.content, fg1, String.valueOf(tab1.getId()));
                 } else
                     ft.show(fg1);
                 tab1.setChecked(true);
@@ -102,7 +114,7 @@ public class MessageFragment extends BaseFragment {
             case 1:
                 if (fg2 == null) {
                     fg2 = new TodoMsgFragment();
-                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
+                    ft.replace(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
                     ft.show(fg2);
                 tab2.setChecked(true);
@@ -131,7 +143,7 @@ public class MessageFragment extends BaseFragment {
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", MessageFragment.class.getSimpleName());
-
+            setBookView();
         }
     }
 

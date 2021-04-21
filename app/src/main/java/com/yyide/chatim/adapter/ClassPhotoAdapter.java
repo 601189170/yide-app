@@ -16,7 +16,6 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.utils.VHUtil;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +23,16 @@ import java.util.List;
  * Created by Hao on 2017/11/29.
  */
 
-public class ClassAnnounAdapter extends LoopPagerAdapter {
+public class ClassPhotoAdapter extends LoopPagerAdapter {
 
     public List<ClassesPhotoBannerRsp.DataBean> list = new ArrayList<>();
     Activity context;
 
-    public ClassAnnounAdapter(RollPagerView viewPager) {
+    public ClassPhotoAdapter(RollPagerView viewPager) {
         super(viewPager);
     }
 
-    public ClassAnnounAdapter(RollPagerView viewPager, Activity context) {
+    public ClassPhotoAdapter(RollPagerView viewPager, Activity context) {
         super(viewPager);
         this.context = context;
     }
@@ -57,7 +56,7 @@ public class ClassAnnounAdapter extends LoopPagerAdapter {
         RoundedCorners roundedCorners = new RoundedCorners(10);
         //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
         RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-        Glide.with(container.getContext()).load(container.getResources().getDrawable((getItem(position).getClassifyId()))).apply(options).into(img);
+        Glide.with(container.getContext()).load(getItem(position).getUrl()).apply(options).into(img);
         return view;
     }
 

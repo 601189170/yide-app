@@ -17,7 +17,8 @@
         <ProgressBar
             android:id="@+id/pb_webview"
             android:layout_width="match_parent"
-            android:layout_height="3dp" />
+            android:layout_height="3dp"
+            android:layout_gravity="top" />
 
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

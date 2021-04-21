@@ -1,6 +1,7 @@
 package com.yyide.chatim.homemodel;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,6 +55,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView table_next;
     @BindView(R.id.iv_tips)
     ImageView iv_tips;
+    @BindView(R.id.iv_logo)
+    ImageView iv_logo;
     private View mBaseView;
 
     private static final String TAG = "TableFragment";
@@ -121,6 +124,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                     tips.setText("");
                     table_next.setVisibility(View.GONE);
                     iv_tips.setVisibility(View.GONE);
+                    iv_logo.setVisibility(View.GONE);
                 }
             } else {
                 className.setText("今日无课");
@@ -129,6 +133,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                 tips.setText("");
                 table_next.setVisibility(View.GONE);
                 iv_tips.setVisibility(View.GONE);
+                iv_logo.setVisibility(View.GONE);
             }
         }
     }
@@ -154,6 +159,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         tips.setText(rsp.beforeClass);
         table_next.setVisibility(View.VISIBLE);
         iv_tips.setVisibility(View.VISIBLE);
+        iv_logo.setVisibility(View.VISIBLE);
     }
 
     @Override

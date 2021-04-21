@@ -2,7 +2,7 @@ package com.yyide.chatim.model;
 
 import java.util.List;
 
-public class ClassesBannerRsp {
+public class ClassesPhotoBannerRsp {
 
     private String msg;
     private Integer code;
@@ -33,16 +33,16 @@ public class ClassesBannerRsp {
     }
 
     public static class DataBean {
-        private Integer classifyId;
+        private int classifyId;
         private String name;
         private String url;
         private String type;
 
-        public Integer getClassifyId() {
+        public int getClassifyId() {
             return classifyId;
         }
 
-        public void setClassifyId(Integer classifyId) {
+        public void setClassifyId(int classifyId) {
             this.classifyId = classifyId;
         }
 

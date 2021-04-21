@@ -182,7 +182,7 @@ public class NoteByListActivity extends BaseActivity {
 
         FragmentManager manager = getSupportFragmentManager();
         NoteTabBean noteTabBean = new NoteTabBean();
-        noteTabBean.tag = (index + 1) + "";
+        noteTabBean.tag = index + "";
         noteTabBean.name = bundle.getString("name");
         noteTabBean.islast = bundle.getString("islast");
         Log.e("TAG", "initDeptFragment2==》: " + JSON.toJSONString(bundle));
@@ -190,7 +190,7 @@ public class NoteByListActivity extends BaseActivity {
 
         manager.beginTransaction()
                 .replace(R.id.content, noteByListFragment)
-                .addToBackStack(String.valueOf(index + 1))
+                .addToBackStack(String.valueOf(index))
                 .commit();
 
         listTab.add(noteTabBean);
@@ -227,7 +227,7 @@ public class NoteByListActivity extends BaseActivity {
     }
 
     void isBack() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
             getSupportFragmentManager().popBackStack();
         } else {
             finish();

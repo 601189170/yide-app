@@ -10,8 +10,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
@@ -53,12 +55,18 @@ public class AppAdapter extends BaseAdapter {
         if (getItem(position).getList() != null) {
             adapter.notifyData(getItem(position).getList());
         }
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
-                intent.putExtra("url", adapter.getItem(position).getPath());
-                view.getContext().startActivity(intent);
+        grid.setOnItemClickListener((parent, view1, position1, id) -> {
+            if ("通知公告".equals(adapter.getItem(position1).getName())) {
+                Intent intent = new Intent(view1.getContext(), NoticeAnnouncementActivity.class);
+                view1.getContext().startActivity(intent);
+            } else {
+                if ("#".equals(adapter.getItem(position1).getPath().trim())) {
+                    ToastUtils.showShort("暂无权限");
+                } else {
+                    Intent intent = new Intent(view1.getContext(), WebViewActivity.class);
+                    intent.putExtra("url", adapter.getItem(position1).getPath());
+                    view1.getContext().startActivity(intent);
+                }
             }
         });
         return view;

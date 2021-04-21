@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
@@ -33,6 +35,7 @@ import com.yyide.chatim.leave.LeaveActivity;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.AppPresenter;
 import com.yyide.chatim.view.AppView;
 
@@ -80,14 +83,23 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         adapter = new MyAppItemAdapter();
         mygrid.setAdapter(adapter);
         mygrid.setOnItemClickListener((parent, view1, position, id) -> {
-            Intent intent;
             if ("editor".equals(adapter.getItem(position).getAppType())) {
-                intent = new Intent(mActivity, AppManagerActivity.class);
+                Intent intent = new Intent(mActivity, AppManagerActivity.class);
+                startActivity(intent);
             } else {
-                intent = new Intent(getContext(), WebViewActivity.class);
-                intent.putExtra("url", adapter.getItem(position).getPath());
+                if ("通知公告".equals(adapter.getItem(position).getName())) {
+                    Intent intent = new Intent(getContext(), NoticeAnnouncementActivity.class);
+                    startActivity(intent);
+                } else {
+                    if ("#".equals(adapter.getItem(position).getPath().trim())) {
+                        ToastUtils.showShort("暂无权限");
+                    } else {
+                        Intent intent = new Intent(getContext(), WebViewActivity.class);
+                        intent.putExtra("url", adapter.getItem(position).getPath());
+                        startActivity(intent);
+                    }
+                }
             }
-            startActivity(intent);
         });
         recylAppAdapter = new RecylAppAdapter();
         recy.setAdapter(recylAppAdapter);

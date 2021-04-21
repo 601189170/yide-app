@@ -11,12 +11,16 @@ import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
-import com.yyide.chatim.adapter.ClassAnnounAdapter;
+import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.adapter.ClassPhotoAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseFragment;
-import com.yyide.chatim.model.ClassesBannerRsp;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.presenter.ClassPhotoPresenter;
+import com.yyide.chatim.view.ClassPhotoView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,27 +31,19 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import okhttp3.OkHttpClient;
 
-
-public class ClassHonorFragment extends BaseFragment {
+public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> implements ClassPhotoView {
 
     private View mBaseView;
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
     @BindView(R.id.grid)
     RecyclerView mHot;
-    ClassAnnounAdapter announAdapter;
+    ClassPhotoAdapter announAdapter;
     IndexAdapter indexAdapter;
-    private int[] imgs = {R.drawable.class_1,
-            R.drawable.class_2,
-            R.drawable.class_3,
-            R.drawable.class_4,
-            R.drawable.class_5};
 
     @Nullable
     @Override
@@ -62,23 +58,17 @@ public class ClassHonorFragment extends BaseFragment {
         EventBus.getDefault().register(this);
 //        mvpPresenter.getMyData();
         indexAdapter = new IndexAdapter();
-        announAdapter = new ClassAnnounAdapter(announRoll);
+        announAdapter = new ClassPhotoAdapter(announRoll);
         announRoll.setHintView(null);
-        announAdapter.setOnItemClickListener(new ClassAnnounAdapter.ItemClickListener() {
+        announAdapter.setOnItemClickListener(new ClassPhotoAdapter.ItemClickListener() {
             @Override
             public void OnItemClickListener() {
-                startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+//                startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+                intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
+                view.getContext().startActivity(intent);
             }
         });
-        //模拟数据
-        List<ClassesBannerRsp.DataBean> dataBeans = new ArrayList<>();
-        for (int i = 0; i < imgs.length; i++) {
-            ClassesBannerRsp.DataBean item = new ClassesBannerRsp.DataBean();
-            item.setClassifyId(imgs[i]);
-            dataBeans.add(item);
-        }
-        announAdapter.notifyData(dataBeans);
-        indexAdapter.setList(dataBeans);
 
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
@@ -104,12 +94,25 @@ public class ClassHonorFragment extends BaseFragment {
 
             }
         });
+        getData();
+    }
+
+    @Override
+    protected ClassPhotoPresenter createPresenter() {
+        return new ClassPhotoPresenter(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", ClassHonorFragment.class.getSimpleName());
+            getData();
+        }
+    }
+
+    private void getData() {
+        if (SpData.getClassInfo() != null) {
+            mvpPresenter.getClassPhotoList(SpData.getIdentityInfo().schoolId + "", SpData.getClassInfo().classesId);
         }
     }
 
@@ -117,5 +120,26 @@ public class ClassHonorFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void getStudentHonorSuccess(ClassesPhotoBannerRsp model) {
+        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+            if (model.getData() != null) {
+                if (model.getData().size() > 5) {
+                    List<ClassesPhotoBannerRsp.DataBean> data = model.getData().subList(0, 5);
+                    indexAdapter.setList(data);
+                    announAdapter.notifyData(data);
+                } else {
+                    indexAdapter.setList(model.getData());
+                    announAdapter.notifyData(model.getData());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void getStudentHonorFail(String msg) {
+
     }
 }

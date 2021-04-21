@@ -98,8 +98,15 @@
     <string name="notice_confirm_number_text">已确认（%d/%d）</string>
     <string name="notice_scope_number_text">已选择(%d)</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cancel">Cancel</string>
     <string name="timed_send_text">%d小时%d分钟后发送</string>
     <string name="timed_send_long_text">%d天后发送</string>
+    <string name="call_timeout">本次通话已超时</string>
+    <string name="call_notification">音视频邀请消息通知</string>
+    <string name="background_tip">当程序处于后台时新的来电消息会通过通知栏提醒用户</string>
+    <string name="new_msg_notification">新普通消息通知</string>
+    <string name="new_msg">收到一条新消息</string>
+    <string name="call_nos">通话失去响应</string>
+    <string name="you_app">您的应用</string>
+    <string name="low_version">" 版本太低，不支持打开该离线消息"</string>
 </resources>

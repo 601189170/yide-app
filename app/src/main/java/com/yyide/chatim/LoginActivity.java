@@ -467,10 +467,15 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onError(String module, final int code, final String desc) {
                 hideLoading();
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
-                    }
+                runOnUiThread(() -> {
+                    //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
+                    SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
+                    UserInfo.getInstance().setAutoLogin(true);
+                    UserInfo.getInstance().setUserSig(userSig);
+                    UserInfo.getInstance().setUserId(String.valueOf(userid));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
                 });
                 DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
             }

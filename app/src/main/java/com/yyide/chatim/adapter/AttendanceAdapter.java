@@ -2,17 +2,12 @@ package com.yyide.chatim.adapter;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -20,10 +15,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
-import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.utils.InitPieChart;
-import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
 import java.util.List;

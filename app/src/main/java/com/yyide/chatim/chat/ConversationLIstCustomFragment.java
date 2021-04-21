@@ -11,9 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alibaba.fastjson.JSON;
 import com.tencent.imsdk.v2.V2TIMConversation;
-import com.tencent.imsdk.v2.V2TIMConversationListener;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
@@ -26,7 +29,6 @@ import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
-import com.tencent.qcloud.tim.uikit.modules.conversation.holder.ConversationCommonHolder;
 import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
@@ -39,12 +41,7 @@ import com.yyide.chatim.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import butterknife.OnClick;
-
-public class ConversationFragment extends BaseFragment {
+public class ConversationLIstCustomFragment extends BaseFragment {
 
     private View mBaseView;
     private ConversationLayout mConversationLayout;
@@ -53,6 +50,7 @@ public class ConversationFragment extends BaseFragment {
     private PopupWindow mConversationPopWindow;
     private List<PopMenuAction> mConversationPopActions = new ArrayList<>();
     private Menu mMenu;
+    private RecyclerView recyclerview;
 
     @Nullable
     @Override

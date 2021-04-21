@@ -17,7 +17,6 @@ import com.yyide.chatim.adapter.AttendanceAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
-import com.yyide.chatim.model.ClassesBannerRsp;
 import com.yyide.chatim.model.EventMessage;
 
 import org.greenrobot.eventbus.EventBus;
