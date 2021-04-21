@@ -75,7 +75,39 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
         Log.e("FaceUploadPresenter", "getFaceData: identity="+identity+"，name="+realname +",classId="+classesId+",depId="+depId);
-        mvpPresenter.getFaceData(identity,realname,classesId,depId);
+        //人名或者id为空则不能上传人脸
+        parmsNull();
+    }
+
+    private void parmsNull() {
+        if (TextUtils.isEmpty(realname)) {
+            warnTip("当前账号姓名为空不能采集人脸");
+        } else {
+            if (identity.equals("学生") || identity.equals("家长")) {
+                if (classesId == 0) {
+                    warnTip("当前账号学生Id为空不能采集人脸");
+                } else {
+                    mvpPresenter.getFaceData(identity, realname, classesId, depId);
+                }
+            } else {
+                if (depId == 0) {
+                    warnTip("当前账号部门Id为空不能采集人脸");
+                } else {
+                    mvpPresenter.getFaceData(identity, realname, classesId, depId);
+                }
+            }
+        }
+    }
+
+    private void warnTip(String msg) {
+        ToastUtils.showShort(msg);
+        tv_face_capture_tip.setVisibility(View.VISIBLE);
+        tv_face_capture_tip.setText(msg);
+        //tv_face_capture_tip.setTextColor(getResources().getColor(R.color.face_warn));
+        tv_face_capture_tip.setCompoundDrawablesWithIntrinsicBounds(getDrawable(R.drawable.icon_tips),null,null,null);
+        tv_face_capture_tip.setCompoundDrawablePadding(10);
+        btn_start_capture.setClickable(false);
+        btn_start_capture.setAlpha(0.2f);
     }
 
     @Override
