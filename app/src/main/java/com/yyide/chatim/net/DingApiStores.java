@@ -37,6 +37,7 @@ import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
@@ -394,4 +395,11 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/android/studentWork/list")
     Observable<StudentHonorRsp> getStudentHonorList(@Body RequestBody requestBody);
+
+    //https://api.edu.1d1j.cn/management/cloud-system/user/notice/getUserNoticePage
+    //获取用户通知分页
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/user/notice/getUserNoticePage")
+    Observable<UserNoticeRsp> getUserNoticePage(@Body RequestBody requestBody);
+
 }
