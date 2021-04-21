@@ -18,6 +18,7 @@ import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.PushModel;
+import com.yyide.chatim.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -50,6 +51,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
     public void onNotifyMessageOpened(Context context, NotificationMessage message) {
         Log.e(TAG, "[onNotifyMessageOpened] " + message);
         try {
+
             //发送消息类型 1 通知公告 2 代办 3系统通知 4 作业 5课表
             PushModel pushModel = JSON.parseObject(message.notificationExtras, PushModel.class);
             if ("1".equals(pushModel.getPush_type())) {//通知公告消息

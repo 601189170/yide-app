@@ -93,7 +93,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
         listview.setOnItemClickListener((parent, view1, position, id) -> {
             //处理学生无法点击查看备课
-            if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_STUDENT.equals(SpData.getIdentityInfo().status)) {
+            if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
                 SelectSchByTeaidRsp.DataBean item = adapter.getItem(position);
                 Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
                 intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
@@ -130,7 +130,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     }
 
     private void getData() {
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_STUDENT.equals(SpData.getIdentityInfo().status)) {
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             if (SpData.getClassInfo() != null) {
                 mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
             }

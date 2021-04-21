@@ -40,15 +40,6 @@ public class StudentHonorListActivity extends BaseActivity {
     RecyclerView honorContentRv;
 
     List<StudentHonorBean> studentHonorBeanList;
-    private int[] imgs = {R.drawable.student_1,
-            R.drawable.student_2,
-            R.drawable.student_3,
-            R.drawable.student_4,
-            R.drawable.student_5,
-            R.drawable.student_6,
-            R.drawable.student_7,
-            R.drawable.student_8};
-
     @Override
     public int getContentViewID() {
         return R.layout.activity_student_honor_list;
@@ -59,9 +50,6 @@ public class StudentHonorListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         title.setText("学生荣誉");
         studentHonorBeanList = new ArrayList<>();
-        for (int i = 0; i < imgs.length; i++) {
-            studentHonorBeanList.add(new StudentHonorBean("url", "学生" + i, "2021.04.2" + i, imgs[i]));
-        }
         initView();
     }
 

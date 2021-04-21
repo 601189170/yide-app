@@ -7,6 +7,7 @@ import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
+import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.DeviceUpdateRsp;
@@ -312,8 +313,8 @@ public interface DingApiStores {
 
     //获取班级相册
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/brand/class-brand-management/android/videoalbum/list")
-    Observable<ClassesPhotoBannerRsp> getClassPhotoList(@Body RequestBody requestBody);
+    @POST("/brand/class-brand-management/app/videoalbum/list")
+    Observable<ClassesPhotoRsp> getClassPhotoList(@Body RequestBody requestBody);
 
     //获取班级相册
     @Headers({"Content-Type: application/json", "Accept: application/json"})
@@ -393,7 +394,7 @@ public interface DingApiStores {
     Observable<FaceOssBean> getTeacherOss(@Body RequestBody requestBody);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/brand/class-brand-management/android/studentWork/list")
+    @POST("/brand/class-brand-management/app/studentWork/list")
     Observable<StudentHonorRsp> getStudentHonorList(@Body RequestBody requestBody);
 
     //https://api.edu.1d1j.cn/management/cloud-system/user/notice/getUserNoticePage

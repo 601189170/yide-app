@@ -155,8 +155,9 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
+        table_next.setText("下一节");
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
-        tips.setText(rsp.beforeClass);
+        tips.setText(TextUtils.isEmpty(rsp.beforeClass) ?  "未设置课前提醒" : rsp.beforeClass);
         table_next.setVisibility(View.VISIBLE);
         iv_tips.setVisibility(View.VISIBLE);
         iv_logo.setVisibility(View.VISIBLE);

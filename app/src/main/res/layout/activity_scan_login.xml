@@ -6,17 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".activity.ScanLoginActivity">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/ic_launcher_logo"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:background="@drawable/bg_blue"
+        android:gravity="center"
         android:text="登录"
-        android:background="@drawable/corners4"
         android:textColor="@color/white"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:textSize="@dimen/text_16"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,15 +38,14 @@
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="取消"
         android:layout_marginTop="15dp"
         android:paddingStart="30dp"
-        android:paddingEnd="30dp"
         android:paddingTop="5dp"
+        android:paddingEnd="30dp"
         android:paddingBottom="5dp"
-        android:background="@drawable/bg_stoke_gray_corners2"
+        android:text="取消登录"
         android:textColor="@color/text_212121"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"/>
+        app:layout_constraintTop_toBottomOf="@+id/login" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -95,7 +95,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
     private void setData() {
         dataBean = (SelectSchByTeaidRsp.DataBean) getIntent().getSerializableExtra("dataBean");
         if (dataBean != null) {
-            tv_class_name.setText(dataBean.classesName);
+            tv_class_name.setText(dataBean.classesName + "\t " + dataBean.subjectName);
             tv_after_class_name.setText(dataBean.classesName);
             tv_code.setText("第" + dataBean.section + "节");
             tv_time.setText(dataBean.fromDateTime + "-" + dataBean.toDateTime);

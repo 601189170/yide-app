@@ -45,20 +45,11 @@ public class GenerateTestUserSig {
      * 它是腾讯云用于区分客户的唯一标识。
      */
     //线上版本APPID
-    public static final int SDKAPPID_RELEASE = 1400510965;
+    public static final int SDKAPPID_RELEASE = 1400511951;
     //UAT- APPID
-    public static final int SDKAPPID_UAT = 1400511599;
+    public static final int SDKAPPID_UAT = 1400510248;
 
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
-
-    /**
-     * 签名过期时间，建议不要设置的过短
-     * <p>
-     * 时间单位：秒
-     * 默认时间：7 x 24 x 60 x 60 = 604800 = 7 天
-     */
-    private static final int EXPIRETIME = 604800;
-
 
     /**
      * 计算签名用的加密密钥，获取步骤如下：
@@ -70,10 +61,18 @@ public class GenerateTestUserSig {
      * 注意：该方案仅适用于调试Demo，正式上线前请将 UserSig 计算代码和密钥迁移到您的后台服务器上，以避免加密密钥泄露导致的流量盗用。
      * 文档：https://cloud.tencent.com/document/product/269/32688#Server
      */
-    private static final String SECRETKEY_UAT = "b9c1e8f05f49028d17853ef14c82f2d47c93c045a866a0408e974d03c6aeb779";
-    private static final String SECRETKEY_RELEASE = "d4212450f2c178a7c524dec1f0726979597865c52da0db2fff1272aab24f8e32";
+    private static final String SECRETKEY_UAT = "25da6e2a52b32448c4be8b4f14af67e16e3fe8458980f9d571610681a37b3eea";
+    private static final String SECRETKEY_RELEASE = "a922980637ed7f0f095bdf36a7e5711cb597d7b59987526f73017d638f3bc564";
 
     private static final String SECRETKEY = BuildConfig.DEBUG ? SECRETKEY_UAT : SECRETKEY_RELEASE;
+
+    /**
+     * 签名过期时间，建议不要设置的过短
+     * <p>
+     * 时间单位：秒
+     * 默认时间：7 x 24 x 60 x 60 = 604800 = 7 天
+     */
+    private static final int EXPIRETIME = 604800;
 
     /**
      * 计算 UserSig 签名

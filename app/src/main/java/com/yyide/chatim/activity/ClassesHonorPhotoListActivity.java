@@ -40,16 +40,6 @@ public class ClassesHonorPhotoListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         ArrayList<Integer> list = new ArrayList<>();
         title.setText("班级荣誉");
-        list.add(R.drawable.class_1);
-        list.add(R.drawable.class_2);
-        list.add(R.drawable.class_3);
-        list.add(R.drawable.class_4);
-        list.add(R.drawable.class_5);
-        list.add(R.drawable.class_6);
-        list.add(R.drawable.class_7);
-        list.add(R.drawable.class_8);
-        list.add(R.drawable.class_9);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         BaseQuickAdapter<Integer, BaseViewHolder> baseQuickAdapter = new BaseQuickAdapter<Integer, BaseViewHolder>(R.layout.item_classes_honor_img) {
             @Override

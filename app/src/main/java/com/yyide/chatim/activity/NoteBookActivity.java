@@ -76,7 +76,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         adapter2 = new NoBookItemAdapter();
         listview.setAdapter(adapter);
         listview.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter.getItem(position).list, adapter.getItem(position).parentName, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name, "staff"));
-        listview2.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter2.getItem(position).list, adapter.getItem(position).parentName, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name, "student"));
+        listview2.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter2.getItem(position).list, adapter2.getItem(position).parentName, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name, "student"));
     }
 
     /**
@@ -143,8 +143,8 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             List<listByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
             if (rsp.data.size() > 0) {
                 pName.setText(rsp.data.get(0).parentName);
-                if (TextUtils.isEmpty(rsp.data.get(0).schoolLogo)) {
-                    GlideUtil.loadImage(NoteBookActivity.this, rsp.data.get(0).schoolLogo, img);
+                if (!TextUtils.isEmpty(rsp.data.get(0).schoolLogo)) {
+                    GlideUtil.loadImageRadius(NoteBookActivity.this, rsp.data.get(0).schoolLogo, img, 6);
                 }
                 for (listByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
                     listBeans1.add(listBean);

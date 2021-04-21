@@ -39,12 +39,16 @@
 
                 <TextView
                     android:id="@+id/tv_class_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
                     android:drawableStart="@drawable/icon_prepares"
                     android:drawablePadding="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
+                    android:lines="1"
                     android:textColor="#ff222222"
-                    android:textSize="@dimen/text_18"
+                    android:textSize="@dimen/text_16"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_code"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,11 +57,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_10"
                     android:textColor="#ff222222"
                     android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_class_name"
-                    app:layout_constraintStart_toEndOf="@+id/tv_class_name"
-                    app:layout_constraintTop_toTopOf="@+id/tv_class_name" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_time"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_time"
+                    app:layout_constraintTop_toTopOf="@+id/tv_time" />
 
                 <TextView
                     android:id="@+id/tv_time"

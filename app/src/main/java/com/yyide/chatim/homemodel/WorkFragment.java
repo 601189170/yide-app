@@ -101,12 +101,8 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
         if (model.code == BaseConstant.REQUEST_SUCCES2 && model != null && model.data != null) {
             if (model.data.size() > 0) {
                 List<SelectSchByTeaidRsp.DataBean> dataBeanList = new ArrayList<>();
-                Calendar c = Calendar.getInstance();
-                int weekDay = c.get(Calendar.DAY_OF_WEEK);//只显示当天作业
                 for (SelectSchByTeaidRsp.DataBean item : model.data) {
-                    if (item.weekTime == (weekDay - 1)) {
-                        dataBeanList.add(item);
-                    }
+                    dataBeanList.add(item);
                 }
                 announAdapter.notifyData(dataBeanList);
                 indexAdapter.setList(dataBeanList);

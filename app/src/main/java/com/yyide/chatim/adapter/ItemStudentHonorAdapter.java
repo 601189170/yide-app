@@ -63,14 +63,6 @@ public class ItemStudentHonorAdapter extends RecyclerView.Adapter<ItemStudentHon
             @Override
             public void onClick(View v) {
                 ArrayList<Integer> list = new ArrayList<>();
-                list.add(R.drawable.student_1);
-                list.add(R.drawable.student_2);
-                list.add(R.drawable.student_3);
-                list.add(R.drawable.student_4);
-                list.add(R.drawable.student_5);
-                list.add(R.drawable.student_6);
-                list.add(R.drawable.student_7);
-                list.add(R.drawable.student_8);
                 PhotoBrowseActivity.startWithElement((Activity) context, list, position, v);
             }
         });

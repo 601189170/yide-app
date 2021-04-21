@@ -240,8 +240,8 @@ public class SwichSchoolPop extends PopupWindow {
 
     //计算 UserSig
     void getUserSig() {
-        RequestBody body = new FormBody.Builder()
-                .build();
+        RequestBody body = RequestBody.create(BaseConstant.JSON, "");
+
         //请求组合创建
         Request request = new Request.Builder()
 //                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")

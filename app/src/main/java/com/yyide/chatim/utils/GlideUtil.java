@@ -5,8 +5,10 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
 import com.yyide.chatim.net.GetData;
 
 
@@ -32,6 +34,15 @@ public class GlideUtil {
                 .circleCrop().placeholder(R.mipmap.de1).error(R.mipmap.de1);
         Glide.with(context).load(GlideUtil.DataUrl(url)).apply(myOptions).into(imageView);
     }
+
+    public static void loadImageRadius(Context context, String path, ImageView img, int radius) {
+        //设置图片圆角角度
+        RoundedCorners roundedCorners = new RoundedCorners(radius);
+        //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
+        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+        Glide.with(context).load(path).apply(options).into(img);
+    }
+
 
     //dp转px
     public static int dip2px(Context context, float dpValue) {

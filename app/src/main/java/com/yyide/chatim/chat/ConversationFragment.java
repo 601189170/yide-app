@@ -26,8 +26,11 @@ import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
+import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationProvider;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
 import com.tencent.qcloud.tim.uikit.modules.conversation.holder.ConversationCommonHolder;
+import com.tencent.qcloud.tim.uikit.modules.conversation.interfaces.IConversationAdapter;
+import com.tencent.qcloud.tim.uikit.modules.conversation.interfaces.IConversationProvider;
 import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
@@ -44,8 +47,10 @@ import com.yyide.chatim.view.UserNoticeView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -98,6 +103,35 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             }
         });
 
+//        ConversationProvider conversationProvider = new ConversationProvider();
+//        conversationProvider.attachAdapter(new IConversationAdapter(){
+//
+//            @NonNull
+//            @Override
+//            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//                return null;
+//            }
+//
+//            @Override
+//            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+//
+//            }
+//
+//            @Override
+//            public int getItemCount() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public void setDataProvider(IConversationProvider provider) {
+//
+//            }
+//
+//            @Override
+//            public ConversationInfo getItem(int position) {
+//                return null;
+//            }
+//        });
         // 从布局文件中获取会话列表面板
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
         mMenu = new Menu(getActivity(), (TitleBarLayout) mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);

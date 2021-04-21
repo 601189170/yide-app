@@ -394,13 +394,10 @@ public class LoginActivity extends BaseActivity {
 
     //计算 UserSig
     void getUserSig() {
-        RequestBody body = new FormBody.Builder()
-                .build();
+        RequestBody body = RequestBody.create(BaseConstant.JSON, "");
         //请求组合创建
         Request request = new Request.Builder()
-//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-//                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
                 .addHeader("Authorization", SpData.User().token)
                 .post(body)
                 .build();

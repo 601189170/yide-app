@@ -24,10 +24,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
-                app:leftBottom_corner_radius="12dp"
-                app:leftTop_corner_radius="12dp"
-                app:rightBottom_corner_radius="12dp"
-                app:rightTop_corner_radius="12dp"
+                app:leftBottom_corner_radius="6dp"
+                app:leftTop_corner_radius="6dp"
+                app:rightBottom_corner_radius="6dp"
+                app:rightTop_corner_radius="6dp"
                 app:type="round" />
 
             <TextView
@@ -95,6 +95,7 @@
             android:layout_marginRight="14dp"
             android:background="@drawable/bg_gradite2"
             android:textColor="@color/white"
+            android:visibility="invisible"
             android:textSize="9sp" />
     </FrameLayout>
 

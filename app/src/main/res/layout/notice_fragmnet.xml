@@ -68,6 +68,6 @@
             android:layout_weight="1"
             android:text="暂无通告"
             android:ellipsize="end"
-            android:lines="4" />
+            android:lines="3" />
     </LinearLayout>
 </LinearLayout>

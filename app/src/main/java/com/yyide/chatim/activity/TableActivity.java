@@ -36,6 +36,7 @@ public class TableActivity extends BaseActivity {
     LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_table_title;

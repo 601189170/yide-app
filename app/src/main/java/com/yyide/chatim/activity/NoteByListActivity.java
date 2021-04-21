@@ -161,7 +161,7 @@ public class NoteByListActivity extends BaseActivity {
         } else {
             noteTabBean.islast = "2";
         }
-
+        bundle.putString("islast", noteTabBean.islast);
         bundle.putInt("size", listBean.size());
         bundle.putString("organization", organization);
         noteByListFragment.setArguments(bundle);

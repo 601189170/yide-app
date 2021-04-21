@@ -50,15 +50,6 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         return mBaseView;
     }
 
-    private int[] imgs = {R.drawable.student_1,
-            R.drawable.student_2,
-            R.drawable.student_3,
-            R.drawable.student_4,
-            R.drawable.student_5,
-            R.drawable.student_6,
-            R.drawable.student_7,
-            R.drawable.student_8};
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -67,13 +58,6 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         indexAdapter = new IndexAdapter();
         announAdapter = new ClassAnnounAdapter(announRoll);
         announRoll.setHintView(null);
-        //模拟数据
-        List<ClassesPhotoBannerRsp.DataBean> dataBeans = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            ClassesPhotoBannerRsp.DataBean item = new ClassesPhotoBannerRsp.DataBean();
-            item.setClassifyId(imgs[i]);
-            dataBeans.add(item);
-        }
 //        announAdapter.notifyData(dataBeans);
 //        indexAdapter.setList(dataBeans);
 
@@ -82,7 +66,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
         ViewPager viewPager = announRoll.getViewPager();
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

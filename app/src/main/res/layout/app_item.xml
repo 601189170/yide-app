@@ -30,10 +30,10 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="23dp"
             android:horizontalSpacing="10dp"
-            android:verticalSpacing="4dp"
             android:listSelector="@android:color/transparent"
             android:numColumns="4"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:verticalSpacing="8dp">
 
         </com.yyide.chatim.widget.MyGridView>
     </LinearLayout>

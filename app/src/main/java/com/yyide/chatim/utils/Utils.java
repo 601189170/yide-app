@@ -2,6 +2,8 @@ package com.yyide.chatim.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
@@ -50,6 +52,24 @@ public class Utils {
         return true;
     }
 
+    /**
+     * 判断应用是否已经启动
+     *
+     * @param context   上下文对象
+     * @param packageName 要判断应用的包名
+     * @return boolean
+     */
+    public static boolean isAppAlive(Context context, String packageName) {
+        ActivityManager activityManager =
+                (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
+        for (int i = 0; i < processInfos.size(); i++) {
+            if (processInfos.get(i).processName.equals(packageName)) {
+                return true;
+            }
+        }
 
+        return false;
+    }
 
 }

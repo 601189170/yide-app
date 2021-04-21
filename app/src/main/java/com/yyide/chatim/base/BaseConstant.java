@@ -37,15 +37,19 @@ public class BaseConstant {
      * 请求ip==>baseUrl
      */
 //    public static final String API_SERVER_URL_UAT = "http://192.168.3.114:8888";
+    public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
-    public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-    public static final String API_SERVER_URL = !BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
+    public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
+
+    public static final String API_SERVER_HTML_RELEASE = "https://cloud.uat.edu.1d1j.net";
+    public static final String API_SERVER_HTML_UAT = "https://cloud.edu.1d1j.net";
+    public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
     //学生作品
-    public static final String STUDENT_HONOR_URL = API_SERVER_URL + "/classcardapp/dist/index.html#/studentHoner";
+    public static final String STUDENT_HONOR_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/studentHoner";
     //班级相册
-    public static final String CLASS_PHOTO_URL = API_SERVER_URL + "/classcardapp/dist/index.html#/classPhoto";
+    public static final String CLASS_PHOTO_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/classPhoto";
     /*Base宽*/
     public static int BaseWith = 171;
 

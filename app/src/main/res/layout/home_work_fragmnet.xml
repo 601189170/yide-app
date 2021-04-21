@@ -41,12 +41,11 @@
         android:background="@drawable/bg_white"
         android:orientation="vertical">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="@dimen/text_18"
-            android:text="暂无作业" />
+            android:src="@drawable/icon_homework"
+            android:layout_gravity="right|center_vertical" />
 
         <com.jude.rollviewpager.RollPagerView
             android:id="@+id/rollPagerView"

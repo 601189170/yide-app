@@ -3,13 +3,13 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         release {
-            storeFile file('E:\\workspace\\yideapp\\app\\school.jks')
+            storeFile file('/school.jks')
             storePassword 'hao12345'
             keyPassword 'hao12345'
             keyAlias 'school'
         }
         debug {
-            storeFile file('E:\\workspace\\yideapp\\app\\school.jks')
+            storeFile file('/school.jks')
             storePassword 'hao12345'
             keyPassword 'hao12345'
             keyAlias 'school'
@@ -97,10 +97,10 @@ VIVO_APPID    : "vivo的APPID",
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -112,8 +112,7 @@ dependencies {
     implementation 'com.github.Jlanglang:TreeRecyclerView:1.3.1.1'
     //日期选择器查看最新版本请前往github，仅支持androidx
     //implementation 'com.github.loperSeven:DateTimePicker:0.1.0'
-//    implementation 'com.tencent.imsdk:tuikit-live:5.1.2'
-    implementation 'com.tencent.imsdk:tuikit:5.1.56'
+
     implementation 'com.nineoldandroids:library:2.4.0'
     //——TimePickerView 时间选择器，支持年月日时分，年月日，年月，时分等格式。
     //——OptionsPickerView 选项选择器，支持一，二，三级选项选择，并且可以设置是否联动
@@ -161,8 +160,10 @@ dependencies {
 //    implementation 'me.jessyan:autosize:1.0.5'
     implementation project(':jiguang')
 //    implementation project(':tuikit')
-    implementation 'cn.bingoogolapple:bga-qrcode-zbar:1.3.6'
+    implementation 'com.tencent.imsdk:tuikit-live:5.1.56'
+    implementation 'com.tencent.imsdk:tuikit:5.1.56'
 
+    implementation 'cn.bingoogolapple:bga-qrcode-zbar:1.3.6'
     implementation 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.jude:rollviewpager:1.3.2'
@@ -172,30 +173,9 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:design:25.2.0'
 
-//    implementation 'com.github.0xZhangKe:QRCodeView:1.3'
-//    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'
-//    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
-
     implementation 'com.tencent:mmkv-static:1.0.24'
 //    //implementation 'com.github.yalantis:ucrop:2.2.6'
     implementation 'com.kevin:crop:1.0.2'
-//
-//    // google firebase
-//    implementation('com.google.firebase:firebase-core:17.0.0')
-//    // google 云消息传递
-//    implementation ('com.google.firebase:firebase-messaging:19.0.1')
-//    // tpns推送
-//    // 小米
-//    implementation "com.tencent.tpns:xiaomi:1.2.1.2-release"
-//    // 魅族
-//    implementation "com.tencent.tpns:meizu:1.2.1.2-release"
-//    // OPPO
-//    implementation "com.tencent.tpns:oppo:1.2.1.2-release"
-//    // vivo
-//    implementation "com.tencent.tpns:vivo:1.2.1.2-release"
-//    // 华为
-//    implementation 'com.tencent.tpns:huawei:1.2.1.3-release'
-//    implementation 'com.huawei.hms:push:5.0.2.300'
 
 }
 

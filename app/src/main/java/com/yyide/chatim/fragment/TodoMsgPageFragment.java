@@ -19,9 +19,11 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.notice.NoticeTemplateListFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AgentInformationRsp;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.TodoFragmentPresenter;
 import com.yyide.chatim.utils.DateUtils;
@@ -88,6 +90,14 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
                 TextView textView = holder.getView(R.id.tv_refused);
                 TextView textView2 = holder.getView(R.id.tv_agree);
                 if (o.getStatus().equals("1")) {
+                    textView.setVisibility(View.GONE);
+                    textView2.setVisibility(View.GONE);
+                } else {
+                    textView.setVisibility(View.VISIBLE);
+                    textView2.setVisibility(View.VISIBLE);
+                }
+                //判断是否为家长同意隐藏按钮
+                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
                     textView.setVisibility(View.GONE);
                     textView2.setVisibility(View.GONE);
                 } else {

@@ -13,7 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.ClassesPhotoBannerRsp;
+import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ClassPhotoAdapter extends LoopPagerAdapter {
 
-    public List<ClassesPhotoBannerRsp.DataBean> list = new ArrayList<>();
+    public List<ClassesPhotoRsp.DataBean.AlbumEntityBean> list = new ArrayList<>();
     Activity context;
 
     public ClassPhotoAdapter(RollPagerView viewPager) {
@@ -37,7 +37,7 @@ public class ClassPhotoAdapter extends LoopPagerAdapter {
         this.context = context;
     }
 
-    private ClassesPhotoBannerRsp.DataBean getItem(int position) {
+    private ClassesPhotoRsp.DataBean.AlbumEntityBean getItem(int position) {
         return list.get(position);
     }
 
@@ -75,7 +75,7 @@ public class ClassPhotoAdapter extends LoopPagerAdapter {
         return list.size();
     }
 
-    public void notifyData(List<ClassesPhotoBannerRsp.DataBean> list) {
+    public void notifyData(List<ClassesPhotoRsp.DataBean.AlbumEntityBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

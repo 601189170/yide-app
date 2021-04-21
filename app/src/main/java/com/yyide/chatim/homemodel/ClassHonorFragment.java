@@ -7,30 +7,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.adapter.ClassPhotoAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
+import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.model.StudentHonorRsp;
 import com.yyide.chatim.presenter.ClassPhotoPresenter;
 import com.yyide.chatim.view.ClassPhotoView;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -112,7 +113,7 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
 
     private void getData() {
         if (SpData.getClassInfo() != null) {
-            mvpPresenter.getClassPhotoList(SpData.getIdentityInfo().schoolId + "", SpData.getClassInfo().classesId);
+            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId);
         }
     }
 
@@ -123,23 +124,34 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
     }
 
     @Override
-    public void getStudentHonorSuccess(ClassesPhotoBannerRsp model) {
+    public void getClassesPhotoSuccess(ClassesPhotoRsp model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
-            if (model.getData() != null) {
-                if (model.getData().size() > 5) {
-                    List<ClassesPhotoBannerRsp.DataBean> data = model.getData().subList(0, 5);
-                    indexAdapter.setList(data);
-                    announAdapter.notifyData(data);
-                } else {
-                    indexAdapter.setList(model.getData());
-                    announAdapter.notifyData(model.getData());
+            List<ClassesPhotoRsp.DataBean.AlbumEntityBean> imgs = new ArrayList<>();
+            //StudentHonorRsp.DataBean data = model.getData().getRecords();
+            if (model.getData() != null && model.getData().size() > 0) {
+                for (ClassesPhotoRsp.DataBean bean : model.getData()) {
+                    if (bean.getAlbumEntity() != null && bean.getAlbumEntity().size() > 0) {
+                        for (ClassesPhotoRsp.DataBean.AlbumEntityBean itme : bean.getAlbumEntity()) {
+                            imgs.add(itme);
+                        }
+                    }
                 }
+            }
+
+            if (imgs.size() > 5) {
+                List<ClassesPhotoRsp.DataBean.AlbumEntityBean> strings = imgs.subList(0, 5);
+                indexAdapter.setList(strings);
+                announAdapter.notifyData(strings);
+            } else {
+                List<ClassesPhotoRsp.DataBean.AlbumEntityBean> img = imgs;
+                indexAdapter.setList(img);
+                announAdapter.notifyData(img);
             }
         }
     }
 
     @Override
-    public void getStudentHonorFail(String msg) {
-
+    public void getClassesPhotoFail(String msg) {
+        Log.d("getStudentHonorFail", msg);
     }
 }
