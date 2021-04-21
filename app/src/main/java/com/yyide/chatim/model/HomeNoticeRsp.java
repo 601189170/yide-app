@@ -86,7 +86,7 @@ public class HomeNoticeRsp {
         private int id;
         private String delInd;
         private Object createdBy;
-        private Date createdDateTime;
+        private String createdDateTime;
         private Object updatedBy;
         private String updatedDateTime;
         private int versionStamp;
@@ -129,11 +129,11 @@ public class HomeNoticeRsp {
             this.createdBy = createdBy;
         }
 
-        public Date getCreatedDateTime() {
+        public String getCreatedDateTime() {
             return createdDateTime;
         }
 
-        public void setCreatedDateTime(Date createdDateTime) {
+        public void setCreatedDateTime(String createdDateTime) {
             this.createdDateTime = createdDateTime;
         }
 

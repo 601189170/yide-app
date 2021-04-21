@@ -13,10 +13,11 @@ import java.util.List;
  */
 public class UniversityScopeRsp {
 
+
     private int code;
     private boolean success;
     private String msg;
-    private DataBean data;
+    private List<ListBeanXX> data;
 
     public int getCode() {
         return code;
@@ -42,25 +43,15 @@ public class UniversityScopeRsp {
         this.msg = msg;
     }
 
-    public DataBean getData() {
+    public List<ListBeanXX> getData() {
         return data;
     }
 
-    public void setData(DataBean data) {
+    public void setData(List<ListBeanXX> data) {
         this.data = data;
     }
 
-    @Override
-    public String toString() {
-        return "UniversityScopeRsp{" +
-                "code=" + code +
-                ", success=" + success +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
-    }
-
-    public static class DataBean {
+    public static class ListBeanXX {
         private int id;
         private String delInd;
         private String createdBy;
@@ -73,6 +64,7 @@ public class UniversityScopeRsp {
         private int current;
         private int schoolId;
         private String name;
+        private String showName;
         private Object parentId;
         private String parentName;
         private String type;
@@ -81,7 +73,7 @@ public class UniversityScopeRsp {
         private Object headmasterId;
         private Object secondHeadmasterId;
         private int nextLevelType;
-        private List<ListBeanXX> list;
+        private List<ListBeanX> list;
         private String isExitInd;
         private Object headmaster;
         private Object secondHeadmaster;
@@ -182,6 +174,14 @@ public class UniversityScopeRsp {
             this.name = name;
         }
 
+        public String getShowName() {
+            return showName;
+        }
+
+        public void setShowName(String showName) {
+            this.showName = showName;
+        }
+
         public Object getParentId() {
             return parentId;
         }
@@ -246,11 +246,11 @@ public class UniversityScopeRsp {
             this.nextLevelType = nextLevelType;
         }
 
-        public List<ListBeanXX> getList() {
+        public List<ListBeanX> getList() {
             return list;
         }
 
-        public void setList(List<ListBeanXX> list) {
+        public void setList(List<ListBeanX> list) {
             this.list = list;
         }
 
@@ -278,37 +278,7 @@ public class UniversityScopeRsp {
             this.secondHeadmaster = secondHeadmaster;
         }
 
-        @Override
-        public String toString() {
-            return "DataBean{" +
-                    "id=" + id +
-                    ", delInd='" + delInd + '\'' +
-                    ", createdBy='" + createdBy + '\'' +
-                    ", createdDateTime='" + createdDateTime + '\'' +
-                    ", updatedBy=" + updatedBy +
-                    ", updatedDateTime='" + updatedDateTime + '\'' +
-                    ", versionStamp=" + versionStamp +
-                    ", total=" + total +
-                    ", size=" + size +
-                    ", current=" + current +
-                    ", schoolId=" + schoolId +
-                    ", name='" + name + '\'' +
-                    ", parentId=" + parentId +
-                    ", parentName='" + parentName + '\'' +
-                    ", type='" + type + '\'' +
-                    ", sort=" + sort +
-                    ", level=" + level +
-                    ", headmasterId=" + headmasterId +
-                    ", secondHeadmasterId=" + secondHeadmasterId +
-                    ", nextLevelType=" + nextLevelType +
-                    ", list=" + list +
-                    ", isExitInd='" + isExitInd + '\'' +
-                    ", headmaster=" + headmaster +
-                    ", secondHeadmaster=" + secondHeadmaster +
-                    '}';
-        }
-
-        public static class ListBeanXX {
+        public static class ListBeanX {
             private int id;
             private String delInd;
             private String createdBy;
@@ -321,6 +291,7 @@ public class UniversityScopeRsp {
             private int current;
             private int schoolId;
             private String name;
+            private String showName;
             private int parentId;
             private String parentName;
             private String type;
@@ -329,40 +300,10 @@ public class UniversityScopeRsp {
             private Object headmasterId;
             private Object secondHeadmasterId;
             private int nextLevelType;
-            private List<ListBeanX> list;
+            private List<ListBean> list;
             private String isExitInd;
             private Object headmaster;
             private Object secondHeadmaster;
-
-            @Override
-            public String toString() {
-                return "ListBeanXX{" +
-                        "id=" + id +
-                        ", delInd='" + delInd + '\'' +
-                        ", createdBy='" + createdBy + '\'' +
-                        ", createdDateTime='" + createdDateTime + '\'' +
-                        ", updatedBy='" + updatedBy + '\'' +
-                        ", updatedDateTime='" + updatedDateTime + '\'' +
-                        ", versionStamp=" + versionStamp +
-                        ", total=" + total +
-                        ", size=" + size +
-                        ", current=" + current +
-                        ", schoolId=" + schoolId +
-                        ", name='" + name + '\'' +
-                        ", parentId=" + parentId +
-                        ", parentName='" + parentName + '\'' +
-                        ", type='" + type + '\'' +
-                        ", sort=" + sort +
-                        ", level=" + level +
-                        ", headmasterId=" + headmasterId +
-                        ", secondHeadmasterId=" + secondHeadmasterId +
-                        ", nextLevelType=" + nextLevelType +
-                        ", list=" + list +
-                        ", isExitInd='" + isExitInd + '\'' +
-                        ", headmaster=" + headmaster +
-                        ", secondHeadmaster=" + secondHeadmaster +
-                        '}';
-            }
 
             public int getId() {
                 return id;
@@ -460,6 +401,14 @@ public class UniversityScopeRsp {
                 this.name = name;
             }
 
+            public String getShowName() {
+                return showName;
+            }
+
+            public void setShowName(String showName) {
+                this.showName = showName;
+            }
+
             public int getParentId() {
                 return parentId;
             }
@@ -524,11 +473,11 @@ public class UniversityScopeRsp {
                 this.nextLevelType = nextLevelType;
             }
 
-            public List<ListBeanX> getList() {
+            public List<ListBean> getList() {
                 return list;
             }
 
-            public void setList(List<ListBeanX> list) {
+            public void setList(List<ListBean> list) {
                 this.list = list;
             }
 
@@ -556,7 +505,7 @@ public class UniversityScopeRsp {
                 this.secondHeadmaster = secondHeadmaster;
             }
 
-            public static class ListBeanX {
+            public static class ListBean {
                 private int id;
                 private String delInd;
                 private String createdBy;
@@ -569,6 +518,7 @@ public class UniversityScopeRsp {
                 private int current;
                 private int schoolId;
                 private String name;
+                private String showName;
                 private int parentId;
                 private String parentName;
                 private String type;
@@ -581,36 +531,6 @@ public class UniversityScopeRsp {
                 private String isExitInd;
                 private Object headmaster;
                 private Object secondHeadmaster;
-
-                @Override
-                public String toString() {
-                    return "ListBeanX{" +
-                            "id=" + id +
-                            ", delInd='" + delInd + '\'' +
-                            ", createdBy='" + createdBy + '\'' +
-                            ", createdDateTime='" + createdDateTime + '\'' +
-                            ", updatedBy=" + updatedBy +
-                            ", updatedDateTime='" + updatedDateTime + '\'' +
-                            ", versionStamp=" + versionStamp +
-                            ", total=" + total +
-                            ", size=" + size +
-                            ", current=" + current +
-                            ", schoolId=" + schoolId +
-                            ", name='" + name + '\'' +
-                            ", parentId=" + parentId +
-                            ", parentName='" + parentName + '\'' +
-                            ", type='" + type + '\'' +
-                            ", sort=" + sort +
-                            ", level=" + level +
-                            ", headmasterId=" + headmasterId +
-                            ", secondHeadmasterId=" + secondHeadmasterId +
-                            ", nextLevelType=" + nextLevelType +
-                            ", list=" + list +
-                            ", isExitInd='" + isExitInd + '\'' +
-                            ", headmaster=" + headmaster +
-                            ", secondHeadmaster=" + secondHeadmaster +
-                            '}';
-                }
 
                 public int getId() {
                     return id;
@@ -706,6 +626,14 @@ public class UniversityScopeRsp {
 
                 public void setName(String name) {
                     this.name = name;
+                }
+
+                public String getShowName() {
+                    return showName;
+                }
+
+                public void setShowName(String showName) {
+                    this.showName = showName;
                 }
 
                 public int getParentId() {

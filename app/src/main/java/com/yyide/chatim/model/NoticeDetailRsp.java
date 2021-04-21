@@ -86,9 +86,9 @@ public class NoticeDetailRsp {
         private int id;
         private String delInd;
         private String createdBy;
-        private Date createdDateTime;
+        private String createdDateTime;
         private String updatedBy;
-        private Date updatedDateTime;
+        private String updatedDateTime;
         private int versionStamp;
         private int total;
         private int size;
@@ -129,11 +129,11 @@ public class NoticeDetailRsp {
             this.createdBy = createdBy;
         }
 
-        public Date getCreatedDateTime() {
+        public String getCreatedDateTime() {
             return createdDateTime;
         }
 
-        public void setCreatedDateTime(Date createdDateTime) {
+        public void setCreatedDateTime(String createdDateTime) {
             this.createdDateTime = createdDateTime;
         }
 
@@ -145,11 +145,11 @@ public class NoticeDetailRsp {
             this.updatedBy = updatedBy;
         }
 
-        public Date getUpdatedDateTime() {
+        public String getUpdatedDateTime() {
             return updatedDateTime;
         }
 
-        public void setUpdatedDateTime(Date updatedDateTime) {
+        public void setUpdatedDateTime(String updatedDateTime) {
             this.updatedDateTime = updatedDateTime;
         }
 

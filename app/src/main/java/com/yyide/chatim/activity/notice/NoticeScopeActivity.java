@@ -295,8 +295,8 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         Log.e(TAG, "getStudentScopeSuccess: " + studentScopeRsp.toString());
         if (studentScopeRsp.getCode() == 200) {
             noticeScopeBeans.clear();
-            for (StudentScopeRsp.DataBean.ListBeanXX listBean : studentScopeRsp.getData().getList()) {
-                List<StudentScopeRsp.DataBean.ListBeanXX.ListBeanX> grades = listBean.getList();
+            for (StudentScopeRsp.ListBeanXX listBean : studentScopeRsp.getData()) {
+                List<StudentScopeRsp.ListBeanXX.ListBeanX> grades = listBean.getList();
                 //第一层
                 NoticeScopeBean noticeScopeBean = new NoticeScopeBean(listBean.getId(), listBean.getName(), listBean.getType());
                 if (grades.isEmpty()) {
@@ -305,8 +305,8 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                     continue;
                 }
                 List<NoticeScopeBean> noticeScopeBeans1 = new ArrayList<>();
-                for (StudentScopeRsp.DataBean.ListBeanXX.ListBeanX grade : grades) {
-                    List<StudentScopeRsp.DataBean.ListBeanXX.ListBeanX.ListBean> classes = grade.getList();
+                for (StudentScopeRsp.ListBeanXX.ListBeanX grade : grades) {
+                    List<StudentScopeRsp.ListBeanXX.ListBeanX.ListBean> classes = grade.getList();
                     NoticeScopeBean noticeScopeBean1 = new NoticeScopeBean(grade.getId(), grade.getName(), grade.getType());
                     if (classes.isEmpty()) {
                         noticeScopeBean1.setHasNext(false);
@@ -314,7 +314,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                         continue;
                     }
                     List<NoticeScopeBean> noticeScopeBeans2 = new ArrayList<>();
-                    for (StudentScopeRsp.DataBean.ListBeanXX.ListBeanX.ListBean aClass : classes) {
+                    for (StudentScopeRsp.ListBeanXX.ListBeanX.ListBean aClass : classes) {
                         classTotal++;
                         noticeScopeBeans2.add(new NoticeScopeBean(aClass.getId(), aClass.getName(), aClass.getType(), false));
                     }
@@ -414,8 +414,8 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         Log.e(TAG, "getUniversityListSuccess: " + universityScopeRsp.toString());
         if (universityScopeRsp.getCode() == 200) {
             noticeScopeBeans.clear();
-            for (UniversityScopeRsp.DataBean.ListBeanXX listBean : universityScopeRsp.getData().getList()) {
-                List<UniversityScopeRsp.DataBean.ListBeanXX.ListBeanX> grades = listBean.getList();
+            for (UniversityScopeRsp.ListBeanXX listBean : universityScopeRsp.getData()) {
+                List<UniversityScopeRsp.ListBeanXX.ListBeanX> grades = listBean.getList();
                 //第一层
                 NoticeScopeBean noticeScopeBean = new NoticeScopeBean(listBean.getId(), listBean.getName(), listBean.getType());
                 if (grades.isEmpty()) {
@@ -424,11 +424,23 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                     continue;
                 }
                 List<NoticeScopeBean> noticeScopeBeans1 = new ArrayList<>();
-                for (UniversityScopeRsp.DataBean.ListBeanXX.ListBeanX grade : grades) {
+                for (UniversityScopeRsp.ListBeanXX.ListBeanX grade : grades) {
+                    List<UniversityScopeRsp.ListBeanXX.ListBeanX.ListBean> classes = grade.getList();
                     NoticeScopeBean noticeScopeBean1 = new NoticeScopeBean(grade.getId(), grade.getName(), grade.getType());
-                    noticeScopeBean1.setHasNext(false);
+                    if (classes.isEmpty()) {
+                        noticeScopeBean1.setHasNext(false);
+                        noticeScopeBeans1.add(noticeScopeBean1);
+                        continue;
+                    }
+                    List<NoticeScopeBean> noticeScopeBeans2 = new ArrayList<>();
+                    for (UniversityScopeRsp.ListBeanXX.ListBeanX.ListBean aClass : classes) {
+                        classTotal++;
+                        noticeScopeBeans2.add(new NoticeScopeBean(aClass.getId(), aClass.getName(), aClass.getType(), false));
+                    }
+                    noticeScopeBean1.setList(noticeScopeBeans2);
                     noticeScopeBeans1.add(noticeScopeBean1);
                 }
+
                 noticeScopeBean.setList(noticeScopeBeans1);
                 noticeScopeBeans.add(noticeScopeBean);
             }
