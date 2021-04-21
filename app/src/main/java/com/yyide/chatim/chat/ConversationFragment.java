@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.tencent.imsdk.v2.V2TIMConversation;
@@ -33,8 +34,12 @@ import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.BookSearchActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
+import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.chat.menu.Menu;
+import com.yyide.chatim.model.UserNoticeRsp;
+import com.yyide.chatim.presenter.UserNoticePresenter;
 import com.yyide.chatim.utils.Constants;
+import com.yyide.chatim.view.UserNoticeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +47,10 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ConversationFragment extends BaseFragment {
+public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> implements UserNoticeView {
 
     private View mBaseView;
     private ConversationLayout mConversationLayout;
@@ -53,6 +59,15 @@ public class ConversationFragment extends BaseFragment {
     private PopupWindow mConversationPopWindow;
     private List<PopMenuAction> mConversationPopActions = new ArrayList<>();
     private Menu mMenu;
+
+    @BindView(R.id.cl_message)
+    ConstraintLayout cl_message;
+
+    @BindView(R.id.tv_user_notice_content)
+    TextView tv_user_notice_content;
+
+    @BindView(R.id.textView3)
+    TextView textView3;
 
     @Nullable
     @Override
@@ -135,6 +150,12 @@ public class ConversationFragment extends BaseFragment {
 //使设置好的布局参数应用到控件
 //        imageView.setLayoutParams(params);
 
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mvpPresenter.getUserNoticePage(1,1,1);
     }
 
     private void initTitleAction() {
@@ -241,4 +262,28 @@ public class ConversationFragment extends BaseFragment {
         BaseApplication.getInstance().startActivity(intent);
     }
 
+    @Override
+    protected UserNoticePresenter createPresenter() {
+        return new UserNoticePresenter(this);
+    }
+
+    @Override
+    public void getUserNoticePageSuccess(UserNoticeRsp userNoticeRsp) {
+        if (userNoticeRsp.getCode() == 200) {
+            List<UserNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
+            if (!records.isEmpty()){
+                UserNoticeRsp.DataBean.RecordsBean recordsBean = records.get(0);
+                String title = recordsBean.getTitle();
+                String content = recordsBean.getContent();
+                cl_message.setVisibility(View.VISIBLE);
+                tv_user_notice_content.setText(content);
+                textView3.setText(title);
+            }
+        }
+    }
+
+    @Override
+    public void getUserNoticePageFail(String msg) {
+
+    }
 }
