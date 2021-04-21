@@ -12,15 +12,6 @@ import java.util.List;
  * @Version: 1.0
  */
 public class TemplateListRsp {
-
-
-    /**
-     * code : 200
-     * success : true
-     * msg : 成功
-     * data : {"records":[{"id":6,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-13T02:48:00.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:48:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"22322222大夫","content":"<p>2<img src=\"https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/plugins/emoticons/img/smiley-cool.gif\" alt=\"cool\" /><\/p>","tempId":null},{"id":7,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-13T02:55:03.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:55:03.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"阿顺丰到付","content":"<p>范德萨发的撒发暗室逢灯三<\/p>","tempId":null},{"id":8,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-12T08:27:32.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T08:27:32.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"范德萨发","content":"<p>发士大夫<\/p>","tempId":null},{"id":9,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-13T02:47:08.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:47:08.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"2321321","content":"<p>21213213<\/p>","tempId":null},{"id":10,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-12T08:39:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T08:39:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"发的发生","content":"<p>范德萨发电费<\/p>","tempId":null},{"id":11,"delInd":"0","createdBy":"13045614523","createdDateTime":"2021-04-12T10:08:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T10:08:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"233d","content":"<p><img src=\"https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/plugins/emoticons/img/smiley-foot-in-mouth.gif\" alt=\"foot-in-mouth\" /><\/p>","tempId":null},{"id":12,"delInd":"0","createdBy":"admin","createdDateTime":"2021-04-13T02:47:44.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:47:44.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"标2题1","content":"123","tempId":null},{"id":13,"delInd":"0","createdBy":"13045614523","createdDateTime":"2021-04-12T11:30:55.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T11:30:55.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"范德萨发","content":"<p>发的发<\/p>","tempId":null},{"id":14,"delInd":"0","createdBy":"13045614523","createdDateTime":"2021-04-12T11:52:15.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T11:52:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"范德萨发生","content":"<p>发的说法的<\/p>","tempId":null}],"total":9,"size":10,"current":1,"searchCount":true,"pages":1}
-     */
-
     private int code;
     private boolean success;
     private String msg;
@@ -59,21 +50,20 @@ public class TemplateListRsp {
     }
 
     public static class DataBean {
-        /**
-         * records : [{"id":6,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-13T02:48:00.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:48:00.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"22322222大夫","content":"<p>2<img src=\"https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/plugins/emoticons/img/smiley-cool.gif\" alt=\"cool\" /><\/p>","tempId":null},{"id":7,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-13T02:55:03.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:55:03.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"阿顺丰到付","content":"<p>范德萨发的撒发暗室逢灯三<\/p>","tempId":null},{"id":8,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-12T08:27:32.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T08:27:32.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"范德萨发","content":"<p>发士大夫<\/p>","tempId":null},{"id":9,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-13T02:47:08.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:47:08.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"2321321","content":"<p>21213213<\/p>","tempId":null},{"id":10,"delInd":"0","createdBy":"18320782675","createdDateTime":"2021-04-12T08:39:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T08:39:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"发的发生","content":"<p>范德萨发电费<\/p>","tempId":null},{"id":11,"delInd":"0","createdBy":"13045614523","createdDateTime":"2021-04-12T10:08:19.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T10:08:19.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"233d","content":"<p><img src=\"https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/plugins/emoticons/img/smiley-foot-in-mouth.gif\" alt=\"foot-in-mouth\" /><\/p>","tempId":null},{"id":12,"delInd":"0","createdBy":"admin","createdDateTime":"2021-04-13T02:47:44.000+0000","updatedBy":null,"updatedDateTime":"2021-04-13T02:47:44.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"标2题1","content":"123","tempId":null},{"id":13,"delInd":"0","createdBy":"13045614523","createdDateTime":"2021-04-12T11:30:55.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T11:30:55.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"范德萨发","content":"<p>发的发<\/p>","tempId":null},{"id":14,"delInd":"0","createdBy":"13045614523","createdDateTime":"2021-04-12T11:52:15.000+0000","updatedBy":null,"updatedDateTime":"2021-04-12T11:52:15.000+0000","versionStamp":0,"total":0,"size":10,"current":1,"title":"范德萨发生","content":"<p>发的说法的<\/p>","tempId":null}]
-         * total : 9
-         * size : 10
-         * current : 1
-         * searchCount : true
-         * pages : 1
-         */
-
+        private List<RecordsBean> records;
         private int total;
         private int size;
         private int current;
         private boolean searchCount;
         private int pages;
-        private List<RecordsBean> records;
+
+        public List<RecordsBean> getRecords() {
+            return records;
+        }
+
+        public void setRecords(List<RecordsBean> records) {
+            this.records = records;
+        }
 
         public int getTotal() {
             return total;
@@ -115,34 +105,10 @@ public class TemplateListRsp {
             this.pages = pages;
         }
 
-        public List<RecordsBean> getRecords() {
-            return records;
-        }
-
-        public void setRecords(List<RecordsBean> records) {
-            this.records = records;
-        }
-
         public static class RecordsBean {
-            /**
-             * id : 6
-             * delInd : 0
-             * createdBy : 18320782675
-             * createdDateTime : 2021-04-13T02:48:00.000+0000
-             * updatedBy : null
-             * updatedDateTime : 2021-04-13T02:48:00.000+0000
-             * versionStamp : 0
-             * total : 0
-             * size : 10
-             * current : 1
-             * title : 22322222大夫
-             * content : <p>2<img src="https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/plugins/emoticons/img/smiley-cool.gif" alt="cool" /></p>
-             * tempId : null
-             */
-
             private int id;
             private String delInd;
-            private String createdBy;
+            private Object createdBy;
             private String createdDateTime;
             private Object updatedBy;
             private String updatedDateTime;
@@ -150,9 +116,12 @@ public class TemplateListRsp {
             private int total;
             private int size;
             private int current;
-            private String title;
+            private String name;
+            private Object type;
+            private String status;
             private String content;
-            private Object tempId;
+            private int tempId;
+            private Object messages;
 
             public int getId() {
                 return id;
@@ -170,11 +139,11 @@ public class TemplateListRsp {
                 this.delInd = delInd;
             }
 
-            public String getCreatedBy() {
+            public Object getCreatedBy() {
                 return createdBy;
             }
 
-            public void setCreatedBy(String createdBy) {
+            public void setCreatedBy(Object createdBy) {
                 this.createdBy = createdBy;
             }
 
@@ -234,12 +203,28 @@ public class TemplateListRsp {
                 this.current = current;
             }
 
-            public String getTitle() {
-                return title;
+            public String getName() {
+                return name;
             }
 
-            public void setTitle(String title) {
-                this.title = title;
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public Object getType() {
+                return type;
+            }
+
+            public void setType(Object type) {
+                this.type = type;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
             }
 
             public String getContent() {
@@ -250,12 +235,20 @@ public class TemplateListRsp {
                 this.content = content;
             }
 
-            public Object getTempId() {
+            public int getTempId() {
                 return tempId;
             }
 
-            public void setTempId(Object tempId) {
+            public void setTempId(int tempId) {
                 this.tempId = tempId;
+            }
+
+            public Object getMessages() {
+                return messages;
+            }
+
+            public void setMessages(Object messages) {
+                this.messages = messages;
             }
         }
     }

@@ -110,7 +110,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, TemplateListRsp.DataBean.RecordsBean o) {
                 baseViewHolder
-                        .setText(R.id.tv_title, o.getTitle())
+                        .setText(R.id.tv_title, o.getName())
                         //.setText(R.id.tv_desc, o.getName())
                         .setText(R.id.tv_notice_content, Html.fromHtml(o.getContent()));
             }
@@ -121,7 +121,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
                 Log.e(TAG, "onItemClick: "+position );
                 TemplateListRsp.DataBean.RecordsBean recordsBean = (TemplateListRsp.DataBean.RecordsBean)adapter.getData().get(position);
                 Intent intent = new Intent(getActivity(), NoticeCreateActivity.class);
-                intent.putExtra("name",recordsBean.getTitle());
+                intent.putExtra("name",recordsBean.getName());
                 intent.putExtra("content",recordsBean.getContent());
                 intent.putExtra("template",true);
                 startActivity(intent);
@@ -155,14 +155,14 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
     @Override
     public void noticeTemplateList(TemplateListRsp templateListRsp) {
         Log.e(TAG, "noticeTemplateList: " + templateListRsp.toString());
+        if (refresh){
+            refresh = false;
+            swipeRefreshLayout.setRefreshing(false);
+        }
         if (templateListRsp.getCode() == 200) {
             TemplateListRsp.DataBean data = templateListRsp.getData();
             List<TemplateListRsp.DataBean.RecordsBean> records = data.getRecords();
             if (!records.isEmpty()){
-                if (refresh){
-                    refresh = false;
-                    swipeRefreshLayout.setRefreshing(false);
-                }
                 list.clear();
                 List<TemplateListRsp.DataBean.RecordsBean> messages = records;
                 list.addAll(messages);
@@ -182,6 +182,8 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
     public void noticeTemplateListFail(String msg) {
         Log.e(TAG, "noticeTemplateListFail: " + msg);
         showBlankPage();
+        refresh = false;
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

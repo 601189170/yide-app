@@ -209,7 +209,7 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/management/cloud-system/announcement/queryAnnouncementTempPage
     //获取消息模板
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/announcement/queryAnnouncementTempPage")
+    @POST("/management/cloud-system/message/temp/selectMessagePage")
     Observable<TemplateListRsp> selectMessagePage(@Body RequestBody requestBody);
 
     //我的应用
