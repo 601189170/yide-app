@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="62dp"
-                    android:text="学生/家长"
+                    android:text="学生"
                     android:textColor="@color/text_212121"
                     android:textSize="@dimen/text_16" />
 

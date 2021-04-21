@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import butterknife.BindView;
 
 import static android.view.View.GONE;
@@ -45,6 +47,10 @@ import static android.view.View.VISIBLE;
 
 public class ChatFragment extends BaseFragment {
 
+    ImageView back;
+    TextView title;
+    @BindView(R.id.chat_layout)
+    ChatLayout chatLayout;
     private View mBaseView;
     private ChatLayout mChatLayout;
     private TitleBarLayout mTitleBar;
@@ -66,6 +72,16 @@ public class ChatFragment extends BaseFragment {
         //单聊组件的默认UI和交互初始化
         mChatLayout.initDefault();
 
+
+        title = mBaseView.findViewById(R.id.text);
+        back = mBaseView.findViewById(R.id.back);
+        title.setText(mChatInfo.getChatName());
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
         /*
          * 需要聊天的基本信息
          */
@@ -81,6 +97,9 @@ public class ChatFragment extends BaseFragment {
                 getActivity().finish();
             }
         });
+        mTitleBar.setVisibility(GONE);
+//        mTitleBar.getRightIcon().setImageDrawable(getResources().getDrawable(R.drawable.create_c2c));
+
         if (mChatInfo.getType() == V2TIMConversation.V2TIM_C2C) {
             mTitleBar.setOnRightClickListener(new View.OnClickListener() {
                 @Override
@@ -104,12 +123,13 @@ public class ChatFragment extends BaseFragment {
                 if (null == messageInfo) {
                     return;
                 }
-                ChatInfo info = new ChatInfo();
-                info.setId(messageInfo.getFromUser());
-                Intent intent = new Intent(BaseApplication.getInstance(), FriendProfileActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(TUIKitConstants.ProfileType.CONTENT, info);
-                BaseApplication.getInstance().startActivity(intent);
+                //先屏蔽点击事件
+//                ChatInfo info = new ChatInfo();
+//                info.setId(messageInfo.getFromUser());
+//                Intent intent = new Intent(MyApp.getInstance(), FriendProfileActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra(TUIKitConstants.ProfileType.CONTENT, info);
+//                MyApp.getInstance().startActivity(intent);
             }
         });
 
@@ -142,8 +162,8 @@ public class ChatFragment extends BaseFragment {
 
                 @Override
                 public void onSuccess(V2TIMConversation v2TIMConversation) {
-                    if (v2TIMConversation == null){
-                        DemoLog.d(TAG,"getConversation failed");
+                    if (v2TIMConversation == null) {
+                        DemoLog.d(TAG, "getConversation failed");
                         return;
                     }
                     mChatInfo.setAtInfoList(v2TIMConversation.getGroupAtInfoList());
@@ -174,7 +194,7 @@ public class ChatFragment extends BaseFragment {
 
                                     @Override
                                     public void onError(String module, int errCode, String errMsg) {
-                                        DemoLog.d(TAG,"getAtInfoChatMessages failed");
+                                        DemoLog.d(TAG, "getAtInfoChatMessages failed");
                                     }
                                 });
                             }
@@ -185,9 +205,9 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
-    private void updateAtInfoLayout(){
+    private void updateAtInfoLayout() {
         int atInfoType = getAtInfoType(mChatInfo.getAtInfoList());
-        switch (atInfoType){
+        switch (atInfoType) {
             case V2TIMGroupAtInfo.TIM_AT_ME:
                 mChatLayout.getAtInfoLayout().setVisibility(VISIBLE);
                 mChatLayout.getAtInfoLayout().setText(BaseApplication.getInstance().getString(R.string.ui_at_me));
@@ -212,7 +232,7 @@ public class ChatFragment extends BaseFragment {
         boolean atMe = false;
         boolean atAll = false;
 
-        if (atInfoList == null || atInfoList.isEmpty()){
+        if (atInfoList == null || atInfoList.isEmpty()) {
             return V2TIMGroupAtInfo.TIM_AT_UNKNOWN;
         }
 
@@ -255,6 +275,7 @@ public class ChatFragment extends BaseFragment {
             mChatLayout.getInputLayout().updateInputText(result_name, result_id);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
