@@ -125,6 +125,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
             userNoticeListAdapter.setIsLoadMore(!records.isEmpty());
             list.addAll(records);
             userNoticeListAdapter.notifyDataSetChanged();
+            showBlankPage();
         }
     }
 

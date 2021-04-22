@@ -309,7 +309,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
                 UserNoticeRsp.DataBean.RecordsBean recordsBean = records.get(0);
                 String title = recordsBean.getTitle();
                 String content = recordsBean.getContent();
-                cl_message.setVisibility(View.VISIBLE);
                 tv_user_notice_content.setText(content);
                 textView3.setText(title);
             }

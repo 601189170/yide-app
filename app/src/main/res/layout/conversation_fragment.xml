@@ -44,7 +44,7 @@
         android:paddingStart="@dimen/dp_15"
         android:paddingTop="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_10"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/iv_img"
@@ -72,7 +72,7 @@
             android:layout_marginTop="@dimen/dp_4"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="[请假]小方的主监护人提交的请假需要你审批一下..."
+            android:text="点击查看更多详情>>"
             android:textColor="#ff909399"
             android:textSize="11sp"
             app:layout_constraintEnd_toStartOf="@+id/textView10"
