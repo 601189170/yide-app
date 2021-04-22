@@ -213,7 +213,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     @Override
     public void updateMyNotice(BaseRsp baseRsp) {
         if (baseRsp.getCode() == 200) {
-            ToastUtils.showShort("确认" + baseRsp.getMsg());
+            //ToastUtils.showShort("确认" + baseRsp.getMsg());
             //请求成功后，刷新界面
             loadNoticeDetail();
 //            new Handler().postDelayed(() -> {

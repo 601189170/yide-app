@@ -4,9 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +76,7 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
             recyclerView.setAdapter(adapter);
             //adapter.setList();
         }
@@ -93,8 +96,16 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
             protected void convert(@NotNull BaseViewHolder baseViewHolder, ConfirmDetailRsp.DataBean.RecordsBean str) {
                 baseViewHolder.setText(R.id.tv_notice_scope_name, str.getUserName());
                 //GlideUtil.loadImage(getContext(), "https://www.thecrazyprogrammer.com/wp-content/uploads/2017/05/Android-Glide-Tutorial-with-Example-1.png", baseViewHolder.findView(R.id.iv_pic));
-                ImageView view = baseViewHolder.findView(R.id.iv_pic);
-                view.setImageDrawable(getActivity().getDrawable(R.drawable.icon_leave));
+                //ImageView view = baseViewHolder.findView(R.id.iv_pic);
+                //view.setImageDrawable(getActivity().getDrawable(R.drawable.icon_leave));
+                String userName = str.getUserName();
+                if (!TextUtils.isEmpty(userName)) {
+                    if (userName.length()<=2){
+                        baseViewHolder.setText(R.id.tv_pic,str.getUserName());
+                    }else {
+                        baseViewHolder.setText(R.id.tv_pic,userName.substring(userName.length()-2));
+                    }
+                }
             }
         };
 

@@ -9,4 +9,6 @@
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
     tools:context=".activity.notice.NoticeItemFragment"
-    tools:listitem="@layout/fragment_notice_item" />
+    tools:listitem="@layout/fragment_notice_item"
+    android:paddingStart="@dimen/dp_20"
+    android:paddingEnd="@dimen/dp_20"/>
