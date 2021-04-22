@@ -301,8 +301,8 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
     @Override
     public void addUserAnnouncement(AddUserAnnouncementResponse addUserAnnouncementResponse) {
         if (addUserAnnouncementResponse.getCode() == 200) {
-            String success = addUserAnnouncementResponse.getMsg();
-            ToastUtils.showShort(success);
+            //String success = addUserAnnouncementResponse.getMsg();
+            ToastUtils.showShort("发送成功");
             finish();
             return;
         }
