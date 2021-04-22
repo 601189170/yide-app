@@ -33,7 +33,6 @@ public class TakePicUtil {
     private static Config config;
 
     private static File output = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/chatim/portraits/" + "temp.png");
-
     public static void config(Config c) {
         config = c;
     }
@@ -111,11 +110,10 @@ public class TakePicUtil {
             }
         }
         config = null;
-
         cropIntent.putExtra("return-data", false);
         cropIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
 
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
         if (!isIntentAvailable(activity, cropIntent)) {
             return false;
         } else {
@@ -148,7 +146,6 @@ public class TakePicUtil {
             if (TextUtils.isEmpty(filePath)) {
                 return null;
             }
-
             corp(activity, new File(filePath));
             return null;
         }

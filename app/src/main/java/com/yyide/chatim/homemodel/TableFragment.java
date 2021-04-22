@@ -118,7 +118,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                 if (dataBean != null) {
                     setTableMsg(dataBean);
                 } else {
-                    className.setText("今日无课");
+                    className.setText("今日课已上完");
                     subjectName.setText("");
                     time.setText("");
                     tips.setText("");
@@ -127,7 +127,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                     iv_logo.setVisibility(View.GONE);
                 }
             } else {
-                className.setText("今日无课");
+                className.setText("今日课已上完");
                 subjectName.setText("");
                 time.setText("");
                 tips.setText("");

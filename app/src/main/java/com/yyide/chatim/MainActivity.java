@@ -24,9 +24,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.imsdk.v2.V2TIMSignalingInfo;
 import com.tencent.liteav.model.CallModel;
 import com.tencent.liteav.model.TRTCAVCallImpl;
+import com.tencent.qcloud.tim.uikit.TUIKit;
+import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.yyide.chatim.base.BaseConstant;
@@ -46,6 +49,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
@@ -55,9 +59,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView, HomeFragment.FragmentListener {
 
@@ -114,6 +126,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         setTab(0, 0);
         //注册极光别名
         registerAlias();
+        //登录IM
+        getUserSig();
     }
 
     @Override
@@ -442,6 +456,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 setTab(0, 0);
                 break;
             case R.id.tab2_layout:
+                //处理失败时点击切换重新登录IM
+                if (!UserInfo.getInstance().isAutoLogin()) {
+                    getUserSig();
+                }
                 setTab(1, 0);
                 break;
             case R.id.tab3_layout:
@@ -451,6 +469,69 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 setTab(3, 0);
                 break;
         }
+    }
+
+    OkHttpClient mOkHttpClient = new OkHttpClient();
+
+    private void getUserSig() {
+        RequestBody body = RequestBody.create(BaseConstant.JSON, "");
+        //请求组合创建
+        Request request = new Request.Builder()
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
+                .addHeader("Authorization", SpData.User().token)
+                .post(body)
+                .build();
+        //发起请求
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                hideLoading();
+                Log.e(TAG, "getUserSigonFailure: " + e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data = response.body().string();
+                Log.e(TAG, "getUserSig==>: " + data);
+                getUserSigRsp bean = JSON.parseObject(data, getUserSigRsp.class);
+                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+                    SPUtils.getInstance().put(SpData.USERSIG, bean.data);
+                    initIm(bean.data);
+                } else {
+                    hideLoading();
+                    ToastUtils.showShort(bean.msg);
+                }
+            }
+        });
+    }
+
+    private void initIm(String userSig) {
+        TUIKit.login(SpData.getIdentityInfo().userId + "", userSig, new IUIKitCallBack() {
+            @Override
+            public void onError(String module, final int code, final String desc) {
+                runOnUiThread(() -> {
+                    //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
+                    SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
+                    UserInfo.getInstance().setAutoLogin(false);
+                    UserInfo.getInstance().setUserSig(userSig);
+                    UserInfo.getInstance().setUserId(String.valueOf(SpData.getIdentityInfo().userId));
+                    Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
+                });
+                DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
+            }
+
+            @Override
+            public void onSuccess(Object data) {
+                SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
+                SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
+                UserInfo.getInstance().setAutoLogin(true);
+                UserInfo.getInstance().setUserSig(userSig);
+                UserInfo.getInstance().setUserId(String.valueOf(SpData.getIdentityInfo().userId));
+                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_IM_LOGIN, ""));
+            }
+        });
     }
 
 }

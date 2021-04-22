@@ -3,6 +3,7 @@ package com.yyide.chatim.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -102,7 +103,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     private void initData() {
         userInfo = SpData.getIdentityInfo();
         if (userInfo != null) {
-            GlideUtil.loadImage(this, userInfo.img, img);
+            GlideUtil.loadImageHead(this, userInfo.img, img);
             sex.setText(!TextUtils.isEmpty(userInfo.sex) ? ("0".equals(userInfo.sex) ? "男" : "女") : "未设置");
             phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
             date.setText(!TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "未设置");
@@ -213,7 +214,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         File corpFile = TakePicUtil.onActivityResult(this, requestCode, resultCode, data);
-        if(corpFile != null){
+        if (corpFile != null) {
             showPicFileByLuban(corpFile);
         }
     }

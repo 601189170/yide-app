@@ -63,7 +63,6 @@ public class AppClient {
         if (mDingRetrofit == null) {
             mDingRetrofit = new Retrofit.Builder()
                     .baseUrl(BaseConstant.API_SERVER_URL)
-
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(getOkHttpClient())
@@ -89,6 +88,9 @@ public class AppClient {
             builder.cache(cache);
             builder.addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR);
 //            builder.addInterceptor(new TokenHeaderInterceptor());
+            builder.connectTimeout(30, TimeUnit.SECONDS). // 设置连接超时时间
+                    readTimeout(30, TimeUnit.SECONDS).
+                    writeTimeout(30, TimeUnit.SECONDS).build();
             okHttpClient = builder.build();
         }
         return okHttpClient;

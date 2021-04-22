@@ -74,7 +74,6 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 //        List<SelectSchByTeaidRsp.DataBean> list=new ArrayList<>();
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-
         tv_week.setText(TimeUtil.getWeek() + "周");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
         Date date = new Date(System.currentTimeMillis());
@@ -87,10 +86,9 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         }
         grid.setOnItemClickListener((parent, view12, position, id) -> {
             timeAdapter.setPosition(position);
-//                weekDay = timeAdapter.getItem(position).day;
+            weekDay = position + 1;
             adapter.notifyData(getTableList(list, position + 1));
         });
-
         listview.setOnItemClickListener((parent, view1, position, id) -> {
             //处理学生无法点击查看备课
             if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {

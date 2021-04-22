@@ -11,7 +11,8 @@
 
     <uses-permission android:name="com.yyide.chatim.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -36,18 +37,19 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <!-- ********华为推送权限设置******** -->
     <!-- ********OPPO 推送 start******** -->
-    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE"/>
-    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE"/>
+    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />
     <!-- ********OPPO 推送 end******** -->
 
-    <uses-feature android:name="android.hardware.Camera"/>
+    <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- ********华为推送权限设置******** -->
     <permission
         android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG"
         android:protectionLevel="signatureOrSystem" />
-    <uses-permission android:name = "com.huawei.android.launcher.permission.CHANGE_BADGE" />
+
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 
     <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG" />
 
@@ -214,7 +216,7 @@
         <activity
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" >
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <!-- 华为离线推送打开应用内页面 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -233,10 +235,10 @@
             <!-- OPPO离线推送的scheme url方式必须配置action和category -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
                 <data
-                    android:scheme="pushscheme"
-                    android:host="com.tencent.qcloud"/>
+                    android:host="com.tencent.qcloud"
+                    android:scheme="pushscheme" />
             </intent-filter>
 
         </activity>
@@ -320,14 +322,15 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <!--人脸采集首页-->
-        <activity android:name=".activity.FaceCaptureActivity"
+        <activity
+            android:name=".activity.FaceCaptureActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <!--人脸裁剪界面-->
-        <activity android:name=".activity.FaceCropActivity"
+        <activity
+            android:name=".activity.FaceCropActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
 
         <!--腾讯IM 配置-->
@@ -365,8 +368,8 @@
         <receiver
             android:name="com.xiaomi.push.service.receivers.PingReceiver"
             android:exported="false"
-            tools:replace="android:process"
-            android:process=":pushservice">
+            android:process=":pushservice"
+            tools:replace="android:process">
             <intent-filter>
                 <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
@@ -393,13 +396,14 @@
             android:name="com.tencent.qcloud.tim.demo.thirdpush.HUAWEIHmsMessageService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <meta-data tools:replace="android:value"
+        <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="" />
+            android:value=""
+            tools:replace="android:value" />
         <!-- ********华为推送设置end******** -->
 
         <!-- ********魅族推送设置start******** -->
@@ -441,12 +445,14 @@
             </intent-filter>
         </receiver>
 
-        <meta-data tools:replace="android:value"
+        <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="" />
-        <meta-data tools:replace="android:value"
+            android:value=""
+            tools:replace="android:value" />
+        <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="" />
+            android:value=""
+            tools:replace="android:value" />
         <!-- ********vivo推送设置end******** -->
 
         <!-- ********海外google云消息传递start******** -->
@@ -465,7 +471,7 @@
 
             android:permission="com.coloros.mcs.permission.SEND_MCS_MESSAGE">
             <intent-filter>
-                <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE"/>
+                <action android:name="com.coloros.mcs.action.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
         </service> <!--兼容Q以下版本-->
 
@@ -475,9 +481,9 @@
             android:permission="com.heytap.mcs.permission.SEND_PUSH_MESSAGE">
 
             <intent-filter>
-                <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE"/>
+                <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE" />
 
-                <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE"/>
+                <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
         </service> <!--兼容Q版本-->
         <!-- ********OPPO 推送 end******** -->
@@ -487,7 +493,7 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.LOCALE_CHANGED"/>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
     </application>

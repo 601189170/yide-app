@@ -2,6 +2,7 @@ package com.yyide.chatim;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -96,9 +97,18 @@ public class LoginActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = this;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         Utils.checkPermission(this);
-
+        //将系统导航栏背景色设置为应用主题色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            int vis = getWindow().getDecorView().getSystemUiVisibility();
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            getWindow().getDecorView().setSystemUiVisibility(vis);
+        }
         String username = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         String password = SPUtils.getInstance().getString(BaseConstant.PASSWORD);
         userEdit.setText(TextUtils.isEmpty(username) ? "" : username);
@@ -311,7 +321,8 @@ public class LoginActivity extends BaseActivity {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    getUserSig();
+//                    getUserSig();
+                    getUserSchool();
                 } else {
                     hideLoading();
                     ToastUtils.showShort(bean.message);
@@ -383,7 +394,8 @@ public class LoginActivity extends BaseActivity {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     SPUtils.getInstance().put(SpData.USERPHONE, phone);
-                    getUserSig();
+                    //getUserSig();
+                    getUserSchool();
                 } else {
                     hideLoading();
                     ToastUtils.showShort(bean.message);
@@ -392,8 +404,45 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    //计算 UserSig
-    void getUserSig() {
+    //获取学校信息
+    private void getUserSchool() {
+        //请求组合创建
+        Request request = new Request.Builder()
+//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
+                .addHeader("Authorization", SpData.User().token)
+                .build();
+        //发起请求
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                hideLoading();
+                Log.e(TAG, "getUserSigonFailure: " + e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String data = response.body().string();
+                Log.e(TAG, "getUserSchool333==>: " + data);
+                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
+                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+                if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+                    //登陆成功保存账号密码
+                    SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
+                    SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
+                    SpData.setIdentityInfo(rsp);
+                    //initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                } else {
+                    hideLoading();
+                    ToastUtils.showShort(rsp.msg);
+                }
+            }
+        });
+    }
+
+    private void getUserSig() {
         RequestBody body = RequestBody.create(BaseConstant.JSON, "");
         //请求组合创建
         Request request = new Request.Builder()
@@ -425,41 +474,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    //获取学校信息
-    void getUserSchool() {
-        //请求组合创建
-        Request request = new Request.Builder()
-//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().token)
-                .build();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                hideLoading();
-                Log.e(TAG, "getUserSigonFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                String data = response.body().string();
-                Log.e(TAG, "getUserSchool333==>: " + data);
-                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
-                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-                    SpData.setIdentityInfo(rsp);
-                    initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
-                } else {
-                    hideLoading();
-                    ToastUtils.showShort(rsp.msg);
-                }
-            }
-        });
-    }
-
-    void initIm(int userid, String userSig) {
+    private void initIm(int userid, String userSig) {
         TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
@@ -468,7 +483,7 @@ public class LoginActivity extends BaseActivity {
                     //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
-                    UserInfo.getInstance().setAutoLogin(true);
+                    UserInfo.getInstance().setAutoLogin(false);
                     UserInfo.getInstance().setUserSig(userSig);
                     UserInfo.getInstance().setUserId(String.valueOf(userid));
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));

@@ -19,16 +19,12 @@
             android:layout_marginTop="7dp"
             android:layout_marginBottom="7dp">
 
-            <org.raphets.roundimageview.RoundImageView
+            <ImageView
                 android:id="@+id/head_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
-                app:leftBottom_corner_radius="6dp"
-                app:leftTop_corner_radius="6dp"
-                app:rightBottom_corner_radius="6dp"
-                app:rightTop_corner_radius="6dp"
-                app:type="round" />
+                android:src="@drawable/default_head" />
 
             <TextView
                 android:id="@+id/user_name"
@@ -36,6 +32,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/corners4"
                 android:gravity="center"
+                android:visibility="gone"
                 android:textColor="@color/white"
                 android:textSize="10sp" />
         </FrameLayout>

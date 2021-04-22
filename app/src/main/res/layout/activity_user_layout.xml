@@ -37,10 +37,11 @@
                 android:layout_height="50dp"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginEnd="38dp"
-                app:leftBottom_corner_radius="12dp"
-                app:leftTop_corner_radius="12dp"
-                app:rightBottom_corner_radius="12dp"
-                app:rightTop_corner_radius="12dp"
+                app:leftBottom_corner_radius="6dp"
+                app:leftTop_corner_radius="6dp"
+                app:rightBottom_corner_radius="6dp"
+                app:rightTop_corner_radius="6dp"
+                android:src="@drawable/default_head"
                 app:type="round" />
 
             <TextView

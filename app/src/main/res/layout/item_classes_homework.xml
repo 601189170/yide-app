@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ff1e232a"
+        android:textStyle="bold"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -21,13 +22,14 @@
         android:id="@+id/tv_homework"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/dp_10"
         android:ellipsize="end"
         android:lines="3"
         android:textColor="#ff8c97a7"
-        android:layout_marginEnd="@dimen/dp_10"
         android:textSize="13sp"
         app:layout_constraintEnd_toStartOf="@+id/imageView3"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tv_homework_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_homework_name" />
 

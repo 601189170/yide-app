@@ -51,6 +51,11 @@ public class GenerateTestUserSig {
 
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
+
+
+
+
+
     /**
      * 计算签名用的加密密钥，获取步骤如下：
      * <p>

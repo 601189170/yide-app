@@ -1,5 +1,6 @@
 package com.yyide.chatim.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,6 +68,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     TableItemAdapter tableItemAdapter;
     TableSectionAdapter tableSectionAdapter;
     int index = -1;
+    private List<SelectTableClassesRsp.DataBean> data;
 
     @Nullable
     @Override
@@ -113,10 +115,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             className.setText(classInfo.classesName);
             mvpPresenter.listTimeDataByApp(classInfo.classesId);
         }
-    }
 
-    @OnClick(R.id.classlayout)
-    public void click() {
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
         if (identityInfo != null) {
             if ("Y".equalsIgnoreCase(identityInfo.schoolType)) {
@@ -124,6 +123,16 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             } else if ("N".equalsIgnoreCase(identityInfo.schoolType)) {
                 mvpPresenter.selectListBySchoolAll();
             }
+        }
+    }
+
+    @OnClick(R.id.classlayout)
+    public void click() {
+        if (data != null && data.size() > 0) {
+            swichTableClassPop = new SwichTableClassPop(getActivity(), data);
+            swichTableClassPop.setSelectClasses(this);
+        } else {
+            ToastUtils.showShort("暂无切换班级");
         }
     }
 
@@ -218,16 +227,12 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            if (model.getData() != null && model.getData().size() > 0) {
-                swichTableClassPop = new SwichTableClassPop(getActivity(), model.getData());
-                swichTableClassPop.setSelectClasses(this);
-            } else {
-                ToastUtils.showShort("暂无班级");
-            }
+            data = model.getData();
         }
     }
 
 
+    @SuppressLint("LongLogTag")
     @Override
     public void selectTableClassListFail(String msg) {
         Log.d("selectTableClassListSuccess", msg);

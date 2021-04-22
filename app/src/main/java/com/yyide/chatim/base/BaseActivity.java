@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
@@ -70,6 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         UserInfo.getInstance().setToken("");
         UserInfo.getInstance().setAutoLogin(false);
 
+        ActivityUtils.finishAllActivities();
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Constants.LOGOUT, true);

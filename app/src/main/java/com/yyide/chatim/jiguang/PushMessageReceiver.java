@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -51,29 +53,34 @@ public class PushMessageReceiver extends JPushMessageReceiver {
     public void onNotifyMessageOpened(Context context, NotificationMessage message) {
         Log.e(TAG, "[onNotifyMessageOpened] " + message);
         try {
-
-            //发送消息类型 1 通知公告 2 代办 3系统通知 4 作业 5课表
-            PushModel pushModel = JSON.parseObject(message.notificationExtras, PushModel.class);
-            if ("1".equals(pushModel.getPush_type())) {//通知公告消息
-                Intent intent = new Intent(context, NoticeDetailActivity.class);
-                intent.putExtra("type", 2);
-                intent.putExtra("signId", pushModel.getSignId());
-                intent.putExtra("id", pushModel.getId());
-                intent.putExtra("status", "2");
+            if (!Utils.isAppAlive(BaseApplication.getInstance(), BaseApplication.getInstance().getPackageName())) {
+                Intent intent = new Intent(context, SplashActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 context.startActivity(intent);
-            } else if ("2".equals(pushModel.getPush_type())) {//代办
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
-            } else if ("3".equals(pushModel.getPush_type())) {//系统通知
-//                Intent intent = new Intent(context, MessageNoticeActivity.class);
-//                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                context.startActivity(intent);
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
-            } else if ("4".equals(pushModel.getPush_type())) {//
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
-            } else if ("5".equals(pushModel.getPush_type())) {//
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+            } else {
+                //发送消息类型 1 通知公告 2 代办 3系统通知 4 作业 5课表
+                PushModel pushModel = JSON.parseObject(message.notificationExtras, PushModel.class);
+                if ("1".equals(pushModel.getPush_type())) {//通知公告消息
+                    Intent intent = new Intent(context, NoticeDetailActivity.class);
+                    intent.putExtra("type", 2);
+                    intent.putExtra("signId", pushModel.getSignId());
+                    intent.putExtra("id", pushModel.getId());
+                    intent.putExtra("status", "2");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(intent);
+                } else if ("2".equals(pushModel.getPush_type())) {//代办
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
+                } else if ("3".equals(pushModel.getPush_type())) {//系统通知
+    //                Intent intent = new Intent(context, MessageNoticeActivity.class);
+    //                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    //                context.startActivity(intent);
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                } else if ("4".equals(pushModel.getPush_type())) {//
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                } else if ("5".equals(pushModel.getPush_type())) {//
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                }
             }
         } catch (Throwable throwable) {
             //throwable.fillInStackTrace();

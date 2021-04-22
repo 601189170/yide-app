@@ -17,6 +17,7 @@
     <dimen name="dp_35">35dp</dimen>
     <dimen name="dp_38">38dp</dimen>
     <dimen name="dp_40">40dp</dimen>
+    <dimen name="dp_44">44dp</dimen>
     <dimen name="dp_50">50dp</dimen>
     <dimen name="dp_56">56dp</dimen>
     <dimen name="text_10">10sp</dimen>

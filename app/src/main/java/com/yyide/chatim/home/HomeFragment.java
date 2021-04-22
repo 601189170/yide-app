@@ -59,7 +59,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> implements HomeFragmentView {
+public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> implements HomeFragmentView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "HomeFragment";
     @BindView(R.id.user_img)
     FrameLayout userImg;
@@ -80,7 +80,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @BindView(R.id.student_honor_content)
     FrameLayout studentHonorContent;
     @BindView(R.id.head_img)
-    RoundImageView head_img;
+    ImageView head_img;
     @BindView(R.id.user_name)
     TextView userName;
     @BindView(R.id.school_name)
@@ -118,14 +118,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         EventBus.getDefault().register(this);
 //        showProgressDialog2();
         setFragment();
-        mvpPresenter.getUserSchool();
-        mvpPresenter.getHomeNotice();
+        mSwipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        onRefresh();
         //initVerticalTextview(null);
-        mSwipeRefreshLayout.setOnRefreshListener(() -> {
-            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
-            mvpPresenter.getUserSchool();
-            mvpPresenter.getHomeNotice();
-        });
         initVerticalTextview(null);
     }
 
@@ -173,6 +169,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
             mListener.jumpFragment(1);
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+        mvpPresenter.getUserSchool();
+        mvpPresenter.getHomeNotice();
     }
 
     @Override
@@ -256,32 +259,18 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     void setSchoolInfo() {
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
-            String qhSchool = "";
-            String qhName = "";
-            String imgUrl = "";
-            for (GetUserSchoolRsp.DataBean datum : SpData.Schoolinfo().data) {
-                if (datum.userId == SpData.getIdentityInfo().userId) {
-                    qhSchool = datum.schoolName;
-                    qhName = datum.realname;
-                    imgUrl = datum.img;
-                    break;
-                }
-            }
-            if (!TextUtils.isEmpty(imgUrl)) {
-                userName.setVisibility(View.GONE);
-                head_img.setVisibility(View.VISIBLE);
-                GlideUtil.loadImage(getActivity(), imgUrl, head_img);
-            } else {
-                head_img.setVisibility(View.GONE);
-                userName.setVisibility(View.VISIBLE);
-                userName.setText(StringUtils.subString(qhName, 2));
-            }
+            GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
+//            if (!TextUtils.isEmpty(identityInfo.img)) {
+                //userName.setVisibility(View.GONE);
+//                head_img.setVisibility(View.VISIBLE);
+            GlideUtil.loadImageHead(getActivity(), identityInfo.img, head_img);
+//            }
             if (BuildConfig.DEBUG) {
-                schoolName.setText(qhSchool + "-UAT");
+                schoolName.setText(identityInfo.schoolName + "-UAT");
             } else {
-                schoolName.setText(qhSchool);
+                schoolName.setText(identityInfo.schoolName);
             }
-            SPUtils.getInstance().put(SpData.USERNAME, qhName);
+            SPUtils.getInstance().put(SpData.USERNAME, identityInfo.realname);
         }
     }
 
@@ -289,9 +278,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_IMG.equals(messageEvent.getCode())) {
             if (!TextUtils.isEmpty(messageEvent.getMessage())) {
-                userName.setVisibility(View.GONE);
-                head_img.setVisibility(View.VISIBLE);
-                GlideUtil.loadImage(getActivity(), messageEvent.getMessage(), head_img);
+//                userName.setVisibility(View.GONE);
+//                head_img.setVisibility(View.VISIBLE);
+                GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
             }
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             mvpPresenter.getUserSchool();

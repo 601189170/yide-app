@@ -32,16 +32,12 @@
                     android:layout_marginTop="7dp"
                     android:layout_marginBottom="7dp">
 
-                    <org.raphets.roundimageview.RoundImageView
+                    <ImageView
                         android:id="@+id/head_img"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="right|center_vertical"
-                        app:leftBottom_corner_radius="6dp"
-                        app:leftTop_corner_radius="6dp"
-                        app:rightBottom_corner_radius="6dp"
-                        app:rightTop_corner_radius="6dp"
-                        app:type="round" />
+                        android:src="@drawable/default_head" />
 
                     <TextView
                         android:id="@+id/user_name"
@@ -50,6 +46,7 @@
                         android:background="@drawable/corners4"
                         android:gravity="center"
                         android:textColor="@color/white"
+                        android:visibility="gone"
                         android:textSize="16sp" />
                 </FrameLayout>
 
@@ -70,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_my_close"
                 android:layout_marginEnd="@dimen/dp_20"
-                android:layout_gravity="right|center_vertical"/>
+                android:layout_gravity="right|center_vertical" />
 
         </FrameLayout>
 
@@ -91,13 +88,14 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_icon1" />
+                        android:src="@drawable/my_icon1" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -136,16 +134,17 @@
                     android:id="@+id/layout2"
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_icon2" />
+                        android:src="@drawable/my_icon2" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -179,16 +178,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
                     android:layout_marginTop="8dp"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_icon3" />
+                        android:src="@drawable/my_icon3" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -219,16 +219,17 @@
                     android:id="@+id/layout4"
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_icon4" />
+                        android:src="@drawable/my_icon4" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -261,14 +262,15 @@
                     android:layout_height="49dp"
                     android:background="@color/white"
                     android:gravity="center_vertical"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_icon5" />
+                        android:src="@drawable/my_icon5" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -337,14 +339,15 @@
                     android:layout_marginTop="8dp"
                     android:background="@color/white"
                     android:gravity="center_vertical"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_icon7" />
+                        android:src="@drawable/my_icon7" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -378,13 +381,14 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:paddingLeft="20dp"
                     android:paddingRight="18dp">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/my_icon8" />
+                        android:src="@drawable/my_icon8" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -405,7 +409,7 @@
                         android:background="@drawable/icon_right" />
                 </LinearLayout>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="18dp"
@@ -455,6 +459,7 @@
                     android:id="@+id/exit"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginBottom="20dp"

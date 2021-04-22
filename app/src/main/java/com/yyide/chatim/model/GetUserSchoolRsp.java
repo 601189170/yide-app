@@ -120,7 +120,6 @@ public class GetUserSchoolRsp {
             public String classesTeacher;
             public int teacherId;
 
-
         }
     }
 

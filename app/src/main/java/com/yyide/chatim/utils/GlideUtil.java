@@ -11,7 +11,6 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
 import com.yyide.chatim.net.GetData;
 
-
 /**
  * Created by Hao on 2017/11/21.
  */
@@ -23,9 +22,17 @@ public class GlideUtil {
     }
 
     public static void loadImage(Context context, String url, ImageView imageView) {
-        RequestOptions myOptions = new RequestOptions()
-                .centerInside().placeholder(R.mipmap.de1).error(R.mipmap.de1);
         Glide.with(context).load(url).into(imageView);
+    }
+
+    public static void loadImageHead(Context context, String url, ImageView imageView) {
+        RoundedCorners roundedCorners = new RoundedCorners(6);
+        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+        Glide.with(context).load(url)
+                .apply(options)
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head)
+                .into(imageView);
     }
 
     //圆图
