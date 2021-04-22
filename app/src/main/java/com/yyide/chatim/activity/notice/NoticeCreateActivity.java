@@ -249,9 +249,11 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
             departmentIds.clear();
             classCardIds.clear();
             classesIds.clear();
-            if (sendObj == 1 || sendObj == 2){
+            if (sendObj == 1) {
                 classesIds.addAll(ids);
-            }else {
+            } else if (sendObj == 2) {
+                classCardIds.addAll(ids);
+            } else {
                 departmentIds.addAll(ids);
             }
             if (ids.isEmpty()){
