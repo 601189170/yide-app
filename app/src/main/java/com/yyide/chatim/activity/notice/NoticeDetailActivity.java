@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.notice;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -170,7 +171,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
                 id = data.getId();//出推送过过来的通知确认
                 String productionTime = DateUtils.formatTime(data.getProductionTime(), "yyyy-MM-dd HH:mm:ss","yyyy.MM.dd HH:mm");
                 tv_notice_title.setText(data.getTitle());
-                tv_notice_author.setText(data.getProductionTarget());
+                tv_notice_author.setText(String.format(this.getString(R.string.notice_release_obj_text),data.getProductionTarget()));
                 tv_notice_time.setText(productionTime);
                 tv_notice_content.setText(Html.fromHtml(data.getContent()));
 

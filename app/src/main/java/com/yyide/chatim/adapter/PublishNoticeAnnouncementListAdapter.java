@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
 import android.text.TextUtils;
@@ -115,7 +116,7 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             holder1.tv_notice.setText(noticeAnnouncementModel.getTitle());
             String productionTime = DateUtils.formatTime(noticeAnnouncementModel.getProductionTime(), null, null);
             holder1.tv_notice_time.setText(productionTime);
-            holder1.tv_notice_author.setText(noticeAnnouncementModel.getProductionTarget());
+            holder1.tv_notice_author.setText(String.format(context.getString(R.string.notice_release_obj_text),noticeAnnouncementModel.getProductionTarget()));
             holder1.tv_notice_content.setText(Html.fromHtml(noticeAnnouncementModel.getContent()));
             holder1.tv_confirm_number.setText(confirmNumber);
             holder1.tv_send_obj.setText(sendObj);

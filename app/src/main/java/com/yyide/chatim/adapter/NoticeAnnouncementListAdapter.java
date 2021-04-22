@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,7 +81,7 @@ public class NoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             NoticeAnnouncementModel noticeAnnouncementModel = data.get(position);
             holder1.tv_notice.setText(noticeAnnouncementModel.getNoticeTitle());
             holder1.tv_notice_time.setText(noticeAnnouncementModel.getNoticeTime());
-            holder1.tv_notice_author.setText(noticeAnnouncementModel.getNoticeAuthor());
+            holder1.tv_notice_author.setText(String.format(context.getString(R.string.notice_release_obj_text),noticeAnnouncementModel.getNoticeAuthor()));
             holder1.tv_notice_content.setText(noticeAnnouncementModel.getNoticeContent());
 
             if ("1".equals(noticeAnnouncementModel.getStatus())){
