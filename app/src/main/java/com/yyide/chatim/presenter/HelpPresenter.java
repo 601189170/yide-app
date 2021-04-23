@@ -25,7 +25,7 @@ public class HelpPresenter extends BasePresenter<HelpView> {
         map.put("size", 10);
         map.put("current", 1);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.getHelpList(body), new ApiCallback<HelpItemRep>() {
             @Override
             public void onSuccess(HelpItemRep model) {

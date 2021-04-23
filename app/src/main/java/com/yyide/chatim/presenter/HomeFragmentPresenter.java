@@ -48,7 +48,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
     }
 
     public void getUserSchool() {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.getUserSchool(), new ApiCallback<GetUserSchoolRsp>() {
             @Override
             public void onSuccess(GetUserSchoolRsp model) {
@@ -68,7 +68,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
     }
 
     public void getHomeNotice() {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.getIndexMyNotice(), new ApiCallback<NoticeHomeRsp>() {
             @Override
             public void onSuccess(NoticeHomeRsp model) {

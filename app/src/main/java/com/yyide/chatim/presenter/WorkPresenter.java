@@ -11,7 +11,7 @@ public class WorkPresenter extends BasePresenter<WorkView> {
     }
 
     public void getWorkInfo(String id) {
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.getClassesHomeworkInfo(id), new ApiCallback<SelectSchByTeaidRsp>() {
             @Override
             public void onSuccess(SelectSchByTeaidRsp model) {

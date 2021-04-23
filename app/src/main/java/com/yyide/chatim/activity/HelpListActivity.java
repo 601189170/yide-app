@@ -69,6 +69,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
 
     private void initAdapter() {
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         type = getIntent().getStringExtra("helpType");
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HelpItemAdapter(null);

@@ -3,6 +3,7 @@ package com.yyide.chatim.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -118,21 +120,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         EventBus.getDefault().register(this);
 //        showProgressDialog2();
         setFragment();
+        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         onRefresh();
         //initVerticalTextview(null);
         initVerticalTextview(null);
-    }
-
-    @Override
-    public void showLoading() {
-        super.showLoading();
-    }
-
-    @Override
-    public void hideLoading() {
-        super.hideLoading();
     }
 
     void initVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
@@ -261,7 +254,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
             GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
 //            if (!TextUtils.isEmpty(identityInfo.img)) {
-                //userName.setVisibility(View.GONE);
+            //userName.setVisibility(View.GONE);
 //                head_img.setVisibility(View.VISIBLE);
             GlideUtil.loadImageHead(getActivity(), identityInfo.img, head_img);
 //            }

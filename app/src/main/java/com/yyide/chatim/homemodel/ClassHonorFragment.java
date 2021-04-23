@@ -77,7 +77,7 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
         ViewPager viewPager = announRoll.getViewPager();
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

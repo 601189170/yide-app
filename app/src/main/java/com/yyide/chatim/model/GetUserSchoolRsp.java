@@ -60,7 +60,7 @@ public class GetUserSchoolRsp {
             String identity = "";
             if (!TextUtils.isEmpty(status)) {
                 if (TYPE_PARENTS.equals(status)) {
-                    identity = "家长";
+                    identity = "监护人";
                 } else if (TYPE_STUDENT.equals(status)) {
                     identity = "学生";
                 } else if (TYPE_PRESIDENT.equals(status)) {

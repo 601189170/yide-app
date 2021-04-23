@@ -17,11 +17,31 @@ public class TablePresenter extends BasePresenter<listTimeDataByAppView> {
     }
 
     public void SelectSchByTeaid() {
-        mvpView.showLoading();
+//        mvpView.showLoading();
 //        Map<String,String> map = new HashMap<String, String>();
 //        map.put("classesId",classesId);
 //        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
         addSubscription(dingApiStores.selectSchByTeaid(), new ApiCallback<SelectSchByTeaidRsp>() {
+            @Override
+            public void onSuccess(SelectSchByTeaidRsp model) {
+                mvpView.SelectSchByTeaid(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.SelectSchByTeaidFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void selectClassInfoByClassId(String classId) {
+//        mvpView.showLoading();
+        addSubscription(dingApiStores.selectClassInfoByClassId(classId), new ApiCallback<SelectSchByTeaidRsp>() {
             @Override
             public void onSuccess(SelectSchByTeaidRsp model) {
                 mvpView.SelectSchByTeaid(model);

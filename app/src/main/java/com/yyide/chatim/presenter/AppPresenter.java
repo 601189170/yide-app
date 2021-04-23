@@ -20,7 +20,7 @@ public class AppPresenter extends BasePresenter<AppView> {
 
     public void getMyAppList() {
         RequestBody body = RequestBody.create(BaseConstant.JSON, "");
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.getMyApp(body), new ApiCallback<AppListRsp>() {
             @Override
             public void onSuccess(AppListRsp model) {
@@ -47,7 +47,7 @@ public class AppPresenter extends BasePresenter<AppView> {
         map.put("size", 100);
         map.put("current", 1);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
-        mvpView.showLoading();
+//        mvpView.showLoading();
         addSubscription(dingApiStores.getAppList(body), new ApiCallback<AppItemBean>() {
             @Override
             public void onSuccess(AppItemBean model) {

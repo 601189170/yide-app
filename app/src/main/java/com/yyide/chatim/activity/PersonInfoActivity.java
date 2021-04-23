@@ -105,12 +105,12 @@ public class PersonInfoActivity extends BaseActivity {
             name.setText(bean.name);
             adress.setText(TextUtils.isEmpty(bean.address) ? "暂无邮箱" : bean.address);
             StringBuffer stringBuffer = new StringBuffer();
-            if (bean.subjects != null) {
+            if (bean.subjects != null && bean.subjects.size() > 0) {
                 for (int i = 0; i < bean.subjects.size(); i++) {
-                    if (i == bean.subjects.size()) {
-                        stringBuffer.append(bean.subjects.get(i));
-                    } else {
-                        if (bean.subjects.size() > 1) {
+                    if (bean.subjects.get(i) != null) {
+                        if (i == (bean.subjects.size() - 1)) {
+                            stringBuffer.append(bean.subjects.get(i).subjectName);
+                        } else {
                             stringBuffer.append(bean.subjects.get(i).subjectName + "、");
                         }
                     }

@@ -148,7 +148,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 
     private void setData() {
         user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
-        user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t" + SpData.getIdentityInfo().getIdentity() : "");
+        user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t\t" + SpData.getIdentityInfo().getIdentity() : "");
         head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
         if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().img)) {
 //            user_name.setVisibility(View.GONE);

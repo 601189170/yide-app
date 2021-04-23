@@ -144,7 +144,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             if (rsp.data.size() > 0) {
                 pName.setText(rsp.data.get(0).parentName);
                 if (!TextUtils.isEmpty(rsp.data.get(0).schoolLogo)) {
-                    GlideUtil.loadImageRadius(NoteBookActivity.this, rsp.data.get(0).schoolLogo, img, 6);
+                    GlideUtil.loadCircleImage(NoteBookActivity.this, rsp.data.get(0).schoolLogo, img);
                 }
                 for (listByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
                     listBeans1.add(listBean);

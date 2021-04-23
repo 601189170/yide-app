@@ -43,7 +43,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements HelpView {
+public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements HelpView, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.rmtext)
     TextView rmtext;
@@ -68,21 +68,21 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
         return mBaseView;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rmtext.setText("视频和文字教程,\n帮助你快速上手");
         jjtext.setText("便捷省心的应用\n操作技巧");
         initAdapter();
+        swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setRefreshing(true);
+        onRefresh();
+    }
+
+    @Override
+    public void onRefresh() {
         mvpPresenter.getHelpList();
-        swipeRefreshLayout.setColorSchemeColors(getActivity().getColor(R.color.colorPrimary));
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mvpPresenter.getHelpList();
-            }
-        });
     }
 
     @Override

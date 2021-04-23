@@ -43,7 +43,7 @@ import java.util.List;
 import butterknife.BindView;
 
 
-public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView {
+public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.mygrid)
     GridView mygrid;
@@ -115,10 +115,10 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
             return false;
         });
 
-        mSwipeRefreshLayout.setOnRefreshListener(() -> {
-            mvpPresenter.getMyAppList();
-            mvpPresenter.getAppList();
-        });
+        mSwipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getColor(R.color.colorPrimary));
+        onRefresh();
 
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -146,6 +146,10 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
 //                startActivity(new Intent(mActivity,LeaveActivity.class));
             startActivity(new Intent(mActivity, AppManagerActivity.class));
         });
+    }
+
+    @Override
+    public void onRefresh() {
         mvpPresenter.getMyAppList();
         mvpPresenter.getAppList();
     }
@@ -207,4 +211,5 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         mSwipeRefreshLayout.setRefreshing(false);
         Log.d(TAG, "getMyAppFail :" + msg);
     }
+
 }

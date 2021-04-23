@@ -80,7 +80,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                 startActivity(intent);
             }
         });
-        mvpPresenter.SelectSchByTeaid();
+        getData();
     }
 
     @Override
@@ -142,6 +142,16 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", TableFragment.class.getSimpleName());
+            getData();
+        }
+    }
+
+    private void getData() {
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            if (SpData.getClassInfo() != null) {
+                mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
+            }
+        } else {
             mvpPresenter.SelectSchByTeaid();
         }
     }
@@ -157,7 +167,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         className.setText(rsp.classesName);
         table_next.setText("下一节");
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
-        tips.setText(TextUtils.isEmpty(rsp.beforeClass) ?  "未设置课前提醒" : rsp.beforeClass);
+        tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
         table_next.setVisibility(View.VISIBLE);
         iv_tips.setVisibility(View.VISIBLE);
         iv_logo.setVisibility(View.VISIBLE);
