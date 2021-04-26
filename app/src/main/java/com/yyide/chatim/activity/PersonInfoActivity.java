@@ -86,6 +86,10 @@ public class PersonInfoActivity extends BaseActivity {
         title.setText("个人信息");
         bean = JSON.parseObject(data, TeacherlistRsp.DataBean.RecordsBean.class);
         Log.e("TAG", "PersonInfoActivity: " + JSON.toJSONString(bean));
+        setData(organization);
+    }
+
+    private void setData(String organization) {
         if (bean != null) {
             if ((!TextUtils.isEmpty(bean.userType) && !"2".equals(bean.userType)) || !"staff".equals(organization)) {
                 ll_email.setVisibility(View.GONE);

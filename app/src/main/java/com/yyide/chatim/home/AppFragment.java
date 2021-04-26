@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
@@ -103,9 +105,14 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         recylAppAdapter.setOnItemClickListener((view12, position) -> {
             sc = false;
             recylAppAdapter.setPosition(position);
-            listview.setSelection(position);
-//                listview.setSelectionFromTop(position);
-//                listview.smoothScrollToPosition(position);
+            /**准确定位到指定位置，并且将指定位置的item置顶，
+             若直接调用scrollToPosition(...)方法，则不会置顶。**/
+//            linearLayoutManager.scrollToPositionWithOffset(position, 0);
+//            linearLayoutManager.setStackFromEnd(true);
+//            listview.setSelection(position);
+//            listview.setSelectionFromTop(position, 0);
+//            listview.smoothScrollToPositionFromTop(position, 0);
+            listview.smoothScrollToPosition(position);
         });
         appAdapter = new AppAdapter();
         listview.setAdapter(appAdapter);

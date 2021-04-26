@@ -5,7 +5,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -80,7 +82,8 @@ public class LoginActivity extends BaseActivity {
     TextView postCode;
     @BindView(R.id.code)
     EditText vCode;
-
+    @BindView(R.id.del)
+    ImageView del;
     private TimeCount time;
     private boolean isPwd;
     OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -111,10 +114,35 @@ public class LoginActivity extends BaseActivity {
         }
         String username = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         String password = SPUtils.getInstance().getString(BaseConstant.PASSWORD);
+        initEdit();
         userEdit.setText(TextUtils.isEmpty(username) ? "" : username);
         passwordEdit.setText(TextUtils.isEmpty(password) ? "" : password);
         time = new TimeCount(120000, 1000);
         alphaAnimation();
+    }
+
+    private void initEdit() {
+        userEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String s1 = s.toString();
+                if (!TextUtils.isEmpty(s1)) {
+                    del.setVisibility(View.VISIBLE);
+                } else {
+                    del.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     //透明度动画
@@ -128,7 +156,7 @@ public class LoginActivity extends BaseActivity {
         alphaAniHide.setDuration(800);
     }
 
-    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code})
+    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code, R.id.del})
     void click(View view) {
         switch (view.getId()) {
             case R.id.forgot:
@@ -163,6 +191,9 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.type:
                 isValidateCode();
+                break;
+            case R.id.del:
+                userEdit.setText("");
                 break;
         }
     }

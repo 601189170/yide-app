@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+
     signingConfigs {
         release {
             storeFile file('/school.jks')
@@ -92,6 +93,10 @@ VIVO_APPID    : "vivo的APPID",
     lintOptions {
         abortOnError false
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -105,7 +110,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.github.f0ris.sweetalert:library:1.5.1'
     //万能适配器
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
     //折叠列表
@@ -160,6 +164,8 @@ dependencies {
 //    implementation 'me.jessyan:autosize:1.0.5'
     implementation project(':jiguang')
 //    implementation project(':tuikit')
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.google.android:flexbox:1.0.0'
     implementation 'com.tencent.imsdk:tuikit-live:5.1.56'
     implementation 'com.tencent.imsdk:tuikit:5.1.56'
 

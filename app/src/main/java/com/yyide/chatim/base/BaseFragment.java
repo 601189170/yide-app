@@ -2,23 +2,16 @@ package com.yyide.chatim.base;
 
 
 import android.app.Activity;
-
-
-import android.app.ProgressDialog;
 import android.os.Bundle;
-
 import android.view.View;
-import android.widget.Toast;
-
-
-import com.yyide.chatim.utils.LoadingTools;
 
 import androidx.fragment.app.Fragment;
+
+import com.yyide.chatim.utils.LoadingTools;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -29,14 +22,11 @@ import rx.subscriptions.CompositeSubscription;
 public class BaseFragment extends Fragment {
     public Activity mActivity;
 
-    private SweetAlertDialog pd;
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         mActivity = getActivity();
-        pd = new LoadingTools().pd(mActivity);
     }
 
     @Override
@@ -63,17 +53,11 @@ public class BaseFragment extends Fragment {
     }
 
     public void showProgressDialog2() {
-        if (pd == null)
-            pd = new LoadingTools().pd(mActivity);
-        if (pd != null)
-            pd.show();
+        LoadingTools.getInstance(getActivity()).showLoading();
     }
 
     public void dismissProgressDialog2() {
-        if (pd != null && pd.isShowing()) {
-            // progressDialog.hide();会导致android.view.WindowLeaked
-            pd.dismiss();
-        }
+        LoadingTools.getInstance(getActivity()).closeLoading();
     }
 
 }

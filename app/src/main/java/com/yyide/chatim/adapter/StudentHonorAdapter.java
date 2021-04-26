@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -47,15 +48,10 @@ public class StudentHonorAdapter extends LoopPagerAdapter {
 
         ImageView img = VHUtil.ViewHolder.get(view, R.id.img);
 
-        //GlideUtil.loadImage(view.getContext(), getItem(position).getUrl(), img);
         img.setOnClickListener(v -> {
             if (mItemClickListener != null) mItemClickListener.OnItemClickListener();
         });
-        //设置图片圆角角度
-        RoundedCorners roundedCorners = new RoundedCorners(10);
-        //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
-        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-        Glide.with(container.getContext()).load(getItem(position)).apply(options).into(img);
+        GlideUtil.loadImageRadius(container.getContext(), getItem(position), img, 10);
         return view;
     }
 

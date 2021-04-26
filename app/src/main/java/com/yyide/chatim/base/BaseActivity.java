@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.Utils;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
@@ -26,15 +25,11 @@ import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.LoadingTools;
 import com.yyide.chatim.utils.LogUtil;
 
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import rx.Observable;
 import rx.Subscriber;
@@ -42,7 +37,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import top.zibin.luban.Luban;
 
 /**
  * 登录状态的Activity都要集成该类，来完成被踢下线等监听处理。
@@ -53,7 +47,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private List<Call> calls;
     private static final String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
-    private SweetAlertDialog pd;
 
     // 监听做成静态可以让每个子类重写时都注册相同的一份。
     private static IMEventListener mIMEventListener = new IMEventListener() {
@@ -107,7 +100,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(vis);
         }
 //        TUIKit.addIMEventListener(mIMEventListener);
-        pd = new LoadingTools().pd(mActivity);
         //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
         //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
 
@@ -232,25 +224,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        showProgressDialog2();
+        if (mActivity != null) {
+            LoadingTools.getInstance(mActivity).showLoading();
+        }
     }
 
     public void hideLoading() {
-        dismissProgressDialog2();
-    }
-
-    public void showProgressDialog2() {
-        if (pd == null)
-            pd = new LoadingTools().pd(mActivity);
-        if (pd != null)
-            pd.show();
-    }
-
-    public void dismissProgressDialog2() {
-        if (pd != null && pd.isShowing()) {
-            // progressDialog.hide();会导致android.view.WindowLeaked
-            pd.dismiss();
-        }
+        LoadingTools.getInstance(mActivity).closeLoading();
     }
 
 }

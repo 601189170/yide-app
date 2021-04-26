@@ -21,7 +21,6 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends BaseFragm
 
     protected abstract P createPresenter();
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

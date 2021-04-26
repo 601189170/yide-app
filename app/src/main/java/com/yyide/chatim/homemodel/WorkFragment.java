@@ -106,6 +106,9 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
                 }
                 announAdapter.notifyData(dataBeanList);
                 indexAdapter.setList(dataBeanList);
+            } else {
+                announAdapter.notifyData(null);
+                indexAdapter.setList(null);
             }
 
         }

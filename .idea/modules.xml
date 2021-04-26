@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/yideapp.iml" filepath="$PROJECT_DIR$/.idea/modules/yideapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" filepath="$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tuikit/yideapp.tuikit.iml" filepath="$PROJECT_DIR$/.idea/modules/tuikit/yideapp.tuikit.iml" />
     </modules>
   </component>
 </project>

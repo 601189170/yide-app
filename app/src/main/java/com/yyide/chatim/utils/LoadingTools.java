@@ -1,55 +1,61 @@
 package com.yyide.chatim.utils;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.view.KeyEvent;
+import android.graphics.drawable.ColorDrawable;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.yyide.chatim.R;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
-
-/**
- * Created by Hao on 2016/10/19.
- */
+import com.yyide.chatim.widget.LoadingView;
 
 public class LoadingTools {
+    private static LoadingTools mInstance;
+    private static Dialog mLoadingDialog;
 
-    public SweetAlertDialog pd(Context context) {
-        final SweetAlertDialog sd = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        Window window = sd.getWindow();
-        window.setWindowAnimations(R.style.NoAnimationDialog); // 添加动画
-        sd.getProgressHelper().setBarColor(Color.parseColor("#37A4FF"));
-        sd.setTitleText("Loading");
-        sd.setCancelable(true);
-        sd.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK)
-                    sd.dismiss();
-                return false;
+    public static LoadingTools getInstance(Context context) {
+        if (mInstance == null) {
+            synchronized (LoadingTools.class) {
+                if (mInstance == null) {
+                    mInstance = new LoadingTools(context);
+                    return mInstance;
+                }
             }
-        });
-        return sd;
+        }
+        return mInstance;
     }
 
-
-    public SweetAlertDialog pd2(Context context) {
-        final SweetAlertDialog sd = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        sd.getProgressHelper().setBarColor(Color.parseColor("#37A4FF"));
-        sd.setTitleText("Loading");
-        sd.setCancelable(false);
-
-//        sd.setOnKeyListener(new DialogInterface.OnKeyListener() {
-//            @Override
-//            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-//                if (keyCode == KeyEvent.KEYCODE_BACK)
-//                    sd.dismiss();
-//                return false;
-//            }
-//        });
-        return sd;
+    public LoadingTools(Context context) {
+        mLoadingDialog = new Dialog(context, R.style.dialogStyle);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_loading, null);
+        LoadingView loadingView = view.findViewById(R.id.loadingView);
+        TextView text = view.findViewById(R.id.text);
+        mLoadingDialog.setCancelable(true);
+        mLoadingDialog.setCanceledOnTouchOutside(true);
+        mLoadingDialog.setContentView(view);
+        loadingView.start();
+        mLoadingDialog.setOnDismissListener(dialog -> loadingView.stop());
+        Window window = mLoadingDialog.getWindow();
+        if (null != window) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setWindowAnimations(R.style.dialogWindowAnim);
+        }
     }
 
+    public void showLoading() {
+        if (mLoadingDialog != null && !mLoadingDialog.isShowing()) {
+            mLoadingDialog.show();
+        }
+    }
+
+    public void closeLoading() {
+        if (mLoadingDialog.isShowing()) {
+            mLoadingDialog.dismiss();
+            mLoadingDialog.cancel();
+        }
+    }
 }

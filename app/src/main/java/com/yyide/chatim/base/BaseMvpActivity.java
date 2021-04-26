@@ -25,15 +25,4 @@ public abstract class BaseMvpActivity<P extends BasePresenter> extends BaseActiv
         }
         hideLoading();
     }
-
-    public void showLoading() {
-        if (mActivity != null) {
-            showProgressDialog2();
-        }
-
-    }
-
-    public void hideLoading() {
-        dismissProgressDialog2();
-    }
 }

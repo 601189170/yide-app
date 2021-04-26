@@ -14,6 +14,7 @@ import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.ClassesPhotoRsp;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -52,11 +53,7 @@ public class ClassPhotoAdapter extends LoopPagerAdapter {
         img.setOnClickListener(v -> {
             if (mItemClickListener != null) mItemClickListener.OnItemClickListener();
         });
-        //设置图片圆角角度
-        RoundedCorners roundedCorners = new RoundedCorners(10);
-        //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
-        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
-        Glide.with(container.getContext()).load(getItem(position).getUrl()).apply(options).into(img);
+        GlideUtil.loadImageRadius(container.getContext(), getItem(position).getUrl(), img, 10);
         return view;
     }
 
