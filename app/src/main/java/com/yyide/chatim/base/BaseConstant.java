@@ -75,20 +75,14 @@ public class BaseConstant {
      * EventBus 常量
      */
     public static final String TYPE_CHECK_HELP_CENTER = "type_check_help_center";
-    public static final String TYPE_UPDATE_USER_PHONE = "type_update_user_phone";
     public static final String TYPE_UPDATE_USER_EMAIL = "type_update_user_email";
     public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
     public static final String TYPE_SELECT_MESSAGE_TODO = "type_select_message_todo";
     public static final String TYPE_MAIN = "type_main";
     public static final String TYPE_IM_LOGIN = "type_im_login";
-
     public static final String TYPE_UPDATE_HOME = "type_update_home";
-
     public static final String TYPE_UPDATE_IMG = "type_update_img";
-
     public static final String TYPE_PREPARES_SAVE = "type_prepares_save";
-    public static final String TYPE_UPDATE_CLASS_HOME = "type_update_class_home";
     public static final String TYPE_UPDATE_APP_MANAGER = "type_update_app_manager";
 
-    public static final String CheakId = "1";
 }

@@ -36,7 +36,6 @@ public class PersonInfoActivity extends BaseActivity {
     TextView sex;
     @BindView(R.id.subject)
     TextView subject;
-    TeacherlistRsp.DataBean.RecordsBean bean;
     @BindView(R.id.topname)
     TextView topname;
     @BindView(R.id.set)
@@ -72,6 +71,7 @@ public class PersonInfoActivity extends BaseActivity {
     int type = 1;
     int type2 = 1;
     int type3 = 1;
+    TeacherlistRsp.DataBean.RecordsBean bean;
 
     @Override
     public int getContentViewID() {
@@ -91,7 +91,7 @@ public class PersonInfoActivity extends BaseActivity {
 
     private void setData(String organization) {
         if (bean != null) {
-            if ((!TextUtils.isEmpty(bean.userType) && !"2".equals(bean.userType)) || !"staff".equals(organization)) {
+            if ("2".equals(bean.userType) || "student".equals(organization)) {
                 ll_email.setVisibility(View.GONE);
                 ll_master.setVisibility(View.VISIBLE);
                 ll_vice.setVisibility(View.VISIBLE);

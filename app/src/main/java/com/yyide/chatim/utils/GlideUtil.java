@@ -26,10 +26,11 @@ public class GlideUtil {
     }
 
     public static void loadImageHead(Context context, String url, ImageView imageView) {
-        RoundedCorners roundedCorners = new RoundedCorners(6);
-        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+        RequestOptions roundOptions = new RequestOptions()
+                .transform(new RoundedCorners(12));
         Glide.with(context).load(url)
-                .apply(options)
+                .centerCrop()
+                .apply(roundOptions)
                 .placeholder(R.drawable.default_head)
                 .error(R.drawable.default_head)
                 .into(imageView);

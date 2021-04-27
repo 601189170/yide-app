@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
@@ -79,23 +77,32 @@ public class SplashActivity extends AppCompatActivity {
                         .add("username", username)
                         .add("password", password)
                         .add("schoolId", schoolId + "")
+                        .add("client_id", "yide-cloud")
+                        .add("grant_type", "password")
+                        .add("client_secret", "yide1234567")
                         .build();
             } else {
                 body = new FormBody.Builder()
                         .add("username", username)
                         .add("password", password)
+                        .add("client_id", "yide-cloud")
+                        .add("grant_type", "password")
+                        .add("client_secret", "yide1234567")
                         .build();
             }
         } else {
             body = new FormBody.Builder()
                     .add("username", username)
                     .add("password", password)
+                    .add("client_id", "yide-cloud")
+                    .add("grant_type", "password")
+                    .add("client_secret", "yide1234567")
                     .build();
         }
 
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/login")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/oauth/token")
                 .post(body)
                 .build();
         //发起请求
@@ -126,7 +133,7 @@ public class SplashActivity extends AppCompatActivity {
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().getToken())
                 .build();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {

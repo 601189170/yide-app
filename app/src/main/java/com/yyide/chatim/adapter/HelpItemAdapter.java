@@ -1,7 +1,10 @@
 package com.yyide.chatim.adapter;
 
 import android.text.Html;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -38,6 +41,18 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 //ImageView imageView = holder.getView(R.id.iv_start);
                 holder.setText(R.id.title, (holder.getAdapterPosition() + 1) + "." + itemBean.getName());
                 videoView = holder.getView(R.id.videoView);
+                //增加封面
+                ImageView imageView = new ImageView(holder.itemView.getContext());
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                Glide.with(holder.itemView.getContext())
+                        .setDefaultRequestOptions(
+                                new RequestOptions()
+                                        .frame(0)
+                                        .centerCrop()
+                        )
+                        .load(itemBean.getVideo())
+                        .into(imageView);
+                videoView.setThumbImageView(imageView);
                 videoView.setUp(itemBean.getVideo(), false, "");
                 break;
         }

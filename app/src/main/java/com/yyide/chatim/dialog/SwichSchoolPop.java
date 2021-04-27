@@ -12,19 +12,16 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.Space;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.SwichSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
@@ -33,6 +30,7 @@ import com.yyide.chatim.model.SelectUserSchoolRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.utils.DemoLog;
+import com.yyide.chatim.utils.LoadingTools;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -133,13 +131,14 @@ public class SwichSchoolPop extends PopupWindow {
     }
 
     void selectUserSchool(GetUserSchoolRsp.DataBean school) {
+        LoadingTools.getInstance(context).showLoading();
         SchoolRsp rsp = new SchoolRsp();
         rsp.userId = school.userId;
         RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/selectUserSchool")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().getToken())
                 .post(requestBody)
                 .build();
         //发起请求
@@ -147,6 +146,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", "onFailure: " + e.toString());
+                LoadingTools.getInstance(context).closeLoading();
             }
 
             @Override
@@ -159,6 +159,7 @@ public class SwichSchoolPop extends PopupWindow {
                     Tologin(school.userId);
                 } else {
                     ToastUtils.showShort(bean.message);
+                    LoadingTools.getInstance(context).closeLoading();
                 }
                 context.runOnUiThread(() -> {
                     if (popupWindow != null && popupWindow.isShowing()) {
@@ -178,10 +179,13 @@ public class SwichSchoolPop extends PopupWindow {
                 .add("username", userName)
                 .add("password", SPUtils.getInstance().getString(BaseConstant.PASSWORD))
                 .add("userId", String.valueOf(userId))
+                .add("client_id", "yide-cloud")
+                .add("grant_type", "password")
+                .add("client_secret", "yide1234567")
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/login")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/oauth/token")
                 .post(body)
                 .build();
         //发起请求
@@ -189,6 +193,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", "onFailure: " + e.toString());
+                LoadingTools.getInstance(context).closeLoading();
             }
 
             @Override
@@ -201,6 +206,7 @@ public class SwichSchoolPop extends PopupWindow {
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     getUserSchool();
                 } else {
+                    LoadingTools.getInstance(context).closeLoading();
                     ToastUtils.showShort(bean.message);
                 }
             }
@@ -213,13 +219,14 @@ public class SwichSchoolPop extends PopupWindow {
         Request request = new Request.Builder()
 //                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().getToken())
                 .build();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", "getUserSigonFailure: " + e.toString());
+                LoadingTools.getInstance(context).closeLoading();
             }
 
             @Override
@@ -230,9 +237,13 @@ public class SwichSchoolPop extends PopupWindow {
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
                 if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
                     SpData.setIdentityInfo(rsp);
+                    if (mOnCheckCallBack != null) {
+                        mOnCheckCallBack.onCheckCallBack();
+                    }
                     getUserSig();
                 } else {
                     ToastUtils.showShort(rsp.msg);
+                    LoadingTools.getInstance(context).closeLoading();
                 }
             }
         });
@@ -247,7 +258,7 @@ public class SwichSchoolPop extends PopupWindow {
 //                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
 //                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().getToken())
                 .post(body)
                 .build();
         //发起请求
@@ -255,6 +266,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onFailure(Call call, IOException e) {
                 //Log.e(TAG, "getUserSigonFailure: " + e.toString());
+                LoadingTools.getInstance(context).closeLoading();
             }
 
             @Override
@@ -266,7 +278,7 @@ public class SwichSchoolPop extends PopupWindow {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
                     initIm(bean.data);
                 } else {
-//                    hideLoading();
+                    LoadingTools.getInstance(context).closeLoading();
                     ToastUtils.showShort(bean.msg);
                 }
             }
@@ -280,9 +292,10 @@ public class SwichSchoolPop extends PopupWindow {
         TUIKit.login(SpData.getIdentityInfo().userId + "", userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
+                LoadingTools.getInstance(context).closeLoading();
                 //context.runOnUiThread(() -> ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc));
                 DemoLog.i("TAG", "imLogin errorCode = " + code + ", errorInfo = " + desc);
-                UserInfo.getInstance().setAutoLogin(true);
+                UserInfo.getInstance().setAutoLogin(false);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
                 Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
@@ -301,7 +314,7 @@ public class SwichSchoolPop extends PopupWindow {
 
             @Override
             public void onSuccess(Object data) {
-
+                LoadingTools.getInstance(context).closeLoading();
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");

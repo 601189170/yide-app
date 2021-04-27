@@ -20,6 +20,7 @@ import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.model.StudentHonorBean;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.UserInfoRsp;
+import com.yyide.chatim.utils.StringUtils;
 
 import org.w3c.dom.Text;
 
@@ -57,6 +58,7 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserInfoRsp.DataBean bean = data.get(position);
+        holder.tv_realName.setText(StringUtils.subString(bean.getName(), 2));
         holder.tv_name.setText(bean.getName());
         if ("1".equals(bean.getUserType())) {
             holder.tv_classname.setText(bean.getDepartmentName());
@@ -68,7 +70,6 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
         } else {
             holder.iv_call.setVisibility(View.GONE);
         }
-
         holder.iv_call.setOnClickListener(v -> {
             //打电话
             if (!TextUtils.isEmpty(bean.getPhone())) {
@@ -106,8 +107,8 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.iv_profile)
-        ImageView iv_profile;//显示图片
+        @BindView(R.id.tv_realName)
+        TextView tv_realName;//显示图片
         @BindView(R.id.iv_user_detail)
         ImageView iv_user_detail;
         @BindView(R.id.iv_call)

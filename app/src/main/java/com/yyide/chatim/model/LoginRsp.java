@@ -1,5 +1,7 @@
 package com.yyide.chatim.model;
 
+import android.text.TextUtils;
+
 public class LoginRsp {
 
 
@@ -12,6 +14,15 @@ public class LoginRsp {
     public String msg;
     public String message;
     public int code;
-    public String token;
+    public String data;
+
+    /**
+     * 处理token为空时避免请求报错导致闪退
+     *
+     * @return
+     */
+    public String getToken() {
+        return TextUtils.isEmpty(data) ? "token=null" : data;
+    }
 
 }

@@ -2,12 +2,10 @@ package com.yyide.chatim;
 
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -478,7 +476,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().getToken())
                 .post(body)
                 .build();
         //发起请求

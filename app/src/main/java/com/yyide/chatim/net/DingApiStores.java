@@ -75,7 +75,7 @@ public interface DingApiStores {
     Observable<DeviceUpdateRsp> setpm(@Query("machineCode") String a, @Query("officeId") int b, @Query("deviceDirection") String c);
 
     //账号密码登入
-    @POST("/management/cloud-system/login")
+    @POST("/management/cloud-system/oauth/token")
     Observable<LoginRsp> login(@Query("username") String a, @Query("password") String b);
 
     //验证码登入
@@ -190,25 +190,19 @@ public interface DingApiStores {
     @GET("/management/cloud-system/user/notice/getMyNoticeDetails")
     Observable<NoticeDetailRsp> getMyNoticeDetails(@Query("id") int id);
 
-    //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyReleaseNotice
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/announcement/getMyReleaseNotice")
     Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") int id);
-
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/management/cloud-system/user/announcement/getMyNoticeBySignId")
     Observable<NoticeDetailRsp> getMyNoticeBySignId(@Query("signId") long id);
 
-    //https://api.uat.edu.1d1j.net/management/cloud-system/notice/temp/getTemplateTypePage
-    //https://api.uat.edu.1d1j.net/management/cloud-system/announcement/type/getAnnouncementTypePage
     //消息模板分类类型
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/announcement/type/getAnnouncementTypePage")
     Observable<TemplateTypeRsp> getTemplateTypePage(@Body RequestBody requestBody);
 
-    //https://api.uat.edu.1d1j.net/management/cloud-system/message/temp/selectMessagePage
-    //https://api.uat.edu.1d1j.net/management/cloud-system/announcement/queryAnnouncementTempPage
     //获取消息模板
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/message/temp/selectMessagePage")

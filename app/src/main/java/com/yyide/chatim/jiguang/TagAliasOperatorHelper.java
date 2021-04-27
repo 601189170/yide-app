@@ -9,10 +9,8 @@ import android.util.SparseArray;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.SmsVerificationRsp;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,7 +23,6 @@ import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.helper.Logger;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -361,7 +358,7 @@ public class TagAliasOperatorHelper {
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/equipment/addUserEquipmentInfo")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().getToken())
                 .post(body)
                 .build();
         //发起请求

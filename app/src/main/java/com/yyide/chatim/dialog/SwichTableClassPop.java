@@ -56,7 +56,6 @@ public class SwichTableClassPop extends PopupWindow {
         ConstraintLayout bg = mView.findViewById(R.id.bg);
         WheelView wheelView = mView.findViewById(R.id.departments);
         WheelView wheelViewClasses = mView.findViewById(R.id.tableClass);
-
         confirm.setOnClickListener(v -> {
             if (classesWheelAdapter.getData() != null && classesWheelAdapter.getData().size() >= wheelViewClasses.getCurrentItem()) {
                 SelectTableClassesRsp.DataBean itemData = (SelectTableClassesRsp.DataBean) classesWheelAdapter.getData().get(wheelViewClasses.getCurrentItem());
@@ -79,7 +78,11 @@ public class SwichTableClassPop extends PopupWindow {
             }
         });
         wheelView.setCyclic(false);
+        wheelView.setTextColorCenter(context.getResources().getColor(R.color.text_212121));
+        wheelView.setTextColorOut(context.getResources().getColor(R.color.text_666666));
         wheelViewClasses.setCyclic(false);
+        wheelViewClasses.setTextColorCenter(context.getResources().getColor(R.color.text_212121));
+        wheelViewClasses.setTextColorOut(context.getResources().getColor(R.color.text_666666));
         wheelViewClasses.setCurrentItem(-1);
         wheelView.setAdapter(new ArrayWheelAdapter(dataBeansList));
         wheelView.setCurrentItem(-1);

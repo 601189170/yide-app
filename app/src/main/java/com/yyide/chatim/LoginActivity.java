@@ -327,12 +327,15 @@ public class LoginActivity extends BaseActivity {
     void Tologin(String username, String password) {
         showLoading();
         RequestBody body = new FormBody.Builder()
+                .add("client_id", "yide-cloud")
+                .add("grant_type", "password")
+                .add("client_secret", "yide1234567")
                 .add("username", username)
                 .add("password", password)
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/login")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/oauth/token")
                 .post(body)
                 .build();
         //发起请求
@@ -441,7 +444,7 @@ public class LoginActivity extends BaseActivity {
         Request request = new Request.Builder()
 //                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().getToken())
                 .build();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
@@ -478,7 +481,7 @@ public class LoginActivity extends BaseActivity {
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .addHeader("Authorization", SpData.User().token)
+                .addHeader("Authorization", SpData.User().data)
                 .post(body)
                 .build();
         //发起请求

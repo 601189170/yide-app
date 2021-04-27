@@ -147,18 +147,20 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     }
 
     private void setData() {
-        user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
-        user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t\t" + SpData.getIdentityInfo().getIdentity() : "");
-        head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
-        if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().img)) {
-//            user_name.setVisibility(View.GONE);
-//            head_img.setVisibility(View.VISIBLE);
-            GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
-        } else {
-//            head_img.setVisibility(View.GONE);
-//            user_name.setVisibility(View.VISIBLE);
-//            user_name.setText(StringUtils.subString(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "", 2));
-        }
+        context.runOnUiThread(() -> {
+            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t\t" + SpData.getIdentityInfo().getIdentity() : "");
+            head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
+            if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().img)) {
+                //            user_name.setVisibility(View.GONE);
+                //            head_img.setVisibility(View.VISIBLE);
+                GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
+            } else {
+                //            head_img.setVisibility(View.GONE);
+                //            user_name.setVisibility(View.VISIBLE);
+                //            user_name.setText(StringUtils.subString(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "", 2));
+            }
+        });
     }
 
     public void show() {

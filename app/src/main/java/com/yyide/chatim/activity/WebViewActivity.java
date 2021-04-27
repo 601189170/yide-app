@@ -1,6 +1,5 @@
 package com.yyide.chatim.activity;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -14,14 +13,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
-import android.os.SystemClock;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -35,23 +27,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.WebModel;
-import com.yyide.chatim.utils.TakePicUtil;
-
-import java.io.File;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class WebViewActivity extends BaseActivity {
 
@@ -180,7 +162,7 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().token + "')");
+                mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().data + "')");
             }
 
             @Override

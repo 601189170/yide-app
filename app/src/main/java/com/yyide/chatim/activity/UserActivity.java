@@ -287,7 +287,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
         }
-        GlideUtil.loadImage(this, imgUrl, img);
+        GlideUtil.loadImageHead(this, imgUrl, img);
     }
 
     @Override

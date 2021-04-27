@@ -251,13 +251,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     void setSchoolInfo() {
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
+        if (SpData.getIdentityInfo() != null) {
             GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-//            if (!TextUtils.isEmpty(identityInfo.img)) {
-            //userName.setVisibility(View.GONE);
-//                head_img.setVisibility(View.VISIBLE);
             GlideUtil.loadImageHead(getActivity(), identityInfo.img, head_img);
-//            }
             if (BuildConfig.DEBUG) {
                 schoolName.setText(identityInfo.schoolName + "-UAT");
             } else {
