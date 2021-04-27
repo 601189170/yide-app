@@ -1,6 +1,5 @@
 package com.yyide.chatim.base;
 
-
 import com.yyide.chatim.BuildConfig;
 
 import okhttp3.MediaType;

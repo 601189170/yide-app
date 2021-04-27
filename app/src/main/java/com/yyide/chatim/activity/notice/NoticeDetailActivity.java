@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.utils.DateUtils;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -51,7 +54,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     private int type;
     private String status;
 
-    private long signId;
+    private String signId;
     private int totalNumber;
     private int readNumber;
 
@@ -67,7 +70,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         tv_notice_content.setMovementMethod(ScrollingMovementMethod.getInstance());
         type = getIntent().getIntExtra("type", 0);
         id = getIntent().getIntExtra("id", 0);
-        signId = getIntent().getLongExtra("signId", 0);
+        signId = getIntent().getStringExtra("signId");
         status = getIntent().getStringExtra("status");
         Log.e(TAG, "onCreate: type:" + type + ",id:" + id + ",status:" + status);
         initView(type);
@@ -106,8 +109,8 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     }
 
     private void loadNoticeDetail() {
-        if (signId > 0) {//推送消息ID
-            mvpPresenter.noticeDetail(id, signId, TYPE_JG_PUSH);
+        if (!TextUtils.isEmpty(signId)) {//推送消息ID
+            mvpPresenter.noticeDetail(id, Long.parseLong(signId), TYPE_JG_PUSH);
         } else {
             mvpPresenter.noticeDetail(id, 0, type);
         }
@@ -169,9 +172,9 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         if (noticeDetailRsp.getCode() == 200) {
             if (data != null) {
                 id = data.getId();//出推送过过来的通知确认
-                String productionTime = DateUtils.formatTime(data.getProductionTime(), "yyyy-MM-dd HH:mm:ss","yyyy.MM.dd HH:mm");
+                String productionTime = DateUtils.formatTime(data.getProductionTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
                 tv_notice_title.setText(data.getTitle());
-                tv_notice_author.setText(String.format(this.getString(R.string.notice_release_obj_text),data.getProductionTarget()));
+                tv_notice_author.setText(String.format(this.getString(R.string.notice_release_obj_text), data.getProductionTarget()));
                 tv_notice_time.setText(productionTime);
                 tv_notice_content.setText(Html.fromHtml(data.getContent()));
 
@@ -179,13 +182,13 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
                 String string = getString(R.string.notice_confirm_number_text);
                 String confirm_number = String.format(string, data.getReadNumber(), data.getTotalNumber());
                 tv_confirm_number.setText(confirm_number);
-                signId = data.getSignId();
+                signId = data.getSignId() + "";
                 totalNumber = data.getTotalNumber();
                 readNumber = data.getReadNumber();
                 status = data.getStatus();
-                Log.e(TAG, "noticeDetail: status="+("1".equals(status))+",type="+type );
-                if ("1".equals(status) && (type == 1||type == TYPE_CONFIRM ||type==TYPE_JG_PUSH || type == TYPE_UNCONFIRM)) {
-                    Log.e(TAG, "noticeDetail: "+type );
+                Log.e(TAG, "noticeDetail: status=" + ("1".equals(status)) + ",type=" + type);
+                if ("1".equals(status) && (type == 1 || type == TYPE_CONFIRM || type == TYPE_JG_PUSH || type == TYPE_UNCONFIRM)) {
+                    Log.e(TAG, "noticeDetail: " + type);
                     tv_confirm.setSelected(false);
                     tv_confirm.setClickable(false);
                     tv_confirm.setText("已确认");
