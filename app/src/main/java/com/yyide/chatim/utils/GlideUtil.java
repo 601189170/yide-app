@@ -22,7 +22,7 @@ public class GlideUtil {
     }
 
     public static void loadImage(Context context, String url, ImageView imageView) {
-        Glide.with(context).load(url).into(imageView);
+        Glide.with(context).load(url).centerCrop().into(imageView);
     }
 
     public static void loadImageHead(Context context, String url, ImageView imageView) {
@@ -44,14 +44,14 @@ public class GlideUtil {
     }
 
     public static void loadImageRadius(Context context, String path, ImageView img, int radius) {
-        //设置图片圆角角度
-        RoundedCorners roundedCorners = new RoundedCorners(radius);
-        //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
-        RequestOptions options = RequestOptions.bitmapTransform(roundedCorners)
-                .circleCrop()
+        RequestOptions roundOptions = new RequestOptions()
+                .transform(new RoundedCorners(radius));
+        Glide.with(context).load(path)
+                .centerCrop()
+                .apply(roundOptions)
                 .placeholder(R.mipmap.icon_class)
-                .error(R.mipmap.icon_class);
-        Glide.with(context).load(path).apply(options).into(img);
+                .error(R.mipmap.icon_class)
+                .into(img);
     }
 
 

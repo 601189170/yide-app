@@ -123,7 +123,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        onRefresh();
+        mvpPresenter.getUserSchool();
+        mvpPresenter.getHomeNotice();
         //initVerticalTextview(null);
         initVerticalTextview(null);
     }

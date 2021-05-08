@@ -86,7 +86,8 @@ public class ChatFragment extends BaseFragment {
          * 需要聊天的基本信息
          */
         mChatLayout.setChatInfo(mChatInfo);
-
+        //获取messageLayout UI
+        MessageLayout messageLayout = mChatLayout.getMessageLayout();
         //获取单聊面板的标题栏
         mTitleBar = mChatLayout.getTitleBar();
 
@@ -111,11 +112,13 @@ public class ChatFragment extends BaseFragment {
                 }
             });
         }
+
         mChatLayout.getMessageLayout().setOnItemClickListener(new MessageLayout.OnItemClickListener() {
             @Override
             public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
                 //因为adapter中第一条为加载条目，位置需减1
-                mChatLayout.getMessageLayout().showItemPopMenu(position - 1, messageInfo, view);
+
+                //mChatLayout.getMessageLayout().showItemPopMenu(position - 1, messageInfo, view);
             }
 
             @Override

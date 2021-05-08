@@ -83,5 +83,6 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_IMG = "type_update_img";
     public static final String TYPE_PREPARES_SAVE = "type_prepares_save";
     public static final String TYPE_UPDATE_APP_MANAGER = "type_update_app_manager";
+    public static final String TYPE_UPDATE_APP = "type_update_app";
 
 }

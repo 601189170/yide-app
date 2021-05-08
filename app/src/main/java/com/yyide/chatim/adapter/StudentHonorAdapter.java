@@ -1,15 +1,11 @@
 package com.yyide.chatim.adapter;
 
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
@@ -26,15 +22,9 @@ import java.util.List;
 public class StudentHonorAdapter extends LoopPagerAdapter {
 
     public List<String> list = new ArrayList<>();
-    Activity context;
 
     public StudentHonorAdapter(RollPagerView viewPager) {
         super(viewPager);
-    }
-
-    public StudentHonorAdapter(RollPagerView viewPager, Activity context) {
-        super(viewPager);
-        this.context = context;
     }
 
     private String getItem(int position) {
@@ -51,7 +41,7 @@ public class StudentHonorAdapter extends LoopPagerAdapter {
         img.setOnClickListener(v -> {
             if (mItemClickListener != null) mItemClickListener.OnItemClickListener();
         });
-        GlideUtil.loadImageRadius(container.getContext(), getItem(position), img, 10);
+        GlideUtil.loadImage(container.getContext(), getItem(position), img);
         return view;
     }
 

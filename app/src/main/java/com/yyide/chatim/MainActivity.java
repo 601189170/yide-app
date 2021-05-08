@@ -6,23 +6,34 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.blankj.utilcode.util.Utils;
+import com.shehuan.nicedialog.BaseNiceDialog;
+import com.shehuan.nicedialog.NiceDialog;
+import com.shehuan.nicedialog.ViewConvertListener;
+import com.shehuan.nicedialog.ViewHolder;
 import com.tencent.imsdk.v2.V2TIMSignalingInfo;
 import com.tencent.liteav.model.CallModel;
 import com.tencent.liteav.model.TRTCAVCallImpl;
@@ -40,6 +51,7 @@ import com.yyide.chatim.home.MessageFragment;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetAppVersionResponse;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ResultBean;
@@ -48,6 +60,7 @@ import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.getUserSigRsp;
+import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
@@ -57,6 +70,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.io.IOException;
 
 import butterknife.BindView;
@@ -176,6 +190,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         } else if (BaseConstant.TYPE_MAIN.equals(messageEvent.getCode())) {
             ActivityUtils.finishToActivity(MainActivity.class, false);
             setTab(0, 0);
+        } else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
+            //模拟数据测试应用更新
+            GetAppVersionResponse versionResponse = new GetAppVersionResponse();
+            versionResponse.setVersion("1.0.1");
+            versionResponse.setUpdateAddress("https://3550d97d52.eachqr.com/aaa4e3fce9f117f73e433ba180dca3f0bab26438.apk?auth_key=1620374642-0-0-d1a8b5e8c43704c29455ab8c077319aa");
+            versionResponse.setUpdateContent("1、更新内容\n2、更新内容\n3、更新内容");
+            download(versionResponse);
         }
     }
 
@@ -532,4 +553,99 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         });
     }
 
+    private void download(GetAppVersionResponse data) {
+        if (!AppUtils.getAppVersionName().equals(data.getVersion())) {
+            NiceDialog.init().setLayoutId(R.layout.dialog_update).setConvertListener(new ViewConvertListener() {
+                @Override
+                protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
+                    TextView tv = holder.getView(R.id.tv);
+                    tv.setText(data.getUpdateContent());
+                    ((TextView) holder.getView(R.id.tv)).setMovementMethod(new ScrollingMovementMethod());
+                    TextView tvUpdate = holder.getView(R.id.tvUpdate);
+                    FrameLayout flUpgrade = holder.getView(R.id.flUpgrade);
+
+                    downloadOrInstall(tvUpdate, flUpgrade, data);
+                }
+            }).setDimAmount(0.5f).setOutCancel(true).show(getSupportFragmentManager());
+        } else {
+            ToastUtils.showShort(R.string.newestVersion);
+        }
+    }
+
+    private long max1;
+
+    private void downloadOrInstall(TextView tvUpdate, FrameLayout flUpgrade, GetAppVersionResponse data) {
+        flUpgrade.setOnClickListener(v -> {
+            //后台下载APK并更新
+            flUpgrade.setClickable(false);
+            AppClient.downloadFile(data.getVersion(), data.getUpdateAddress(), new AppClient.DownloadListener() {
+                @Override
+                public void onStart(long max) {
+                    max1 = max;
+                    ToastUtils.showShort("开始下载");
+                }
+
+                @Override
+                public void onProgress(long progress) {
+                    runOnUiThread(() -> tvUpdate.setText((int) ((float) progress / max1 * 100) + "%"));
+                }
+
+                @Override
+                public void onSuccess() {
+                    runOnUiThread(() -> {
+                        flUpgrade.setClickable(true);
+                        tvUpdate.setText("点击安装");
+                        flUpgrade.setOnClickListener(v1 -> {
+                            File file = new File(Utils.getApp().getCacheDir(), data.getVersion() + ".apk");// 设置路径
+                            String[] command = {"chmod", "777", file.getPath()};
+                            ProcessBuilder builder = new ProcessBuilder(command);
+                            try {
+                                builder.start();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            Intent intent = installIntent(file.getPath());
+                            if (intent != null) {
+                                startActivity(intent);
+                            }
+                        });
+                        flUpgrade.performClick();
+                    });
+                }
+
+                @Override
+                public void onFailure() {
+                    runOnUiThread(() -> {
+                        File file = new File(Utils.getApp().getCacheDir(), data.getVersion() + ".apk");
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        downloadOrInstall(tvUpdate, flUpgrade, data);
+                        flUpgrade.setClickable(true);
+                        tvUpdate.setText("点击重试");
+                    });
+                    ToastUtils.showShort("更新失败");
+                }
+            });
+        });
+    }
+
+    private Intent installIntent(String path) {
+        try {
+            File file = new File(path);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".FileProvider", file),
+                        "application/vnd.android.package-archive");
+            } else {
+                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            }
+            return intent;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

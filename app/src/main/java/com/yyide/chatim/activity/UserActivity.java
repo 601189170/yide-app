@@ -129,7 +129,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 new BottomHeadMenuPop(this);
                 break;
             case R.id.layout2://手机号
-                //startActivity(new Intent(this, CheckPhoneActivity.class));
+                startActivity(new Intent(this, CheckPhoneActivity.class));
                 break;
             case R.id.layout3://性别
                 Intent intent1 = new Intent(this, SexActivity.class);

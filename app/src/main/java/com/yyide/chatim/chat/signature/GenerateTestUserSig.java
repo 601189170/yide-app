@@ -47,7 +47,7 @@ public class GenerateTestUserSig {
     //线上版本APPID
     public static final int SDKAPPID_RELEASE = 1400511951;
     //UAT- APPID
-    public static final int SDKAPPID_UAT = 1400510248;
+    public static final int SDKAPPID_UAT = 1400514965;
 
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 

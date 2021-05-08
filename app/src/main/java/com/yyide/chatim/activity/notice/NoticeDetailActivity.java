@@ -1,6 +1,5 @@
 package com.yyide.chatim.activity.notice;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,15 +12,12 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
-import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeDetailPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeDetailView;
+import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.NoticeDetailRsp;
-import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.utils.DateUtils;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;

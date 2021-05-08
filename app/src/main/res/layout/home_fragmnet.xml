@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.yyide.chatim.widget.VpSwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,7 +26,6 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:orientation="horizontal">
@@ -141,5 +140,5 @@
             </LinearLayout>
 
         </ScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.yyide.chatim.widget.VpSwipeRefreshLayout>
 </LinearLayout>

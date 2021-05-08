@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,6 +42,8 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
     private View mBaseView;
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
+    @BindView(R.id.iv_bg)
+    ImageView iv_bg;
     @BindView(R.id.grid)
     RecyclerView mHot;
     ClassPhotoAdapter announAdapter;
@@ -129,6 +132,7 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
             List<ClassesPhotoRsp.DataBean.AlbumEntityBean> imgs = new ArrayList<>();
             //StudentHonorRsp.DataBean data = model.getData().getRecords();
             if (model.getData() != null && model.getData().size() > 0) {
+                iv_bg.setVisibility(View.GONE);
                 for (ClassesPhotoRsp.DataBean bean : model.getData()) {
                     if (bean.getAlbumEntity() != null && bean.getAlbumEntity().size() > 0) {
                         for (ClassesPhotoRsp.DataBean.AlbumEntityBean itme : bean.getAlbumEntity()) {
@@ -136,6 +140,8 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
                         }
                     }
                 }
+            } else {
+                iv_bg.setVisibility(View.VISIBLE);
             }
 
             if (imgs.size() > 5) {

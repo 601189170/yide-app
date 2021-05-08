@@ -61,11 +61,6 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
-/**
- * 作者：Rance on 2016/10/25 15:19
- * 邮箱：rance935@163.com
- */
-
 public interface DingApiStores {
 
     @GET("/java-painted-screen/api/wechatPaintedScreenManage/selectDeviceOperation")
@@ -116,7 +111,7 @@ public interface DingApiStores {
     @POST("/school/cloud-school/classes/listAllBySchoolId")
     Observable<listAllBySchoolIdRsp> listAllBySchoolId();
 
-    //通过班级查询生成课表
+    //通过班级查询班级课表
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/timetable/cloud-timetable/timetable/listTimeDataByApp")
     Observable<listTimeDataByAppRsp> listTimeDataByApp(@Body RequestBody info);

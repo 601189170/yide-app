@@ -1,11 +1,13 @@
 package com.yyide.chatim.homemodel;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
@@ -40,6 +42,8 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
     private View mBaseView;
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
+    @BindView(R.id.iv_bg)
+    ImageView iv_bg;
     @BindView(R.id.grid)
     RecyclerView mHot;
     StudentHonorAdapter announAdapter;
@@ -116,7 +120,8 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             List<String> imgs = new ArrayList<>();
             //StudentHonorRsp.DataBean data = model.getData().getRecords();
-            if (model.getData() != null && model.getData().getRecords() != null) {
+            if (model.getData() != null && model.getData().getRecords() != null && model.getData().getRecords().size() > 0) {
+                iv_bg.setVisibility(View.GONE);
                 for (StudentHonorRsp.DataBean.RecordsBean bean : model.getData().getRecords()) {
                     if (bean.getWorksUrl() != null && bean.getWorksUrl().size() > 0) {
                         for (String itme : bean.getWorksUrl()) {
@@ -124,6 +129,8 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
                         }
                     }
                 }
+            } else {
+                iv_bg.setVisibility(View.VISIBLE);
             }
 
             if (imgs.size() > 5) {

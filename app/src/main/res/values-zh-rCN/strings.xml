@@ -58,6 +58,7 @@
     <string name="tips_empty_group_member">请选择群成员</string>
     <string name="tips_empty_group_type">请选择加群方式</string>
     <string name="no_friend_apply">暂无好友申请</string>
+    <string name="newestVersion">已经是最新版本</string>
 
 
     // 新朋友

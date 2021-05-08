@@ -53,7 +53,7 @@ public class ClassPhotoAdapter extends LoopPagerAdapter {
         img.setOnClickListener(v -> {
             if (mItemClickListener != null) mItemClickListener.OnItemClickListener();
         });
-        GlideUtil.loadImageRadius(container.getContext(), getItem(position).getUrl(), img, 10);
+        GlideUtil.loadImage(container.getContext(), getItem(position).getUrl(), img);
         return view;
     }
 

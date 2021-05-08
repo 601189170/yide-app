@@ -16,10 +16,13 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.utils.DemoLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
@@ -60,7 +63,6 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             startLogin();
         }
-//        handleData();
     }
 
     void initData() {
@@ -70,30 +72,12 @@ public class SplashActivity extends AppCompatActivity {
 
     void Tologin(String username, String password) {
         RequestBody body = null;
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().schoolId > 0) {
-            int schoolId = SpData.getIdentityInfo().schoolId;
-            if (schoolId > 0) {
-                body = new FormBody.Builder()
-                        .add("username", username)
-                        .add("password", password)
-                        .add("schoolId", schoolId + "")
-                        .add("client_id", "yide-cloud")
-                        .add("grant_type", "password")
-                        .add("client_secret", "yide1234567")
-                        .build();
-            } else {
-                body = new FormBody.Builder()
-                        .add("username", username)
-                        .add("password", password)
-                        .add("client_id", "yide-cloud")
-                        .add("grant_type", "password")
-                        .add("client_secret", "yide1234567")
-                        .build();
-            }
-        } else {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
+            int userId = SpData.getIdentityInfo().userId;
             body = new FormBody.Builder()
                     .add("username", username)
                     .add("password", password)
+                    .add("userId", String.valueOf(userId))
                     .add("client_id", "yide-cloud")
                     .add("grant_type", "password")
                     .add("client_secret", "yide1234567")
@@ -164,13 +148,13 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void handleData() {
-        if (mUserInfo != null && mUserInfo.isAutoLogin()) {
+        if (mUserInfo != null) {
             loginIM();
         } else {
             mFlashView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    startLogin();
+                    startMain();
                 }
             }, SPLASH_TIME);
         }
@@ -180,21 +164,27 @@ public class SplashActivity extends AppCompatActivity {
         TUIKit.login(mUserInfo.getUserId(), mUserInfo.getUserSig(), new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
-//                runOnUiThread(new Runnable() {
-//                    public void run() {
-//                        ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
-//                        Log.e(TAG, "UserInfo: " + JSON.toJSONString(UserInfo.getInstance()));
-////                        startMain();
-//                        startLogin();
-//                    }
-//                });
+                runOnUiThread(() -> {
+                    //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
+                    SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
+                    UserInfo.getInstance().setAutoLogin(false);
+                    UserInfo.getInstance().setUserSig(mUserInfo.getUserSig());
+                    UserInfo.getInstance().setUserId(String.valueOf(SpData.getIdentityInfo().userId));
+                    Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
+                });
                 startMain();
-                DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
+                Log.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
             }
 
             @Override
             public void onSuccess(Object data) {
-                Log.e(TAG, "UserInfo==》: " + JSON.toJSONString(UserInfo.getInstance()));
+                SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
+                SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
+                UserInfo.getInstance().setAutoLogin(true);
+                UserInfo.getInstance().setUserSig(mUserInfo.getUserSig());
+                UserInfo.getInstance().setUserId(String.valueOf(SpData.getIdentityInfo().userId));
+                Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
                 startMain();
             }
         });
@@ -207,13 +197,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void startMain() {
-//        OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());
-//        if (bean != null) {
-//            OfflineMessageDispatcher.redirect(bean);
-//            finish();
-//            return;
-//        }
-
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

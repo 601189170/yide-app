@@ -39,12 +39,12 @@
                 android:layout_marginEnd="38dp"
                 android:src="@drawable/default_head" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/icon_right" />
+                android:src="@drawable/icon_right" />
 
         </FrameLayout>
 
@@ -59,7 +59,6 @@
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:background="@color/white">
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,13 +79,13 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/icon_right"
-                android:visibility="gone" />
+                android:src="@drawable/icon_right"
+                android:visibility="visible" />
 
         </FrameLayout>
 
@@ -122,12 +121,12 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/icon_right" />
+                android:src="@drawable/icon_right" />
 
         </FrameLayout>
 
@@ -163,12 +162,12 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/icon_right" />
+                android:src="@drawable/icon_right" />
 
         </FrameLayout>
 
@@ -204,12 +203,12 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/icon_right" />
+                android:src="@drawable/icon_right" />
 
         </FrameLayout>
 
@@ -239,12 +238,12 @@
                 android:textColor="#666666"
                 android:textSize="12sp" />
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/icon_right" />
+                android:src="@drawable/icon_right" />
 
         </FrameLayout>
     </LinearLayout>

@@ -46,8 +46,13 @@
             <com.jude.rollviewpager.RollPagerView
                 android:id="@+id/announRoll"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/iv_bg"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@mipmap/icon_class"/>
+                android:src="@mipmap/icon_class" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/grid"

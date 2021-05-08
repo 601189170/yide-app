@@ -6,16 +6,20 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
 
+import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
+import okhttp3.Call;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -144,7 +148,77 @@ public class AppClient {
                 return chain.proceed(updateRequest);
             }
         }
+    }
 
+    private static void downloadFile(String address, okhttp3.Callback callback) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(address)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public static void downloadFile(String version, String url, DownloadListener downloadListener) {
+        downloadFile(url, new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                downloadListener.onFailure();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.code() != 200) {
+                    downloadListener.onFailure();
+                    return;
+                }
+                InputStream is = null;//输入流
+                FileOutputStream fos = null;//输出流
+                try {
+                    is = response.body().byteStream();//获取输入流
+                    long total = response.body().contentLength();//获取文件大小
+                    downloadListener.onStart(total);
+                    if (is != null) {
+                        File file = new File(Utils.getApp().getCacheDir(), version + ".apk");
+                        fos = new FileOutputStream(file);
+                        byte[] buf = new byte[1024];
+                        int ch;
+                        int process = 0;
+                        while ((ch = is.read(buf)) != -1) {
+                            fos.write(buf, 0, ch);
+                            process += ch;
+                            downloadListener.onProgress(process);
+                        }
+                        fos.flush();
+                    }
+                    downloadListener.onSuccess();
+                } catch (Exception e) {
+                    downloadListener.onFailure();
+                } finally {
+                    try {
+                        if (is != null)
+                            is.close();
+                    } catch (IOException e) {
+                        downloadListener.onFailure();
+                    }
+                    try {
+                        if (fos != null)
+                            fos.close();
+                    } catch (IOException e) {
+                        downloadListener.onFailure();
+                    }
+                }
+            }
+        });
+    }
+
+    public interface DownloadListener {
+        void onStart(long max);
+
+        void onProgress(long progress);
+
+        void onSuccess();
+
+        void onFailure();
     }
 
 }

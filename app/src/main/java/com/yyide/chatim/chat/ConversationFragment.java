@@ -90,12 +90,12 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
     @BindView(R.id.cl_message)
     ConstraintLayout cl_message;
-
     @BindView(R.id.tv_user_notice_content)
     TextView tv_user_notice_content;
-
     @BindView(R.id.textView3)
     TextView textView3;
+    @BindView(R.id.tv_unNum)
+    TextView tv_unNum;
 
     @Nullable
     @Override
@@ -106,7 +106,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     }
 
     private void initView() {
-        Log.e("TAG", "initView: 加载会话列表");
 //        V2TIMManager.getConversationManager().
         V2TIMManager.getConversationManager().getConversationList(0, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
             @Override
@@ -126,35 +125,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             }
         });
 
-//        ConversationProvider conversationProvider = new ConversationProvider();
-//        conversationProvider.attachAdapter(new IConversationAdapter(){
-//
-//            @NonNull
-//            @Override
-//            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//                return null;
-//            }
-//
-//            @Override
-//            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-//
-//            }
-//
-//            @Override
-//            public int getItemCount() {
-//                return 0;
-//            }
-//
-//            @Override
-//            public void setDataProvider(IConversationProvider provider) {
-//
-//            }
-//
-//            @Override
-//            public ConversationInfo getItem(int position) {
-//                return null;
-//            }
-//        });
         // 从布局文件中获取会话列表面板
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
         mMenu = new Menu(getActivity(), (TitleBarLayout) mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
@@ -213,7 +183,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        mvpPresenter.getUserNoticePage(1,1,1);
+        mvpPresenter.getUserNoticePage(1, 1, 1);
     }
 
     private void initTitleAction() {
@@ -327,14 +297,18 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
     @Override
     public void getUserNoticePageSuccess(UserNoticeRsp userNoticeRsp) {
-        if (userNoticeRsp.getCode() == 200) {
+        if (userNoticeRsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
             List<UserNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
-            if (records != null && records.size() > 0){
+            if (records != null && records.size() > 0) {
                 UserNoticeRsp.DataBean.RecordsBean recordsBean = records.get(0);
                 String title = recordsBean.getTitle();
                 String content = recordsBean.getContent();
 //                tv_user_notice_content.setText(content);
 //                textView3.setText(title);
+                tv_unNum.setVisibility(View.VISIBLE);
+                tv_unNum.setText(records.size() + "");
+            } else {
+                tv_unNum.setVisibility(View.GONE);
             }
         }
     }
@@ -352,7 +326,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_IM_LOGIN.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_IM_LOGIN.equals(messageEvent.getCode()) ||
+                BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             initView();
         }
     }

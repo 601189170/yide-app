@@ -19,6 +19,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 
+import com.blankj.utilcode.util.CacheDiskUtils;
+import com.blankj.utilcode.util.CacheDoubleUtils;
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.SDCardUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -31,10 +35,13 @@ import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.utils.FileCacheUtils;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.math.BigDecimal;
 
 
 /**
@@ -50,6 +57,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private TextView head_name;
     private TextView user_identity;
     private TextView user_name;
+    private TextView tv_cache;
     private ImageView head_img;
 
     public LeftMenuPop(Activity context) {
@@ -72,6 +80,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         user_class = mView.findViewById(R.id.user_class);
         user_name = mView.findViewById(R.id.user_name);
         head_img = mView.findViewById(R.id.head_img);
+        tv_cache = mView.findViewById(R.id.tv_cache);
         mView.findViewById(R.id.iv_close).setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
@@ -148,19 +157,20 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 
     private void setData() {
         context.runOnUiThread(() -> {
+            setCache();
             user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
-            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "\t\t" + SpData.getIdentityInfo().getIdentity() : "");
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
             head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
-            if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().img)) {
-                //            user_name.setVisibility(View.GONE);
-                //            head_img.setVisibility(View.VISIBLE);
-                GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
-            } else {
-                //            head_img.setVisibility(View.GONE);
-                //            user_name.setVisibility(View.VISIBLE);
-                //            user_name.setText(StringUtils.subString(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "", 2));
-            }
+            GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
         });
+    }
+
+    private void setCache() {
+        try {
+            tv_cache.setText(FileCacheUtils.getTotalCacheSize(context));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void show() {
@@ -217,10 +227,13 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 context.startActivity(new Intent(context, PowerActivity.class));
                 break;
             case R.id.layout7://清理缓存
+                FileCacheUtils.clearAllCache(context);
                 ToastUtils.showShort("缓存已清理");
+                setCache();
                 break;
             case R.id.layout8://版本更新
-                ToastUtils.showShort("已是最新版本");
+//                ToastUtils.showShort("已是最新版本");
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
                 break;
             case R.id.exit://退出登录
                 SPUtils.getInstance().remove(BaseConstant.LOGINNAME);

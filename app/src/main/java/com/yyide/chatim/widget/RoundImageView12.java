@@ -26,7 +26,7 @@ public class RoundImageView12 extends ImageView {
     }
 
     private final RectF roundRect = new RectF();
-    private float rect_adius = 12;
+    private float rect_adius = 10;
     private final Paint maskPaint = new Paint();
     private final Paint zonePaint = new Paint();
 
@@ -51,9 +51,7 @@ public class RoundImageView12 extends ImageView {
         int w = getWidth();
         int h = getHeight();
         roundRect.set(0, 0, w, h + rect_adius);//画布下移半径长度
-
     }
-
 
     @Override
     public void draw(Canvas canvas) {

@@ -95,6 +95,7 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
         adapter = new HelpItemAdapter(null);
         adapter.setEmptyView(R.layout.empty);
         recyclerview.setAdapter(adapter);
+        adapter.setEmptyView(R.layout.empty);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) adapter.getData().get(position);
             Intent intent = new Intent(mActivity, HelpInfoActivity.class);
