@@ -224,7 +224,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        if (mActivity != null) {
+        if (mActivity != null && !mActivity.isFinishing()) {
             LoadingTools.getInstance(mActivity).showLoading();
         }
     }

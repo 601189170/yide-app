@@ -132,13 +132,15 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
             List<ClassesPhotoRsp.DataBean.AlbumEntityBean> imgs = new ArrayList<>();
             //StudentHonorRsp.DataBean data = model.getData().getRecords();
             if (model.getData() != null && model.getData().size() > 0) {
-                iv_bg.setVisibility(View.GONE);
                 for (ClassesPhotoRsp.DataBean bean : model.getData()) {
                     if (bean.getAlbumEntity() != null && bean.getAlbumEntity().size() > 0) {
                         for (ClassesPhotoRsp.DataBean.AlbumEntityBean itme : bean.getAlbumEntity()) {
                             imgs.add(itme);
                         }
                     }
+                }
+                if (imgs != null && imgs.size() > 0) {
+                    iv_bg.setVisibility(View.GONE);
                 }
             } else {
                 iv_bg.setVisibility(View.VISIBLE);

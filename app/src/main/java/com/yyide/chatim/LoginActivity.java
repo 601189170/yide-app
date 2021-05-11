@@ -35,6 +35,7 @@ import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.databinding.LoginForDevActivityBinding;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
@@ -359,7 +360,7 @@ public class LoginActivity extends BaseActivity {
                     getUserSchool();
                 } else {
                     hideLoading();
-                    ToastUtils.showShort(bean.message);
+                    ToastUtils.showShort(bean.msg);
                 }
             }
         });
@@ -456,7 +457,6 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-
                 String data = response.body().string();
                 Log.e(TAG, "getUserSchool333==>: " + data);
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
@@ -481,7 +481,7 @@ public class LoginActivity extends BaseActivity {
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .addHeader("Authorization", SpData.User().data)
+                .addHeader("Authorization", SpData.User().getToken())
                 .post(body)
                 .build();
         //发起请求

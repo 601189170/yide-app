@@ -32,7 +32,9 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends BaseFragm
 
     public void showLoading() {
 //        showProgressDialog();
-        showProgressDialog2();
+        if(!getActivity().isFinishing()){
+            showProgressDialog2();
+        }
     }
 
     public void hideLoading() {

@@ -14,6 +14,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -130,7 +131,6 @@ public class WebViewActivity extends BaseActivity {
             }
 
 
-
             //For Android  >= 4.1
             public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
                 uploadMessage = valueCallback;
@@ -162,7 +162,8 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().data + "')");
+                Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
+                mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
             }
 
             @Override

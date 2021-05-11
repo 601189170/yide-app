@@ -186,16 +186,18 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
 
     @Override
     public void getMyAppListSuccess(AppListRsp model) {
-        if (model != null && model.getData() != null) {
-            List<AppListRsp.DataBean> data = model.getData();
-            AppListRsp.DataBean itemBean = new AppListRsp.DataBean();
-            itemBean.setAppType("editor");
-            itemBean.setName("编辑");
-            if (data == null) {
-                data = new ArrayList<>();
+        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+            if (model != null && model.getData() != null) {
+                List<AppListRsp.DataBean> data = model.getData();
+                AppListRsp.DataBean itemBean = new AppListRsp.DataBean();
+                itemBean.setAppType("editor");
+                itemBean.setName("编辑");
+                if (data == null) {
+                    data = new ArrayList<>();
+                }
+                data.add(itemBean);
+                adapter.notifyData(data);
             }
-            data.add(itemBean);
-            adapter.notifyData(data);
         }
     }
 
@@ -208,15 +210,18 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @Override
     public void getAppListSuccess(AppItemBean model) {
         mSwipeRefreshLayout.setRefreshing(false);
-        Log.d(TAG, "getMyAppFail :" + model);
-        recylAppAdapter.notifydata(model.getData().getRecords());
-        appAdapter.notifyData(model.getData().getRecords());
+        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+            if (model.getData() != null && model.getData().getRecords() != null) {
+                recylAppAdapter.notifydata(model.getData().getRecords());
+                appAdapter.notifyData(model.getData().getRecords());
+            }
+        }
     }
 
     @Override
     public void getAppListFail(String msg) {
         mSwipeRefreshLayout.setRefreshing(false);
-        Log.d(TAG, "getMyAppFail :" + msg);
+        Log.d(TAG, "getAppListFail :" + msg);
     }
 
 }

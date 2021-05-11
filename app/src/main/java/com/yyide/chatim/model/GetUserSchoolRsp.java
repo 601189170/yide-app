@@ -17,6 +17,7 @@ public class GetUserSchoolRsp {
     public int code;
     public boolean success;
     public String msg;
+    public String message;
     public List<DataBean> data;
 
     public static class DataBean {

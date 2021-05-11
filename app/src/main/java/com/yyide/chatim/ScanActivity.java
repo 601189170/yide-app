@@ -2,6 +2,7 @@ package com.yyide.chatim;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.activity.ScanLoginActivity;
+import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -22,6 +24,8 @@ import com.yyide.chatim.view.ScanLoginView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -36,7 +40,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
+public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
 
     @BindView(R.id.zbarview)
     ZBarView zbarview;
@@ -59,10 +63,17 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
 //        },5000);
 //        zbarview.startCamera();
     }
+
     @Override
     public void onScanQRCodeSuccess(String result) {
         vibrate();
-        jupm(this, ScanLoginActivity.class, "result", result);
+        if (!TextUtils.isEmpty(result) && result.contains("/management/cloud-system/app/user/scan/")) {
+            jupm(this, ScanLoginActivity.class, "result", result);
+        } else if (!TextUtils.isEmpty(result) && (result.startsWith("http") || result.equals("https"))) {
+            jupm(this, WebViewActivity.class, "url", result);
+        } else {
+            ToastUtils.showShort(result);
+        }
 //        ToastUtils.showShort("onScanQRCodeSuccess==>"+result.toString());
 //        if (result.contains("id:")) {
 //            ResultRsp bean = JSON.parseObject(result, ResultRsp.class);
@@ -95,10 +106,10 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate{
     }
 
     public void setSM() {
-            if (zbarview!=null){
-                zbarview.showScanRect();
-                zbarview.startSpot();
-            }
+        if (zbarview != null) {
+            zbarview.showScanRect();
+            zbarview.startSpot();
+        }
 
         if (zbarview != null && i == 0) {
             zbarview.startCamera(Camera.CameraInfo.CAMERA_FACING_BACK);

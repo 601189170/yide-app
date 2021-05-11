@@ -24,9 +24,7 @@ public class AppPresenter extends BasePresenter<AppView> {
         addSubscription(dingApiStores.getMyApp(body), new ApiCallback<AppListRsp>() {
             @Override
             public void onSuccess(AppListRsp model) {
-                if (model.isSuccess()) {
-                    mvpView.getMyAppListSuccess(model);
-                }
+                mvpView.getMyAppListSuccess(model);
             }
 
             @Override

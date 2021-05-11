@@ -239,6 +239,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 SPUtils.getInstance().remove(BaseConstant.LOGINNAME);
                 SPUtils.getInstance().remove(BaseConstant.PASSWORD);
                 SPUtils.getInstance().remove(BaseConstant.JG_ALIAS_NAME);
+                SPUtils.getInstance().remove(SpData.LOGINDATA);
                 //退出登录IM
                 TUIKit.logout(new IUIKitCallBack() {
 

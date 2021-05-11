@@ -21,9 +21,9 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.tencent.rtmp.TXLiveBase;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.MessageNotification;
 import com.yyide.chatim.chat.helper.ConfigHelper;
-import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.PrivateConstants;
 
@@ -73,7 +73,7 @@ public class BaseApplication extends Application {
          * @param sdkAppID 您在腾讯云注册应用时分配的sdkAppID
          * @param configs  TUIKit的相关配置项，一般使用默认即可，需特殊配置参考API文档
          */
-        TUIKit.init(this, GenerateTestUserSig.SDKAPPID, new ConfigHelper().getConfigs());
+        TUIKit.init(this, BaseConstant.SDKAPPID, new ConfigHelper().getConfigs());
 
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);

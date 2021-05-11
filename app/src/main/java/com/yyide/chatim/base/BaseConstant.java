@@ -10,14 +10,6 @@ import okhttp3.MediaType;
  */
 public class BaseConstant {
     /**
-     * app打开次数
-     */
-    public static String openTimes = "OPENTIMES";
-    /**
-     * app登陆成功
-     */
-    public static String loginSuccess = "LOGINSUCCESS";
-    /**
      * 分页加载数量
      */
     public static final int PAGE_SIZE = 20;
@@ -26,6 +18,16 @@ public class BaseConstant {
     public static int REQUEST_SUCCES = 10000;
 
     public static int REQUEST_SUCCES2 = 200;
+
+    /**
+     * 腾讯IM APPID
+     */
+    //线上版本APPID
+    public static final int SDKAPPID_RELEASE = 1400511951;
+    //UAT- APPID
+    public static final int SDKAPPID_UAT = 1400514965;
+
+    public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
     /*账号*/
     public static String LOGINNAME = "LOGINNAME";
@@ -43,18 +45,12 @@ public class BaseConstant {
 
 
     public static final String API_SERVER_HTML_RELEASE = "https://cloud.edu.1d1j.cn";
-    public static final String API_SERVER_HTML_UAT = "https://cloud.edu.1d1j.net";
+    public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.net";
     public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
     //学生作品
     public static final String STUDENT_HONOR_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/studentWorks";
     //班级相册
     public static final String CLASS_PHOTO_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/classPhoto";
-
-    /*Base宽*/
-    public static int BaseWith = 171;
-
-    /*Base高*/
-    public static int BaseHeight = 177;
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 

@@ -110,10 +110,10 @@ public class AppClient {
             CacheControl cacheControl = cacheBuilder.build();
 
             Request request = chain.request();
-            if (SpData.User() != null && !TextUtils.isEmpty(SpData.User().data)) {
-                Log.e("TAG", "intercept: " + JSON.toJSONString(SpData.User().data));
+            if (SpData.User() != null && !TextUtils.isEmpty(SpData.User().getToken())) {
+                Log.e("TAG", "intercept: " + JSON.toJSONString(SpData.User().getToken()));
                 request = request.newBuilder()
-                        .addHeader("Authorization", SpData.User().data)
+                        .addHeader("Authorization", SpData.User().getToken())
                         .cacheControl(cacheControl)
                         .build();
             }
@@ -138,7 +138,7 @@ public class AppClient {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            String token = SpData.User().data;
+            String token = SpData.User().getToken();
             if (TextUtils.isEmpty(token)) {
                 Request originalRequest = chain.request();
                 return chain.proceed(originalRequest);
