@@ -1,106 +1,107 @@
 <resources>
-    <string name="app_name">Cloud Communication IM</string>
+    <string name="app_name">一加壹</string>
 
-    // Cloud Communication
-    <string name="chat_top">Sticky on Top</string>
-    <string name="chat_delete">Delete</string>
-    <string name="quit_chat_top">Unstick</string>
+    // 云通信
+    <string name="chat_top">置顶聊天</string>
+    <string name="chat_delete">删除聊天</string>
+    <string name="quit_chat_top">取消置顶</string>
 
-    // login
-    <string name="account">Account</string>
-    <string name="password">Password</string>
+    // 登录相关
+    <string name="account">用户名</string>
+    <string name="password">密码</string>
 
-    <string name="login_title">Login IM</string>
-    <string name="login_sub_title">Experience functions for group chat, video call etc.</string>
-    <string name="input_number">Phone Number</string>
-    <string name="input_verification">SMS Code</string>
-    <string name="verification_code">Get verification code</string>
-    <string name="button_login">Login</string>
-    <string name="password_login">Password Login</string>
-    <string name="official_website">Official Website</string>
-    <string name="debug_mode_summary">Directly login IM, only for debug mode</string>
-    <string name="account_hint">Any non-blank character</string>
+    <string name="login_title">登录·即时通信</string>
+    <string name="login_sub_title">体验群组聊天，音视频对话等 IM 功能</string>
+    <string name="input_number">请输入手机号</string>
+    <string name="input_verification">请输入短信验证码</string>
+    <string name="verification_code">获取验证码</string>
+    <string name="button_login">登录</string>
+    <string name="password_login">密码登录</string>
+    <string name="official_website">访问官网</string>
+    <string name="debug_mode_summary">IM 账号直接登录界面，此只在 Debug 模式下显示</string>
+    <string name="account_hint">手机号/用户名</string>
+    <string name="account_pwd_hint">请输入登录密码</string>
+    <string name="cancel">取消</string>
+    // "我"相关
+    <string name="profile">我</string>
+    <string name="id">账号：%1$s</string>
+    <string name="modify_user_icon">修改头像</string>
+    <string name="modify_nick_name">修改昵称</string>
+    <string name="modify_signature">修改个性签名</string>
+    <string name="add_rule">加我为好友时</string>
+    <string name="allow_type_allow_any">允许任何人</string>
+    <string name="allow_type_deny_any">拒绝任何人</string>
+    <string name="allow_type_need_confirm">需要验证</string>
+    <string name="exit">退出登录</string>
+    <string name="about_im">关于即时通信IM</string>
 
-    // About Me
-    <string name="profile">Me</string>
-    <string name="id">Account：%1$s</string>
-    <string name="modify_user_icon">Profile Photo</string>
-    <string name="modify_nick_name">Nickname</string>
-    <string name="modify_signature">Modify Signature</string>
-    <string name="add_rule">When Add Friend</string>
-    <string name="allow_type_allow_any">Allow Anyone</string>
-    <string name="allow_type_deny_any">Deny Anyone</string>
-    <string name="allow_type_need_confirm">Need Confirm</string>
-    <string name="exit">Exit</string>
-    <string name="about_im">About IM</string>
+    // 主页Tab相关
+    <string name="tab_contact_tab_text">通讯录</string>
+    <string name="tab_conversation_tab_text">消息</string>
+    <string name="tab_profile_tab_text">我</string>
+    <string name="tab_scenes_tab_text">直播</string>
 
-    // Main Tab
-    <string name="tab_contact_tab_text">Contacts</string>
-    <string name="tab_conversation_tab_text">Message</string>
-    <string name="tab_profile_tab_text">Me</string>
-    <string name="tab_scenes_tab_text">Live</string>
+    // "+"menu相关
+    <string name="add_friend">添加好友</string>
+    <string name="add_group">添加群聊</string>
+    <string name="start_conversation">发起会话</string>
+    <string name="create_group_chat">创建群聊</string>
+    <string name="create_chat_room">创建聊天室</string>
+    <string name="create_private_group">创建讨论组</string>
+    <string name="hint_add_user_id">请输入ID</string>
+    <string name="hint_add_wording">请输入验证消息</string>
+    <string name="contact_add">添加</string>
+    <string name="user_id">对方ID</string>
+    <string name="add_wording">验证消息</string>
 
-    // "+"menu
-    <string name="add_friend">Add Friends</string>
-    <string name="add_group">Add Groups</string>
-    <string name="start_conversation">New Chat</string>
-    <string name="create_group_chat">New Group</string>
-    <string name="create_chat_room">New Chat Room</string>
-    <string name="create_private_group">New Private Group</string>
-    <string name="hint_add_user_id">Please Input ID</string>
-    <string name="hint_add_wording">Please Input Confirm Message</string>
-    <string name="contact_add">Add</string>
-    <string name="user_id">Other Side ID</string>
-    <string name="add_wording">Confirm Message</string>
-
-    // About Group
-    <string name="tips_empty_group_member">Please Select Group Members</string>
-    <string name="tips_empty_group_type">Please Select Join Way</string>
-    <string name="no_friend_apply">No Friend Application</string>
+    // 群信息相关
+    <string name="tips_empty_group_member">请选择群成员</string>
+    <string name="tips_empty_group_type">请选择加群方式</string>
+    <string name="no_friend_apply">暂无好友申请</string>
+    <string name="newestVersion">已经是最新版本</string>
 
 
-    // New Friend
-    <string name="request_agree">Agreed</string>
-    <string name="request_accepted">Accepted</string>
-    <string name="request_waiting">Waiting for Verification</string>
+    // 新朋友
+    <string name="request_agree">同意</string>
+    <string name="request_accepted">已接受</string>
+    <string name="request_waiting">等待验证</string>
 
-    <string name="test_custom_action">Custom Message</string>
-    <string name="test_custom_message">Details</string>
+    <string name="test_custom_action">自定义消息</string>
+    <string name="test_custom_message">查看详情>></string>
 
-    <string name="privacy_text">Agreed《<a href="http://privacy.qq.com/">Privacy Policy</a>》</string>
+    <string name="privacy_text">已同意《<a href="http://privacy.qq.com/">隐私政策</a>》</string>
 
-    // scenes
-    <string name="live_scenes_live_room">Live Video</string>
-    <string name="live_scenes_voice_room">Voice Chat Room</string>
-    <string name="live_voice_room_room_title" formatted="false">Room Number: %d</string>
-    <string name="live_voice_room_numer_format" formatted="false">%d people are watching</string>
-    <string name="live_voice_room_agree">Agree</string>
-    <string name="live_voice_room_warning_not_empty">"Input can not be empty!"</string>
-    <string name="live_voice_room_send">Send</string>
-    <string name="live_voice_room_already_agree">Agreed</string>
+    // 场景
+    <string name="live_scenes_live_room">视频直播</string>
+    <string name="live_scenes_voice_room">语音聊天室</string>
+    <string name="live_voice_room_room_title" formatted="false">房间号: %d</string>
+    <string name="live_voice_room_numer_format" formatted="false" >%d人在看</string>
+    <string name="live_voice_room_agree">同意</string>
+    <string name="live_voice_room_warning_not_empty">"输入不能为空!"</string>
+    <string name="live_voice_room_send">发送</string>
+    <string name="live_voice_room_already_agree">已同意</string>
     <string name="live_voice_room_main_title" formatted="false">%1s(%2d)</string>
-    <string name="live_is_over">Live over</string>
+    <string name="live_is_over">直播已结束</string>
     <string name="student_honor_count">%d荣誉</string>
 
-    //notice
-    <string name="notice_scope_title">Notice scope</string>
-    <string name="notice_confirm_detail_title">Notice detail</string>
-    <string name="notice_announcement_title">"Notice announcement "</string>
-    <string name="notice_create_title">Notice create</string>
-    <string name="notice_to_confirm">Notice to confirm</string>
-    <string name="notice_tab_my_notice">My Notice</string>
-    <string name="notice_tab_my_release">My Release</string>
-    <string name="notice_template_title">Notice template</string>
-    <string name="notice_select_number">Notice select %d</string>
-    <string name="account_pwd_hint">"account "</string>
+    <!--通知模块-->
+    <string name="notice_announcement_title">通知公告</string>
+    <string name="notice_template_title">通知模板</string>
+    <string name="notice_scope_title">通知范围</string>
+    <string name="notice_confirm_detail_title">确认详情</string>
+    <string name="notice_create_title">创建通知</string>
+    <string name="notice_to_confirm">去确认</string>
+    <string name="notice_tab_my_notice">我的通知</string>
+    <string name="notice_tab_my_release">我的发布</string>
+    <string name="notice_select_number">已选择(%d)</string>
     <string name="notice_send_obj">发送对象：%s</string>
     <string name="notice_confirm_number">（%d/%d）已确认</string>
     <string name="notice_confirm_number_text">已确认（%d/%d）</string>
     <string name="notice_scope_number_text">已选择(%d)</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="cancel">Cancel</string>
     <string name="timed_send_text">%d小时%d分钟后发送</string>
     <string name="timed_send_long_text">%d天后发送</string>
+
+    <!--Im-->
     <string name="call_timeout">本次通话已超时</string>
     <string name="call_notification">音视频邀请消息通知</string>
     <string name="background_tip">当程序处于后台时新的来电消息会通过通知栏提醒用户</string>
@@ -108,7 +109,12 @@
     <string name="new_msg">收到一条新消息</string>
     <string name="call_nos">通话失去响应</string>
     <string name="you_app">您的应用</string>
-    <string name="low_version">" 版本太低，不支持打开该离线消息"</string>
+    <string name="low_version"> 版本太低，不支持打开该离线消息</string>
     <string name="notice_release_obj_text">%s发布</string>
-    <string name="newestVersion">已经是最新版本</string>
+
+    <!--请假-->
+    <string name="ask_for_leave">请假</string>
+    <string name="my_ask_for_leave">我要请假</string>
+    <string name="leave_record">请假记录</string>
+
 </resources>

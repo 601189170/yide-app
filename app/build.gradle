@@ -186,5 +186,9 @@ dependencies {
 //    //implementation 'com.github.yalantis:ucrop:2.2.6'
     implementation 'com.kevin:crop:1.0.2'
 
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
 }
 
