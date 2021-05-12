@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.AppView;
 
@@ -21,9 +21,9 @@ public class AppPresenter extends BasePresenter<AppView> {
     public void getMyAppList() {
         RequestBody body = RequestBody.create(BaseConstant.JSON, "");
 //        mvpView.showLoading();
-        addSubscription(dingApiStores.getMyApp(body), new ApiCallback<AppListRsp>() {
+        addSubscription(dingApiStores.getMyApp(body), new ApiCallback<MyAppListRsp>() {
             @Override
-            public void onSuccess(AppListRsp model) {
+            public void onSuccess(MyAppListRsp model) {
                 mvpView.getMyAppListSuccess(model);
             }
 

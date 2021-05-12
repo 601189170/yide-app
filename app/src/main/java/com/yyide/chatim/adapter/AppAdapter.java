@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -19,6 +21,8 @@ import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,39 +30,26 @@ import java.util.List;
  * Created by Administrator on 2019/3/29.
  */
 
-public class AppAdapter extends BaseAdapter {
-    public List<AppItemBean.DataBean.RecordsBean> list = new ArrayList<>();
+public class AppAdapter extends BaseQuickAdapter<AppItemBean.DataBean.RecordsBean, BaseViewHolder> {
 
-    @Override
-    public int getCount() {
-        return list.size();
+
+    public AppAdapter(int layoutResId) {
+        super(layoutResId);
     }
 
     @Override
-    public AppItemBean.DataBean.RecordsBean getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
-        if (view == null)
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.app_item, null, false);
-        TextView title = VHUtil.ViewHolder.get(view, R.id.title);
-        GridView grid = VHUtil.ViewHolder.get(view, R.id.grid);
-        title.setText(getItem(position).getName());
+    protected void convert(@NotNull BaseViewHolder holder, AppItemBean.DataBean.RecordsBean recordsBean) {
+        TextView title = holder.getView(R.id.title);
+        GridView grid = holder.getView(R.id.grid);
+        title.setText(recordsBean.getName());
         AppItemAdapter adapter = new AppItemAdapter();
         grid.setAdapter(adapter);
-        if (getItem(position).getList() != null) {
-            adapter.notifyData(getItem(position).getList());
+        if (recordsBean.getList() != null) {
+            adapter.notifyData(recordsBean.getList());
         }
         grid.setOnItemClickListener((parent, view1, position1, id) -> {
             Intent intent;
-            switch (adapter.getItem(position1).getName()){
+            switch (adapter.getItem(position1).getName()) {
                 case "通知公告":
                     intent = new Intent(view1.getContext(), NoticeAnnouncementActivity.class);
                     view1.getContext().startActivity(intent);
@@ -81,25 +72,6 @@ public class AppAdapter extends BaseAdapter {
                     }
                     break;
             }
-//            if ("通知公告".equals(adapter.getItem(position1).getName())) {
-//                Intent intent = new Intent(view1.getContext(), NoticeAnnouncementActivity.class);
-//                view1.getContext().startActivity(intent);
-//            } else {
-//                if ("#".equals(adapter.getItem(position1).getPath().trim())) {
-//                    ToastUtils.showShort("暂无权限");
-//                } else {
-//                    Intent intent = new Intent(view1.getContext(), WebViewActivity.class);
-//                    intent.putExtra("url", adapter.getItem(position1).getPath());
-//                    view1.getContext().startActivity(intent);
-//                }
-//            }
         });
-        return view;
     }
-
-    public void notifyData(List<AppItemBean.DataBean.RecordsBean> list) {
-        this.list = list;
-        notifyDataSetChanged();
-    }
-
 }

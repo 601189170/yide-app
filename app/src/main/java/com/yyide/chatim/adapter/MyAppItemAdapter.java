@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MyAppItemAdapter extends BaseAdapter {
     //   public List<String> list=new ArrayList<>();
-    public List<AppListRsp.DataBean> list = new ArrayList<>();
+    public List<MyAppListRsp.DataBean> list = new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -30,7 +30,7 @@ public class MyAppItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public AppListRsp.DataBean getItem(int position) {
+    public MyAppListRsp.DataBean getItem(int position) {
         return list.get(position);
     }
 
@@ -45,7 +45,7 @@ public class MyAppItemAdapter extends BaseAdapter {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.icon_item, null, false);
         ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
         TextView name = VHUtil.ViewHolder.get(view, R.id.name);
-        AppListRsp.DataBean dataBean = getItem(position);
+        MyAppListRsp.DataBean dataBean = getItem(position);
         if (dataBean != null) {
             if (!TextUtils.isEmpty(dataBean.getImg())) {
                 GlideUtil.loadCircleImage(view.getContext(), dataBean.getImg(), item);
@@ -58,7 +58,7 @@ public class MyAppItemAdapter extends BaseAdapter {
         return view;
     }
 
-    public void notifyData(List<AppListRsp.DataBean> list) {
+    public void notifyData(List<MyAppListRsp.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

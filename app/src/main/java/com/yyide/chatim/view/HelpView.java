@@ -2,8 +2,6 @@ package com.yyide.chatim.view;
 
 
 import com.yyide.chatim.base.BaseView;
-import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.HelpItemRep;
 
 /**

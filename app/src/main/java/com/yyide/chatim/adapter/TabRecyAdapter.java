@@ -113,16 +113,15 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
         this.mOnItemClickListener = listener;
     }
 
-    public void remove(int position) {
-
+    public List<NoteTabBean> remove(int position) {
         List<NoteTabBean> noteTabBeans = new ArrayList<>();
-
         for (int i = 0; i < list.size(); i++) {
             if (i <= position) {
                 noteTabBeans.add(list.get(i));
             }
         }
         resetList(noteTabBeans);
+        return noteTabBeans;
     }
 
     public void resetList(List<NoteTabBean> list) {

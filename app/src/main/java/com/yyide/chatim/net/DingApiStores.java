@@ -5,8 +5,7 @@ import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.AppListRsp;
-import com.yyide.chatim.model.ClassesPhotoBannerRsp;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
@@ -129,6 +128,7 @@ public interface DingApiStores {
     @POST("/school/cloud-school/section/selectListByApp")
     Observable<listByAppRsp> selectListByApp();
 
+    //通讯录-学生/家长（大学）
     @POST("/school/cloud-school/departmentClass/selectListByApp")
     Observable<listByAppRsp> universitySelectListByApp();
 
@@ -206,7 +206,7 @@ public interface DingApiStores {
     //我的应用
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/application/me")
-    Observable<AppListRsp> getMyApp(@Body RequestBody requestBody);
+    Observable<MyAppListRsp> getMyApp(@Body RequestBody requestBody);
 
     //获取应用列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})

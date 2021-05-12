@@ -46,7 +46,6 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
 
         viewHolder.line = view.findViewById(R.id.line);
 
-
         return viewHolder;
     }
 
@@ -61,6 +60,14 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
             viewHolder.item.setChecked(false);
         }
         viewHolder.item.setText(getItem(i).getName());
+        viewHolder.itemView.setOnClickListener(v -> {
+            position = viewHolder.getAdapterPosition();
+            if (mOnItemClickListener != null) {
+                //注意这里使用getTag方法获取position
+                mOnItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
+            }
+            notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -68,26 +75,15 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ViewHolder(View arg0) {
             super(arg0);
             item = arg0.findViewById(R.id.item);
-            item.setOnClickListener(this);
         }
 
         CheckedTextView item;
         TextView line;
-
-        @Override
-        public void onClick(View v) {
-            position = getAdapterPosition();
-            if (mOnItemClickListener != null) {
-                //注意这里使用getTag方法获取position
-                mOnItemClickListener.onItemClick(v, getAdapterPosition());
-            }
-            notifyDataSetChanged();
-        }
     }
 
     public void notifydata(List<AppItemBean.DataBean.RecordsBean> list) {

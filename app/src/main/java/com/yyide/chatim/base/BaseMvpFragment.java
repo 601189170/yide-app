@@ -31,19 +31,16 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends BaseFragm
     }
 
     public void showLoading() {
-//        showProgressDialog();
         if(!getActivity().isFinishing()){
             showProgressDialog2();
         }
     }
 
     public void hideLoading() {
-//        dismissProgressDialog();
         dismissProgressDialog2();
     }
 
     public void showError() {
-//        dismissProgressDialog();
         dismissProgressDialog2();
         ToastUtils.showShort("出错啦！");
     }

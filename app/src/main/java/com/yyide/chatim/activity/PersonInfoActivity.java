@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.google.android.material.tabs.TabLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.TeacherlistRsp;
@@ -52,6 +53,8 @@ public class PersonInfoActivity extends BaseActivity {
     LinearLayout ll_classes;
     @BindView(R.id.ll_email)
     LinearLayout ll_email;
+    @BindView(R.id.ll_address)
+    LinearLayout ll_address;
     @BindView(R.id.ll_subject)
     LinearLayout ll_subject;
     @BindView(R.id.tv_master_phone)
@@ -62,6 +65,8 @@ public class PersonInfoActivity extends BaseActivity {
     TextView tv_class_name;
     @BindView(R.id.tv_name_title)
     TextView tv_name_title;
+    @BindView(R.id.address)
+    TextView address;
     @BindView(R.id.iv_phone)
     ImageView iv_phone;
     @BindView(R.id.iv_phone_master)
@@ -97,9 +102,11 @@ public class PersonInfoActivity extends BaseActivity {
                 ll_vice.setVisibility(View.VISIBLE);
                 ll_classes.setVisibility(View.VISIBLE);
                 ll_subject.setVisibility(View.GONE);
+                ll_address.setVisibility(View.VISIBLE);
             } else {
                 ll_email.setVisibility(View.VISIBLE);
                 ll_subject.setVisibility(View.VISIBLE);
+                ll_address.setVisibility(View.GONE);
                 ll_master.setVisibility(View.GONE);
                 ll_vice.setVisibility(View.GONE);
                 ll_classes.setVisibility(View.GONE);
@@ -124,6 +131,7 @@ public class PersonInfoActivity extends BaseActivity {
             sex.setText(!TextUtils.isEmpty(bean.sex) ? "0".equals(bean.sex) ? "男" : "女" : "无");
             tv_class_name.setText(TextUtils.isEmpty(bean.classesName) ? "未知班级" : bean.classesName);
             phone.setText(!TextUtils.isEmpty(bean.phone) ? setMobile(bean.phone) : "暂无手机号码");
+            address.setText(!TextUtils.isEmpty(bean.address) ? bean.address : "暂无住址");
             if (TextUtils.isEmpty(bean.phone)) {
                 iv_phone.setVisibility(View.GONE);
                 set.setVisibility(View.GONE);

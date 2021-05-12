@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class AppListRsp {
+public class MyAppListRsp {
     private int code;
     private boolean success;
     private String msg;

@@ -44,9 +44,10 @@ public class NoteByListActivity extends BaseActivity {
     List<NoteTabBean> listTab = new ArrayList<>();
     List<listByAppRsp.DataBean.ListBean> listBean = new ArrayList<>();
 
-    String id;
-    String name;
+    private String id;
+    private String name;
     private String organization;
+    private String type;
 
     @Override
     public int getContentViewID() {
@@ -56,12 +57,12 @@ public class NoteByListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        String data=getIntent().getStringExtra("list");
-
         int sum = getIntent().getIntExtra("size", 0);
         id = getIntent().getStringExtra("id");
         name = getIntent().getStringExtra("name");
         organization = getIntent().getStringExtra("organization");
+        type = getIntent().getStringExtra("type");
+
         for (int i = 0; i < sum; i++) {
             listByAppRsp.DataBean.ListBean bean = (listByAppRsp.DataBean.ListBean) getIntent().getSerializableExtra(i + "");
             Log.e("TAG", "ZBListBean: " + JSON.toJSONString(bean));
@@ -135,7 +136,7 @@ public class NoteByListActivity extends BaseActivity {
         int index = num;
         FragmentManager manager = getSupportFragmentManager();
         Fragment noteByListFragment = new NoteByListFragment();
-        if (!TextUtils.isEmpty(schoolName)) {//第一个条目
+        if (!TextUtils.isEmpty(schoolName) && !"origin".equals(type)) {//第一个条目
             NoteTabBean noteTab = new NoteTabBean();
             noteTab.name = schoolName;
             noteTab.islast = "2";
@@ -179,7 +180,6 @@ public class NoteByListActivity extends BaseActivity {
         int num = getSupportFragmentManager().getBackStackEntryCount();
         int index = num;
         Fragment noteByListFragment = new NoteByListFragment();
-
         FragmentManager manager = getSupportFragmentManager();
         NoteTabBean noteTabBean = new NoteTabBean();
         noteTabBean.tag = index + "";
@@ -187,18 +187,13 @@ public class NoteByListActivity extends BaseActivity {
         noteTabBean.islast = bundle.getString("islast");
         Log.e("TAG", "initDeptFragment2==》: " + JSON.toJSONString(bundle));
         noteByListFragment.setArguments(bundle);
-
         manager.beginTransaction()
                 .replace(R.id.content, noteByListFragment)
                 .addToBackStack(String.valueOf(index))
                 .commit();
-
         listTab.add(noteTabBean);
-
         Log.e("TAG", "initDeptFragment2==>: " + JSON.toJSONString(listTab));
-
         tabRecyAdapter.notifydata(listTab);
-
     }
 
     @Override
@@ -218,8 +213,7 @@ public class NoteByListActivity extends BaseActivity {
                 String name = backStackEntry.getName();
                 for (NoteTabBean noteTabBean : tabRecyAdapter.list) {
                     if (name.equals(noteTabBean.tag)) {
-                        tabRecyAdapter.remove(i);
-//                        listTab.remove(i);
+                        listTab = tabRecyAdapter.remove(i);
                     }
                 }
             }

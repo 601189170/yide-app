@@ -276,16 +276,15 @@ public class LoadingView extends View {
      * 开始动画
      */
     public void start() {
-        if (anim == null) {
-            initAnim();
-        }
-        if (anim.isRunning()) {
-            anim.cancel();
-        }
-
         post(() -> {
             isAnimCanceled = false;
             isLtr = false;
+            if (anim == null) {
+                initAnim();
+            }
+            if (anim.isRunning()) {
+                anim.cancel();
+            }
             anim.start();
         });
     }

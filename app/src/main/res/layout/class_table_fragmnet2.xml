@@ -28,11 +28,11 @@
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <GridView
                 android:id="@+id/listsection"
-                android:layout_width="@dimen/dp_50"
+                android:layout_width="@dimen/dp_20"
                 android:layout_height="match_parent"
                 android:numColumns="1"
                 android:verticalSpacing="1dp" />

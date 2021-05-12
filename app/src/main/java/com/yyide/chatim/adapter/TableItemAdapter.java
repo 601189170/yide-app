@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +40,14 @@ public class TableItemAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_card, null, false);
         TextView text_view = VHUtil.ViewHolder.get(view, R.id.text_view);
         LinearLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
+        //text_view.setText(getItem(position).subjectName + "\n" + getItem(position).fromDateTime + "\n" + getItem(position).toDateTime);
         text_view.setText(getItem(position).subjectName);
 
         if (position % 7 == this.position) {

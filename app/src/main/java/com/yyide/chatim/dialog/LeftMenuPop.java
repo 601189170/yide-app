@@ -253,7 +253,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                         //Log.d();
                     }
                 });
-                dismiss();
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                }
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();
                 break;

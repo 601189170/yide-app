@@ -185,7 +185,7 @@ public class SwichSchoolPop extends PopupWindow {
                 .build();
         //请求组合创建
         Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/login")
+                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/oauth/token")
                 .post(body)
                 .build();
         //发起请求

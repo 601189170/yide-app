@@ -24,18 +24,13 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
         attachView(view);
     }
 
-    public void NoteBookByList(String departmentId, String name, String phone, String jobNumber, int size, int current) {
-//        mvpView.showLoading();
+    public void NoteBookByList(String departmentId, int pageSize, int current) {
+        mvpView.showLoading();
         Map map = new HashMap();
         map.put("departmentId", departmentId);
-        map.put("name", name);
-        map.put("phone", phone);
-        map.put("jobNumber", jobNumber);
-        Map map2 = new HashMap();
-        map2.put("size", size);
-        map2.put("current", current);
-        map.put("page", map2);
-
+        map.put("name", "");
+        map.put("size", pageSize);
+        map.put("current", current);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
 
         addSubscription(dingApiStores.teacherlist(body), new ApiCallback<TeacherlistRsp>() {
@@ -56,13 +51,13 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
         });
     }
 
-    public void getStudentList(String classesIs) {
-//        mvpView.showLoading();
+    public void getStudentList(String classesIs, int pageNum, int pageSize) {
+        mvpView.showLoading();
         Map map = new HashMap();
         map.put("classesId", classesIs);
         map.put("name", "");
-        map.put("size", 150);
-        map.put("current", 1);
+        map.put("size", pageSize);
+        map.put("current", pageNum);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
         addSubscription(dingApiStores.getStudentList(body), new ApiCallback<TeacherlistRsp>() {
             @Override

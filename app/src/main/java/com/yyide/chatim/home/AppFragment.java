@@ -3,23 +3,32 @@ package com.yyide.chatim.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.RegexUtils;
+import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -30,14 +39,17 @@ import com.yyide.chatim.adapter.RecylAppAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.ItemMultiApp;
 import com.yyide.chatim.presenter.AppPresenter;
 import com.yyide.chatim.view.AppView;
+import com.yyide.chatim.view.YDNestedScrollView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +64,17 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @BindView(R.id.recy)
     RecyclerView recy;
     @BindView(R.id.listview)
-    ListView listview;
+    RecyclerView listview;
     @BindView(R.id.right_btn)
     LinearLayout rightBtn;
+    @BindView(R.id.ll_my_app)
+    LinearLayout ll_my_app;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+//    @BindView(R.id.nestedScrollView)
+//    YDNestedScrollView nestedScrollView;
+    @BindView(R.id.recy2)
+    RecyclerView mStickView;
     private View mBaseView;
     RecylAppAdapter recylAppAdapter;
     AppAdapter appAdapter;
@@ -77,6 +95,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         adapter = new MyAppItemAdapter();
+        //我的应用
         mygrid.setAdapter(adapter);
         mygrid.setOnItemClickListener((parent, view1, position, id) -> {
             if ("editor".equals(adapter.getItem(position).getAppType())) {
@@ -97,6 +116,17 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 }
             }
         });
+        //处理吸顶菜单是否显示
+//        nestedScrollView.setNeedScroll(false);
+//        nestedScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+//            if (scrollY > (ll_my_app.getHeight() + SizeUtils.dp2px(20))) {
+//                mStickView.setVisibility(View.VISIBLE);
+//            } else {
+//                mStickView.setVisibility(View.GONE);
+//            }
+//        });
+
+        //菜单列表
         recylAppAdapter = new RecylAppAdapter();
         recy.setAdapter(recylAppAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mActivity);
@@ -105,52 +135,54 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         recylAppAdapter.setOnItemClickListener((view12, position) -> {
             sc = false;
             recylAppAdapter.setPosition(position);
-            /**准确定位到指定位置，并且将指定位置的item置顶，
-             若直接调用scrollToPosition(...)方法，则不会置顶。**/
-//            linearLayoutManager.scrollToPositionWithOffset(position, 0);
-//            linearLayoutManager.setStackFromEnd(true);
-//            listview.setSelection(position);
-//            listview.setSelectionFromTop(position, 0);
-//            listview.smoothScrollToPositionFromTop(position, 0);
+            recy.smoothScrollToPosition(position);
+            mStickView.smoothScrollToPosition(position);
             listview.smoothScrollToPosition(position);
         });
-        appAdapter = new AppAdapter();
+//        recy.setNestedScrollingEnabled(false);
+//        listview.setNestedScrollingEnabled(false);
+        mStickView.setAdapter(recylAppAdapter);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(mActivity);
+        linearLayoutManager2.setOrientation(linearLayoutManager2.HORIZONTAL);
+        mStickView.setLayoutManager(linearLayoutManager2);
+
+        //其他应用列表
+        appAdapter = new AppAdapter(R.layout.app_item);
+        listview.setLayoutManager(new LinearLayoutManager(mActivity));
         listview.setAdapter(appAdapter);
-//        appAdapter.notifyData(list);
         listview.setOnTouchListener((v, event) -> {
             sc = true;
             return false;
         });
 
-        mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getColor(R.color.colorPrimary));
         onRefresh();
-
-        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+        listview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                //判断ListView是否滑动到第一个Item的顶部
-                if (mSwipeRefreshLayout != null && listview.getChildCount() > 0 && listview.getFirstVisiblePosition() == 0
-                        && listview.getChildAt(0).getTop() >= listview.getPaddingTop()) {
-                    //解决滑动冲突，当滑动到第一个item，下拉刷新才起作用
-                    mSwipeRefreshLayout.setEnabled(true);
-                } else {
-                    mSwipeRefreshLayout.setEnabled(false);
-                }
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {//停止滑动
+//                    if (recyclerView.canScrollVertically(1)) {
+//                        mSwipeRefreshLayout.setEnabled(true);
+//                    } else {
+//                        mSwipeRefreshLayout.setEnabled(false);
+//                    }
+//                }
             }
 
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int firstVisiblePosition = view.getFirstVisiblePosition();
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                LinearLayoutManager l = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int firstVisiblePosition = l.findFirstVisibleItemPosition();
                 if (sc) {
                     recylAppAdapter.setPosition(firstVisiblePosition);
+                    recy.smoothScrollToPosition(firstVisiblePosition);
+                    mStickView.smoothScrollToPosition(firstVisiblePosition);
                 }
             }
         });
 
         rightBtn.setOnClickListener(v -> {
-//                startActivity(new Intent(mActivity,LeaveActivity.class));
             startActivity(new Intent(mActivity, AppManagerActivity.class));
         });
     }
@@ -165,9 +197,11 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_APP_MANAGER.equals(messageEvent.getCode())) {
             mvpPresenter.getMyAppList();
+        } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            mvpPresenter.getMyAppList();
+            mvpPresenter.getAppList();
         }
     }
-
 
     @Override
     protected AppPresenter createPresenter() {
@@ -185,11 +219,11 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     }
 
     @Override
-    public void getMyAppListSuccess(AppListRsp model) {
+    public void getMyAppListSuccess(MyAppListRsp model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model != null && model.getData() != null) {
-                List<AppListRsp.DataBean> data = model.getData();
-                AppListRsp.DataBean itemBean = new AppListRsp.DataBean();
+                List<MyAppListRsp.DataBean> data = model.getData();
+                MyAppListRsp.DataBean itemBean = new MyAppListRsp.DataBean();
                 itemBean.setAppType("editor");
                 itemBean.setName("编辑");
                 if (data == null) {
@@ -203,7 +237,6 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
 
     @Override
     public void getMyAppFail(String msg) {
-//        ToastUtils.showShort(msg);
         Log.d(TAG, "getMyAppFail :" + msg);
     }
 
@@ -213,7 +246,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null && model.getData().getRecords() != null) {
                 recylAppAdapter.notifydata(model.getData().getRecords());
-                appAdapter.notifyData(model.getData().getRecords());
+                appAdapter.setList(model.getData().getRecords());
             }
         }
     }

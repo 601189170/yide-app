@@ -1,17 +1,11 @@
 package com.yyide.chatim.presenter;
 
-import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
-import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.AppManagerView;
-import com.yyide.chatim.view.AppView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.RequestBody;
 
@@ -22,9 +16,9 @@ public class AppMannagerPresenter extends BasePresenter<AppManagerView> {
 
     public void getMyAppList() {
         RequestBody body = RequestBody.create(BaseConstant.JSON, "");
-        addSubscription(dingApiStores.getMyApp(body), new ApiCallback<AppListRsp>() {
+        addSubscription(dingApiStores.getMyApp(body), new ApiCallback<MyAppListRsp>() {
             @Override
-            public void onSuccess(AppListRsp model) {
+            public void onSuccess(MyAppListRsp model) {
                 if (model.isSuccess()) {
                     mvpView.getMyAppListSuccess(model);
                 }

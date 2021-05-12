@@ -10,23 +10,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.AppListRsp;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.presenter.AppMannagerPresenter;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.AppManagerView;
-import com.yyide.chatim.view.AppView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,8 +49,8 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
     FrameLayout fz;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    private BaseQuickAdapter<AppListRsp.DataBean, BaseViewHolder> baseQuickAdapter;
-    private AppListRsp.DataBean dataBean;
+    private BaseQuickAdapter<MyAppListRsp.DataBean, BaseViewHolder> baseQuickAdapter;
+    private MyAppListRsp.DataBean dataBean;
 
     @Override
     public int getContentViewID() {
@@ -78,9 +73,9 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
 
     private void initAdapter() {
         recyclerview.setLayoutManager(new GridLayoutManager(this, 4));
-        baseQuickAdapter = new BaseQuickAdapter<AppListRsp.DataBean, BaseViewHolder>(R.layout.item_manager) {
+        baseQuickAdapter = new BaseQuickAdapter<MyAppListRsp.DataBean, BaseViewHolder>(R.layout.item_manager) {
             @Override
-            protected void convert(@NotNull BaseViewHolder holder, AppListRsp.DataBean item) {
+            protected void convert(@NotNull BaseViewHolder holder, MyAppListRsp.DataBean item) {
                 ImageView iv_app_icon = holder.getView(R.id.iv_app_icon);
                 ImageView iv_del = holder.getView(R.id.iv_del);
                 TextView name = holder.getView(R.id.tv_name);
@@ -103,7 +98,7 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
 
         recyclerview.setAdapter(baseQuickAdapter);
         baseQuickAdapter.setOnItemClickListener((adapter, view, position) -> {
-            AppListRsp.DataBean item = (AppListRsp.DataBean) adapter.getItem(position);
+            MyAppListRsp.DataBean item = (MyAppListRsp.DataBean) adapter.getItem(position);
             if ("editor".equals(item.getAppType())) {
                 startActivity(new Intent(AppManagerActivity.this, AppAddActivity.class));
             }
@@ -144,11 +139,11 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
     }
 
     @Override
-    public void getMyAppListSuccess(AppListRsp model) {
+    public void getMyAppListSuccess(MyAppListRsp model) {
         hideLoading();
         if (model != null && model.getData() != null) {
-            List<AppListRsp.DataBean> data = model.getData();
-            AppListRsp.DataBean itemBean = new AppListRsp.DataBean();
+            List<MyAppListRsp.DataBean> data = model.getData();
+            MyAppListRsp.DataBean itemBean = new MyAppListRsp.DataBean();
             itemBean.setAppType("editor");
             itemBean.setName("添加");
             if (data == null) {

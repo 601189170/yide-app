@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -159,29 +160,28 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
 
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-//            setTable(rsp);
-            tableItemAdapter.notifyData(rsp.data.subList);
-
-            String jc = rsp.data.timetableStructure;
-            String s = jc.replaceAll("节课", "");
-            int num = Integer.parseInt(s);
-            List<Integer> Sectionlist = new ArrayList<>();
-            for (int i = 0; i < num; i++) {
-                Sectionlist.add(i);
+            if (rsp.data != null) {
+                tableItemAdapter.notifyData(rsp.data.subList);
+                String jc = rsp.data.timetableStructure;
+                String s = jc.replaceAll("节课", "");
+                int num = Integer.parseInt(s);
+                List<Integer> Sectionlist = new ArrayList<>();
+                for (int i = 0; i < num; i++) {
+                    Sectionlist.add(i);
+                }
+                tableSectionAdapter.notifyData(Sectionlist);
+                createLeftTypeView(0, 1, 1);//早读
+                createLeftTypeView(1, 2, 2);//上午
+                createLeftTypeView(3, 3, 3);//下午
+                createLeftTypeView(6, 4, 1);//晚自习
             }
-            tableSectionAdapter.notifyData(Sectionlist);
-//            setData(rsp);
-
         }
-//        createLeftTypeView(0, 1, 1);
-//        createLeftTypeView(1, 2, 2);
-//        createLeftTypeView(3, 3, 3);
     }
 
     //创建"第上下午"视图
     private void createLeftTypeView(int selection, int type, int length) {
 
-        int CouseHeight = 190;
+        int CouseHeight = SizeUtils.dp2px(75) + 2;
         int CouseWith = 121;
 
         View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card_type2, null);

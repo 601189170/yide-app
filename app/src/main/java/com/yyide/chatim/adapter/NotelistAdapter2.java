@@ -23,7 +23,6 @@ import java.util.List;
 
 public class NotelistAdapter2 extends BaseAdapter {
 
-
     List<TeacherlistRsp.DataBean.RecordsBean> list = new ArrayList<>();
 
     @Override

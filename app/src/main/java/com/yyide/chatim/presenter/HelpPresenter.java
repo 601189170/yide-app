@@ -3,7 +3,6 @@ package com.yyide.chatim.presenter;
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
-import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.HelpItemRep;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.HelpView;
@@ -12,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class HelpPresenter extends BasePresenter<HelpView> {
     public HelpPresenter(HelpView view) {

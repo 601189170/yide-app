@@ -4,12 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.AppAddRsp;
-import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.AppListRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.AppAddView;
-import com.yyide.chatim.view.AppView;
 
 import java.util.HashMap;
 import java.util.Map;

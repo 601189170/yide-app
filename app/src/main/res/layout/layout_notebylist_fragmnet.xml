@@ -22,18 +22,11 @@
                 android:divider="@color/transparent"
                 android:dividerHeight="0dp" />
 
-            <com.yyide.chatim.widget.MyListView
-                android:id="@+id/listview2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"  />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

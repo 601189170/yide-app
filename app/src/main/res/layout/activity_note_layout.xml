@@ -69,13 +69,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp">
 
-                <ImageView
+                <com.yyide.chatim.widget.RadiusImageView
                     android:id="@+id/img"
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp_12"
-                    android:src="@drawable/icon_leave" />
+                    android:src="@drawable/icon_leave"
+                    app:left_bottom_radius="6dp"
+                    app:right_bottom_radius="6dp"
+                    app:right_top_radius="6dp"
+                    app:left_top_radius="6dp" />
 
                 <TextView
                     android:id="@+id/pName"
@@ -88,16 +92,17 @@
 
             </FrameLayout>
 
-            <TextView
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="62dp"
                 android:background="@color/line_11" />
 
             <FrameLayout
-
+                android:id="@+id/original"
                 android:layout_width="match_parent"
-                android:layout_height="62dp">
+                android:layout_height="52dp"
+                android:foreground="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="@dimen/dp_20"
@@ -127,9 +132,10 @@
             </com.yyide.chatim.widget.MyListView>
 
             <FrameLayout
-
+                android:id="@+id/student"
                 android:layout_width="match_parent"
-                android:layout_height="62dp">
+                android:layout_height="52dp"
+                android:foreground="?android:attr/selectableItemBackground">
 
                 <TextView
                     android:layout_width="@dimen/dp_20"
