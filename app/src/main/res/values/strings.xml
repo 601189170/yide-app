@@ -116,5 +116,32 @@
     <string name="ask_for_leave">请假</string>
     <string name="my_ask_for_leave">我要请假</string>
     <string name="leave_record">请假记录</string>
+    <string name="approval_text">审批中</string>
+    <string name="pass_text">审批通过</string>
+    <string name="refuse_text">审批拒绝</string>
+    <string name="repeal_text">已撤销</string>
+    <string name="ask_for_leave_time">请假时间</string>
+    <string name="start_time">开始时间</string>
+    <string name="please_select">请选择</string>
+    <string name="end_time">结束时间</string>
+    <string name="choose_department">所选部门</string>
+    <string name="commit">提交</string>
+    <string name="according_course">按课程</string>
+    <string name="according_date">按日期</string>
+    <string name="detail">详情</string>
+    <string name="repeal">撤销</string>
+    <string name="agree">同意</string>
+    <string name="refuse">拒绝</string>
+    <string name="flow">流程</string>
+    <string name="reason_for_leave">请假事由</string>
+    <string name="to">至</string>
+    <string name="in_department">所在部门</string>
+    <string name="input_reason_for_leave">请输入请假事由</string>
+    <string name="approver_required">审批人（必选）</string>
+    <string name="copy_people">抄送人</string>
+    <string name="date_for_leave">请假日期</string>
+    <string name="section_for_leave">请假节次</string>
+    <string name="check_all">全选</string>
+    <string name="choose_class">选择班级</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity;
+package com.yyide.chatim.activity.leave;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,15 +12,18 @@ import android.widget.TextView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.fragment.leave.AskForLeaveListFragment;
 import com.yyide.chatim.fragment.leave.RequestLeaveStaffFragment;
+import com.yyide.chatim.fragment.leave.RequestLeaveStudentFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import lombok.val;
 
 public class AskForLeaveActivity extends BaseActivity {
@@ -43,12 +46,19 @@ public class AskForLeaveActivity extends BaseActivity {
         initViewPager();
     }
 
-    private void initViewPager() {
-        RequestLeaveStaffFragment requestLeaveStaffFragment = RequestLeaveStaffFragment.newInstance("staff ask for leave");
-        fragments.add(requestLeaveStaffFragment);
-        AskForLeaveListFragment askForLeaveListFragment = AskForLeaveListFragment.newInstance("ask for leave record");
-        fragments.add(askForLeaveListFragment);
+    @OnClick(R.id.back_layout)
+    public void click() {
+        finish();
+    }
 
+    private void initViewPager() {
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            //教职工入口
+            fragments.add(RequestLeaveStaffFragment.newInstance("staff ask for leave"));
+        }else {
+            fragments.add(RequestLeaveStudentFragment.newInstance("student ask for leave"));
+        }
+        fragments.add(AskForLeaveListFragment.newInstance("ask for leave record"));
         mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull

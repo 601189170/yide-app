@@ -79,6 +79,14 @@ public class GetUserSchoolRsp {
             return identity;
         }
 
+        /**
+         * 判断当前是否是教职工
+         * @return 默认是教职工
+         */
+        public boolean staffIdentity(){
+            return TextUtils.isEmpty(status) || (!TYPE_PARENTS.equals(status) && !TYPE_STUDENT.equals(status));
+        }
+
         public String realname;
         public String username;
         public String password;

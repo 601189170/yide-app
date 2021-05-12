@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.AskForLeaveActivity;
+import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.model.AppItemBean;
@@ -64,9 +64,9 @@ public class AppAdapter extends BaseAdapter {
                     view1.getContext().startActivity(intent);
                     break;
                 case "请假":
-                    ToastUtils.showShort("请假");
-                    //intent = new Intent(view1.getContext(), AskForLeaveActivity.class);
-                    //view1.getContext().startActivity(intent);
+                    //ToastUtils.showShort("请假");
+                    intent = new Intent(view1.getContext(), AskForLeaveActivity.class);
+                    view1.getContext().startActivity(intent);
                     break;
                 case "调课":
                     ToastUtils.showShort("调课");

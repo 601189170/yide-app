@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F8FC"
+    tools:context=".activity.leave.LeaveFlowDetailActivity">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout2" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="44dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_leave_content"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_leave_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="某某某提交的请假"
+                    android:textColor="#ff333333"
+                    android:textSize="15sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_leave_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="2021.03.20"
+                    android:textColor="#ff999999"
+                    android:textSize="12sp"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_leave_title"
+                    app:layout_constraintTop_toBottomOf="@id/tv_leave_title" />
+
+                <TextView
+                    android:id="@+id/tv_leave_flow_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:background="@drawable/ask_for_leave_status_pass_shape"
+                    android:paddingStart="@dimen/dp_12"
+                    android:paddingTop="@dimen/dp_4"
+                    android:paddingEnd="@dimen/dp_12"
+                    android:paddingBottom="@dimen/dp_4"
+                    android:text="审批通过"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_leave_content2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/cl_leave_content">
+
+                <TextView
+                    android:id="@+id/tv_department"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:text="@string/in_department"
+                    android:textColor="#ff999999"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_department_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:text="三年级二班"
+                    android:textColor="#ff333333"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_department"
+                    app:layout_constraintTop_toBottomOf="@id/tv_department" />
+
+                <TextView
+                    android:id="@+id/tv_time_interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/ask_for_leave_time"
+                    android:textColor="#ff999999"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_department"
+                    app:layout_constraintTop_toBottomOf="@id/tv_department_name" />
+
+                <TextView
+                    android:id="@+id/tv_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:background="@drawable/ask_for_leave_time_bg_shape"
+                    android:paddingStart="@dimen/dp_12"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingEnd="@dimen/dp_12"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:text="2021.03.06  09:00"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_department"
+                    app:layout_constraintTop_toBottomOf="@id/tv_time_interval" />
+
+                <TextView
+                    android:id="@+id/tv_time_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:text="@string/to"
+                    android:textColor="#ff333333"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_start_time"
+                    app:layout_constraintLeft_toRightOf="@id/tv_start_time"
+                    app:layout_constraintTop_toTopOf="@id/tv_start_time" />
+
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:background="@drawable/ask_for_leave_time_bg_shape"
+                    android:paddingStart="@dimen/dp_12"
+                    android:paddingTop="@dimen/dp_5"
+                    android:paddingEnd="@dimen/dp_12"
+                    android:paddingBottom="@dimen/dp_5"
+                    android:text="2021.03.07  18:00"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_start_time"
+                    app:layout_constraintLeft_toRightOf="@id/tv_time_to"
+                    app:layout_constraintTop_toTopOf="@id/tv_start_time" />
+
+                <TextView
+                    android:id="@+id/tv_reason_for_leave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:text="@string/reason_for_leave"
+                    android:textColor="#ff999999"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_department"
+                    app:layout_constraintTop_toBottomOf="@id/tv_start_time" />
+
+                <TextView
+                    android:id="@+id/tv_reason_for_leave_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:paddingBottom="@dimen/dp_20"
+                    android:text="家里有急事需要处理，请一天假"
+                    android:textColor="#ff333333"
+                    android:textSize="16sp"
+                    app:layout_constraintLeft_toLeftOf="@id/tv_reason_for_leave"
+                    app:layout_constraintTop_toBottomOf="@id/tv_reason_for_leave" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_flow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/cl_leave_content2">
+
+                <TextView
+                    android:id="@+id/tv_flow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:text="@string/flow"
+                    android:textColor="#ff333333"
+                    android:textSize="20sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_flow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    app:layout_constraintTop_toBottomOf="@id/tv_flow" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="83dp"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/cl_flow">
+
+                <Button
+                    android:id="@+id/btn_refuse"
+                    android:layout_width="157dp"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:background="@drawable/flow_no_pass_bg_shape"
+                    android:text="@string/refuse"
+                    android:textColor="#212121"
+                    android:textSize="@dimen/text_16"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btn_pass"
+                    android:layout_width="157dp"
+                    android:layout_height="39dp"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:background="@drawable/flow_pass_bg_shape"
+                    android:text="@string/agree"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_16"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:constraint_referenced_ids="btn_pass,btn_refuse" />
+
+                <Button
+                    android:id="@+id/btn_repeal"
+                    android:layout_width="match_parent"
+                    android:layout_height="39dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:background="@drawable/flow_no_pass_bg_shape"
+                    android:text="@string/repeal"
+                    android:textColor="#212121"
+                    android:textSize="@dimen/text_16"
+                    android:visibility="gone"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -499,8 +499,11 @@
             </intent-filter>
         </receiver>
 
-        <!--请假主界面-->
-        <activity android:name=".activity.AskForLeaveActivity"
+        <!--请假界面-->
+        <activity android:name=".activity.leave.AskForLeaveActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".activity.leave.LeaveFlowDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
 
