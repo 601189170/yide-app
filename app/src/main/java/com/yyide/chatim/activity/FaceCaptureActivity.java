@@ -55,7 +55,6 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     Button btn_start_capture;//已经上传过人脸的，显示重新采集，默认开始采集
 
     private static final int REQUEST_TAKE_PHOTO = 1;
-    private String identity;
     private int classesId;
     private int depId;
     private String realname;
@@ -70,11 +69,10 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         super.onCreate(savedInstanceState);
         title.setText("人脸采集");
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.png"));
-        identity = SpData.getIdentityInfo().getIdentity();
         classesId = SpData.getIdentityInfo().classesId;
         depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
-        Log.e("FaceUploadPresenter", "getFaceData: identity="+identity+"，name="+realname +",classId="+classesId+",depId="+depId);
+        Log.e("FaceUploadPresenter", "getFaceData: name="+realname +",classId="+classesId+",depId="+depId);
         //人名或者id为空则不能上传人脸
         parmsNull();
     }
@@ -83,17 +81,17 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         if (TextUtils.isEmpty(realname)) {
             warnTip("当前账号姓名为空不能采集人脸");
         } else {
-            if (identity.equals("学生") || identity.equals("家长")) {
+            if (!SpData.getIdentityInfo().staffIdentity()) {
                 if (classesId == 0) {
                     warnTip("当前账号学生Id为空不能采集人脸");
                 } else {
-                    mvpPresenter.getFaceData(identity, realname, classesId, depId);
+                    mvpPresenter.getFaceData(realname, classesId, depId);
                 }
             } else {
                 if (depId == 0) {
                     warnTip("当前账号部门Id为空不能采集人脸");
                 } else {
-                    mvpPresenter.getFaceData(identity, realname, classesId, depId);
+                    mvpPresenter.getFaceData(realname, classesId, depId);
                 }
             }
         }
@@ -219,7 +217,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             } catch (IOException e) {
             }
             //图片上传
-            mvpPresenter.updateFaceData(identity,realname,classesId,depId,imagePath);
+            mvpPresenter.updateFaceData(realname,classesId,depId,imagePath);
 
             File file = new File(currentPhotoPath);
             if (file.exists()) {
@@ -282,7 +280,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         if (baseRsp.getCode() == 200){
             tv_face_capture_tip.setText("人脸上传成功");
         }
-        mvpPresenter.getFaceData(identity,realname,classesId,depId);
+        mvpPresenter.getFaceData(realname,classesId,depId);
     }
 
     @Override
@@ -290,7 +288,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         Log.e(TAG, "faceUploadFail: " + msg);
         ToastUtils.showShort("提交失败："+msg);
         tv_face_capture_tip.setText("人脸上传失败");
-        mvpPresenter.getFaceData(identity,realname,classesId,depId);
+        mvpPresenter.getFaceData(realname,classesId,depId);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.yyide.chatim.presenter;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.notice.view.NoticeHomeView;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.BaseRsp;
@@ -24,10 +25,10 @@ public class FaceUploadPresenter extends BasePresenter<FaceUploadView> {
         attachView(view);
     }
 
-    public void updateFaceData(String identity, String name, int classId,int depId, String facePath) {
-        Log.e("FaceUploadPresenter", "updateFaceData: identity="+identity+"，name="+name +",classId="+classId+",depId="+depId+",facePath="+facePath);
+    public void updateFaceData(String name, int classId,int depId, String facePath) {
+        Log.e("FaceUploadPresenter", "updateFaceData: name="+name +",classId="+classId+",depId="+depId+",facePath="+facePath);
         mvpView.showLoading();
-        if (identity.equals("学生") || identity.equals("家长")) {
+        if (!SpData.getIdentityInfo().staffIdentity()) {
             Map<String, RequestBody> params = new HashMap<>();
             params.put("name", convertToRequestBody(name));
             params.put("classId", convertToRequestBody("" + classId));
@@ -80,10 +81,10 @@ public class FaceUploadPresenter extends BasePresenter<FaceUploadView> {
         }
     }
 
-    public void getFaceData(String identity, String name, int classId,int depId){
-        Log.e("FaceUploadPresenter", "getFaceData: identity="+identity+"，name="+name +",classId="+classId+",depId="+depId);
+    public void getFaceData(String name, int classId,int depId){
+        Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId+",depId="+depId);
         mvpView.showLoading();
-        if (identity.equals("学生") || identity.equals("家长")) {
+        if (!SpData.getIdentityInfo().staffIdentity()) {
             Map<String, Object> params = new HashMap<>();
             params.put("name",name);
             params.put("classId",classId);

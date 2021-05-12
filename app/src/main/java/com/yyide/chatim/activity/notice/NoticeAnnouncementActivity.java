@@ -58,7 +58,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
 
     private void initViewPager() {
         //家长身份不能添加公告
-        if (SpData.getIdentityInfo().getIdentity().equals("家长")) {
+        if (!SpData.getIdentityInfo().staffIdentity()) {
             floatingActionButton.setVisibility(View.GONE);
         }
         NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
