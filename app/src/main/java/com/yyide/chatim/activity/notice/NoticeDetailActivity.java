@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.Group;
+
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.notice.presenter.NoticeDetailPresenter;
@@ -41,6 +43,9 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
     @BindView(R.id.tv_notice_confirm)
     TextView tv_notice_confirm;
 
+    @BindView(R.id.gp_bottom)
+    Group gp_bottom;
+
     private int TYPE_CONFIRM = 1;//已确认
     private int TYPE_UNCONFIRM = 2;//未确认
     private int TYPE_STATISTICAL = 3;//通知统计
@@ -68,7 +73,11 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         id = getIntent().getIntExtra("id", 0);
         signId = getIntent().getStringExtra("signId");
         status = getIntent().getStringExtra("status");
-        Log.e(TAG, "onCreate: type:" + type + ",id:" + id + ",status:" + status);
+        Log.e(TAG, "onCreate: type:" + type + "signId:"+signId +",id:" + id + ",status:" + status);
+        final String sendObject = getIntent().getStringExtra("sendObject");
+        if (sendObject != null  && (sendObject.equals("学生") || sendObject.equals("2"))){
+            gp_bottom.setVisibility(View.GONE);
+        }
         initView(type);
         initData();
     }
@@ -132,7 +141,18 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         Intent intent = new Intent(this, NoticeConfirmDetailActivity.class);
         intent.putExtra("totalNumber", totalNumber);
         intent.putExtra("readNumber", readNumber);
-        intent.putExtra("signId", signId);
+        if (TextUtils.isEmpty(signId)){
+            intent.putExtra("signId", id);
+        }else {
+            try {
+                final Long value = Long.valueOf(signId);
+                intent.putExtra("signId", value);
+            }catch (NumberFormatException exception){
+                ToastUtils.showShort("不好意思，出错啦，无法查看通知统计");
+                return;
+            }
+        }
+
         startActivity(intent);
     }
 

@@ -120,6 +120,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
                 intent.putExtra("type", 3);
                 intent.putExtra("id", record.getId());
                 intent.putExtra("status", record.getStatus());
+                intent.putExtra("sendObject",record.getSendObject());
                 startActivity(intent);
             }
 

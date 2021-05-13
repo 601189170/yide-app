@@ -99,6 +99,9 @@ public class NoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             holder1.tv_confirm.setOnClickListener(v -> {
                 onItemOnClickListener.onClicked(position);
             });
+
+            holder1.itemView.setOnClickListener(v ->
+                    onItemOnClickListener.onClicked(position));
         }
     }
 
