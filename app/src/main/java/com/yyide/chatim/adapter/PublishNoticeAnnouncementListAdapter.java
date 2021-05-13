@@ -118,7 +118,12 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             holder1.tv_notice_time.setText(productionTime);
             holder1.tv_notice_author.setText(String.format(context.getString(R.string.notice_release_obj_text),noticeAnnouncementModel.getProductionTarget()));
             holder1.tv_notice_content.setText(Html.fromHtml(noticeAnnouncementModel.getContent()));
-            holder1.tv_confirm_number.setText(confirmNumber);
+            if (getSendObj(sendObject).equals("学生")) {
+                holder1.tv_confirm_number.setVisibility(View.INVISIBLE);
+            }else {
+                holder1.tv_confirm_number.setVisibility(View.VISIBLE);
+                holder1.tv_confirm_number.setText(confirmNumber);
+            }
             holder1.tv_send_obj.setText(sendObj);
 
             holder1.btn_delete.setOnClickListener(v -> {
