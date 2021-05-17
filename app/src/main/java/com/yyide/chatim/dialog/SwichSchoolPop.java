@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
@@ -54,6 +56,7 @@ public class SwichSchoolPop extends PopupWindow {
     PopupWindow popupWindow;
     Window mWindow;
     OkHttpClient mOkHttpClient = new OkHttpClient();
+    LoadingTools loadingTools;
 
     public SwichSchoolPop(Activity context) {
         this.context = context;
@@ -74,6 +77,7 @@ public class SwichSchoolPop extends PopupWindow {
         FrameLayout bg = mView.findViewById(R.id.bg);
         ListView listview = mView.findViewById(R.id.listview);
         SwichSchoolAdapter adapter = new SwichSchoolAdapter();
+        loadingTools = new LoadingTools(context);
         listview.setAdapter(adapter);
         if (SpData.Schoolinfo() != null && SpData.Schoolinfo().data != null) {
             adapter.notifyData(SpData.Schoolinfo().data);
@@ -131,7 +135,7 @@ public class SwichSchoolPop extends PopupWindow {
     }
 
     void selectUserSchool(GetUserSchoolRsp.DataBean school) {
-        LoadingTools.getInstance(context).showLoading();
+        loadingTools.showLoading();
         SchoolRsp rsp = new SchoolRsp();
         rsp.userId = school.userId;
         RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
@@ -146,7 +150,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", "onFailure: " + e.toString());
-                LoadingTools.getInstance(context).closeLoading();
+                loadingTools.closeLoading();
             }
 
             @Override
@@ -159,7 +163,7 @@ public class SwichSchoolPop extends PopupWindow {
                     Tologin(school.userId);
                 } else {
                     ToastUtils.showShort(bean.message);
-                    LoadingTools.getInstance(context).closeLoading();
+                    loadingTools.closeLoading();
                 }
                 context.runOnUiThread(() -> {
                     if (popupWindow != null && popupWindow.isShowing()) {
@@ -193,7 +197,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", "onFailure: " + e.toString());
-                LoadingTools.getInstance(context).closeLoading();
+                loadingTools.closeLoading();
             }
 
             @Override
@@ -206,8 +210,8 @@ public class SwichSchoolPop extends PopupWindow {
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     getUserSchool();
                 } else {
-                    LoadingTools.getInstance(context).closeLoading();
                     ToastUtils.showShort(bean.message);
+                    loadingTools.closeLoading();
                 }
             }
         });
@@ -226,7 +230,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e("TAG", "getUserSigonFailure: " + e.toString());
-                LoadingTools.getInstance(context).closeLoading();
+                loadingTools.closeLoading();
             }
 
             @Override
@@ -243,7 +247,7 @@ public class SwichSchoolPop extends PopupWindow {
                     getUserSig();
                 } else {
                     ToastUtils.showShort(rsp.msg);
-                    LoadingTools.getInstance(context).closeLoading();
+                    loadingTools.closeLoading();
                 }
             }
         });
@@ -266,7 +270,7 @@ public class SwichSchoolPop extends PopupWindow {
             @Override
             public void onFailure(Call call, IOException e) {
                 //Log.e(TAG, "getUserSigonFailure: " + e.toString());
-                LoadingTools.getInstance(context).closeLoading();
+                loadingTools.closeLoading();
             }
 
             @Override
@@ -278,8 +282,8 @@ public class SwichSchoolPop extends PopupWindow {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
                     initIm(bean.data);
                 } else {
-                    LoadingTools.getInstance(context).closeLoading();
                     ToastUtils.showShort(bean.msg);
+                    loadingTools.closeLoading();
                 }
             }
         });
@@ -292,7 +296,7 @@ public class SwichSchoolPop extends PopupWindow {
         TUIKit.login(SpData.getIdentityInfo().userId + "", userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
-                LoadingTools.getInstance(context).closeLoading();
+                loadingTools.closeLoading();
                 //context.runOnUiThread(() -> ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc));
                 DemoLog.i("TAG", "imLogin errorCode = " + code + ", errorInfo = " + desc);
                 UserInfo.getInstance().setAutoLogin(false);
@@ -314,14 +318,11 @@ public class SwichSchoolPop extends PopupWindow {
 
             @Override
             public void onSuccess(Object data) {
-                LoadingTools.getInstance(context).closeLoading();
+                loadingTools.closeLoading();
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
                 Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
 //                ActivityUtils.finishAllActivities();
 //                Intent intent = new Intent(context, MainActivity.class);
 //                context.startActivity(intent);
@@ -329,6 +330,9 @@ public class SwichSchoolPop extends PopupWindow {
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
                 if (mOnCheckCallBack != null) {
                     mOnCheckCallBack.onCheckCallBack();
+                }
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
                 }
             }
         });

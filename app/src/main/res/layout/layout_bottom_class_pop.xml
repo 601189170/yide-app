@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="365dp"
+        android:layout_height="395dp"
         android:layout_gravity="bottom"
         android:background="@drawable/bg_white_top"
         android:orientation="vertical">
@@ -41,6 +41,12 @@
                     android:textColor="@color/text_212121"
                     android:textSize="16sp" />
             </LinearLayout>
+
+            <View
+                android:id="@+id/view_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DCDFE6" />
 
             <ListView
                 android:id="@+id/listview"

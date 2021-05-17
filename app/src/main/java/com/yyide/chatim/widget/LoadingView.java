@@ -276,9 +276,9 @@ public class LoadingView extends View {
      * 开始动画
      */
     public void start() {
+        isAnimCanceled = false;
+        isLtr = false;
         post(() -> {
-            isAnimCanceled = false;
-            isLtr = false;
             if (anim == null) {
                 initAnim();
             }

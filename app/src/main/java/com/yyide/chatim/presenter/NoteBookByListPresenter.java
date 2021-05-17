@@ -4,9 +4,7 @@ package com.yyide.chatim.presenter;
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.TeacherlistRsp;
-import com.yyide.chatim.model.listByAppRsp;
 import com.yyide.chatim.net.ApiCallback;
-import com.yyide.chatim.view.NoteBookView;
 import com.yyide.chatim.view.NoteByListBookView;
 
 import java.util.HashMap;

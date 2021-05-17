@@ -38,6 +38,7 @@
                         android:layout_height="50dp"
                         android:layout_gravity="right|center_vertical"
                         android:src="@drawable/default_head"
+                        android:scaleType="centerCrop"
                         app:left_bottom_radius="6dp"
                         app:right_bottom_radius="6dp"
                         app:right_top_radius="6dp"
@@ -195,6 +196,7 @@
                         android:src="@drawable/my_icon3" />
 
                     <TextView
+                        android:id="@+id/my_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"

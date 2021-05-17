@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
@@ -47,13 +48,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     private List<Call> calls;
     private static final String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
+    private LoadingTools loading;
 
     // 监听做成静态可以让每个子类重写时都注册相同的一份。
     private static IMEventListener mIMEventListener = new IMEventListener() {
         @Override
         public void onForceOffline() {
-            ToastUtil.toastLongMessage("您的帐号已在其它终端登录");
-            logout(BaseApplication.getInstance());
+            //ToastUtil.toastLongMessage("您的帐号已在其它终端登录");
+            //logout(BaseApplication.getInstance());
         }
     };
 
@@ -90,6 +92,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getContentViewID());
         mActivity = this;
         unbinder = ButterKnife.bind(this);
+        loading = new LoadingTools(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.white));
@@ -99,17 +102,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
             getWindow().getDecorView().setSystemUiVisibility(vis);
         }
-//        TUIKit.addIMEventListener(mIMEventListener);
         //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
         //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
 
         //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
 //        ImmersionBar.with(this).init();
-
-    }
-
-    private int getBaseActivityLayout() {
-        return R.layout.activity_base;
+        TUIKit.addIMEventListener(mIMEventListener);
     }
 
     @Override
@@ -160,6 +158,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             unbinder.unbind();
         }
         hideLoading();
+        loading = null;
+        mActivity = null;
         super.onDestroy();
     }
 
@@ -168,7 +168,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         DemoLog.i(TAG, "onNewIntent");
         super.onNewIntent(intent);
     }
-
 
     public void addCalls(Call call) {
         if (calls == null) {
@@ -214,7 +213,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
             case android.R.id.home:
                 super.onBackPressed();//返回
                 return true;
@@ -224,13 +222,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showLoading() {
-        if (mActivity != null && !mActivity.isFinishing()) {
-            LoadingTools.getInstance(mActivity).showLoading();
+        if (loading != null && !isFinishing()) {
+            loading.showLoading();
         }
     }
 
     public void hideLoading() {
-        LoadingTools.getInstance(mActivity).closeLoading();
+        if (loading != null) {
+            loading.closeLoading();
+        }
     }
 
 }

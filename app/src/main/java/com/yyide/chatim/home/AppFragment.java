@@ -3,32 +3,20 @@ package com.yyide.chatim.home;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.blankj.utilcode.util.AppUtils;
-import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -41,7 +29,6 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.ItemMultiApp;
 import com.yyide.chatim.presenter.AppPresenter;
 import com.yyide.chatim.view.AppView;
 import com.yyide.chatim.view.YDNestedScrollView;
@@ -49,7 +36,6 @@ import com.yyide.chatim.view.YDNestedScrollView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +50,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @BindView(R.id.recy)
     RecyclerView recy;
     @BindView(R.id.listview)
-    RecyclerView listview;
+    RecyclerView recyclerViewApp;
     @BindView(R.id.right_btn)
     LinearLayout rightBtn;
     @BindView(R.id.ll_my_app)
@@ -116,7 +102,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 }
             }
         });
-        //处理吸顶菜单是否显示
+//        处理吸顶菜单是否显示
 //        nestedScrollView.setNeedScroll(false);
 //        nestedScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
 //            if (scrollY > (ll_my_app.getHeight() + SizeUtils.dp2px(20))) {
@@ -135,9 +121,10 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         recylAppAdapter.setOnItemClickListener((view12, position) -> {
             sc = false;
             recylAppAdapter.setPosition(position);
+//            recyclerViewApp.smoothScrollToPosition(position);
             recy.smoothScrollToPosition(position);
             mStickView.smoothScrollToPosition(position);
-            listview.smoothScrollToPosition(position);
+            ((LinearLayoutManager)recyclerViewApp.getLayoutManager()).scrollToPositionWithOffset(position,0);
         });
 //        recy.setNestedScrollingEnabled(false);
 //        listview.setNestedScrollingEnabled(false);
@@ -148,9 +135,9 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
 
         //其他应用列表
         appAdapter = new AppAdapter(R.layout.app_item);
-        listview.setLayoutManager(new LinearLayoutManager(mActivity));
-        listview.setAdapter(appAdapter);
-        listview.setOnTouchListener((v, event) -> {
+        recyclerViewApp.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerViewApp.setAdapter(appAdapter);
+        recyclerViewApp.setOnTouchListener((v, event) -> {
             sc = true;
             return false;
         });
@@ -158,16 +145,16 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getColor(R.color.colorPrimary));
         onRefresh();
-        listview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewApp.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {//停止滑动
-//                    if (recyclerView.canScrollVertically(1)) {
-//                        mSwipeRefreshLayout.setEnabled(true);
-//                    } else {
-//                        mSwipeRefreshLayout.setEnabled(false);
-//                    }
-//                }
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {//停止滑动
+                    if (recyclerView.canScrollVertically(1)) {
+                        mSwipeRefreshLayout.setEnabled(true);
+                    } else {
+                        mSwipeRefreshLayout.setEnabled(false);
+                    }
+                }
             }
 
             @Override

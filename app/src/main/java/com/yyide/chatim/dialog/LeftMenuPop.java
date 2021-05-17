@@ -35,6 +35,7 @@ import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.utils.FileCacheUtils;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
@@ -59,6 +60,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private TextView user_name;
     private TextView tv_cache;
     private ImageView head_img;
+    private TextView my_info;
 
     public LeftMenuPop(Activity context) {
         this.context = context;
@@ -81,6 +83,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         user_name = mView.findViewById(R.id.user_name);
         head_img = mView.findViewById(R.id.head_img);
         tv_cache = mView.findViewById(R.id.tv_cache);
+        my_info = mView.findViewById(R.id.my_info);
         mView.findViewById(R.id.iv_close).setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
@@ -158,6 +161,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private void setData() {
         context.runOnUiThread(() -> {
             setCache();
+            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)) {
+                my_info.setText("我的信息");
+            } else {
+                my_info.setText("学生信息");
+            }
             user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
             head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
@@ -253,9 +261,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                         //Log.d();
                     }
                 });
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+                hide();
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();
                 break;

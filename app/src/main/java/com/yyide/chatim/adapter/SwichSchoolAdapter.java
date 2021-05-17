@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,12 +48,20 @@ public class SwichSchoolAdapter extends BaseAdapter {
         TextView school_info = VHUtil.ViewHolder.get(view, R.id.school_info);
         TextView school_name = VHUtil.ViewHolder.get(view, R.id.school_name);
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
+        View view_line = VHUtil.ViewHolder.get(view, R.id.view_line);
+
         school_name.setText(getItem(position).schoolName);
         school_info.setText(getItem(position).realname);
         if (list.get(position).userId == SpData.getIdentityInfo().userId) {
             select.setVisibility(View.VISIBLE);
         } else {
             select.setVisibility(View.GONE);
+        }
+        Log.d("position", position + "");
+        if (getCount() -1 == position) {
+            view_line.setVisibility(View.GONE);
+        } else {
+            view_line.setVisibility(View.VISIBLE);
         }
 //        select.setVisibility(index==position?View.VISIBLE:View.GONE);
         return view;

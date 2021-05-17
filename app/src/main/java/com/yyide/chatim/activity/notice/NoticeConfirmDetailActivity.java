@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.notice;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDe
         return R.layout.activity_confirm_detail;
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

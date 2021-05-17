@@ -306,7 +306,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         }
     }
 
-    public static interface FragmentListener {
+    public interface FragmentListener {
         void jumpFragment(int index);
     }
 

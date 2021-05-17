@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.listByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class NotelistAdapter extends BaseAdapter {
 
-    public List<listByAppRsp.DataBean.ListBean> list=new ArrayList<>();
+    public List<ListByAppRsp.DataBean.ListBean> list=new ArrayList<>();
 
     @Override
     public int getCount() {
@@ -27,7 +27,7 @@ public class NotelistAdapter extends BaseAdapter {
     }
 
     @Override
-    public listByAppRsp.DataBean.ListBean getItem(int position) {
+    public ListByAppRsp.DataBean.ListBean getItem(int position) {
         return list.get(position);
     }
 
@@ -44,7 +44,7 @@ public class NotelistAdapter extends BaseAdapter {
         item.setText(getItem(position).name);
         return view;
     }
-    public void notifydata(List<listByAppRsp.DataBean.ListBean> list){
+    public void notifydata(List<ListByAppRsp.DataBean.ListBean> list){
         this.list=list;
         notifyDataSetChanged();
     }

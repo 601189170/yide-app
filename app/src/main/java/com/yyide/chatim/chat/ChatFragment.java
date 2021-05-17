@@ -68,11 +68,8 @@ public class ChatFragment extends BaseFragment {
     private void initView() {
         //从布局文件中获取聊天面板组件
         mChatLayout = mBaseView.findViewById(R.id.chat_layout);
-
         //单聊组件的默认UI和交互初始化
         mChatLayout.initDefault();
-
-
         title = mBaseView.findViewById(R.id.text);
         back = mBaseView.findViewById(R.id.back);
         title.setText(mChatInfo.getChatName());
@@ -117,8 +114,7 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
                 //因为adapter中第一条为加载条目，位置需减1
-
-                //mChatLayout.getMessageLayout().showItemPopMenu(position - 1, messageInfo, view);
+                mChatLayout.getMessageLayout().showItemPopMenu(position - 1, messageInfo, view);
             }
 
             @Override

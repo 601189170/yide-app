@@ -1,74 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bg"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#33000000"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#33000000">
 
     <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="395dp"
         android:layout_gravity="bottom"
         android:background="@drawable/bg_white_top"
-        android:id="@+id/layout"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="365dp">
+        android:orientation="vertical">
+
         <LinearLayout
-            android:layout_weight="1"
-            android:paddingLeft="@dimen/dp_20"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dp_20">
+
             <LinearLayout
-                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
                 android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="66dp">
+                android:orientation="horizontal">
+
                 <TextView
-                    android:background="@drawable/swich_person"
                     android:layout_width="30dp"
-                    android:layout_height="30dp" />
+                    android:layout_height="30dp"
+                    android:background="@drawable/swich_person" />
 
-
-            <TextView
-                android:text="切换身份"
-                android:textSize="16sp"
-                android:layout_marginLeft="@dimen/dp_12"
-                android:textColor="@color/text_212121"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:text="切换身份"
+                    android:textColor="@color/text_212121"
+                    android:textSize="16sp" />
             </LinearLayout>
-            <TextView
-                android:background="#DCDFE6"
+
+            <View
+                android:id="@+id/view_line"
                 android:layout_width="match_parent"
-                android:layout_height="1dp" />
+                android:layout_height="1dp"
+                android:background="#DCDFE6" />
+
             <ListView
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp"
                 android:id="@+id/listview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:divider="@color/transparent"
+                android:dividerHeight="0dp">
 
             </ListView>
         </LinearLayout>
 
         <FrameLayout
-            android:background="#F5F8FC"
-            android:padding="@dimen/dp_20"
             android:layout_width="match_parent"
-            android:layout_height="80dp" >
+            android:layout_height="80dp"
+            android:background="#F5F8FC"
+            android:padding="@dimen/dp_20">
 
             <TextView
-                android:text="取消"
-                android:gravity="center"
-                android:background="@drawable/bg_white20"
-                android:layout_gravity="center"
-                android:textSize="16sp"
-                android:textColor="@color/blue11"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_white20"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/blue11"
+                android:textSize="16sp" />
         </FrameLayout>
-
 
 
     </LinearLayout>

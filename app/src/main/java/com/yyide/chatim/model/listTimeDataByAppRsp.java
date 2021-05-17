@@ -71,8 +71,10 @@ public class listTimeDataByAppRsp {
         public String timetableStructure;
         public String timetableType;
         public List<SubListBean> subList;
-
-     
+        public List<String> earlyReadingList;//早读
+        public List<String> morningList;//上午
+        public List<String> afternoonList;//下午
+        public List<String> eveningStudyList;//晚自习
 
         public static class SubListBean {
             /**

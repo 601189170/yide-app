@@ -25,6 +25,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
                 android:src="@drawable/default_head"
+                android:scaleType="centerCrop"
                 app:left_bottom_radius="6dp"
                 app:right_bottom_radius="6dp"
                 app:right_top_radius="6dp"

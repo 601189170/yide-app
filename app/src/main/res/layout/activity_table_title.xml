@@ -1,83 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/white"
+    tools:context=".activity.notice.NoticeConfirmDetailActivity">
 
     <include
-        layout="@layout/title_layout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></include>
+        android:id="@+id/top"
+        layout="@layout/title_layout2" />
 
-    <LinearLayout
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        app:tabTextColor="#909399"
+        app:tabSelectedTextColor="#303133"
+        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorColor="@color/colorPrimaryDark"
+        app:tabIndicatorFullWidth="false"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:layout_constraintTop_toBottomOf="@+id/top" />
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <CheckedTextView
-                android:id="@+id/tab1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="我的课表"
-                android:textAlignment="center"
-                android:textColor="@color/tab_msg_color" />
-
-            <TextView
-                android:id="@+id/line1"
-                android:layout_width="40dp"
-                android:layout_height="3dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/blue11"
-                android:visibility="gone" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <CheckedTextView
-                android:id="@+id/tab2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="班级课表"
-                android:textAlignment="center"
-                android:textColor="@color/tab_msg_color" />
-
-            <TextView
-                android:id="@+id/line2"
-                android:layout_width="40dp"
-                android:layout_height="3dp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/blue11"
-                android:visibility="gone" />
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <View
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#EEF2F8" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tablayout" />
 
-    <FrameLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

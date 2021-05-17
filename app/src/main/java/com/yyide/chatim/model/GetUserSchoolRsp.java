@@ -48,7 +48,7 @@ public class GetUserSchoolRsp {
          * introduce : null
          * img : null
          */
-        //家长：0 ,学生：1 ,校长：2 ,班主任：3,老师：4,班牌账号：5，管理员账号：6
+        //0 家长,1 学生,2 校长,3 班主任,4 老师,5 班牌账号，6 管理员账号
         public static final String TYPE_PARENTS = "0";
         public static final String TYPE_STUDENT = "1";
         public static final String TYPE_PRESIDENT = "2";
