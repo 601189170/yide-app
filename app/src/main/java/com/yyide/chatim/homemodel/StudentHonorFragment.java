@@ -70,7 +70,11 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
             intent.putExtra("url", BaseConstant.STUDENT_HONOR_URL);
             view.getContext().startActivity(intent);
         });
-
+        iv_bg.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), WebViewActivity.class);
+            intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
+            view.getContext().startActivity(intent);
+        });
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));

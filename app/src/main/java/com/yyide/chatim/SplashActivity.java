@@ -71,10 +71,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     void Tologin(String username, String password) {
-        RequestBody body = null;
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
             int userId = SpData.getIdentityInfo().userId;
-            body = new FormBody.Builder()
+            RequestBody body = new FormBody.Builder()
                     .add("username", username)
                     .add("password", password)
                     .add("userId", String.valueOf(userId))
@@ -82,34 +81,35 @@ public class SplashActivity extends AppCompatActivity {
                     .add("grant_type", "password")
                     .add("client_secret", "yide1234567")
                     .build();
-        }
-
-        //请求组合创建
-        Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/oauth/token")
-                .post(body)
-                .build();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                startLogin();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e(TAG, "mOkHttpClient==>: " + data);
-                LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-                    //存储登录信息
-                    SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                    getUserSchool();
-                } else {
+            //请求组合创建
+            Request request = new Request.Builder()
+                    .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/oauth/token")
+                    .post(body)
+                    .build();
+            //发起请求
+            mOkHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
                     startLogin();
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String data = response.body().string();
+                    Log.e(TAG, "mOkHttpClient==>: " + data);
+                    LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
+                    if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+                        //存储登录信息
+                        SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+                        getUserSchool();
+                    } else {
+                        startLogin();
+                    }
+                }
+            });
+        } else {
+            startLogin();
+        }
     }
 
     //获取学校信息
@@ -151,12 +151,7 @@ public class SplashActivity extends AppCompatActivity {
         if (mUserInfo != null) {
             loginIM();
         } else {
-            mFlashView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startMain();
-                }
-            }, SPLASH_TIME);
+            mFlashView.postDelayed(() -> startMain(), SPLASH_TIME);
         }
     }
 

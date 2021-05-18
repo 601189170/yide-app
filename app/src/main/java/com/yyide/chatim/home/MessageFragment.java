@@ -60,7 +60,7 @@ public class MessageFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        int type = getArguments().getInt("type", 0);
+        int type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
         Log.e(TAG, "onViewCreated: " + type);
         setTab(type);
         setBookView();

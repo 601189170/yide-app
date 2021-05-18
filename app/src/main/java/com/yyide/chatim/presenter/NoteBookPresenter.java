@@ -2,11 +2,8 @@ package com.yyide.chatim.presenter;
 
 
 import com.yyide.chatim.base.BasePresenter;
-import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.listByAppRsp;
-import com.yyide.chatim.model.selectListByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.net.ApiCallback;
-import com.yyide.chatim.view.HomeFragmentView;
 import com.yyide.chatim.view.NoteBookView;
 
 /**
@@ -21,9 +18,9 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
 
     public void listByApp() {
 //        mvpView.showLoading();
-        addSubscription(dingApiStores.listByApp(), new ApiCallback<listByAppRsp>() {
+        addSubscription(dingApiStores.listByApp(), new ApiCallback<ListByAppRsp>() {
             @Override
-            public void onSuccess(listByAppRsp model) {
+            public void onSuccess(ListByAppRsp model) {
                 mvpView.listByApp(model);
             }
 
@@ -41,9 +38,9 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
 
     public void selectListByApp() {
 //        mvpView.showLoading();
-        addSubscription(dingApiStores.selectListByApp(), new ApiCallback<listByAppRsp>() {
+        addSubscription(dingApiStores.selectListByApp(), new ApiCallback<ListByAppRsp>() {
             @Override
-            public void onSuccess(listByAppRsp model) {
+            public void onSuccess(ListByAppRsp model) {
                 mvpView.selectListByApp(model);
             }
 
@@ -60,9 +57,9 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
     }
 
     public void universitySelectListByApp() {
-        addSubscription(dingApiStores.universitySelectListByApp(), new ApiCallback<listByAppRsp>() {
+        addSubscription(dingApiStores.universitySelectListByApp(), new ApiCallback<ListByAppRsp>() {
             @Override
-            public void onSuccess(listByAppRsp model) {
+            public void onSuccess(ListByAppRsp model) {
                 mvpView.universityListByApp(model);
             }
 

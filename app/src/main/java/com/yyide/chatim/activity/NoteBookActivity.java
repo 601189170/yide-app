@@ -3,6 +3,7 @@ package com.yyide.chatim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,7 @@ import com.yyide.chatim.adapter.NoBookItemAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.listByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.selectListByAppRsp;
 import com.yyide.chatim.presenter.NoteBookPresenter;
 import com.yyide.chatim.utils.GlideUtil;
@@ -89,15 +90,12 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
      * @param name
      * @param organization 教职工staff  学生student
      */
-    void setPostData(List<listByAppRsp.DataBean.ListBean> list, String schoolName, String id, String name, String organization, String type) {
+    void setPostData(ArrayList<ListByAppRsp.DataBean.ListBean> list, String schoolName, String id, String name, String organization, String type) {
         Intent intent = new Intent();
-        for (int i = 0; i < list.size(); i++) {
-            intent.putExtra(i + "", list.get(i));
-        }
+        intent.putParcelableArrayListExtra("listBean", list);
         intent.putExtra("id", id);
         intent.putExtra("name", name);
         intent.putExtra("schoolName", TextUtils.isEmpty(schoolName) ? pName.getText().toString().trim(): schoolName);
-        intent.putExtra("size", list.size());
         intent.putExtra("schoolType", schoolType);
         intent.putExtra("type", type);
         intent.putExtra("organization", organization);
@@ -141,17 +139,17 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     }
 
     @Override
-    public void listByApp(listByAppRsp rsp) {
+    public void listByApp(ListByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             //学校组织结构
-            List<listByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
+            ArrayList<ListByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
             if (rsp.data.size() > 0) {
                 pName.setText(rsp.data.get(0).parentName);
                 if (!TextUtils.isEmpty(rsp.data.get(0).schoolLogo)) {
                     GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.get(0).schoolLogo, img);
                 }
-                for (listByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
+                for (ListByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
                     listBeans1.add(listBean);
                 }
                 original.setOnClickListener(v -> setPostData(listBeans1, rsp.data.get(0).parentName, String.valueOf(rsp.data.get(0).id), rsp.data.get(0).name, "staff", "origin"));
@@ -161,14 +159,14 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     }
 
     @Override
-    public void selectListByApp(listByAppRsp rsp) {
+    public void selectListByApp(ListByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             //小初高组织结构
-            List<listByAppRsp.DataBean.ListBean> listBeans = new ArrayList<>();
+            ArrayList<ListByAppRsp.DataBean.ListBean> listBeans = new ArrayList<>();
             if (rsp.data != null && rsp.data.size() > 0) {
-                for (listByAppRsp.DataBean listBean : rsp.data) {
-                    listByAppRsp.DataBean.ListBean item = new listByAppRsp.DataBean.ListBean();
+                for (ListByAppRsp.DataBean listBean : rsp.data) {
+                    ListByAppRsp.DataBean.ListBean item = new ListByAppRsp.DataBean.ListBean();
                     item.name = listBean.name;
                     item.id = listBean.id;
                     item.list = listBean.list;
@@ -182,13 +180,13 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     }
 
     @Override
-    public void universityListByApp(listByAppRsp rsp) {
+    public void universityListByApp(ListByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             //通讯录（大学）组织结构
-            List<listByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
+            List<ListByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
             if (rsp.data.size() > 0) {
-                for (listByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
+                for (ListByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
                     listBeans1.add(listBean);
                 }
                 student.setOnClickListener(v -> setPostData(rsp.data.get(0).list, rsp.data.get(0).parentName, String.valueOf(rsp.data.get(0).id), rsp.data.get(0).name, "student", "student"));

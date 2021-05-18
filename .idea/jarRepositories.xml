@@ -101,5 +101,10 @@
       <option name="name" value="D:\Android\sdk\extras\android\m2repository" />
       <option name="url" value="file:/$PROJECT_DIR$/../../Android/sdk/extras/android/m2repository/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven4" />
+      <option name="name" value="maven4" />
+      <option name="url" value="https://developer.huawei.com/repo/" />
+    </remote-repository>
   </component>
 </project>

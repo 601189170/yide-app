@@ -73,6 +73,11 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
                 view.getContext().startActivity(intent);
             }
         });
+        iv_bg.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), WebViewActivity.class);
+            intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
+            view.getContext().startActivity(intent);
+        });
 
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);

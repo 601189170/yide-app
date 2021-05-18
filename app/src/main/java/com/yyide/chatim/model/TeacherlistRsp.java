@@ -39,7 +39,7 @@ public class TeacherlistRsp implements Serializable {
         public List<RecordsBean> records;
 
 
-        public static class RecordsBean {
+        public static class RecordsBean implements MultiItemEntity {
             /**
              * id : 585
              * delInd : 0
@@ -133,7 +133,14 @@ public class TeacherlistRsp implements Serializable {
             public List<SubjectsBean> subjects;
             public List<?> roles;
             public String userType;//用户类型 1老师 2学生
+            //组织架构列表
+            public ListByAppRsp.DataBean.ListBean organizationItem;
+            public int itemType; //0 成员 1 组织
 
+            @Override
+            public int getItemType() {
+                return itemType;
+            }
 
             public static class DepartmentsBean {
                 /**

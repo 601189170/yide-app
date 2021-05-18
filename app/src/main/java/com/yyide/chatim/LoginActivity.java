@@ -35,7 +35,6 @@ import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.databinding.LoginForDevActivityBinding;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
@@ -45,6 +44,8 @@ import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.Utils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -150,11 +151,11 @@ public class LoginActivity extends BaseActivity {
     private void alphaAnimation() {
         //显示
         alphaAniShow = new AlphaAnimation(0, 1);//百分比透明度，从0%到100%显示
-        alphaAniShow.setDuration(800);//一秒
+        alphaAniShow.setDuration(500);//一秒
 
         //隐藏
         alphaAniHide = new AlphaAnimation(1, 0);
-        alphaAniHide.setDuration(800);
+        alphaAniHide.setDuration(500);
     }
 
     @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code, R.id.del})
@@ -187,7 +188,7 @@ public class LoginActivity extends BaseActivity {
                 if (TextUtils.isEmpty(mobile)) {
                     ToastUtils.showShort("请输入手机号码");
                 } else {
-                    getcode(mobile);
+                    getCode(mobile);
                 }
                 break;
             case R.id.type:
@@ -262,7 +263,7 @@ public class LoginActivity extends BaseActivity {
             } else if (TextUtils.isEmpty(validateCode)) {
                 ToastUtils.showShort("请输入验证码");
             } else {
-                TologinBymobile(validateCode, mobile);
+                tologinBymobile(validateCode, mobile);
             }
         } else {
             if (TextUtils.isEmpty(mobile)) {
@@ -270,7 +271,7 @@ public class LoginActivity extends BaseActivity {
             } else if (TextUtils.isEmpty(password)) {
                 ToastUtils.showShort("请输入密码");
             } else {
-                Tologin(userEdit.getText().toString(), passwordEdit.getText().toString());
+                toLogin(userEdit.getText().toString(), passwordEdit.getText().toString());
             }
         }
     }
@@ -325,7 +326,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    void Tologin(String username, String password) {
+    void toLogin(String username, String password) {
         showLoading();
         RequestBody body = new FormBody.Builder()
                 .add("client_id", "yide-cloud")
@@ -355,8 +356,6 @@ public class LoginActivity extends BaseActivity {
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//                    getUserSig();
                     getUserSchool();
                 } else {
                     hideLoading();
@@ -367,10 +366,11 @@ public class LoginActivity extends BaseActivity {
     }
 
     //获取验证码
-    void getcode(String phone) {
-        RequestBody body = new FormBody.Builder()
-                .add("phone", phone)
-                .build();
+    void getCode(String phone) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("phone", phone);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(params));
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/app/smsVerification")
@@ -395,13 +395,15 @@ public class LoginActivity extends BaseActivity {
                     //存储登录信息
                     ToastUtils.showShort("验证码已发送");
                     time.start();
+                } else {
+                    ToastUtils.showShort(bean.msg);
                 }
             }
         });
     }
 
     //验证码登入
-    void TologinBymobile(String validateCode, String mobile) {
+    void tologinBymobile(String validateCode, String mobile) {
         RequestBody body = new FormBody.Builder()
                 .add("validateCode", validateCode)
                 .add("mobile", mobile)
@@ -466,8 +468,7 @@ public class LoginActivity extends BaseActivity {
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
                     SpData.setIdentityInfo(rsp);
-                    //initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    getUserSig();
                 } else {
                     hideLoading();
                     ToastUtils.showShort(rsp.msg);
@@ -499,7 +500,7 @@ public class LoginActivity extends BaseActivity {
                 getUserSigRsp bean = JSON.parseObject(data, getUserSigRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
-                    getUserSchool();
+                    initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
                 } else {
                     hideLoading();
                     ToastUtils.showShort(bean.msg);
@@ -521,6 +522,7 @@ public class LoginActivity extends BaseActivity {
                     UserInfo.getInstance().setUserSig(userSig);
                     UserInfo.getInstance().setUserId(String.valueOf(userid));
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                     Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
                 });
                 DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
@@ -535,6 +537,7 @@ public class LoginActivity extends BaseActivity {
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userid));
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
                 Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
             }
         });

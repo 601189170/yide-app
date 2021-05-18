@@ -14,10 +14,10 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.widget.LoadingView;
 
 public class LoadingTools {
-    private static LoadingTools mInstance;
-    private static Dialog mLoadingDialog;
+    private LoadingTools mInstance;
+    private Dialog mLoadingDialog;
 
-    public static LoadingTools getInstance(Context context) {
+    public LoadingTools getInstance(Context context) {
         if (mInstance == null) {
             synchronized (LoadingTools.class) {
                 if (mInstance == null) {

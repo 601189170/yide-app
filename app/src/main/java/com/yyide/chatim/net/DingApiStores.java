@@ -39,7 +39,7 @@ import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
-import com.yyide.chatim.model.listByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.mobileRsp;
 
@@ -122,15 +122,15 @@ public interface DingApiStores {
 
     //查询组织架构列表信息 大学组织结构
     @POST("/school/cloud-school/department/listByApp")
-    Observable<listByAppRsp> listByApp();
+    Observable<ListByAppRsp> listByApp();
 
     //查询组织架构列表信息 小初高组织结构
     @POST("/school/cloud-school/section/selectListByApp")
-    Observable<listByAppRsp> selectListByApp();
+    Observable<ListByAppRsp> selectListByApp();
 
     //通讯录-学生/家长（大学）
     @POST("/school/cloud-school/departmentClass/selectListByApp")
-    Observable<listByAppRsp> universitySelectListByApp();
+    Observable<ListByAppRsp> universitySelectListByApp();
 
     //查询应用
     @POST("/backstage/cloud-backstage/application/search")

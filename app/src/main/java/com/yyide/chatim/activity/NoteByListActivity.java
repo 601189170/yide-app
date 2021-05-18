@@ -3,6 +3,7 @@ package com.yyide.chatim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,7 +23,7 @@ import com.yyide.chatim.adapter.TabRecyAdapter;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.NoteByListFragment;
 import com.yyide.chatim.model.NoteTabBean;
-import com.yyide.chatim.model.listByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class NoteByListActivity extends BaseActivity {
     RecyclerView recyclerview;
     TabRecyAdapter tabRecyAdapter;
     List<NoteTabBean> listTab = new ArrayList<>();
-    List<listByAppRsp.DataBean.ListBean> listBean = new ArrayList<>();
+    ArrayList<ListByAppRsp.DataBean.ListBean> listBean = new ArrayList<>();
 
     private String id;
     private String name;
@@ -57,19 +58,11 @@ public class NoteByListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int sum = getIntent().getIntExtra("size", 0);
         id = getIntent().getStringExtra("id");
         name = getIntent().getStringExtra("name");
         organization = getIntent().getStringExtra("organization");
         type = getIntent().getStringExtra("type");
-
-        for (int i = 0; i < sum; i++) {
-            listByAppRsp.DataBean.ListBean bean = (listByAppRsp.DataBean.ListBean) getIntent().getSerializableExtra(i + "");
-            Log.e("TAG", "ZBListBean: " + JSON.toJSONString(bean));
-            listBean.add(bean);
-        }
-
-        Log.e("TAG", "listBean==》sum: " + JSON.toJSONString(listBean));
+        listBean = getIntent().getParcelableArrayListExtra("listBean");
         title.setText("通讯录");
         tabRecyAdapter = new TabRecyAdapter();
 
@@ -92,16 +85,17 @@ public class NoteByListActivity extends BaseActivity {
                 } else {
                     getSupportFragmentManager().popBackStackImmediate(tabRecyAdapter.list.get(position).tag, 0);
                     tabRecyAdapter.remove(position);
+                    BackSp();
                 }
             }
         });
 
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                BackSp();
-            }
-        });
+//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//            @Override
+//            public void onBackStackChanged() {
+//                BackSp();
+//            }
+//        });
 
         initDeptFragment();
 //        mvpPresenter.NoteBookByList(departmentId,"","","","10","1");
@@ -154,16 +148,13 @@ public class NoteByListActivity extends BaseActivity {
         noteTabBean.organization = organization;
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
-        for (int i = 0; i < listBean.size(); i++) {
-            bundle.putSerializable(i + "", listBean.get(i));
-        }
+        bundle.putParcelableArrayList("listBean", listBean);
         if (listBean.size() == 0) {
             noteTabBean.islast = "1";
         } else {
             noteTabBean.islast = "2";
         }
         bundle.putString("islast", noteTabBean.islast);
-        bundle.putInt("size", listBean.size());
         bundle.putString("organization", organization);
         noteByListFragment.setArguments(bundle);
 

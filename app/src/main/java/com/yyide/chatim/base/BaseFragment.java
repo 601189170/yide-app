@@ -21,12 +21,13 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class BaseFragment extends Fragment {
     public Activity mActivity;
-
+    private LoadingTools loadingTools;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         mActivity = getActivity();
+        loadingTools = new LoadingTools(getActivity());
     }
 
     @Override
@@ -53,11 +54,15 @@ public class BaseFragment extends Fragment {
     }
 
     public void showProgressDialog2() {
-        LoadingTools.getInstance(getActivity()).showLoading();
+        if(loadingTools != null && !getActivity().isFinishing()){
+            loadingTools.showLoading();
+        }
     }
 
     public void dismissProgressDialog2() {
-        LoadingTools.getInstance(getActivity()).closeLoading();
+        if(loadingTools != null){
+            loadingTools.closeLoading();
+        }
     }
 
 }

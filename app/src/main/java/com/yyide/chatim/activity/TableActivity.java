@@ -2,40 +2,41 @@ package com.yyide.chatim.activity;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.notice.NoticeItemFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.ClassTableFragment;
 import com.yyide.chatim.fragment.MyTableFragment;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.model.TemplateTypeRsp;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class TableActivity extends BaseActivity {
 
-    @BindView(R.id.tab1)
-    CheckedTextView tab1;
-    @BindView(R.id.line1)
-    TextView line1;
-    @BindView(R.id.tab2)
-    CheckedTextView tab2;
-    @BindView(R.id.line2)
-    TextView line2;
-    @BindView(R.id.content)
-    FrameLayout content;
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.tablayout)
+    TabLayout mTablayout;
+    @BindView(R.id.viewpager)
+    ViewPager2 mViewpager;
 
     @Override
     public int getContentViewID() {
@@ -46,7 +47,7 @@ public class TableActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText("课表");
-        setTab(0);
+        initViewPager();
     }
 
     @Override
@@ -59,52 +60,40 @@ public class TableActivity extends BaseActivity {
         super.onPause();
     }
 
-    void setTab(int position) {
-        tab1.setChecked(false);
-        tab2.setChecked(false);
-        line1.setVisibility(View.GONE);
-        line2.setVisibility(View.GONE);
+    private void initViewPager() {
 
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
-        Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
+        mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        mViewpager.setAdapter(new FragmentStateAdapter(this) {
+            @NonNull
+            @Override
+            public Fragment createFragment(int position) {
+                if(position == 0){
+                    return new MyTableFragment();
+                } else {
+                    return new ClassTableFragment();
+                }
+            }
 
-        if (fg1 != null) ft.hide(fg1);
-        if (fg2 != null) ft.hide(fg2);
-
-        switch (position) {
-            case 0:
-                if (fg1 == null) {
-                    fg1 = new MyTableFragment();
-                    ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
-                } else
-                    ft.show(fg1);
-                tab1.setChecked(true);
-                line1.setVisibility(View.VISIBLE);
-                break;
-            case 1:
-                if (fg2 == null) {
-                    fg2 = new ClassTableFragment();
-                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
-                } else
-                    ft.show(fg2);
-                tab2.setChecked(true);
-                line2.setVisibility(View.VISIBLE);
-                break;
-        }
-        ft.commitAllowingStateLoss();
+            @Override
+            public int getItemCount() {
+                return 2;
+            }
+        });
+        new TabLayoutMediator(mTablayout, mViewpager, true, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                if(position == 0){
+                    tab.setText("我的课表");
+                } else {
+                    tab.setText("班级课表");
+                }
+            }
+        }).attach();
     }
 
-    @OnClick({R.id.tab1, R.id.tab2, R.id.back_layout})
+    @OnClick({R.id.back_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tab1:
-                setTab(0);
-                break;
-            case R.id.tab2:
-                setTab(1);
-                break;
             case R.id.back_layout:
                 finish();
                 break;

@@ -48,9 +48,7 @@ public class BaseApplication extends Application {
 
         //blankj初始化
         Utils.init(this);
-
         MultiDex.install(this);
-
         MMKV.initialize(this); //初始化mmkv
 
         /**
@@ -65,7 +63,7 @@ public class BaseApplication extends Application {
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplicationContext());
         strategy.setAppVersion(V2TIMManager.getInstance().getVersion());
         CrashReport.initCrashReport(getApplicationContext(), PrivateConstants.BUGLY_APPID, true, strategy);
-        TXLiveBase.getInstance().setLicence(instance, licenceUrl, licenseKey);
+        //TXLiveBase.getInstance().setLicence(instance, licenceUrl, licenseKey);
         /**
          * TUIKit的初始化函数
          *
@@ -74,7 +72,6 @@ public class BaseApplication extends Application {
          * @param configs  TUIKit的相关配置项，一般使用默认即可，需特殊配置参考API文档
          */
         TUIKit.init(this, BaseConstant.SDKAPPID, new ConfigHelper().getConfigs());
-
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
 
@@ -102,17 +99,14 @@ public class BaseApplication extends Application {
         private IMEventListener mIMEventListener = new IMEventListener() {
             @Override
             public void onNewMessage(V2TIMMessage msg) {
-//                MessageNotification notification = MessageNotification.getInstance();
-//                notification.notify(msg);
+                MessageNotification notification = MessageNotification.getInstance();
+                notification.notify(msg);
             }
         };
 
-        private ConversationManagerKit.MessageUnreadWatcher mUnreadWatcher = new ConversationManagerKit.MessageUnreadWatcher() {
-            @Override
-            public void updateUnread(int count) {
-                // 华为离线推送角标
-                //HUAWEIHmsMessageService.updateBadge(BaseApplication.this, count);
-            }
+        private ConversationManagerKit.MessageUnreadWatcher mUnreadWatcher = count -> {
+            // 华为离线推送角标
+            //HUAWEIHmsMessageService.updateBadge(BaseApplication.this, count);
         };
 
         @Override

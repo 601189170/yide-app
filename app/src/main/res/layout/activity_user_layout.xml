@@ -31,13 +31,18 @@
                 android:textColor="#212121"
                 android:textSize="15sp" />
 
-            <ImageView
+            <com.yyide.chatim.widget.RadiusImageView
                 android:id="@+id/img"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginEnd="38dp"
-                android:src="@drawable/default_head" />
+                android:src="@drawable/default_head"
+                android:scaleType="centerCrop"
+                app:left_bottom_radius="6dp"
+                app:right_bottom_radius="6dp"
+                app:right_top_radius="6dp"
+                app:left_top_radius="6dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -58,6 +63,7 @@
             android:id="@+id/layout2"
             android:layout_width="match_parent"
             android:layout_height="49dp"
+            android:visibility="gone"
             android:background="@color/white">
 
             <TextView

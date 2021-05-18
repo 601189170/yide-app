@@ -101,12 +101,11 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.conversation_fragment, container, false);
-        initView();
+        //initView();
         return mBaseView;
     }
 
     private void initView() {
-//        V2TIMManager.getConversationManager().
         V2TIMManager.getConversationManager().getConversationList(0, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
             @Override
             public void onProgress(int progress) {
@@ -121,7 +120,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             @Override
             public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
                 v2TIMConversationResult.getConversationList();
-                //ToastUtil.toastShortMessage("onSuccess==》"+JSON.toJSONString(v2TIMConversationResult.getConversationList()));
             }
         });
 
@@ -205,24 +203,20 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         List<PopMenuAction> conversationPopActions = new ArrayList<PopMenuAction>();
         PopMenuAction action = new PopMenuAction();
         action.setActionName(getResources().getString(R.string.chat_top));
-        action.setActionClickListener(new PopActionClickListener() {
-            @Override
-            public void onActionClick(int position, Object data) {
-                mConversationLayout.setConversationTop(position, (ConversationInfo) data);
-            }
-        });
+        action.setActionClickListener((position, data) -> mConversationLayout.setConversationTop(position, (ConversationInfo) data));
         conversationPopActions.add(action);
         action = new PopMenuAction();
-        action.setActionClickListener(new PopActionClickListener() {
-            @Override
-            public void onActionClick(int position, Object data) {
-                mConversationLayout.deleteConversation(position, (ConversationInfo) data);
-            }
-        });
+        action.setActionClickListener((position, data) -> mConversationLayout.deleteConversation(position, (ConversationInfo) data));
         action.setActionName(getResources().getString(R.string.chat_delete));
         conversationPopActions.add(action);
         mConversationPopActions.clear();
         mConversationPopActions.addAll(conversationPopActions);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initView();
     }
 
     /**
@@ -238,15 +232,12 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             return;
         View itemPop = LayoutInflater.from(getActivity()).inflate(R.layout.pop_menu_layout, null);
         mConversationPopList = itemPop.findViewById(R.id.pop_menu_list);
-        mConversationPopList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PopMenuAction action = mConversationPopActions.get(position);
-                if (action.getActionClickListener() != null) {
-                    action.getActionClickListener().onActionClick(index, conversationInfo);
-                }
-                mConversationPopWindow.dismiss();
+        mConversationPopList.setOnItemClickListener((parent, view, position, id) -> {
+            PopMenuAction action = mConversationPopActions.get(position);
+            if (action.getActionClickListener() != null) {
+                action.getActionClickListener().onActionClick(index, conversationInfo);
             }
+            mConversationPopWindow.dismiss();
         });
 
         for (int i = 0; i < mConversationPopActions.size(); i++) {

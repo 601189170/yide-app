@@ -9,13 +9,14 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,7 @@ import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.presenter.MainPresenter;
+import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.view.MainView;
@@ -107,17 +109,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     FrameLayout tab4Layout;
     @BindView(R.id.msg_total_unread)
     UnreadCountTextView msgTotalUnread;
-
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
-    public int IdType = 1;
     public String TAG = "MainActivity";
 
     private long firstTime = 0;
-    private UserInfo mUserInfo;
     private CallModel mCallModel;
 
     @Override
@@ -131,15 +130,29 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         registerMessageReceiver();  // used for receive msg
         permission();
         // 未读消息监视器
-        ConversationManagerKit.getInstance().addUnreadWatcher(this);
-
-        mUserInfo = UserInfo.getInstance();
         EventBus.getDefault().register(this);
+        setTab(1, 0);
         setTab(0, 0);
         //注册极光别名
         registerAlias();
         //登录IM
-        getUserSig();
+        //处理失败时点击切换重新登录IM
+        prepareThirdPushToken();
+
+
+    }
+
+    public static Fragment[] getFragments() {
+        Fragment fragments[] = new Fragment[4];
+        fragments[0] = new HomeFragment();
+        fragments[1] = new MessageFragment();
+        fragments[2] = new AppFragment();
+        fragments[3] = new HelpFragment();
+        return fragments;
+    }
+
+    private void prepareThirdPushToken() {
+        ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
     }
 
     @Override
@@ -159,6 +172,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     protected void onStop() {
         ConversationManagerKit.getInstance().destroyConversation();
         super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ConversationManagerKit.getInstance().addUnreadWatcher(this);
     }
 
     @Override
@@ -409,17 +428,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         if (fg2 != null) ft.hide(fg2);
         if (fg3 != null) ft.hide(fg3);
         if (fg4 != null) ft.hide(fg4);
-
         switch (position) {
             case 0:
                 if (fg1 == null) {
                     //身份切换
-                    if (IdType == 1) {
-                        fg1 = new HomeFragment();
-//                        fg1 = new HomeFragment2();
-                    } else {
-                        fg1 = new HomeFragmentXZ();
-                    }
+                    fg1 = new HomeFragment();
                     ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
                 } else
                     ft.show(fg1);

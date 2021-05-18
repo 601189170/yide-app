@@ -138,10 +138,9 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (pageNum == 1) {
                 if (model != null && model.getData() != null) {
-                    adapter.setNewData(model.getData().getRecords());
+                    adapter.setList(model.getData().getRecords());
                 }
             } else {
-                pageNum++;
                 if (model != null && model.getData() != null) {
                     adapter.addData(model.getData().getRecords());
                 }

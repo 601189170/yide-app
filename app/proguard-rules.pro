@@ -45,3 +45,28 @@
 
 #========================腾讯云Im防混淆================================
 -keep class com.tencent.imsdk.** { *; }
+
+#=========================华为推送通道混淆===================================
+-ignorewarning
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keepattributes Signature
+-keepattributes SourceFile,LineNumberTable
+-keep class com.hianalytics.android.**{*;}
+-keep class com.huawei.updatesdk.**{*;}
+-keep class com.huawei.hms.**{*;}
+
+#=========================小米推送通道混淆===================================
+-dontwarn com.xiaomi.push.**
+-keep class com.xiaomi.push.** { *; }
+
+#=========================OPPO推送通道混淆===================================
+-dontwarn com.coloros.mcsdk.**
+-keep class com.coloros.mcsdk.** { *; }
+
+-dontwarn com.heytap.**
+-keep class com.heytap.** { *; }
+
+-dontwarn com.mcs.**
+-keep class com.mcs.** { *; }

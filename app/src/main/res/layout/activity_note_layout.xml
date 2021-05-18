@@ -75,6 +75,7 @@
                     android:layout_height="@dimen/dp_30"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp_12"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/icon_leave"
                     app:left_bottom_radius="6dp"
                     app:right_bottom_radius="6dp"

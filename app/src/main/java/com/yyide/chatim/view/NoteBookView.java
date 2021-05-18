@@ -3,8 +3,7 @@ package com.yyide.chatim.view;
 
 
 import com.yyide.chatim.base.BaseView;
-import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.listByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.selectListByAppRsp;
 
 /**
@@ -14,11 +13,11 @@ import com.yyide.chatim.model.selectListByAppRsp;
 public interface NoteBookView extends BaseView {
 
 
-    void listByApp(listByAppRsp rsp);
+    void listByApp(ListByAppRsp rsp);
 
-    void selectListByApp(listByAppRsp rsp);
+    void selectListByApp(ListByAppRsp rsp);
 
-    void universityListByApp(listByAppRsp rsp);
+    void universityListByApp(ListByAppRsp rsp);
 
     void listByAppDataFail(String rsp);
 

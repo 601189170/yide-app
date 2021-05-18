@@ -3,6 +3,8 @@ package com.yyide.chatim.chat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.tencent.imsdk.v2.V2TIMManager;
@@ -17,6 +19,9 @@ import com.yyide.chatim.utils.DemoLog;
 
 import androidx.annotation.Nullable;
 
+import butterknife.BindView;
+import butterknife.OnClick;
+
 import static com.tencent.imsdk.v2.V2TIMManager.V2TIM_STATUS_LOGINED;
 
 public class ChatActivity extends BaseActivity {
@@ -25,6 +30,8 @@ public class ChatActivity extends BaseActivity {
 
     private ChatFragment mChatFragment;
     private ChatInfo mChatInfo;
+    @BindView(R.id.title)
+    TextView title;
 
     @Override
     public int getContentViewID() {
@@ -35,6 +42,11 @@ public class ChatActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         chat(getIntent());
+    }
+
+    @OnClick(R.id.back_layout)
+    void click(View view){
+        finish();
     }
 
     @Override
@@ -67,12 +79,11 @@ public class ChatActivity extends BaseActivity {
 //            bundle.putSerializable(Constants.CHAT_INFO, mChatInfo);
 //            DemoLog.i(TAG, "offline mChatInfo: " + mChatInfo);
 //        } else {
-//            mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
-//            if (mChatInfo == null) {
-//                startSplashActivity(null);
-//                return;
-//            }
+        mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
 //        }
+        if(mChatInfo != null){
+            title.setText(mChatInfo.getChatName());
+        }
 
         if (V2TIMManager.getInstance().getLoginStatus() == V2TIM_STATUS_LOGINED) {
             mChatFragment = new ChatFragment();

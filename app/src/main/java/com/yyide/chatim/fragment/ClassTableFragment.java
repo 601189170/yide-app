@@ -3,6 +3,7 @@ package com.yyide.chatim.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import java.util.List;
 import androidx.annotation.Nullable;
 
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -170,10 +172,15 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     Sectionlist.add(i);
                 }
                 tableSectionAdapter.notifyData(Sectionlist);
-                createLeftTypeView(0, 1, 1);//早读
-                createLeftTypeView(1, 2, 2);//上午
-                createLeftTypeView(3, 3, 3);//下午
-                createLeftTypeView(6, 4, 1);//晚自习
+                int earlyReading = rsp.data.earlyReadingList != null ? rsp.data.earlyReadingList.size() : 0;
+                int morning = rsp.data.morningList != null ? rsp.data.morningList.size() : 0;
+                int afternoon = rsp.data.afternoonList != null ? rsp.data.afternoonList.size() : 0;
+                int eveningStudy = rsp.data.eveningStudyList != null ? rsp.data.eveningStudyList.size() : 0;
+
+                createLeftTypeView(0, 1, earlyReading);//早读
+                createLeftTypeView(earlyReading, 2, morning);//上午
+                createLeftTypeView(earlyReading + morning, 3, afternoon);//下午
+                createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚自习
             }
         }
     }
@@ -181,38 +188,37 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //创建"第上下午"视图
     private void createLeftTypeView(int selection, int type, int length) {
 
-        int CouseHeight = SizeUtils.dp2px(75) + 2;
-        int CouseWith = 121;
+        int CouseHeight = SizeUtils.dp2px(75) + 1;
+        int CouseWith = SizeUtils.dp2px(30);
 
         View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card_type2, null);
-//            View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card, null);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CouseHeight * length); //设置布局高度,即跨多少节课
-//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CouseHeight*length);
-        view.setY(CouseHeight * selection);
-
-        view.setLayoutParams(params);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(CouseWith, CouseHeight * length); //设置布局高度,即跨多少节课
         TextView text = view.findViewById(R.id.text_view);
         text.setText("");
-
         switch (type) {
             case 1:
+                view.setY(CouseHeight * selection);
                 view.setBackground(getResources().getDrawable(R.drawable.bg_table_type1));
                 text.setText("早\n读");
                 break;
             case 2:
+                view.setY((CouseHeight * selection) + SizeUtils.dp2px(1));
                 view.setBackground(getResources().getDrawable(R.drawable.bg_table_type2));
                 text.setText("上\n午");
                 break;
             case 3:
+                view.setY((CouseHeight * selection) + SizeUtils.dp2px(2));
                 view.setBackground(getResources().getDrawable(R.drawable.bg_table_type3));
                 text.setText("下\n午");
                 break;
             case 4:
+                view.setY((CouseHeight * selection) + SizeUtils.dp2px(3));
                 view.setBackground(getResources().getDrawable(R.drawable.bg_table_type4));
                 text.setText("晚\n自\n习");
                 break;
         }
+        params.gravity = Gravity.CENTER;
+        text.setLayoutParams(params);
         leftLayout.addView(view);
 
     }
