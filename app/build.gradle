@@ -196,6 +196,8 @@ dependencies {
     //lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    //Alibaba Java Coding Guidelines    
+    compileOnly 'com.alibaba.p3c.idea:p3c-common:1.0.0'
 
     //引入极光-华为插件，如果采用此配置，无需拷贝jpush-android-plugin-huawei-v3.x.x.jar文件，也无需配置cn.jpush.android.service.PluginHuaweiPlatformsService组件
 //    implementation 'cn.jiguang.sdk.plugin:huawei:3.6.0'
