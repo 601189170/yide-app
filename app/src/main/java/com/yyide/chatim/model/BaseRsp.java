@@ -21,7 +21,7 @@ public class BaseRsp {
     private int code;
     private boolean success;
     private String msg;
-    private Object data;
+    private String data;
 
     public int getCode() {
         return code;
@@ -47,11 +47,11 @@ public class BaseRsp {
         this.msg = msg;
     }
 
-    public Object getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(String data) {
         this.data = data;
     }
 

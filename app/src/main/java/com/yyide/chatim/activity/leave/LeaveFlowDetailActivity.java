@@ -1,26 +1,39 @@
 package com.yyide.chatim.activity.leave;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.LeaveFlowAdapter;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.fragment.leave.AskForLeaveListFragment;
 import com.yyide.chatim.fragment.leave.RequestLeaveStaffFragment;
 import com.yyide.chatim.fragment.leave.RequestLeaveStudentFragment;
+import com.yyide.chatim.model.BaseRsp;
+import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveFlowBean;
+import com.yyide.chatim.presenter.leave.LeaveDetailPresenter;
+import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.view.leave.LeaveDetailView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +41,54 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class LeaveFlowDetailActivity extends BaseActivity {
+public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresenter> implements LeaveDetailView {
+    private static final String TAG = "LeaveFlowDetailActivity";
+
     @BindView(R.id.title)
     TextView title;
 
     @BindView(R.id.recyclerview_flow)
     RecyclerView recyclerViewFlow;
 
+    @BindView(R.id.tv_leave_title)
+    TextView tv_leave_title;
+
+    @BindView(R.id.tv_leave_time)
+    TextView tv_leave_time;
+
+    @BindView(R.id.tv_department_name)
+    TextView tv_department_name;
+
+    @BindView(R.id.tv_start_time)
+    TextView tv_start_time;
+
+    @BindView(R.id.tv_end_time)
+    TextView tv_end_time;
+
+    @BindView(R.id.tv_reason_for_leave_content)
+    TextView tv_reason_for_leave_content;
+
+    @BindView(R.id.btn_repeal)
+    Button btn_repeal;
+
+    @BindView(R.id.gp_approver)
+    Group gp_approver;
+
+    @BindView(R.id.tv_leave_flow_status)
+    TextView tv_leave_flow_status;
+
+    @BindView(R.id.cl_content)
+    ConstraintLayout cl_content;
+
+    @BindView(R.id.blank_page)
+    LinearLayout blank_page;
+    @BindView(R.id.cl_repeal)
+    ConstraintLayout cl_repeal;
+
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
+    private long id;
+    private boolean updateList = false;
 
     @Override
     public int getContentViewID() {
@@ -47,21 +99,188 @@ public class LeaveFlowDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText(R.string.detail);
-        initData();
+        //type 1请假人 2审批人
+        final int type = getIntent().getIntExtra("type", 1);
+        if (type == 1) {
+            btn_repeal.setVisibility(View.VISIBLE);
+            gp_approver.setVisibility(View.GONE);
+        } else {
+            btn_repeal.setVisibility(View.GONE);
+            gp_approver.setVisibility(View.VISIBLE);
+        }
+        id = getIntent().getLongExtra("id", -1);
+        Log.e(TAG, "id: " + id);
+        if (id == -1) {
+            showBlankPage(true);
+        } else {
+            mvpPresenter.queryLeaveDetailsById(id);
+        }
+    }
+
+
+    @Override
+    protected LeaveDetailPresenter createPresenter() {
+        return new LeaveDetailPresenter(this);
+    }
+
+
+    @OnClick(R.id.back_layout)
+    public void click() {
+        if (updateList){
+            setResult(RESULT_OK,getIntent());
+        }
+        finish();
+    }
+
+    @OnClick({R.id.btn_refuse, R.id.btn_pass})
+    public void click(View view) {
+        switch (view.getId()){
+            case R.id.btn_refuse:
+                mvpPresenter.processExaminationApproval(id,0);
+                break;
+            case R.id.btn_pass:
+                mvpPresenter.processExaminationApproval(id,1);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (updateList){
+            setResult(RESULT_OK,getIntent());
+            finish();
+        }else {
+            super.onBackPressed();
+        }
+    }
+
+    @OnClick(R.id.btn_repeal)
+    public void repeal() {
+        updateList = true;
+        mvpPresenter.ondoApplyLeave(id);
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void leaveDetail(LeaveDetailRsp leaveDetailRsp) {
+        Log.e(TAG, "leaveDetail: " + leaveDetailRsp.toString());
+        showBlankPage(leaveDetailRsp == null);
+        final LeaveDetailRsp.DataBean data = leaveDetailRsp.getData();
+        leaveFlowBeanList.clear();
+
+        tv_leave_title.setText(data.getName());
+        String initiateTime = data.getInitiateTime();
+        tv_leave_time.setText(initiateTime);
+        tv_department_name.setText(data.getDeptOrClassName());
+        tv_start_time.setText(data.getStartTime());
+        tv_end_time.setText(data.getEndTime());
+        tv_reason_for_leave_content.setText(data.getReason());
+        //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
+        final String approvalResult = data.getApprovalResult();
+        leaveStatus(approvalResult, tv_leave_flow_status);
+        final String approverName = data.getApproverName();
+        String approvalTime = data.getApprovalTime();
+        initiateTime = DateUtils.formatTime(initiateTime, "yyyy.MM.dd HH:mm", "yyyy.MM.dd HH:mm");
+        final String[] initiateTimes = initiateTime.split(" ");
+        //"2021.05.19 13:54" to "05.19 13:54"
+        String[] approvalTimes = {"", ""};
+        if (approvalTime != null) {
+            //"2021-05-19 14:17:36" to "05.19 13:54"
+            approvalTime = DateUtils.formatTime(approvalTime, "yyyy-MM-dd HH:mm", "yyyy.MM.dd HH:mm");
+            approvalTimes = approvalTime.split(" ");
+        }
+
+        leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true));
+        leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult)));
         leaveFlowAdapter = new LeaveFlowAdapter(this, leaveFlowBeanList);
         recyclerViewFlow.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFlow.setAdapter(leaveFlowAdapter);
     }
 
-    private void initData(){
-        leaveFlowBeanList.add(new LeaveFlowBean("09:25","03.06","发起申请","某某某",true));
-        leaveFlowBeanList.add(new LeaveFlowBean("09:27","03.06","审批人","某某某",true));
-        leaveFlowBeanList.add(new LeaveFlowBean("10:29","03.06","审批人","某某某",false));
-        leaveFlowBeanList.add(new LeaveFlowBean("12:50","03.06","审批人","某某某",false));
+    @Override
+    public void leaveDetailFail(String msg) {
+        showBlankPage(true);
     }
-    @OnClick(R.id.back_layout)
-    public void click() {
+
+    @Override
+    public void repealResult(BaseRsp baseRsp) {
+        Log.e(TAG, "repealResult: " + baseRsp.toString());
+        if (baseRsp.getCode() == 200) {
+            mvpPresenter.queryLeaveDetailsById(id);
+        } else {
+            ToastUtils.showShort("撤销失败");
+        }
+    }
+
+    @Override
+    public void repealFail(String msg) {
+        ToastUtils.showShort("撤销失败");
+    }
+
+    @Override
+    public void processApproval(BaseRsp baseRsp) {
+        Log.e(TAG, "processApproval: "+baseRsp.toString());
+        if (baseRsp.getCode() == 200){
+            ToastUtils.showShort("审批成功");
+            finish();
+        }else {
+            ToastUtils.showShort("审批失败");
+            finish();
+        }
+    }
+
+    @Override
+    public void processApprovalFail(String msg) {
+        Log.e(TAG, "processApprovalFail: "+msg );
+        ToastUtils.showShort("审批失败");
         finish();
     }
 
+    private void leaveStatus(String status, TextView view) {
+        //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
+        switch (status) {
+            case "0":
+                view.setText(getString(R.string.refuse_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_refuse_shape);
+                view.setTextColor(getResources().getColor(R.color.black9));
+                cl_repeal.setVisibility(View.GONE);
+                break;
+            case "1":
+                view.setText(getString(R.string.pass_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_pass_shape);
+                view.setTextColor(getResources().getColor(R.color.black9));
+                cl_repeal.setVisibility(View.GONE);
+                break;
+            case "2":
+                view.setText(getString(R.string.approval_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
+                view.setTextColor(getResources().getColor(R.color.black9));
+                cl_repeal.setVisibility(View.VISIBLE);
+                break;
+            case "3":
+                view.setText(getString(R.string.repeal_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_repeal_shape);
+                view.setTextColor(getResources().getColor(R.color.black11));
+                cl_repeal.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void showBlankPage(boolean show) {
+        if (show) {
+            blank_page.setVisibility(View.VISIBLE);
+            cl_content.setVisibility(View.GONE);
+        } else {
+            blank_page.setVisibility(View.GONE);
+            cl_content.setVisibility(View.VISIBLE);
+        }
+    }
 }

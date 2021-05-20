@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter.leave;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.AskForLeaveRecordRsp;
+import com.yyide.chatim.model.LeaveListRsp;
 import com.yyide.chatim.model.NoticeAnnouncementModel;
 import com.yyide.chatim.view.FootView;
 
@@ -31,7 +33,7 @@ import butterknife.ButterKnife;
  */
 public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     private Context context;
-    private List<AskForLeaveRecordRsp> data;
+    private List<LeaveListRsp.DataBean.RecordsBean> data;
     //上拉加载更多布局
     public static final int view_Foot = 1;
     //主要布局
@@ -48,7 +50,7 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     public void setOnItemOnClickListener(OnItemOnClickListener onItemOnClickListener) {
         this.onItemOnClickListener = onItemOnClickListener;
     }
-    public AskForLeaveListAdapter(Context context, List<AskForLeaveRecordRsp> data) {
+    public AskForLeaveListAdapter(Context context, List<LeaveListRsp.DataBean.RecordsBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -78,39 +80,40 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
             }
         }else {
             ViewHolder  holder1= (ViewHolder)holder;
-            AskForLeaveRecordRsp askForLeaveRecordRsp = data.get(position);
-            holder1.tv_title.setText(askForLeaveRecordRsp.getTitle());
-            holder1.tv_time.setText(askForLeaveRecordRsp.getDate());
-            leaveStatus(askForLeaveRecordRsp.getStatus(),holder1.tv_status);
-            //holder1.tv_status.setText(askForLeaveRecordRsp.getStatus());
+            LeaveListRsp.DataBean.RecordsBean askForLeaveRecordRsp = data.get(position);
+            holder1.tv_title.setText(askForLeaveRecordRsp.getName());
+            holder1.tv_time.setText(askForLeaveRecordRsp.getInitiateTime());
+            leaveStatus(askForLeaveRecordRsp.getApprovalResult(),holder1.tv_status);
             holder1.itemView.setOnClickListener(v -> {
                 onItemOnClickListener.onClicked(position);
             });
         }
     }
 
-    private void leaveStatus(int status,TextView view){
-        //1,审批中，2，已撤销，3，审批通过 4，审批拒绝
+    private void leaveStatus(String status,TextView view){
+        //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
         switch (status){
-            case 1:
-                view.setText(context.getString(R.string.approval_text));
-                view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
+            case "0":
+                view.setText(context.getString(R.string.refuse_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_refuse_shape);
                 view.setTextColor(context.getResources().getColor(R.color.black9));
                 break;
-            case 2:
-                view.setText(context.getString(R.string.repeal_text));
-                view.setBackgroundResource(R.drawable.ask_for_leave_status_repeal_shape);
-                view.setTextColor(context.getResources().getColor(R.color.black11));
-                break;
-            case 3:
+            case "1":
                 view.setText(context.getString(R.string.pass_text));
                 view.setBackgroundResource(R.drawable.ask_for_leave_status_pass_shape);
                 view.setTextColor(context.getResources().getColor(R.color.black9));
                 break;
-            case 4:
-                view.setText(context.getString(R.string.refuse_text));
-                view.setBackgroundResource(R.drawable.ask_for_leave_status_refuse_shape);
+            case "2":
+                view.setText(context.getString(R.string.approval_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
                 view.setTextColor(context.getResources().getColor(R.color.black9));
+                break;
+            case "3":
+                view.setText(context.getString(R.string.repeal_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_repeal_shape);
+                view.setTextColor(context.getResources().getColor(R.color.black11));
+                break;
+            default:
                 break;
         }
     }

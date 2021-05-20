@@ -17,6 +17,7 @@
         android:layout_marginTop="44dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -34,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_15"
-                    android:text="某某某提交的请假"
+                    android:text=""
                     android:textColor="#ff333333"
                     android:textSize="15sp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -45,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_5"
-                    android:text="2021.03.20"
+                    android:text=""
                     android:textColor="#ff999999"
                     android:textSize="12sp"
                     app:layout_constraintLeft_toLeftOf="@id/tv_leave_title"
@@ -61,7 +62,6 @@
                     android:paddingTop="@dimen/dp_4"
                     android:paddingEnd="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_4"
-                    android:text="审批通过"
                     android:textColor="#ff333333"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -94,7 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_12"
-                    android:text="三年级二班"
+                    android:text=""
                     android:textColor="#ff333333"
                     android:textSize="16sp"
                     app:layout_constraintLeft_toLeftOf="@id/tv_department"
@@ -121,7 +121,7 @@
                     android:paddingTop="@dimen/dp_5"
                     android:paddingEnd="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_5"
-                    android:text="2021.03.06  09:00"
+                    android:text=""
                     android:textColor="#ff333333"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="@id/tv_department"
@@ -149,7 +149,7 @@
                     android:paddingTop="@dimen/dp_5"
                     android:paddingEnd="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_5"
-                    android:text="2021.03.07  18:00"
+                    android:text=""
                     android:textColor="#ff333333"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_start_time"
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_20"
-                    android:text="家里有急事需要处理，请一天假"
+                    android:text=""
                     android:textColor="#ff333333"
                     android:textSize="16sp"
                     app:layout_constraintLeft_toLeftOf="@id/tv_reason_for_leave"
@@ -210,10 +210,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_repeal"
                 android:layout_width="match_parent"
                 android:layout_height="83dp"
                 android:layout_marginTop="@dimen/dp_20"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/cl_flow">
 
                 <Button
@@ -243,9 +245,10 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gp_approver"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:constraint_referenced_ids="btn_pass,btn_refuse" />
 
                 <Button
@@ -259,11 +262,18 @@
                     android:text="@string/repeal"
                     android:textColor="#212121"
                     android:textSize="@dimen/text_16"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+    <LinearLayout
+        android:id="@+id/blank_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <include layout="@layout/layout_blank_page" />
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

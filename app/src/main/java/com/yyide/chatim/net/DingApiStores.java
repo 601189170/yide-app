@@ -3,8 +3,12 @@ package com.yyide.chatim.net;
 
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.model.AppAddRsp;
+import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
+import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.LeaveDetailRsp;
+import com.yyide.chatim.model.LeaveListRsp;
 import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
@@ -392,4 +396,51 @@ public interface DingApiStores {
     @POST("/management/cloud-system/user/notice/getUserNoticePage")
     Observable<UserNoticeRsp> getUserNoticePage(@Body RequestBody requestBody);
 
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/common/getAskLeaveRecord
+    //请假列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/leave-server/cloud-leave/leave/common/getAskLeaveRecord")
+    Observable<LeaveListRsp> getAskLeaveRecord(@QueryMap HashMap<String, Object> map);
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/common/queryLeaveDetailsById
+    //请假详情
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/leave-server/cloud-leave/leave/common/queryLeaveDetailsById")
+    Observable<LeaveDetailRsp> queryLeaveDetailsById(@QueryMap HashMap<String, Object> map);
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/student/ondoApplyLeave
+    //请假撤销
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/leave-server/cloud-leave/student/ondoApplyLeave")
+    Observable<BaseRsp> ondoApplyLeave(@QueryMap HashMap<String, Object> map);
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/queryDeptInfoByTeacherId
+    //获取所在部门
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/leave-server/cloud-leave/teacher/queryDeptInfoByTeacherId")
+    Observable<LeaveDeptRsp> queryDeptInfoByTeacherId();
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/common/getApprover?classIdOrdeptId=2076
+    //获取流程审批人和抄送人
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/leave-server/cloud-leave/leave/common/getApprover")
+    Observable<ApproverRsp> getApprover(@QueryMap HashMap<String, Object> map);
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/addTeacherLeave
+    //教职工请假
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/leave-server/cloud-leave/teacher/addTeacherLeave")
+    Observable<BaseRsp> addTeacherLeave(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/student/addStudentLeave
+    //学生请假
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/leave-server/cloud-leave/student/addStudentLeave")
+    Observable<BaseRsp> addStudentLeave(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/processExaminationApproval
+    //请假审批确认
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/leave-server/cloud-leave/teacher/processExaminationApproval")
+    Observable<BaseRsp> processExaminationApproval(@QueryMap HashMap<String, Object> map);
 }
