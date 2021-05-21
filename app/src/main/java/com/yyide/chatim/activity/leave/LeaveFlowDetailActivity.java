@@ -198,6 +198,13 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 
         leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true));
         leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult)));
+        final List<LeaveDetailRsp.DataBean.ListBean> list = data.getList();
+        if (!list.isEmpty()){
+            for (LeaveDetailRsp.DataBean.ListBean listBean : list) {
+                leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getUserName(), "1".equals(approvalResult)));
+            }
+        }
+
         leaveFlowAdapter = new LeaveFlowAdapter(this, leaveFlowBeanList);
         recyclerViewFlow.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFlow.setAdapter(leaveFlowAdapter);
