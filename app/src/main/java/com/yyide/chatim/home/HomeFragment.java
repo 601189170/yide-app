@@ -96,8 +96,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     private View mBaseView;
-    ArrayList<String> list = new ArrayList<>();
     public FragmentListener mListener;
+    private ArrayList<String> list = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull Activity activity) {
@@ -118,31 +118,21 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-//        showProgressDialog2();
         setFragment();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
-        //initVerticalTextview(null);
-        initVerticalTextview(null);
     }
 
     void initVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
         if (noticeHomeRsps != null) {
             list.clear();
             for (NoticeHomeRsp.DataBean item : noticeHomeRsps) {
-                list.add(item.getContent());
+                list.add(item.getTitle());
             }
         }
-        list.add("罗欣的主监护人提交的请假需要你审批");
-        list.add("李克用的主监护人提交的请假需要你审批");
-        list.add("王保华的主监护人提交的请假需要你审批");
-        list.add("秦鑫的主监护人提交的请假需要你审批");
-        list.add("张玉明的主监护人提交的请假需要你审批");
-        //spmsg.setText(20, 0, Color.WHITE);//设置属性
-        Log.e(TAG, "initVerticalTextview: " + list);
         spmsg.setTextStillTime(3000);//设置停留时长间隔
         spmsg.setAnimTime(300);//设置进入和退出的时间间隔
         if (spmsg != null) {
@@ -159,8 +149,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         }
 
         spmsg.setOnItemClickListener(i -> {
-            //startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-            //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
             mListener.jumpFragment(1);
         });
     }
@@ -268,13 +256,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_IMG.equals(messageEvent.getCode())) {
             if (!TextUtils.isEmpty(messageEvent.getMessage())) {
-//                userName.setVisibility(View.GONE);
-//                head_img.setVisibility(View.VISIBLE);
                 GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
             }
-        } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            mvpPresenter.getUserSchool();
-            mvpPresenter.getHomeNotice();
         }
     }
 
@@ -294,15 +277,15 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void getIndexMyNotice(NoticeHomeRsp rsp) {
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
-//            tv_todo.setVisibility(View.VISIBLE);
-//            initVerticalTextview(rsp.getData());
+            tv_todo.setVisibility(View.VISIBLE);
+            initVerticalTextview(rsp.getData());
         } else {
-//            tv_todo.setVisibility(View.GONE);
-//            List<NoticeHomeRsp.DataBean> noticeHomeRsps = new ArrayList<>();
-//            NoticeHomeRsp.DataBean dataBean = new NoticeHomeRsp.DataBean();
-//            dataBean.setContent("暂无代办消息通知");
-//            noticeHomeRsps.add(dataBean);
-//            initVerticalTextview(noticeHomeRsps);
+            tv_todo.setVisibility(View.GONE);
+            List<NoticeHomeRsp.DataBean> noticeHomeRsps = new ArrayList<>();
+            NoticeHomeRsp.DataBean dataBean = new NoticeHomeRsp.DataBean();
+            dataBean.setContent("暂无代办消息通知");
+            noticeHomeRsps.add(dataBean);
+            initVerticalTextview(noticeHomeRsps);
         }
     }
 

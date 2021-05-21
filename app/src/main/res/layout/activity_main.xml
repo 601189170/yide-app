@@ -25,9 +25,10 @@
             android:layout_weight="1">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <CheckedTextView
@@ -91,9 +92,10 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
+                        android:gravity="center"
                         android:text="消息"
                         android:textColor="#1E232A"
                         android:textSize="10sp" />
@@ -109,7 +111,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -138,9 +141,10 @@
             android:layout_weight="1">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <CheckedTextView

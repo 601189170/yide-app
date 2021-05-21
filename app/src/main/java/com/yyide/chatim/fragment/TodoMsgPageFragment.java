@@ -1,57 +1,65 @@
 package com.yyide.chatim.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.google.common.reflect.TypeToken;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.notice.NoticeTemplateListFragment;
+import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.AgentInformationRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.TodoFragmentPresenter;
-import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.TodoFragmentView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 
-public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> implements TodoFragmentView {
+public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> implements TodoFragmentView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "TodoMsgFragment";
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    private View mBaseView;
-    private BaseQuickAdapter adapter;
-    private List<TodoRsp.DataBean.RecordsBean> list = new ArrayList<>();
-    private static final String ARG_PARAM1 = "param1";
-    private String mParam1;
 
-    public static TodoMsgPageFragment newInstance(String param1) {
+    private View mBaseView;
+    private TodoAdapter adapter;
+    private static final String ARG_PARAM1 = "param1";
+    private int mParam1; //待办状态 1 已办 0待办 3全部
+    private int pageNum = 1;
+    private int pageSize = 15;
+
+    public static TodoMsgPageFragment newInstance(int param1) {
         TodoMsgPageFragment fragment = new TodoMsgPageFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +68,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getInt(ARG_PARAM1, -1);
             Log.e(TAG, "mParam1:" + mParam1);
         }
     }
@@ -75,55 +83,106 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initView();
+    }
+
+    private void initView() {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new BaseQuickAdapter<TodoRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.message_item) {
-            @Override
-            protected void convert(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
-
-                holder.setText(R.id.tv_leave, o.getContent())
-                        .setText(R.id.tv_title, o.getTitle())
-                        .setText(R.id.tv_leave_type, "请假类型：事假")
-                        .setText(R.id.tv_start_time, "开始时间：" + o.getCreatedDateTime())
-                        .setText(R.id.tv_leave_status, "审批状态：" + (o.getStatus().equals("0") ? "待审批" : "已审批"))
-                        .setText(R.id.tv_date, o.getCreatedDateTime())
-                        .setText(R.id.tv_end_time, "结束时间：" + o.getCreatedDateTime());
-                TextView textView = holder.getView(R.id.tv_refused);
-                TextView textView2 = holder.getView(R.id.tv_agree);
-                if (o.getStatus().equals("1")) {
-                    textView.setVisibility(View.GONE);
-                    textView2.setVisibility(View.GONE);
-                } else {
-                    textView.setVisibility(View.VISIBLE);
-                    textView2.setVisibility(View.VISIBLE);
-                }
-                //判断是否为家长同意隐藏按钮
-                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-                    textView.setVisibility(View.GONE);
-                    textView2.setVisibility(View.GONE);
-                } else {
-                    textView.setVisibility(View.VISIBLE);
-                    textView2.setVisibility(View.VISIBLE);
-                }
-                textView.setOnClickListener(v -> {//拒绝
-                    o.setStatus("1");
-                    list.remove(o);
-                    adapter.remove(o);
-                    notifyDataSetChanged();
-                });
-
-                textView2.setOnClickListener(v -> {//同意
-                    o.setStatus("2");
-                    adapter.remove(o);
-                    adapter.notifyDataSetChanged();
-                });
-
-            }
-        };
+        adapter = new TodoAdapter();
+        adapter.setEmptyView(R.layout.empty);
         recyclerview.setAdapter(adapter);
+        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setRefreshing(false);
+        adapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
+            //上拉加载时取消下拉刷新
+            adapter.getLoadMoreModule().setEnableLoadMore(true);
+            //请求数据
+            pageNum++;
+            mvpPresenter.getMessageTransaction(pageNum, pageSize, String.valueOf(mParam1));
+        });
+        adapter.getLoadMoreModule().setAutoLoadMore(true);
+        //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
+        adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
+        mvpPresenter.getMessageTransaction(pageNum, pageSize, String.valueOf(mParam1));
+    }
 
-        initData();
-        getData(mParam1);
-        //mvpPresenter.getMyNoticePage(1, 20, mParam1);
+    @Override
+    public void onRefresh() {
+        pageNum = 1;
+        mvpPresenter.getMessageTransaction(pageNum, pageSize, String.valueOf(mParam1));
+    }
+
+    public class TodoAdapter extends BaseMultiItemQuickAdapter<TodoRsp.DataBean.RecordsBean, BaseViewHolder> implements LoadMoreModule {
+
+        public TodoAdapter() {
+            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE, R.layout.message_item);
+            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_TODO, R.layout.message_item);
+            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_NOTICE, R.layout.message_item);
+        }
+
+        @Override
+        protected void convert (@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o){
+            switch (o.getItemType()){
+                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE:
+                    //setTodoItem(holder, o);
+                    break;
+                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_TODO:
+                    setTodoItem(holder, o);
+                    break;
+                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_NOTICE:
+                    //setTodoItem(holder, o);
+                    break;
+            }
+        }
+
+        private void setTodoItem(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
+            holder.setText(R.id.tv_leave, o.getFirstData())
+                    .setText(R.id.tv_title, o.getTitle());
+            //处理内容解析
+            try {
+                if (TodoRsp.DataBean.RecordsBean.IS_TEXT_TYPE.equals(o.getIsText())) {
+                    holder.setText(R.id.tv_leave_type, o.getContent());
+                } else {
+                    String content = o.getContent();
+                    if(!TextUtils.isEmpty(content)){
+                        Type type = new TypeToken<List<String>>(){}.getType();
+                        List<String> strings = JSON.parseObject(content, type);
+                        StringBuffer stringBuffer = new StringBuffer();
+                        if(strings != null){
+                            for (int i = 0; i < strings.size(); i++){
+                                stringBuffer.append(strings.get(i));
+                                if(i < strings.size() -1){
+                                    stringBuffer.append("\n").append("\n");
+                                }
+                            }
+                        }
+                        holder.setText(R.id.tv_leave_type, stringBuffer.toString());
+                    }
+                }
+            } catch (Exception e){
+                Log.d("setTodoItem", o.getIsText());
+                Log.d("setTodoItem", o.getContent());
+                e.printStackTrace();
+            }
+            TextView textView2 = holder.getView(R.id.tv_agree);
+            //如果身份是家长隐藏按钮
+            if ("1".equals(o.getStatus())
+                    || "2".equals(o.getStatus())
+                    || "3".equals(o.getStatus())
+                    || (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status))) {
+                textView2.setVisibility(View.GONE);
+            } else {
+                textView2.setVisibility(View.VISIBLE);
+            }
+
+            textView2.setOnClickListener(v -> {//同意
+                Intent intent = new Intent(getContext(), LeaveFlowDetailActivity.class);
+                intent.putExtra("type", 2);
+                intent.putExtra("id", o.getCallId());
+                startActivity(intent);
+            });
+        }
     }
 
     @Override
@@ -133,89 +192,31 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
 
     @Override
     public void getMyNoticePageSuccess(TodoRsp noticeHomeRsp) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageSuccess: " + noticeHomeRsp.toString());
-        if (noticeHomeRsp.getCode() == 200) {
-            list.clear();
+        if (BaseConstant.REQUEST_SUCCES2 == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, noticeHomeRsp.getData().getTotal() + ""));
             List<TodoRsp.DataBean.RecordsBean> data = noticeHomeRsp.getData().getRecords();
-            list.addAll(data);
-            adapter.setList(list);
+            if (pageNum == 1) {
+                adapter.setList(data);
+            } else {
+                adapter.addData(data);
+            }
+            if (noticeHomeRsp.getData().getRecords() != null) {
+                if (noticeHomeRsp.getData().getRecords().size() < pageSize) {
+                    //如果不够一页,显示没有更多数据布局
+                    adapter.getLoadMoreModule().loadMoreEnd();
+                } else {
+                    adapter.getLoadMoreModule().loadMoreComplete();
+                }
+            }
         }
     }
 
     @Override
     public void getMyNoticePageFail(String msg) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageFail: " + msg);
         ToastUtils.showShort(msg);
-    }
-
-    private void getData(String status) {
-        if ("3".equals(status)) {
-            adapter.setList(list);
-        } else {
-            List<TodoRsp.DataBean.RecordsBean> items = new ArrayList<>();
-            for (TodoRsp.DataBean.RecordsBean item : list) {
-                if (status.equals(item.getStatus())) {
-                    items.add(item);
-                }
-            }
-            adapter.setList(items);
-        }
-    }
-
-    private void initData() {
-        for (int i = 0; i < 9; i++) {
-            TodoRsp.DataBean.RecordsBean item = new TodoRsp.DataBean.RecordsBean();
-            switch (i) {
-                case 0:
-                    item.setTitle("请假");
-                    item.setContent("张宇的主监护人提交的请假需要你审批");
-                    item.setStatus("1");
-                    break;
-                case 1:
-                    item.setTitle("请假");
-                    item.setContent("刘星的主监护人提交的请假需要你审批");
-                    item.setStatus("1");
-                    break;
-                case 2:
-                    item.setTitle("请假");
-                    item.setContent("李沐的主监护人提交的请假需要你审批");
-                    item.setStatus("1");
-                    break;
-                case 3:
-                    item.setTitle("请假");
-                    item.setContent("刘德云的主监护人提交的请假需要你审批");
-                    item.setStatus("2");
-                    break;
-                case 4:
-                    item.setTitle("请假");
-                    item.setContent("张明宇的主监护人提交的请假需要你审批");
-                    item.setStatus("1");
-                    break;
-                case 5:
-                    item.setTitle("请假");
-                    item.setContent("王珂的主监护人提交的请假需要你审批");
-                    item.setStatus("2");
-                    break;
-                case 6:
-                    item.setTitle("请假");
-                    item.setContent("张檬的主监护人提交的请假需要你审批");
-                    item.setStatus("2");
-                    break;
-                case 7:
-                    item.setTitle("请假");
-                    item.setContent("刘博的主监护人提交的请假需要你审批");
-                    item.setStatus("1");
-                    break;
-                case 8:
-                    item.setTitle("请假");
-                    item.setContent("程昱的主监护人提交的请假需要你审批");
-                    item.setStatus("2");
-                    break;
-            }
-
-            item.setCreatedDateTime("开始时间：" + DateUtils.stampToDate(System.currentTimeMillis()));
-            item.setCreatedDateTime("结束时间：" + DateUtils.stampToDate(System.currentTimeMillis() + 1000 * 60 * 60 * 24));
-            list.add(item);
-        }
     }
 }

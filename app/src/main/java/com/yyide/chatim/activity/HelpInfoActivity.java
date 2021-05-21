@@ -1,8 +1,16 @@
 package com.yyide.chatim.activity;
 
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
+import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +31,8 @@ public class HelpInfoActivity extends BaseActivity {
     TextView tv_helpTitle;
     @BindView(R.id.tc_content)
     TextView tc_content;
+    @BindView(R.id.webView)
+    WebView mWebView;
 
     @Override
     public int getContentViewID() {
@@ -33,11 +43,36 @@ public class HelpInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText("入门指南");
+        initWebView();
         HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) getIntent().getSerializableExtra("itemBean");
         if (itemBean != null) {
             tv_helpTitle.setText(itemBean.getName());
-            tc_content.setText(Html.fromHtml(itemBean.getMessage()));
+            mWebView.loadDataWithBaseURL(null, itemBean.getMessage(), "text/html" , "utf-8", null);//加载html数据
         }
+    }
+    private WebSettings webSettings;
+
+    private void initWebView() {
+        webSettings = mWebView.getSettings();
+        webSettings.setLoadsImagesAutomatically(true);
+        //设置默认字体大小
+        webSettings.setDefaultFontSize(40);
+//        webSettings.setTextZoom(120);
+        //设置自适应屏幕，两者合用
+        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        //允许js代码
+        webSettings.setJavaScriptEnabled(true);
+        //允许SessionStorage/LocalStorage存储
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setBlockNetworkImage(false);
+
+        //缩放操作
+        webSettings.setSupportZoom(false); //支持缩放，默认为true。是下面那个的前提。
+        webSettings.setBuiltInZoomControls(false); //设置内置的缩放控件。若为false，则该WebView不可缩放
+        webSettings.setDisplayZoomControls(true); //隐藏原生的缩放控件
+
+        webSettings.setAllowFileAccess(true);
     }
 
     @Override

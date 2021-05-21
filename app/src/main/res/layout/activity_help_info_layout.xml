@@ -46,7 +46,13 @@
             android:layout_marginTop="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_20"
             android:textColor="#606266"
+            android:visibility="gone"
             android:textSize="@dimen/sp_14" />
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 

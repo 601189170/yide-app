@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -35,6 +37,7 @@ import com.shehuan.nicedialog.BaseNiceDialog;
 import com.shehuan.nicedialog.NiceDialog;
 import com.shehuan.nicedialog.ViewConvertListener;
 import com.shehuan.nicedialog.ViewHolder;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.tencent.imsdk.v2.V2TIMSignalingInfo;
 import com.tencent.liteav.model.CallModel;
 import com.tencent.liteav.model.TRTCAVCallImpl;
@@ -139,16 +142,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         //处理失败时点击切换重新登录IM
         prepareThirdPushToken();
 
-
-    }
-
-    public static Fragment[] getFragments() {
-        Fragment fragments[] = new Fragment[4];
-        fragments[0] = new HomeFragment();
-        fragments[1] = new MessageFragment();
-        fragments[2] = new AppFragment();
-        fragments[3] = new HelpFragment();
-        return fragments;
     }
 
     private void prepareThirdPushToken() {
@@ -182,10 +175,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //如果是全屏就关闭全屏
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return false;
+        }
         long secondTime = System.currentTimeMillis();
-
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             if (secondTime - firstTime < 2000) {
                 ActivityUtils.finishAllActivities();
             } else {
@@ -194,7 +189,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             }
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
@@ -206,6 +200,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             setTab(1, 0);
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             registerAlias();
+            ConversationManagerKit.getInstance().addUnreadWatcher(this);
         } else if (BaseConstant.TYPE_MAIN.equals(messageEvent.getCode())) {
             ActivityUtils.finishToActivity(MainActivity.class, false);
             setTab(0, 0);
@@ -217,6 +212,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             versionResponse.setUpdateContent("1、更新内容\n2、更新内容\n3、更新内容");
             download(versionResponse);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     /**
@@ -403,12 +403,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     info.getInviteID(), info.getInviter(), info.getGroupID(), info.getInviteeList(), info.getData());
             mCallModel = null;
         }
+        GSYVideoManager.onResume();
     }
 
     @Override
     protected void onPause() {
         isForeground = false;
         super.onPause();
+        GSYVideoManager.onPause();
     }
 
     void setTab(int position, int type) {
@@ -479,6 +481,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
     }
 
     @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout})

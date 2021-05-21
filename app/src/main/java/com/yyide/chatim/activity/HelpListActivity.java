@@ -2,17 +2,20 @@ package com.yyide.chatim.activity;
 
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.HelpItemAdapter;
 import com.yyide.chatim.base.BaseConstant;
@@ -78,9 +81,11 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         adapter.setEmptyView(R.layout.empty);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) adapter.getData().get(position);
-            Intent intent = new Intent(mActivity, HelpInfoActivity.class);
-            intent.putExtra("itemBean", itemBean);
-            startActivity(intent);
+            if(itemBean.getItemType() == 1){
+                Intent intent = new Intent(mActivity, HelpInfoActivity.class);
+                intent.putExtra("itemBean", itemBean);
+                startActivity(intent);
+            }
         });
 
         if ("helpAdvanced".equals(type)) {
@@ -94,19 +99,16 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     }
 
     private void initLoadMore() {
-        adapter.getLoadMoreModule().setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                //上拉加载时取消下拉刷新
-                mSwipeRefreshLayout.setRefreshing(false);
-                adapter.getLoadMoreModule().setEnableLoadMore(true);
-                //请求数据
-                pageNum++;
-                if ("helpAdvanced".equals(type)) {
-                    mvpPresenter.getHelpAdvancedList(pageSize, pageNum);
-                } else {
-                    mvpPresenter.getHelpList(pageSize, pageNum);
-                }
+        adapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
+            //上拉加载时取消下拉刷新
+            mSwipeRefreshLayout.setRefreshing(false);
+            adapter.getLoadMoreModule().setEnableLoadMore(true);
+            //请求数据
+            pageNum++;
+            if ("helpAdvanced".equals(type)) {
+                mvpPresenter.getHelpAdvancedList(pageSize, pageNum);
+            } else {
+                mvpPresenter.getHelpList(pageSize, pageNum);
             }
         });
         adapter.getLoadMoreModule().setAutoLoadMore(true);
@@ -115,8 +117,22 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     }
 
     @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        GSYVideoManager.onResume();
     }
 
     @Override
@@ -125,6 +141,13 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         if (adapter != null) {
             adapter.stop();
         }
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
     }
 
     @OnClick(R.id.back_layout)

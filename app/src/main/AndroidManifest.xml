@@ -157,6 +157,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:windowSoftInputMode="stateHidden|adjustPan">
 
             <!-- <intent-filter> -->
@@ -300,6 +301,7 @@
         <activity
             android:name=".activity.HelpListActivity"
             android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".ScanActivity"

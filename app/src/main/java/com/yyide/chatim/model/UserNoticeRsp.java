@@ -106,118 +106,26 @@ public class UserNoticeRsp {
         }
 
         public static class RecordsBean {
-            private int id;
-            private String delInd;
-            private String createdBy;
-            private String createdDateTime;
-            private Object updatedBy;
-            private String updatedDateTime;
-            private int versionStamp;
-            private int total;
-            private int size;
-            private int current;
-            private int userId;
-            private String content;
-            private Object registrationId;
-            private String alias;
-            private String type;
-            private String equipmentType;
-            private String status;
+
             private String title;
-            private Object productionTarget;
-            private String productionTime;
-            private int productionTargetId;
-            private String timingTime;
+            private String content;
+            private int userId;
+            private int id;
             private long signId;
-            private Object msgId;
-            private String timingRead;
-
-            public int getId() {
-                return id;
+            private String remakeData;
+            private String firstData;
+            private long callId;
+            private String attributeType;
+            private String isText;
+            private String status;
+            private String sendTime;
+            private String createdDateTime;
+            public String getTitle() {
+                return title;
             }
 
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public String getDelInd() {
-                return delInd;
-            }
-
-            public void setDelInd(String delInd) {
-                this.delInd = delInd;
-            }
-
-            public String getCreatedBy() {
-                return createdBy;
-            }
-
-            public void setCreatedBy(String createdBy) {
-                this.createdBy = createdBy;
-            }
-
-            public String getCreatedDateTime() {
-                return createdDateTime;
-            }
-
-            public void setCreatedDateTime(String createdDateTime) {
-                this.createdDateTime = createdDateTime;
-            }
-
-            public Object getUpdatedBy() {
-                return updatedBy;
-            }
-
-            public void setUpdatedBy(Object updatedBy) {
-                this.updatedBy = updatedBy;
-            }
-
-            public String getUpdatedDateTime() {
-                return updatedDateTime;
-            }
-
-            public void setUpdatedDateTime(String updatedDateTime) {
-                this.updatedDateTime = updatedDateTime;
-            }
-
-            public int getVersionStamp() {
-                return versionStamp;
-            }
-
-            public void setVersionStamp(int versionStamp) {
-                this.versionStamp = versionStamp;
-            }
-
-            public int getTotal() {
-                return total;
-            }
-
-            public void setTotal(int total) {
-                this.total = total;
-            }
-
-            public int getSize() {
-                return size;
-            }
-
-            public void setSize(int size) {
-                this.size = size;
-            }
-
-            public int getCurrent() {
-                return current;
-            }
-
-            public void setCurrent(int current) {
-                this.current = current;
-            }
-
-            public int getUserId() {
-                return userId;
-            }
-
-            public void setUserId(int userId) {
-                this.userId = userId;
+            public void setTitle(String title) {
+                this.title = title;
             }
 
             public String getContent() {
@@ -228,84 +136,20 @@ public class UserNoticeRsp {
                 this.content = content;
             }
 
-            public Object getRegistrationId() {
-                return registrationId;
+            public int getUserId() {
+                return userId;
             }
 
-            public void setRegistrationId(Object registrationId) {
-                this.registrationId = registrationId;
+            public void setUserId(int userId) {
+                this.userId = userId;
             }
 
-            public String getAlias() {
-                return alias;
+            public int getId() {
+                return id;
             }
 
-            public void setAlias(String alias) {
-                this.alias = alias;
-            }
-
-            public String getType() {
-                return type;
-            }
-
-            public void setType(String type) {
-                this.type = type;
-            }
-
-            public String getEquipmentType() {
-                return equipmentType;
-            }
-
-            public void setEquipmentType(String equipmentType) {
-                this.equipmentType = equipmentType;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public Object getProductionTarget() {
-                return productionTarget;
-            }
-
-            public void setProductionTarget(Object productionTarget) {
-                this.productionTarget = productionTarget;
-            }
-
-            public String getProductionTime() {
-                return productionTime;
-            }
-
-            public void setProductionTime(String productionTime) {
-                this.productionTime = productionTime;
-            }
-
-            public int getProductionTargetId() {
-                return productionTargetId;
-            }
-
-            public void setProductionTargetId(int productionTargetId) {
-                this.productionTargetId = productionTargetId;
-            }
-
-            public String getTimingTime() {
-                return timingTime;
-            }
-
-            public void setTimingTime(String timingTime) {
-                this.timingTime = timingTime;
+            public void setId(int id) {
+                this.id = id;
             }
 
             public long getSignId() {
@@ -316,20 +160,68 @@ public class UserNoticeRsp {
                 this.signId = signId;
             }
 
-            public Object getMsgId() {
-                return msgId;
+            public String getRemakeData() {
+                return remakeData;
             }
 
-            public void setMsgId(Object msgId) {
-                this.msgId = msgId;
+            public void setRemakeData(String remakeData) {
+                this.remakeData = remakeData;
             }
 
-            public String getTimingRead() {
-                return timingRead;
+            public String getFirstData() {
+                return firstData;
             }
 
-            public void setTimingRead(String timingRead) {
-                this.timingRead = timingRead;
+            public void setFirstData(String firstData) {
+                this.firstData = firstData;
+            }
+
+            public long getCallId() {
+                return callId;
+            }
+
+            public void setCallId(long callId) {
+                this.callId = callId;
+            }
+
+            public String getAttributeType() {
+                return attributeType;
+            }
+
+            public void setAttributeType(String attributeType) {
+                this.attributeType = attributeType;
+            }
+
+            public String getIsText() {
+                return isText;
+            }
+
+            public void setIsText(String isText) {
+                this.isText = isText;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public String getSendTime() {
+                return sendTime;
+            }
+
+            public void setSendTime(String sendTime) {
+                this.sendTime = sendTime;
+            }
+
+            public String getCreatedDateTime() {
+                return createdDateTime;
+            }
+
+            public void setCreatedDateTime(String createdDateTime) {
+                this.createdDateTime = createdDateTime;
             }
         }
     }

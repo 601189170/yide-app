@@ -1,7 +1,5 @@
 package com.yyide.chatim.model;
 
-import java.util.Date;
-
 /**
  * @Description: HomeNoticeRsp
  * @Author: liu tao
@@ -85,9 +83,9 @@ public class HomeNoticeRsp {
 
         private int id;
         private String delInd;
-        private Object createdBy;
+        private String createdBy;
         private String createdDateTime;
-        private Object updatedBy;
+        private String updatedBy;
         private String updatedDateTime;
         private int versionStamp;
         private int total;
@@ -95,10 +93,10 @@ public class HomeNoticeRsp {
         private int current;
         private String title;
         private String productionTarget;
-        private Object productionTime;
+        private String productionTime;
         private String content;
         private long signId;
-        private Object timingTime;
+        private String timingTime;
         private String type;
         private String status;
         private int totalNumber;
@@ -125,7 +123,7 @@ public class HomeNoticeRsp {
             return createdBy;
         }
 
-        public void setCreatedBy(Object createdBy) {
+        public void setCreatedBy(String createdBy) {
             this.createdBy = createdBy;
         }
 
@@ -141,7 +139,7 @@ public class HomeNoticeRsp {
             return updatedBy;
         }
 
-        public void setUpdatedBy(Object updatedBy) {
+        public void setUpdatedBy(String updatedBy) {
             this.updatedBy = updatedBy;
         }
 
@@ -201,11 +199,11 @@ public class HomeNoticeRsp {
             this.productionTarget = productionTarget;
         }
 
-        public Object getProductionTime() {
+        public String getProductionTime() {
             return productionTime;
         }
 
-        public void setProductionTime(Object productionTime) {
+        public void setProductionTime(String productionTime) {
             this.productionTime = productionTime;
         }
 
@@ -225,11 +223,11 @@ public class HomeNoticeRsp {
             this.signId = signId;
         }
 
-        public Object getTimingTime() {
+        public String getTimingTime() {
             return timingTime;
         }
 
-        public void setTimingTime(Object timingTime) {
+        public void setTimingTime(String timingTime) {
             this.timingTime = timingTime;
         }
 
@@ -265,7 +263,7 @@ public class HomeNoticeRsp {
             this.readNumber = readNumber;
         }
 
-        public String getSendObject() {
+        public String getSendString() {
             return sendObject;
         }
 

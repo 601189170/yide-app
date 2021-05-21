@@ -1,16 +1,8 @@
 package com.yyide.chatim.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class NoticeHomeRsp {
-
-    /**
-     * code : 200
-     * success : true
-     * msg : data
-     * data : [{"title":null,"productionTarget":null,"productionTime":null,"content":"这是推送内容","id":3,"signId":null,"timingTime":null,"type":"待办","status":"0","totalNumber":null,"readNumber":null},{"title":null,"productionTarget":null,"productionTime":null,"content":"这是推送内容","id":5,"signId":null,"timingTime":null,"type":"待办","status":"0","totalNumber":null,"readNumber":null}]
-     */
 
     private int code;
     private boolean success;
@@ -49,54 +41,40 @@ public class NoticeHomeRsp {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable {
-        /**
-         * title : null
-         * productionTarget : null
-         * productionTime : null
-         * content : 这是推送内容
-         * id : 3
-         * signId : null
-         * timingTime : null
-         * type : 待办
-         * status : 0
-         * totalNumber : null
-         * readNumber : null
-         */
-
-        private Object title;
-        private Object productionTarget;
-        private Object productionTime;
+    public static class DataBean {
+        private String title;
+        private String productionTarget;
+        private String productionTime;
         private String content;
-        private int id;
-        private Object signId;
-        private Object timingTime;
+        private Integer id;
+        private String signId;
+        private String timingTime;
         private String type;
         private String status;
-        private Object totalNumber;
-        private Object readNumber;
+        private String totalNumber;
+        private String readNumber;
 
-        public Object getTitle() {
+        public String getTitle() {
             return title;
         }
 
-        public void setTitle(Object title) {
+        public void setTitle(String title) {
             this.title = title;
         }
 
-        public Object getProductionTarget() {
+        public String getProductionTarget() {
             return productionTarget;
         }
 
-        public void setProductionTarget(Object productionTarget) {
+        public void setProductionTarget(String productionTarget) {
             this.productionTarget = productionTarget;
         }
 
-        public Object getProductionTime() {
+        public String getProductionTime() {
             return productionTime;
         }
 
-        public void setProductionTime(Object productionTime) {
+        public void setProductionTime(String productionTime) {
             this.productionTime = productionTime;
         }
 
@@ -108,27 +86,27 @@ public class NoticeHomeRsp {
             this.content = content;
         }
 
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(Integer id) {
             this.id = id;
         }
 
-        public Object getSignId() {
+        public String getSignId() {
             return signId;
         }
 
-        public void setSignId(Object signId) {
+        public void setSignId(String signId) {
             this.signId = signId;
         }
 
-        public Object getTimingTime() {
+        public String getTimingTime() {
             return timingTime;
         }
 
-        public void setTimingTime(Object timingTime) {
+        public void setTimingTime(String timingTime) {
             this.timingTime = timingTime;
         }
 
@@ -148,19 +126,19 @@ public class NoticeHomeRsp {
             this.status = status;
         }
 
-        public Object getTotalNumber() {
+        public String getTotalNumber() {
             return totalNumber;
         }
 
-        public void setTotalNumber(Object totalNumber) {
+        public void setTotalNumber(String totalNumber) {
             this.totalNumber = totalNumber;
         }
 
-        public Object getReadNumber() {
+        public String getReadNumber() {
             return readNumber;
         }
 
-        public void setReadNumber(Object readNumber) {
+        public void setReadNumber(String readNumber) {
             this.readNumber = readNumber;
         }
     }

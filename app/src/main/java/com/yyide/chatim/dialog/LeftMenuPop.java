@@ -161,11 +161,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private void setData() {
         context.runOnUiThread(() -> {
             setCache();
-            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)) {
-                my_info.setText("我的信息");
-            } else {
-                my_info.setText("学生信息");
-            }
+            my_info.setText("我的信息");
+//            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)) {
+//            } else {
+//                my_info.setText("学生信息");
+//            }
             user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
             head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");

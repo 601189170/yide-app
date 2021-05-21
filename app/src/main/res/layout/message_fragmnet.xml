@@ -80,6 +80,7 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
         <TextView
             android:layout_gravity="bottom|center_horizontal"
             android:id="@+id/line2"
@@ -87,6 +88,19 @@
             android:layout_width="40dp"
             android:background="@color/blue11"
             android:layout_height="3dp" />
+
+        <TextView
+            android:id="@+id/tv_todo_total"
+            android:layout_width="18dp"
+            android:layout_height="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="15dp"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:background="@drawable/todo"
+            android:textSize="9sp"/>
     </FrameLayout>
 </LinearLayout>
 

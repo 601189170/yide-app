@@ -2,6 +2,7 @@ package com.yyide.chatim.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,8 @@ public class MessageFragment extends BaseFragment {
     TextView line1;
     @BindView(R.id.line2)
     TextView line2;
+    @BindView(R.id.tv_todo_total)
+    TextView tv_todo_total;
     @BindView(R.id.note)
     LinearLayout note;
     private View mBaseView;
@@ -144,6 +147,14 @@ public class MessageFragment extends BaseFragment {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", MessageFragment.class.getSimpleName());
             setBookView();
+        } else if(BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())){
+            if(!TextUtils.isEmpty(messageEvent.getMessage())){
+                tv_todo_total.setVisibility(View.VISIBLE);
+                tv_todo_total.setText(messageEvent.getMessage());
+            } else {
+                tv_todo_total.setText("");
+                tv_todo_total.setVisibility(View.GONE);
+            }
         }
     }
 

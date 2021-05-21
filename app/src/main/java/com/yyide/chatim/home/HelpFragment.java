@@ -20,6 +20,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.HelpInfoActivity;
 import com.yyide.chatim.activity.HelpListActivity;
@@ -98,9 +99,11 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
         adapter.setEmptyView(R.layout.empty);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) adapter.getData().get(position);
-            Intent intent = new Intent(mActivity, HelpInfoActivity.class);
-            intent.putExtra("itemBean", itemBean);
-            startActivity(intent);
+            if(itemBean.getItemType() == 1){
+                Intent intent = new Intent(mActivity, HelpInfoActivity.class);
+                intent.putExtra("itemBean", itemBean);
+                startActivity(intent);
+            }
         });
     }
 
@@ -117,6 +120,7 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
                 break;
         }
     }
+
 
     @Override
     public void showLoading() {

@@ -70,3 +70,8 @@
 
 -dontwarn com.mcs.**
 -keep class com.mcs.** { *; }
+
+#=========================VIVO推送通道混淆===================================
+-dontwarn com.vivo.push.**
+-keep class com.vivo.push.**{*; }
+-keep class com.vivo.vms.**{*; }

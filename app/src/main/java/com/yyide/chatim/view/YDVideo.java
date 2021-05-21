@@ -93,9 +93,9 @@ public class YDVideo extends StandardGSYVideoPlayer {
         setViewShowState(mThumbImageView, GONE);
         setViewShowState(mBottomProgressBar, VISIBLE);
         //显示一些UI   进度  时间  当前时间 全屏 返回  加载Loading  暂停开始
-        setViewShowState(mStartButton, VISIBLE);
+        setViewShowState(mStartButton, GONE);
         setViewShowState(mLoadingProgressBar, VISIBLE);
-        setViewShowState(mFullscreenButton, GONE);
+        setViewShowState(mFullscreenButton, VISIBLE);
         setViewShowState(mBackButton, GONE);
         setViewShowState(mProgressBar, VISIBLE);
         setViewShowState(mCurrentTimeTextView, VISIBLE);

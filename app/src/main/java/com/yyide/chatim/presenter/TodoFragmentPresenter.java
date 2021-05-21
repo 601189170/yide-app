@@ -18,12 +18,12 @@ public class TodoFragmentPresenter extends BasePresenter<TodoFragmentView> {
         attachView(view);
     }
 
-    public void getMyNoticePage(int current, int size, String status) {
+    public void getMessageTransaction(int current, int size, String status) {
         HashMap<String, Object> map = new HashMap();
         map.put("current", current);
         map.put("size", size);
         map.put("status", status);
-        addSubscription(dingApiStores.getMyNoticePage(map), new ApiCallback<TodoRsp>() {
+        addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
             @Override
             public void onSuccess(TodoRsp model) {
                 mvpView.getMyNoticePageSuccess(model);

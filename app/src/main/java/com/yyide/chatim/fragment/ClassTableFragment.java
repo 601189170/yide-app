@@ -154,33 +154,74 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     @Override
     public void listAllBySchoolIdFail(String msg) {
-
+        Log.e("TAG", "listAllBySchoolId==>: " + msg);
     }
 
     @Override
     public void listTimeDataByApp(listTimeDataByAppRsp rsp) {
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
-
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             if (rsp.data != null) {
-                tableItemAdapter.notifyData(rsp.data.subList);
                 String jc = rsp.data.timetableStructure;
                 String s = jc.replaceAll("节课", "");
                 int num = Integer.parseInt(s);
-                List<Integer> Sectionlist = new ArrayList<>();
-                for (int i = 0; i < num; i++) {
-                    Sectionlist.add(i);
-                }
-                tableSectionAdapter.notifyData(Sectionlist);
                 int earlyReading = rsp.data.earlyReadingList != null ? rsp.data.earlyReadingList.size() : 0;
                 int morning = rsp.data.morningList != null ? rsp.data.morningList.size() : 0;
                 int afternoon = rsp.data.afternoonList != null ? rsp.data.afternoonList.size() : 0;
                 int eveningStudy = rsp.data.eveningStudyList != null ? rsp.data.eveningStudyList.size() : 0;
 
-                createLeftTypeView(0, 1, earlyReading);//早读
-                createLeftTypeView(earlyReading, 2, morning);//上午
-                createLeftTypeView(earlyReading + morning, 3, afternoon);//下午
-                createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚自习
+                List<String> sectionlist = new ArrayList<>();
+                if (rsp.data.subList != null && rsp.data.subList.size() > 0) {
+                    List<listTimeDataByAppRsp.DataBean.SubListBean> subListBeans = new ArrayList<>();
+                    for(int j = 0; j < num; j++){//处理课表数据排版
+                        List<listTimeDataByAppRsp.DataBean.SubListBean> subListBeansWeek = new ArrayList<>();
+                        for (int i = 0; i < rsp.data.subList.size(); i++) {
+                            if(earlyReading > 0){ //有早读0和没早读1 下标不同
+                                if (rsp.data.subList.get(i).section == j) {
+                                    subListBeansWeek.add(rsp.data.subList.get(i));
+                                }
+                            } else {
+                                if (rsp.data.subList.get(i).section == j + 1) {
+                                    subListBeansWeek.add(rsp.data.subList.get(i));
+                                }
+                            }
+                        }
+
+                        if(subListBeansWeek.size() < 7){
+                            int index = subListBeansWeek.size() > 0 ? 7 - subListBeansWeek.size() : 7;
+                            for (int i = 0; i < index; i++){
+                                subListBeans.add(new listTimeDataByAppRsp.DataBean.SubListBean());
+                            }
+                        }
+                        subListBeans.addAll(subListBeans.size(), subListBeansWeek);
+                    }
+                    tableItemAdapter.notifyData(subListBeans);
+                }
+
+                if (earlyReading > 0) {
+                    createLeftTypeView(0, 1, earlyReading);//早读
+                }
+                if (morning > 0) {
+                    createLeftTypeView(earlyReading, 2, morning);//上午
+                }
+                if (afternoon > 0) {
+                    createLeftTypeView(earlyReading + morning, 3, afternoon);//下午
+                }
+                if (eveningStudy > 0) {
+                    createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚自习
+                }
+                for (int i = 0; i < num; i++) {
+                    if(earlyReading > 0 && i == 0){
+                        sectionlist.add("早读");
+                    } else {
+                        if(earlyReading > 0){
+                            sectionlist.add(i + "");
+                        } else {
+                            sectionlist.add(i + 1 + "");
+                        }
+                    }
+                }
+                tableSectionAdapter.notifyData(sectionlist);
             }
         }
     }
@@ -220,12 +261,12 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         params.gravity = Gravity.CENTER;
         text.setLayoutParams(params);
         leftLayout.addView(view);
-
     }
 
+    @SuppressLint("LongLogTag")
     @Override
-    public void listTimeDataByAppFail(String rsp) {
-
+    public void listTimeDataByAppFail(String msg) {
+        Log.d("selectTableClassListSuccess", msg);
     }
 
     private SwichTableClassPop swichTableClassPop;
@@ -237,11 +278,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         }
     }
 
-
     @SuppressLint("LongLogTag")
     @Override
     public void selectTableClassListFail(String msg) {
-        Log.d("selectTableClassListSuccess", msg);
     }
 
     @Override

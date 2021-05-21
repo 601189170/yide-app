@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.fragment.TodoMsgPageFragment;
+import com.yyide.chatim.model.TodoRsp;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -76,7 +77,7 @@ public class TodoMsgFragment extends BaseFragment {
         switch (position) {
             case 0:
                 if (fg1 == null) {
-                    fg1 = TodoMsgPageFragment.newInstance("3");
+                    fg1 = TodoMsgPageFragment.newInstance(3);
                     ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
                 } else
                     ft.show(fg1);
@@ -84,7 +85,7 @@ public class TodoMsgFragment extends BaseFragment {
                 break;
             case 1:
                 if (fg2 == null) {
-                    fg2 = TodoMsgPageFragment.newInstance("2");
+                    fg2 = TodoMsgPageFragment.newInstance(2);
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
                     ft.show(fg2);
@@ -92,7 +93,7 @@ public class TodoMsgFragment extends BaseFragment {
                 break;
             case 2:
                 if (fg3 == null) {
-                    fg3 = TodoMsgPageFragment.newInstance("1");
+                    fg3 = TodoMsgPageFragment.newInstance(1);
                     ft.add(R.id.content, fg3, String.valueOf(tab3.getId()));
                 } else
                     ft.show(fg3);

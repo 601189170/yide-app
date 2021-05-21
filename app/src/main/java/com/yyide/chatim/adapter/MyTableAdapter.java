@@ -92,7 +92,7 @@ public class MyTableAdapter extends BaseAdapter {
             dateS.setImageResource(R.drawable.icon_table_un);
         }
         className.setText(item.classesName + "\t" + item.subjectName);
-        seciton.setText("第" + item.section + "节");
+        seciton.setText("0".equals(item.section) ? "早读" : "第" + item.section + "节");
         time.setText(item.fromDateTime + "-" + item.toDateTime);
 
         return view;

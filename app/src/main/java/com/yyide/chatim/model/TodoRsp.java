@@ -1,5 +1,10 @@
 package com.yyide.chatim.model;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 import java.util.List;
 
 /**
@@ -11,7 +16,7 @@ import java.util.List;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class TodoRsp {
+public class TodoRsp{
 
     /**
      * code : 200
@@ -122,7 +127,7 @@ public class TodoRsp {
             this.records = records;
         }
 
-        public static class RecordsBean {
+        public static class RecordsBean implements MultiItemEntity{
             /**
              * id : 222
              * delInd : 0
@@ -159,18 +164,43 @@ public class TodoRsp {
             private int current;
             private String title;
             private String productionTarget;
-            private Object productionTime;
+            private String productionTime;
             private String content;
             private long signId;
-            private Object timingTime;
+            private long callId;
+            private String timingTime;
             private String type;
-            private String status;
-            private Object totalNumber;
-            private Object readNumber;
-            private Object sendObject;
+            private String status;//‘读取状态 1 已读/同意 0未读 2拒绝 3已撤回
+            private int totalNumber;
+            private int readNumber;
+            private String sendObject;
+            private String firstData;
+            private String attributeType;//	消息属性 1 请假 2 调课
+            private String isText;//是否纯文本 1 是 2不是
+            private int messageType;//消息类型 1 通知公告 2 代办 3系统通知
+            public static final String IS_TEXT_TYPE = "1";
+            public static final int ITEM_TYPE_MESSAGE = 1;
+            public static final int ITEM_TYPE_NOTICE = 2;
+            public static final int ITEM_TYPE_TODO = 3;
+
+            public String getFirstData() {
+                return firstData;
+            }
+
+            public void setFirstData(String firstData) {
+                this.firstData = firstData;
+            }
 
             public int getId() {
                 return id;
+            }
+
+            public long getCallId() {
+                return callId;
+            }
+
+            public void setCallId(long callId) {
+                this.callId = callId;
             }
 
             public void setId(int id) {
@@ -269,8 +299,24 @@ public class TodoRsp {
                 return productionTime;
             }
 
-            public void setProductionTime(Object productionTime) {
+            public void setProductionTime(String productionTime) {
                 this.productionTime = productionTime;
+            }
+
+            public String getAttributeType() {
+                return attributeType;
+            }
+
+            public void setAttributeType(String attributeType) {
+                this.attributeType = attributeType;
+            }
+
+            public String getIsText() {
+                return isText;
+            }
+
+            public void setIsText(String isText) {
+                this.isText = isText;
             }
 
             public String getContent() {
@@ -293,7 +339,7 @@ public class TodoRsp {
                 return timingTime;
             }
 
-            public void setTimingTime(Object timingTime) {
+            public void setTimingTime(String timingTime) {
                 this.timingTime = timingTime;
             }
 
@@ -317,7 +363,7 @@ public class TodoRsp {
                 return totalNumber;
             }
 
-            public void setTotalNumber(Object totalNumber) {
+            public void setTotalNumber(int totalNumber) {
                 this.totalNumber = totalNumber;
             }
 
@@ -325,7 +371,7 @@ public class TodoRsp {
                 return readNumber;
             }
 
-            public void setReadNumber(Object readNumber) {
+            public void setReadNumber(int readNumber) {
                 this.readNumber = readNumber;
             }
 
@@ -333,7 +379,7 @@ public class TodoRsp {
                 return sendObject;
             }
 
-            public void setSendObject(Object sendObject) {
+            public void setSendObject(String sendObject) {
                 this.sendObject = sendObject;
             }
 
@@ -362,6 +408,24 @@ public class TodoRsp {
                         ", readNumber=" + readNumber +
                         ", sendObject=" + sendObject +
                         '}';
+            }
+
+            @Override
+            public int getItemType() {
+                int type = -1;
+                Log.d("setTodoItem", status);
+                switch (messageType){
+                    case 1:
+                        type = TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE;
+                        break;
+                    case 3:
+                        type = TodoRsp.DataBean.RecordsBean.ITEM_TYPE_NOTICE;
+                        break;
+                    default:
+                        type = TodoRsp.DataBean.RecordsBean.ITEM_TYPE_TODO;
+                        break;
+                }
+                return type;
             }
         }
 

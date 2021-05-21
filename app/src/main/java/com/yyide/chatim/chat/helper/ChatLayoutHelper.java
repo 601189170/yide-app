@@ -89,7 +89,7 @@ public class ChatLayoutHelper {
 //        messageLayout.setTipsMessageFontColor(0xFF7E848C);
 //
         // 设置自定义的消息渲染时的回调
-        messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
+//        messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
 
         // 设置点击群消息
 //        messageLayout.setIGroupMessageClickListener(new IGroupMessageClickListener() {
@@ -132,7 +132,6 @@ public class ChatLayoutHelper {
 //            }
 //        });
 
-
         //====== InputLayout使用范例 ======//
         final InputLayout inputLayout = layout.getInputLayout();
 
@@ -164,24 +163,24 @@ public class ChatLayoutHelper {
 
         // TODO 可以自己增加一些功能，可以打开下面代码测试
         // 增加一个欢迎提示富文本
-        InputMoreActionUnit unit = new InputMoreActionUnit();
-//        unit.setIconResId(R.drawable.custom);
-        unit.setTitleId(R.string.test_custom_action);
-        unit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Gson gson = new Gson();
-                CustomHelloMessage customHelloMessage = new CustomHelloMessage();
-                customHelloMessage.version = TUIKitConstants.version;
-//                customHelloMessage.text = BaseApplication.getInstance().getString(R.string.welcome_tip);
-                customHelloMessage.link = "https://cloud.tencent.com/document/product/269/3794";
-
-                String data = gson.toJson(customHelloMessage);
-                MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
-                layout.sendMessage(info, false);
-            }
-        });
-        inputLayout.addAction(unit);
+//        InputMoreActionUnit unit = new InputMoreActionUnit();
+////        unit.setIconResId(R.drawable.custom);
+//        unit.setTitleId(R.string.test_custom_action);
+//        unit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Gson gson = new Gson();
+//                CustomHelloMessage customHelloMessage = new CustomHelloMessage();
+//                customHelloMessage.version = TUIKitConstants.version;
+////                customHelloMessage.text = BaseApplication.getInstance().getString(R.string.welcome_tip);
+//                customHelloMessage.link = "https://cloud.tencent.com/document/product/269/3794";
+//
+//                String data = gson.toJson(customHelloMessage);
+//                MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
+//                layout.sendMessage(info, false);
+//            }
+//        });
+//        inputLayout.addAction(unit);
     }
 
     public class CustomMessageDraw implements IOnCustomMessageDrawListener {

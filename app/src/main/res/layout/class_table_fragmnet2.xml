@@ -34,19 +34,19 @@
                 android:id="@+id/listsection"
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="match_parent"
+                android:scrollbars="none"
                 android:numColumns="1"
                 android:verticalSpacing="1dp" />
 
             <com.yyide.chatim.widget.MyGridView
                 android:id="@+id/tablegrid"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:horizontalSpacing="1dp"
                 android:numColumns="7"
                 android:verticalSpacing="1dp" />
 
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>
