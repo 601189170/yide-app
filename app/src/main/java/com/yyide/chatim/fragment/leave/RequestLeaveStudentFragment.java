@@ -42,6 +42,7 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.presenter.leave.StudentAskLeavePresenter;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
 import com.yyide.chatim.view.leave.StaffAskLeaveView;
 import com.yyide.chatim.view.leave.StudentAskLeaveView;
@@ -234,13 +235,17 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     public void click(View view) {
         switch (view.getId()) {
             case R.id.cl_start_time:
-                showTime("选择开始时间", startTimeListener);
+                showTime("选择开始时间", startTime,startTimeListener);
                 break;
             case R.id.cl_end_time:
-                showTime("选择结束时间", endTimeListener);
+                if (TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(startTime)){
+                    showTime("选择结束时间", startTime,endTimeListener);
+                    break;
+                }
+                showTime("选择结束时间", endTime,endTimeListener);
                 break;
             case R.id.cl_ask_for_leave_date:
-                showTime("选择请假日期", dateTimeListener);
+                showTime("选择请假日期", "",dateTimeListener);
                 break;
             case R.id.btn_commit:
                 commit();
@@ -271,6 +276,10 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             ToastUtils.showShort("请选择请假结束时间");
             return;
         }
+        if (DateUtils.parseTimestamp(endTime,"")-DateUtils.parseTimestamp(startTime,"")>=0){
+            ToastUtils.showShort("请假结束时间应该大于开始时间");
+            return;
+        }
         reason = editLeaveReason.getText().toString();
         if (TextUtils.isEmpty(reason)){
             ToastUtils.showShort("请假事由不能为空");
@@ -291,8 +300,13 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         }
     }
 
-    private void showTime(String title, OnDateSetListener onDateSetListener) {
+    private void showTime(String title, String currentMillseconds,OnDateSetListener onDateSetListener) {
         long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
+        long oneYears = 3L * 365 * 1000 * 60 * 60 * 24L;
+        long currentSelectedTime = 0;
+        if (!TextUtils.isEmpty(currentMillseconds)){
+            currentSelectedTime = DateUtils.parseTimestamp(currentMillseconds,"");
+        }
         mDialogAll = new TimePickerDialog.Builder()
                 .setCallBack(onDateSetListener)
                 .setCancelStringId("取消")
@@ -304,11 +318,11 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                 .setHourText("时")
                 .setMinuteText("分")
                 .setCyclic(false)
-                .setMinMillseconds(System.currentTimeMillis())
+                .setMinMillseconds(System.currentTimeMillis()-oneYears)
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
-                .setCurrentMillseconds(System.currentTimeMillis())
+                .setCurrentMillseconds(currentSelectedTime == 0?System.currentTimeMillis():currentSelectedTime)
                 .setThemeColor(getResources().getColor(R.color.colorPrimary))
-                .setType(Type.MONTH_DAY_HOUR_MIN)
+                .setType(Type.ALL)
                 .setWheelItemTextNormalColor(getResources().getColor(R.color.text_212121))
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorPrimary))
                 .setWheelItemTextSize(16)

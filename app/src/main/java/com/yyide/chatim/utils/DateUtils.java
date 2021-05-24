@@ -100,6 +100,24 @@ public class DateUtils {
     }
 
     /**
+     * 将时间字符串解析成时间戳
+     * @param time
+     * @return
+     */
+    public static long parseTimestamp(String time,String format){
+        if (TextUtils.isEmpty(format)){
+            format = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        try {
+            return simpleDateFormat.parse(time).getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
      * 获取日期毫秒数
      * @param dateValue
      * @return
