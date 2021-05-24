@@ -41,6 +41,7 @@ import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.ListByAppRsp;
@@ -387,6 +388,12 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/message-server/cloud-message/user/notice/queryUserMessageNotice")
     Observable<UserNoticeRsp> getUserNoticePage(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/notice/queryUserMessageNotice
+    //获取消息分页
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/message-server/cloud-message/user/notice/queryUserMessageNotice")
+    Observable<UserMsgNoticeRsp> queryUserMessageNotice(@QueryMap HashMap<String, Object> map);
 
 
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/common/getAskLeaveRecord

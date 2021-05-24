@@ -48,6 +48,7 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.UserInfo;
+import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.presenter.UserNoticePresenter;
@@ -181,7 +182,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        mvpPresenter.getUserNoticePage(1, 1, 1);
+        mvpPresenter.getUserNoticePage(1, 1);
     }
 
     private void initTitleAction() {
@@ -287,17 +288,13 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     }
 
     @Override
-    public void getUserNoticePageSuccess(UserNoticeRsp userNoticeRsp) {
+    public void getUserNoticePageSuccess(UserMsgNoticeRsp userNoticeRsp) {
         if (userNoticeRsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            List<UserNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
+            List<UserMsgNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
             if (records != null && records.size() > 0) {
-                UserNoticeRsp.DataBean.RecordsBean recordsBean = records.get(0);
-                String title = recordsBean.getTitle();
-                String content = recordsBean.getContent();
-//                tv_user_notice_content.setText(content);
-//                textView3.setText(title);
+                final int total = userNoticeRsp.getData().getTotal();
                 tv_unNum.setVisibility(View.VISIBLE);
-                tv_unNum.setText(records.size() + "");
+                tv_unNum.setText(total + "");
             } else {
                 tv_unNum.setVisibility(View.GONE);
             }

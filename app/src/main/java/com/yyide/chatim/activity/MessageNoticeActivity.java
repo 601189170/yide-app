@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,11 +12,13 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.UserNoticeListAdapter;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.AgentInformationRsp;
 import com.yyide.chatim.model.HelpRsp;
+import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.presenter.UserNoticePresenter;
 import com.yyide.chatim.utils.DateUtils;
@@ -51,7 +54,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
     LinearLayout blank_page;
     private boolean refresh = false;
     //private BaseQuickAdapter adapter;
-    private List<UserNoticeRsp.DataBean.RecordsBean> list = new ArrayList<>();
+    private List<UserMsgNoticeRsp.DataBean.RecordsBean> list = new ArrayList<>();
     private UserNoticeListAdapter userNoticeListAdapter;
     private int curIndex = 1;
     private int pages = 1;
@@ -69,7 +72,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
         swipeRefreshLayout.setOnRefreshListener(this);
         refresh = true;
         swipeRefreshLayout.setRefreshing(true);
-        mvpPresenter.getUserNoticePage(1,curIndex,5);
+        mvpPresenter.getUserNoticePage(curIndex,5);
     }
 
     @Override
@@ -84,7 +87,25 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
         recyclerview.setAdapter(userNoticeListAdapter);
         recyclerview.addOnScrollListener(mOnScrollListener);
         userNoticeListAdapter.setOnItemOnClickListener(position ->{
-            Log.e(TAG, "initAdapter: "+position );
+            final UserMsgNoticeRsp.DataBean.RecordsBean recordsBean = list.get(position);
+            Log.e(TAG, "initAdapter: "+recordsBean.toString() );
+            if ("2".equals(recordsBean.getIsText())){
+                //不是纯文本，需要跳转详情
+                switch (recordsBean.getAttributeType()){
+                    case "1":
+                        //请假
+                        final long callId = recordsBean.getCallId();
+                        final Intent intent = new Intent(this, LeaveFlowDetailActivity.class);
+                        intent.putExtra("id",callId);
+                        startActivity(intent);
+                        break;
+                    case "2":
+                        //调课
+                        break;
+                    default:
+                        break;
+                }
+            }
         });
     }
 
@@ -110,9 +131,9 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
     }
 
     @Override
-    public void getUserNoticePageSuccess(UserNoticeRsp userNoticeRsp) {
+    public void getUserNoticePageSuccess(UserMsgNoticeRsp userNoticeRsp) {
         if (userNoticeRsp.getCode() == 200) {
-            UserNoticeRsp.DataBean data = userNoticeRsp.getData();
+            UserMsgNoticeRsp.DataBean data = userNoticeRsp.getData();
             pages = data.getPages();
             if (refresh) {
                 list.clear();
@@ -120,7 +141,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                 swipeRefreshLayout.setRefreshing(false);
             }
 
-            List<UserNoticeRsp.DataBean.RecordsBean> records = data.getRecords();
+            List<UserMsgNoticeRsp.DataBean.RecordsBean> records = data.getRecords();
             userNoticeListAdapter.setIsLastPage(curIndex == pages);
             userNoticeListAdapter.setIsLoadMore(!records.isEmpty());
             list.addAll(records);
@@ -148,7 +169,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
     public void onRefresh() {
         curIndex = 1;
         refresh = true;
-        mvpPresenter.getUserNoticePage(1,1,5);
+        mvpPresenter.getUserNoticePage(1,5);
     }
 
     public void showBlankPage() {
@@ -174,7 +195,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                         return;
                     }
                     //发送网络请求获取更多数据
-                    mvpPresenter.getUserNoticePage(1, ++curIndex, 5);
+                    mvpPresenter.getUserNoticePage(++curIndex, 5);
                 }
             }
         }

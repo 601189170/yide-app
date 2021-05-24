@@ -1,21 +1,31 @@
 package com.yyide.chatim.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.NoticeAnnouncementModel;
+import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.FootView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,7 +42,7 @@ import butterknife.ButterKnife;
  */
 public class UserNoticeListAdapter extends RecyclerView.Adapter {
     private Context context;
-    private List<UserNoticeRsp.DataBean.RecordsBean> data;
+    private List<UserMsgNoticeRsp.DataBean.RecordsBean> data;
     //上拉加载更多布局
     public static final int view_Foot = 1;
     //主要布局
@@ -49,7 +59,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
     public void setOnItemOnClickListener(OnItemOnClickListener onItemOnClickListener) {
         this.onItemOnClickListener = onItemOnClickListener;
     }
-    public UserNoticeListAdapter(Context context, List<UserNoticeRsp.DataBean.RecordsBean> data) {
+    public UserNoticeListAdapter(Context context, List<UserMsgNoticeRsp.DataBean.RecordsBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -79,15 +89,60 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
             }
         }else {
             ViewHolder  holder1= (ViewHolder)holder;
-            UserNoticeRsp.DataBean.RecordsBean recordsBean = data.get(position);
-            String createdDateTime = recordsBean.getCreatedDateTime();
+            UserMsgNoticeRsp.DataBean.RecordsBean recordsBean = data.get(position);
+            String createdDateTime = recordsBean.getSendTime();
             holder1.tv_date.setText(DateUtils.formatTime(createdDateTime,"","yyyy-MM-dd"));
             holder1.tv_title.setText(recordsBean.getTitle());
-            holder1.tv_leave.setText(recordsBean.getContent());
+            final String content = recordsBean.getContent();
+            final String templateContent = parseTemplateContent(content);
+            Log.e("TAG", "onBindViewHolder: "+content );
+            if (TextUtils.isEmpty(templateContent)){
+                holder1.tv_leave.setText(content);
+            }else {
+                holder1.tv_leave.setText(templateContent);
+            }
+            //不是纯文本则可以跳转详情
+            if ("2".equals(recordsBean.getIsText())) {
+                holder1.rl_detail.setVisibility(View.VISIBLE);
+            }else {
+                holder1.rl_detail.setVisibility(View.GONE);
+            }
+            //消息类型
+            holder1.tv_msg_type.setText(switchAttributeType(recordsBean.getAttributeType()));
             holder1.itemView.setOnClickListener(v -> {
                 onItemOnClickListener.onClicked(position);
             });
         }
+    }
+
+    private String parseTemplateContent(String content){
+        final StringBuffer buffer = new StringBuffer();
+        try {
+            final JSONArray jsonArray = new JSONArray(content);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                final String jsonObject = jsonArray.getString(i);
+                buffer.append(jsonObject+"\n"+"\n");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return buffer.toString();
+    }
+
+
+    private String switchAttributeType(String attributeType){
+        switch (attributeType){
+            case "1":
+                attributeType = "请假";
+                break;
+            case "2":
+                attributeType = "调课";
+                break;
+            default:
+                attributeType = "通知";
+                break;
+        }
+        return attributeType;
     }
 
     @Override
@@ -121,6 +176,12 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_leave)
         TextView tv_leave;
+
+        @BindView(R.id.tv_msg_type)
+        TextView tv_msg_type;
+
+        @BindView(R.id.rl_detail)
+        RelativeLayout rl_detail;
 
         public ViewHolder(View view) {
             super(view);
