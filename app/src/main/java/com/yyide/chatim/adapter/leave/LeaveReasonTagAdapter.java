@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.LeavePhraseRsp;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
  */
 public class LeaveReasonTagAdapter extends RecyclerView.Adapter<LeaveReasonTagAdapter.ViewHolder> {
     private Context context;
-    private List<String> data;
+    private List<LeavePhraseRsp.DataBean> data;
 
     public void setOnClickedListener(OnClickedListener onClickedListener) {
         this.onClickedListener = onClickedListener;
@@ -35,7 +36,7 @@ public class LeaveReasonTagAdapter extends RecyclerView.Adapter<LeaveReasonTagAd
 
     private OnClickedListener onClickedListener;
 
-    public LeaveReasonTagAdapter(Context context, List<String> data) {
+    public LeaveReasonTagAdapter(Context context, List<LeavePhraseRsp.DataBean> data) {
         this.context = context;
         this.data = data;
 
@@ -50,8 +51,8 @@ public class LeaveReasonTagAdapter extends RecyclerView.Adapter<LeaveReasonTagAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String tag = data.get(position);
-        holder.tv_tag.setText(tag);
+        LeavePhraseRsp.DataBean tag = data.get(position);
+        holder.tv_tag.setText(tag.getTag());
         holder.itemView.setOnClickListener(v -> {
             onClickedListener.onClicked(position);
         });

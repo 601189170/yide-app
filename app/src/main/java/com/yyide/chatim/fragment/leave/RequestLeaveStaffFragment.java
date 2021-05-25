@@ -30,6 +30,7 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
@@ -53,7 +54,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private static final String TAG = RequestLeaveStaffFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
     private String mParam1;
-    private List<String> tags = new ArrayList<>();
+    private List<LeavePhraseRsp.DataBean> tags = new ArrayList<>();
     private LeaveReasonTagAdapter leaveReasonTagAdapter;
     @BindView(R.id.recyclerview_tag_hint)
     RecyclerView recyclerviewTagHint;
@@ -112,7 +113,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initTags();
+        //initTags();
         leaveReasonTagAdapter = new LeaveReasonTagAdapter(getActivity(), tags);
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(getActivity());
         //flexDirection 属性决定主轴的方向（即项目的排列方向）。类似 LinearLayout 的 vertical 和 horizontal。
@@ -126,12 +127,13 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         recyclerviewTagHint.addItemDecoration(new SpacesItemDecoration(SpacesItemDecoration.dip2px(5)));
         recyclerviewTagHint.setAdapter(leaveReasonTagAdapter);
         leaveReasonTagAdapter.setOnClickedListener(position -> {
-            String tag = tags.get(position);
-            editLeaveReason.setText(tag);
+            LeavePhraseRsp.DataBean tag = tags.get(position);
+            editLeaveReason.setText(tag.getTag());
         });
         btn_commit.setAlpha(0.5f);
         btn_commit.setClickable(false);
         mvpPresenter.queryDeptInfoByTeacherId();
+        mvpPresenter.queryLeavePhraseList(2);
     }
 
     @OnClick({R.id.cl_start_time, R.id.cl_end_time,R.id.btn_commit})
@@ -157,9 +159,9 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     }
 
     private void initTags() {
-        tags.add("小孩生病了");
-        tags.add("家里有事");
-        tags.add("小孩课外辅导");
+//        tags.add("小孩生病了");
+//        tags.add("家里有事");
+//        tags.add("小孩课外辅导");
     }
 
     /**
@@ -315,5 +317,20 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     @Override
     public void addTeacherLeaveFail(String msg) {
         Log.e(TAG, "addTeacherLeaveFail: "+msg );
+    }
+
+    @Override
+    public void leavePhrase(LeavePhraseRsp leavePhraseRsp) {
+        if (leavePhraseRsp.getCode() == 200){
+            final List<LeavePhraseRsp.DataBean> data = leavePhraseRsp.getData();
+            tags.clear();
+            tags.addAll(data);
+            leaveReasonTagAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void leavePhraseFail(String msg) {
+
     }
 }

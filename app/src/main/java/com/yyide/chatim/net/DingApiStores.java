@@ -9,6 +9,7 @@ import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveListRsp;
+import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
@@ -443,4 +444,11 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/leave-server/cloud-leave/teacher/processExaminationApproval")
     Observable<BaseRsp> processExaminationApproval(@QueryMap HashMap<String, Object> map);
+
+    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/phrase/queryLeavePhraseList
+    //请假短语 短语类型 1 家长 2教职工
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/leave-server/cloud-leave/leave/phrase/queryLeavePhraseList")
+    Observable<LeavePhraseRsp> queryLeavePhraseList(@QueryMap HashMap<String, Object> map);
+
 }

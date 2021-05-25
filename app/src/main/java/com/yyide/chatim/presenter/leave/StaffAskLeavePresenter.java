@@ -8,6 +8,7 @@ import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.leave.StaffAskLeaveView;
 
@@ -59,6 +60,30 @@ public class StaffAskLeavePresenter extends BasePresenter<StaffAskLeaveView> {
             @Override
             public void onFinish() {
                 mvpView.hideLoading();
+            }
+        });
+    }
+
+    /**
+     * 查询请假原因提示
+     * @param type
+     */
+    public void queryLeavePhraseList(int type){
+        final HashMap<String, Object> map = new HashMap<>(1);
+        map.put("type", type);
+        addSubscription(dingApiStores.queryLeavePhraseList(map), new ApiCallback<LeavePhraseRsp>() {
+            @Override
+            public void onSuccess(LeavePhraseRsp model) {
+                mvpView.leavePhrase(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.leavePhraseFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
             }
         });
     }

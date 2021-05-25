@@ -40,6 +40,7 @@ import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.CourseSectionBean;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.presenter.leave.StudentAskLeavePresenter;
 import com.yyide.chatim.utils.DateUtils;
@@ -65,7 +66,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     private static final String TAG = RequestLeaveStudentFragment.class.getSimpleName();;
     private static final String ARG_PARAM1 = "param1";
     private String mParam1;
-    private List<String> tags = new ArrayList<>();
+    private List<LeavePhraseRsp.DataBean> tags = new ArrayList<>();
     private List<CourseSectionBean> courses = new ArrayList<>();
     private LeaveReasonTagAdapter leaveReasonTagAdapter;
     @BindView(R.id.recyclerview_tag_hint)
@@ -152,8 +153,8 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         recyclerviewTagHint.addItemDecoration(new SpacesItemDecoration(SpacesItemDecoration.dip2px(5)));
         recyclerviewTagHint.setAdapter(leaveReasonTagAdapter);
         leaveReasonTagAdapter.setOnClickedListener(position -> {
-            String tag = tags.get(position);
-            editLeaveReason.setText(tag);
+            LeavePhraseRsp.DataBean tag = tags.get(position);
+            editLeaveReason.setText(tag.getTag());
         });
         accordingCourseLeave(false);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -198,6 +199,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         btn_commit.setClickable(false);
         //请求审批流程
         mvpPresenter.getApprover(classesId);
+        mvpPresenter.queryLeavePhraseList(1);
     }
 
     /**
@@ -292,13 +294,13 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
 
 
     private void initTags() {
-        tags.add("小孩生病了");
-        tags.add("家里有事");
-        tags.add("小孩课外辅导");
-
-        for (int i = 0; i < 8; i++) {
-            courses.add(new CourseSectionBean("第" + (i + 1) + "节", "课程" + i, false));
-        }
+//        tags.add("小孩生病了");
+//        tags.add("家里有事");
+//        tags.add("小孩课外辅导");
+//
+//        for (int i = 0; i < 8; i++) {
+//            courses.add(new CourseSectionBean("第" + (i + 1) + "节", "课程" + i, false));
+//        }
     }
 
     private void showTime(String title, String currentMillseconds,OnDateSetListener onDateSetListener) {
@@ -419,6 +421,21 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
 
     @Override
     public void addStudentLeaveFail(String msg) {
+
+    }
+
+    @Override
+    public void leavePhrase(LeavePhraseRsp leavePhraseRsp) {
+        if (leavePhraseRsp.getCode() == 200){
+            final List<LeavePhraseRsp.DataBean> data = leavePhraseRsp.getData();
+            tags.clear();
+            tags.addAll(data);
+            leaveReasonTagAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void leavePhraseFail(String msg) {
 
     }
 }
