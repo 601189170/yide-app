@@ -276,7 +276,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             ToastUtils.showShort("请选择请假结束时间");
             return;
         }
-        if (DateUtils.parseTimestamp(endTime,"")-DateUtils.parseTimestamp(startTime,"")>=0){
+        if (DateUtils.parseTimestamp(endTime,"")-DateUtils.parseTimestamp(startTime,"")<=0){
             ToastUtils.showShort("请假结束时间应该大于开始时间");
             return;
         }
