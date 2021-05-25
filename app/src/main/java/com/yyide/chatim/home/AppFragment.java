@@ -20,6 +20,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.adapter.AppAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
@@ -84,22 +85,52 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         //我的应用
         mygrid.setAdapter(adapter);
         mygrid.setOnItemClickListener((parent, view1, position, id) -> {
-            if ("editor".equals(adapter.getItem(position).getAppType())) {
-                Intent intent = new Intent(mActivity, AppManagerActivity.class);
-                startActivity(intent);
-            } else {
-                if ("通知公告".equals(adapter.getItem(position).getName())) {
-                    Intent intent = new Intent(getContext(), NoticeAnnouncementActivity.class);
+//            if ("editor".equals(adapter.getItem(position).getAppType())) {
+//                Intent intent = new Intent(mActivity, AppManagerActivity.class);
+//                startActivity(intent);
+//            } else {
+//                if ("通知公告".equals(adapter.getItem(position).getName())) {
+//                    Intent intent = new Intent(getContext(), NoticeAnnouncementActivity.class);
+//                    startActivity(intent);
+//                } else {
+//                    if ("#".equals(adapter.getItem(position).getPath().trim())) {
+//                        ToastUtils.showShort("暂无权限");
+//                    } else {
+//                        Intent intent = new Intent(getContext(), WebViewActivity.class);
+//                        intent.putExtra("url", adapter.getItem(position).getPath());
+//                        startActivity(intent);
+//                    }
+//                }
+//            }
+
+            Intent intent;
+            final MyAppListRsp.DataBean item = adapter.getItem(position);
+            switch (item.getName()) {
+                case "editor":
+                    intent = new Intent(mActivity, AppManagerActivity.class);
                     startActivity(intent);
-                } else {
-                    if ("#".equals(adapter.getItem(position).getPath().trim())) {
+                    break;
+                case "通知公告":
+                    intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
+                    startActivity(intent);
+                    break;
+                case "请假":
+                    //ToastUtils.showShort("请假");
+                    intent = new Intent(getActivity(), AskForLeaveActivity.class);
+                    startActivity(intent);
+                    break;
+                case "调课":
+                    ToastUtils.showShort("调课");
+                    break;
+                default:
+                    if ("#".equals(item.getPath().trim())) {
                         ToastUtils.showShort("暂无权限");
                     } else {
-                        Intent intent = new Intent(getContext(), WebViewActivity.class);
-                        intent.putExtra("url", adapter.getItem(position).getPath());
+                        intent = new Intent(getActivity(), WebViewActivity.class);
+                        intent.putExtra("url", item.getPath());
                         startActivity(intent);
                     }
-                }
+                    break;
             }
         });
 //        处理吸顶菜单是否显示
