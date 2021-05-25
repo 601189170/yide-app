@@ -94,7 +94,6 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
     private void initAdapter() {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new HelpItemAdapter(null);
-        adapter.setEmptyView(R.layout.empty);
         recyclerview.setAdapter(adapter);
         adapter.setEmptyView(R.layout.empty);
         adapter.setOnItemClickListener((adapter, view, position) -> {

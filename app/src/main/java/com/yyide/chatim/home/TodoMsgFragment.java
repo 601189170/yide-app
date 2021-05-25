@@ -74,7 +74,7 @@ public class TodoMsgFragment extends BaseFragment {
         if (fg2 != null) ft.hide(fg2);
         if (fg3 != null) ft.hide(fg3);
 
-        switch (position) {
+        switch (position) {//0 未审核 1 已拒绝 3全部
             case 0:
                 if (fg1 == null) {
                     fg1 = TodoMsgPageFragment.newInstance(3);
@@ -85,7 +85,7 @@ public class TodoMsgFragment extends BaseFragment {
                 break;
             case 1:
                 if (fg2 == null) {
-                    fg2 = TodoMsgPageFragment.newInstance(2);
+                    fg2 = TodoMsgPageFragment.newInstance(0);
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
                     ft.show(fg2);

@@ -13,6 +13,7 @@ public class ResultBean {
     private String msg;
     private String message;
 
+
     public int getCode() {
         return code;
     }

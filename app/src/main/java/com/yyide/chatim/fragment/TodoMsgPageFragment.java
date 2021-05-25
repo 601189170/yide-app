@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.common.reflect.TypeToken;
@@ -33,6 +36,8 @@ import com.yyide.chatim.presenter.TodoFragmentPresenter;
 import com.yyide.chatim.view.TodoFragmentView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
@@ -83,14 +88,15 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
         initView();
     }
 
     private void initView() {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new TodoAdapter();
-        adapter.setEmptyView(R.layout.empty);
         recyclerview.setAdapter(adapter);
+        adapter.setEmptyView(R.layout.empty);
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setRefreshing(false);
@@ -100,6 +106,15 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
             //请求数据
             pageNum++;
             mvpPresenter.getMessageTransaction(pageNum, pageSize, String.valueOf(mParam1));
+        });
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            TodoRsp.DataBean.RecordsBean item = (TodoRsp.DataBean.RecordsBean) adapter.getItem(position);
+            if("1".equals(item.getIsOperation())){
+                Intent intent = new Intent(getContext(), LeaveFlowDetailActivity.class);
+                intent.putExtra("type", 2);
+                intent.putExtra("id", item.getCallId());
+                startActivity(intent);
+            }
         });
         adapter.getLoadMoreModule().setAutoLoadMore(true);
         //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
@@ -122,8 +137,8 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         }
 
         @Override
-        protected void convert (@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o){
-            switch (o.getItemType()){
+        protected void convert(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
+            switch (o.getItemType()) {
                 case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE:
                     //setTodoItem(holder, o);
                     break;
@@ -145,38 +160,37 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
                     holder.setText(R.id.tv_leave_type, o.getContent());
                 } else {
                     String content = o.getContent();
-                    if(!TextUtils.isEmpty(content)){
-                        Type type = new TypeToken<List<String>>(){}.getType();
+                    if (!TextUtils.isEmpty(content)) {
+                        Type type = new TypeToken<List<String>>() {
+                        }.getType();
                         List<String> strings = JSON.parseObject(content, type);
                         StringBuffer stringBuffer = new StringBuffer();
-                        if(strings != null){
-                            for (int i = 0; i < strings.size(); i++){
+                        if (strings != null) {
+                            for (int i = 0; i < strings.size(); i++) {
                                 stringBuffer.append(strings.get(i));
-                                if(i < strings.size() -1){
-                                    stringBuffer.append("\n").append("\n");
+                                if (i < strings.size() - 1) {
+                                    stringBuffer.append("\n").append("");
                                 }
                             }
                         }
                         holder.setText(R.id.tv_leave_type, stringBuffer.toString());
                     }
                 }
-            } catch (Exception e){
-                Log.d("setTodoItem", o.getIsText());
-                Log.d("setTodoItem", o.getContent());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             TextView textView2 = holder.getView(R.id.tv_agree);
             //如果身份是家长隐藏按钮
-            if ("1".equals(o.getStatus())
-                    || "2".equals(o.getStatus())
-                    || "3".equals(o.getStatus())
+            if ("1".equals(o.getIsOperation())
+                    || "2".equals(o.getIsOperation())
+                    || "3".equals(o.getIsOperation())
                     || (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status))) {
                 textView2.setVisibility(View.GONE);
             } else {
                 textView2.setVisibility(View.VISIBLE);
             }
 
-            textView2.setOnClickListener(v -> {//同意
+            textView2.setOnClickListener(v -> {
                 Intent intent = new Intent(getContext(), LeaveFlowDetailActivity.class);
                 intent.putExtra("type", 2);
                 intent.putExtra("id", o.getCallId());
@@ -184,6 +198,15 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
             });
         }
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
+            pageNum = 1;
+            mvpPresenter.getMessageTransaction(pageNum, pageSize, String.valueOf(mParam1));
+        }
+    }
+
 
     @Override
     protected TodoFragmentPresenter createPresenter() {
@@ -195,7 +218,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageSuccess: " + noticeHomeRsp.toString());
         if (BaseConstant.REQUEST_SUCCES2 == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
-            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, noticeHomeRsp.getData().getTotal() + ""));
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
             List<TodoRsp.DataBean.RecordsBean> data = noticeHomeRsp.getData().getRecords();
             if (pageNum == 1) {
                 adapter.setList(data);
@@ -218,5 +241,11 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageFail: " + msg);
         ToastUtils.showShort(msg);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

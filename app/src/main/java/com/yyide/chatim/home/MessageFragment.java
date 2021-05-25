@@ -17,9 +17,14 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.NoteBookActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseFragment;
+import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.chat.ConversationFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.MessageNumberRsp;
+import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.presenter.MessagePresenter;
+import com.yyide.chatim.view.MessageView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -34,7 +39,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class MessageFragment extends BaseFragment {
+public class MessageFragment extends BaseMvpFragment<MessagePresenter> implements MessageView {
     private static final String TAG = "MessageFragment";
     @BindView(R.id.tab1)
     CheckedTextView tab1;
@@ -67,6 +72,12 @@ public class MessageFragment extends BaseFragment {
         Log.e(TAG, "onViewCreated: " + type);
         setTab(type);
         setBookView();
+        mvpPresenter.getMessageNumber();
+    }
+
+    @Override
+    protected MessagePresenter createPresenter() {
+        return new MessagePresenter(this);
     }
 
     private void setBookView() {
@@ -145,16 +156,9 @@ public class MessageFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            Log.d("HomeRefresh", MessageFragment.class.getSimpleName());
             setBookView();
-        } else if(BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())){
-            if(!TextUtils.isEmpty(messageEvent.getMessage())){
-                tv_todo_total.setVisibility(View.VISIBLE);
-                tv_todo_total.setText(messageEvent.getMessage());
-            } else {
-                tv_todo_total.setText("");
-                tv_todo_total.setVisibility(View.GONE);
-            }
+        } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
+            setNumber(messageEvent.getCount());
         }
     }
 
@@ -164,4 +168,29 @@ public class MessageFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void messageNumberSuccess(MessageNumberRsp model) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            setNumber(model.getData());
+        }
+    }
+
+    private void setNumber(int count) {
+        if (count > 0) {
+            tv_todo_total.setVisibility(View.VISIBLE);
+            if (count > 99) {
+                tv_todo_total.setText("99+");
+            } else {
+                tv_todo_total.setText(count + "");
+            }
+        } else {
+            tv_todo_total.setText("");
+            tv_todo_total.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void messageNumberFail(String msg) {
+        Log.d(TAG, msg);
+    }
 }

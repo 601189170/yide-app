@@ -37,9 +37,9 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.155:8888";
+    public static final String API_SERVER_URL_UAT = "http://192.168.3.155:8888";
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
+//    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
     public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
@@ -77,6 +77,7 @@ public class BaseConstant {
     public static final String TYPE_IM_LOGIN = "type_im_login";
     public static final String TYPE_UPDATE_HOME = "type_update_home";
     public static final String TYPE_MESSAGE_TODO_NUM = "type_message_todo_num";
+    public static final String TYPE_LEAVE = "type_leave";
     public static final String TYPE_UPDATE_IMG = "type_update_img";
     public static final String TYPE_PREPARES_SAVE = "type_prepares_save";
     public static final String TYPE_UPDATE_APP_MANAGER = "type_update_app_manager";

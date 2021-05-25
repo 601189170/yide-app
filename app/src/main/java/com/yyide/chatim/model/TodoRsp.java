@@ -178,10 +178,27 @@ public class TodoRsp{
             private String attributeType;//	消息属性 1 请假 2 调课
             private String isText;//是否纯文本 1 是 2不是
             private int messageType;//消息类型 1 通知公告 2 代办 3系统通知
+            private String isOperation;
             public static final String IS_TEXT_TYPE = "1";
             public static final int ITEM_TYPE_MESSAGE = 1;
             public static final int ITEM_TYPE_NOTICE = 2;
             public static final int ITEM_TYPE_TODO = 3;
+
+            public int getMessageType() {
+                return messageType;
+            }
+
+            public void setMessageType(int messageType) {
+                this.messageType = messageType;
+            }
+
+            public String getIsOperation() {
+                return isOperation;
+            }
+
+            public void setIsOperation(String isOperation) {
+                this.isOperation = isOperation;
+            }
 
             public String getFirstData() {
                 return firstData;

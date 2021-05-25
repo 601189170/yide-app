@@ -9,6 +9,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.utils.GlideUtil;
@@ -43,6 +44,7 @@ public class AppItemAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.icon_item, null, false);
+
         ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
         TextView name = VHUtil.ViewHolder.get(view, R.id.name);
         name.setText(getItem(position).getName());

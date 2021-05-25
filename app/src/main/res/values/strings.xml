@@ -75,7 +75,7 @@
     <string name="live_scenes_live_room">视频直播</string>
     <string name="live_scenes_voice_room">语音聊天室</string>
     <string name="live_voice_room_room_title" formatted="false">房间号: %d</string>
-    <string name="live_voice_room_numer_format" formatted="false" >%d人在看</string>
+    <string name="live_voice_room_numer_format" formatted="false">%d人在看</string>
     <string name="live_voice_room_agree">同意</string>
     <string name="live_voice_room_warning_not_empty">"输入不能为空!"</string>
     <string name="live_voice_room_send">发送</string>
@@ -143,5 +143,10 @@
     <string name="section_for_leave">请假节次</string>
     <string name="check_all">全选</string>
     <string name="choose_class">选择班级</string>
+
+    <!--考勤-->
+    <string name="attendance_title">考勤</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

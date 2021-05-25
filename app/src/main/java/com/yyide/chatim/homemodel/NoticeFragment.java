@@ -78,11 +78,11 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         mvpPresenter.getHomeNotice();
 
         ll_notice.setOnClickListener(v -> {
-            if (jump && data != null){
+            if (jump && data != null) {
                 Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
-                intent.putExtra("type",1);
-                intent.putExtra("id",data.getId());
-                intent.putExtra("status",data.getStatus());
+                intent.putExtra("type", 1);
+                intent.putExtra("id", data.getId());
+                intent.putExtra("status", data.getStatus());
                 startActivity(intent);
             }
         });
@@ -109,18 +109,18 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 
     @Override
     public void noticeHome(HomeNoticeRsp homeNoticeRsp) {
-        Log.e(TAG, "noticeHome: "+homeNoticeRsp );
+        Log.e(TAG, "noticeHome: " + homeNoticeRsp);
         if (homeNoticeRsp.getCode() == 200) {
             data = homeNoticeRsp.getData();
-            if (data != null){
+            if (data != null) {
                 jump = true;
                 notice_content.setText(data.getContent());
-                notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(),"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd"));
+                notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(), "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
                 if (!TextUtils.isEmpty(data.getTitle())) {
                     tv_title.setVisibility(View.VISIBLE);
-                    tv_title.setText("《"+data.getTitle()+"》");
+                    tv_title.setText("《" + data.getTitle() + "》");
                 }
-            }else {
+            } else {
                 jump = false;
                 notice_content.setText("暂无消息公告");
             }
@@ -129,6 +129,6 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 
     @Override
     public void noticeHomeFail(String msg) {
-        Log.e(TAG, "noticeHomeFail: "+msg );
+        Log.e(TAG, "noticeHomeFail: " + msg);
     }
 }

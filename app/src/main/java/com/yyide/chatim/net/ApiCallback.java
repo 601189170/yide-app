@@ -41,7 +41,7 @@ public abstract class ApiCallback<M> extends Subscriber<M> {
         } else {
             msg = e.getMessage();
         }
-        if (! BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
+        if (!BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
             msg = "请检查网络连接";
         }
         if (!TextUtils.isEmpty(msg)){

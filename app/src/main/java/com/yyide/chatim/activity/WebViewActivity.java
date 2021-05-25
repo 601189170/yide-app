@@ -9,14 +9,17 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
@@ -30,11 +33,15 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.KeyboardUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.WebModel;
+import com.yyide.chatim.utils.LogUtil;
 
 public class WebViewActivity extends BaseActivity {
 
@@ -50,6 +57,7 @@ public class WebViewActivity extends BaseActivity {
     private WebView mWebView;
     private String type;
     private ValueAnimator pbAnim;
+    private int softHeight;
 
     private ValueCallback<Uri> uploadMessage;
     private ValueCallback<Uri[]> uploadMessageAboveL;
@@ -82,6 +90,9 @@ public class WebViewActivity extends BaseActivity {
     }
 
     private void initWebView() {
+//        KeyboardUtils.registerSoftInputChangedListener(this, height -> {
+//            mWebView.loadUrl("javascript:sendH5Event('" + "softHeight" + "','" + height + "')");
+//        });
         mWebView = new WebView(Utils.getApp().getApplicationContext());
 
         mWebView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -186,6 +197,7 @@ public class WebViewActivity extends BaseActivity {
         });
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -258,6 +270,34 @@ public class WebViewActivity extends BaseActivity {
                 }
             }
         }
+    }
+
+    /**
+     * 获取软键盘的高度 * *
+     *
+     * @param rootView *
+     */
+    int heightDifference;
+
+    private int getSoftKeyboardHeight(View rootView) {
+        final ViewTreeObserver.OnGlobalLayoutListener layoutListener
+                = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect rect = new Rect();
+                rootView.getWindowVisibleDisplayFrame(rect);
+                int screenHeight = rootView.getRootView().getHeight();
+                heightDifference = screenHeight - rect.bottom;
+                //设置一个阀值来判断软键盘是否弹出
+                boolean visible = heightDifference > screenHeight / 3;
+                if (visible) {
+                    rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            }
+
+        };
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
+        return heightDifference;
     }
 
     @Override

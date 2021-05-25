@@ -262,7 +262,6 @@ public class ChatFragment extends BaseFragment {
         }
 
         return atInfoType;
-
     }
 
     @Override
@@ -286,9 +285,9 @@ public class ChatFragment extends BaseFragment {
         }
         initView();
 
-        // TODO 通过api设置ChatLayout各种属性的样例
-        ChatLayoutHelper helper = new ChatLayoutHelper(getActivity());
-        helper.customizeChatLayout(mChatLayout);
+        // TODO 通过api设置ChatLayout各种属性的样例 语音通话  视频通话
+//        ChatLayoutHelper helper = new ChatLayoutHelper(getActivity());
+//        helper.customizeChatLayout(mChatLayout);
     }
 
     @Override

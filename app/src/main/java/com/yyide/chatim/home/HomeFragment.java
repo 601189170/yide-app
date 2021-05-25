@@ -122,35 +122,37 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        initVerticalTextview();
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
+
     }
 
-    void initVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
+    void initVerticalTextview() {
+        spmsg.setVisibility(View.VISIBLE);
+        spmsg.setTextStillTime(3000);//设置停留时长间隔
+        spmsg.setAnimTime(300);//设置进入和退出的时间间隔
+        spmsg.setOnItemClickListener(i -> {
+            mListener.jumpFragment(1);
+        });
+    }
+
+    private void setVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
         if (noticeHomeRsps != null) {
             list.clear();
             for (NoticeHomeRsp.DataBean item : noticeHomeRsps) {
                 list.add(item.getTitle());
             }
         }
-        spmsg.setTextStillTime(3000);//设置停留时长间隔
-        spmsg.setAnimTime(300);//设置进入和退出的时间间隔
         if (spmsg != null) {
             if (null != list && list.size() > 0) {
-                spmsg.setVisibility(View.VISIBLE);
                 spmsg.setTextList(list);
                 spmsg.startAutoScroll();
                 if (list.size() < 2) {
                     spmsg.stopAutoScroll();
                 }
-            } else {
-                spmsg.setVisibility(View.GONE);
             }
         }
-
-        spmsg.setOnItemClickListener(i -> {
-            mListener.jumpFragment(1);
-        });
     }
 
     @Override
@@ -278,14 +280,14 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
             tv_todo.setVisibility(View.VISIBLE);
-            initVerticalTextview(rsp.getData());
+            setVerticalTextview(rsp.getData());
         } else {
             tv_todo.setVisibility(View.GONE);
             List<NoticeHomeRsp.DataBean> noticeHomeRsps = new ArrayList<>();
             NoticeHomeRsp.DataBean dataBean = new NoticeHomeRsp.DataBean();
-            dataBean.setContent("暂无代办消息通知");
+            dataBean.setTitle("暂无代办消息通知");
             noticeHomeRsps.add(dataBean);
-            initVerticalTextview(noticeHomeRsps);
+            setVerticalTextview(noticeHomeRsps);
         }
     }
 

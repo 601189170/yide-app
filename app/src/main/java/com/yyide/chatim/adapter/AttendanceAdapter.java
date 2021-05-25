@@ -2,6 +2,7 @@ package com.yyide.chatim.adapter;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.utils.InitPieChart;
 
 import java.util.ArrayList;
@@ -85,6 +87,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         PieData pieData = new PieData(dataSet);
         piechart.setData(pieData);
         piechart.invalidate();
+        view.setOnClickListener(v -> view.getContext().startActivity(new Intent(view.getContext(), AttendanceActivity.class)));
         return view;
     }
 

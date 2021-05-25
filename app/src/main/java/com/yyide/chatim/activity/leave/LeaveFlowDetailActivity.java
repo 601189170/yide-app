@@ -7,33 +7,25 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.LeaveFlowAdapter;
-import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.fragment.leave.AskForLeaveListFragment;
-import com.yyide.chatim.fragment.leave.RequestLeaveStaffFragment;
-import com.yyide.chatim.fragment.leave.RequestLeaveStudentFragment;
 import com.yyide.chatim.model.BaseRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveFlowBean;
 import com.yyide.chatim.presenter.leave.LeaveDetailPresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.leave.LeaveDetailView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -235,8 +227,9 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         Log.e(TAG, "processApproval: "+baseRsp.toString());
         if (baseRsp.getCode() == 200){
             ToastUtils.showShort("审批成功");
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
             finish();
-        }else {
+        } else {
             ToastUtils.showShort("审批失败");
             finish();
         }

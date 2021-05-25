@@ -63,7 +63,7 @@ public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
      */
     public void processExaminationApproval(long id,int type){
         mvpView.showLoading();
-        final HashMap<String, Object> map = new HashMap<>(1);
+        HashMap<String, Object> map = new HashMap<>(1);
         map.put("id",id);
         map.put("type",type);
         addSubscription(dingApiStores.processExaminationApproval(map), new ApiCallback<BaseRsp>() {

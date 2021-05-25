@@ -244,7 +244,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
                 break;
             case R.id.exit://退出登录
-                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);
+//                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);
                 SPUtils.getInstance().remove(BaseConstant.PASSWORD);
                 SPUtils.getInstance().remove(BaseConstant.JG_ALIAS_NAME);
                 SPUtils.getInstance().remove(SpData.LOGINDATA);

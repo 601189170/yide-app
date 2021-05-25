@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.google.android.material.tabs.TabLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.TeacherlistRsp;

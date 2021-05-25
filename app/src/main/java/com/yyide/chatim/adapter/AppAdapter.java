@@ -45,7 +45,13 @@ public class AppAdapter extends BaseQuickAdapter<AppItemBean.DataBean.RecordsBea
         AppItemAdapter adapter = new AppItemAdapter();
         grid.setAdapter(adapter);
         if (recordsBean.getList() != null) {
-            adapter.notifyData(recordsBean.getList());
+            List<AppItemBean.DataBean.RecordsBean.ListBean> listBeans = new ArrayList<>();
+            for (AppItemBean.DataBean.RecordsBean.ListBean item: recordsBean.getList()){
+                if (!"#".equals(item.getPath().trim())) {
+                    listBeans.add(item);
+                }
+            }
+            adapter.notifyData(listBeans);
         }
         grid.setOnItemClickListener((parent, view1, position1, id) -> {
             Intent intent;
