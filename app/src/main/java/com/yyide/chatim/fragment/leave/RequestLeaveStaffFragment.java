@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -230,24 +231,22 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         return new StaffAskLeavePresenter(this);
     }
 
-    private OnDateSetListener startTimeListener = (timePickerView, millseconds) -> {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-        Long time = Long.valueOf(millseconds);
-        String timingTime = simpleDateFormat.format(new Date(time));
+    private final OnDateSetListener startTimeListener = (timePickerView, millseconds) -> {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+        String timingTime = simpleDateFormat.format(new Date(millseconds));
         Log.d(TAG, "startTimeListener: " + timingTime);
         tvStartTime.setText(timingTime);
-        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        startTime = simpleDateFormat2.format(new Date(time));
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        startTime = simpleDateFormat2.format(new Date(millseconds));
     };
 
-    private OnDateSetListener endTimeListener = (timePickerView, millseconds) -> {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
-        Long time = Long.valueOf(millseconds);
-        String timingTime = simpleDateFormat.format(new Date(time));
+    private final OnDateSetListener endTimeListener = (timePickerView, millseconds) -> {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault());
+        String timingTime = simpleDateFormat.format(new Date(millseconds));
         Log.d(TAG, "endTimeListener: " + timingTime);
         tvEndTime.setText(timingTime);
-        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        endTime = simpleDateFormat2.format(new Date(time));
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        endTime = simpleDateFormat2.format(new Date(millseconds));
     };
 
     @Override
