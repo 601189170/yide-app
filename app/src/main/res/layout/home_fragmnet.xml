@@ -55,9 +55,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:orientation="horizontal"
-                    android:paddingLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:paddingTop="3dp"
-                    android:paddingRight="10dp">
+                    android:layout_marginEnd="10dp">
 
                     <FrameLayout
                         android:id="@+id/kq_content"

@@ -109,12 +109,10 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         });
         adapter.setOnItemClickListener((adapter, view, position) -> {
             TodoRsp.DataBean.RecordsBean item = (TodoRsp.DataBean.RecordsBean) adapter.getItem(position);
-            if("1".equals(item.getIsOperation())){
-                Intent intent = new Intent(getContext(), LeaveFlowDetailActivity.class);
-                intent.putExtra("type", 2);
-                intent.putExtra("id", item.getCallId());
-                startActivity(intent);
-            }
+            Intent intent = new Intent(getContext(), LeaveFlowDetailActivity.class);
+            intent.putExtra("type", 2);
+            intent.putExtra("id", item.getCallId());
+            startActivity(intent);
         });
         adapter.getLoadMoreModule().setAutoLoadMore(true);
         //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
@@ -218,7 +216,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageSuccess: " + noticeHomeRsp.toString());
         if (BaseConstant.REQUEST_SUCCES2 == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
-            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
+            //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
             List<TodoRsp.DataBean.RecordsBean> data = noticeHomeRsp.getData().getRecords();
             if (pageNum == 1) {
                 adapter.setList(data);

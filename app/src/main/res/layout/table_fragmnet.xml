@@ -8,6 +8,7 @@
         android:id="@+id/tablelayout"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:layout_weight="1"
         android:background="@drawable/home_table_bg">
 

@@ -88,12 +88,23 @@
             android:textColor="#1F2833"
             android:textSize="14sp" />
 
+        <com.yyide.chatim.view.VerticalTextView
+            android:id="@+id/verticalTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inAnimation="@anim/in_animation"
+            android:outAnimation="@anim/out_animation"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="45dp"
+            android:layout_gravity="center"/>
+
         <TextView
             android:id="@+id/tv_todo"
             android:layout_width="15dp"
-            android:layout_height="wrap_content"
+            android:layout_height="15dp"
             android:layout_gravity="center_vertical|right"
             android:layout_marginRight="14dp"
+            android:gravity="center"
             android:background="@drawable/bg_gradite2"
             android:textColor="@color/white"
             android:textSize="9sp"

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.attendance.StatisticsActivity">
+
     <include
         android:id="@+id/top"
         layout="@layout/title_layout2"
@@ -12,20 +13,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tablayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/top"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/colorPrimaryDark"
-        app:tabIndicatorFullWidth="false"
-        app:tabIndicatorHeight="3dp"
-        app:tabMaxWidth="0dp"
-        app:tabMode="scrollable"
-        app:tabSelectedTextColor="#303133"
-        app:tabTextColor="#909399" />
+        app:layout_constraintTop_toBottomOf="@+id/top">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorPrimaryDark"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="3dp"
+            app:tabMaxWidth="0dp"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="#303133"
+            app:tabTextColor="#909399" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
@@ -33,5 +43,5 @@
         android:layout_height="0dp"
         android:background="#F5F8FC"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tablayout" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

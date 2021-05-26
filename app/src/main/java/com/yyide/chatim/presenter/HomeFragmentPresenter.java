@@ -19,6 +19,7 @@ import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.getUserSigRsp;
@@ -69,9 +70,13 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
 
     public void getHomeNotice() {
 //        mvpView.showLoading();
-        addSubscription(dingApiStores.getIndexMyNotice(), new ApiCallback<NoticeHomeRsp>() {
+        HashMap<String, Object> map = new HashMap();
+        map.put("current", 1);
+        map.put("size", 5);
+        map.put("isOperation", 0);
+        addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
             @Override
-            public void onSuccess(NoticeHomeRsp model) {
+            public void onSuccess(TodoRsp model) {
                 mvpView.getIndexMyNotice(model);
             }
 

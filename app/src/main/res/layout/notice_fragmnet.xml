@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-
     <LinearLayout
         android:id="@+id/ll_notice"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:layout_weight="1"
         android:background="@drawable/bg_white"
         android:orientation="vertical">

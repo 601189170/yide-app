@@ -57,10 +57,6 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @BindView(R.id.tv_title)
     TextView tv_title;
 
-    OkHttpClient mOkHttpClient = new OkHttpClient();
-
-    NoiceAnnounAdapter adapter;
-
     private boolean jump = false;
     private HomeNoticeRsp.DataBean data;
 

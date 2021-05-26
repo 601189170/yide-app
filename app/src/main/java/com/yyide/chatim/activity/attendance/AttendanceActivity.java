@@ -21,6 +21,7 @@ public class AttendanceActivity extends BaseActivity implements View.OnClickList
 
     private ActivityAttendanceBinding mViewBinding;
     private BaseQuickAdapter<String, BaseViewHolder> baseQuickAdapter;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_attendance;
@@ -32,6 +33,9 @@ public class AttendanceActivity extends BaseActivity implements View.OnClickList
         mViewBinding = ActivityAttendanceBinding.inflate(getLayoutInflater());
         setContentView(mViewBinding.getRoot());
         mViewBinding.top.title.setText(R.string.attendance_title);
+        mViewBinding.top.tvRight.setVisibility(View.VISIBLE);
+        mViewBinding.top.tvRight.setText(R.string.statistics_title);
+        mViewBinding.top.tvRight.setTextColor(getResources().getColor(R.color.colorPrimary));
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         baseQuickAdapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_attendance) {
             @Override
@@ -39,9 +43,11 @@ public class AttendanceActivity extends BaseActivity implements View.OnClickList
                 holder.setText(R.id.tv_item, s);
             }
         };
+        mViewBinding.top.tvRight.setOnClickListener(v -> jupm(AttendanceActivity.this, StatisticsActivity.class));
+
         mViewBinding.recyclerview.setAdapter(baseQuickAdapter);
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             list.add("item" + i);
         }
         baseQuickAdapter.setList(list);
@@ -71,7 +77,7 @@ public class AttendanceActivity extends BaseActivity implements View.OnClickList
         mViewBinding.tvLeave.setChecked(false);
         mViewBinding.tvLate.setChecked(false);
         mViewBinding.tvNormal.setChecked(false);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_all:
                 mViewBinding.tvAll.setChecked(true);
                 break;

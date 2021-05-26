@@ -34,6 +34,7 @@ public class StatisticsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mViewBinding = ActivityStatisticsBinding.inflate(getLayoutInflater());
         setContentView(mViewBinding.getRoot());
+        mViewBinding.top.title.setText(R.string.attendance_title);
         initViewPager();
     }
 

@@ -157,8 +157,6 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             setBookView();
-        } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
-            setNumber(messageEvent.getCount());
         }
     }
 

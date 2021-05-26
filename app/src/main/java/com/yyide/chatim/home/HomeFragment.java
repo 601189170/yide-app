@@ -2,10 +2,7 @@ package com.yyide.chatim.home;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,20 +14,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
-import com.paradoxie.autoscrolltextview.VerticalTextview;
 import com.yyide.chatim.BuildConfig;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
-import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
@@ -43,16 +36,15 @@ import com.yyide.chatim.homemodel.TableFragment;
 import com.yyide.chatim.homemodel.WorkFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.NoticeHomeRsp;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
-import com.yyide.chatim.utils.StringUtils;
 import com.yyide.chatim.view.HomeFragmentView;
+import com.yyide.chatim.view.VerticalTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.raphets.roundimageview.RoundImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,12 +81,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     TextView schoolName;
     @BindView(R.id.tv_todo)
     TextView tv_todo;
-    @BindView(R.id.spmsg)
-    VerticalTextview spmsg;
+    @BindView(R.id.verticalTextView)
+    VerticalTextView mVerticalTextView;
     @BindView(R.id.layout_message)
     FrameLayout layoutMessage;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
     private View mBaseView;
     public FragmentListener mListener;
     private ArrayList<String> list = new ArrayList<>();
@@ -122,37 +115,23 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        initVerticalTextview();
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
 
     }
 
-    void initVerticalTextview() {
-        spmsg.setVisibility(View.VISIBLE);
-        spmsg.setTextStillTime(3000);//设置停留时长间隔
-        spmsg.setAnimTime(300);//设置进入和退出的时间间隔
-        spmsg.setOnItemClickListener(i -> {
-            mListener.jumpFragment(1);
-        });
-    }
-
-    private void setVerticalTextview(List<NoticeHomeRsp.DataBean> noticeHomeRsps) {
+    void initVerticalTextview(List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps) {
         if (noticeHomeRsps != null) {
             list.clear();
-            for (NoticeHomeRsp.DataBean item : noticeHomeRsps) {
-                list.add(item.getTitle());
+            for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
+                list.add(item.getFirstData());
             }
         }
-        if (spmsg != null) {
-            if (null != list && list.size() > 0) {
-                spmsg.setTextList(list);
-                spmsg.startAutoScroll();
-                if (list.size() < 2) {
-                    spmsg.stopAutoScroll();
-                }
-            }
-        }
+        mVerticalTextView.setResources(list);
+        mVerticalTextView.setTextStillTime(3000);
+        mVerticalTextView.setOnItemClickListener(i -> {
+            mListener.jumpFragment(1);
+        });
     }
 
     @Override
@@ -197,17 +176,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
-        if (spmsg != null && list.size() > 1) {
-            spmsg.startAutoScroll();
-        }
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (spmsg != null && list.size() > 1) {
-            spmsg.stopAutoScroll();
-        }
+
     }
 
     void setFragment() {
@@ -276,18 +251,19 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     @Override
-    public void getIndexMyNotice(NoticeHomeRsp rsp) {
+    public void getIndexMyNotice(TodoRsp rsp) {
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
-        if (rsp != null && rsp.getData() != null && rsp.getData().size() > 0) {
+        if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
             tv_todo.setVisibility(View.VISIBLE);
-            setVerticalTextview(rsp.getData());
+            tv_todo.setText(rsp.getData().getRecords().size() + "");
+            initVerticalTextview(rsp.getData().getRecords());
         } else {
             tv_todo.setVisibility(View.GONE);
-            List<NoticeHomeRsp.DataBean> noticeHomeRsps = new ArrayList<>();
-            NoticeHomeRsp.DataBean dataBean = new NoticeHomeRsp.DataBean();
-            dataBean.setTitle("暂无代办消息通知");
+            List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps = new ArrayList<>();
+            TodoRsp.DataBean.RecordsBean dataBean = new TodoRsp.DataBean.RecordsBean();
+            dataBean.setFirstData("暂无代办消息通知");
             noticeHomeRsps.add(dataBean);
-            setVerticalTextview(noticeHomeRsps);
+            initVerticalTextview(noticeHomeRsps);
         }
     }
 

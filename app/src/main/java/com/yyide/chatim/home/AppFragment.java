@@ -58,8 +58,6 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     LinearLayout ll_my_app;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-//    @BindView(R.id.nestedScrollView)
-//    YDNestedScrollView nestedScrollView;
     @BindView(R.id.recy2)
     RecyclerView mStickView;
     private View mBaseView;
@@ -85,28 +83,10 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         //我的应用
         mygrid.setAdapter(adapter);
         mygrid.setOnItemClickListener((parent, view1, position, id) -> {
-//            if ("editor".equals(adapter.getItem(position).getAppType())) {
-//                Intent intent = new Intent(mActivity, AppManagerActivity.class);
-//                startActivity(intent);
-//            } else {
-//                if ("通知公告".equals(adapter.getItem(position).getName())) {
-//                    Intent intent = new Intent(getContext(), NoticeAnnouncementActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    if ("#".equals(adapter.getItem(position).getPath().trim())) {
-//                        ToastUtils.showShort("暂无权限");
-//                    } else {
-//                        Intent intent = new Intent(getContext(), WebViewActivity.class);
-//                        intent.putExtra("url", adapter.getItem(position).getPath());
-//                        startActivity(intent);
-//                    }
-//                }
-//            }
-
             Intent intent;
-            final MyAppListRsp.DataBean item = adapter.getItem(position);
+            final MyAppListRsp.DataBean item = (MyAppListRsp.DataBean) parent.getItemAtPosition(position);
             switch (item.getName()) {
-                case "editor":
+                case "编辑":
                     intent = new Intent(mActivity, AppManagerActivity.class);
                     startActivity(intent);
                     break;
@@ -123,7 +103,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                     ToastUtils.showShort("调课");
                     break;
                 default:
-                    if ("#".equals(item.getPath().trim())) {
+                    if ("#".equals(item.getPath())) {
                         ToastUtils.showShort("暂无权限");
                     } else {
                         intent = new Intent(getActivity(), WebViewActivity.class);
@@ -133,15 +113,6 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                     break;
             }
         });
-//        处理吸顶菜单是否显示
-//        nestedScrollView.setNeedScroll(false);
-//        nestedScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-//            if (scrollY > (ll_my_app.getHeight() + SizeUtils.dp2px(20))) {
-//                mStickView.setVisibility(View.VISIBLE);
-//            } else {
-//                mStickView.setVisibility(View.GONE);
-//            }
-//        });
 
         //菜单列表
         recylAppAdapter = new RecylAppAdapter();

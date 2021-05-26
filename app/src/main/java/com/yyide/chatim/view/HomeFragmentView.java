@@ -7,6 +7,7 @@ import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 
 /**
@@ -20,5 +21,5 @@ public interface HomeFragmentView extends BaseView {
 
     void getUserSchoolDataFail(String rsp);
 
-    void getIndexMyNotice(NoticeHomeRsp rsp);
+    void getIndexMyNotice(TodoRsp rsp);
 }
