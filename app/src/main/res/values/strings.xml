@@ -143,6 +143,8 @@
     <string name="section_for_leave">请假节次</string>
     <string name="check_all">全选</string>
     <string name="choose_class">选择班级</string>
+    <string name="carbon_copy_people">抄送人</string>
+    <string name="carbon_copy_people_text">抄送%s人</string>
 
     <!--考勤-->
     <string name="attendance_title">考勤</string>
