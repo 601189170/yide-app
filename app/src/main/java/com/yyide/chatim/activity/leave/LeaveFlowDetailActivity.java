@@ -128,10 +128,10 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     public void click(View view) {
         switch (view.getId()){
             case R.id.btn_refuse:
-                mvpPresenter.processExaminationApproval(id,0);
+                mvpPresenter.processExaminationApproval(id,1);
                 break;
             case R.id.btn_pass:
-                mvpPresenter.processExaminationApproval(id,1);
+                mvpPresenter.processExaminationApproval(id,0);
                 break;
             default:
                 break;
@@ -162,29 +162,35 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @Override
     public void leaveDetail(LeaveDetailRsp leaveDetailRsp) {
         Log.e(TAG, "leaveDetail: " + leaveDetailRsp.toString());
-        showBlankPage(leaveDetailRsp == null);
+        showBlankPage(leaveDetailRsp.getData() == null);
+        if (leaveDetailRsp.getCode() !=200){
+            ToastUtils.showShort(leaveDetailRsp.getMsg());
+            return;
+        }
         final LeaveDetailRsp.DataBean data = leaveDetailRsp.getData();
         leaveFlowBeanList.clear();
 
         tv_leave_title.setText(data.getName());
         String initiateTime = data.getInitiateTime();
-        tv_leave_time.setText(initiateTime);
+        tv_leave_time.setText(DateUtils.formatTime(initiateTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd"));
         tv_department_name.setText(data.getDeptOrClassName());
-        tv_start_time.setText(data.getStartTime());
-        tv_end_time.setText(data.getEndTime());
+        final String starttime = DateUtils.formatTime(data.getStartTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
+        tv_start_time.setText(starttime);
+        final String endtime = DateUtils.formatTime(data.getEndTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
+        tv_end_time.setText(endtime);
         tv_reason_for_leave_content.setText(data.getReason());
         //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
         final String approvalResult = data.getApprovalResult();
         leaveStatus(approvalResult, tv_leave_flow_status);
         final String approverName = data.getApproverName();
         String approvalTime = data.getApprovalTime();
-        initiateTime = DateUtils.formatTime(initiateTime, "yyyy.MM.dd HH:mm", "yyyy.MM.dd HH:mm");
+        initiateTime = DateUtils.formatTime(initiateTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
         final String[] initiateTimes = initiateTime.split(" ");
         //"2021.05.19 13:54" to "05.19 13:54"
         String[] approvalTimes = {"", ""};
         if (approvalTime != null) {
             //"2021-05-19 14:17:36" to "05.19 13:54"
-            approvalTime = DateUtils.formatTime(approvalTime, "yyyy-MM-dd HH:mm", "yyyy.MM.dd HH:mm");
+            approvalTime = DateUtils.formatTime(approvalTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
             approvalTimes = approvalTime.split(" ");
         }
 

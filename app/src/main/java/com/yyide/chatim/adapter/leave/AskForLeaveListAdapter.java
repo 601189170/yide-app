@@ -15,6 +15,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.model.AskForLeaveRecordRsp;
 import com.yyide.chatim.model.LeaveListRsp;
 import com.yyide.chatim.model.NoticeAnnouncementModel;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.FootView;
 
 import java.util.List;
@@ -82,7 +83,8 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
             ViewHolder  holder1= (ViewHolder)holder;
             LeaveListRsp.DataBean.RecordsBean askForLeaveRecordRsp = data.get(position);
             holder1.tv_title.setText(askForLeaveRecordRsp.getName());
-            holder1.tv_time.setText(askForLeaveRecordRsp.getInitiateTime());
+            final String formatTime = DateUtils.formatTime(askForLeaveRecordRsp.getInitiateTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd");
+            holder1.tv_time.setText(formatTime);
             leaveStatus(askForLeaveRecordRsp.getApprovalResult(),holder1.tv_status);
             holder1.itemView.setOnClickListener(v -> {
                 onItemOnClickListener.onClicked(position);

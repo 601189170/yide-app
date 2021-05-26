@@ -271,6 +271,10 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     @Override
     public void approver(ApproverRsp approverRsp) {
         final ApproverRsp.DataBean data = approverRsp.getData();
+        if (approverRsp.getCode() != 200){
+            ToastUtils.showShort(approverRsp.getMsg());
+            return;
+        }
         if (data != null){
             //审批人
             btn_commit.setAlpha(1f);

@@ -109,6 +109,9 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
 
     public RequestLeaveStudentFragment() {
         // Required empty public constructor
+        // 327562857224863744
+        //{"reason":"快快快好起来","classId":2463,"carbonCopyPeopleId":[2006,3886,3887,3912,3913],"leaveReason":"2","startTime":"2021-05-26 13:42:00","className":"高二2班","endTime":"2021-05-27 13:42:00"}
+
     }
 
     public static RequestLeaveStudentFragment newInstance(String param1) {
@@ -367,6 +370,10 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     public void approver(ApproverRsp approverRsp) {
         Log.e(TAG, "approver: " + approverRsp.toString());
         final ApproverRsp.DataBean data = approverRsp.getData();
+        if (approverRsp.getCode() != 200){
+            ToastUtils.showShort(approverRsp.getMsg());
+            return;
+        }
         if (data != null){
             btn_commit.setAlpha(1f);
             btn_commit.setClickable(true);
