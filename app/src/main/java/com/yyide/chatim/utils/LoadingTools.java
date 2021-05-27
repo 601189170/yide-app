@@ -54,7 +54,7 @@ public class LoadingTools {
 
     public void closeLoading() {
         if (mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
+//            mLoadingDialog.dismiss();
             mLoadingDialog.cancel();
         }
     }

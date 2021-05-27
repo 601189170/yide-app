@@ -27,13 +27,13 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
-import com.yyide.chatim.homemodel.AttendanceFragment;
-import com.yyide.chatim.homemodel.BannerFragment;
-import com.yyide.chatim.homemodel.ClassHonorFragment;
-import com.yyide.chatim.homemodel.NoticeFragment;
-import com.yyide.chatim.homemodel.StudentHonorFragment;
-import com.yyide.chatim.homemodel.TableFragment;
-import com.yyide.chatim.homemodel.WorkFragment;
+import com.yyide.chatim.fragment.AttendanceFragment;
+import com.yyide.chatim.fragment.BannerFragment;
+import com.yyide.chatim.fragment.ClassHonorFragment;
+import com.yyide.chatim.fragment.NoticeFragment;
+import com.yyide.chatim.fragment.StudentHonorFragment;
+import com.yyide.chatim.fragment.TableFragment;
+import com.yyide.chatim.fragment.WorkFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.TodoRsp;
@@ -117,7 +117,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
-
     }
 
     void initVerticalTextview(List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps) {
@@ -128,7 +127,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             }
         }
         mVerticalTextView.setResources(list);
-        mVerticalTextView.setTextStillTime(3000);
+        mVerticalTextView.setTextStillTime(4000);
         mVerticalTextView.setOnItemClickListener(i -> {
             mListener.jumpFragment(1);
         });
@@ -160,7 +159,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             case R.id.layout_message:
 //                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 break;
             case R.id.notice_content:
                 //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
@@ -176,7 +175,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -235,6 +233,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             if (!TextUtils.isEmpty(messageEvent.getMessage())) {
                 GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
             }
+        }else if(BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())){
+            mvpPresenter.getHomeNotice();
         }
     }
 
@@ -255,13 +255,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
             tv_todo.setVisibility(View.VISIBLE);
-            tv_todo.setText(rsp.getData().getRecords().size() + "");
+            tv_todo.setText(rsp.getData().getTotal() + "");
             initVerticalTextview(rsp.getData().getRecords());
         } else {
             tv_todo.setVisibility(View.GONE);
             List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps = new ArrayList<>();
             TodoRsp.DataBean.RecordsBean dataBean = new TodoRsp.DataBean.RecordsBean();
-            dataBean.setFirstData("暂无代办消息通知");
+            dataBean.setFirstData("暂无待办数据");
             noticeHomeRsps.add(dataBean);
             initVerticalTextview(noticeHomeRsps);
         }

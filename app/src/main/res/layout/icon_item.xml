@@ -13,6 +13,7 @@
             android:id="@+id/item"
             android:layout_width="32dp"
             android:layout_height="34dp"
+            android:scaleType="fitXY"
             android:layout_gravity="center_horizontal" />
 
         <TextView

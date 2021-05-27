@@ -197,7 +197,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         if (BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())) {
             setTab(3, 0);
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
-            setTab(1, 0);
+            setTab(1, 1);
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             registerAlias();
             ConversationManagerKit.getInstance().addUnreadWatcher(this);

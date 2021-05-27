@@ -1,6 +1,7 @@
 package com.yyide.chatim.utils;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -41,6 +42,13 @@ public class GlideUtil {
         RequestOptions myOptions = new RequestOptions()
                 .circleCrop().placeholder(R.mipmap.de1).error(R.mipmap.de1);
         Glide.with(context).load(GlideUtil.DataUrl(url)).apply(myOptions).into(imageView);
+    }
+
+    //圆图
+    public static void loadCircleImage(Context context, Drawable drawable, ImageView imageView) {
+        RequestOptions myOptions = new RequestOptions()
+                .circleCrop().placeholder(R.mipmap.de1).error(R.mipmap.de1);
+        Glide.with(context).load(drawable).apply(myOptions).into(imageView);
     }
 
     public static void loadImageRadius(Context context, String path, ImageView img, int radius) {

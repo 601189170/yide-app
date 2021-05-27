@@ -51,7 +51,7 @@ public class UserMsgNoticeRsp {
             private long callId;
             private String attributeType;
             private String isText;
-            private String status;
+            private String status;//读取状态 1 已读/同意 0未读 2拒绝 3 撤消
             private String sendTime;
         }
     }

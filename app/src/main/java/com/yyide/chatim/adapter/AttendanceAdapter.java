@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
+import com.yyide.chatim.model.HomeAttendanceRsp;
 import com.yyide.chatim.utils.InitPieChart;
 
 import java.util.ArrayList;
@@ -29,28 +31,32 @@ import java.util.List;
 public class AttendanceAdapter extends LoopPagerAdapter {
     //    -->设置各区块的颜色
     public static final int[] PIE_COLORS2 = {
-            Color.rgb(55, 130, 255), Color.rgb(224, 235, 255)
-            , Color.rgb(115, 127, 255), Color.rgb(255, 106, 110)
+            Color.rgb(55, 130, 255), Color.rgb(145, 147, 153)
+            , Color.rgb(246, 189, 22), Color.rgb(246, 108, 108)
     };
-    public List<String> list = new ArrayList<>();
+    public List<HomeAttendanceRsp.DataBean> list = new ArrayList<>();
 
     public AttendanceAdapter(RollPagerView viewPager) {
         super(viewPager);
     }
 
-    private String getItem(int position) {
+    private HomeAttendanceRsp.DataBean getItem(int position) {
         return list.get(position);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(ViewGroup container, final int position) {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.attce_item, null);
         TextView cd = view.findViewById(R.id.cd);
         TextView qq = view.findViewById(R.id.qq);
         TextView qj = view.findViewById(R.id.qj);
+        TextView attendanceName = view.findViewById(R.id.tv_attendance_type);
+        TextView number = view.findViewById(R.id.tv_attendance_number);
         TextView tv_desc = view.findViewById(R.id.tv_desc);
 
-
+        HomeAttendanceRsp.DataBean item = list.get(position);
+        attendanceName.setText(item.getName());
         PieChart piechart = view.findViewById(R.id.piechart);
         InitPieChart.InitPieChart(((Activity) container.getContext()), piechart);
         //        总人数：50
@@ -58,27 +64,15 @@ public class AttendanceAdapter extends LoopPagerAdapter {
 //        考勤2：课堂考勤-第1节语文，出勤率94%，迟到1人，缺勤1人，请假2人
 //        int amOrPm = new GregorianCalendar().get(GregorianCalendar.AM_PM);
         List<PieEntry> entries = new ArrayList<>();
-        if (position == 0) {
-            cd.setText("迟到(2人)");
-            qq.setText("缺勤(2人)");
-            qj.setText("请假(2人)");
-            entries.add(new PieEntry(44, "实到"));
-            entries.add(new PieEntry(2, "请假"));
-            entries.add(new PieEntry(2, "迟到"));
-            entries.add(new PieEntry(2, "缺勤"));
-            tv_desc.setText("出入校考勤-入校");
-            piechart.setCenterText(92 + "%\n" + "考勤率");
-        } else {
-            cd.setText("迟到(1人)");
-            qq.setText("缺勤(2人)");
-            qj.setText("请假(1人)");
-            entries.add(new PieEntry(46, "实到"));
-            entries.add(new PieEntry(1, "请假"));
-            entries.add(new PieEntry(1, "迟到"));
-            entries.add(new PieEntry(2, "缺勤"));
-            tv_desc.setText("课堂考勤-第1节语文");
-            piechart.setCenterText(94 + "%\n" + "考勤率");
-        }
+        cd.setText(item.getLate() + " 人");
+        qq.setText(item.getAbsence() + " 人");
+        qj.setText(item.getLeave() + " 人");
+        number.setText(item.getNumber() + " 人");
+        entries.add(new PieEntry(item.getApplyNum(), "实到"));
+        entries.add(new PieEntry(item.getLeave(), "请假"));
+        entries.add(new PieEntry(item.getLate(), "迟到"));
+        entries.add(new PieEntry(item.getAbsence(), "缺勤"));
+        piechart.setCenterText(item.getRate() + "%\n" + "考勤率");
 
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(0);//设置饼块之间的间隔
@@ -96,7 +90,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         return list.size();
     }
 
-    public void notifyData(List<String> list) {
+    public void notifyData(List<HomeAttendanceRsp.DataBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

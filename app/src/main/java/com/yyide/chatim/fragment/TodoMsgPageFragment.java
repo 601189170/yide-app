@@ -33,6 +33,7 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.TodoFragmentPresenter;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.TodoFragmentView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -152,6 +153,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         private void setTodoItem(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
             holder.setText(R.id.tv_leave, o.getFirstData())
                     .setText(R.id.tv_title, o.getTitle());
+            GlideUtil.loadCircleImage(getContext(), getContext().getResources().getDrawable(R.mipmap.ic_launcher_logo), holder.getView(R.id.img));
             //处理内容解析
             try {
                 if (TodoRsp.DataBean.RecordsBean.IS_TEXT_TYPE.equals(o.getIsText())) {
@@ -205,7 +207,6 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         }
     }
 
-
     @Override
     protected TodoFragmentPresenter createPresenter() {
         return new TodoFragmentPresenter(this);
@@ -216,7 +217,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageSuccess: " + noticeHomeRsp.toString());
         if (BaseConstant.REQUEST_SUCCES2 == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
-            //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
+//            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
             List<TodoRsp.DataBean.RecordsBean> data = noticeHomeRsp.getData().getRecords();
             if (pageNum == 1) {
                 adapter.setList(data);

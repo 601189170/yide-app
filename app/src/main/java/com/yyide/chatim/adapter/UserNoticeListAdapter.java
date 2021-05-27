@@ -59,6 +59,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
     public void setOnItemOnClickListener(OnItemOnClickListener onItemOnClickListener) {
         this.onItemOnClickListener = onItemOnClickListener;
     }
+
     public UserNoticeListAdapter(Context context, List<UserMsgNoticeRsp.DataBean.RecordsBean> data) {
         this.context = context;
         this.data = data;
@@ -67,10 +68,10 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == view_Normal){
+        if (viewType == view_Normal) {
             view = LayoutInflater.from(context).inflate(R.layout.item_message_notice, parent, false);
             return new ViewHolder(view);
-        }else {
+        } else {
             FootView view = new FootView(context);
             FootViewHolder footViewHolder = new FootViewHolder(view);
             return footViewHolder;
@@ -78,33 +79,33 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull  RecyclerView.ViewHolder holder, int position) {
-        if (position == getItemCount()-1){
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (position == getItemCount() - 1) {
             FootView itemView = (FootView) holder.itemView;
-            if (isLoadMore){
+            if (isLoadMore) {
                 itemView.setVisibility(View.VISIBLE);
                 itemView.setLoading(!isLastPage);
-            }else {
+            } else {
                 itemView.setVisibility(View.GONE);
             }
-        }else {
-            ViewHolder  holder1= (ViewHolder)holder;
+        } else {
+            ViewHolder holder1 = (ViewHolder) holder;
             UserMsgNoticeRsp.DataBean.RecordsBean recordsBean = data.get(position);
             String createdDateTime = recordsBean.getSendTime();
-            holder1.tv_date.setText(DateUtils.formatTime(createdDateTime,"","yyyy-MM-dd"));
+            holder1.tv_date.setText(DateUtils.formatTime(createdDateTime, "", "yyyy-MM-dd"));
             holder1.tv_title.setText(recordsBean.getTitle());
             final String content = recordsBean.getContent();
             final String templateContent = parseTemplateContent(content);
-            Log.e("TAG", "onBindViewHolder: "+content );
-            if (TextUtils.isEmpty(templateContent)){
+            Log.e("TAG", "onBindViewHolder: " + content);
+            if (TextUtils.isEmpty(templateContent)) {
                 holder1.tv_leave.setText(content);
-            }else {
+            } else {
                 holder1.tv_leave.setText(templateContent);
             }
             //不是纯文本则可以跳转详情
             if ("2".equals(recordsBean.getIsText())) {
                 holder1.rl_detail.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 holder1.rl_detail.setVisibility(View.GONE);
             }
             //消息类型
@@ -115,13 +116,13 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private String parseTemplateContent(String content){
+    private String parseTemplateContent(String content) {
         final StringBuffer buffer = new StringBuffer();
         try {
             final JSONArray jsonArray = new JSONArray(content);
             for (int i = 0; i < jsonArray.length(); i++) {
                 final String jsonObject = jsonArray.getString(i);
-                buffer.append(jsonObject+"\n"+"\n");
+                buffer.append(jsonObject + "\n" + "\n");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -130,8 +131,11 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
     }
 
 
-    private String switchAttributeType(String attributeType){
-        switch (attributeType){
+    private String switchAttributeType(String attributeType) {
+        if (TextUtils.isEmpty(attributeType)) {
+            return "";
+        }
+        switch (attributeType) {
             case "1":
                 attributeType = "请假";
                 break;
@@ -147,21 +151,23 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return data.size()+1;
+        return data.size() + 1;
     }
+
     public void setIsLoadMore(boolean loadMore) {
         this.isLoadMore = loadMore;
     }
 
     //设置是最后一页
-    public void setIsLastPage(boolean lastPage){
+    public void setIsLastPage(boolean lastPage) {
         this.isLastPage = lastPage;
     }
+
     @Override
     public int getItemViewType(int position) {
-        if (position == getItemCount()-1){
+        if (position == getItemCount() - 1) {
             return view_Foot;
-        }else {
+        } else {
             return view_Normal;
         }
     }
@@ -195,7 +201,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public interface OnItemOnClickListener{
+    public interface OnItemOnClickListener {
         void onClicked(int position);
     }
 }

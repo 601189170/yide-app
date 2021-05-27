@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.google.android.material.appbar.AppBarLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -28,11 +28,10 @@ import com.yyide.chatim.adapter.RecylAppAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.presenter.AppPresenter;
 import com.yyide.chatim.view.AppView;
-import com.yyide.chatim.view.YDNestedScrollView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,8 +57,8 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     LinearLayout ll_my_app;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recy2)
-    RecyclerView mStickView;
+    @BindView(R.id.appBarLayout)
+    AppBarLayout appBarLayout;
     private View mBaseView;
     RecylAppAdapter recylAppAdapter;
     AppAdapter appAdapter;
@@ -70,7 +69,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mBaseView = inflater.inflate(R.layout.app_layout, container, false);
+        mBaseView = inflater.inflate(R.layout.app_fragment_new, container, false);
         return mBaseView;
     }
 
@@ -79,6 +78,13 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
+        appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (verticalOffset >= 0) {
+                mSwipeRefreshLayout.setEnabled(true);
+            } else {
+                mSwipeRefreshLayout.setEnabled(false);
+            }
+        });
         adapter = new MyAppItemAdapter();
         //我的应用
         mygrid.setAdapter(adapter);
@@ -121,19 +127,18 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recy.setLayoutManager(linearLayoutManager);
         recylAppAdapter.setOnItemClickListener((view12, position) -> {
+            appBarLayout.setExpanded(false);
             sc = false;
             recylAppAdapter.setPosition(position);
 //            recyclerViewApp.smoothScrollToPosition(position);
             recy.smoothScrollToPosition(position);
-            mStickView.smoothScrollToPosition(position);
             ((LinearLayoutManager)recyclerViewApp.getLayoutManager()).scrollToPositionWithOffset(position,0);
         });
+
 //        recy.setNestedScrollingEnabled(false);
-//        listview.setNestedScrollingEnabled(false);
-        mStickView.setAdapter(recylAppAdapter);
+//        recyclerViewApp.setNestedScrollingEnabled(false);
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(mActivity);
         linearLayoutManager2.setOrientation(linearLayoutManager2.HORIZONTAL);
-        mStickView.setLayoutManager(linearLayoutManager2);
 
         //其他应用列表
         appAdapter = new AppAdapter(R.layout.app_item);
@@ -150,13 +155,13 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         recyclerViewApp.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {//停止滑动
-                    if (recyclerView.canScrollVertically(1)) {
-                        mSwipeRefreshLayout.setEnabled(true);
-                    } else {
-                        mSwipeRefreshLayout.setEnabled(false);
-                    }
-                }
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {//停止滑动
+//                    if (recyclerView.canScrollVertically(1)) {
+//                        mSwipeRefreshLayout.setEnabled(true);
+//                    } else {
+//                        mSwipeRefreshLayout.setEnabled(false);
+//                    }
+//                }
             }
 
             @Override
@@ -166,7 +171,6 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 if (sc) {
                     recylAppAdapter.setPosition(firstVisiblePosition);
                     recy.smoothScrollToPosition(firstVisiblePosition);
-                    mStickView.smoothScrollToPosition(firstVisiblePosition);
                 }
             }
         });

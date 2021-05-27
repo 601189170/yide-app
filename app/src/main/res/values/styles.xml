@@ -125,4 +125,5 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textColor">#1E232A</item>
     </style>
+
 </resources>

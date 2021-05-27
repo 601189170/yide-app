@@ -1,7 +1,6 @@
-package com.yyide.chatim.homemodel;
+package com.yyide.chatim.fragment;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,23 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.jude.rollviewpager.RollPagerView;
-import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.WebViewActivity;
-import com.yyide.chatim.adapter.IndexAdapter;
-import com.yyide.chatim.adapter.StudentHonorAdapter;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.StudentHonorRsp;
-import com.yyide.chatim.presenter.StudentHonorPresenter;
-import com.yyide.chatim.view.StudentHonorView;
-
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
+import com.jude.rollviewpager.RollPagerView;
+import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.adapter.ClassPhotoAdapter;
+import com.yyide.chatim.adapter.IndexAdapter;
+import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.ClassesPhotoRsp;
+import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.presenter.ClassPhotoPresenter;
+import com.yyide.chatim.view.ClassPhotoView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,8 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-
-public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter> implements StudentHonorView {
+public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> implements ClassPhotoView {
 
     private View mBaseView;
     @BindView(R.id.announRoll)
@@ -46,13 +44,13 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
     ImageView iv_bg;
     @BindView(R.id.grid)
     RecyclerView mHot;
-    StudentHonorAdapter announAdapter;
+    ClassPhotoAdapter announAdapter;
     IndexAdapter indexAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mBaseView = inflater.inflate(R.layout.home_student_honor_fragmnet, container, false);
+        mBaseView = inflater.inflate(R.layout.home_class_honor_fragmnet, container, false);
         return mBaseView;
     }
 
@@ -62,21 +60,26 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
         EventBus.getDefault().register(this);
 //        mvpPresenter.getMyData();
         indexAdapter = new IndexAdapter();
-        announAdapter = new StudentHonorAdapter(announRoll);
+        announAdapter = new ClassPhotoAdapter(announRoll);
         announRoll.setHintView(null);
-        announAdapter.setOnItemClickListener(() -> {
-            //startActivity(new Intent(getContext(), StudentHonorListActivity.class));
-            Intent intent = new Intent(view.getContext(), WebViewActivity.class);
-            intent.putExtra("url", BaseConstant.STUDENT_HONOR_URL);
-            view.getContext().startActivity(intent);
+        announAdapter.setOnItemClickListener(new ClassPhotoAdapter.ItemClickListener() {
+            @Override
+            public void OnItemClickListener() {
+//                startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+                intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
+                view.getContext().startActivity(intent);
+            }
         });
         iv_bg.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), WebViewActivity.class);
             intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
             view.getContext().startActivity(intent);
         });
+
         announRoll.setPlayDelay(5000);
         announRoll.setAdapter(announAdapter);
+
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
         ViewPager viewPager = announRoll.getViewPager();
@@ -98,51 +101,60 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
 
             }
         });
-
-        if (SpData.getClassInfo() != null) {
-            mvpPresenter.getStudentHonorList(SpData.getClassInfo().classesId);
-        }
+        getData();
     }
 
     @Override
-    protected StudentHonorPresenter createPresenter() {
-        return new StudentHonorPresenter(this);
+    protected ClassPhotoPresenter createPresenter() {
+        return new ClassPhotoPresenter(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", ClassHonorFragment.class.getSimpleName());
-            if (SpData.getClassInfo() != null) {
-                mvpPresenter.getStudentHonorList(SpData.getClassInfo().classesId);
-            }
+            getData();
+        }
+    }
+
+    private void getData() {
+        if (SpData.getClassInfo() != null) {
+            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId);
         }
     }
 
     @Override
-    public void getStudentHonorSuccess(StudentHonorRsp model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            List<String> imgs = new ArrayList<>();
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void getClassesPhotoSuccess(ClassesPhotoRsp model) {
+        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+            List<ClassesPhotoRsp.DataBean.AlbumEntityBean> imgs = new ArrayList<>();
             //StudentHonorRsp.DataBean data = model.getData().getRecords();
-            if (model.getData() != null && model.getData().getRecords() != null && model.getData().getRecords().size() > 0) {
-                iv_bg.setVisibility(View.GONE);
-                for (StudentHonorRsp.DataBean.RecordsBean bean : model.getData().getRecords()) {
-                    if (bean.getWorksUrl() != null && bean.getWorksUrl().size() > 0) {
-                        for (String itme : bean.getWorksUrl()) {
+            if (model.getData() != null && model.getData().size() > 0) {
+                for (ClassesPhotoRsp.DataBean bean : model.getData()) {
+                    if (bean.getAlbumEntity() != null && bean.getAlbumEntity().size() > 0) {
+                        for (ClassesPhotoRsp.DataBean.AlbumEntityBean itme : bean.getAlbumEntity()) {
                             imgs.add(itme);
                         }
                     }
+                }
+                if (imgs != null && imgs.size() > 0) {
+                    iv_bg.setVisibility(View.GONE);
                 }
             } else {
                 iv_bg.setVisibility(View.VISIBLE);
             }
 
             if (imgs.size() > 5) {
-                List<String> strings = imgs.subList(0, 5);
+                List<ClassesPhotoRsp.DataBean.AlbumEntityBean> strings = imgs.subList(0, 5);
                 indexAdapter.setList(strings);
                 announAdapter.notifyData(strings);
             } else {
-                List<String> img = imgs;
+                List<ClassesPhotoRsp.DataBean.AlbumEntityBean> img = imgs;
                 indexAdapter.setList(img);
                 announAdapter.notifyData(img);
             }
@@ -150,13 +162,7 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
     }
 
     @Override
-    public void getStudentHonorFail(String msg) {
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    public void getClassesPhotoFail(String msg) {
+        Log.d("getStudentHonorFail", msg);
     }
 }

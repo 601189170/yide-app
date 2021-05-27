@@ -34,8 +34,6 @@
                         android:id="@+id/table_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginTop="2dp"
                         android:layout_weight="1">
 
                     </FrameLayout>
@@ -44,27 +42,21 @@
                         android:id="@+id/notice_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="7dp"
                         android:layout_weight="1" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginStart="10dp"
-                    android:paddingTop="3dp"
-                    android:layout_marginEnd="10dp">
+                    android:paddingTop="3dp">
 
                     <FrameLayout
                         android:id="@+id/kq_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_white" />
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -80,8 +72,7 @@
                         android:id="@+id/banner_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_white">
+                        android:layout_weight="1">
 
                     </FrameLayout>
                 </LinearLayout>
@@ -89,34 +80,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="10dp">
+                    android:orientation="horizontal">
 
                     <FrameLayout
                         android:id="@+id/work_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_white" />
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="10dp">
+                    android:orientation="horizontal">
 
                     <FrameLayout
                         android:id="@+id/class_honor_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_white">
+                        android:layout_weight="1">
 
                     </FrameLayout>
 
@@ -124,8 +107,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp">
+                    android:layout_height="wrap_content">
 
                     <FrameLayout
                         android:id="@+id/student_honor_content"
