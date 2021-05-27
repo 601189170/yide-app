@@ -45,6 +45,11 @@ public class LeaveDetailRsp {
          *请假类型: 1 家长请假， 2 教职工请假
          * */
         private String leaveType;
+
+        /**
+         * 撤销时间
+         * */
+        private String undoTime;
         @NoArgsConstructor
         @Data
         public static class ListBean {

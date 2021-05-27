@@ -46,6 +46,7 @@ import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.presenter.leave.StudentAskLeavePresenter;
+import com.yyide.chatim.utils.ButtonUtils;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
 import com.yyide.chatim.view.leave.StaffAskLeaveView;
@@ -258,7 +259,9 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                 showTime("选择请假日期", "",dateTimeListener);
                 break;
             case R.id.btn_commit:
-                commit();
+                if (!ButtonUtils.isFastDoubleClick(R.id.btn_commit)){
+                    commit();
+                }
                 break;
             default:
                 break;

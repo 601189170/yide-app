@@ -23,6 +23,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveFlowBean;
 import com.yyide.chatim.presenter.leave.LeaveDetailPresenter;
+import com.yyide.chatim.utils.ButtonUtils;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.leave.LeaveDetailView;
 
@@ -30,6 +31,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -132,10 +134,14 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     public void click(View view) {
         switch (view.getId()){
             case R.id.btn_refuse:
-                mvpPresenter.processExaminationApproval(id,1);
+                if (!ButtonUtils.isFastDoubleClick(R.id.btn_refuse)) {
+                    mvpPresenter.processExaminationApproval(id,1);
+                }
                 break;
             case R.id.btn_pass:
-                mvpPresenter.processExaminationApproval(id,0);
+                if (!ButtonUtils.isFastDoubleClick(R.id.btn_refuse)) {
+                    mvpPresenter.processExaminationApproval(id,0);
+                }
                 break;
             default:
                 break;
@@ -154,8 +160,10 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 
     @OnClick(R.id.btn_repeal)
     public void repeal() {
-        updateList = true;
-        mvpPresenter.ondoApplyLeave(id);
+        if (!ButtonUtils.isFastDoubleClick(R.id.btn_repeal)){
+            updateList = true;
+            mvpPresenter.ondoApplyLeave(id);
+        }
     }
 
     @Override
@@ -195,8 +203,11 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         leaveStatus(approvalResult, tv_leave_flow_status);
         final String approverName = data.getApproverName();
         String approvalTime = data.getApprovalTime();
-        initiateTime = DateUtils.formatTime(initiateTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
-        final String[] initiateTimes = initiateTime.split(" ");
+        String[] initiateTimes = {"", ""};
+        if (initiateTime != null){
+            initiateTime = DateUtils.formatTime(initiateTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
+            initiateTimes = initiateTime.split(" ");
+        }
         //"2021.05.19 13:54" to "05.19 13:54"
         String[] approvalTimes = {"", ""};
         if (approvalTime != null) {
@@ -205,15 +216,35 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             approvalTimes = approvalTime.split(" ");
         }
 
-        leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true));
-        leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult)));
-        final List<LeaveDetailRsp.DataBean.ListBean> list = data.getList();
-        if (!list.isEmpty()){
-            for (LeaveDetailRsp.DataBean.ListBean listBean : list) {
-                leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getName(), "1".equals(approvalResult)));
-            }
+        String undoTime = data.getUndoTime();
+        String[] undoTimes = {"", ""};
+        if (undoTime != null) {
+            //"2021-05-19 14:17:36" to "05.19 13:54"
+            undoTime = DateUtils.formatTime(approvalTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
+            undoTimes = approvalTime.split(" ");
         }
 
+        leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true));
+        switch (approvalResult){
+            case "0":
+                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人（已拒绝）", "" + approverName, true));
+                break;
+            case "1":
+            case "2":
+                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult)));
+                final List<LeaveDetailRsp.DataBean.ListBean> list = data.getList();
+                if (!list.isEmpty()){
+                    for (LeaveDetailRsp.DataBean.ListBean listBean : list) {
+                        leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getName(), "1".equals(approvalResult)));
+                    }
+                }
+                break;
+            case "3":
+                leaveFlowBeanList.add(new LeaveFlowBean(""+undoTimes[1], ""+undoTimes[0], "我（已撤销）", "" + data.getName(), true));
+                break;
+            default:
+                break;
+        }
         leaveFlowAdapter = new LeaveFlowAdapter(this, leaveFlowBeanList);
         recyclerViewFlow.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFlow.setAdapter(leaveFlowAdapter);
