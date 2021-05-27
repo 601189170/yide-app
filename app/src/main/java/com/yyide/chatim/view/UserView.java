@@ -2,6 +2,7 @@ package com.yyide.chatim.view;
 
 
 import com.yyide.chatim.base.BaseView;
+import com.yyide.chatim.model.FaceOssBean;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.mobileRsp;
@@ -14,4 +15,6 @@ public interface UserView extends BaseView {
     void updateFail(String msg);
     void uploadFileSuccess(String imgUrl);
     void uploadFileFail(String msg);
+    void getFaceDataSuccess(FaceOssBean faceOssBean);
+    void getFaceDataFail(String msg);
 }

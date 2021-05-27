@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
@@ -28,6 +30,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.dialog.BottomHeadMenuPop;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.FaceOssBean;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.UserPresenter;
 import com.yyide.chatim.utils.DateUtils;
@@ -84,6 +87,10 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     private GetUserSchoolRsp.DataBean userInfo;
 
+    private int classesId;
+    private int depId;
+    private String realname;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_user_layout;
@@ -99,14 +106,10 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             title.setText("学生信息");
         }
         initData();
-        setFaceStatus();
-    }
-
-    private void setFaceStatus() {
-        final String faceStatus = MMKV.defaultMMKV().decodeString("FACE_STATUS");
-        if (!TextUtils.isEmpty(faceStatus)){
-            face.setText(faceStatus);
-        }
+        classesId = SpData.getIdentityInfo().classesId;
+        depId = SpData.getIdentityInfo().teacherDepId;
+        realname = SpData.getIdentityInfo().realname;
+        Log.e(TAG, "getFaceData: name="+realname +",classId="+classesId+",depId="+depId);
     }
 
     @Override
@@ -129,6 +132,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onResume() {
         super.onResume();
+        mvpPresenter.getFaceData(realname,classesId,depId);
     }
 
     @Override
@@ -232,10 +236,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         if (corpFile != null) {
             showPicFileByLuban(corpFile);
         }
-        Log.e(TAG, "onActivityResult: requestCode="+ requestCode+",resultCode="+resultCode);
-        if (requestCode == 1 && resultCode == RESULT_OK){
-            setFaceStatus();
-        }
+
     }
 
     private void showPicFileByLuban(@NonNull File file) {
@@ -312,6 +313,23 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void uploadFileFail(String msg) {
         ToastUtils.showShort(msg);
+    }
+
+    @Override
+    public void getFaceDataSuccess(FaceOssBean faceOssBean) {
+        Log.e(TAG, "getFaceDataSuccess: "+faceOssBean.toString() );
+        if (faceOssBean.getCode() == 200) {
+            if (faceOssBean.getData() != null) {
+                FaceOssBean.DataBean data = faceOssBean.getData();
+                final String status = data.getStatus();
+                face.setText(status);
+            }
+        }
+    }
+
+    @Override
+    public void getFaceDataFail(String msg) {
+
     }
 
     @Override

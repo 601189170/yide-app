@@ -1,9 +1,13 @@
 package com.yyide.chatim.presenter;
 
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.FaceOssBean;
 import com.yyide.chatim.model.UpdateUserInfo;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.net.ApiCallback;
@@ -92,5 +96,53 @@ public class UserPresenter extends BasePresenter<UserView> {
                 mvpView.hideLoading();
             }
         });
+    }
+
+    public void getFaceData(String name, int classId,int depId){
+        Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId+",depId="+depId);
+        mvpView.showLoading();
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("name",name);
+            params.put("classId",classId);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
+            addSubscription(dingApiStores.getStudentOss(body), new ApiCallback<FaceOssBean>() {
+                @Override
+                public void onSuccess(FaceOssBean model) {
+                    mvpView.getFaceDataSuccess(model);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    mvpView.getFaceDataFail(msg);
+                }
+
+                @Override
+                public void onFinish() {
+                    mvpView.hideLoading();
+                }
+            });
+        }else {
+            Map<String, Object> params = new HashMap<>();
+            params.put("name",name);
+            params.put("depId",depId);
+            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
+            addSubscription(dingApiStores.getTeacherOss(body), new ApiCallback<FaceOssBean>() {
+                @Override
+                public void onSuccess(FaceOssBean model) {
+                    mvpView.getFaceDataSuccess(model);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    mvpView.getFaceDataFail(msg);
+                }
+
+                @Override
+                public void onFinish() {
+                    mvpView.hideLoading();
+                }
+            });
+        }
     }
 }

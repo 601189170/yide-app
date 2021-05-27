@@ -168,7 +168,6 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_layout:
-                setResult(RESULT_OK);
                 finish();
                 break;
             case R.id.btn_start_capture:
@@ -305,7 +304,6 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 String path = data.getPath();
                 if (!TextUtils.isEmpty(path)) {
                     final String status = data.getStatus();
-                    MMKV.defaultMMKV().encode("FACE_STATUS",status);
                     tv_face_capture_tip.setVisibility(View.VISIBLE);
                     if (!TextUtils.isEmpty(status)){
                         tv_face_capture_tip.setText(status);
@@ -325,11 +323,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         btn_start_capture.setAlpha(1f);
     }
 
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_OK);
-        super.onBackPressed();
-    }
+
 
     @Override
     public void getFaceDataFail(String msg) {
