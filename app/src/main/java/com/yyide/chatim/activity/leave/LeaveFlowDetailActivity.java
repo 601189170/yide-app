@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.LeaveFlowAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
@@ -50,6 +51,9 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 
     @BindView(R.id.tv_department_name)
     TextView tv_department_name;
+
+    @BindView(R.id.tv_department)
+    TextView tv_department;
 
     @BindView(R.id.tv_start_time)
     TextView tv_start_time;
@@ -169,6 +173,13 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         }
         final LeaveDetailRsp.DataBean data = leaveDetailRsp.getData();
         leaveFlowBeanList.clear();
+        if ("1".equals(data.getLeaveType())) {
+            //监护人
+            tv_department.setText(getString(R.string.choose_class));
+        } else {
+            //教职工
+            tv_department.setText(R.string.in_department);
+        }
 
         tv_leave_title.setText(data.getName());
         String initiateTime = data.getInitiateTime();

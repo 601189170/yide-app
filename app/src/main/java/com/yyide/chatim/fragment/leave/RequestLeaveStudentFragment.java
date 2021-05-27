@@ -103,7 +103,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     private String startTime;
     private String endTime;
     private String leaveReason = "2";
-    private String reason;
+    private String reason="";
     private long classesId;
     private List<Long> carbonCopyPeopleId;
     private List<String> carbonCopyPeopleList;
@@ -161,7 +161,8 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         recyclerviewTagHint.setAdapter(leaveReasonTagAdapter);
         leaveReasonTagAdapter.setOnClickedListener(position -> {
             LeavePhraseRsp.DataBean tag = tags.get(position);
-            editLeaveReason.setText(tag.getTag());
+            reason += tag.getTag();
+            editLeaveReason.setText(reason);
         });
         accordingCourseLeave(false);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {

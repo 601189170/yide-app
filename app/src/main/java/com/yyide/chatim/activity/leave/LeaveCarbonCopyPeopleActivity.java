@@ -41,8 +41,6 @@ public class LeaveCarbonCopyPeopleActivity extends BaseActivity {
         final String carbonCopyPeople = getIntent().getStringExtra("carbonCopyPeople");
         Log.e("TAG", "onCreate: "+carbonCopyPeople );
         data = JSON.parseArray(carbonCopyPeople,String.class);
-        data.add("王小二");
-        data.add("张三");
         final String format = String.format(getString(R.string.carbon_copy_people_text), ""+data.size());
         tv_carbon_copy_people.setText(format);
         final LeaveCarbonCopyPeopleAdapter leaveCarbonCopyPeopleAdapter = new LeaveCarbonCopyPeopleAdapter(this, data);

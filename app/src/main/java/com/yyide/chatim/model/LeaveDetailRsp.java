@@ -41,7 +41,10 @@ public class LeaveDetailRsp {
         private List<ListBean> list;
         private Object leaveCourseFormList;
         private Object ccbid;
-
+        /**
+         *请假类型: 1 家长请假， 2 教职工请假
+         * */
+        private String leaveType;
         @NoArgsConstructor
         @Data
         public static class ListBean {

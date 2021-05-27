@@ -77,7 +77,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String startTime;
     private String endTime;
     private String leaveReason = "2";
-    private String reason;
+    private String reason="";
     private long deptId;
     private List<Long> carbonCopyPeopleId;
     private String deptName;
@@ -128,7 +128,9 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         recyclerviewTagHint.setAdapter(leaveReasonTagAdapter);
         leaveReasonTagAdapter.setOnClickedListener(position -> {
             LeavePhraseRsp.DataBean tag = tags.get(position);
-            editLeaveReason.setText(tag.getTag());
+            //editLeaveReason.setText(tag.getTag());
+            reason += tag.getTag();
+            editLeaveReason.setText(reason);
         });
         btn_commit.setAlpha(0.5f);
         btn_commit.setClickable(false);
