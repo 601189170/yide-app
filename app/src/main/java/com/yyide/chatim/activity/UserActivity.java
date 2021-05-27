@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
@@ -52,7 +54,7 @@ import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 public class UserActivity extends BaseMvpActivity<UserPresenter> implements UserView, OnDateSetListener {
-
+    private static final String TAG = UserActivity.class.getSimpleName();
     @BindView(R.id.img)
     ImageView img;
     @BindView(R.id.layout1)
@@ -97,6 +99,14 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             title.setText("学生信息");
         }
         initData();
+        setFaceStatus();
+    }
+
+    private void setFaceStatus() {
+        final String faceStatus = MMKV.defaultMMKV().decodeString("FACE_STATUS");
+        if (!TextUtils.isEmpty(faceStatus)){
+            face.setText(faceStatus);
+        }
     }
 
     @Override
@@ -151,7 +161,8 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 startActivity(intent);
                 break;
             case R.id.layout6://设置人脸
-                startActivity(new Intent(this, FaceCaptureActivity.class));
+                //startActivity(new Intent(this, FaceCaptureActivity.class));
+                startActivityForResult(new Intent(this, FaceCaptureActivity.class),1);
                 break;
             case R.id.back_layout:
                 finish();
@@ -220,6 +231,10 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         File corpFile = TakePicUtil.onActivityResult(this, requestCode, resultCode, data);
         if (corpFile != null) {
             showPicFileByLuban(corpFile);
+        }
+        Log.e(TAG, "onActivityResult: requestCode="+ requestCode+",resultCode="+resultCode);
+        if (requestCode == 1 && resultCode == RESULT_OK){
+            setFaceStatus();
         }
     }
 

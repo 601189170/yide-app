@@ -19,7 +19,9 @@ import androidx.core.content.FileProvider;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kevin.crop.UCrop;
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
@@ -166,6 +168,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_layout:
+                setResult(RESULT_OK);
                 finish();
                 break;
             case R.id.btn_start_capture:
@@ -301,17 +304,31 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 FaceOssBean.DataBean data = faceOssBean.getData();
                 String path = data.getPath();
                 if (!TextUtils.isEmpty(path)) {
+                    final String status = data.getStatus();
+                    MMKV.defaultMMKV().encode("FACE_STATUS",status);
                     tv_face_capture_tip.setVisibility(View.VISIBLE);
-                    tv_face_capture_tip.setText(""+data.getStatus());
+                    if (!TextUtils.isEmpty(status)){
+                        tv_face_capture_tip.setText(status);
+                    }
                     btn_start_capture.setText("重新采集");
                     //加载图片
-                    Glide.with(this).load(path).into(iv_face);
+                    Glide.with(this)
+                            .load(path)
+                            .skipMemoryCache(true)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(iv_face);
                 }
             }
         }
 
         btn_start_capture.setClickable(true);
         btn_start_capture.setAlpha(1f);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 
     @Override
