@@ -199,7 +199,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         final List<LeaveDetailRsp.DataBean.ListBean> list = data.getList();
         if (!list.isEmpty()){
             for (LeaveDetailRsp.DataBean.ListBean listBean : list) {
-                leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getUserName(), "1".equals(approvalResult)));
+                leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getName(), "1".equals(approvalResult)));
             }
         }
 

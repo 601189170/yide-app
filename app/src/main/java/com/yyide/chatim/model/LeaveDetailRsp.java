@@ -46,7 +46,7 @@ public class LeaveDetailRsp {
         @Data
         public static class ListBean {
             private int userId;
-            private String userName;
+            private String name;
         }
     }
 }
