@@ -200,8 +200,10 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             setCheckAll(isChecked);
         });
         final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-        classesId = Long.parseLong(classInfo.classesId);
-        classesName = classInfo.classesName;
+        if (classInfo !=null){
+            classesId = Long.parseLong(classInfo.classesId);
+            classesName = classInfo.classesName;
+        }
         tv_department.setText(classesName);
         btn_commit.setAlpha(0.5f);
         btn_commit.setClickable(false);
