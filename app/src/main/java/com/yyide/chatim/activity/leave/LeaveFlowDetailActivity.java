@@ -219,7 +219,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         if (baseRsp.getCode() == 200) {
             mvpPresenter.queryLeaveDetailsById(id);
         } else {
-            ToastUtils.showShort("撤销失败");
+            ToastUtils.showShort("撤销失败："+baseRsp.getMsg());
         }
     }
 
@@ -236,7 +236,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
             finish();
         } else {
-            ToastUtils.showShort("审批失败");
+            ToastUtils.showShort("审批失败："+baseRsp.getMsg());
             finish();
         }
     }
