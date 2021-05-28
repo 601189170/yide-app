@@ -75,6 +75,7 @@ public class BaseConstant {
     public static final String TYPE_SELECT_MESSAGE_TODO = "type_select_message_todo";
     public static final String TYPE_MAIN = "type_main";
     public static final String TYPE_IM_LOGIN = "type_im_login";
+    public static final String TYPE_MESSAGE_UPDATE = "type_message_update";
     public static final String TYPE_UPDATE_HOME = "type_update_home";
     public static final String TYPE_MESSAGE_TODO_NUM = "type_message_todo_num";
     public static final String TYPE_LEAVE = "type_leave";

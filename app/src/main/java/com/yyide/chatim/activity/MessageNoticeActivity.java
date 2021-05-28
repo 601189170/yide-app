@@ -15,9 +15,12 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.UserNoticeListAdapter;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.AgentInformationRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.HelpRsp;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.presenter.UserNoticePresenter;
@@ -26,6 +29,7 @@ import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
 import com.yyide.chatim.view.UserNoticeView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -70,9 +74,10 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
         title.setText("消息通知");
         initAdapter();
         swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         refresh = true;
         swipeRefreshLayout.setRefreshing(true);
-        mvpPresenter.getUserNoticePage(curIndex,5);
+        mvpPresenter.getUserNoticePage(curIndex, 5);
     }
 
     @Override
@@ -86,17 +91,20 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
         recyclerview.addItemDecoration(new SpacesItemDecoration(StatusBarUtils.dip2px(this, 20)));
         recyclerview.setAdapter(userNoticeListAdapter);
         recyclerview.addOnScrollListener(mOnScrollListener);
-        userNoticeListAdapter.setOnItemOnClickListener(position ->{
+        userNoticeListAdapter.setOnItemOnClickListener(position -> {
             final UserMsgNoticeRsp.DataBean.RecordsBean recordsBean = list.get(position);
-            Log.e(TAG, "initAdapter: "+recordsBean.toString() );
-            if ("2".equals(recordsBean.getIsText())){
+            Log.e(TAG, "initAdapter: " + recordsBean.toString());
+            if (recordsBean != null && "0".equals(recordsBean.getStatus())) {
+                mvpPresenter.updateMyNoticeDetails(recordsBean.getSignId());
+            }
+            if ("2".equals(recordsBean.getIsText())) {
                 //不是纯文本，需要跳转详情
-                switch (recordsBean.getAttributeType()){
+                switch (recordsBean.getAttributeType()) {
                     case "1":
                         //请假
                         final long callId = recordsBean.getCallId();
                         final Intent intent = new Intent(this, LeaveFlowDetailActivity.class);
-                        intent.putExtra("id",callId);
+                        intent.putExtra("id", callId);
                         startActivity(intent);
                         break;
                     case "2":
@@ -151,6 +159,13 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
     }
 
     @Override
+    public void updateNoticeSuccess(ResultBean resultBean) {
+        if (resultBean.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_UPDATE, ""));
+        }
+    }
+
+    @Override
     public void getUserNoticePageFail(String msg) {
         ToastUtils.showShort(msg);
         refresh = false;
@@ -169,7 +184,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
     public void onRefresh() {
         curIndex = 1;
         refresh = true;
-        mvpPresenter.getUserNoticePage(1,5);
+        mvpPresenter.getUserNoticePage(1, 5);
     }
 
     public void showBlankPage() {
@@ -190,7 +205,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
             }
             if (userNoticeListAdapter != null) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == userNoticeListAdapter.getItemCount()) {
-                    if (curIndex>=pages){
+                    if (curIndex >= pages) {
                         //ToastUtils.showShort("没有更多数据了！");
                         return;
                     }

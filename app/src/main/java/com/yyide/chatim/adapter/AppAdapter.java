@@ -32,7 +32,6 @@ import java.util.List;
 
 public class AppAdapter extends BaseQuickAdapter<AppItemBean.DataBean.RecordsBean, BaseViewHolder> {
 
-
     public AppAdapter(int layoutResId) {
         super(layoutResId);
     }

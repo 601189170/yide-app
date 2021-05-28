@@ -1,6 +1,7 @@
 package com.yyide.chatim.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,25 @@ public class TodoMsgFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setTab(0);
+        int type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
+        if(type > 0){
+            setTab(type);
+        } else {
+            setTab(0);
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
+        if (!hidden) {
+            int type = getArguments().getInt("type", 0);
+            Log.e(TAG, "onHiddenChanged: " + type);
+            if (type != 0) {
+                setTab(type);
+            }
+        }
     }
 
     @OnClick({R.id.tab1, R.id.tab2, R.id.tab3})

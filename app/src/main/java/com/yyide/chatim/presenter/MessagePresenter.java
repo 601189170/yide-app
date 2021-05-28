@@ -2,6 +2,7 @@ package com.yyide.chatim.presenter;
 
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.MessageNumberRsp;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MessageView;
 
@@ -14,11 +15,13 @@ public class MessagePresenter extends BasePresenter<MessageView> {
 
     public void getMessageNumber() {
 //        mvpView.showLoading();
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("isOperation", "2");//待办状态 1 已办 0待办 2全部
-        addSubscription(dingApiStores.queryBocklogNuberByStatus(map), new ApiCallback<MessageNumberRsp>() {
+        HashMap<String, Object> map = new HashMap();
+        map.put("current", 1);
+        map.put("size", 5);
+        map.put("isOperation", 0);
+        addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
             @Override
-            public void onSuccess(MessageNumberRsp model) {
+            public void onSuccess(TodoRsp model) {
                 mvpView.messageNumberSuccess(model);
             }
 

@@ -1,4 +1,4 @@
-package com.yyide.chatim.homemodel;
+package com.yyide.chatim.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.ClassAnnounAdapter;
+import com.yyide.chatim.adapter.ClassesHomeworkAnnounAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.presenter.HomeBannerPresenter;
-import com.yyide.chatim.view.HomeBannerView;
+import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.presenter.WorkPresenter;
+import com.yyide.chatim.view.WorkView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,20 +33,20 @@ import java.util.List;
 import butterknife.BindView;
 
 
-public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> implements HomeBannerView {
+public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements WorkView {
 
-    @BindView(R.id.announRoll)
-    RollPagerView announRoll;
-    @BindView(R.id.grid)
+    @BindView(R.id.rollPagerView)
+    RollPagerView rollPagerView;
+    @BindView(R.id.recyclerview)
     RecyclerView mHot;
     private View mBaseView;
-    ClassAnnounAdapter announAdapter;
+    ClassesHomeworkAnnounAdapter announAdapter;
     IndexAdapter indexAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mBaseView = inflater.inflate(R.layout.home_banner_fragmnet, container, false);
+        mBaseView = inflater.inflate(R.layout.home_work_fragmnet, container, false);
         return mBaseView;
     }
 
@@ -54,18 +54,22 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-//        mvpPresenter.getMyData();
-        indexAdapter = new IndexAdapter();
-        announAdapter = new ClassAnnounAdapter(announRoll);
-        announRoll.setHintView(null);
-//        announAdapter.notifyData(dataBeans);
-//        indexAdapter.setList(dataBeans);
+        if (SpData.getClassInfo() != null) {
+            mvpPresenter.getWorkInfo(SpData.getClassInfo().classesId);
+        }
+        initView();
+    }
 
-        announRoll.setPlayDelay(5000);
-        announRoll.setAdapter(announAdapter);
+    private void initView() {
+        indexAdapter = new IndexAdapter();
+        rollPagerView.setHintView(null);
+
+        announAdapter = new ClassesHomeworkAnnounAdapter(rollPagerView);
+        rollPagerView.setPlayDelay(5000);
+        rollPagerView.setAdapter(announAdapter);
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
-        ViewPager viewPager = announRoll.getViewPager();
+        ViewPager viewPager = rollPagerView.getViewPager();
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -84,45 +88,43 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             }
         });
-//        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-//            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
-//        }
-        //initAdapter();
     }
 
     @Override
-    protected HomeBannerPresenter createPresenter() {
-        return new HomeBannerPresenter(this);
+    protected WorkPresenter createPresenter() {
+        return new WorkPresenter(this);
     }
 
-
     @Override
-    public void getClassBannerListSuccess(ClassesPhotoBannerRsp model) {
-        if (model != null && model.getData() != null) {
-            if (model.getData().size() >= 5) {
-                List<ClassesPhotoBannerRsp.DataBean> dataBeans = model.getData().subList(0, 5);
-                announAdapter.notifyData(dataBeans);
-                indexAdapter.setList(dataBeans);
+    public void getWorkSuccess(SelectSchByTeaidRsp model) {
+        if (model.code == BaseConstant.REQUEST_SUCCES2 && model != null && model.data != null) {
+            if (model.data.size() > 0) {
+                List<SelectSchByTeaidRsp.DataBean> dataBeanList = new ArrayList<>();
+                for (SelectSchByTeaidRsp.DataBean item : model.data) {
+                    dataBeanList.add(item);
+                }
+                announAdapter.notifyData(dataBeanList);
+                indexAdapter.setList(dataBeanList);
             } else {
-                announAdapter.notifyData(model.getData());
-                indexAdapter.setList(model.getData());
+                announAdapter.notifyData(null);
+                indexAdapter.setList(null);
             }
+
         }
     }
 
     @Override
-    public void getClassBannerListFail(String msg) {
-        Log.d("getClassBannerListFail", msg);
+    public void getWorkFail(String msg) {
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            Log.d("HomeRefresh", BannerFragment.class.getSimpleName());
-
-            //        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
-//        }
+            Log.d("HomeRefresh", WorkFragment.class.getSimpleName());
+            if (SpData.getClassInfo() != null) {
+                mvpPresenter.getWorkInfo(SpData.getClassInfo().classesId);
+            }
         }
     }
 
@@ -131,4 +133,5 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
 }

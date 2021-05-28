@@ -66,7 +66,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(intent);
                 } else if ("2".equals(pushModel.getPushType())) {//代办
-                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, ""));
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 } else if ("3".equals(pushModel.getPushType())) {//系统通知
     //                Intent intent = new Intent(context, MessageNoticeActivity.class);
     //                //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

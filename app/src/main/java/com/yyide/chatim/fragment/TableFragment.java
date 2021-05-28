@@ -1,7 +1,6 @@
-package com.yyide.chatim.homemodel;
+package com.yyide.chatim.fragment;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,19 +23,16 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.utils.GlideUtil;
 
 import androidx.annotation.Nullable;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
 import butterknife.BindView;
-import okhttp3.OkHttpClient;
 
 
 public class TableFragment extends BaseMvpFragment<TablePresenter> implements listTimeDataByAppView {

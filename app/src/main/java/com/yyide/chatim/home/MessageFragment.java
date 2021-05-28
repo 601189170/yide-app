@@ -23,6 +23,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.MessageNumberRsp;
 import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.MessagePresenter;
 import com.yyide.chatim.view.MessageView;
 
@@ -56,6 +57,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     @BindView(R.id.note)
     LinearLayout note;
     private View mBaseView;
+    private int type = 0;
 
     @Nullable
     @Override
@@ -68,7 +70,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        int type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
+        type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
         Log.e(TAG, "onViewCreated: " + type);
         setTab(type);
         setBookView();
@@ -93,7 +95,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         super.onHiddenChanged(hidden);
         Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
         if (!hidden) {
-            int type = getArguments().getInt("type", 0);
+            type = getArguments().getInt("type", 0);
             Log.e(TAG, "onHiddenChanged: " + type);
             if (type != 0) {
                 setTab(type);
@@ -126,10 +128,14 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
                 line1.setVisibility(View.VISIBLE);
                 break;
             case 1:
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", type);
                 if (fg2 == null) {
                     fg2 = new TodoMsgFragment();
+                    fg2.setArguments(bundle);
                     ft.replace(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else
+                    fg2.setArguments(bundle);
                     ft.show(fg2);
                 tab2.setChecked(true);
                 line2.setVisibility(View.VISIBLE);
@@ -157,6 +163,10 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             setBookView();
+        } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
+            setNumber(messageEvent.getCount());
+        } else if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
+            mvpPresenter.getMessageNumber();
         }
     }
 
@@ -167,9 +177,11 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     }
 
     @Override
-    public void messageNumberSuccess(MessageNumberRsp model) {
+    public void messageNumberSuccess(TodoRsp model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            setNumber(model.getData());
+            if (model.getData() != null) {
+                setNumber(model.getData().getTotal());
+            }
         }
     }
 

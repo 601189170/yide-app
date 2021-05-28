@@ -47,6 +47,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
@@ -302,8 +303,14 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     }
 
     @Override
-    public void getUserNoticePageFail(String msg) {
+    public void updateNoticeSuccess(ResultBean resultBean) {
 
+    }
+
+
+    @Override
+    public void getUserNoticePageFail(String msg) {
+        Log.d("getUserNoticePageFail", "getUserNoticePageFail-->>" + msg);
     }
 
     @Override
@@ -317,6 +324,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         if (BaseConstant.TYPE_IM_LOGIN.equals(messageEvent.getCode()) ||
                 BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             initView();
+        } else if (BaseConstant.TYPE_MESSAGE_UPDATE.equals(messageEvent.getCode())) {
+            mvpPresenter.getUserNoticePage(1, 1);
         }
     }
 
