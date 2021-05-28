@@ -280,6 +280,10 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     @Override
     public void leaveDept(LeaveDeptRsp leaveDeptRsp) {
         Log.e(TAG, "leaveDept: "+leaveDeptRsp.toString() );
+        if (leaveDeptRsp.getCode() != 200){
+            ToastUtils.showShort(""+leaveDeptRsp.getMsg());
+            return;
+        }
         final List<LeaveDeptRsp.DataBean> data = leaveDeptRsp.getData();
         if (!data.isEmpty()) {
             final Optional<LeaveDeptRsp.DataBean> dataBeanOptional = data.stream().filter(it -> it.getIsDefault() == 1).findFirst();
