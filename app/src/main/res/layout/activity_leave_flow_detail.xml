@@ -19,7 +19,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_leave_content"
@@ -211,7 +212,112 @@
                     android:layout_marginTop="@dimen/dp_20"
                     app:layout_constraintTop_toBottomOf="@id/tv_flow"
                     />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_copyer_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/recyclerview_flow">
+                    <View
+                        android:id="@+id/v_dot"
+                        android:layout_width="@dimen/dp_8"
+                        android:layout_height="@dimen/dp_8"
+                        android:background="@drawable/black12_dot_shape"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginStart="23.5dp"/>
+                    <View
+                        android:id="@+id/v_line1"
+                        android:layout_width="0.5dp"
+                        android:layout_height="36dp"
+                        android:background="#DCDFE6"
+                        app:layout_constraintLeft_toLeftOf="@id/v_dot"
+                        app:layout_constraintRight_toRightOf="@id/v_dot"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <ImageView
+                        android:id="@+id/iv_flow_checked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@id/v_dot"
+                        app:layout_constraintRight_toRightOf="@id/v_dot"
+                        android:src="@drawable/icon_flow_checked"
+                        android:visibility="visible"
+                        />
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="09:25"
+                        android:textColor="#ff333333"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:layout_marginEnd="54dp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="03.06"
+                        android:textColor="#ff999999"
+                        android:textSize="12sp"
+                        app:layout_constraintLeft_toLeftOf="@id/tv_time"
+                        app:layout_constraintTop_toBottomOf="@id/tv_time"/>
+                    <ImageView
+                        android:id="@+id/iv_user_head"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/default_head"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginStart="54dp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_flow_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="抄送人"
+                        android:textColor="#ff333333"
+                        android:textSize="14sp"
+                        app:layout_constraintLeft_toRightOf="@id/iv_user_head"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:layout_marginStart="@dimen/dp_12"
+                        />
+                    <TextView
+                        android:id="@+id/tv_flow_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/carbon_copy_people_text"
+                        android:textColor="#ff999999"
+                        android:textSize="14sp"
+                        app:layout_constraintLeft_toLeftOf="@id/tv_flow_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_flow_title"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <LinearLayout
+                    android:id="@+id/ll_copyer_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_50"
+                    app:layout_constraintLeft_toLeftOf="@id/cl_copyer_list"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    app:layout_constraintTop_toBottomOf="@id/cl_copyer_list"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="84dp"
+                    android:layout_marginTop="@dimen/dp_10"
+                    />
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/gp_copyer_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="ll_copyer_list,cl_copyer_list"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

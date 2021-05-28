@@ -57,7 +57,10 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
         holder.tv_date.setText(leaveFlowBean.getDate());
         holder.tv_flow_title.setText(leaveFlowBean.getFlowTitle());
         holder.tv_flow_content.setText(leaveFlowBean.getFlowContent());
-        if (leaveFlowBean.isChecked()) {
+        if (leaveFlowBean.getFlowTitle().contains("已拒绝")){
+            holder.iv_flow_checked.setImageResource(R.drawable.icon_flow_refuse);
+        }
+        if (leaveFlowBean.isChecked() && !leaveFlowBean.getFlowTitle().contains("已撤销")) {
             holder.iv_flow_checked.setVisibility(View.VISIBLE);
             holder.v_dot.setVisibility(View.INVISIBLE);
         }else {
@@ -66,7 +69,7 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
         }
 
         //隐藏最后一条分割线
-        if (position == data.size()-1){
+        if (position == data.size()-1 && leaveFlowBean.isNopass()){
             holder.v_line_bottom.setVisibility(View.GONE);
             holder.v_line2.setVisibility(View.INVISIBLE);
         }

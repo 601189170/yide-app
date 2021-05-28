@@ -1,9 +1,12 @@
 package com.yyide.chatim.activity.leave;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +15,7 @@ import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -83,7 +87,26 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @BindView(R.id.cl_repeal)
     ConstraintLayout cl_repeal;
 
+    @BindView(R.id.gp_copyer_list)
+    Group cl_copyer_list;
+
+    @BindView(R.id.ll_copyer_list)
+    LinearLayout  ll_copyer_list;
+
+    @BindView(R.id.tv_flow_content)
+    TextView tv_flow_content;
+
+    @BindView(R.id.tv_date)
+    TextView tv_date;
+
+    @BindView(R.id.tv_time)
+    TextView tv_time;
+
+    @BindView(R.id.iv_flow_checked)
+    ImageView iv_flow_checked;
+
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
+    List<String> leaveFlowCopyerList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
     private long id;
     private boolean updateList = false;
@@ -224,23 +247,25 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             undoTimes = approvalTime.split(" ");
         }
 
-        leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true));
+        leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true,false));
         switch (approvalResult){
             case "0":
-                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人（已拒绝）", "" + approverName, true));
+                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人（已拒绝）", "" + approverName, true,true));
                 break;
             case "1":
             case "2":
-                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult)));
                 final List<LeaveDetailRsp.DataBean.ListBean> list = data.getList();
+                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult),list.isEmpty()));
                 if (!list.isEmpty()){
                     for (LeaveDetailRsp.DataBean.ListBean listBean : list) {
-                        leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getName(), "1".equals(approvalResult)));
+                        //leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getName(), "1".equals(approvalResult)));
+                        leaveFlowCopyerList.add(listBean.getName());
                     }
                 }
                 break;
             case "3":
-                leaveFlowBeanList.add(new LeaveFlowBean(""+undoTimes[1], ""+undoTimes[0], "我（已撤销）", "" + data.getName(), true));
+                cl_copyer_list.setVisibility(View.GONE);
+                leaveFlowBeanList.add(new LeaveFlowBean(""+undoTimes[1], ""+undoTimes[0], "我（已撤销）", "" + data.getName(), true,true));
                 break;
             default:
                 break;
@@ -248,6 +273,39 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         leaveFlowAdapter = new LeaveFlowAdapter(this, leaveFlowBeanList);
         recyclerViewFlow.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFlow.setAdapter(leaveFlowAdapter);
+        //显示抄送人列表
+        if (!leaveFlowCopyerList.isEmpty() && !"3".equals(approvalResult)){
+            cl_copyer_list.setVisibility(View.VISIBLE);
+            tv_flow_content.setText(String.format(getString(R.string.carbon_copy_people_text),""+leaveFlowCopyerList.size()));
+            tv_date.setText(approvalTimes[0]);
+            tv_time.setText(approvalTimes[1]);
+            if (Objects.equals(approvalResult, "2")){
+                iv_flow_checked.setVisibility(View.INVISIBLE);
+            }
+
+            for (int i = 0; i < leaveFlowCopyerList.size(); i++) {
+                if (i<3){
+                    final String name = leaveFlowCopyerList.get(i);
+                    final View view1 = LayoutInflater.from(this).inflate(R.layout.item_approver_head, null);
+                    final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                    tv_copyer_name.setText(name);
+                    ll_copyer_list.addView(view1);
+                }
+            }
+            if (leaveFlowCopyerList.size()>3){
+                final View view1 = LayoutInflater.from(this).inflate(R.layout.item_approver_head, null);
+                final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                tv_copyer_name.setText("查看全部");
+                view1.setOnClickListener(v -> {
+                    final Intent intent = new Intent(LeaveFlowDetailActivity.this, LeaveCarbonCopyPeopleActivity.class);
+                    intent.putExtra("carbonCopyPeople", JSON.toJSONString(leaveFlowCopyerList));
+                    startActivity(intent);
+                });
+                ll_copyer_list.addView(view1);
+            }
+
+        }
+
     }
 
     @Override
