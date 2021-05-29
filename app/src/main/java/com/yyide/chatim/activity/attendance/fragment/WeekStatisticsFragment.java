@@ -2,13 +2,22 @@ package com.yyide.chatim.activity.attendance.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.databinding.FragmentWeekStatisticsBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,7 +25,9 @@ import com.yyide.chatim.R;
  * create an instance of this fragment.
  */
 public class WeekStatisticsFragment extends Fragment {
-
+    private static final String TAG = "WeekStatisticsFragment";
+    private FragmentWeekStatisticsBinding mViewBinding;
+    private List<Fragment> fragments = new ArrayList<>();
     public WeekStatisticsFragment() {
         // Required empty public constructor
     }
@@ -51,5 +62,59 @@ public class WeekStatisticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_week_statistics, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewBinding = FragmentWeekStatisticsBinding.bind(view);
+        List<String> listTab = new ArrayList<>();
+        listTab.add("缺勤");
+        listTab.add("迟到");
+        listTab.add("请假");
+        listTab.add("早退");
+        listTab.add("未签到");
+        fragments.add(StatisticsListFragment.newInstance(listTab.get(0)));
+        fragments.add(StatisticsListFragment.newInstance(listTab.get(1)));
+        fragments.add(StatisticsListFragment.newInstance(listTab.get(2)));
+        fragments.add(StatisticsListFragment.newInstance(listTab.get(3)));
+        fragments.add(StatisticsListFragment.newInstance(listTab.get(4)));
+
+        mViewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        mViewBinding.viewpager.setUserInputEnabled(false);
+        mViewBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {
+            @NonNull
+            @Override
+            public Fragment createFragment(int position) {
+                return fragments.get(position);
+            }
+
+            @Override
+            public int getItemCount() {
+                return listTab.isEmpty() ? 0 : listTab.size();
+            }
+        });
+        mViewBinding.rgAttendanceType.setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId){
+                case R.id.rb_absence:
+                    mViewBinding.viewpager.setCurrentItem(0);
+                    break;
+                case R.id.rb_late:
+                    mViewBinding.viewpager.setCurrentItem(1);
+                    break;
+                case R.id.rb_leave:
+                    mViewBinding.viewpager.setCurrentItem(2);
+                    break;
+                case R.id.rb_leave_early:
+                    mViewBinding.viewpager.setCurrentItem(3);
+                    break;
+                case R.id.rb_not_sign_in:
+                    mViewBinding.viewpager.setCurrentItem(4);
+                    break;
+                default:
+                    break;
+            }
+        });
+
     }
 }

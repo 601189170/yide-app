@@ -38,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_marginTop="16dp"
-                        android:drawableRight="@drawable/icon_down"
+                        android:drawableRight="@drawable/icon_arrow_down"
                         android:drawablePadding="@dimen/dp_10"
                         android:text="学生出入校考勤上午到校"
                         android:textColor="#1E1E1E"
