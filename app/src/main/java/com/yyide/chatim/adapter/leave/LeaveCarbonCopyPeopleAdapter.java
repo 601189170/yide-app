@@ -54,7 +54,7 @@ public class LeaveCarbonCopyPeopleAdapter extends RecyclerView.Adapter<LeaveCarb
         String tag = data.get(position);
         holder.tv_name.setText(tag);
         if (position == data.size()-1){
-            holder.tv_add.setVisibility(View.GONE);
+            //holder.tv_add.setVisibility(View.GONE);
         }
 //        holder.itemView.setOnClickListener(v -> {
 //            onClickedListener.onClicked(position);
@@ -70,8 +70,8 @@ public class LeaveCarbonCopyPeopleAdapter extends RecyclerView.Adapter<LeaveCarb
 
         @BindView(R.id.tv_name)
         TextView tv_name;
-        @BindView(R.id.tv_add)
-        TextView tv_add;
+        //@BindView(R.id.tv_add)
+        //TextView tv_add;
 
         public ViewHolder(View view) {
             super(view);
