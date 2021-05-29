@@ -88,4 +88,7 @@
     <color name="line_11">#DCDFE6</color>
     <color name="line_E4E7ED">#E4E7ED</color>
     <color name="face_warn">#F7A200</color>
+
+    <color name="colorDateSelect">#2C8AFF</color>
+    <color name="colorTodayText">#2C8AFF</color>
 </resources>

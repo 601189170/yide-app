@@ -243,8 +243,8 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         String[] undoTimes = {"", ""};
         if (undoTime != null) {
             //"2021-05-19 14:17:36" to "05.19 13:54"
-            undoTime = DateUtils.formatTime(approvalTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
-            undoTimes = approvalTime.split(" ");
+            undoTime = DateUtils.formatTime(undoTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
+            undoTimes = undoTime.split(" ");
         }
 
         leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true,false));

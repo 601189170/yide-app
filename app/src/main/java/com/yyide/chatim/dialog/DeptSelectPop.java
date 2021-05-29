@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -60,20 +61,20 @@ public class DeptSelectPop extends PopupWindow {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void init() {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_dept_select_bttom_pop, null);
-        TextView confirm = mView.findViewById(R.id.confirm);
+//        TextView confirm = mView.findViewById(R.id.confirm);
         TextView cancel = mView.findViewById(R.id.cancel);
         ConstraintLayout bg = mView.findViewById(R.id.bg);
         RecyclerView recyclerView = mView.findViewById(R.id.departments);
-        confirm.setOnClickListener(v -> {
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-                final Optional<LeaveDeptRsp.DataBean> optionalDataBean = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-                if (optionalDataBean.isPresent()){
-                    final LeaveDeptRsp.DataBean dataBean = optionalDataBean.get();
-                    onCheckedListener.onOnCheckedListener(dataBean.getDeptId(),dataBean.getDeptName());
-                }
-            }
-        });
+//        confirm.setOnClickListener(v -> {
+//            if (popupWindow != null && popupWindow.isShowing()) {
+//                popupWindow.dismiss();
+//                final Optional<LeaveDeptRsp.DataBean> optionalDataBean = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+//                if (optionalDataBean.isPresent()){
+//                    final LeaveDeptRsp.DataBean dataBean = optionalDataBean.get();
+//                    onCheckedListener.onOnCheckedListener(dataBean.getDeptId(),dataBean.getDeptName());
+//                }
+//            }
+//        });
         bg.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
@@ -97,6 +98,15 @@ public class DeptSelectPop extends PopupWindow {
             final LeaveDeptRsp.DataBean dataBean = dataBeansList.get(position);
             dataBean.setIsDefault(1);
             deptSelectAdapter.notifyDataSetChanged();
+
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+                final Optional<LeaveDeptRsp.DataBean> optionalDataBean = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+                if (optionalDataBean.isPresent()){
+                    final LeaveDeptRsp.DataBean dataBean2 = optionalDataBean.get();
+                    onCheckedListener.onOnCheckedListener(dataBean2.getDeptId(),dataBean2.getDeptName());
+                }
+            }
         });
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
@@ -171,16 +181,12 @@ public class DeptSelectPop extends PopupWindow {
             LeaveDeptRsp.DataBean dataBean = data.get(position);
             holder.tv_title.setText(dataBean.getDeptName());
             final boolean b = dataBean.getIsDefault() == 1;
-            holder.checkBox.setChecked(b);
+            holder.checkBox.setVisibility(b?View.VISIBLE:View.GONE);
             holder.itemView.setOnClickListener(v -> {
                 onClickedListener.onClicked(position);
             });
 
-            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (!buttonView.isPressed()){
-                    Log.e("TAG", "initView: 代码触发，不处理监听事件。" );
-                    return;
-                }
+            holder.checkBox.setOnClickListener(v->{
                 onClickedListener.onClicked(position);
             });
         }
@@ -195,7 +201,7 @@ public class DeptSelectPop extends PopupWindow {
             @BindView(R.id.tv_title)
             TextView tv_title;
             @BindView(R.id.checkBox)
-            CheckBox checkBox;
+            ImageView checkBox;
 
             public ViewHolder(View view) {
                 super(view);

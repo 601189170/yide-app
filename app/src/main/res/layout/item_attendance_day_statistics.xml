@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/dp_12"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="@dimen/dp_12"
+    android:background="@color/white"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_16">
+
+        <TextView
+            android:id="@+id/tv_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上午到校"
+            android:textColor="#ff1e1e1e"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_attendance_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/attendance_time_text"
+            android:textColor="#ff909399"
+            android:textSize="13sp"
+            android:drawableLeft="@drawable/icon_attendance_time"
+            android:drawablePadding="@dimen/dp_4"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_attendance_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="97"
+            android:textColor="#ff2c8aff"
+            android:textSize="30sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_event_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textColor="#ff2c8aff"
+            android:textSize="13sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_attendance_rate"
+            app:layout_constraintLeft_toRightOf="@id/tv_attendance_rate" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:text="签到率"
+            android:textColor="#ff909399"
+            android:textSize="13sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_attendance_rate"
+            app:layout_constraintLeft_toRightOf="@id/tv_attendance_rate" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="98dp" />
+
+        <TextView
+            android:id="@+id/tv_due_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90"
+            android:textColor="#ff606266"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_due"
+            app:layout_constraintRight_toRightOf="@id/tv_due"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintBottom_toTopOf="@id/tv_due"/>
+
+        <TextView
+            android:id="@+id/tv_due"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="应到"
+            android:textColor="#ff909399"
+            android:textSize="14sp"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/vertical_line1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <View
+            android:id="@+id/vertical_line1"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dp_30"
+            android:background="#EEF4FC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_due"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@id/tv_normal"/>
+
+        <TextView
+            android:id="@+id/tv_normal_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90"
+            android:textColor="#ff606266"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_normal"
+            app:layout_constraintLeft_toLeftOf="@id/tv_normal"
+            app:layout_constraintRight_toRightOf="@id/tv_normal"
+            app:layout_constraintTop_toBottomOf="@id/guideline"/>
+
+        <TextView
+            android:id="@+id/tv_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="正常"
+            android:textColor="#ff909399"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@id/vertical_line1"
+            app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintRight_toLeftOf="@id/vertical_line2"
+             />
+
+        <View
+            android:id="@+id/vertical_line2"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dp_30"
+            android:background="#EEF4FC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_normal"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@id/tv_absence"
+            />
+
+        <TextView
+            android:id="@+id/tv_absence_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90"
+            android:textColor="#ff606266"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_absence"
+            app:layout_constraintLeft_toLeftOf="@id/tv_absence"
+            app:layout_constraintRight_toRightOf="@id/tv_absence"
+            app:layout_constraintTop_toBottomOf="@id/guideline"/>
+
+        <TextView
+            android:id="@+id/tv_absence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="缺勤"
+            android:textColor="#ff909399"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@id/vertical_line2"
+            app:layout_constraintRight_toLeftOf="@id/vertical_line3"
+            app:layout_constraintBottom_toBottomOf="parent"
+             />
+
+        <View
+            android:id="@+id/vertical_line3"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dp_30"
+            android:background="#EEF4FC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_absence"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@id/tv_ask_for_leave"/>
+
+        <TextView
+            android:id="@+id/tv_ask_for_leave_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90"
+            android:textColor="#ff606266"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_ask_for_leave"
+            app:layout_constraintLeft_toLeftOf="@id/tv_ask_for_leave"
+            app:layout_constraintRight_toRightOf="@id/tv_ask_for_leave"
+            app:layout_constraintTop_toBottomOf="@id/guideline"/>
+
+        <TextView
+            android:id="@+id/tv_ask_for_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="请假"
+            android:textColor="#ff909399"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@id/vertical_line3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/vertical_line4"
+             />
+
+        <View
+            android:id="@+id/vertical_line4"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dp_30"
+            android:background="#EEF4FC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tv_ask_for_leave"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintRight_toLeftOf="@id/tv_late"/>
+
+        <TextView
+            android:id="@+id/tv_late_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="90"
+            android:textColor="#ff606266"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_late"
+            app:layout_constraintRight_toRightOf="@id/tv_late"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintBottom_toTopOf="@id/tv_late"/>
+
+        <TextView
+            android:id="@+id/tv_late"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="迟到"
+            android:textColor="#ff909399"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@id/vertical_line4"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+             />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

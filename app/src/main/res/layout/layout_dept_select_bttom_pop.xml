@@ -35,12 +35,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/confirm"
+                android:id="@+id/cancel"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="确定"
+                android:text="取消"
                 android:textColor="@color/blue11"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +60,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -15,7 +15,6 @@ import com.yyide.chatim.activity.attendance.fragment.DayStatisticsFragment;
 import com.yyide.chatim.activity.attendance.fragment.WeekStatisticsFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityStatisticsBinding;
-import com.yyide.chatim.model.TemplateTypeRsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +33,15 @@ public class StatisticsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mViewBinding = ActivityStatisticsBinding.inflate(getLayoutInflater());
         setContentView(mViewBinding.getRoot());
-        mViewBinding.top.title.setText(R.string.attendance_title);
+        initView();
         initViewPager();
+    }
+
+    private void initView() {
+        mViewBinding.top.title.setText(R.string.attendance_title);
+        mViewBinding.top.backLayout.setOnClickListener((v)->{
+            finish();
+        });
     }
 
     private void initViewPager() {
@@ -48,6 +54,7 @@ public class StatisticsActivity extends BaseActivity {
         fragments.add(new WeekStatisticsFragment());
 
         mViewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        mViewBinding.viewpager.setUserInputEnabled(false);
         mViewBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override

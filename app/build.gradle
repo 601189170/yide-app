@@ -186,5 +186,8 @@ dependencies {
 
     //图片查看器
     implementation 'com.github.chrisbanes:PhotoView:1.2.6'
+
+    implementation(name: 'weekcalendar-release', ext: 'aar')
+    implementation 'joda-time:joda-time:2.9.1'
 }
 

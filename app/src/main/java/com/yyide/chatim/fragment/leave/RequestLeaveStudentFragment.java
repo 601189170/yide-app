@@ -440,12 +440,14 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             intent.putExtra("id",id);
             startActivity(intent);
             getActivity().finish();
+        }else {
+            ToastUtils.showShort("提交失败："+baseRsp.getMsg());
         }
     }
 
     @Override
     public void addStudentLeaveFail(String msg) {
-
+        ToastUtils.showShort("提交失败："+msg);
     }
 
     @Override
