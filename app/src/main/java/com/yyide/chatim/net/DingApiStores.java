@@ -182,24 +182,28 @@ public interface DingApiStores {
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNotice
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyAnnouncement
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyAnnouncement
     //通知公告列表
     //type 1 我收到的 2 我发布的
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/announcement/getMyAnnouncement")
+    @GET("/message-server/cloud-message/user/announcement/getMyAnnouncement")
     Observable<NoticeListRsp> getMyNotice(@Query("type") int type, @Query("current") int page, @Query("size") int size);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeDetails
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/notice/getMyNoticeDetails
     //获取我的公告详情
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/notice/getMyNoticeDetails")
+    @GET("/message-server/cloud-message/user/notice/getMyNoticeDetails")
     Observable<NoticeDetailRsp> getMyNoticeDetails(@Query("id") int id);
 
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyReleaseNotice
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/announcement/getMyReleaseNotice")
+    @GET("/message-server/cloud-message/user/announcement/getMyReleaseNotice")
     Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") int id);
 
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyNoticeBySignId
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/announcement/getMyNoticeBySignId")
+    @GET("/message-server/cloud-message/user/announcement/getMyNoticeBySignId")
     Observable<NoticeDetailRsp> getMyNoticeBySignId(@Query("signId") long id);
 
     //消息模板分类类型
@@ -232,13 +236,15 @@ public interface DingApiStores {
     Observable<HomeNoticeRsp> getMyNoticeBacklog();
 
     //添加公告
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/addUserAnnouncement
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/user/announcement/addUserAnnouncement")
+    @POST("/message-server/cloud-message/user/announcement/addUserAnnouncement")
     Observable<AddUserAnnouncementResponse> addUserAnnouncement(@Body RequestBody requestBody);
 
     //删除我发布的通告
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/delAnnouncement
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/announcement/delAnnouncement")
+    @GET("/message-server/cloud-message/user/announcement/delAnnouncement")
     Observable<BaseRsp> delAnnouncement(@Query("id") int id);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
@@ -246,8 +252,9 @@ public interface DingApiStores {
     Observable<BaseRsp> updateMyNoticeDetails(@Query("id") int id);
 
     //确认详情（多少人未确认）
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getConfirmDetails
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/announcement/getConfirmDetails")
+    @GET("/message-server/cloud-message/user/announcement/getConfirmDetails")
     Observable<ConfirmDetailRsp> getConfirmDetails(@Query("confirmType") int confirmType, @Query("signId") long signId, @Query("current") int current, @Query("size") int size);
 
     //查询学段
@@ -459,6 +466,7 @@ public interface DingApiStores {
     Observable<LeavePhraseRsp> queryLeavePhraseList(@QueryMap HashMap<String, Object> map);
 
     //更新我收到的公告
+    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/notice/updateMyNoticeDetails
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/message-server/cloud-message/user/notice/updateMyNoticeDetails")
     Observable<ResultBean> updateMyNoticeDetails(@QueryMap HashMap<String, Object> map);

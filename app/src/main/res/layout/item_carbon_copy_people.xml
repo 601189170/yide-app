@@ -34,5 +34,6 @@
         app:layout_constraintBottom_toBottomOf="@id/iv_user_head"
         app:layout_constraintLeft_toRightOf="@id/iv_user_head"
         android:layout_marginStart="@dimen/dp_5"
+        android:visibility="gone"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,12 +21,17 @@ import com.beiing.weekcalendar.listener.GetViewHelper;
 import com.beiing.weekcalendar.utils.CalendarUtil;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.attendance.DayStatisticsListAdapter;
+import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.model.DayStatisticsBean;
+import com.yyide.chatim.utils.DateUtils;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +42,7 @@ public class DayStatisticsFragment extends Fragment {
     private static final String TAG = DayStatisticsFragment.class.getSimpleName();
     private List<DateTime> eventDates;
     private List<DayStatisticsBean> data;
+    private FragmentDayStatisticsBinding binding;
     public DayStatisticsFragment() {
         // Required empty public constructor
     }
@@ -76,7 +82,11 @@ public class DayStatisticsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final FragmentDayStatisticsBinding bind = FragmentDayStatisticsBinding.bind(view);
+        this.binding = bind;
         eventDates = new ArrayList<>();
+        final String time = DateUtils.switchTime(new Date(), "yyyy-MM-dd");
+        this.binding.tvCurrentDate.setText(time);
         final WeekCalendar weekCalendar = view.findViewById(R.id.week_calendar);
         weekCalendar.setGetViewHelper(new GetViewHelper() {
             @Override
@@ -127,7 +137,8 @@ public class DayStatisticsFragment extends Fragment {
         });
 
         weekCalendar.setDateSelectListener(selectDate -> {
-            String text = "你选择的日期是：" + selectDate.toString("yyyy-MM-dd");
+            String text = selectDate.toString("yyyy-MM-dd");
+            this.binding.tvCurrentDate.setText(text);
             Log.e(TAG, "onDateSelect: "+text );
         });
 
