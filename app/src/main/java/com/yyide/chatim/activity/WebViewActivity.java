@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -62,12 +63,24 @@ public class WebViewActivity extends BaseActivity {
     private ValueCallback<Uri> uploadMessage;
     private ValueCallback<Uri[]> uploadMessageAboveL;
     private final static int FILE_CHOOSER_RESULT_CODE = 10000;
+    private static final String PARAM_URL = "url";
+    private static final String PARAM_TYPE = "type";
+    private static final String PARAM_JSON = "json";
+    private String json;
+
+    public static void start(Context context, String url, String json){
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(PARAM_URL, url);
+        intent.putExtra(PARAM_JSON, json);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUrl = getIntent().getStringExtra("url");
-        type = getIntent().getStringExtra("type");
+        currentUrl = getIntent().getStringExtra(PARAM_URL);
+        type = getIntent().getStringExtra(PARAM_TYPE);
+        json = getIntent().getStringExtra(PARAM_JSON);
         initView();
 
         initAnimtor();
@@ -175,6 +188,10 @@ public class WebViewActivity extends BaseActivity {
                 super.onPageFinished(view, url);
                 Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
                 mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
+                mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
+                if(SpData.getIdentityInfo() != null){
+                    mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
+                }
             }
 
             @Override
@@ -196,7 +213,6 @@ public class WebViewActivity extends BaseActivity {
 
         });
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

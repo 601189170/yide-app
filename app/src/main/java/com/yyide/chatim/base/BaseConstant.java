@@ -52,6 +52,8 @@ public class BaseConstant {
     //班级相册
     public static final String CLASS_PHOTO_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/classPhoto";
 
+    public static final String SCAN_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/QRcodeLogin";
+
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     /**
@@ -76,6 +78,7 @@ public class BaseConstant {
     public static final String TYPE_MAIN = "type_main";
     public static final String TYPE_IM_LOGIN = "type_im_login";
     public static final String TYPE_MESSAGE_UPDATE = "type_message_update";
+    public static final String TYPE_MAIN_MESSAGE_NUMBER = "type_main_message_number";
     public static final String TYPE_UPDATE_HOME = "type_update_home";
     public static final String TYPE_MESSAGE_TODO_NUM = "type_message_todo_num";
     public static final String TYPE_LEAVE = "type_leave";

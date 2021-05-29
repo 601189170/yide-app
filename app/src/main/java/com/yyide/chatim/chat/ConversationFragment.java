@@ -176,14 +176,13 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 //        titleBarLayout.setBackgroundColor(R.color.black);
 //使设置好的布局参数应用到控件
 //        imageView.setLayoutParams(params);
-
+        mvpPresenter.getUserNoticePage(1, 1);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        mvpPresenter.getUserNoticePage(1, 1);
     }
 
     private void initTitleAction() {
@@ -296,6 +295,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
                 final int total = userNoticeRsp.getData().getTotal();
                 tv_unNum.setVisibility(View.VISIBLE);
                 tv_unNum.setText(total + "");
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN_MESSAGE_NUMBER, "", total));
             } else {
                 tv_unNum.setVisibility(View.GONE);
             }
@@ -306,7 +306,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void updateNoticeSuccess(ResultBean resultBean) {
 
     }
-
 
     @Override
     public void getUserNoticePageFail(String msg) {
@@ -325,7 +324,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
                 BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             initView();
         } else if (BaseConstant.TYPE_MESSAGE_UPDATE.equals(messageEvent.getCode())) {
-            mvpPresenter.getUserNoticePage(1, 1);
+            //mvpPresenter.getUserNoticePage(1, 1);
         }
     }
 

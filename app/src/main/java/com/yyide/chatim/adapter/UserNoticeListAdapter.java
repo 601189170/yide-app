@@ -94,13 +94,14 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
             String createdDateTime = recordsBean.getSendTime();
             holder1.tv_date.setText(DateUtils.formatTime(createdDateTime, "", "yyyy-MM-dd"));
             holder1.tv_title.setText(recordsBean.getTitle());
+            holder1.tv_leave.setText(recordsBean.getFirstData());
             final String content = recordsBean.getContent();
             final String templateContent = parseTemplateContent(content);
             Log.e("TAG", "onBindViewHolder: " + content);
             if (TextUtils.isEmpty(templateContent)) {
-                holder1.tv_leave.setText(content);
+                holder1.tv_content.setText(content);
             } else {
-                holder1.tv_leave.setText(templateContent);
+                holder1.tv_content.setText(templateContent);
             }
             //不是纯文本则可以跳转详情
             if ("2".equals(recordsBean.getIsText())) {
@@ -122,7 +123,11 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
             final JSONArray jsonArray = new JSONArray(content);
             for (int i = 0; i < jsonArray.length(); i++) {
                 final String jsonObject = jsonArray.getString(i);
-                buffer.append(jsonObject + "\n" + "\n");
+                if (i != jsonArray.length() - 1) {
+                    buffer.append(jsonObject + "\n" + "\n");
+                } else {
+                    buffer.append(jsonObject);
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -185,6 +190,9 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_msg_type)
         TextView tv_msg_type;
+
+        @BindView(R.id.tv_content)
+        TextView tv_content;
 
         @BindView(R.id.rl_detail)
         RelativeLayout rl_detail;

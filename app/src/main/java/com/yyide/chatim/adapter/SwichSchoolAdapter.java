@@ -49,6 +49,7 @@ public class SwichSchoolAdapter extends BaseAdapter {
         TextView school_name = VHUtil.ViewHolder.get(view, R.id.school_name);
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
         View view_line = VHUtil.ViewHolder.get(view, R.id.view_line);
+        ImageView img = VHUtil.ViewHolder.get(view, R.id.img);
 
         school_name.setText(getItem(position).schoolName);
         school_info.setText(getItem(position).realname);

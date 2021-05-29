@@ -211,6 +211,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             versionResponse.setUpdateAddress("https://3550d97d52.eachqr.com/aaa4e3fce9f117f73e433ba180dca3f0bab26438.apk?auth_key=1620374642-0-0-d1a8b5e8c43704c29455ab8c077319aa");
             versionResponse.setUpdateContent("1、更新内容\n2、更新内容\n3、更新内容");
             download(versionResponse);
+        } else if(BaseConstant.TYPE_MAIN_MESSAGE_NUMBER.equals(messageEvent.getCode())){
+            messageNumber = messageEvent.getCount() + imUnread;
+            setMessageCount(messageNumber);
         }
     }
 
@@ -268,8 +271,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
     }
 
+    private int messageNumber = 0;
+    private int imUnread = 0;
+
     @Override
     public void updateUnread(int count) {
+        imUnread = count;
+        count = count + messageNumber;
+        setMessageCount(count);
+        // 华为离线推送角标
+//        HUAWEIHmsMessageService.updateBadge(this, count);
+    }
+
+    private void setMessageCount(int count) {
         Log.e("Chatim", "updateUnread==>: " + count);
         if (count > 0) {
             msgTotalUnread.setVisibility(View.VISIBLE);
@@ -281,8 +295,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             unreadStr = "99+";
         }
         msgTotalUnread.setText(unreadStr);
-        // 华为离线推送角标
-//        HUAWEIHmsMessageService.updateBadge(this, count);
     }
 
     @Override

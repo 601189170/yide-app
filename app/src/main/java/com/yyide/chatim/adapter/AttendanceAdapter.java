@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +32,8 @@ import java.util.List;
 public class AttendanceAdapter extends LoopPagerAdapter {
     //    -->设置各区块的颜色
     public static final int[] PIE_COLORS2 = {
-            Color.rgb(55, 130, 255), Color.rgb(145, 147, 153)
-            , Color.rgb(246, 189, 22), Color.rgb(246, 108, 108)
+          Color.rgb(145, 147, 153), Color.rgb(246, 189, 22)
+            , Color.rgb(246, 108, 108),  Color.rgb(55, 130, 255)
     };
     public List<HomeAttendanceRsp.DataBean> list = new ArrayList<>();
 
@@ -64,16 +65,15 @@ public class AttendanceAdapter extends LoopPagerAdapter {
 //        考勤2：课堂考勤-第1节语文，出勤率94%，迟到1人，缺勤1人，请假2人
 //        int amOrPm = new GregorianCalendar().get(GregorianCalendar.AM_PM);
         List<PieEntry> entries = new ArrayList<>();
-        cd.setText(item.getLate() + " 人");
         qq.setText(item.getAbsence() + " 人");
+        cd.setText(item.getLate() + " 人");
         qj.setText(item.getLeave() + " 人");
         number.setText(item.getNumber() + " 人");
-        entries.add(new PieEntry(item.getApplyNum(), "实到"));
+        entries.add(new PieEntry(item.getAbsence(), "缺勤"));
         entries.add(new PieEntry(item.getLeave(), "请假"));
         entries.add(new PieEntry(item.getLate(), "迟到"));
-        entries.add(new PieEntry(item.getAbsence(), "缺勤"));
+        entries.add(new PieEntry(item.getApplyNum(), "实到"));
         piechart.setCenterText(item.getRate() + "%\n" + "考勤率");
-
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(0);//设置饼块之间的间隔
         dataSet.setColors(PIE_COLORS2);//设置饼块的颜色

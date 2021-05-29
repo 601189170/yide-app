@@ -376,7 +376,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             intent.putExtra("id",id);
             startActivity(intent);
             getActivity().finish();
-        }else {
+        } else {
             ToastUtils.showShort("提交失败："+baseRsp.getMsg());
         }
     }

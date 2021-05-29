@@ -153,7 +153,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         private void setTodoItem(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
             holder.setText(R.id.tv_leave, o.getFirstData())
                     .setText(R.id.tv_title, o.getTitle());
-            GlideUtil.loadCircleImage(getContext(), getContext().getResources().getDrawable(R.mipmap.ic_launcher_logo), holder.getView(R.id.img));
+            //GlideUtil.loadCircleImage(getContext(), getContext().getResources().getDrawable(R.mipmap.ic_launcher_logo), holder.getView(R.id.img));
             //处理内容解析
             try {
                 if (TodoRsp.DataBean.RecordsBean.IS_TEXT_TYPE.equals(o.getIsText())) {

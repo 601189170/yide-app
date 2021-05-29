@@ -38,7 +38,7 @@
                     android:layout_height="26dp"
                     android:layout_gravity="center_vertical"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_launcher_logo" />
+                    android:src="@drawable/icon_leave" />
 
                 <TextView
                     android:layout_width="wrap_content"

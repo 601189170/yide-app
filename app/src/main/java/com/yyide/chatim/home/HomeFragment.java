@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -111,10 +112,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        setFragment();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        setFragment();
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
     }
@@ -180,7 +181,26 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onPause() {
         super.onPause();
+    }
 
+    private void setIdentityFragment(){//身份切换只做模块显示和隐藏
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
+            tableContent.setVisibility(View.GONE);
+            noticeContent.setVisibility(View.VISIBLE);
+            kqContent.setVisibility(View.VISIBLE);
+            bannerContent.setVisibility(View.GONE);
+            workContent.setVisibility(View.GONE);
+            classHonorContent.setVisibility(View.GONE);
+            studentHonorContent.setVisibility(View.GONE);
+        } else {
+            tableContent.setVisibility(View.VISIBLE);
+            noticeContent.setVisibility(View.VISIBLE);
+            kqContent.setVisibility(View.VISIBLE);
+            bannerContent.setVisibility(View.VISIBLE);
+            workContent.setVisibility(View.VISIBLE);
+            classHonorContent.setVisibility(View.VISIBLE);
+            studentHonorContent.setVisibility(View.VISIBLE);
+        }
     }
 
     void setFragment() {
@@ -212,6 +232,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             SpData.setIdentityInfo(rsp);
         }
         setSchoolInfo();
+        setIdentityFragment();
     }
 
     void setSchoolInfo() {
@@ -233,7 +254,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             if (!TextUtils.isEmpty(messageEvent.getMessage())) {
                 GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
             }
-        }else if(BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())){
+        } else if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
             mvpPresenter.getHomeNotice();
         }
     }

@@ -67,7 +67,10 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     @Override
     public void onScanQRCodeSuccess(String result) {
         vibrate();
-        if (!TextUtils.isEmpty(result) && result.contains("/management/cloud-system/app/user/scan/")) {
+        if (!TextUtils.isEmpty(result) && (result.contains("equipmentSerialNumber") && result.contains("brandStatus"))) {
+            //{"scanUrl":"/management/cloud-system/app/user/scan/loginId","equipmentSerialNumber":"equipmentSerialNumber","brandStatus":"brandStatus"}
+            WebViewActivity.start(this, BaseConstant.SCAN_URL, result);
+        } else if (!TextUtils.isEmpty(result) && result.contains("/management/cloud-system/app/user/scan/")) {
             jupm(this, ScanLoginActivity.class, "result", result);
         } else if (!TextUtils.isEmpty(result) && (result.startsWith("http") || result.equals("https"))) {
             jupm(this, WebViewActivity.class, "url", result);
@@ -113,11 +116,9 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
 
         if (zbarview != null && i == 0) {
             zbarview.startCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
-
 //            //显示扫描框
             //开始识别
             i = 1;
-
         }
 
     }

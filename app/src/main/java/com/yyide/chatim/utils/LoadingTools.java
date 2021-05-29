@@ -28,7 +28,6 @@ public class LoadingTools {
         }
         return mInstance;
     }
-
     public LoadingTools(Context context) {
         mLoadingDialog = new Dialog(context, R.style.dialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_loading, null);
@@ -37,7 +36,8 @@ public class LoadingTools {
         mLoadingDialog.setCancelable(true);
         mLoadingDialog.setCanceledOnTouchOutside(true);
         mLoadingDialog.setContentView(view);
-        loadingView.start();
+
+        mLoadingDialog.setOnShowListener(dialog -> loadingView.start());
         mLoadingDialog.setOnDismissListener(dialog -> loadingView.stop());
         Window window = mLoadingDialog.getWindow();
         if (null != window) {
@@ -54,7 +54,7 @@ public class LoadingTools {
 
     public void closeLoading() {
         if (mLoadingDialog.isShowing()) {
-//            mLoadingDialog.dismiss();
+            mLoadingDialog.dismiss();
             mLoadingDialog.cancel();
         }
     }

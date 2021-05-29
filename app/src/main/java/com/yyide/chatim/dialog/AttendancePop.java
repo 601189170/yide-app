@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.view.WheelView;
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.widget.ArrayWheelAdapter;
 
@@ -26,17 +27,19 @@ public class AttendancePop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
-    private List<String> dataBeansList;
+    private int selectIndex;
+    private List<AttendanceCheckRsp.DataBean.AttendancesFormBean> dataBeansList;
     private SelectClasses mSelectClasses;
-    public void BottomSelectWindow(SelectClasses selectClasses) {
+
+    public void setOnSelectListener(SelectClasses selectClasses) {
         this.mSelectClasses = selectClasses;
     }
 
     public interface SelectClasses {
-        void OnSelectClassesListener(int id, String classesName);
+        void OnSelectClassesListener(int index);
     }
 
-    public AttendancePop(Activity context, List<String> dataBeansList) {
+    public AttendancePop(Activity context, List<AttendanceCheckRsp.DataBean.AttendancesFormBean> dataBeansList) {
         this.context = context;
         this.dataBeansList = dataBeansList;
         init();
@@ -49,6 +52,9 @@ public class AttendancePop extends PopupWindow {
         ConstraintLayout bg = mView.findViewById(R.id.bg);
         WheelView wheelView = mView.findViewById(R.id.departments);
         confirm.setOnClickListener(v -> {
+            if(mSelectClasses != null){
+                mSelectClasses.OnSelectClassesListener(selectIndex);
+            }
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }
@@ -74,7 +80,7 @@ public class AttendancePop extends PopupWindow {
 
             @Override
             public Object getItem(int index) {
-                return dataBeansList.get(index);
+                return dataBeansList.get(index).getStudents().getName();
             }
 
             @Override
@@ -84,7 +90,7 @@ public class AttendancePop extends PopupWindow {
         });
         wheelView.setCurrentItem(-1);
         wheelView.setOnItemSelectedListener(index -> {
-            dataBeansList.get(index);
+            this.selectIndex = index;
         });
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,

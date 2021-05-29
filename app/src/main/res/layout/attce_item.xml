@@ -21,12 +21,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/ll_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="65dp"
         android:orientation="vertical"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/piechart">
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout5">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -60,8 +62,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             android:layout_marginTop="@dimen/dp_5"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <View
@@ -147,25 +149,35 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/piechart"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="@dimen/dp_5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_attendance_type" />
-
-    <TextView
-        android:id="@+id/tv_desc"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_5"
-        android:textColor="@color/text_1E1E1E"
-        android:textSize="@dimen/text_18"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/piechart"
-        app:layout_constraintStart_toStartOf="@+id/piechart"
-        app:layout_constraintTop_toBottomOf="@+id/piechart" />
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/ll_desc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attendance_type">
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/piechart"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:textColor="@color/text_1E1E1E"
+            android:textSize="@dimen/text_18"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/piechart"
+            app:layout_constraintStart_toStartOf="@+id/piechart"
+            app:layout_constraintTop_toBottomOf="@+id/piechart" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -509,36 +509,41 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void initIm(int userid, String userSig) {
-        TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    private void initIm(int userId, String userSig) {
+        TUIKit.login(String.valueOf(userId), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
-                hideLoading();
                 runOnUiThread(() -> {
                     //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
                     UserInfo.getInstance().setAutoLogin(false);
                     UserInfo.getInstance().setUserSig(userSig);
-                    UserInfo.getInstance().setUserId(String.valueOf(userid));
+                    UserInfo.getInstance().setUserId(String.valueOf(userId));
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                     Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
                 });
                 DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
+                hideLoading();
             }
 
             @Override
             public void onSuccess(Object data) {
-                hideLoading();
                 SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
                 SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
-                UserInfo.getInstance().setUserId(String.valueOf(userid));
+                UserInfo.getInstance().setUserId(String.valueOf(userId));
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                hideLoading();
                 Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
+                finish();
             }
         });
     }

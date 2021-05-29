@@ -34,9 +34,7 @@
                         android:id="@+id/table_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                    </FrameLayout>
+                        android:layout_weight="1"/>
 
                     <FrameLayout
                         android:id="@+id/notice_content"

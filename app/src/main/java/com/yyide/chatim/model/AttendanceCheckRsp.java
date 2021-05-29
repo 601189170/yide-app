@@ -4,11 +4,10 @@ import java.util.List;
 
 public class AttendanceCheckRsp {
 
-
     private int code;
     private boolean success;
     private String msg;
-    private List<DataBean> data;
+    private DataBean data;
 
     public int getCode() {
         return code;
@@ -18,7 +17,7 @@ public class AttendanceCheckRsp {
         this.code = code;
     }
 
-    public boolean getSuccess() {
+    public boolean isSuccess() {
         return success;
     }
 
@@ -34,57 +33,48 @@ public class AttendanceCheckRsp {
         this.msg = msg;
     }
 
-    public List<DataBean> getData() {
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
     public static class DataBean {
-        private int number;
-        private String rate;
-        private StudentsBean students;
+        private List<AttendancesFormBean> attendancesForm;
+        private List<?> schoolPeopleAllForm;
 
-        public int getNumber() {
-            return number;
+        public List<AttendancesFormBean> getAttendancesForm() {
+            return attendancesForm;
         }
 
-        public void setNumber(int number) {
-            this.number = number;
+        public void setAttendancesForm(List<AttendancesFormBean> attendancesForm) {
+            this.attendancesForm = attendancesForm;
         }
 
-        public String getRate() {
-            return rate;
+        public List<?> getSchoolPeopleAllForm() {
+            return schoolPeopleAllForm;
         }
 
-        public void setRate(String rate) {
-            this.rate = rate;
+        public void setSchoolPeopleAllForm(List<?> schoolPeopleAllForm) {
+            this.schoolPeopleAllForm = schoolPeopleAllForm;
         }
 
-        public StudentsBean getStudents() {
-            return students;
-        }
-
-        public void setStudents(StudentsBean students) {
-            this.students = students;
-        }
-
-        public static class StudentsBean {
+        public static class AttendancesFormBean {
             private int number;
-            private String rate;
-            private int applyNum;
-            private int late;
-            private int leaveEarly;
-            private int absence;
-            private int leave;
-            private String name;
-            private int section;
-            private List<PeopleBean> people;
-            private List<?> latePeople;
-            private List<?> leavePeople;
-            private List<AbsencePeopleBean> absencePeople;
+            private StudentsBean students;
+            private int numberA;
+            private int applyNumA;
+            private int lateA;
+            private int leaveEarlyA;
+            private int absenceA;
+            private int leaveA;
+            private List<?> peopleA;
+            private List<?> latePeopleA;
+            private List<?> leavePeopleA;
+            private List<?> absencePeopleA;
+            private List<?> leaveEarlyPeopleA;
 
             public int getNumber() {
                 return number;
@@ -94,106 +84,175 @@ public class AttendanceCheckRsp {
                 this.number = number;
             }
 
-            public String getRate() {
-                return rate;
+            public StudentsBean getStudents() {
+                return students;
             }
 
-            public void setRate(String rate) {
-                this.rate = rate;
+            public void setStudents(StudentsBean students) {
+                this.students = students;
             }
 
-            public int getApplyNum() {
-                return applyNum;
+            public int getNumberA() {
+                return numberA;
             }
 
-            public void setApplyNum(int applyNum) {
-                this.applyNum = applyNum;
+            public void setNumberA(int numberA) {
+                this.numberA = numberA;
             }
 
-            public int getLate() {
-                return late;
+            public int getApplyNumA() {
+                return applyNumA;
             }
 
-            public void setLate(int late) {
-                this.late = late;
+            public void setApplyNumA(int applyNumA) {
+                this.applyNumA = applyNumA;
             }
 
-            public int getLeaveEarly() {
-                return leaveEarly;
+            public int getLateA() {
+                return lateA;
             }
 
-            public void setLeaveEarly(int leaveEarly) {
-                this.leaveEarly = leaveEarly;
+            public void setLateA(int lateA) {
+                this.lateA = lateA;
             }
 
-            public int getAbsence() {
-                return absence;
+            public int getLeaveEarlyA() {
+                return leaveEarlyA;
             }
 
-            public void setAbsence(int absence) {
-                this.absence = absence;
+            public void setLeaveEarlyA(int leaveEarlyA) {
+                this.leaveEarlyA = leaveEarlyA;
             }
 
-            public int getLeave() {
-                return leave;
+            public int getAbsenceA() {
+                return absenceA;
             }
 
-            public void setLeave(int leave) {
-                this.leave = leave;
+            public void setAbsenceA(int absenceA) {
+                this.absenceA = absenceA;
             }
 
-            public String getName() {
-                return name;
+            public int getLeaveA() {
+                return leaveA;
             }
 
-            public void setName(String name) {
-                this.name = name;
+            public void setLeaveA(int leaveA) {
+                this.leaveA = leaveA;
             }
 
-            public int getSection() {
-                return section;
+            public List<?> getPeopleA() {
+                return peopleA;
             }
 
-            public void setSection(int section) {
-                this.section = section;
+            public void setPeopleA(List<?> peopleA) {
+                this.peopleA = peopleA;
             }
 
-            public List<PeopleBean> getPeople() {
-                return people;
+            public List<?> getLatePeopleA() {
+                return latePeopleA;
             }
 
-            public void setPeople(List<PeopleBean> people) {
-                this.people = people;
+            public void setLatePeopleA(List<?> latePeopleA) {
+                this.latePeopleA = latePeopleA;
             }
 
-            public List<?> getLatePeople() {
-                return latePeople;
+            public List<?> getLeavePeopleA() {
+                return leavePeopleA;
             }
 
-            public void setLatePeople(List<?> latePeople) {
-                this.latePeople = latePeople;
+            public void setLeavePeopleA(List<?> leavePeopleA) {
+                this.leavePeopleA = leavePeopleA;
             }
 
-            public List<?> getLeavePeople() {
-                return leavePeople;
+            public List<?> getAbsencePeopleA() {
+                return absencePeopleA;
             }
 
-            public void setLeavePeople(List<?> leavePeople) {
-                this.leavePeople = leavePeople;
+            public void setAbsencePeopleA(List<?> absencePeopleA) {
+                this.absencePeopleA = absencePeopleA;
             }
 
-            public List<AbsencePeopleBean> getAbsencePeople() {
-                return absencePeople;
+            public List<?> getLeaveEarlyPeopleA() {
+                return leaveEarlyPeopleA;
             }
 
-            public void setAbsencePeople(List<AbsencePeopleBean> absencePeople) {
-                this.absencePeople = absencePeople;
+            public void setLeaveEarlyPeopleA(List<?> leaveEarlyPeopleA) {
+                this.leaveEarlyPeopleA = leaveEarlyPeopleA;
             }
 
-            public static class PeopleBean {
+            public static class StudentsBean {
+                private int number;
+                private String rate;
+                private int applyNum;
+                private int late;
+                private int leaveEarly;
+                private int absence;
+                private int leave;
                 private String name;
-                private String time;
-                private String status;
+                private int section;
+                private String subjectName;
+                private List<?> studentIds;
+                private List<PeopleBean> people;
+                private List<PeopleBean> latePeople;
+                private List<PeopleBean> leavePeople;
+                private List<PeopleBean> absencePeople;
+                private List<PeopleBean> leaveEarlyPeople;
+
+                public int getNumber() {
+                    return number;
+                }
+
+                public void setNumber(int number) {
+                    this.number = number;
+                }
+
+                public String getRate() {
+                    return rate;
+                }
+
+                public void setRate(String rate) {
+                    this.rate = rate;
+                }
+
+                public int getApplyNum() {
+                    return applyNum;
+                }
+
+                public void setApplyNum(int applyNum) {
+                    this.applyNum = applyNum;
+                }
+
+                public int getLate() {
+                    return late;
+                }
+
+                public void setLate(int late) {
+                    this.late = late;
+                }
+
+                public int getLeaveEarly() {
+                    return leaveEarly;
+                }
+
+                public void setLeaveEarly(int leaveEarly) {
+                    this.leaveEarly = leaveEarly;
+                }
+
+                public int getAbsence() {
+                    return absence;
+                }
+
+                public void setAbsence(int absence) {
+                    this.absence = absence;
+                }
+
+                public int getLeave() {
+                    return leave;
+                }
+
+                public void setLeave(int leave) {
+                    this.leave = leave;
+                }
 
                 public String getName() {
                     return name;
@@ -203,42 +262,122 @@ public class AttendanceCheckRsp {
                     this.name = name;
                 }
 
-                public String getTime() {
-                    return time;
+                public int getSection() {
+                    return section;
                 }
 
-                public void setTime(String time) {
-                    this.time = time;
+                public void setSection(int section) {
+                    this.section = section;
                 }
 
-                public String getStatus() {
-                    return status;
+                public String getSubjectName() {
+                    return subjectName;
                 }
 
-                public void setStatus(String status) {
-                    this.status = status;
-                }
-            }
-
-            public static class AbsencePeopleBean {
-                private String name;
-                private String status;
-
-                public String getName() {
-                    return name;
+                public void setSubjectName(String subjectName) {
+                    this.subjectName = subjectName;
                 }
 
-                public void setName(String name) {
-                    this.name = name;
+                public List<?> getStudentIds() {
+                    return studentIds;
                 }
 
-                public String getStatus() {
-                    return status;
+                public void setStudentIds(List<?> studentIds) {
+                    this.studentIds = studentIds;
                 }
 
-                public void setStatus(String status) {
-                    this.status = status;
+                public List<PeopleBean> getPeople() {
+                    return people;
                 }
+
+                public void setPeople(List<PeopleBean> people) {
+                    this.people = people;
+                }
+
+                public List<?> getLatePeople() {
+                    return latePeople;
+                }
+
+                public void setLatePeople(List<PeopleBean> latePeople) {
+                    this.latePeople = latePeople;
+                }
+
+                public List<?> getLeavePeople() {
+                    return leavePeople;
+                }
+
+                public void setLeavePeople(List<PeopleBean> leavePeople) {
+                    this.leavePeople = leavePeople;
+                }
+
+                public List<PeopleBean> getAbsencePeople() {
+                    return absencePeople;
+                }
+
+                public void setAbsencePeople(List<PeopleBean> absencePeople) {
+                    this.absencePeople = absencePeople;
+                }
+
+                public List<?> getLeaveEarlyPeople() {
+                    return leaveEarlyPeople;
+                }
+
+                public void setLeaveEarlyPeople(List<PeopleBean> leaveEarlyPeople) {
+                    this.leaveEarlyPeople = leaveEarlyPeople;
+                }
+
+                public static class PeopleBean {
+                    private String name;
+                    private String status;
+                    private String time;
+
+                    public String getName() {
+                        return name;
+                    }
+
+                    public void setName(String name) {
+                        this.name = name;
+                    }
+
+                    public String getStatus() {
+                        return status;
+                    }
+
+                    public String getStatusValue() {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
+                        switch (status){
+                            case "0":
+                                status = "正常";
+                                break;
+                            case "1":
+                                status = "缺勤";
+                                break;
+                            case "2":
+                                status = "迟到";
+                                break;
+                            case "3":
+                                status = "早退";
+                                break;
+                            case "4":
+                                status = "无效打卡";
+                                break;
+                        }
+                        return status;
+                    }
+
+
+                    public void setStatus(String status) {
+                        this.status = status;
+                    }
+
+                    public String getTime() {
+                        return time;
+                    }
+
+                    public void setTime(String time) {
+                        this.time = time;
+                    }
+                }
+
             }
         }
     }

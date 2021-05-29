@@ -6,23 +6,16 @@
     android:orientation="vertical">
 
     <FrameLayout
-
         android:layout_width="match_parent"
         android:layout_height="72dp">
-
-        <com.yyide.chatim.widget.RadiusImageView
-            android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
-            android:layout_gravity="center_vertical"
-            android:background="@color/blue" />
 
         <com.yyide.chatim.widget.RadiusImageView
             android:id="@+id/img"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_gravity="center_vertical"
-            android:background="@color/blue"
             android:scaleType="centerCrop"
+            android:src="@color/blue"
             app:left_bottom_radius="6dp"
             app:left_top_radius="6dp"
             app:right_bottom_radius="6dp"
@@ -39,7 +32,6 @@
                 android:id="@+id/school_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:textColor="@color/text_212121"
                 android:textSize="@dimen/text_16" />
 

@@ -43,14 +43,8 @@ public class AppAdapter extends BaseQuickAdapter<AppItemBean.DataBean.RecordsBea
         title.setText(recordsBean.getName());
         AppItemAdapter adapter = new AppItemAdapter();
         grid.setAdapter(adapter);
-        if (recordsBean.getList() != null) {
-            List<AppItemBean.DataBean.RecordsBean.ListBean> listBeans = new ArrayList<>();
-            for (AppItemBean.DataBean.RecordsBean.ListBean item: recordsBean.getList()){
-                if (!"#".equals(item.getPath().trim())) {
-                    listBeans.add(item);
-                }
-            }
-            adapter.notifyData(listBeans);
+        if (recordsBean.getList() != null && recordsBean.getList().size() > 0) {
+            adapter.notifyData(recordsBean.getList());
         }
         grid.setOnItemClickListener((parent, view1, position1, id) -> {
             Intent intent;

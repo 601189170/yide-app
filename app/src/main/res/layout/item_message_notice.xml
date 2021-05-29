@@ -28,13 +28,10 @@
             android:paddingRight="15dp">
 
             <LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-
                 <TextView
-
                     android:layout_width="26dp"
                     android:layout_height="26dp"
                     android:layout_gravity="center_vertical"
@@ -46,7 +43,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="11dp"
-                    android:text="消息通知"
                     android:textColor="#303133"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -64,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="20dp"
-                android:text="请假审批提醒"
                 android:textColor="#303133"
                 android:textSize="15sp"
                 android:textStyle="bold" />
@@ -74,31 +69,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="邓小方的主监护人提交的请假需要你审批"
+                android:layout_marginBottom="@dimen/dp_20"
                 android:textColor="#606266"
-                android:textSize="13sp"
-                android:layout_marginBottom="@dimen/dp_20"/>
-           <RelativeLayout
-               android:id="@+id/rl_detail"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:visibility="gone">
-               <TextView
-                   android:layout_width="match_parent"
-                   android:layout_height="1dp"
-                   android:background="@color/line_10" />
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="详情"
-                   android:textColor="#ff666666"
-                   android:textSize="14sp"
-                 android:layout_alignParentEnd="true"
-                   android:layout_marginTop="@dimen/dp_12"
-                   android:layout_marginBottom="@dimen/dp_20"
-                   android:drawableRight="@drawable/icon_right"
-                   />
-           </RelativeLayout>
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:textColor="#606266"
+                android:textSize="13sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/line_10" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginBottom="@dimen/dp_20"
+                    android:drawableRight="@drawable/icon_right"
+                    android:text="详情"
+                    android:textColor="#ff666666"
+                    android:textSize="14sp" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
