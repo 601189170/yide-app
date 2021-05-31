@@ -72,10 +72,20 @@ public class StatisticsListFragment extends Fragment {
     }
     private void initdata(){
         data = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 1; i <= 10; i++) {
             final WeekStatisticsBean weekStatisticsBean = new WeekStatisticsBean();
             weekStatisticsBean.setName("张大大("+type+")");
             weekStatisticsBean.setTime(i);
+            weekStatisticsBean.setChecked(false);
+            List<WeekStatisticsBean.DataBean> list = new ArrayList<>();
+            for (int j = 0; j < i; j++) {
+                final WeekStatisticsBean.DataBean data = new WeekStatisticsBean.DataBean();
+                data.setStatus("未打卡");
+                data.setTime("05.31");
+                data.setTitle("上午到校");
+                list.add(data);
+            }
+            weekStatisticsBean.setDataBeanList(list);
             data.add(weekStatisticsBean);
         }
     }
@@ -87,5 +97,18 @@ public class StatisticsListFragment extends Fragment {
         final WeekStatisticsListAdapter weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         bind.recyclerview.setAdapter(weekStatisticsListAdapter);
+        weekStatisticsListAdapter.setOnClickedListener(position -> {
+            final WeekStatisticsBean weekStatisticsBean = data.get(position);
+            if (weekStatisticsBean.isChecked()){
+               weekStatisticsBean.setChecked(false);
+                weekStatisticsListAdapter.notifyDataSetChanged();
+            }else {
+                for (WeekStatisticsBean datum : data) {
+                    datum.setChecked(false);
+                }
+                weekStatisticsBean.setChecked(true);
+                weekStatisticsListAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

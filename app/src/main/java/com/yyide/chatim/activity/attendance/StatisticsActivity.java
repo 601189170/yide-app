@@ -50,8 +50,8 @@ public class StatisticsActivity extends BaseActivity {
         listTab.add("周统计");
         listTab.add("月统计");
         fragments.add(new DayStatisticsFragment());
-        fragments.add(new WeekStatisticsFragment());
-        fragments.add(new WeekStatisticsFragment());
+        fragments.add(WeekStatisticsFragment.newInstance(listTab.get(1)));
+        fragments.add(WeekStatisticsFragment.newInstance(listTab.get(2)));
 
         mViewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewBinding.viewpager.setUserInputEnabled(false);

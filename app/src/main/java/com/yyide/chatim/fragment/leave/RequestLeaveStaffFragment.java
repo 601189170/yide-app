@@ -169,7 +169,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                 break;
             case R.id.tv_department:
                 if (deptList.size()>1){
-                    final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), deptList);
+                    final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 1,deptList);
                     deptSelectPop.setOnCheckedListener((id, dept) -> {
                         deptName = dept;
                         deptId = id;

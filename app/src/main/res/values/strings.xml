@@ -151,5 +151,7 @@
     <string name="statistics_title">统计</string>
     <string name="attendance_time_text">考勤时间 %s</string>
     <string name="attendance_time_format">%d次</string>
+    <string name="month">%d月</string>
+    <string name="week">%s - %s</string>
 
 </resources>
