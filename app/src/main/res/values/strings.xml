@@ -153,5 +153,11 @@
     <string name="attendance_time_format">%d次</string>
     <string name="month">%d月</string>
     <string name="week">%s - %s</string>
+    <!--//考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
+    <string name="attendance_normal">正常</string>
+    <string name="attendance_late">迟到</string>
+    <string name="attendance_leave_early">早退</string>
+    <string name="attendance_no_sign_in">未签到</string>
+    <string name="attendance_ask_for_leave">请假</string>
 
 </resources>

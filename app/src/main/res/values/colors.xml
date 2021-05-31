@@ -91,4 +91,10 @@
 
     <color name="colorDateSelect">#2C8AFF</color>
     <color name="colorTodayText">#2C8AFF</color>
+   <!-- //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
+    <color name="attendance_normal">#5DADFF</color>
+    <color name="attendance_late">#F66C6C</color>
+    <color name="attendance_leave_early">#63DAAB</color>
+    <color name="attendance_no_sign_in">#F66C6C</color>
+    <color name="attendance_ask_for_leave">#F6BD16</color>
 </resources>

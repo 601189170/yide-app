@@ -25,12 +25,14 @@ import com.beiing.weekcalendar.utils.CalendarUtil;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.attendance.DayStatisticsListAdapter;
+import com.yyide.chatim.adapter.attendance.StudentDayStatisticsListAdapter;
 import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.dialog.SwichClassPop;
 import com.yyide.chatim.model.DayStatisticsBean;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.StudentDayStatisticsBean;
 import com.yyide.chatim.utils.DateUtils;
 
 import org.joda.time.DateTime;
@@ -52,6 +54,7 @@ public class DayStatisticsFragment extends Fragment {
     private static final String TAG = DayStatisticsFragment.class.getSimpleName();
     private List<DateTime> eventDates;
     private List<DayStatisticsBean> data;
+    private List<StudentDayStatisticsBean> studentDayStatisticsBeanList;
     private FragmentDayStatisticsBinding mViewBinding;
     private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
     private List<LeaveDeptRsp.DataBean> eventList = new ArrayList<>();
@@ -221,9 +224,15 @@ public class DayStatisticsFragment extends Fragment {
 
         RecyclerView recyclerview = view.findViewById(R.id.recyclerview);
         initdata();
-        final DayStatisticsListAdapter dayStatisticsListAdapter = new DayStatisticsListAdapter(getContext(), data);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerview.setAdapter(dayStatisticsListAdapter);
+        if (SpData.getIdentityInfo().staffIdentity()){
+            final DayStatisticsListAdapter dayStatisticsListAdapter = new DayStatisticsListAdapter(getContext(), data);
+            recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerview.setAdapter(dayStatisticsListAdapter);
+        }else {
+            final StudentDayStatisticsListAdapter studentDayStatisticsListAdapter = new StudentDayStatisticsListAdapter(getActivity(), studentDayStatisticsBeanList);
+            recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerview.setAdapter(studentDayStatisticsListAdapter);
+        }
     }
 
     private void initdata() {
@@ -238,6 +247,16 @@ public class DayStatisticsFragment extends Fragment {
             dayStatisticsBean.setRate(50);
             dayStatisticsBean.setAsk_for_leave(32);
             data.add(dayStatisticsBean);
+        }
+
+        studentDayStatisticsBeanList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            final StudentDayStatisticsBean studentDayStatisticsBean = new StudentDayStatisticsBean();
+            studentDayStatisticsBean.setEventName("上午到校"+i);
+            studentDayStatisticsBean.setTime("2021-03-04");
+            studentDayStatisticsBean.setEventStatus((int)(Math.random()*10)+1);
+            studentDayStatisticsBean.setEventTime("打卡时间：07:0"+i);
+            studentDayStatisticsBeanList.add(studentDayStatisticsBean);
         }
     }
 

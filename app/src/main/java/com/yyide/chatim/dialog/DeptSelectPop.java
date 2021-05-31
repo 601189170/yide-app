@@ -98,7 +98,7 @@ public class DeptSelectPop extends PopupWindow {
         //初始化列表
         final DeptSelectAdapter deptSelectAdapter = new DeptSelectAdapter(context, dataBeansList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
+        //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(deptSelectAdapter);
         deptSelectAdapter.setOnClickedListener(position -> {
             //恢复状态
