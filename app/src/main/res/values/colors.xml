@@ -95,6 +95,6 @@
     <color name="attendance_normal">#5DADFF</color>
     <color name="attendance_late">#F66C6C</color>
     <color name="attendance_leave_early">#63DAAB</color>
-    <color name="attendance_no_sign_in">#F66C6C</color>
+    <color name="attendance_no_sign_in">#919399</color>
     <color name="attendance_ask_for_leave">#F6BD16</color>
 </resources>

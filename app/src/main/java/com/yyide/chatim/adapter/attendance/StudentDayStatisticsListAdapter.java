@@ -76,17 +76,20 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
             case 3:
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_leave_early));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_leave_early));
+                holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_leave_early);
                 break;
             case 4:
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_no_sign_in));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_no_sign_in));
                 holder.mViewBanding.tvEventTime.setVisibility(View.GONE);
                 holder.mViewBanding.ivEventFaceRecognize.setVisibility(View.GONE);
+                holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_no_sign_in);
                 break;
             case 5:
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_ask_for_leave));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_ask_for_leave));
                 holder.mViewBanding.ivEventFaceRecognize.setVisibility(View.GONE);
+                holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_ask_for_leave);
                 break;
             default:
                 break;
