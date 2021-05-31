@@ -23,4 +23,5 @@ public class LeaveFlowBean {
     private String flowContent;
     private boolean checked;
     private boolean nopass;
+    private String image;
 }

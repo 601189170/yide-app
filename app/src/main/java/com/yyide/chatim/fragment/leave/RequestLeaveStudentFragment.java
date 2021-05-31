@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -107,7 +110,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     private String reason="";
     private long classesId;
     private List<Long> carbonCopyPeopleId;
-    private List<String> carbonCopyPeopleList;
+    private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList;
     private String classesName;
     private TimePickerDialog mDialogAll;
     private LeaveCourseSectionAdapter leaveCourseSectionAdapter;
@@ -398,11 +401,13 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                 for (ApproverRsp.DataBean.ListBean listBean : list) {
                     final long userId = listBean.getUserId();
                     carbonCopyPeopleId.add(userId);
-                    carbonCopyPeopleList.add(listBean.getName());
+                    carbonCopyPeopleList.add(listBean);
                     if (carbonCopyPeopleId.size()<3){
                         final String name = listBean.getName();
                         final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
                         final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                        final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
+                        showImage(listBean.getImage(),iv_user_head);
                         tv_copyer_name.setText(name);
                         ll_copyer_list.addView(view1);
                     }
@@ -417,6 +422,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                         public void onClick(View v) {
                             final Intent intent = new Intent(getActivity(), LeaveCarbonCopyPeopleActivity.class);
                             intent.putExtra("carbonCopyPeople", JSON.toJSONString(carbonCopyPeopleList));
+                            intent.putExtra("type",1);
                             startActivity(intent);
                         }
                     });
@@ -425,7 +431,18 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             }
         }
     }
-
+    private void showImage(String url,ImageView imageView){
+        if (TextUtils.isEmpty(url)){
+            return;
+        }
+        Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imageView);
+    }
     @Override
     public void approverFail(String msg) {
         Log.e(TAG, "approverFail: "+msg );

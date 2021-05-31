@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -36,6 +39,7 @@ import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.utils.ButtonUtils;
@@ -88,7 +92,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String reason="";
     private long deptId;
     private List<Long> carbonCopyPeopleId;
-    private List<String> carbonCopyPeopleList;
+    private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList;
     private String deptName;
 
     public RequestLeaveStaffFragment() {
@@ -334,11 +338,13 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                 for (ApproverRsp.DataBean.ListBean listBean : list) {
                     final long userId = listBean.getUserId();
                     carbonCopyPeopleId.add(userId);
-                    carbonCopyPeopleList.add(listBean.getName());
+                    carbonCopyPeopleList.add(listBean);
                     if (carbonCopyPeopleId.size()<3){
                         final String name = listBean.getName();
                         final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
                         final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                        final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
+                        showImage(listBean.getImage(),iv_user_head);
                         tv_copyer_name.setText(name);
                         ll_copyer_list.addView(view1);
                     }
@@ -353,6 +359,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                         public void onClick(View v) {
                             final Intent intent = new Intent(getActivity(), LeaveCarbonCopyPeopleActivity.class);
                             intent.putExtra("carbonCopyPeople", JSON.toJSONString(carbonCopyPeopleList));
+                            intent.putExtra("type",1);
                             startActivity(intent);
                         }
                     });
@@ -360,6 +367,19 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                 }
             }
         }
+    }
+
+    private void showImage(String url,ImageView imageView){
+        if (TextUtils.isEmpty(url)){
+            return;
+        }
+        Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imageView);
     }
 
     @Override

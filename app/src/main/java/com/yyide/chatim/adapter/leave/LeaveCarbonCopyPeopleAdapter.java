@@ -1,15 +1,22 @@
 package com.yyide.chatim.adapter.leave;
 
 import android.content.Context;
+import android.media.Image;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.ApproverRsp;
+import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
 
 import java.util.List;
@@ -28,7 +35,7 @@ import butterknife.ButterKnife;
  */
 public class LeaveCarbonCopyPeopleAdapter extends RecyclerView.Adapter<LeaveCarbonCopyPeopleAdapter.ViewHolder> {
     private Context context;
-    private List<String> data;
+    private List<ApproverRsp.DataBean.ListBean> data;
 
     public void setOnClickedListener(OnClickedListener onClickedListener) {
         this.onClickedListener = onClickedListener;
@@ -36,7 +43,7 @@ public class LeaveCarbonCopyPeopleAdapter extends RecyclerView.Adapter<LeaveCarb
 
     private OnClickedListener onClickedListener;
 
-    public LeaveCarbonCopyPeopleAdapter(Context context, List<String> data) {
+    public LeaveCarbonCopyPeopleAdapter(Context context, List<ApproverRsp.DataBean.ListBean> data) {
         this.context = context;
         this.data = data;
 
@@ -51,8 +58,17 @@ public class LeaveCarbonCopyPeopleAdapter extends RecyclerView.Adapter<LeaveCarb
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String tag = data.get(position);
-        holder.tv_name.setText(tag);
+        ApproverRsp.DataBean.ListBean listBean = data.get(position);
+        holder.tv_name.setText(listBean.getName());
+        if (!TextUtils.isEmpty(listBean.getImage())){
+            Glide.with(context)
+                    .load(listBean.getImage())
+                    .placeholder(R.drawable.default_head)
+                    .error(R.drawable.default_head)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(holder.iv_user_head);
+        }
         if (position == data.size()-1){
             //holder.tv_add.setVisibility(View.GONE);
         }
@@ -70,6 +86,8 @@ public class LeaveCarbonCopyPeopleAdapter extends RecyclerView.Adapter<LeaveCarb
 
         @BindView(R.id.tv_name)
         TextView tv_name;
+        @BindView(R.id.iv_user_head)
+        ImageView iv_user_head;
         //@BindView(R.id.tv_add)
         //TextView tv_add;
 

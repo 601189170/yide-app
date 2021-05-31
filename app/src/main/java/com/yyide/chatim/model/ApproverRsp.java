@@ -34,7 +34,7 @@ public class ApproverRsp {
         public static class PeopleFormBean {
             private int userId;
             private String name;
-            private Object image;
+            private String image;
         }
 
         @NoArgsConstructor
@@ -42,6 +42,7 @@ public class ApproverRsp {
         public static class ListBean {
             private long userId;
             private String name;
+            private String image;
         }
     }
 }
