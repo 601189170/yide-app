@@ -129,7 +129,7 @@ public class ConfirmDetailRsp {
              */
 
             private int userId;
-            private String userName;
+            private String name;
 
             public int getUserId() {
                 return userId;
@@ -139,19 +139,19 @@ public class ConfirmDetailRsp {
                 this.userId = userId;
             }
 
-            public String getUserName() {
-                return userName;
+            public String getName() {
+                return name;
             }
 
-            public void setUserName(String userName) {
-                this.userName = userName;
+            public void setName(String name) {
+                this.name = name;
             }
 
             @Override
             public String toString() {
                 return "RecordsBean{" +
                         "userId=" + userId +
-                        ", userName='" + userName + '\'' +
+                        ", userName='" + name + '\'' +
                         '}';
             }
         }

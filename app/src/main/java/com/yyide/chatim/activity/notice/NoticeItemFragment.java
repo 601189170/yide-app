@@ -94,14 +94,14 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
         adapter = new BaseQuickAdapter<ConfirmDetailRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.fragment_notice_item) {
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, ConfirmDetailRsp.DataBean.RecordsBean str) {
-                baseViewHolder.setText(R.id.tv_notice_scope_name, str.getUserName());
+                baseViewHolder.setText(R.id.tv_notice_scope_name, str.getName());
                 //GlideUtil.loadImage(getContext(), "https://www.thecrazyprogrammer.com/wp-content/uploads/2017/05/Android-Glide-Tutorial-with-Example-1.png", baseViewHolder.findView(R.id.iv_pic));
                 //ImageView view = baseViewHolder.findView(R.id.iv_pic);
                 //view.setImageDrawable(getActivity().getDrawable(R.drawable.icon_leave));
-                String userName = str.getUserName();
+                String userName = str.getName();
                 if (!TextUtils.isEmpty(userName)) {
                     if (userName.length()<=2){
-                        baseViewHolder.setText(R.id.tv_pic,str.getUserName());
+                        baseViewHolder.setText(R.id.tv_pic,str.getName());
                     }else {
                         baseViewHolder.setText(R.id.tv_pic,userName.substring(userName.length()-2));
                     }
