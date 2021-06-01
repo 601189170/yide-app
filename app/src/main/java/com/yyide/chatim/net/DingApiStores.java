@@ -248,7 +248,7 @@ public interface DingApiStores {
     Observable<BaseRsp> delAnnouncement(@Query("id") int id);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/notice/updateMyNoticeDetails")
+    @GET("/message-server/cloud-message/user/notice/updateMyNoticeDetails")
     Observable<BaseRsp> updateMyNoticeDetails(@Query("id") int id);
 
     //确认详情（多少人未确认）
