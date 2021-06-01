@@ -34,10 +34,11 @@ public class BaseConstant {
 
     /*密码*/
     public static String PASSWORD = "PASSWORD";
+
     /**
      * 请求ip==>baseUrl
      */
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.155:8888";
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.148:8888";
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境

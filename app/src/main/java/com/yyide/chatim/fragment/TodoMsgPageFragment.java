@@ -177,6 +177,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
                     }
                 }
             } catch (Exception e) {
+                holder.setText(R.id.tv_leave_type, o.getContent());
                 e.printStackTrace();
             }
             TextView textView2 = holder.getView(R.id.tv_agree);

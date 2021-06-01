@@ -1,34 +1,19 @@
 package com.yyide.chatim.presenter;
 
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.SPUtils;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
-import com.yyide.chatim.jiguang.TagAliasOperatorHelper;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
-import com.yyide.chatim.model.ListScheduleRsp;
 import com.yyide.chatim.model.ResultBean;
-import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
-import com.yyide.chatim.model.VideoEntity;
-import com.yyide.chatim.model.addUserEquipmentInfoRsp;
-import com.yyide.chatim.model.getUserSigRsp;
-import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MainView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.cache.Sp;
 import okhttp3.RequestBody;
 
 /**

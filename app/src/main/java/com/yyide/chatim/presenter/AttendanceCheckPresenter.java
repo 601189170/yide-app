@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.model.HomeAttendanceRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.AttendanceCheckView;
-import com.yyide.chatim.view.AttendanceView;
 
 import java.util.HashMap;
 
@@ -19,11 +17,11 @@ public class AttendanceCheckPresenter extends BasePresenter<AttendanceCheckView>
     }
 
     public void attendance(String classId) {
-//        mvpView.showLoading();
+        mvpView.showLoading();
         HashMap<String, Object> map = new HashMap<>();
         map.put("classId", classId);//班级ID
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
-        addSubscription(dingApiStores.teacherAttendance(body), new ApiCallback<AttendanceCheckRsp>() {
+        addSubscription(dingApiStores.viewAttendance(body), new ApiCallback<AttendanceCheckRsp>() {
             @Override
             public void onSuccess(AttendanceCheckRsp model) {
                 mvpView.getAttendanceSuccess(model);

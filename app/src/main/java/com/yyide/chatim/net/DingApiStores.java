@@ -7,7 +7,6 @@ import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.HomeAttendanceRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveListRsp;
@@ -47,10 +46,10 @@ import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
+import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
-import com.yyide.chatim.model.mobileRsp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,16 +78,21 @@ public interface DingApiStores {
 
     //账号密码登入
     @POST("/management/cloud-system/oauth/token")
-    Observable<LoginRsp> login(@Query("username") String a, @Query("password") String b);
+    Observable<LoginRsp> login(@Body RequestBody info);
 
     //验证码登入
     @POST("/management/cloud-system/authentication/mobile")
-    Observable<mobileRsp> loginmobile(@Query("validateCode") String a, @Query("mobile") String b);
+    Observable<LoginRsp> loginmobile(@Body RequestBody info);
 
     //获取验证码
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-system/app/smsVerification")
     Observable<SmsVerificationRsp> getCode(@Body RequestBody info);
+
+    //获取Im签名
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @POST("/management/cloud-system/im/getUserSig")
+    Observable<UserSigRsp> getUserSig(@Body RequestBody info);
 
     //登出
     @POST("/management/cloud-system/login/userLogout")
@@ -471,13 +475,8 @@ public interface DingApiStores {
     @GET("/message-server/cloud-message/user/notice/updateMyNoticeDetails")
     Observable<ResultBean> updateMyNoticeDetails(@QueryMap HashMap<String, Object> map);
 
-    //首页考勤
-    @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/face/cloud-face/attendance/homeAttendance")
-    Observable<HomeAttendanceRsp> homeAttendance(@Body RequestBody requestBody);
-
-    //老师视角的课堂考勤
+    //首页考勤 老师视角的课堂考勤
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/face/cloud-face/attendance/viewAttendance")
-    Observable<AttendanceCheckRsp> teacherAttendance(@Body RequestBody requestBody);
+    Observable<AttendanceCheckRsp> viewAttendance(@Body RequestBody requestBody);
 }

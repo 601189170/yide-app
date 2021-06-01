@@ -18,12 +18,10 @@ import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.view.WheelView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.model.SelectTableClassesRsp;
-import com.yyide.chatim.widget.ArrayWheelAdapter;
 
 import java.util.List;
 
-public class AttendancePop extends PopupWindow {
+public class AttendanceCheckPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
@@ -39,7 +37,7 @@ public class AttendancePop extends PopupWindow {
         void OnSelectClassesListener(int index);
     }
 
-    public AttendancePop(Activity context, List<AttendanceCheckRsp.DataBean.AttendancesFormBean> dataBeansList) {
+    public AttendanceCheckPop(Activity context, List<AttendanceCheckRsp.DataBean.AttendancesFormBean> dataBeansList) {
         this.context = context;
         this.dataBeansList = dataBeansList;
         init();
@@ -48,11 +46,11 @@ public class AttendancePop extends PopupWindow {
     private void init() {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bttom_pop, null);
         TextView confirm = mView.findViewById(R.id.confirm);
-        TextView cancel = mView.findViewById(R.id.cancel);
+        TextView leftDesc = mView.findViewById(R.id.cancel);
         ConstraintLayout bg = mView.findViewById(R.id.bg);
         WheelView wheelView = mView.findViewById(R.id.departments);
         confirm.setOnClickListener(v -> {
-            if(mSelectClasses != null){
+            if (mSelectClasses != null) {
                 mSelectClasses.OnSelectClassesListener(selectIndex);
             }
             if (popupWindow != null && popupWindow.isShowing()) {
@@ -64,11 +62,7 @@ public class AttendancePop extends PopupWindow {
                 popupWindow.dismiss();
             }
         });
-        cancel.setOnClickListener(v -> {
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-            }
-        });
+        leftDesc.setText("");
         wheelView.setCyclic(false);
         wheelView.setTextColorCenter(context.getResources().getColor(R.color.text_212121));
         wheelView.setTextColorOut(context.getResources().getColor(R.color.text_666666));

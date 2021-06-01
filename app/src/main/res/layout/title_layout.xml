@@ -12,7 +12,6 @@
         android:background="@color/white"
         android:gravity="center_vertical">
 
-
         <LinearLayout
             android:id="@+id/back_layout"
             android:layout_width="wrap_content"

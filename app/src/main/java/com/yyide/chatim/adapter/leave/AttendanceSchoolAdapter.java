@@ -1,12 +1,10 @@
-package com.yyide.chatim.adapter;
+package com.yyide.chatim.adapter.leave;
 
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.text.Html;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +20,6 @@ import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.model.HomeAttendanceRsp;
 import com.yyide.chatim.utils.InitPieChart;
 
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ import java.util.List;
  * Created by Hao on 2017/11/29.
  */
 
-public class AttendanceAdapter extends LoopPagerAdapter {
+public class AttendanceSchoolAdapter extends LoopPagerAdapter {
 
     private boolean isSchool = false;
     //    -->设置各区块的颜色
@@ -42,7 +39,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
     };
     public List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> list = new ArrayList<>();
 
-    public AttendanceAdapter(RollPagerView viewPager) {
+    public AttendanceSchoolAdapter(RollPagerView viewPager) {
         super(viewPager);
     }
 
@@ -50,42 +47,28 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         return list.get(position);
     }
 
-    public void setSchool(boolean isSchool) {
+    public void setIsSchool(boolean isSchool) {
         this.isSchool = isSchool;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public View getView(ViewGroup container, final int position) {
-        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.attce_item, null);
-        TextView cd = view.findViewById(R.id.cd);
-        TextView qq = view.findViewById(R.id.qq);
-        TextView qj = view.findViewById(R.id.qj);
+        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.attce_school_item, null);
         TextView attendanceName = view.findViewById(R.id.tv_attendance_type);
-        TextView number = view.findViewById(R.id.tv_attendance_number);
         TextView tv_desc = view.findViewById(R.id.tv_desc);
-        LinearLayout LinearLayout = view.findViewById(R.id.ll_desc);
 
         AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item = list.get(position);
         attendanceName.setText(item.getAttName());
-        if (isSchool) {
-            LinearLayout.setVisibility(View.GONE);
-        } else {
-            LinearLayout.setVisibility(View.VISIBLE);
-            qq.setText(item.getAbsence() + " 人");
-            cd.setText(item.getLate() + " 人");
-            qj.setText(item.getLeave() + " 人");
-            number.setText(item.getNumber() + " 人");
-        }
         PieChart piechart = view.findViewById(R.id.piechart);
         InitPieChart.InitPieChart(((Activity) container.getContext()), piechart);
+
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(item.getAbsence(), "缺勤"));
         entries.add(new PieEntry(item.getLeave(), "请假"));
         entries.add(new PieEntry(item.getLate(), "迟到"));
         entries.add(new PieEntry(item.getApplyNum(), "实到"));
-        piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + "考勤率");
-        piechart.setCenterTextSize(14);
+        piechart.setCenterText(item.getRate() + "%\n" + "考勤率");
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(0);//设置饼块之间的间隔
         dataSet.setColors(PIE_COLORS2);//设置饼块的颜色
@@ -107,4 +90,8 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         notifyDataSetChanged();
     }
 
+    //-->设置饼图数据
+    private void setPieChartData(PieChart piechart) {
+
+    }
 }

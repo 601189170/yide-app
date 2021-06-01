@@ -64,13 +64,13 @@ public class SexActivity extends BaseActivity {
             case R.id.layout1://男
                 type1.setVisibility(View.VISIBLE);
                 type2.setVisibility(View.GONE);
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_USER_SEX, "0"));
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_USER_SEX, "1"));
                 finish();
                 break;
             case R.id.layout2://女
                 type1.setVisibility(View.GONE);
                 type2.setVisibility(View.VISIBLE);
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_USER_SEX, "1"));
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_USER_SEX, "0"));
                 finish();
                 break;
             case R.id.back_layout:

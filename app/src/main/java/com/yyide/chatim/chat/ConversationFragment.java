@@ -2,45 +2,31 @@ package com.yyide.chatim.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.imsdk.v2.V2TIMConversation;
-import com.tencent.imsdk.v2.V2TIMConversationListener;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
-import com.tencent.qcloud.tim.uikit.TUIKit;
-import com.tencent.qcloud.tim.uikit.base.BaseFragment;
-import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
-import com.tencent.qcloud.tim.uikit.component.action.PopActionClickListener;
 import com.tencent.qcloud.tim.uikit.component.action.PopDialogAdapter;
 import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
-import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationProvider;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
-import com.tencent.qcloud.tim.uikit.modules.conversation.holder.ConversationCommonHolder;
-import com.tencent.qcloud.tim.uikit.modules.conversation.interfaces.IConversationAdapter;
-import com.tencent.qcloud.tim.uikit.modules.conversation.interfaces.IConversationProvider;
 import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.BookSearchActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -48,37 +34,22 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.ResultBean;
-import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
-import com.yyide.chatim.model.UserNoticeRsp;
-import com.yyide.chatim.model.getUserSigRsp;
 import com.yyide.chatim.presenter.UserNoticePresenter;
 import com.yyide.chatim.utils.Constants;
-import com.yyide.chatim.utils.DemoLog;
-import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.UserNoticeView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> implements UserNoticeView {
 
@@ -176,7 +147,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 //        titleBarLayout.setBackgroundColor(R.color.black);
 //使设置好的布局参数应用到控件
 //        imageView.setLayoutParams(params);
-        mvpPresenter.getUserNoticePage(1, 1);
+        //mvpPresenter.getUserNoticePage(1, 1);
     }
 
     @Override

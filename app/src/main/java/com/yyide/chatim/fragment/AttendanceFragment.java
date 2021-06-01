@@ -17,22 +17,26 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.AttendanceAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
+import com.yyide.chatim.adapter.leave.AttendanceSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.HomeAttendanceRsp;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.AttendancePresenter;
-import com.yyide.chatim.view.AttendanceView;
+import com.yyide.chatim.view.AttendanceCheckView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
 
-public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceView {
+public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
 
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
@@ -44,6 +48,8 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     AttendanceAdapter announAdapter;
     IndexAdapter indexAdapter;
     public String TAG = AttendanceFragment.class.getSimpleName();
+    private boolean isSchool;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -60,8 +66,12 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     }
 
     private void getHomeAttendance() {
-        if (SpData.getClassInfo() != null) {
-            mvpPresenter.homeAttendance(SpData.getClassInfo().classesId, "", "");
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
+            mvpPresenter.homeAttendance("");
+            isSchool = true;
+        } else {
+            mvpPresenter.homeAttendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "");
+            isSchool = false;
         }
     }
 
@@ -73,9 +83,9 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     private void initView() {
         indexAdapter = new IndexAdapter();
         announAdapter = new AttendanceAdapter(announRoll);
+        //处理是否为校长身份
         announRoll.setHintView(null);
         announRoll.setPlayDelay(5000);
-        announRoll.setAdapter(announAdapter);
 
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
@@ -115,20 +125,62 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     }
 
     @Override
-    public void getHomeAttendanceListSuccess(HomeAttendanceRsp model) {
-        if(BaseConstant.REQUEST_SUCCES2 == model.getCode()){
-            if(model.getData() != null && model.getData().size() > 0){
+    public void getAttendanceSuccess(AttendanceCheckRsp model) {
+        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+            if (model.getData() != null) {
                 tv_data.setVisibility(View.GONE);
-                announAdapter.notifyData(model.getData());
-                indexAdapter.setList(model.getData());
+                setData(model.getData());
             } else {
                 tv_data.setVisibility(View.VISIBLE);
             }
         }
     }
 
+    private void setData(AttendanceCheckRsp.DataBean dataBean) {
+        List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllFormBeanList = new ArrayList<>();
+        if (isSchool) {
+            if (dataBean.getSchoolPeopleAllForm() != null) {
+                schoolPeopleAllFormBeanList.addAll(dataBean.getSchoolPeopleAllForm());
+            }
+            if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
+                for (AttendanceCheckRsp.DataBean.AttendancesFormBean item : dataBean.getAttendancesForm()) {
+                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
+                    schoolBean.setAbsence(item.getAbsenceA());
+                    schoolBean.setApplyNum(item.getApplyNumA());
+                    schoolBean.setAttName(item.getAttNameA());
+                    schoolBean.setLate(item.getLateA());
+                    schoolBean.setLeave(item.getLeaveA());
+                    schoolBean.setNumber(item.getNumberA());
+                    schoolBean.setRate(item.getRateA());
+                    schoolPeopleAllFormBeanList.add(schoolBean);
+                }
+            }
+        } else {
+            if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
+                for (AttendanceCheckRsp.DataBean.AttendancesFormBean itemBean : dataBean.getAttendancesForm()) {
+                    AttendanceCheckRsp.DataBean.AttendancesFormBean.Students item = itemBean.getStudents();
+                    if (itemBean.getStudents() != null) {
+                        AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
+                        schoolBean.setAbsence(item.getAbsence());
+                        schoolBean.setApplyNum(item.getApplyNum());
+                        schoolBean.setAttName(item.getName());
+                        schoolBean.setLate(item.getLate());
+                        schoolBean.setLeave(item.getLeave());
+                        schoolBean.setNumber(item.getNumber());
+                        schoolBean.setRate(item.getRate());
+                        schoolPeopleAllFormBeanList.add(schoolBean);
+                    }
+                }
+            }
+        }
+        announAdapter.setSchool(isSchool);
+        announRoll.setAdapter(announAdapter);
+        announAdapter.notifyData(schoolPeopleAllFormBeanList);
+        indexAdapter.setList(schoolPeopleAllFormBeanList);
+    }
+
     @Override
-    public void getHomeAttendanceFail(String msg) {
-        Log.d(TAG, "getHomeAttendanceFail-->>" + msg);
+    public void getAttendanceFail(String msg) {
+        Log.e("TAG", "getAttendanceFail==>: " + msg);
     }
 }

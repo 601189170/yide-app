@@ -1,6 +1,6 @@
 package com.yyide.chatim.model;
 
-public class getUserSigRsp {
+public class UserSigRsp {
 
 
     /**

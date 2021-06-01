@@ -16,8 +16,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +48,6 @@ import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
 import com.yyide.chatim.home.HomeFragment;
-import com.yyide.chatim.home.HomeFragmentXZ;
 import com.yyide.chatim.home.MessageFragment;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
@@ -63,7 +60,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
-import com.yyide.chatim.model.getUserSigRsp;
+import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
@@ -540,7 +537,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
                 Log.e(TAG, "getUserSig==>: " + data);
-                getUserSigRsp bean = JSON.parseObject(data, getUserSigRsp.class);
+                UserSigRsp bean = JSON.parseObject(data, UserSigRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
                     initIm(bean.data);

@@ -36,13 +36,18 @@ import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserInfo;
-import com.yyide.chatim.model.getUserSigRsp;
+import com.yyide.chatim.model.UserSigRsp;
+import com.yyide.chatim.model.mobileRsp;
+import com.yyide.chatim.net.DingApiStores;
+import com.yyide.chatim.presenter.LoginPresenter;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.Utils;
+import com.yyide.chatim.view.LoginView;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -66,7 +71,7 @@ import okhttp3.Response;
  * <p>
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements LoginView {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     @BindView(R.id.user_edit)
@@ -122,6 +127,11 @@ public class LoginActivity extends BaseActivity {
         passwordEdit.setText(TextUtils.isEmpty(password) ? "" : password);
         time = new TimeCount(120000, 1000);
         alphaAnimation();
+    }
+
+    @Override
+    protected LoginPresenter createPresenter() {
+        return new LoginPresenter(this);
     }
 
     private void initEdit() {
@@ -278,6 +288,81 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void getLoginSuccess(LoginRsp bean) {
+        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+            //存储登录信息
+            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+            getUserSchool();
+        } else {
+            hideLoading();
+            ToastUtils.showShort(bean.msg);
+        }
+    }
+
+    @Override
+    public void loginMobileData(LoginRsp bean) {
+        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+            //存储登录信息
+            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+            SPUtils.getInstance().put(SpData.USERPHONE, phone);
+            //getUserSig();
+            getUserSchool();
+        } else {
+            hideLoading();
+            ToastUtils.showShort(bean.message);
+        }
+    }
+
+
+    @Override
+    public void getCode(SmsVerificationRsp bean) {
+        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+            //存储登录信息
+            ToastUtils.showShort("验证码已发送");
+            time.start();
+        } else {
+            ToastUtils.showShort(bean.msg);
+        }
+    }
+
+    @Override
+    public void getUserSign(UserSigRsp bean) {
+        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+            SPUtils.getInstance().put(SpData.USERSIG, bean.data);
+            initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
+        } else {
+            hideLoading();
+            ToastUtils.showShort(bean.msg);
+        }
+    }
+
+    @Override
+    public void getFail(String msg) {
+        hideLoading();
+        Log.e(TAG, "onFailure: " + msg);
+    }
+
+    @Override
+    public void getUserSchool(GetUserSchoolRsp rsp) {
+        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+            //登陆成功保存账号密码
+            SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
+            SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
+            SpData.setIdentityInfo(rsp);
+            getUserSig();
+        } else {
+            hideLoading();
+            ToastUtils.showShort(rsp.msg);
+        }
+    }
+
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
@@ -329,7 +414,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     void toLogin(String username, String password) {
-        showLoading();
         RequestBody body = new FormBody.Builder()
                 .add("client_id", "yide-cloud")
                 .add("grant_type", "password")
@@ -337,178 +421,26 @@ public class LoginActivity extends BaseActivity {
                 .add("username", username)
                 .add("password", password)
                 .build();
-        //请求组合创建
-        Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/oauth/token")
-                .post(body)
-                .build();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                hideLoading();
-                Log.e(TAG, "onFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e(TAG, "mOkHttpClientlogin==>: " + data);
-                LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-                    //存储登录信息
-                    SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                    getUserSchool();
-                } else {
-                    hideLoading();
-                    ToastUtils.showShort(bean.msg);
-                }
-            }
-        });
+        mvpPresenter.Login(body);
     }
 
     //获取验证码
     void getCode(String phone) {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("phone", phone);
-        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(params));
-        //请求组合创建
-        Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/app/smsVerification")
-                .post(body)
-                .build();
-        showLoading();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                hideLoading();
-                Log.e(TAG, "onFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                hideLoading();
-                String data = response.body().string();
-                Log.e(TAG, "mOkHttpClient==>: " + data);
-                SmsVerificationRsp bean = JSON.parseObject(data, SmsVerificationRsp.class);
-                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-                    //存储登录信息
-                    ToastUtils.showShort("验证码已发送");
-                    time.start();
-                } else {
-                    ToastUtils.showShort(bean.msg);
-                }
-            }
-        });
+        mvpPresenter.getCode(phone);
     }
 
     //验证码登入
     void tologinBymobile(String validateCode, String mobile) {
-        RequestBody body = new FormBody.Builder()
-                .add("validateCode", validateCode)
-                .add("mobile", mobile)
-                .build();
-        //请求组合创建
-        Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/authentication/mobile")
-                .post(body)
-                .build();
-        showLoading();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                hideLoading();
-                Log.e(TAG, "onFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e(TAG, "c==>: " + data);
-                LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-                    //存储登录信息
-                    SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                    SPUtils.getInstance().put(SpData.USERPHONE, phone);
-                    //getUserSig();
-                    getUserSchool();
-                } else {
-                    hideLoading();
-                    ToastUtils.showShort(bean.message);
-                }
-            }
-        });
+        mvpPresenter.loginMobile(mobile, validateCode);
     }
 
     //获取学校信息
     private void getUserSchool() {
-        //请求组合创建
-        Request request = new Request.Builder()
-//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().getToken())
-                .build();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                hideLoading();
-                Log.e(TAG, "getUserSigonFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e(TAG, "getUserSchool333==>: " + data);
-                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
-                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-                    //登陆成功保存账号密码
-                    SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
-                    SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
-                    SpData.setIdentityInfo(rsp);
-                    getUserSig();
-                } else {
-                    hideLoading();
-                    ToastUtils.showShort(rsp.msg);
-                }
-            }
-        });
+        mvpPresenter.getUserSchool();
     }
 
     private void getUserSig() {
-        RequestBody body = RequestBody.create(BaseConstant.JSON, "");
-        //请求组合创建
-        Request request = new Request.Builder()
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .addHeader("Authorization", SpData.User().getToken())
-                .post(body)
-                .build();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                hideLoading();
-                Log.e(TAG, "getUserSigonFailure: " + e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e(TAG, "getUserSig==>: " + data);
-                getUserSigRsp bean = JSON.parseObject(data, getUserSigRsp.class);
-                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-                    SPUtils.getInstance().put(SpData.USERSIG, bean.data);
-                    initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
-                } else {
-                    hideLoading();
-                    ToastUtils.showShort(bean.msg);
-                }
-            }
-        });
+        mvpPresenter.getUserSign();
     }
 
     @Override

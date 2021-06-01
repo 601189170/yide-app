@@ -109,7 +109,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         classesId = SpData.getIdentityInfo().classesId;
         depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
-        Log.e(TAG, "getFaceData: name="+realname +",classId="+classesId+",depId="+depId);
+        Log.e(TAG, "getFaceData: name=" + realname + ",classId=" + classesId + ",depId=" + depId);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         userInfo = SpData.getIdentityInfo();
         if (userInfo != null) {
             GlideUtil.loadImageHead(this, userInfo.img, img);
-            sex.setText(!TextUtils.isEmpty(userInfo.sex) ? ("0".equals(userInfo.sex) ? "男" : "女") : "未设置");
+            sex.setText(!TextUtils.isEmpty(userInfo.sex) ? ("1".equals(userInfo.sex) ? "男" : "女") : "未设置");
             phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
             date.setText(!TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "未设置");
             email.setText(!TextUtils.isEmpty(userInfo.email) ? userInfo.email : "未设置");
@@ -132,7 +132,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname,classesId,depId);
+        mvpPresenter.getFaceData(realname, classesId, depId);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 break;
             case R.id.layout6://设置人脸
                 //startActivity(new Intent(this, FaceCaptureActivity.class));
-                startActivityForResult(new Intent(this, FaceCaptureActivity.class),1);
+                startActivityForResult(new Intent(this, FaceCaptureActivity.class), 1);
                 break;
             case R.id.back_layout:
                 finish();
@@ -208,12 +208,12 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             updateInfo();
         } else if (BaseConstant.TYPE_UPDATE_USER_SEX.equals(messageEvent.getCode())) {
-            if ("0".equals(messageEvent.getMessage())) {//男
+            if ("1".equals(messageEvent.getMessage())) {//男
                 sex.setText("男");
-                userInfo.sex = "0";
-            } else if ("1".equals(messageEvent.getMessage())) {//女
-                sex.setText("女");
                 userInfo.sex = "1";
+            } else if ("0".equals(messageEvent.getMessage())) {//女
+                sex.setText("女");
+                userInfo.sex = "0";
             }
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             updateInfo();
@@ -317,7 +317,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     @Override
     public void getFaceDataSuccess(FaceOssBean faceOssBean) {
-        Log.e(TAG, "getFaceDataSuccess: "+faceOssBean.toString() );
+        Log.e(TAG, "getFaceDataSuccess: " + faceOssBean.toString());
         if (faceOssBean.getCode() == 200) {
             if (faceOssBean.getData() != null) {
                 FaceOssBean.DataBean data = faceOssBean.getData();

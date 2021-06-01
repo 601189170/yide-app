@@ -97,7 +97,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
             ViewHolder holder1 = (ViewHolder) holder;
             UserMsgNoticeRsp.DataBean.RecordsBean recordsBean = data.get(position);
             String createdDateTime = recordsBean.getSendTime();
-            holder1.tv_date.setText(DateUtils.formatTime(createdDateTime, "", "yyyy-MM-dd"));
+            holder1.tv_date.setText(DateUtils.formatTime(createdDateTime, "", "yyyy-MM-dd hh:mm:ss"));
             holder1.tv_title.setText(recordsBean.getTitle());
             holder1.tv_leave.setText(recordsBean.getFirstData());
             final String content = recordsBean.getContent();

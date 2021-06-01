@@ -10,13 +10,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
@@ -30,7 +28,7 @@ import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.SelectUserSchoolRsp;
 import com.yyide.chatim.model.UserInfo;
-import com.yyide.chatim.model.getUserSigRsp;
+import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.LoadingTools;
 
@@ -277,7 +275,7 @@ public class SwichSchoolPop extends PopupWindow {
             public void onResponse(Call call, Response response) throws IOException {
                 String data = response.body().string();
                 //Log.e(TAG, "getUserSig==>: " + data);
-                getUserSigRsp bean = JSON.parseObject(data, getUserSigRsp.class);
+                UserSigRsp bean = JSON.parseObject(data, UserSigRsp.class);
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data);
                     initIm(bean.data);

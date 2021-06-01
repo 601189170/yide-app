@@ -2,10 +2,10 @@ package com.yyide.chatim.view;
 
 
 import com.yyide.chatim.base.BaseView;
-import com.yyide.chatim.model.DeviceUpdateRsp;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
-import com.yyide.chatim.model.mobileRsp;
+import com.yyide.chatim.model.UserSigRsp;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -13,16 +13,16 @@ import com.yyide.chatim.model.mobileRsp;
  */
 public interface LoginView extends BaseView {
 
-    void getData(LoginRsp rsp);
+    void getLoginSuccess(LoginRsp rsp);
 
-    void getDataFail(String msg);
+    void loginMobileData(LoginRsp rsp);
 
-    void loginmobileData(mobileRsp rsp);
+    void getCode(SmsVerificationRsp rsp);
 
-    void getmobileFail(String msg);
+    void getUserSign(UserSigRsp model);
 
-    void getcode(SmsVerificationRsp rsp);
+    void getFail(String msg);
 
-    void getcodeFail(String msg);
+    void getUserSchool(GetUserSchoolRsp rsp);
 
 }

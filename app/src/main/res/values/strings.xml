@@ -150,6 +150,7 @@
     <string name="attendance_title">考勤</string>
     <string name="statistics_title">统计</string>
     <string name="attendance_time_text">考勤时间 %s</string>
+    <string name="attendance_punch_card_text">打卡时间：%s</string>
     <string name="attendance_time_format">%d次</string>
     <string name="month">%d月</string>
     <string name="week">%s - %s</string>
@@ -159,5 +160,7 @@
     <string name="attendance_leave_early">早退</string>
     <string name="attendance_no_sign_in">未签到</string>
     <string name="attendance_ask_for_leave">请假</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

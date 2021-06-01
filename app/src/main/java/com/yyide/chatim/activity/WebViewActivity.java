@@ -44,6 +44,9 @@ import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.WebModel;
 import com.yyide.chatim.utils.LogUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WebViewActivity extends BaseActivity {
 
     @Override
@@ -58,7 +61,6 @@ public class WebViewActivity extends BaseActivity {
     private WebView mWebView;
     private String type;
     private ValueAnimator pbAnim;
-    private int softHeight;
 
     private ValueCallback<Uri> uploadMessage;
     private ValueCallback<Uri[]> uploadMessageAboveL;
@@ -68,7 +70,7 @@ public class WebViewActivity extends BaseActivity {
     private static final String PARAM_JSON = "json";
     private String json;
 
-    public static void start(Context context, String url, String json){
+    public static void start(Context context, String url, String json) {
         Intent intent = new Intent(context, WebViewActivity.class);
         intent.putExtra(PARAM_URL, url);
         intent.putExtra(PARAM_JSON, json);
@@ -187,16 +189,20 @@ public class WebViewActivity extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("setToken", SpData.User().getToken());
+//                map.put("setScanJson", json);
+//                map.put("setSchoolId", SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolId : "");
+//                mWebView.loadUrl("javascript:sendH5Event('" + "paramsJson" + "','" + JSON.toJSONString(map) + "')");
                 mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
-                mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
-                if(SpData.getIdentityInfo() != null){
+                if (SpData.getIdentityInfo() != null) {
                     mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
                 }
+                mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-
                 return false;
             }
 

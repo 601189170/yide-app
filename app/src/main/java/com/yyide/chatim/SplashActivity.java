@@ -97,13 +97,15 @@ public class SplashActivity extends AppCompatActivity {
                 public void onResponse(Call call, Response response) throws IOException {
                     String data = response.body().string();
                     Log.e(TAG, "mOkHttpClient==>: " + data);
-                    LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-                    if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-                        //存储登录信息
-                        SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                        getUserSchool();
-                    } else {
-                        startLogin();
+                    if (response.code() == BaseConstant.REQUEST_SUCCES2) {
+                        LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
+                        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+                            //存储登录信息
+                            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+                            getUserSchool();
+                        } else {
+                            startLogin();
+                        }
                     }
                 }
             });

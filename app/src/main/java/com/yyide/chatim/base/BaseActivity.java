@@ -20,6 +20,8 @@ import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.UserInfo;
+import com.yyide.chatim.net.AppClient;
+import com.yyide.chatim.net.DingApiStores;
 import com.yyide.chatim.utils.ClickUtils;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
@@ -49,7 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
     private LoadingTools loading;
-
+    protected DingApiStores mDingApiStores;
     // 监听做成静态可以让每个子类重写时都注册相同的一份。
     private static IMEventListener mIMEventListener = new IMEventListener() {
         @Override
@@ -93,6 +95,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mActivity = this;
         unbinder = ButterKnife.bind(this);
         loading = new LoadingTools(this);
+        mDingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.white));
