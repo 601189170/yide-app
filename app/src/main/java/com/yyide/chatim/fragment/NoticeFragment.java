@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeHomePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeHomeView;
@@ -62,10 +63,10 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 
         ll_notice.setOnClickListener(v -> {
             if (jump && data != null) {
-                Intent intent = new Intent(getActivity(), NoticeDetailActivity.class);
-                intent.putExtra("type", 1);
-                intent.putExtra("id", data.getId());
-                intent.putExtra("status", data.getStatus());
+                Intent intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
+//                intent.putExtra("type", 1);
+//                intent.putExtra("id", data.getId());
+//                intent.putExtra("status", data.getStatus());
                 startActivity(intent);
             }
         });
