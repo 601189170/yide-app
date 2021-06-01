@@ -33,6 +33,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
+import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -171,6 +172,7 @@ public class LoginActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.tv_login:
+                //startActivity(new Intent(this, StatisticsActivity.class));
                 login();
                 break;
             case R.id.eye:

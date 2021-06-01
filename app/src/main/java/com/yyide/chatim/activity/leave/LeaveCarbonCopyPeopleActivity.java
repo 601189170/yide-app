@@ -11,6 +11,8 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.leave.LeaveCarbonCopyPeopleAdapter;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.model.ApproverRsp;
+import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.view.SpacesItemDecoration;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class LeaveCarbonCopyPeopleActivity extends BaseActivity {
     @BindView(R.id.tv_carbon_copy_people)
     TextView tv_carbon_copy_people;
 
-    List<String> data;
+    List<ApproverRsp.DataBean.ListBean> data;
     @Override
     public int getContentViewID() {
         return R.layout.activity_leave_carbon_copy_people;
@@ -40,7 +42,7 @@ public class LeaveCarbonCopyPeopleActivity extends BaseActivity {
         //initData();
         final String carbonCopyPeople = getIntent().getStringExtra("carbonCopyPeople");
         Log.e("TAG", "onCreate: "+carbonCopyPeople );
-        data = JSON.parseArray(carbonCopyPeople,String.class);
+        data = JSON.parseArray(carbonCopyPeople, ApproverRsp.DataBean.ListBean.class);
         final String format = String.format(getString(R.string.carbon_copy_people_text), ""+data.size());
         tv_carbon_copy_people.setText(format);
         final LeaveCarbonCopyPeopleAdapter leaveCarbonCopyPeopleAdapter = new LeaveCarbonCopyPeopleAdapter(this, data);

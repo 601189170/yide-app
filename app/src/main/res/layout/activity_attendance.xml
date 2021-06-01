@@ -47,6 +47,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_4"
                             android:layout_marginTop="@dimen/dp_4"
+                            android:text="上午到校"
                             android:textColor="#ffffffff"
                             android:textSize="28sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -178,7 +179,6 @@
                             android:layout_height="wrap_content"
                             android:text="缺勤"
                             android:textColor="#ffffffff"
-                            android:layout_marginTop="@dimen/dp_5"
                             android:textSize="13sp"
                             app:layout_constraintEnd_toEndOf="@+id/tv_absenteeism_num"
                             app:layout_constraintStart_toStartOf="@+id/tv_absenteeism_num"
@@ -262,16 +262,18 @@
                         android:drawableRight="@mipmap/icon_down"
                         android:drawablePadding="@dimen/dp_5"
                         android:textStyle="bold"
+                        android:text="学生出入校考勤上午到校"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/top" />
 
                     <TextView
-                        android:id="@+id/tv_class_name"
+                        android:id="@+id/textView13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:textSize="@dimen/text_14"
                         android:textColor="@color/text_606266"
+                        android:text="一年级二班"
                         app:layout_constraintEnd_toStartOf="@+id/tv_switch"
                         app:layout_constraintTop_toTopOf="@+id/tv_attendance_title" />
 

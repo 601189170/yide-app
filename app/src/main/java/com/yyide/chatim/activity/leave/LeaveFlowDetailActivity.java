@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.leave;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.LeaveFlowAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.LeaveDetailRsp;
@@ -106,7 +110,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     ImageView iv_flow_checked;
 
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
-    List<String> leaveFlowCopyerList = new ArrayList<>();
+    List<ApproverRsp.DataBean.ListBean> leaveFlowCopyerList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
     private long id;
     private boolean updateList = false;
@@ -221,6 +225,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         final String endtime = DateUtils.formatTime(data.getEndTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
         tv_end_time.setText(endtime);
         tv_reason_for_leave_content.setText(data.getReason());
+
         //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
         final String approvalResult = data.getApprovalResult();
         leaveStatus(approvalResult, tv_leave_flow_status);
@@ -247,25 +252,30 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             undoTimes = undoTime.split(" ");
         }
 
-        leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true,false));
+        leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true,false,null));
         switch (approvalResult){
             case "0":
-                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人（已拒绝）", "" + approverName, true,true));
+                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人（已拒绝）", "" + approverName, true,true,data.getApproverImage()));
                 break;
             case "1":
             case "2":
                 final List<LeaveDetailRsp.DataBean.ListBean> list = data.getList();
-                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult),list.isEmpty()));
+                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult),list.isEmpty(),data.getApproverImage()));
                 if (!list.isEmpty()){
+                    //leaveFlowCopyerList.addAll(list);
                     for (LeaveDetailRsp.DataBean.ListBean listBean : list) {
                         //leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getName(), "1".equals(approvalResult)));
-                        leaveFlowCopyerList.add(listBean.getName());
+                        final ApproverRsp.DataBean.ListBean bean = new ApproverRsp.DataBean.ListBean();
+                        bean.setImage(listBean.getImage());
+                        bean.setName(listBean.getName());
+                        bean.setUserId(listBean.getUserId());
+                        leaveFlowCopyerList.add(bean);
                     }
                 }
                 break;
             case "3":
                 cl_copyer_list.setVisibility(View.GONE);
-                leaveFlowBeanList.add(new LeaveFlowBean(""+undoTimes[1], ""+undoTimes[0], "我（已撤销）", "" + data.getName(), true,true));
+                leaveFlowBeanList.add(new LeaveFlowBean(""+undoTimes[1], ""+undoTimes[0], "我（已撤销）", "" + data.getName(), true,true,null));
                 break;
             default:
                 break;
@@ -285,10 +295,12 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 
             for (int i = 0; i < leaveFlowCopyerList.size(); i++) {
                 if (i<3){
-                    final String name = leaveFlowCopyerList.get(i);
+                    final ApproverRsp.DataBean.ListBean listBean = leaveFlowCopyerList.get(i);
                     final View view1 = LayoutInflater.from(this).inflate(R.layout.item_approver_head, null);
                     final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
-                    tv_copyer_name.setText(name);
+                    final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
+                    tv_copyer_name.setText(listBean.getName());
+                    showImage(listBean.getImage(),iv_user_head);
                     ll_copyer_list.addView(view1);
                 }
             }
@@ -299,6 +311,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 view1.setOnClickListener(v -> {
                     final Intent intent = new Intent(LeaveFlowDetailActivity.this, LeaveCarbonCopyPeopleActivity.class);
                     intent.putExtra("carbonCopyPeople", JSON.toJSONString(leaveFlowCopyerList));
+                    intent.putExtra("type",2);
                     startActivity(intent);
                 });
                 ll_copyer_list.addView(view1);
@@ -306,6 +319,19 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 
         }
 
+    }
+
+    private void showImage(String url,ImageView imageView){
+        if (TextUtils.isEmpty(url)){
+            return;
+        }
+        Glide.with(this)
+                .load(url)
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imageView);
     }
 
     @Override

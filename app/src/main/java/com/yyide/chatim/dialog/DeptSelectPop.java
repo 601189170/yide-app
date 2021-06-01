@@ -51,30 +51,40 @@ public class DeptSelectPop extends PopupWindow {
         void onOnCheckedListener(long id, String dept);
     }
 
+    /**
+     *
+     * @param context
+     * @param type 弹框类型 1选择部门 2，选择班级，3，选择考勤事件
+     * @param dataBeansList
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public DeptSelectPop(Activity context, List<LeaveDeptRsp.DataBean> dataBeansList) {
+    public DeptSelectPop(Activity context, int type,List<LeaveDeptRsp.DataBean> dataBeansList) {
         this.context = context;
         this.dataBeansList = dataBeansList;
-        init();
+        init(type);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void init() {
+    private void init(int type) {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_dept_select_bttom_pop, null);
-//        TextView confirm = mView.findViewById(R.id.confirm);
         TextView cancel = mView.findViewById(R.id.cancel);
         ConstraintLayout bg = mView.findViewById(R.id.bg);
         RecyclerView recyclerView = mView.findViewById(R.id.departments);
-//        confirm.setOnClickListener(v -> {
-//            if (popupWindow != null && popupWindow.isShowing()) {
-//                popupWindow.dismiss();
-//                final Optional<LeaveDeptRsp.DataBean> optionalDataBean = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-//                if (optionalDataBean.isPresent()){
-//                    final LeaveDeptRsp.DataBean dataBean = optionalDataBean.get();
-//                    onCheckedListener.onOnCheckedListener(dataBean.getDeptId(),dataBean.getDeptName());
-//                }
-//            }
-//        });
+        //设置弹框的标题和图标
+        TextView tvPopTitle = mView.findViewById(R.id.tv_pop_title);
+        switch (type){
+            case 1:
+                tvPopTitle.setText("选择部门");
+                break;
+            case 2:
+                tvPopTitle.setText("选择班级");
+                break;
+            case 3:
+                tvPopTitle.setText("选择考勤事件");
+                break;
+            default:
+                break;
+        }
         bg.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
@@ -88,7 +98,7 @@ public class DeptSelectPop extends PopupWindow {
         //初始化列表
         final DeptSelectAdapter deptSelectAdapter = new DeptSelectAdapter(context, dataBeansList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
+        //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(deptSelectAdapter);
         deptSelectAdapter.setOnClickedListener(position -> {
             //恢复状态

@@ -16,12 +16,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeaveFlowBean {
-    private String time;
-    private String date;
-    private String flowTitle;
-    private String flowContent;
-    private boolean checked;
-    private boolean nopass;
-    private String image;
+public class StudentDayStatisticsBean {
+    private String time;//考勤时间
+    private String eventName;
+    //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假
+    private int eventStatus;
+    //打卡时间
+    private String eventTime;
 }

@@ -1,16 +1,23 @@
 package com.yyide.chatim.utils;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 public class DateUtils {
-
+    private static final String TAG = "DateUtils";
     /**
      * 将时间戳转换为时间
      * <p>
@@ -164,5 +171,31 @@ public class DateUtils {
             e.printStackTrace();
         }
         return new long[]{};
+    }
+    /**
+     * 根据输入的年月周数来取该周首天
+     * @param year 年份(>0)
+     * @param month 月份(1-12)
+     * @param week 当月周数(1-5)
+     * @return 该周第一天（周日）
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String[] getFirstDayAndLastDayByMonthWeek(int year, int month, int week){
+        Log.e(TAG,"year="+year+",month="+month+",week="+week);
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.WEEK_OF_MONTH,week);
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String[] dates= {"",""};
+        LocalDate inputDate = LocalDate.parse(simpleDateFormat.format(calendar.getTime()));
+        // 所在周开始时间
+        LocalDate beginDayOfWeek = inputDate.with(DayOfWeek.MONDAY);
+        // 所在周结束时间
+        LocalDate endDayOfWeek = inputDate.with(DayOfWeek.SUNDAY);
+        Log.e(TAG, "beginDayOfWeek: "+beginDayOfWeek.toString()+",endDayOfWeek："+endDayOfWeek.toString() );
+        dates[0] = beginDayOfWeek.getMonthValue()+"."+beginDayOfWeek.getDayOfMonth();
+        dates[1] = endDayOfWeek.getMonthValue()+"."+endDayOfWeek.getDayOfMonth();
+        return dates;
     }
 }
