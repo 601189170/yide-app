@@ -307,7 +307,9 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             if (leaveFlowCopyerList.size()>3){
                 final View view1 = LayoutInflater.from(this).inflate(R.layout.item_approver_head, null);
                 final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
                 tv_copyer_name.setText("查看全部");
+                userHeadImage.setImageResource(R.drawable.icon_read_more);
                 view1.setOnClickListener(v -> {
                     final Intent intent = new Intent(LeaveFlowDetailActivity.this, LeaveCarbonCopyPeopleActivity.class);
                     intent.putExtra("carbonCopyPeople", JSON.toJSONString(leaveFlowCopyerList));
