@@ -45,6 +45,13 @@ public class NoticeAnnouncementListAdapter extends RecyclerView.Adapter {
 
     public boolean isLastPage = false;
 
+    public void setOnlyOnePage(boolean onlyOnePage) {
+        this.onlyOnePage = onlyOnePage;
+    }
+
+    //是否是只有一页
+    public boolean onlyOnePage = false;
+
     public void setOnItemOnClickListener(OnItemOnClickListener onItemOnClickListener) {
         this.onItemOnClickListener = onItemOnClickListener;
     }
@@ -70,7 +77,7 @@ public class NoticeAnnouncementListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull  RecyclerView.ViewHolder holder, int position) {
         if (position == getItemCount()-1){
             FootView itemView = (FootView) holder.itemView;
-            if (isLoadMore){
+            if (isLoadMore && !onlyOnePage){
                 itemView.setVisibility(View.VISIBLE);
                 itemView.setLoading(!isLastPage);
             }else {

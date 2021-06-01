@@ -353,7 +353,9 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                 if (carbonCopyPeopleId.size()>3){
                     final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
                     final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                    final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
                     tv_copyer_name.setText("查看全部");
+                    userHeadImage.setImageResource(R.drawable.icon_read_more);
                     view1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

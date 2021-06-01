@@ -173,6 +173,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         List<NoticeListRsp.DataBean.RecordsBean> records = noticeListRsp.getData().getRecords();
         publishNoticeAnnouncementListAdapter.setIsLoadMore(!records.isEmpty());
         publishNoticeAnnouncementListAdapter.setIsLastPage(curIndex == pages);
+        publishNoticeAnnouncementListAdapter.setOnlyOnePage(pages <= 1);
         if (refresh){
             list.clear();
             refresh = false;

@@ -41,7 +41,12 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     public static final int view_Normal = 2;
     //是否隐藏
     public boolean isLoadMore = false;
+    public void setOnlyOnePage(boolean onlyOnePage) {
+        this.onlyOnePage = onlyOnePage;
+    }
 
+    //是否是只有一页
+    public boolean onlyOnePage = false;
     private View view;
 
     private OnItemOnClickListener onItemOnClickListener;
@@ -73,7 +78,7 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull  RecyclerView.ViewHolder holder, int position) {
         if (position == getItemCount()-1){
             FootView itemView = (FootView) holder.itemView;
-            if (isLoadMore){
+            if (isLoadMore && !onlyOnePage){
                 itemView.setVisibility(View.VISIBLE);
                 itemView.setLoading(!isLastPage);
             }else {
