@@ -151,6 +151,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
 
             List<UserMsgNoticeRsp.DataBean.RecordsBean> records = data.getRecords();
             userNoticeListAdapter.setIsLastPage(curIndex == pages);
+            userNoticeListAdapter.setOnlyOnePage(pages <= 1);
             userNoticeListAdapter.setIsLoadMore(!records.isEmpty());
             list.addAll(records);
             userNoticeListAdapter.notifyDataSetChanged();

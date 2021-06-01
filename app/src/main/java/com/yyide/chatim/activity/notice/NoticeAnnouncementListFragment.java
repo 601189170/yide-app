@@ -159,6 +159,7 @@ public class NoticeAnnouncementListFragment extends BaseMvpFragment<NoticeAnnoun
         Log.e(TAG, "noticeList: " + noticeListRsp.toString());
         List<NoticeListRsp.DataBean.RecordsBean> records = noticeListRsp.getData().getRecords();
         pages = noticeListRsp.getData().getPages();
+        noticeAnnouncementListAdapter.setOnlyOnePage(pages <= 1);
         noticeAnnouncementListAdapter.setIsLastPage(curIndex == pages);
         noticeAnnouncementListAdapter.setIsLoadMore(!records.isEmpty());
         if (refresh) {

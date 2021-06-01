@@ -178,6 +178,7 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         final List<LeaveListRsp.DataBean.RecordsBean> records = leaveListRsp.getData().getRecords();
         pages = leaveListRsp.getData().getPages();
         adapter.setIsLastPage(curIndex == pages);
+        adapter.setOnlyOnePage(pages <= 1);
         adapter.setIsLoadMore(!records.isEmpty());
         if (refresh) {
             list.clear();
