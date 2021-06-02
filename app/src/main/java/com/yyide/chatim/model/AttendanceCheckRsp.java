@@ -72,12 +72,13 @@ public class AttendanceCheckRsp {
             private int leaveEarlyA;
             private int absenceA;
             private int leaveA;
+            private String peopleType;
             private String attNameA;
-            private List<?> peopleA;
-            private List<?> latePeopleA;
-            private List<?> leavePeopleA;
-            private List<?> absencePeopleA;
-            private List<?> leaveEarlyPeopleA;
+            private List<Students.PeopleBean> peopleA;
+            private List<Students.PeopleBean> latePeopleA;
+            private List<Students.PeopleBean> leavePeopleA;
+            private List<Students.PeopleBean> absencePeopleA;
+            private List<Students.PeopleBean> leaveEarlyPeopleA;
 
             public Students getStudents() {
                 return students;
@@ -87,7 +88,7 @@ public class AttendanceCheckRsp {
                 this.students = students;
             }
 
-            public static class Students{
+            public static class Students {
 
                 private int number;
                 private String rate;
@@ -96,12 +97,18 @@ public class AttendanceCheckRsp {
                 private int leaveEarly;
                 private int absence;
                 private int leave;
-                private String attendanceType;//（0正常、1缺勤、2迟到/3早退,4无效打卡）
+                private String attendanceType;//0已签到 1未签到
                 private String attendanceData;//考情时间
                 private String name;
                 private int section;
                 private String subjectName;
                 private String id;
+                private String peopleName;
+                private String applyDate;
+                private String startTime;
+                private String requiredTime;
+                private String endTime;
+                private String peopleType;//N 老师 Y 学生
                 private List<?> studentIds;
                 private List<PeopleBean> people;
                 private List<PeopleBean> latePeople;
@@ -116,6 +123,14 @@ public class AttendanceCheckRsp {
 
                 public void setAttendanceData(String attendanceData) {
                     this.attendanceData = attendanceData;
+                }
+
+                public String getPeopleType() {
+                    return peopleType;
+                }
+
+                public void setPeopleType(String peopleType) {
+                    this.peopleType = peopleType;
                 }
 
                 public String getAttendanceType() {
@@ -246,6 +261,46 @@ public class AttendanceCheckRsp {
                     this.leavePeople = leavePeople;
                 }
 
+                public String getApplyDate() {
+                    return applyDate;
+                }
+
+                public void setApplyDate(String applyDate) {
+                    this.applyDate = applyDate;
+                }
+
+                public String getPeopleName() {
+                    return peopleName;
+                }
+
+                public void setPeopleName(String peopleName) {
+                    this.peopleName = peopleName;
+                }
+
+                public String getStartTime() {
+                    return startTime;
+                }
+
+                public void setStartTime(String startTime) {
+                    this.startTime = startTime;
+                }
+
+                public String getRequiredTime() {
+                    return requiredTime;
+                }
+
+                public void setRequiredTime(String requiredTime) {
+                    this.requiredTime = requiredTime;
+                }
+
+                public String getEndTime() {
+                    return endTime;
+                }
+
+                public void setEndTime(String endTime) {
+                    this.endTime = endTime;
+                }
+
                 public List<PeopleBean> getAbsencePeople() {
                     return absencePeople;
                 }
@@ -254,7 +309,7 @@ public class AttendanceCheckRsp {
                     this.absencePeople = absencePeople;
                 }
 
-                public List<?> getLeaveEarlyPeople() {
+                public List<PeopleBean> getLeaveEarlyPeople() {
                     return leaveEarlyPeople;
                 }
 
@@ -262,7 +317,7 @@ public class AttendanceCheckRsp {
                     this.leaveEarlyPeople = leaveEarlyPeople;
                 }
 
-                public List<?> getApplyPeople() {
+                public List<PeopleBean> getApplyPeople() {
                     return applyPeople;
                 }
 
@@ -274,9 +329,11 @@ public class AttendanceCheckRsp {
                     private String name;
                     private String status;
                     private String time;
+                    private String startDate;
+                    private String endDate;
 
                     public String getStatusType() {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
-                        switch (status){
+                        switch (status) {
                             case "0":
                                 status = "正常";
                                 break;
@@ -294,6 +351,22 @@ public class AttendanceCheckRsp {
                                 break;
                         }
                         return status;
+                    }
+
+                    public String getStartDate() {
+                        return startDate;
+                    }
+
+                    public void setStartDate(String startDate) {
+                        this.startDate = startDate;
+                    }
+
+                    public String getEndDate() {
+                        return endDate;
+                    }
+
+                    public void setEndDate(String endDate) {
+                        this.endDate = endDate;
                     }
 
                     public String getTime() {
@@ -323,6 +396,13 @@ public class AttendanceCheckRsp {
 
             }
 
+            public String getPeopleType() {
+                return peopleType;
+            }
+
+            public void setPeopleType(String peopleType) {
+                this.peopleType = peopleType;
+            }
 
             public int getNumber() {
                 return number;
@@ -408,7 +488,7 @@ public class AttendanceCheckRsp {
                 return peopleA;
             }
 
-            public void setPeopleA(List<?> peopleA) {
+            public void setPeopleA(List<Students.PeopleBean> peopleA) {
                 this.peopleA = peopleA;
             }
 
@@ -416,7 +496,7 @@ public class AttendanceCheckRsp {
                 return latePeopleA;
             }
 
-            public void setLatePeopleA(List<?> latePeopleA) {
+            public void setLatePeopleA(List<Students.PeopleBean> latePeopleA) {
                 this.latePeopleA = latePeopleA;
             }
 
@@ -424,7 +504,7 @@ public class AttendanceCheckRsp {
                 return leavePeopleA;
             }
 
-            public void setLeavePeopleA(List<?> leavePeopleA) {
+            public void setLeavePeopleA(List<Students.PeopleBean> leavePeopleA) {
                 this.leavePeopleA = leavePeopleA;
             }
 
@@ -432,7 +512,7 @@ public class AttendanceCheckRsp {
                 return absencePeopleA;
             }
 
-            public void setAbsencePeopleA(List<?> absencePeopleA) {
+            public void setAbsencePeopleA(List<Students.PeopleBean> absencePeopleA) {
                 this.absencePeopleA = absencePeopleA;
             }
 
@@ -440,7 +520,7 @@ public class AttendanceCheckRsp {
                 return leaveEarlyPeopleA;
             }
 
-            public void setLeaveEarlyPeopleA(List<?> leaveEarlyPeopleA) {
+            public void setLeaveEarlyPeopleA(List<Students.PeopleBean> leaveEarlyPeopleA) {
                 this.leaveEarlyPeopleA = leaveEarlyPeopleA;
             }
 
@@ -651,12 +731,22 @@ public class AttendanceCheckRsp {
             private int leaveEarly;
             private int absence;
             private int leave;
+            private String peopleType;//Y 老师 N 学生
             private String attName;
+            private String attendanceType;
             private List<?> people;
             private List<?> latePeople;
             private List<?> leavePeople;
             private List<?> absencePeople;
             private List<GradeListBean> gradeList;
+
+            public String getAttendanceType() {
+                return attendanceType;
+            }
+
+            public void setAttendanceType(String attendanceType) {
+                this.attendanceType = attendanceType;
+            }
 
             public int getNumber() {
                 return number;
@@ -712,6 +802,14 @@ public class AttendanceCheckRsp {
 
             public void setLeave(int leave) {
                 this.leave = leave;
+            }
+
+            public String getPeopleType() {
+                return peopleType;
+            }
+
+            public void setPeopleType(String peopleType) {
+                this.peopleType = peopleType;
             }
 
             public String getAttName() {
@@ -776,11 +874,20 @@ public class AttendanceCheckRsp {
                 private int leaveEarly;
                 private int absence;
                 private int leave;
+                private String peopleType;//Y 老师 N 学生
                 private List<?> people;
                 private List<?> latePeople;
                 private List<?> leavePeople;
                 private List<?> absencePeople;
                 private List<ClassFormBean> classForm;
+
+                public String getPeopleType() {
+                    return peopleType;
+                }
+
+                public void setPeopleType(String peopleType) {
+                    this.peopleType = peopleType;
+                }
 
                 public String getName() {
                     return name;

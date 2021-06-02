@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentAttendanceBinding;
-import com.yyide.chatim.dialog.AttendanceCheckPop;
-import com.yyide.chatim.dialog.AttendanceClassPop;
+import com.yyide.chatim.dialog.AttendancePop;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.AttendanceCheckPresenter;
@@ -36,13 +36,13 @@ import java.util.List;
  * time 2021年5月31日15:52:14
  * other lrz
  */
-public class AttendanceTeachingFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener {
+public class TeacherStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener {
     private AttendanceCheckRsp.DataBean.AttendancesFormBean.Students itemStudents;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentAttendanceBinding mViewBinding;
 
-    public static AttendanceTeachingFragment newInstance() {
-        AttendanceTeachingFragment fragment = new AttendanceTeachingFragment();
+    public static TeacherStudentAttendanceFragment newInstance() {
+        TeacherStudentAttendanceFragment fragment = new TeacherStudentAttendanceFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -133,7 +133,7 @@ public class AttendanceTeachingFragment extends BaseMvpFragment<AttendanceCheckP
             case R.id.tv_normal:
                 mViewBinding.tvNormal.setChecked(true);
                 mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemStudents != null ? itemStudents.getPeople() : null);
+                adapter.setList(itemStudents != null ? itemStudents.getApplyPeople() : null);
                 break;
         }
     }
@@ -142,7 +142,22 @@ public class AttendanceTeachingFragment extends BaseMvpFragment<AttendanceCheckP
     private void setDataView(AttendanceCheckRsp.DataBean item) {
         mViewBinding.tvClassName.setOnClickListener(v -> {
             List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
-            AttendanceClassPop attendancePop = new AttendanceClassPop(getActivity(), classList);
+            AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
+                @Override
+                public int getItemsCount() {
+                    return classList.size();
+                }
+
+                @Override
+                public Object getItem(int index) {
+                    return classList.get(index).classesName;
+                }
+
+                @Override
+                public int indexOf(Object o) {
+                    return classList.indexOf(o);
+                }
+            }, "");
             attendancePop.setOnSelectListener(index -> {
                 mViewBinding.tvClassName.setText(classList.get(index).classesName);
                 mvpPresenter.attendance(classList.get(index).classesId);
@@ -150,7 +165,22 @@ public class AttendanceTeachingFragment extends BaseMvpFragment<AttendanceCheckP
         });
 
         mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-            AttendanceCheckPop attendancePop = new AttendanceCheckPop(getActivity(), item.getAttendancesForm());
+            AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
+                @Override
+                public int getItemsCount() {
+                    return item.getAttendancesForm().size();
+                }
+
+                @Override
+                public Object getItem(int index) {
+                    return item.getAttendancesForm().get(index).getStudents().getName();
+                }
+
+                @Override
+                public int indexOf(Object o) {
+                    return item.getAttendancesForm().indexOf(o);
+                }
+            }, "");
             attendancePop.setOnSelectListener(index -> {
                 itemStudents = item.getAttendancesForm().get(index).getStudents();
                 setData();
@@ -161,12 +191,14 @@ public class AttendanceTeachingFragment extends BaseMvpFragment<AttendanceCheckP
             itemStudents = item.getAttendancesForm().get(0).getStudents();
         }
 
-        if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
-            mViewBinding.tvClassName.setClickable(true);
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-        } else {
-            mViewBinding.tvClassName.setClickable(false);
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+        if (SpData.getIdentityInfo() != null) {
+            if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
+                mViewBinding.tvClassName.setClickable(true);
+                mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+            } else {
+                mViewBinding.tvClassName.setClickable(false);
+                mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            }
         }
 
         if (item.getAttendancesForm() != null && item.getAttendancesForm().size() > 1) {
@@ -181,20 +213,9 @@ public class AttendanceTeachingFragment extends BaseMvpFragment<AttendanceCheckP
 
     @SuppressLint("SetTextI18n")
     private void setData() {
-        if (SpData.getIdentityInfo() != null) {
-            switch (SpData.getIdentityInfo().status) {
-                case GetUserSchoolRsp.DataBean.TYPE_PRESIDENT://校长
-                    break;
-                case GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER://班主任
-                case GetUserSchoolRsp.DataBean.TYPE_TEACHER://教师-老师
-                case GetUserSchoolRsp.DataBean.TYPE_PARENTS://家长-监护人
-                    break;
-            }
-        }
-
         if (itemStudents != null) {
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvAttendanceTitle.setText(itemStudents.getName());
+            mViewBinding.tvAttendanceTitle.setText(itemStudents.getSection() > 0 ? itemStudents.getSubjectName() : itemStudents.getName());
             mViewBinding.tvDesc.setText(itemStudents.getName());
             mViewBinding.tvAttendanceTime.setText("考勤时间 " + DateUtils.switchTime(new Date(), "HH:mm"));
             mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());

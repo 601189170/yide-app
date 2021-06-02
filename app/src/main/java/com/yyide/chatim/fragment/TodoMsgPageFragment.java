@@ -218,7 +218,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageSuccess: " + noticeHomeRsp.toString());
         if (BaseConstant.REQUEST_SUCCES2 == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
-//            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
             List<TodoRsp.DataBean.RecordsBean> data = noticeHomeRsp.getData().getRecords();
             if (pageNum == 1) {
                 adapter.setList(data);

@@ -131,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_5"
-            android:text="正常"
+            android:text="缺勤"
             android:textColor="#ffffffff"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="@+id/tv_absenteeism_num"
