@@ -68,6 +68,8 @@ public class AttendanceAdapter extends LoopPagerAdapter {
 
         AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item = list.get(position);
         attendanceName.setText(item.getAttName());
+
+//        tv_desc.setText("0".equals(item.getAttendanceType()) ? "已签到" : "未签到");
         if (isSchool) {
             LinearLayout.setVisibility(View.GONE);
         } else {
@@ -85,7 +87,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         entries.add(new PieEntry(item.getLate(), "迟到"));
         entries.add(new PieEntry(item.getApplyNum(), "实到"));
         piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + "考勤率");
-        piechart.setCenterTextSize(14);
+        piechart.setCenterTextSize(12);
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(0);//设置饼块之间的间隔
         dataSet.setColors(PIE_COLORS2);//设置饼块的颜色
@@ -93,7 +95,9 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         PieData pieData = new PieData(dataSet);
         piechart.setData(pieData);
         piechart.invalidate();
-        view.setOnClickListener(v -> view.getContext().startActivity(new Intent(view.getContext(), AttendanceActivity.class)));
+        view.setOnClickListener(v -> {
+            AttendanceActivity.start(view.getContext(), item.getPeopleType());
+        });
         return view;
     }
 

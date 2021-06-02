@@ -37,6 +37,7 @@ import com.yyide.chatim.fragment.TableFragment;
 import com.yyide.chatim.fragment.WorkFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.NoteTabBean;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
@@ -112,6 +113,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
+        childFragmentManager = getChildFragmentManager();
+        fragmentTransaction = childFragmentManager.beginTransaction();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -183,44 +186,42 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         super.onPause();
     }
 
-    private void setIdentityFragment(){//身份切换只做模块显示和隐藏
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
-            tableContent.setVisibility(View.GONE);
-            noticeContent.setVisibility(View.VISIBLE);
-            kqContent.setVisibility(View.VISIBLE);
-            bannerContent.setVisibility(View.GONE);
-            workContent.setVisibility(View.GONE);
-            classHonorContent.setVisibility(View.GONE);
-            studentHonorContent.setVisibility(View.GONE);
-        } else {
-            tableContent.setVisibility(View.VISIBLE);
-            noticeContent.setVisibility(View.VISIBLE);
-            kqContent.setVisibility(View.VISIBLE);
-            bannerContent.setVisibility(View.VISIBLE);
-            workContent.setVisibility(View.VISIBLE);
-            classHonorContent.setVisibility(View.VISIBLE);
-            studentHonorContent.setVisibility(View.VISIBLE);
-        }
-    }
+    private FragmentManager childFragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     void setFragment() {
-        FragmentManager childFragmentManager = getChildFragmentManager();
-        FragmentTransaction fragmentTransaction = childFragmentManager.beginTransaction();
-        //班级课表
-        fragmentTransaction.add(R.id.table_content, new TableFragment());
-        //通知
-        fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
-        //班级考勤情况
-        fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
-        //班级相册轮播
-        fragmentTransaction.add(R.id.banner_content, new BannerFragment());
-        //班级作业
-        fragmentTransaction.add(R.id.work_content, new WorkFragment());
-        //班级相册
-        fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
-        //班级学生荣誉
-        fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
+        clearFragment();
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
+            tableContent.setVisibility(View.GONE);
+            //通知
+            fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
+            //班级考勤情况
+            fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
+        } else {
+            tableContent.setVisibility(View.VISIBLE);
+            //班级课表
+            fragmentTransaction.add(R.id.table_content, new TableFragment());
+            //通知
+            fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
+            //班级考勤情况
+            fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
+            //班级相册轮播
+            fragmentTransaction.add(R.id.banner_content, new BannerFragment());
+            //班级作业
+            fragmentTransaction.add(R.id.work_content, new WorkFragment());
+            //班级相册
+            fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
+            //班级学生荣誉
+            fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
+        }
         fragmentTransaction.commit();
+    }
+
+    void clearFragment() {
+        int num = getFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < num; i++) {
+            getFragmentManager().popBackStack();
+        }
     }
 
     @Override
@@ -232,7 +233,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             SpData.setIdentityInfo(rsp);
         }
         setSchoolInfo();
-        setIdentityFragment();
+        setFragment();
     }
 
     void setSchoolInfo() {

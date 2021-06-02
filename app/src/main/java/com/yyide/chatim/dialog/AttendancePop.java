@@ -18,15 +18,17 @@ import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.view.WheelView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.SelectTableClassesRsp;
+import com.yyide.chatim.widget.ArrayWheelAdapter;
 
 import java.util.List;
 
-public class AttendanceCheckPop extends PopupWindow {
+public class AttendancePop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
     private int selectIndex;
-    private List<AttendanceCheckRsp.DataBean.AttendancesFormBean> dataBeansList;
     private SelectClasses mSelectClasses;
 
     public void setOnSelectListener(SelectClasses selectClasses) {
@@ -37,13 +39,12 @@ public class AttendanceCheckPop extends PopupWindow {
         void OnSelectClassesListener(int index);
     }
 
-    public AttendanceCheckPop(Activity context, List<AttendanceCheckRsp.DataBean.AttendancesFormBean> dataBeansList) {
+    public AttendancePop(Activity context, WheelAdapter wheelAdapter, String leftText) {
         this.context = context;
-        this.dataBeansList = dataBeansList;
-        init();
+        init(wheelAdapter, leftText);
     }
 
-    private void init() {
+    private void init(WheelAdapter wheelAdapter, String leftText) {
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bttom_pop, null);
         TextView confirm = mView.findViewById(R.id.confirm);
         TextView leftDesc = mView.findViewById(R.id.cancel);
@@ -62,26 +63,11 @@ public class AttendanceCheckPop extends PopupWindow {
                 popupWindow.dismiss();
             }
         });
-        leftDesc.setText("");
+        leftDesc.setText(leftText);
         wheelView.setCyclic(false);
         wheelView.setTextColorCenter(context.getResources().getColor(R.color.text_212121));
         wheelView.setTextColorOut(context.getResources().getColor(R.color.text_666666));
-        wheelView.setAdapter(new WheelAdapter() {
-            @Override
-            public int getItemsCount() {
-                return dataBeansList.size();
-            }
-
-            @Override
-            public Object getItem(int index) {
-                return dataBeansList.get(index).getStudents().getName();
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                return dataBeansList.indexOf(o);
-            }
-        });
+        wheelView.setAdapter(wheelAdapter);
         wheelView.setCurrentItem(-1);
         wheelView.setOnItemSelectedListener(index -> {
             this.selectIndex = index;

@@ -50,6 +50,7 @@ public class BaseConstant {
     public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
     //学生作品
     public static final String STUDENT_HONOR_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/studentWorks";
+    public static final String STUDENT_FAMILY_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/patriarchProduction";
     //班级相册
     public static final String CLASS_PHOTO_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/classPhoto";
 

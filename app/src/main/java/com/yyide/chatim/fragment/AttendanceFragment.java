@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -42,8 +43,8 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     RollPagerView announRoll;
     @BindView(R.id.grid)
     RecyclerView mHot;
-    @BindView(R.id.tv_data)
-    TextView tv_data;
+    @BindView(R.id.constraintLayout)
+    ConstraintLayout constraintLayout;
     private View mBaseView;
     AttendanceAdapter announAdapter;
     IndexAdapter indexAdapter;
@@ -128,10 +129,7 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     public void getAttendanceSuccess(AttendanceCheckRsp model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null) {
-                tv_data.setVisibility(View.GONE);
                 setData(model.getData());
-            } else {
-                tv_data.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -152,6 +150,7 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
                     schoolBean.setLeave(item.getLeaveA());
                     schoolBean.setNumber(item.getNumberA());
                     schoolBean.setRate(item.getRateA());
+                    schoolBean.setPeopleType(item.getPeopleType());
                     schoolPeopleAllFormBeanList.add(schoolBean);
                 }
             }
@@ -168,6 +167,7 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
                         schoolBean.setLeave(item.getLeave());
                         schoolBean.setNumber(item.getNumber());
                         schoolBean.setRate(item.getRate());
+                        schoolBean.setPeopleType(item.getPeopleType());
                         schoolPeopleAllFormBeanList.add(schoolBean);
                     }
                 }
@@ -175,6 +175,7 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
         }
         announAdapter.setSchool(isSchool);
         announRoll.setAdapter(announAdapter);
+        constraintLayout.setVisibility((schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) ? View.GONE : View.VISIBLE);
         announAdapter.notifyData(schoolPeopleAllFormBeanList);
         indexAdapter.setList(schoolPeopleAllFormBeanList);
     }

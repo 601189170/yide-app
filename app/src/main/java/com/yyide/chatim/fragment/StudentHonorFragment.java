@@ -17,6 +17,7 @@ import com.yyide.chatim.adapter.StudentHonorAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.StudentHonorRsp;
 import com.yyide.chatim.presenter.StudentHonorPresenter;
 import com.yyide.chatim.view.StudentHonorView;
@@ -66,7 +67,7 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
         announAdapter.setOnItemClickListener(() -> {
             //startActivity(new Intent(getContext(), StudentHonorListActivity.class));
             Intent intent = new Intent(view.getContext(), WebViewActivity.class);
-            intent.putExtra("url", BaseConstant.STUDENT_HONOR_URL);
+            intent.putExtra("url", (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) ? BaseConstant.STUDENT_FAMILY_URL : BaseConstant.STUDENT_HONOR_URL);
             view.getContext().startActivity(intent);
         });
         iv_bg.setOnClickListener(v -> {
