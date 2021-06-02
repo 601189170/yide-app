@@ -145,10 +145,10 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
         if ("1".equals(sendObj))
             return "家长";
         if ("2".equals(sendObj))
-            return "学生";
+            return "班级";
         if ("3".equals(sendObj))
             return "教职工";
-        return "学生";
+        return "班级";
     }
 
     @Override

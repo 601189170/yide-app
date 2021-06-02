@@ -133,7 +133,7 @@
                     android:paddingTop="@dimen/dp_5"
                     android:paddingEnd="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_5"
-                    android:text="学生"
+                    android:text="班级"
                     android:textColor="@color/text_666666"
                     android:textSize="@dimen/text_12"
                     android:layout_marginEnd="@dimen/dp_20"
