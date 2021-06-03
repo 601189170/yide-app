@@ -59,7 +59,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        mvpPresenter.getHomeNotice();
+        //mvpPresenter.getHomeNotice();
 
         ll_notice.setOnClickListener(v -> {
             if (jump && data != null) {
@@ -71,6 +71,14 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: ");
+        mvpPresenter.getHomeNotice();
+    }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {

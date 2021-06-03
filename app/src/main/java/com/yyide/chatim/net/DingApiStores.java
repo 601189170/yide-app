@@ -212,12 +212,12 @@ public interface DingApiStores {
 
     //消息模板分类类型
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/announcement/type/getAnnouncementTypePage")
+    @POST("/message-server/cloud-message/announcement/type/getAnnouncementTypePage")
     Observable<TemplateTypeRsp> getTemplateTypePage(@Body RequestBody requestBody);
 
     //获取消息模板
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/message/temp/selectMessagePage")
+    @POST("/message-server/cloud-message/message/temp/selectMessagePage")
     Observable<TemplateListRsp> selectMessagePage(@Body RequestBody requestBody);
 
     //我的应用
