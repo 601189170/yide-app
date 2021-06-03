@@ -111,6 +111,11 @@ public class PushMessageReceiver extends JPushMessageReceiver {
     @Override
     public void onNotifyMessageArrived(Context context, NotificationMessage message) {
         Log.e(TAG, "[onNotifyMessageArrived] " + message);
+        PushModel pushModel = JSON.parseObject(message.notificationExtras, PushModel.class);
+        //通知公告消息
+        if ("1".equals(pushModel.getPushType())) {
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_REMOTE_NOTICE, ""));
+        }
     }
 
     @Override

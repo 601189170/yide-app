@@ -82,7 +82,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode()) || BaseConstant.TYPE_UPDATE_REMOTE_NOTICE.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", NoticeFragment.class.getSimpleName());
             mvpPresenter.getHomeNotice();
         }
