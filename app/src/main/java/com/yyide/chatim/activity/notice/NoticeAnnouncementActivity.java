@@ -60,11 +60,14 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
         //家长身份不能添加公告
         if (!SpData.getIdentityInfo().staffIdentity()) {
             floatingActionButton.setVisibility(View.GONE);
+            mTablayout.setVisibility(View.GONE);
         }
         NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
         fragments.add(my_notice);
-        PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
-        fragments.add(my_release);
+        if (SpData.getIdentityInfo().staffIdentity()){
+            PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
+            fragments.add(my_release);
+        }
         mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
@@ -79,7 +82,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
 
             @Override
             public int getItemCount() {
-                return 2;
+                return fragments.size();
             }
         });
         new TabLayoutMediator(mTablayout, mViewpager, true, new TabLayoutMediator.TabConfigurationStrategy() {

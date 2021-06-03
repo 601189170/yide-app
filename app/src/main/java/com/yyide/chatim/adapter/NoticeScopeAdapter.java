@@ -65,7 +65,7 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
         holder.checkBox.setChecked(bean.isChecked());
         if (bean.getList() != null && !bean.getList().isEmpty()) {
             holder.btn_level.setVisibility(View.VISIBLE);
-            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
+            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
 
             holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             NoticeScopeAdapter adapter = new NoticeScopeAdapter(context, bean.getList());
@@ -78,11 +78,11 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
                 Log.e("TAG", "onBindViewHolder: "+unfold );
                 if (unfold) {
                     unfold = false;
-                    holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
+                    holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
                     holder.mRecyclerView.setVisibility(View.GONE);
                 } else {
                     unfold = true;
-                    holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
+                    holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
                     holder.mRecyclerView.setVisibility(View.VISIBLE);
                 }
 
