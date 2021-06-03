@@ -3,10 +3,12 @@ package com.yyide.chatim.activity.notice;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -25,6 +28,7 @@ import com.yyide.chatim.activity.notice.view.NoticeTemplateListFragmentView;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.view.FootView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +38,7 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  */
-public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmentPresenter> implements NoticeConfirmListFragmentView {
+public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmentPresenter> implements NoticeConfirmListFragmentView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NoticeItemFragment";
     BaseQuickAdapter adapter;
     private static final String ARG_PARAM1 = "confirmType";
@@ -43,7 +47,15 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
     private int confirmType;
     private long signId;
     private int size;
+    private boolean refresh = false;
+    private int curIndex = 1;
+    private int pages = 0;
+    private int total = 15;
     private List<ConfirmDetailRsp.DataBean.RecordsBean> recordsBeans = new ArrayList<>();
+    private FootView footView;
+    private LinearLayout blank_page;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     // TODO: Customize parameter initialization
     public static NoticeItemFragment newInstance(int confirmType,long signId,int size) {
         NoticeItemFragment fragment = new NoticeItemFragment();
@@ -69,17 +81,7 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            initAdapter();
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-            recyclerView.setAdapter(adapter);
-            //adapter.setList();
-        }
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
         return view;
     }
 
@@ -87,9 +89,24 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated: ");
-        mvpPresenter.getConfirmDetails(confirmType,signId,1,size);
+        final RecyclerView recyclerView = view.findViewById(R.id.list);
+        blank_page = view.findViewById(R.id.blank_page);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        initAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addOnScrollListener(monScrollListener);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
+        mvpPresenter.getConfirmDetails(confirmType,signId,1,total);
     }
-
+    public void showBlankPage() {
+        if (recordsBeans.isEmpty()) {
+            blank_page.setVisibility(View.VISIBLE);
+        } else {
+            blank_page.setVisibility(View.GONE);
+        }
+    }
     private void initAdapter(){
         adapter = new BaseQuickAdapter<ConfirmDetailRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.fragment_notice_item) {
             @Override
@@ -108,7 +125,7 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
                 }
             }
         };
-
+        footView = new FootView(getActivity());
 
     }
 
@@ -116,20 +133,60 @@ public class NoticeItemFragment extends BaseMvpFragment<NoticeConfirmListFragmen
     public void noticeConfirmList(ConfirmDetailRsp confirmDetailRsp) {
         Log.e(TAG, "noticeConfirmList: "+confirmDetailRsp.toString() );
         if (confirmDetailRsp.getCode() == 200) {
+            if (refresh) {
+                recordsBeans.clear();
+                refresh = false;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            pages = confirmDetailRsp.getData().getPages();
             List<ConfirmDetailRsp.DataBean.RecordsBean> records = confirmDetailRsp.getData().getRecords();
             recordsBeans.addAll(records);
             adapter.setList(recordsBeans);
             adapter.notifyDataSetChanged();
+            showBlankPage();
         }
     }
 
     @Override
     public void noticeConfirmListFail(String msg) {
-
+            showBlankPage();
     }
 
     @Override
     protected NoticeConfirmListFragmentPresenter createPresenter() {
         return new NoticeConfirmListFragmentPresenter(this);
+    }
+
+    private int mLastVisibleItemPosition;
+    private RecyclerView.OnScrollListener monScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                mLastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            }
+            if (adapter != null) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == adapter.getItemCount()) {
+                    if (adapter.getFooterLayoutCount() == 0 && pages > 0){
+                        adapter.setFooterView(footView);
+                    }
+                    if (curIndex >= pages) {
+                        footView.setLoading(false);
+                        //ToastUtils.showShort("没有更多数据了！");
+                        return;
+                    }
+                    footView.setLoading(true);
+                    //发送网络请求获取更多数据
+                    mvpPresenter.getConfirmDetails(confirmType,signId,++curIndex,total);
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onRefresh() {
+        curIndex = 1;
+        refresh = true;
+        mvpPresenter.getConfirmDetails(confirmType,signId,1,total);
     }
 }
