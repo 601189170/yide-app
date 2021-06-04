@@ -107,6 +107,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
             } else {
                 showNoticeScopeNumber(getAllCheckedDepartmentIds(noticeScopeBeans, new ArrayList<String>()).size());
             }
+            adapter.notifyDataSetChanged();
         });
         initView();
         //notifyPrice();

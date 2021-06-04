@@ -33,9 +33,10 @@ import butterknife.ButterKnife;
  * @Version: 1.0
  */
 public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.ViewHolder> {
+    private static final String TAG = "NoticeScopeAdapter";
     private Context context;
     private List<NoticeScopeBean> data;
-    private boolean unfold = false;
+    //private boolean unfold = false;
 
     public void setOnCheckBoxChangeListener(OnCheckBoxChangeListener onCheckBoxChangeListener) {
         this.onCheckBoxChangeListener = onCheckBoxChangeListener;
@@ -66,7 +67,16 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
         if (bean.getList() != null && !bean.getList().isEmpty()) {
             holder.btn_level.setVisibility(View.VISIBLE);
             holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
-
+            Log.e(TAG, "onBindViewHolder isUnfold: "+bean.isUnfold() );
+            if (bean.isUnfold()) {
+                //bean.setUnfold(false);
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
+                holder.mRecyclerView.setVisibility(View.VISIBLE);
+            } else {
+                //bean.setUnfold(true);
+                holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
+                holder.mRecyclerView.setVisibility(View.GONE);
+            }
             holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             NoticeScopeAdapter adapter = new NoticeScopeAdapter(context, bean.getList());
 //            holder.mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
@@ -74,25 +84,27 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
             adapter.setOnCheckBoxChangeListener(()->{
                 onCheckBoxChangeListener.change();
             });
-            holder.itemView.setOnClickListener(v -> {
-                Log.e("TAG", "onBindViewHolder: "+unfold );
-                if (unfold) {
-                    unfold = false;
-                    holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
-                    holder.mRecyclerView.setVisibility(View.GONE);
+            holder.btn_level.setOnClickListener(v -> {
+                Log.e(TAG, "onBindViewHolder: onclick is unfold:"+bean.isUnfold() );
+                if (bean.isUnfold()) {
+                    bean.setUnfold(false);
+                    //holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
+                    //holder.mRecyclerView.setVisibility(View.GONE);
                 } else {
-                    unfold = true;
-                    holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
-                    holder.mRecyclerView.setVisibility(View.VISIBLE);
+                    bean.setUnfold(true);
+                    //holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
+                    //holder.mRecyclerView.setVisibility(View.VISIBLE);
                 }
-
+                onCheckBoxChangeListener.change();
+                //new Handler().post(() -> notifyDataSetChanged());
             });
         }
         //选中层级
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             recursionChecked(bean,isChecked);
             onCheckBoxChangeListener.change();
-            new Handler().post(() -> notifyDataSetChanged());
+            bean.setUnfold(isChecked);
+            //new Handler().post(() -> notifyDataSetChanged());
         });
 
     }
