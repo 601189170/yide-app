@@ -59,16 +59,13 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        //mvpPresenter.getHomeNotice();
-
         ll_notice.setOnClickListener(v -> {
-            if (jump && data != null) {
-                Intent intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
-//                intent.putExtra("type", 1);
-//                intent.putExtra("id", data.getId());
-//                intent.putExtra("status", data.getStatus());
-                startActivity(intent);
+
+            Intent intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
+            if (data != null){
+                intent.putExtra("hasNoticePermission",data.isHasNoticePermission());
             }
+            startActivity(intent);
         });
     }
 

@@ -103,6 +103,16 @@ public class HomeNoticeRsp {
         private int readNumber;
         private String sendObject;
 
+        public boolean isHasNoticePermission() {
+            return hasNoticePermission;
+        }
+
+        public void setHasNoticePermission(boolean hasNoticePermission) {
+            this.hasNoticePermission = hasNoticePermission;
+        }
+
+        private boolean hasNoticePermission;
+
         public int getId() {
             return id;
         }
