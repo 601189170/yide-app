@@ -95,7 +95,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         intent.putParcelableArrayListExtra("listBean", list);
         intent.putExtra("id", id);
         intent.putExtra("name", name);
-        intent.putExtra("schoolName", TextUtils.isEmpty(schoolName) ? pName.getText().toString().trim(): schoolName);
+        intent.putExtra("schoolName", TextUtils.isEmpty(schoolName) ? pName.getText().toString().trim() : schoolName);
         intent.putExtra("schoolType", schoolType);
         intent.putExtra("type", type);
         intent.putExtra("organization", organization);

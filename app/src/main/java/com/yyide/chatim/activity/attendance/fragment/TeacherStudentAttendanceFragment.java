@@ -141,6 +141,12 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     @SuppressLint("SetTextI18n")
     private void setDataView(AttendanceCheckRsp.DataBean item) {
+        if (item.getAttendancesForm() != null && item.getAttendancesForm().size() > 0) {
+            if(item.getAttendancesForm().size() < index){
+                index = 0;
+            }
+            itemStudents = item.getAttendancesForm().get(index).getStudents();
+        }
         mViewBinding.tvClassName.setOnClickListener(v -> {
             List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
             AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
@@ -187,13 +193,6 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 setData();
             });
         });
-
-        if (item.getAttendancesForm() != null && item.getAttendancesForm().size() > 0) {
-            if(item.getAttendancesForm().size() < index){
-                index = 0;
-            }
-            itemStudents = item.getAttendancesForm().get(index).getStudents();
-        }
 
         if (SpData.getIdentityInfo() != null) {
             if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {

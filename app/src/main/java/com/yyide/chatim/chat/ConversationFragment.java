@@ -2,6 +2,7 @@ package com.yyide.chatim.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,16 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.module.LoadMoreModule;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.google.common.reflect.TypeToken;
 import com.tencent.imsdk.v2.V2TIMConversation;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
+import com.tencent.qcloud.tim.uikit.component.CustomLinearLayoutManager;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.component.action.PopDialogAdapter;
 import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
@@ -27,28 +34,38 @@ import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.BookSearchActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
+import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.chat.helper.ConversationLayoutHelper;
 import com.yyide.chatim.chat.menu.Menu;
+import com.yyide.chatim.fragment.TodoMsgPageFragment;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.presenter.UserNoticePresenter;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.view.UserNoticeView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 
@@ -78,6 +95,79 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         mBaseView = inflater.inflate(R.layout.conversation_fragment, container, false);
         //initView();
         return mBaseView;
+    }
+
+    public class TodoAdapter extends BaseMultiItemQuickAdapter<TodoRsp.DataBean.RecordsBean, BaseViewHolder> implements LoadMoreModule {
+
+        public TodoAdapter() {
+            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE, R.layout.message_item);
+            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_TODO, R.layout.message_item);
+            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_NOTICE, R.layout.message_item);
+        }
+
+        @Override
+        protected void convert(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
+            switch (o.getItemType()) {
+                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE:
+                    //setTodoItem(holder, o);
+                    break;
+                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_TODO:
+                    setTodoItem(holder, o);
+                    break;
+                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_NOTICE:
+                    //setTodoItem(holder, o);
+                    break;
+            }
+        }
+
+        private void setTodoItem(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
+            holder.setText(R.id.tv_leave, o.getFirstData())
+                    .setText(R.id.tv_title, o.getTitle());
+            //GlideUtil.loadCircleImage(getContext(), getContext().getResources().getDrawable(R.mipmap.ic_launcher_logo), holder.getView(R.id.img));
+            //处理内容解析
+            try {
+                if (TodoRsp.DataBean.RecordsBean.IS_TEXT_TYPE.equals(o.getIsText())) {
+                    holder.setText(R.id.tv_leave_type, o.getContent());
+                } else {
+                    String content = o.getContent();
+                    if (!TextUtils.isEmpty(content)) {
+                        Type type = new TypeToken<List<String>>() {
+                        }.getType();
+                        List<String> strings = JSON.parseObject(content, type);
+                        StringBuffer stringBuffer = new StringBuffer();
+                        if (strings != null) {
+                            for (int i = 0; i < strings.size(); i++) {
+                                stringBuffer.append(strings.get(i));
+                                if (i < strings.size() - 1) {
+                                    stringBuffer.append("\n").append("");
+                                }
+                            }
+                        }
+                        holder.setText(R.id.tv_leave_type, stringBuffer.toString());
+                    }
+                }
+            } catch (Exception e) {
+                holder.setText(R.id.tv_leave_type, o.getContent());
+                e.printStackTrace();
+            }
+            TextView textView2 = holder.getView(R.id.tv_agree);
+            //如果身份是家长隐藏按钮
+            if ("1".equals(o.getIsOperation())
+                    || "2".equals(o.getIsOperation())
+                    || "3".equals(o.getIsOperation())
+                    || (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status))) {
+                textView2.setVisibility(View.GONE);
+            } else {
+                textView2.setVisibility(View.VISIBLE);
+            }
+
+            textView2.setOnClickListener(v -> {
+                Intent intent = new Intent(getContext(), LeaveFlowDetailActivity.class);
+                intent.putExtra("type", 2);
+                intent.putExtra("id", o.getCallId());
+                startActivity(intent);
+            });
+        }
     }
 
     private void initView() {

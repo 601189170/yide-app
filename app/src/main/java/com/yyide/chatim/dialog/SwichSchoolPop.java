@@ -125,9 +125,6 @@ public class SwichSchoolPop extends PopupWindow {
                 params.alpha = 1.0f;
                 mWindow.setAttributes(params);
             }
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-            }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
     }
@@ -163,14 +160,6 @@ public class SwichSchoolPop extends PopupWindow {
                     ToastUtils.showShort(bean.message);
                     loadingTools.closeLoading();
                 }
-                context.runOnUiThread(() -> {
-                    if (popupWindow != null && popupWindow.isShowing()) {
-                        popupWindow.dismiss();
-                    }
-                });
-//                ActivityUtils.finishAllActivities();
-//                Intent intent = new Intent(context, MainActivity.class);
-//                context.startActivity(intent);
             }
         });
     }
@@ -238,11 +227,11 @@ public class SwichSchoolPop extends PopupWindow {
                 GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
                 SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
                 if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+                    getUserSig();
                     SpData.setIdentityInfo(rsp);
                     if (mOnCheckCallBack != null) {
                         mOnCheckCallBack.onCheckCallBack();
                     }
-                    getUserSig();
                 } else {
                     ToastUtils.showShort(rsp.msg);
                     loadingTools.closeLoading();
@@ -254,12 +243,9 @@ public class SwichSchoolPop extends PopupWindow {
     //计算 UserSig
     void getUserSig() {
         RequestBody body = RequestBody.create(BaseConstant.JSON, "");
-
         //请求组合创建
         Request request = new Request.Builder()
-//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-//                .url("http://192.168.3.120:8010"+"/cloud-system/im/getUserSig")
                 .addHeader("Authorization", SpData.User().getToken())
                 .post(body)
                 .build();
@@ -290,7 +276,6 @@ public class SwichSchoolPop extends PopupWindow {
     void initIm(String userSig) {
         UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
         // 获取userSig函数
-        //final String userSig = GenerateTestUserSig.genTestUserSig(mUser);
         TUIKit.login(SpData.getIdentityInfo().userId + "", userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
@@ -301,6 +286,10 @@ public class SwichSchoolPop extends PopupWindow {
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
                 Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+                if (mOnCheckCallBack != null) {
+                    mOnCheckCallBack.onCheckCallBack();
+                }
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
@@ -308,10 +297,6 @@ public class SwichSchoolPop extends PopupWindow {
 //                Intent intent = new Intent(context, MainActivity.class);
 //                context.startActivity(intent);
                 //刷新首页数据
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
-                if (mOnCheckCallBack != null) {
-                    mOnCheckCallBack.onCheckCallBack();
-                }
             }
 
             @Override

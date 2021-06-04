@@ -34,6 +34,7 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
 
     private FragmentSchoolMasterAttendanceBinding mViewBinding;
     private String TAG = SchoolStudentAttendanceFragment.class.getSimpleName();
+    private int index;
 
     public static SchoolStudentAttendanceFragment newInstance(int index) {
         SchoolStudentAttendanceFragment fragment = new SchoolStudentAttendanceFragment();
@@ -47,6 +48,7 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            index = getArguments().getInt("index");
         }
     }
 
@@ -73,7 +75,10 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
 
     private void setDataView(AttendanceCheckRsp.DataBean item) {
         if (item.getSchoolPeopleAllForm() != null && item.getSchoolPeopleAllForm().size() > 0) {
-            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemStudents = item.getSchoolPeopleAllForm().get(0);
+            if (item.getSchoolPeopleAllForm().size() < index) {
+                index = 0;
+            }
+            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemStudents = item.getSchoolPeopleAllForm().get(index);
 
             if (itemStudents != null) {
                 mViewBinding.clContent.setVisibility(View.VISIBLE);
