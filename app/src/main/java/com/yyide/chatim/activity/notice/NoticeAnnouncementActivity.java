@@ -42,6 +42,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     FloatingActionButton floatingActionButton;
     boolean other = false;
     boolean other2 = false;
+    private boolean hasNoticePermission;
     @Override
     public int getContentViewID() {
         return R.layout.activity_notice_announcement;
@@ -53,18 +54,19 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText(R.string.notice_announcement_title);
+        final boolean hasNoticePermission = getIntent().getBooleanExtra("hasNoticePermission", false);
         initViewPager();
     }
 
     private void initViewPager() {
         //家长身份不能添加公告
-        if (!SpData.getIdentityInfo().staffIdentity()) {
+        if (!SpData.getIdentityInfo().staffIdentity() || !hasNoticePermission) {
             floatingActionButton.setVisibility(View.GONE);
             mTablayout.setVisibility(View.GONE);
         }
         NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
         fragments.add(my_notice);
-        if (SpData.getIdentityInfo().staffIdentity()){
+        if (SpData.getIdentityInfo().staffIdentity() || !hasNoticePermission){
             PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
             fragments.add(my_release);
         }
