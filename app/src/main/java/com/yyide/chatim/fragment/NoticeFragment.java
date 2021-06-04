@@ -122,5 +122,6 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @Override
     public void noticeHomeFail(String msg) {
         Log.e(TAG, "noticeHomeFail: " + msg);
+        notice_content.setText("暂无消息公告");
     }
 }
