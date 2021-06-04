@@ -61,6 +61,8 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
 
     private String name;
     private long tempId;
+    //加载过就不在自动加载
+    private boolean load;
 
     public NoticeTemplateListFragment() {
         // Required empty public constructor
@@ -105,6 +107,8 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.e(TAG, "onViewCreated: "+load);
+        load = false;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new BaseQuickAdapter<TemplateListRsp.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_template) {
             @Override
@@ -131,19 +135,16 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
 
         swipeRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.setAdapter(adapter);
-        mvpPresenter.noticeTemplateList(name,tempId);
+        //mvpPresenter.noticeTemplateList(name,tempId);
+    }
 
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        list.add(new NoticeAnnouncementModel("放假通知", "刘校长发布", "Fragments的生命周期. 每一个fragments 都有自己的一套生命周期回调方法和处理自己的用户输入事件。. 对应生命周期可参考下图：. 详解Android Fragment之二：Fragment的创建和生命周期. 创建片元（Creating a Fragment）. To create a fragment, you must create a subclass of Fragment (or an existing subclass of it). The Fragment class has code that looks a lot like an Activity.", "2021-03-25 16点11分"));
-//        adapter.setList(list);
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: "+load );
+        if (!load){
+            mvpPresenter.noticeTemplateList(name,tempId);
+        }
     }
 
     @Override
@@ -163,6 +164,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
             TemplateListRsp.DataBean data = templateListRsp.getData();
             List<TemplateListRsp.DataBean.RecordsBean> records = data.getRecords();
             if (!records.isEmpty()){
+                load = true;
                 list.clear();
                 List<TemplateListRsp.DataBean.RecordsBean> messages = records;
                 list.addAll(messages);

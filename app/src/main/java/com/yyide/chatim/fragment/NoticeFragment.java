@@ -45,7 +45,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @BindView(R.id.tv_title)
     TextView tv_title;
 
-    private boolean jump = false;
+    private boolean jump = true;
     private HomeNoticeRsp.DataBean data;
 
     @Nullable
@@ -105,7 +105,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         if (homeNoticeRsp.getCode() == 200) {
             data = homeNoticeRsp.getData();
             if (data != null) {
-                jump = true;
+//                jump = true;
                 notice_content.setText(data.getContent());
                 notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(), "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
                 if (!TextUtils.isEmpty(data.getTitle())) {
@@ -113,7 +113,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
                     tv_title.setText("《" + data.getTitle() + "》");
                 }
             } else {
-                jump = false;
+//                jump = false;
                 notice_content.setText("暂无消息公告");
             }
         }

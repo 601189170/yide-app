@@ -2,6 +2,7 @@ package com.yyide.chatim.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.R;
 
 /**
@@ -24,7 +26,20 @@ import com.yyide.chatim.R;
  * @Version: 1.0
  */
 public class DialogUtil {
-
+    public static void showAlertDialog(Context context, String title, String hintText, String leftText, String rightText, OnClickListener onClickListener) {
+        new MaterialAlertDialogBuilder(
+                context,
+                R.style.ThemeOverlay_App_MaterialAlertDialog)
+                .setTitle(title)
+                .setMessage(hintText)
+                .setNegativeButton(leftText, (dialog, which) -> {
+                    onClickListener.onCancel(null);
+                })
+                .setPositiveButton(rightText, (dialog, which) -> {
+                    onClickListener.onEnsure(null);
+                })
+                .show();
+    }
     public static Dialog hintDialog(Context context, String title, String hintText, String leftText, String rightText, OnClickListener onClickListener) {
         FullScreenDialog tipDialog = new FullScreenDialog(context, R.style.MyDialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_hint4, null);

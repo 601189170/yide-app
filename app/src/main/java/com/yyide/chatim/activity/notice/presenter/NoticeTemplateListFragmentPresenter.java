@@ -22,7 +22,7 @@ public class NoticeTemplateListFragmentPresenter extends BasePresenter<NoticeTem
 
     public void noticeTemplateList(String name,long tempId){
         Log.e("NoticeTemplateListFragm", "noticeTemplateList: "+name +","+tempId);
-        //mvpView.showLoading();
+        mvpView.showLoading();
         Map map = new HashMap<String,Object>();
         map.put("title",null);
         map.put("id",tempId);
@@ -42,7 +42,7 @@ public class NoticeTemplateListFragmentPresenter extends BasePresenter<NoticeTem
 
             @Override
             public void onFinish() {
-                //mvpView.hideLoading();
+                mvpView.hideLoading();
             }
         });
     }
