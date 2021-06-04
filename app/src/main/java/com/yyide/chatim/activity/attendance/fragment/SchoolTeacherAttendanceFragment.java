@@ -40,9 +40,10 @@ public class SchoolTeacherAttendanceFragment extends BaseMvpFragment<AttendanceC
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentSchoolTeacherAttendanceBinding mViewBinding;
 
-    public static SchoolTeacherAttendanceFragment newInstance() {
+    public static SchoolTeacherAttendanceFragment newInstance(int index) {
         SchoolTeacherAttendanceFragment fragment = new SchoolTeacherAttendanceFragment();
         Bundle args = new Bundle();
+        args.putInt("index", index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -197,7 +198,7 @@ public class SchoolTeacherAttendanceFragment extends BaseMvpFragment<AttendanceC
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
             mViewBinding.tvAttendanceTitle.setText(itemStudents.getAttNameA());
             mViewBinding.tvDesc.setText(itemStudents.getAttNameA());
-            mViewBinding.tvAttendanceTime.setText("考勤时间 " + DateUtils.switchTime(new Date(), "HH:mm"));
+            mViewBinding.tvAttendanceTime.setText("考勤时间 " + itemStudents.getStudents() != null ? itemStudents.getStudents().getRequiredTime() : "");
             mViewBinding.tvAttendanceRate.setText(itemStudents.getRateA());
             if (!TextUtils.isEmpty(itemStudents.getRateA())) {
                 try {

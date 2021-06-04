@@ -1,8 +1,6 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -11,50 +9,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.SPUtils;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.SwichClassAdapter;
-import com.yyide.chatim.adapter.SwichSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.SchoolRsp;
-import com.yyide.chatim.model.SelectUserSchoolRsp;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
 /**
  * Created by Administrator on 2019/5/15.
  */
 
-public class SwichClassPop extends PopupWindow {
+public class SwitchClassPopNew extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
+    private GetUserSchoolRsp.DataBean.FormBean classBean;
 
-    public SwichClassPop(Activity context) {
+    public SwitchClassPopNew(Activity context, GetUserSchoolRsp.DataBean.FormBean classBean) {
         this.context = context;
+        this.classBean = classBean;
         init();
     }
 
@@ -62,6 +45,10 @@ public class SwichClassPop extends PopupWindow {
 
     public void setOnCheckCallBack(OnCheckCallBack mOnCheckCallBack) {
         this.mOnCheckCallBack = mOnCheckCallBack;
+    }
+
+    public interface OnCheckCallBack {
+        void onCheckCallBack(GetUserSchoolRsp.DataBean.FormBean classBean);
     }
 
     private void init() {
@@ -80,10 +67,10 @@ public class SwichClassPop extends PopupWindow {
         //保存班级ID用于切换班级业务逻辑使用
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
             adapter.notifyData(SpData.getIdentityInfo().form);
-            List<GetUserSchoolRsp.DataBean.FormBean> list = SpData.getIdentityInfo().form;
-            for (int i = 0; i < list.size(); i++) {
-                if (!TextUtils.isEmpty(SpData.getClassInfo().classesId)
-                        && SpData.getClassInfo().classesId.equals(list.get(i).classesId)) {
+            for (int i = 0; i < SpData.getIdentityInfo().form.size(); i++) {
+                if (classBean != null
+                        && classBean.classesId != null
+                        && classBean.classesId.equals(SpData.getIdentityInfo().form.get(i).classesId)) {
                     index = i;
                     break;
                 }
@@ -92,13 +79,11 @@ public class SwichClassPop extends PopupWindow {
         adapter.setIndex(index);
         listview.setOnItemClickListener((parent, view, position, id) -> {
             adapter.setIndex(position);
-            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(SpData.getIdentityInfo().form.get(position)));
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }
-            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
             if (mOnCheckCallBack != null) {
-                mOnCheckCallBack.onCheckCallBack();
+                mOnCheckCallBack.onCheckCallBack(adapter.getItem(position));
             }
 //                ActivityUtils.finishAllActivities();
 //                Intent intent = new Intent(context, MainActivity.class);

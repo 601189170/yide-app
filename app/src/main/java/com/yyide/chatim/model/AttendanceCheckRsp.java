@@ -109,6 +109,7 @@ public class AttendanceCheckRsp {
                 private String requiredTime;
                 private String endTime;
                 private String peopleType;//N 老师 Y 学生
+                private String type;
                 private List<?> studentIds;
                 private List<PeopleBean> people;
                 private List<PeopleBean> latePeople;
@@ -116,6 +117,36 @@ public class AttendanceCheckRsp {
                 private List<PeopleBean> absencePeople;
                 private List<PeopleBean> leaveEarlyPeople;
                 private List<PeopleBean> applyPeople;
+
+                public String getType() {
+                    return type;
+                }
+
+                public void setType(String type) {
+                    this.type = type;
+                }
+
+                public String getStatusType() {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
+                    switch (type) {
+                        case "0":
+                            type = "正常";
+                            break;
+                        case "1":
+                            type = "缺勤";
+                            break;
+                        case "2":
+                            type = "迟到";
+                            break;
+                        case "3":
+                            type = "早退";
+                            break;
+                        case "4":
+                            type = "无效打卡";
+                            break;
+                    }
+                    return type;
+                }
+
 
                 public String getAttendanceData() {
                     return attendanceData;

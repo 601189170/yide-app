@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -14,6 +15,7 @@
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_10"
+        android:visibility="gone"
         android:background="@drawable/bg_corners18_gray"
         android:gravity="center_vertical">
 

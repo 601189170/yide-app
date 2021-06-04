@@ -41,10 +41,11 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
 
     private FragmentFamilyHeadBinding mViewBinding;
     private String TAG = FamilyStudentAttendanceFragment.class.getSimpleName();
-
-    public static FamilyStudentAttendanceFragment newInstance() {
+    private int index;
+    public static FamilyStudentAttendanceFragment newInstance(int index) {
         FamilyStudentAttendanceFragment fragment = new FamilyStudentAttendanceFragment();
         Bundle args = new Bundle();
+        args.putInt("index", index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,7 +54,7 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            index = getArguments().getInt("index");
         }
     }
 
@@ -80,7 +81,10 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
         List<AttendanceCheckRsp.DataBean.AttendancesFormBean> attendancesForm = item.getAttendancesForm();
         adapter.setList(attendancesForm);
         if (attendancesForm != null && attendancesForm.size() > 0) {
-            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = attendancesForm.get(0).getStudents();
+            if(attendancesForm.size() < index){
+                index = 0;
+            }
+            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = attendancesForm.get(index).getStudents();
             mViewBinding.tvAttendanceType.setText(students.getName());
         }
         mViewBinding.tvClassName.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");

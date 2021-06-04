@@ -40,10 +40,11 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     private AttendanceCheckRsp.DataBean.AttendancesFormBean.Students itemStudents;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentAttendanceBinding mViewBinding;
-
-    public static TeacherStudentAttendanceFragment newInstance() {
+    private int index;
+    public static TeacherStudentAttendanceFragment newInstance(int index) {
         TeacherStudentAttendanceFragment fragment = new TeacherStudentAttendanceFragment();
         Bundle args = new Bundle();
+        args.putInt("index", index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +53,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            index = getArguments().getInt("index");
         }
     }
 
@@ -188,7 +189,10 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         });
 
         if (item.getAttendancesForm() != null && item.getAttendancesForm().size() > 0) {
-            itemStudents = item.getAttendancesForm().get(0).getStudents();
+            if(item.getAttendancesForm().size() < index){
+                index = 0;
+            }
+            itemStudents = item.getAttendancesForm().get(index).getStudents();
         }
 
         if (SpData.getIdentityInfo() != null) {
@@ -217,7 +221,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
             mViewBinding.tvAttendanceTitle.setText(itemStudents.getSection() > 0 ? itemStudents.getSubjectName() : itemStudents.getName());
             mViewBinding.tvDesc.setText(itemStudents.getName());
-            mViewBinding.tvAttendanceTime.setText("考勤时间 " + DateUtils.switchTime(new Date(), "HH:mm"));
+            mViewBinding.tvAttendanceTime.setText("考勤时间 " + itemStudents.getRequiredTime());
             mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
             if (!TextUtils.isEmpty(itemStudents.getRate())) {
                 try {

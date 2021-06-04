@@ -23,9 +23,10 @@ public class AttendanceActivity extends BaseActivity {
     private ActivityAttendanceBinding mViewBinding;
     private String TAG = AttendanceActivity.class.getSimpleName();
 
-    public static void start(Context context, String type) {
+    public static void start(Context context, String type, int index) {
         Intent intent = new Intent(context, AttendanceActivity.class);
         intent.putExtra("type", type);
+        intent.putExtra("index", index);
         context.startActivity(intent);
     }
 
@@ -44,6 +45,7 @@ public class AttendanceActivity extends BaseActivity {
 
     private void initView() {
         String type = getIntent().getStringExtra("type");
+        int index = getIntent().getIntExtra("index", 0);
         mViewBinding.top.title.setText(R.string.attendance_title);
         mViewBinding.top.tvRight.setVisibility(View.GONE);
         mViewBinding.top.tvRight.setText(R.string.statistics_title);
@@ -55,16 +57,16 @@ public class AttendanceActivity extends BaseActivity {
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
             //校长考情展示
             if ("N".equals(type)) {
-                fragmentTransaction.add(R.id.fl_content, SchoolTeacherAttendanceFragment.newInstance());
+                fragmentTransaction.add(R.id.fl_content, SchoolTeacherAttendanceFragment.newInstance(index));
             } else {
-                fragmentTransaction.add(R.id.fl_content, SchoolStudentAttendanceFragment.newInstance());
+                fragmentTransaction.add(R.id.fl_content, SchoolStudentAttendanceFragment.newInstance(index));
             }
         } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             //家长考情
-            fragmentTransaction.add(R.id.fl_content, FamilyStudentAttendanceFragment.newInstance());
+            fragmentTransaction.add(R.id.fl_content, FamilyStudentAttendanceFragment.newInstance(index));
         } else {
             //教师教职工 考情详情
-            fragmentTransaction.add(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance());
+            fragmentTransaction.add(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(index));
         }
         fragmentTransaction.commit();
     }

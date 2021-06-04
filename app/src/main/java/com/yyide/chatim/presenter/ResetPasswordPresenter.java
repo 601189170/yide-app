@@ -23,6 +23,7 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
     }
 
     public void getSmsCode(String phone) {
+        mvpView.showLoading();
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("mobileNumber", phone);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(paramMap));
@@ -43,12 +44,13 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
 
             @Override
             public void onFinish() {
-
+                mvpView.hideLoading();
             }
         });
     }
 
     public void updatePwd(String mobile, String code, String newPassword) {
+        mvpView.showLoading();
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("mobileNumber", mobile);
         paramMap.put("validateCode", code);
@@ -72,7 +74,7 @@ public class ResetPasswordPresenter extends BasePresenter<ResetPasswordView> {
 
             @Override
             public void onFinish() {
-
+                mvpView.hideLoading();
             }
         });
     }

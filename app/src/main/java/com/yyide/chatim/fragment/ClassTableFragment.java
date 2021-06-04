@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.TableAdapter;
@@ -26,7 +27,10 @@ import com.yyide.chatim.adapter.TableSectionAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.dialog.AttendancePop;
+import com.yyide.chatim.dialog.SwichClassPop;
 import com.yyide.chatim.dialog.SwichTableClassPop;
+import com.yyide.chatim.dialog.SwitchClassPopNew;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
@@ -72,6 +76,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     TableSectionAdapter tableSectionAdapter;
     int index = -1;
     private List<SelectTableClassesRsp.DataBean> data;
+    private GetUserSchoolRsp.DataBean.FormBean classInfo;
 
     @Nullable
     @Override
@@ -113,7 +118,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             }
         }
         mvpPresenter.listAllBySchoolId();
-        GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+        classInfo = SpData.getClassInfo();
         if (classInfo != null) {
             className.setText(classInfo.classesName);
             mvpPresenter.listTimeDataByApp(classInfo.classesId);
@@ -131,11 +136,24 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     @OnClick(R.id.classlayout)
     public void click() {
-        if (data != null && data.size() > 0) {
-            swichTableClassPop = new SwichTableClassPop(getActivity(), data);
-            swichTableClassPop.setSelectClasses(this);
+        if (SpData.getIdentityInfo() != null &&
+                (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status) ||
+                        GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status) ||
+                        GetUserSchoolRsp.DataBean.TYPE_TEACHER.equals(SpData.getIdentityInfo().status))) {
+            SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
+            classPopNew.setOnCheckCallBack(classBean -> {
+                this.classInfo = classBean;
+                className.setText(classBean.classesName);
+                mvpPresenter.listTimeDataByApp(classBean.classesId);
+            });
+
         } else {
-            ToastUtils.showShort("暂无切换班级");
+            if (data != null && data.size() > 0) {
+                swichTableClassPop = new SwichTableClassPop(getActivity(), data);
+                swichTableClassPop.setSelectClasses(this);
+            } else {
+                ToastUtils.showShort("暂无切换班级");
+            }
         }
     }
 
@@ -173,10 +191,10 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 List<String> sectionlist = new ArrayList<>();
                 if (rsp.data.subList != null && rsp.data.subList.size() > 0) {
                     List<listTimeDataByAppRsp.DataBean.SubListBean> subListBeans = new ArrayList<>();
-                    for(int j = 0; j < num; j++){//处理课表数据排版
+                    for (int j = 0; j < num; j++) {//处理课表数据排版
                         List<listTimeDataByAppRsp.DataBean.SubListBean> subListBeansWeek = new ArrayList<>();
                         for (int i = 0; i < rsp.data.subList.size(); i++) {
-                            if(earlyReading > 0){ //有早读0和没早读1 下标不同
+                            if (earlyReading > 0) { //有早读0和没早读1 下标不同
                                 if (rsp.data.subList.get(i).section == j) {
                                     subListBeansWeek.add(rsp.data.subList.get(i));
                                 }
@@ -187,9 +205,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                             }
                         }
 
-                        if(subListBeansWeek.size() < 7){
+                        if (subListBeansWeek.size() < 7) {
                             int index = subListBeansWeek.size() > 0 ? 7 - subListBeansWeek.size() : 7;
-                            for (int i = 0; i < index; i++){
+                            for (int i = 0; i < index; i++) {
                                 subListBeans.add(new listTimeDataByAppRsp.DataBean.SubListBean());
                             }
                         }
@@ -211,10 +229,10 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚自习
                 }
                 for (int i = 0; i < num; i++) {
-                    if(earlyReading > 0 && i == 0){
+                    if (earlyReading > 0 && i == 0) {
                         sectionlist.add("早读");
                     } else {
-                        if(earlyReading > 0){
+                        if (earlyReading > 0) {
                             sectionlist.add(i + "");
                         } else {
                             sectionlist.add(i + 1 + "");

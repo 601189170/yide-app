@@ -31,6 +31,7 @@ import com.yyide.chatim.activity.BookSearchActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.chat.helper.ConversationLayoutHelper;
 import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.ResultBean;
@@ -69,6 +70,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     TextView textView3;
     @BindView(R.id.tv_unNum)
     TextView tv_unNum;
+    private int nextSeq = 0;
 
     @Nullable
     @Override
@@ -79,25 +81,28 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     }
 
     private void initView() {
-        V2TIMManager.getConversationManager().getConversationList(0, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
-            @Override
-            public void onProgress(int progress) {
-
-            }
-
-            @Override
-            public void onError(int code, String desc) {
-                ToastUtil.toastShortMessage("onError==>" + desc);
-            }
-
-            @Override
-            public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-                v2TIMConversationResult.getConversationList();
-            }
-        });
+//        V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
+//            @Override
+//            public void onProgress(int progress) {
+//
+//            }
+//
+//            @Override
+//            public void onError(int code, String desc) {
+//                ToastUtil.toastShortMessage("onError==>" + desc);
+//            }
+//
+//            @Override
+//            public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
+//                nextSeq++;
+//                v2TIMConversationResult.getConversationList();
+//            }
+//        });
 
         // 从布局文件中获取会话列表面板
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
+        // 会话列表面板的默认UI和交互初始化
+        mConversationLayout.initDefault();
         mMenu = new Menu(getActivity(), (TitleBarLayout) mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
         ConstraintLayout constraintLayout = mBaseView.findViewById(R.id.cl_message);
         LinearLayout ll_search = mBaseView.findViewById(R.id.ll_search);
@@ -107,8 +112,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         ll_search.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), BookSearchActivity.class));
         });
-        // 会话列表面板的默认UI和交互初始化
-        mConversationLayout.initDefault();
+
         ConversationListLayout listLayout = mConversationLayout.getConversationList();
         listLayout.setItemTopTextSize(16); // 设置 item 中 top 文字大小
         listLayout.setItemBottomTextSize(12);// 设置 item 中 bottom 文字大小

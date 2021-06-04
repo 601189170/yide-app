@@ -195,7 +195,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
             builder = new NotificationCompat.Builder(context);
         }
         Notification notification = builder
-                .setSmallIcon(R.mipmap.fff)
+                .setSmallIcon(R.mipmap.icon_login_logo)
                 .setContentTitle("我是一个标题")
                 .setContentText(msg)
                 .setAutoCancel(true)

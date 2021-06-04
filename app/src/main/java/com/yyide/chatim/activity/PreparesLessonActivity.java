@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -29,6 +30,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 备课
+ */
 public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresenter> implements PreparesLessonView {
 
     @BindView(R.id.title)
@@ -173,22 +177,19 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
                 }
             }
         });
-        et_input_after_class.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    //通知父控件不要干扰
-                    view.getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                    //通知父控件不要干扰
-                    view.getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    view.getParent().requestDisallowInterceptTouchEvent(false);
-                }
-                return false;
+        et_input_after_class.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                //通知父控件不要干扰
+                view.getParent().requestDisallowInterceptTouchEvent(true);
             }
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                //通知父控件不要干扰
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+            }
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                view.getParent().requestDisallowInterceptTouchEvent(false);
+            }
+            return false;
         });
 
         et_input_before_class.setOnTouchListener(new View.OnTouchListener() {
@@ -263,6 +264,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
         PreparesLessonRep lessonRep = new PreparesLessonRep();
         lessonRep.setTimetableSchedulSubId(dataBean.subid);
         lessonRep.setLessonsId(dataBean.lessonsId);
+        lessonRep.setLessonsDate(dateTime);
         lessonRep.setId(dataBean.lessonsId);
         lessonRep.setBeforeClass(before_class);
         lessonRep.setAfterClass(after_class);
@@ -274,35 +276,30 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
             PreparesLessonRep.LessonsSubEntityList item = new PreparesLessonRep.LessonsSubEntityList();
             item.setInformation(homework1);
             item.setClassesId(dataBean.classesId);
-            item.setLessonsDate(dateTime);
             lessonsSubEntityList.add(item);
         }
         if (!TextUtils.isEmpty(homework2)) {
             PreparesLessonRep.LessonsSubEntityList item2 = new PreparesLessonRep.LessonsSubEntityList();
             item2.setInformation(homework2);
             item2.setClassesId(dataBean.classesId);
-            item2.setLessonsDate(dateTime);
             lessonsSubEntityList.add(item2);
         }
         if (!TextUtils.isEmpty(homework3)) {
             PreparesLessonRep.LessonsSubEntityList item3 = new PreparesLessonRep.LessonsSubEntityList();
             item3.setInformation(homework3);
             item3.setClassesId(dataBean.classesId);
-            item3.setLessonsDate(dateTime);
             lessonsSubEntityList.add(item3);
         }
         if (!TextUtils.isEmpty(homework4)) {
             PreparesLessonRep.LessonsSubEntityList item4 = new PreparesLessonRep.LessonsSubEntityList();
             item4.setInformation(homework4);
             item4.setClassesId(dataBean.classesId);
-            item4.setLessonsDate(dateTime);
             lessonsSubEntityList.add(item4);
         }
         if (!TextUtils.isEmpty(homework5)) {
             PreparesLessonRep.LessonsSubEntityList item5 = new PreparesLessonRep.LessonsSubEntityList();
             item5.setInformation(homework5);
             item5.setClassesId(dataBean.classesId);
-            item5.setLessonsDate(dateTime);
             lessonsSubEntityList.add(item5);
         }
         lessonRep.setLessonsSubEntityList(lessonsSubEntityList);

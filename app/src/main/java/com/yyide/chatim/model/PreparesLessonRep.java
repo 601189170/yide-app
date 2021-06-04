@@ -12,6 +12,8 @@ public class PreparesLessonRep {
 
     private int lessonsId;
 
+    private String lessonsDate;
+
     private List<String> teachToolList;
 
     private List<LessonsSubEntityList> lessonsSubEntityList;
@@ -72,10 +74,18 @@ public class PreparesLessonRep {
         return this.lessonsSubEntityList;
     }
 
+    public String getLessonsDate() {
+        return lessonsDate;
+    }
+
+    public void setLessonsDate(String lessonsDate) {
+        this.lessonsDate = lessonsDate;
+    }
+
     public static class LessonsSubEntityList {
         private String information;
         private String classesId;
-        private String lessonsDate;
+
 
         public void setInformation(String information) {
             this.information = information;
@@ -93,12 +103,5 @@ public class PreparesLessonRep {
             this.classesId = classesId;
         }
 
-        public String getLessonsDate() {
-            return lessonsDate;
-        }
-
-        public void setLessonsDate(String lessonsDate) {
-            this.lessonsDate = lessonsDate;
-        }
     }
 }

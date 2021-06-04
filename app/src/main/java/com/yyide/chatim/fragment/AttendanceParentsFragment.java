@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,8 +16,8 @@ import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.AttendanceAdapter;
+import com.yyide.chatim.adapter.AttendanceParentsAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
-import com.yyide.chatim.adapter.leave.AttendanceSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AttendanceCheckRsp;
@@ -36,8 +35,10 @@ import java.util.List;
 
 import butterknife.BindView;
 
-
-public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
+/**
+ * 家长查看学生考勤
+ */
+public class AttendanceParentsFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
 
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
@@ -46,9 +47,9 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     @BindView(R.id.constraintLayout)
     ConstraintLayout constraintLayout;
     private View mBaseView;
-    AttendanceAdapter announAdapter;
+    AttendanceParentsAdapter announAdapter;
     IndexAdapter indexAdapter;
-    public String TAG = AttendanceFragment.class.getSimpleName();
+    public String TAG = AttendanceParentsFragment.class.getSimpleName();
     private boolean isSchool = false;
 
     @Nullable
@@ -83,7 +84,7 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
 
     private void initView() {
         indexAdapter = new IndexAdapter();
-        announAdapter = new AttendanceAdapter(announRoll);
+        announAdapter = new AttendanceParentsAdapter(announRoll);
         //处理是否为校长身份
         announRoll.setHintView(null);
         announRoll.setPlayDelay(5000);
@@ -114,7 +115,7 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            Log.d("HomeRefresh", AttendanceFragment.class.getSimpleName());
+            Log.d("HomeRefresh", AttendanceParentsFragment.class.getSimpleName());
             getHomeAttendance();
         }
     }
@@ -135,28 +136,15 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     }
 
     private void setData(AttendanceCheckRsp.DataBean dataBean) {
-        List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllFormBeanList = new ArrayList<>();
         if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
-            for (AttendanceCheckRsp.DataBean.AttendancesFormBean itemBean : dataBean.getAttendancesForm()) {
-                AttendanceCheckRsp.DataBean.AttendancesFormBean.Students item = itemBean.getStudents();
-                if (itemBean.getStudents() != null) {
-                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
-                    schoolBean.setAbsence(item.getAbsence());
-                    schoolBean.setApplyNum(item.getApplyNum());
-                    schoolBean.setAttName(item.getName());
-                    schoolBean.setLate(item.getLate());
-                    schoolBean.setLeave(item.getLeave());
-                    schoolBean.setNumber(item.getNumber());
-                    schoolBean.setRate(item.getRate());
-                    schoolBean.setPeopleType(item.getPeopleType());
-                    schoolPeopleAllFormBeanList.add(schoolBean);
-                }
-            }
+            List<AttendanceCheckRsp.DataBean.AttendancesFormBean> attendancesForm = dataBean.getAttendancesForm();
+            announRoll.setAdapter(announAdapter);
+            constraintLayout.setVisibility((attendancesForm != null && attendancesForm.size() > 0) ? View.GONE : View.VISIBLE);
+            announAdapter.notifyData(attendancesForm);
+            indexAdapter.setList(attendancesForm);
+        } else {
+
         }
-        announRoll.setAdapter(announAdapter);
-        constraintLayout.setVisibility((schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) ? View.GONE : View.VISIBLE);
-        announAdapter.notifyData(schoolPeopleAllFormBeanList);
-        indexAdapter.setList(schoolPeopleAllFormBeanList);
     }
 
     @Override

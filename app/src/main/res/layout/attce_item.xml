@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:foreground="?android:attr/selectableItemBackgroundBorderless"
-    android:paddingTop="@dimen/dp_20"
-    android:paddingBottom="@dimen/dp_20">
+    android:paddingTop="@dimen/dp_20">
 
     <TextView
         android:id="@+id/tv_attendance_type"
@@ -153,26 +152,26 @@
         android:id="@+id/constraintLayout5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
         android:orientation="vertical"
+        android:layout_marginBottom="@dimen/dp_5"
         app:layout_constraintEnd_toStartOf="@+id/ll_desc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_attendance_type">
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_5"
             android:textColor="@color/text_1E1E1E"
             android:textSize="@dimen/text_18"
             android:textStyle="bold"

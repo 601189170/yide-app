@@ -29,6 +29,8 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.fragment.AttendanceFragment;
+import com.yyide.chatim.fragment.AttendanceParentsFragment;
+import com.yyide.chatim.fragment.AttendanceSchoolFragment;
 import com.yyide.chatim.fragment.BannerFragment;
 import com.yyide.chatim.fragment.ClassHonorFragment;
 import com.yyide.chatim.fragment.NoticeFragment;
@@ -118,12 +120,17 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        initVerticalTextview();
         setFragment();
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
     }
 
-    void initVerticalTextview(List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps) {
+    void initVerticalTextview() {
+        List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps = new ArrayList<>();
+        TodoRsp.DataBean.RecordsBean dataBean = new TodoRsp.DataBean.RecordsBean();
+        dataBean.setFirstData("暂无待办数据");
+        noticeHomeRsps.add(dataBean);
         if (noticeHomeRsps != null) {
             list.clear();
             for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
@@ -192,11 +199,27 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     void setFragment() {
         clearFragment();
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
+            //校长身份
             tableContent.setVisibility(View.GONE);
             //通知
             fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
-            fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
+            fragmentTransaction.add(R.id.kq_content, new AttendanceSchoolFragment());
+        } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            //家长身份
+            tableContent.setVisibility(View.VISIBLE);
+            //班级课表
+            fragmentTransaction.add(R.id.table_content, new TableFragment());
+            //通知
+            fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
+            //班级考勤情况
+            fragmentTransaction.add(R.id.kq_content, new AttendanceParentsFragment());
+            //班级相册轮播
+            fragmentTransaction.add(R.id.banner_content, new BannerFragment());
+            //班级作业
+            fragmentTransaction.add(R.id.work_content, new WorkFragment());
+            //班级学生荣誉
+            fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
         } else {
             tableContent.setVisibility(View.VISIBLE);
             //班级课表
@@ -278,14 +301,15 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
             tv_todo.setVisibility(View.VISIBLE);
             tv_todo.setText(rsp.getData().getTotal() + "");
-            initVerticalTextview(rsp.getData().getRecords());
+            if (rsp.getData().getRecords() != null) {
+                list.clear();
+                for (TodoRsp.DataBean.RecordsBean item : rsp.getData().getRecords()) {
+                    list.add(item.getFirstData());
+                }
+            }
+            mVerticalTextView.setResources(list);
         } else {
             tv_todo.setVisibility(View.GONE);
-            List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps = new ArrayList<>();
-            TodoRsp.DataBean.RecordsBean dataBean = new TodoRsp.DataBean.RecordsBean();
-            dataBean.setFirstData("暂无待办数据");
-            noticeHomeRsps.add(dataBean);
-            initVerticalTextview(noticeHomeRsps);
         }
     }
 

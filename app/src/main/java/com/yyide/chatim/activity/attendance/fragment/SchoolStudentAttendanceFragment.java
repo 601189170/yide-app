@@ -35,9 +35,10 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
     private FragmentSchoolMasterAttendanceBinding mViewBinding;
     private String TAG = SchoolStudentAttendanceFragment.class.getSimpleName();
 
-    public static SchoolStudentAttendanceFragment newInstance() {
+    public static SchoolStudentAttendanceFragment newInstance(int index) {
         SchoolStudentAttendanceFragment fragment = new SchoolStudentAttendanceFragment();
         Bundle args = new Bundle();
+        args.putInt("index", index);
         fragment.setArguments(args);
         return fragment;
     }

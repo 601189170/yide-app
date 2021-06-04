@@ -12,8 +12,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -165,6 +167,17 @@ public class NoteByListActivity extends BaseActivity {
 
         listTab.add(noteTabBean);
         tabRecyAdapter.notifydata(listTab);
+        recyclerview.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                recyclerview.smoothScrollToPosition(tabRecyAdapter.getItemCount());
+            }
+        });
     }
 
     public void initDeptFragment2(Bundle bundle) {
@@ -213,6 +226,7 @@ public class NoteByListActivity extends BaseActivity {
 
     void isBack() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
+            BackSp();
             getSupportFragmentManager().popBackStack();
         } else {
             finish();

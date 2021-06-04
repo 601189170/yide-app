@@ -193,7 +193,7 @@
                     android:layout_height="@dimen/dp_40"
                     android:layout_marginTop="@dimen/dp_40"
                     android:layout_marginBottom="@dimen/dp_5"
-                    android:background="@drawable/bg_blue"
+                    android:background="@drawable/drawable_material_button_accent"
                     android:gravity="center"
                     android:text="登录"
                     android:textColor="@color/white"

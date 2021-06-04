@@ -110,9 +110,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             }
 
             @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
+            public void onFinish() { }
         });
     }
 
@@ -131,7 +129,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onFinish() {
-                mvpView.hideLoading();
             }
         });
     }

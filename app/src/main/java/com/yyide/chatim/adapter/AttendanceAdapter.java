@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -34,12 +36,16 @@ import java.util.List;
 
 public class AttendanceAdapter extends LoopPagerAdapter {
 
-    private boolean isSchool = false;
     //    -->设置各区块的颜色
     public static final int[] PIE_COLORS2 = {
             Color.rgb(145, 147, 153), Color.rgb(246, 189, 22)
             , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
     };
+    private boolean isSchool;
+    public void setIsSchool(boolean isSchool){
+        this.isSchool = isSchool;
+    }
+
     public List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> list = new ArrayList<>();
 
     public AttendanceAdapter(RollPagerView viewPager) {
@@ -50,13 +56,10 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         return list.get(position);
     }
 
-    public void setSchool(boolean isSchool) {
-        this.isSchool = isSchool;
-    }
-
     @SuppressLint("SetTextI18n")
     @Override
     public View getView(ViewGroup container, final int position) {
+        AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item = list.get(position);
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.attce_item, null);
         TextView cd = view.findViewById(R.id.cd);
         TextView qq = view.findViewById(R.id.qq);
@@ -64,25 +67,24 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         TextView attendanceName = view.findViewById(R.id.tv_attendance_type);
         TextView number = view.findViewById(R.id.tv_attendance_number);
         TextView tv_desc = view.findViewById(R.id.tv_desc);
-        LinearLayout LinearLayout = view.findViewById(R.id.ll_desc);
-
-        AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item = list.get(position);
+        ConstraintLayout constraintLayout5 = view.findViewById(R.id.constraintLayout5);
         attendanceName.setText(item.getAttName());
-
-//        tv_desc.setText("0".equals(item.getAttendanceType()) ? "已签到" : "未签到");
-        if (isSchool) {
-            LinearLayout.setVisibility(View.GONE);
-        } else {
-            LinearLayout.setVisibility(View.VISIBLE);
-            qq.setText(item.getAbsence() + " 人");
-            cd.setText(item.getLate() + " 人");
-            qj.setText(item.getLeave() + " 人");
-            number.setText(item.getNumber() + " 人");
-        }
+        tv_desc.setText("0".equals(item.getAttendanceType()) ? "签到" : "未签到");
+        qq.setText(item.getAbsence() + " 人");
+        cd.setText(item.getLate() + " 人");
+        qj.setText(item.getLeave() + " 人");
+        number.setText(item.getNumber() + " 人");
         PieChart piechart = view.findViewById(R.id.piechart);
         InitPieChart.InitPieChart(((Activity) container.getContext()), piechart);
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(item.getAbsence(), "缺勤"));
+        int absence = item.getAbsence();
+        int leave = item.getLeave();
+        int late = item.getLate();
+        int applyNum = item.getApplyNum();
+
+        absence = (absence + late + applyNum + leave) > 0 ? absence : 1;
+
+        entries.add(new PieEntry(absence, "缺勤"));
         entries.add(new PieEntry(item.getLeave(), "请假"));
         entries.add(new PieEntry(item.getLate(), "迟到"));
         entries.add(new PieEntry(item.getApplyNum(), "实到"));
@@ -96,8 +98,10 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         piechart.setData(pieData);
         piechart.invalidate();
         view.setOnClickListener(v -> {
-            AttendanceActivity.start(view.getContext(), item.getPeopleType());
+            AttendanceActivity.start(view.getContext(), item.getPeopleType(), position);
         });
+        constraintLayout5.setOnClickListener(v -> AttendanceActivity.start(view.getContext(), item.getPeopleType(), position));
+
         return view;
     }
 

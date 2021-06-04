@@ -56,7 +56,7 @@
             <com.jude.rollviewpager.RollPagerView
                 android:id="@+id/announRoll"
                 android:layout_width="match_parent"
-                android:layout_height="180dp" />
+                android:layout_height="wrap_content" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -90,6 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="6dp"
                 android:layout_gravity="center_horizontal|bottom"
+                android:background="@color/transparent"
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:layout_marginBottom="10dp">

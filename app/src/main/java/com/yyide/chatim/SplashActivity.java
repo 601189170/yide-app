@@ -106,6 +106,8 @@ public class SplashActivity extends AppCompatActivity {
                         } else {
                             startLogin();
                         }
+                    } else {
+                        startLogin();
                     }
                 }
             });
@@ -125,6 +127,7 @@ public class SplashActivity extends AppCompatActivity {
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                startLogin();
                 Log.e(TAG, "getUserSigonFailure: " + e.toString());
             }
 

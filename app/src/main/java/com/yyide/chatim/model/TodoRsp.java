@@ -430,7 +430,7 @@ public class TodoRsp{
             @Override
             public int getItemType() {
                 int type = -1;
-                Log.d("setTodoItem", status);
+                Log.d("setTodoItem", status + "");
                 switch (messageType){
                     case 1:
                         type = TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE;

@@ -344,6 +344,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void getFail(String msg) {
+        hideLoading();
         Log.e(TAG, "onFailure: " + msg);
     }
 

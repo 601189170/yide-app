@@ -91,6 +91,7 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
                 submit();
                 break;
             case R.id.post_code://获取验证码
+                postCode.setClickable(false);
                 String mobile = phone.getText().toString().trim();
                 if (TextUtils.isEmpty(mobile)) {
                     ToastUtils.showShort("请输入手机号码");
@@ -141,6 +142,7 @@ public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresente
 
     @Override
     public void getSmsSuccess(String msg) {
+        ToastUtils.showShort(msg);
         time.start();
     }
 
