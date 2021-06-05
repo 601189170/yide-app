@@ -100,15 +100,18 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @BindView(R.id.tv_flow_content)
     TextView tv_flow_content;
 
-    @BindView(R.id.tv_date)
-    TextView tv_date;
-
-    @BindView(R.id.tv_time)
-    TextView tv_time;
+//    @BindView(R.id.tv_date)
+//    TextView tv_date;
+//
+//    @BindView(R.id.tv_time)
+//    TextView tv_time;
 
     @BindView(R.id.iv_flow_checked)
     ImageView iv_flow_checked;
 
+    @BindView(R.id.iv_unfold)
+    ImageView iv_unfold;
+    private boolean unfold = false;
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
     List<ApproverRsp.DataBean.ListBean> leaveFlowCopyerList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
@@ -287,8 +290,20 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         if (!leaveFlowCopyerList.isEmpty() && !"3".equals(approvalResult)){
             cl_copyer_list.setVisibility(View.VISIBLE);
             tv_flow_content.setText(String.format(getString(R.string.carbon_copy_people_text),""+leaveFlowCopyerList.size()));
-            tv_date.setText(approvalTimes[0]);
-            tv_time.setText(approvalTimes[1]);
+            //tv_date.setText(approvalTimes[0]);
+            //tv_time.setText(approvalTimes[1]);
+            iv_unfold.setOnClickListener(v -> {
+                        if (unfold) {
+                            ll_copyer_list.setVisibility(View.GONE);
+                            iv_unfold.setImageResource(R.drawable.icon_arrow_down);
+                            unfold = false;
+                        } else {
+                            ll_copyer_list.setVisibility(View.VISIBLE);
+                            iv_unfold.setImageResource(R.drawable.icon_arrow_up);
+                            unfold = true;
+                        }
+                    }
+            );
             if (Objects.equals(approvalResult, "2")){
                 iv_flow_checked.setVisibility(View.INVISIBLE);
             }

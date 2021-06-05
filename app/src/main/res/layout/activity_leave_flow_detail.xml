@@ -215,7 +215,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_copyer_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="72dp"
                     app:layout_constraintTop_toBottomOf="@id/recyclerview_flow">
                     <View
                         android:id="@+id/v_dot"
@@ -245,32 +245,25 @@
                         android:src="@drawable/icon_flow_checked"
                         android:visibility="visible"
                         />
-                    <TextView
-                        android:id="@+id/tv_time"
+                    <ImageView
+                        android:id="@+id/iv_unfold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="09:25"
-                        android:textColor="#ff333333"
-                        android:textSize="16sp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/icon_arrow_down"
                         app:layout_constraintRight_toRightOf="parent"
-                        android:layout_marginTop="@dimen/dp_20"
-                        android:layout_marginEnd="54dp"
+                        app:layout_constraintTop_toTopOf="@id/iv_user_head"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_user_head"
+                        android:paddingStart="@dimen/dp_20"
+                        android:paddingEnd="@dimen/dp_20"
+                        android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
+                        android:visibility="visible"
                         />
-                    <TextView
-                        android:id="@+id/tv_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="03.06"
-                        android:textColor="#ff999999"
-                        android:textSize="12sp"
-                        app:layout_constraintLeft_toLeftOf="@id/tv_time"
-                        app:layout_constraintTop_toBottomOf="@id/tv_time"/>
                     <ImageView
                         android:id="@+id/iv_user_head"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/default_head"
+                        android:src="@drawable/icon_copyer"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -284,8 +277,8 @@
                         android:textColor="#ff333333"
                         android:textSize="14sp"
                         app:layout_constraintLeft_toRightOf="@id/iv_user_head"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="@dimen/dp_20"
+                        app:layout_constraintTop_toTopOf="@id/iv_user_head"
+                        app:layout_constraintBottom_toTopOf="@id/tv_flow_content"
                         android:layout_marginStart="@dimen/dp_12"
                         />
                     <TextView
@@ -297,6 +290,7 @@
                         android:textSize="14sp"
                         app:layout_constraintLeft_toLeftOf="@id/tv_flow_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_flow_title"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_user_head"
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -311,13 +305,13 @@
                     android:gravity="center_vertical"
                     android:layout_marginStart="84dp"
                     android:layout_marginTop="@dimen/dp_10"
-                    />
+                    android:visibility="gone"/>
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/gp_copyer_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:constraint_referenced_ids="ll_copyer_list,cl_copyer_list"/>
+                app:constraint_referenced_ids="cl_copyer_list"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
