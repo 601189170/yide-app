@@ -51,6 +51,7 @@ import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.presenter.leave.StudentAskLeavePresenter;
 import com.yyide.chatim.utils.ButtonUtils;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
 import com.yyide.chatim.view.leave.StaffAskLeaveView;
 import com.yyide.chatim.view.leave.StudentAskLeaveView;
@@ -402,7 +403,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                     final long userId = listBean.getUserId();
                     carbonCopyPeopleId.add(userId);
                     carbonCopyPeopleList.add(listBean);
-                    if (carbonCopyPeopleId.size()<3){
+                    if (carbonCopyPeopleId.size()<=3){
                         final String name = listBean.getName();
                         final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
                         final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
@@ -410,6 +411,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                         showImage(listBean.getImage(),iv_user_head);
                         tv_copyer_name.setText(name);
                         ll_copyer_list.addView(view1);
+                        setViewLayoutParams(view1, StatusBarUtils.dip2px(getContext(),45),0);
                     }
                 }
                 //更多
@@ -482,5 +484,14 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     @Override
     public void leavePhraseFail(String msg) {
 
+    }
+    /**
+     * 重设 view 的宽高
+     */
+    public static void setViewLayoutParams(View view, int nWidth, int nHeight) {
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
+        lp.width = nWidth;
+        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        view.setLayoutParams(lp);
     }
 }

@@ -89,9 +89,26 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
                 onCheckBoxChangeListener.change();
             });
         }
+        holder.btn_level.setVisibility(View.VISIBLE);
+        holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
+
+        holder.itemView.setOnClickListener(v -> {
+            Log.e(TAG, "onBindViewHolder: onclick is unfold:" + bean.isUnfold());
+            if (bean.isUnfold()) {
+                bean.setUnfold(false);
+                //holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
+                //holder.mRecyclerView.setVisibility(View.GONE);
+            } else {
+                bean.setUnfold(true);
+                //holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
+                //holder.mRecyclerView.setVisibility(View.VISIBLE);
+            }
+            onCheckBoxChangeListener.change();
+            onItemClickListener.onItemClick(bean);
+            //new Handler().post(() -> notifyDataSetChanged());
+        });
+
         if (bean.getList() != null && !bean.getList().isEmpty()) {
-            holder.btn_level.setVisibility(View.VISIBLE);
-            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
             holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             AddressBookAdapter adapter = new AddressBookAdapter(context, bean.getList());
 //            holder.mRecyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
@@ -99,30 +116,15 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
             adapter.setOnCheckBoxChangeListener(() -> {
                 onCheckBoxChangeListener.change();
             });
-            adapter.setOnItemClickListener((position1, level) -> {
-                onItemClickListener.onItemClick(position1, level);
-            });
-            holder.itemView.setOnClickListener(v -> {
-                Log.e(TAG, "onBindViewHolder: onclick is unfold:" + bean.isUnfold());
-                if (bean.isUnfold()) {
-                    bean.setUnfold(false);
-                    //holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
-                    //holder.mRecyclerView.setVisibility(View.GONE);
-                } else {
-                    bean.setUnfold(true);
-                    //holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
-                    //holder.mRecyclerView.setVisibility(View.VISIBLE);
-                }
-                onCheckBoxChangeListener.change();
-                onItemClickListener.onItemClick(position, bean.getLevel());
-                //new Handler().post(() -> notifyDataSetChanged());
+            adapter.setOnItemClickListener(bean1 -> {
+                onItemClickListener.onItemClick(bean1);
             });
         }
         //选中层级
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            bean.setUnfold(isChecked);
-            recursionChecked(bean, isChecked);
-            onCheckBoxChangeListener.change();
+            //bean.setUnfold(isChecked);
+            //recursionChecked(bean, isChecked);
+            //onCheckBoxChangeListener.change();
             //new Handler().post(() -> notifyDataSetChanged());
         });
 
@@ -133,7 +135,7 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position, int level);
+        void onItemClick(AddressBookBean addressBookBean);
     }
 
     /**

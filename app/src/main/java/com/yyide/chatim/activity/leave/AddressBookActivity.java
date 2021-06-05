@@ -52,6 +52,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
     //记录当前点击的条目数据
     private int currentPosition;
     private int currentLevel;
+    private AddressBookBean addressBookBean;
 
     @Override
     public int getContentViewID() {
@@ -98,35 +99,34 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
             adapter.notifyDataSetChanged();
         });
 
-        adapter.setOnItemClickListener((position, level) -> {
-                    Log.e(TAG, "setOnItemClickListener: position=" + position + " ,level=" + level);
-                    final AddressBookBean addressBookBean = currentDeptData(position, level,noticeScopeBeans);
-                    if (addressBookBean != null){
-                        if (addressBookBean.getDeptMemberList().isEmpty()) {
-                            currentLevel = level;
-                            currentPosition = position;
-                            mvpPresenter.queryDeptMemberByDeptId(addressBookBean.getId(),addressBookBean.getLevel());
-                        }
+        adapter.setOnItemClickListener(addressBookBean -> {
+                    Log.e(TAG, "setOnItemClickListener: id=" + addressBookBean.getId() + " ,level=" + addressBookBean.getLevel());
+                    this.addressBookBean = addressBookBean;
+                    if (addressBookBean.getDeptMemberList() != null && addressBookBean.getDeptMemberList().isEmpty()){
+                        mvpPresenter.queryDeptMemberByDeptId(addressBookBean.getId(), addressBookBean.getLevel());
+                    }else {
+                        Log.e(TAG, "setOnItemClickListener: 已经请求过数据不在请求" );
                     }
                 }
         );
         initView();
     }
 
-    private AddressBookBean currentDeptData(int position,int level,List<AddressBookBean> list){
-        for (int i = 0; i < list.size(); i++) {
-            final AddressBookBean addressBookBean = list.get(i);
-            if (addressBookBean.getLevel() == level && i == position) {
-                return addressBookBean;
-            }
-            final List<AddressBookBean> list1 = addressBookBean.getList();
-            if (list1 == null || list1.isEmpty()) {
-                return null;
-            }
-            return currentDeptData(position, level,list1);
-        }
-        return null;
-    }
+//    private AddressBookBean currentDeptData(int position,int level,List<AddressBookBean> list){
+//        for (int i = 0; i < list.size(); i++) {
+//            final AddressBookBean addressBookBean = list.get(i);
+//            if (addressBookBean.getLevel() == level && i == position) {
+//                return addressBookBean;
+//            }
+//            final List<AddressBookBean> list1 = addressBookBean.getList();
+//            if (list1 != null && !list1.isEmpty()) {
+//                currentDeptData(position, level,list1);
+//            }else {
+//                continue;
+//            }
+//        }
+//        return null;
+//    }
 
     private void showNoticeScopeNumber(int totalNumber) {
         tv_selected_member.setText(String.format(getString(R.string.notice_scope_number_text), totalNumber));
@@ -463,7 +463,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
         if (addressBookRsp.getCode() == 200) {
             final List<AddressBookRsp.DataBean> data = addressBookRsp.getData();
             if (data != null && !data.isEmpty()){
-                final AddressBookBean addressBookBean = currentDeptData(currentPosition, currentLevel, noticeScopeBeans);
+                //final AddressBookBean addressBookBean = currentDeptData(currentPosition, currentLevel, noticeScopeBeans);
                 if (addressBookBean != null){
                     List<AddressBookRsp.DataBean> deptMemberList = addressBookBean.getDeptMemberList();
                     if (deptMemberList == null){
