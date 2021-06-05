@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -92,7 +93,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     ConstraintLayout cl_repeal;
 
     @BindView(R.id.gp_copyer_list)
-    Group cl_copyer_list;
+    Group gp_copyer_list;
 
     @BindView(R.id.ll_copyer_list)
     LinearLayout  ll_copyer_list;
@@ -111,6 +112,9 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 
     @BindView(R.id.iv_unfold)
     ImageView iv_unfold;
+
+    @BindView(R.id.nestedScrollView)
+    NestedScrollView nestedScrollView;
     private boolean unfold = false;
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
     List<ApproverRsp.DataBean.ListBean> leaveFlowCopyerList = new ArrayList<>();
@@ -277,7 +281,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 }
                 break;
             case "3":
-                cl_copyer_list.setVisibility(View.GONE);
+                gp_copyer_list.setVisibility(View.GONE);
                 leaveFlowBeanList.add(new LeaveFlowBean(""+undoTimes[1], ""+undoTimes[0], "我（已撤销）", "" + data.getName(), true,true,null));
                 break;
             default:
@@ -288,7 +292,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         recyclerViewFlow.setAdapter(leaveFlowAdapter);
         //显示抄送人列表
         if (!leaveFlowCopyerList.isEmpty() && !"3".equals(approvalResult)){
-            cl_copyer_list.setVisibility(View.VISIBLE);
+            gp_copyer_list.setVisibility(View.VISIBLE);
             tv_flow_content.setText(String.format(getString(R.string.carbon_copy_people_text),""+leaveFlowCopyerList.size()));
             //tv_date.setText(approvalTimes[0]);
             //tv_time.setText(approvalTimes[1]);
@@ -297,10 +301,14 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                             ll_copyer_list.setVisibility(View.GONE);
                             iv_unfold.setImageResource(R.drawable.icon_arrow_down);
                             unfold = false;
+                            //滚动到底部
+                            nestedScrollView.fullScroll(NestedScrollView.FOCUS_UP);
                         } else {
                             ll_copyer_list.setVisibility(View.VISIBLE);
                             iv_unfold.setImageResource(R.drawable.icon_arrow_up);
                             unfold = true;
+                            //滚动到底部
+                            nestedScrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
                         }
                     }
             );

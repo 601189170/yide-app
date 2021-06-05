@@ -77,7 +77,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
         }
         NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
         fragments.add(my_notice);
-        if (SpData.getIdentityInfo().staffIdentity() || !hasNoticePermission){
+        if (SpData.getIdentityInfo().staffIdentity() && hasNoticePermission){
             PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
             fragments.add(my_release);
         }

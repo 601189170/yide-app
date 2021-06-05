@@ -12,6 +12,7 @@
         layout="@layout/title_layout2" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="44dp">
@@ -20,6 +21,7 @@
             android:id="@+id/cl_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="84dp"
             android:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
