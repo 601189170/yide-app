@@ -26,13 +26,16 @@
 
         <TextView
             android:id="@+id/tv_notice"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="放假通知"
-            android:layout_marginStart="8.5dp"
             android:textColor="@color/text_303133"
             android:textStyle="bold"
             android:textSize="@dimen/text_16"
+            android:singleLine="true"
+            android:maxEms="5"
+            android:layout_marginStart="@dimen/dp_50"
+            android:layout_marginEnd="@dimen/dp_35"
             app:layout_constraintLeft_toRightOf="@+id/iv_pic"
             app:layout_constraintTop_toTopOf="@+id/iv_pic" />
 
