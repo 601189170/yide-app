@@ -39,12 +39,8 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
     public TabRecyAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.tab_recy_item,
                 viewGroup, false);
-
         ViewHolder viewHolder = new ViewHolder(view);
-
         viewHolder.item = view.findViewById(R.id.item);
-
-
         return viewHolder;
     }
 
@@ -61,8 +57,6 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
             }
             viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.black10));
         }
-
-
     }
 
     @Override
@@ -116,7 +110,7 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
     public List<NoteTabBean> remove(int position) {
         List<NoteTabBean> noteTabBeans = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            if (i <= (position - 1)) {
+            if (i < position) {
                 noteTabBeans.add(list.get(i));
             }
         }

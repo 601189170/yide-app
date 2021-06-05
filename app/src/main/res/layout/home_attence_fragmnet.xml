@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:text="考勤情况"
+                android:text="学员考勤"
                 android:textColor="#1E232A"
                 android:textSize="15sp"
                 android:textStyle="bold" />

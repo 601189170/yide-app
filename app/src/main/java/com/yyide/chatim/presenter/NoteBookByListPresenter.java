@@ -49,7 +49,7 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
         });
     }
 
-    public void getStudentList(String classesIs, int pageNum, int pageSize) {
+    public void getStudentList(String classesIs, int pageSize, int pageNum) {
         mvpView.showLoading();
         Map map = new HashMap();
         map.put("classesId", classesIs);

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,13 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentAttendanceSchoolBinding;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.AttendancePresenter;
 import com.yyide.chatim.utils.InitPieChart;
 import com.yyide.chatim.view.AttendanceCheckView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -48,9 +52,6 @@ import java.util.List;
 public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
 
     private FragmentAttendanceSchoolBinding mViewBinding;
-    public AttendanceSchoolFragment() {
-        // Required empty public constructor
-    }
 
     public static AttendanceSchoolFragment newInstance() {
         AttendanceSchoolFragment fragment = new AttendanceSchoolFragment();
@@ -81,6 +82,13 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         mvpPresenter.homeAttendance("");
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            mvpPresenter.homeAttendance("");
+        }
+    }
+
     @Override
     protected AttendancePresenter createPresenter() {
         return new AttendancePresenter(this);
@@ -108,21 +116,24 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             PieChart piechart = holder.getView(R.id.piechart);
             piechart2.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
             piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
-            constraintLayout1.setOnClickListener(v -> {
-                AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
-            });
-            constraintLayout2.setOnClickListener(v -> {
-                AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
-            });
+
             if(item1 != null){
                 holder.setText(R.id.tv_attendance_type, item1.getAttName());
                 holder.setText(R.id.tv_desc, "0".equals(item1.getAttendanceType()) ? "签到" : "签退");
                 setPieChart(item1, piechart);
+                constraintLayout1.setOnClickListener(v -> {
+                    AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
+                });
+                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
             }
             if(item2 != null){
                 constraintLayout2.setVisibility(View.VISIBLE);
                 holder.setText(R.id.tv_attendance_type2, item2.getAttName());
                 holder.setText(R.id.tv_desc2, "0".equals(item2.getAttendanceType()) ? "签到" : "签退");
+                piechart2.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
+                constraintLayout2.setOnClickListener(v -> {
+                    AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
+                });
                 setPieChart(item2, piechart2);
             } else {
                 constraintLayout2.setVisibility(View.GONE);
@@ -185,17 +196,16 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         //数据处理
         List<AttendanceSchoolBean> list = new ArrayList<>();
         if(schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0){
-            for (int i = 0; i < schoolPeopleAllFormBeanList.size(); i++) {
+            for (int i = 0; i <= schoolPeopleAllFormBeanList.size(); i++) {
                 AttendanceSchoolBean attendanceSchoolBean = new AttendanceSchoolBean();
                 attendanceSchoolBean.setItem1(schoolPeopleAllFormBeanList.get(i));
                 i++;
-                if(i <= schoolPeopleAllFormBeanList.size()){
+                if(i < schoolPeopleAllFormBeanList.size()){
                     attendanceSchoolBean.setItem2(schoolPeopleAllFormBeanList.get(i));
                 }
                 list.add(attendanceSchoolBean);
             }
         }
-
         adapter.setList(list);
     }
 
@@ -222,6 +232,6 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
 
     @Override
     public void getAttendanceFail(String msg) {
-
+        Log.e("TAG", "getAttendanceFail==>: " + msg);
     }
 }

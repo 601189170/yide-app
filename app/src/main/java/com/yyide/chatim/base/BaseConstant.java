@@ -44,7 +44,6 @@ public class BaseConstant {
     //线上环境
     public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
-
     public static final String API_SERVER_HTML_RELEASE = "https://cloud.edu.1d1j.cn";
     public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.net";
     public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
@@ -85,6 +84,8 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_NOTICE_TAB = "type_update_notice_tab";
     public static final String TYPE_UPDATE_REMOTE_NOTICE = "type_update_remote_notice";
     public static final String TYPE_MESSAGE_TODO_NUM = "type_message_todo_num";
+    public static final String TYPE_MESSAGE_NUM = "type_message_num";
+
     public static final String TYPE_LEAVE = "type_leave";
     public static final String TYPE_UPDATE_IMG = "type_update_img";
     public static final String TYPE_PREPARES_SAVE = "type_prepares_save";

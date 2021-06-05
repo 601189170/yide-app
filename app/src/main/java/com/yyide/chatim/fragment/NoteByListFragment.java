@@ -49,7 +49,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 
     private String id;
     private int pageNum = 1;
-    private int pageSize = 20;
+    private int pageSize = 30;
     private NoteItemAdapter noteItemAdapter;
     private String islast;
     private String organization;
@@ -79,9 +79,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         }
         //不穿ID表示查询当下你所属部门人员或学生列表
         if (!TextUtils.isEmpty(organization) && "staff".equals(organization)) {
-            mvpPresenter.NoteBookByList(id, 30, pageNum);
+            mvpPresenter.NoteBookByList(id, pageSize, pageNum);
         } else {
-            mvpPresenter.getStudentList(id, 30, pageNum);
+            mvpPresenter.getStudentList(id, pageSize, pageNum);
         }
     }
 
@@ -125,20 +125,17 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                 bundle.putString("id", String.valueOf(noteItemAdapter.getItem(position).id));
                 bundle.putString("name", String.valueOf(noteItemAdapter.getItem(position).name));
                 bundle.putString("organization", organization);
-                if (noteItemAdapter.getItem(position).organizationItem.list != null && noteItemAdapter.getItem(position).organizationItem.list.size() == 0) {
-                    bundle.putString("islast", "1");
+                TeacherlistRsp.DataBean.RecordsBean item = noteItemAdapter.getItem(position);
+                if (item.organizationItem.list != null && item.organizationItem.list.size() > 0) {
+                    bundle.putString("islast", "2");
                 } else {
-                    if (noteItemAdapter.getItem(position).organizationItem == null) {
-                        bundle.putString("islast", "1");
-                    } else {
-                        bundle.putString("islast", "2");
-                    }
+                    bundle.putString("islast", "1");
                 }
 
                 if (noteItemAdapter.getItem(position).organizationItem.list != null && noteItemAdapter.getItem(position).organizationItem.list.size() > 0) {
-                    bundle.putParcelableArrayList(PARAMS_NAME, (ArrayList<? extends Parcelable>) noteItemAdapter.getItem(position).organizationItem.list);
+                    bundle.putParcelableArrayList(PARAMS_NAME, noteItemAdapter.getItem(position).organizationItem.list);
                 }
-                activity.initDeptFragment2(bundle);
+                activity.initDeptFragmentNew(bundle);
             } else {
                 Intent intent = new Intent();
                 intent.putExtra("data", JSON.toJSONString(noteItemAdapter.getItem(position)));
