@@ -54,7 +54,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText(R.string.notice_announcement_title);
-        final boolean hasNoticePermission = getIntent().getBooleanExtra("hasNoticePermission", false);
+        hasNoticePermission = getIntent().getBooleanExtra("hasNoticePermission", false);
         initViewPager();
     }
 
