@@ -162,6 +162,14 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        if (publishNoticeAnnouncementListAdapter != null){
+            publishNoticeAnnouncementListAdapter.cancelTimer();
+        }
+    }
+
+    @Override
     protected PublishAnnouncementFragmentPresenter createPresenter() {
         return new PublishAnnouncementFragmentPresenter(this);
     }

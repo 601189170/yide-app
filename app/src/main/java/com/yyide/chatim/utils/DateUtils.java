@@ -150,7 +150,7 @@ public class DateUtils {
      */
     public static long[] dateDiff(String endTime) {
         // 按照传入的格式生成一个simpledateformate对象
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
         long nh = 1000 * 60 * 60;// 一小时的毫秒数
         long nm = 1000 * 60;// 一分钟的毫秒数
@@ -166,7 +166,7 @@ public class DateUtils {
             long min = diff % nd % nh / nm;// 计算差多少分钟
             long sec = diff % nd % nh % nm / ns;// 计算差多少秒
             Log.e("dateDiff", "dateDiff: "+day+","+hour+","+min+","+sec);
-            return new long[]{day,hour,min};
+            return new long[]{day,hour,min,sec};
         } catch (ParseException e) {
             e.printStackTrace();
         }

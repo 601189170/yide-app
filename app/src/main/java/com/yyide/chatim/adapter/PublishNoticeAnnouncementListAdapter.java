@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.text.TextUtils;
@@ -22,6 +23,8 @@ import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.FootView;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +50,8 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
     public boolean isLoadMore = false;
 
     public boolean isLastPage = false;
+    private Timer timer;
+
     public void setOnlyOnePage(boolean onlyOnePage) {
         this.onlyOnePage = onlyOnePage;
     }
@@ -96,15 +101,39 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             if (!TextUtils.isEmpty(timingTime)) {
                 // DateUtils.formatTime(timingTime,)
                 long[] dateDiff = DateUtils.dateDiff(timingTime);
-                if (dateDiff.length == 3) {
+                if (dateDiff.length == 4) {
                     holder1.tv_timed_send_time.setVisibility(View.VISIBLE);
                     if (dateDiff[0] != 0) {
                         String string = context.getString(R.string.timed_send_long_text);
                         holder1.tv_timed_send_time.setText(String.format(string, dateDiff[0]));
                     } else {
                         String string = context.getString(R.string.timed_send_text);
-                        holder1.tv_timed_send_time.setText(String.format(string, dateDiff[1], dateDiff[2]));
+                        holder1.tv_timed_send_time.setText(String.format(string, dateDiff[1], dateDiff[2],dateDiff[3]));
                     }
+                    if (timer == null){
+                        timer = new Timer();
+                    }
+                    final TimerTask timerTask = new TimerTask(){
+                        @Override
+                        public void run() {
+                            long[] dateDiff = DateUtils.dateDiff(timingTime);
+                            ((Activity)context).runOnUiThread(() -> {
+                                if (dateDiff[0] == 0 && dateDiff[1]==0&& dateDiff[2]==0&& dateDiff[3]==0){
+                                    this.cancel();
+                                    holder1.tv_timed_send_time.setVisibility(View.GONE);
+                                    return;
+                                }
+                                if (dateDiff[0] != 0) {
+                                    String string = context.getString(R.string.timed_send_long_text);
+                                    holder1.tv_timed_send_time.setText(String.format(string, dateDiff[0]));
+                                } else {
+                                    String string = context.getString(R.string.timed_send_text);
+                                    holder1.tv_timed_send_time.setText(String.format(string, dateDiff[1], dateDiff[2],dateDiff[3]));
+                                }
+                            });
+                        }
+                    };
+                    timer.schedule(timerTask,0,1000);
                 }
             } else {
                 holder1.tv_timed_send_time.setVisibility(View.GONE);
@@ -163,6 +192,13 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
     //设置是最后一页
     public void setIsLastPage(boolean lastPage) {
         this.isLastPage = lastPage;
+    }
+
+    public void cancelTimer(){
+        if (timer != null){
+            timer.cancel();
+            timer = null;
+        }
     }
 
     @Override
