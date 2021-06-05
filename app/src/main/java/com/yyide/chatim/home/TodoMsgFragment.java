@@ -33,6 +33,7 @@ public class TodoMsgFragment extends BaseFragment {
     private View mBaseView;
     @BindView(R.id.content)
     FrameLayout content;
+    private int type;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class TodoMsgFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
+        type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
         if(type > 0){
             setTab(type);
         } else {
@@ -56,7 +57,7 @@ public class TodoMsgFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
         if (!hidden) {
-            int type = getArguments().getInt("type", 0);
+            type = getArguments().getInt("type", 0);
             Log.e(TAG, "onHiddenChanged: " + type);
             if (type != 0) {
                 setTab(type);
@@ -88,12 +89,11 @@ public class TodoMsgFragment extends BaseFragment {
         Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
         Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
         Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
-
         if (fg1 != null) ft.hide(fg1);
         if (fg2 != null) ft.hide(fg2);
         if (fg3 != null) ft.hide(fg3);
 
-        switch (position) {//0 未审核 1 已拒绝 3全部
+        switch (position) {//0待办 1 已拒绝 3全部
             case 0:
                 if (fg1 == null) {
                     fg1 = TodoMsgPageFragment.newInstance(3);

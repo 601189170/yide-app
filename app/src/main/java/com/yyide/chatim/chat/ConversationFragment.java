@@ -97,97 +97,24 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         return mBaseView;
     }
 
-    public class TodoAdapter extends BaseMultiItemQuickAdapter<TodoRsp.DataBean.RecordsBean, BaseViewHolder> implements LoadMoreModule {
-
-        public TodoAdapter() {
-            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE, R.layout.message_item);
-            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_TODO, R.layout.message_item);
-            addItemType(TodoRsp.DataBean.RecordsBean.ITEM_TYPE_NOTICE, R.layout.message_item);
-        }
-
-        @Override
-        protected void convert(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
-            switch (o.getItemType()) {
-                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_MESSAGE:
-                    //setTodoItem(holder, o);
-                    break;
-                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_TODO:
-                    setTodoItem(holder, o);
-                    break;
-                case TodoRsp.DataBean.RecordsBean.ITEM_TYPE_NOTICE:
-                    //setTodoItem(holder, o);
-                    break;
-            }
-        }
-
-        private void setTodoItem(@NotNull BaseViewHolder holder, TodoRsp.DataBean.RecordsBean o) {
-            holder.setText(R.id.tv_leave, o.getFirstData())
-                    .setText(R.id.tv_title, o.getTitle());
-            //GlideUtil.loadCircleImage(getContext(), getContext().getResources().getDrawable(R.mipmap.ic_launcher_logo), holder.getView(R.id.img));
-            //处理内容解析
-            try {
-                if (TodoRsp.DataBean.RecordsBean.IS_TEXT_TYPE.equals(o.getIsText())) {
-                    holder.setText(R.id.tv_leave_type, o.getContent());
-                } else {
-                    String content = o.getContent();
-                    if (!TextUtils.isEmpty(content)) {
-                        Type type = new TypeToken<List<String>>() {
-                        }.getType();
-                        List<String> strings = JSON.parseObject(content, type);
-                        StringBuffer stringBuffer = new StringBuffer();
-                        if (strings != null) {
-                            for (int i = 0; i < strings.size(); i++) {
-                                stringBuffer.append(strings.get(i));
-                                if (i < strings.size() - 1) {
-                                    stringBuffer.append("\n").append("");
-                                }
-                            }
-                        }
-                        holder.setText(R.id.tv_leave_type, stringBuffer.toString());
-                    }
-                }
-            } catch (Exception e) {
-                holder.setText(R.id.tv_leave_type, o.getContent());
-                e.printStackTrace();
-            }
-            TextView textView2 = holder.getView(R.id.tv_agree);
-            //如果身份是家长隐藏按钮
-            if ("1".equals(o.getIsOperation())
-                    || "2".equals(o.getIsOperation())
-                    || "3".equals(o.getIsOperation())
-                    || (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status))) {
-                textView2.setVisibility(View.GONE);
-            } else {
-                textView2.setVisibility(View.VISIBLE);
-            }
-
-            textView2.setOnClickListener(v -> {
-                Intent intent = new Intent(getContext(), LeaveFlowDetailActivity.class);
-                intent.putExtra("type", 2);
-                intent.putExtra("id", o.getCallId());
-                startActivity(intent);
-            });
-        }
-    }
-
     private void initView() {
-//        V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
-//            @Override
-//            public void onProgress(int progress) {
-//
-//            }
-//
-//            @Override
-//            public void onError(int code, String desc) {
-//                ToastUtil.toastShortMessage("onError==>" + desc);
-//            }
-//
-//            @Override
-//            public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-//                nextSeq++;
-//                v2TIMConversationResult.getConversationList();
-//            }
-//        });
+        V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
+            @Override
+            public void onProgress(int progress) {
+
+            }
+
+            @Override
+            public void onError(int code, String desc) {
+                ToastUtil.toastShortMessage("onError==>" + desc);
+            }
+
+            @Override
+            public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
+                nextSeq++;
+                v2TIMConversationResult.getConversationList();
+            }
+        });
 
         // 从布局文件中获取会话列表面板
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
@@ -247,7 +174,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
     }
 
     private void initTitleAction() {
@@ -264,7 +191,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     }
 
     private void initPopMenuAction() {
-
         // 设置长按conversation显示PopAction
         List<PopMenuAction> conversationPopActions = new ArrayList<PopMenuAction>();
         PopMenuAction action = new PopMenuAction();
@@ -380,7 +306,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

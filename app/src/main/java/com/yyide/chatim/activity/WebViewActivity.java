@@ -199,6 +199,7 @@ public class WebViewActivity extends BaseActivity {
                     mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
                 }
                 mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
+                mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
             }
 
             @Override
@@ -280,6 +281,14 @@ public class WebViewActivity extends BaseActivity {
 //        i.setType("file/*");//文件上传
         i.setType("*/*");//文件上传
         startActivityForResult(Intent.createChooser(i, "Image Chooser"), FILE_CHOOSER_RESULT_CODE);
+    }
+
+    @JavascriptInterface
+    public String getToken() {
+        if (mWebView != null) {
+            mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
+        }
+        return SpData.User() != null ? SpData.User().getToken() : "";
     }
 
     @JavascriptInterface

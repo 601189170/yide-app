@@ -121,7 +121,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         initVerticalTextview();
-        setFragment();
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
     }
@@ -204,7 +203,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             //通知
             fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
-            fragmentTransaction.add(R.id.kq_content, new AttendanceSchoolFragment());
+            fragmentTransaction.add(R.id.kq_content, AttendanceSchoolFragment.newInstance());
         } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             //家长身份
             tableContent.setVisibility(View.VISIBLE);

@@ -143,7 +143,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
 
     private String switchAttributeType(String attributeType) {
         if (TextUtils.isEmpty(attributeType)) {
-            return "";
+            return "消息通知";
         }
         switch (attributeType) {
             case "1":
@@ -153,7 +153,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
                 attributeType = "调课";
                 break;
             default:
-                attributeType = "通知";
+                attributeType = "消息通知";
                 break;
         }
         return attributeType;

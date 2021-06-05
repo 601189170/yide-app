@@ -33,8 +33,6 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
-import com.yyide.chatim.activity.attendance.StatisticsActivity;
-import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -42,26 +40,16 @@ import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserSigRsp;
-import com.yyide.chatim.model.mobileRsp;
-import com.yyide.chatim.net.DingApiStores;
 import com.yyide.chatim.presenter.LoginPresenter;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.Utils;
 import com.yyide.chatim.view.LoginView;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * <p>
@@ -356,7 +344,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
             SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
             SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
             SpData.setIdentityInfo(rsp);
-            getUserSig();
+            hideLoading();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            //getUserSig();
         } else {
             hideLoading();
             ToastUtils.showShort(rsp.msg);

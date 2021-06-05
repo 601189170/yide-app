@@ -57,6 +57,9 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     private MsgView msgView;
     private View mBaseView;
     private int type = 0;
+    private TodoMsgFragment fragment;
+    private int todoCount = 0;
+    private int messageCount = 0;
 
     @Nullable
     @Override
@@ -70,6 +73,10 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
+        fragment = new TodoMsgFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", type);
+        fragment.setArguments(bundle);
         Log.e(TAG, "onViewCreated: " + type);
         setTab(type);
         setBookView();
@@ -96,8 +103,12 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         if (!hidden) {
             type = getArguments().getInt("type", 0);
             Log.e(TAG, "onHiddenChanged: " + type);
-            if (type != 0) {
-                setTab(type);
+            if (type != 0 && mSlidingTabLayout != null) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", type);
+                fragment.setArguments(bundle);
+                mSlidingTabLayout.setCurrentTab(type);
+                fragment.onHiddenChanged(false);
             }
         }
     }
@@ -106,14 +117,14 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         List<String> mTitles = new ArrayList<>();
         mTitles.add("消息");
         mTitles.add("待办");
-        viewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        viewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
             @Override
             public Fragment getItem(int position) {
                 if (position == 0) {
                     return new ConversationFragment();
                 } else {
-                    return new TodoMsgFragment();
+                    return fragment;
                 }
             }
 
@@ -146,7 +157,13 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             setBookView();
         } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
-            setNumber(messageEvent.getCount());
+            todoCount = messageEvent.getCount();
+            Log.d(TAG, "TYPE_MESSAGE_TODO_NUM>>:" + messageCount);
+            setNumber(messageCount + todoCount);
+        } else if(BaseConstant.TYPE_MESSAGE_NUM.equals(messageEvent.getCode())){
+            messageCount = messageEvent.getCount();
+            Log.d(TAG, "TYPE_MESSAGE_NUM>>:" + messageCount);
+            setNumber(messageCount + todoCount);
         }
     }
 
@@ -158,9 +175,11 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
 
     @Override
     public void messageNumberSuccess(TodoRsp model) {
+        Log.d(TAG, "messageNumberSuccess>>:" + model.getData().getTotal());
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             if (model.getData() != null) {
-                setNumber(model.getData().getTotal());
+                todoCount = model.getData().getTotal();
+                setNumber(todoCount + messageCount);
             }
         }
     }
@@ -172,9 +191,9 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
             msgView.setBackgroundColor(Color.parseColor("#fb2d24"));
         }
         if(count > 0){
-            mSlidingTabLayout.showMsg(2, count);
+            mSlidingTabLayout.showMsg(1, count);
         } else {
-            mSlidingTabLayout.hideMsg(2);
+            mSlidingTabLayout.hideMsg(1);
         }
     }
 

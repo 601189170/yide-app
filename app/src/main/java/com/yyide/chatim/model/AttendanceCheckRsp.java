@@ -570,12 +570,12 @@ public class AttendanceCheckRsp {
                 private String name;
                 private int section;
                 private List<?> studentIds;
-                private List<PeopleBean> people;
+                private List<Students.PeopleBean> people;
                 private List<?> latePeople;
                 private List<?> leavePeople;
                 private List<?> absencePeople;
                 private List<?> leaveEarlyPeople;
-                private List<ApplyPeopleBean> applyPeople;
+                private List<Students.PeopleBean> applyPeople;
 
                 public String getRate() {
                     return rate;
@@ -689,11 +689,11 @@ public class AttendanceCheckRsp {
                     this.studentIds = studentIds;
                 }
 
-                public List<PeopleBean> getPeople() {
+                public List<Students.PeopleBean> getPeople() {
                     return people;
                 }
 
-                public void setPeople(List<PeopleBean> people) {
+                public void setPeople(List<Students.PeopleBean> people) {
                     this.people = people;
                 }
 
@@ -729,73 +729,14 @@ public class AttendanceCheckRsp {
                     this.leaveEarlyPeople = leaveEarlyPeople;
                 }
 
-                public List<ApplyPeopleBean> getApplyPeople() {
+                public List<Students.PeopleBean> getApplyPeople() {
                     return applyPeople;
                 }
 
-                public void setApplyPeople(List<ApplyPeopleBean> applyPeople) {
+                public void setApplyPeople(List<Students.PeopleBean> applyPeople) {
                     this.applyPeople = applyPeople;
                 }
 
-                public static class PeopleBean {
-                    private String name;
-                    private String time;
-                    private String status;
-
-                    public String getName() {
-                        return name;
-                    }
-
-                    public void setName(String name) {
-                        this.name = name;
-                    }
-
-                    public String getTime() {
-                        return time;
-                    }
-
-                    public void setTime(String time) {
-                        this.time = time;
-                    }
-
-                    public String getStatus() {
-                        return status;
-                    }
-
-                    public void setStatus(String status) {
-                        this.status = status;
-                    }
-                }
-
-                public static class ApplyPeopleBean {
-                    private String name;
-                    private String time;
-                    private String status;
-
-                    public String getName() {
-                        return name;
-                    }
-
-                    public void setName(String name) {
-                        this.name = name;
-                    }
-
-                    public String getTime() {
-                        return time;
-                    }
-
-                    public void setTime(String time) {
-                        this.time = time;
-                    }
-
-                    public String getStatus() {
-                        return status;
-                    }
-
-                    public void setStatus(String status) {
-                        this.status = status;
-                    }
-                }
             }
         }
 
