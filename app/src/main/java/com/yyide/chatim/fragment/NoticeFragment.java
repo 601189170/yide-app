@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeDetailActivity;
@@ -60,11 +61,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         ll_notice.setOnClickListener(v -> {
-
             Intent intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
-            if (data != null){
-                intent.putExtra("hasNoticePermission",data.isHasNoticePermission());
-            }
             startActivity(intent);
         });
     }
@@ -102,6 +99,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         if (homeNoticeRsp.getCode() == 200) {
             data = homeNoticeRsp.getData();
             if (data != null) {
+                MMKV.defaultMMKV().encode("hasNoticePermission",data.isHasNoticePermission());
 //                jump = true;
                 notice_content.setText(data.getContent());
                 notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(), "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));

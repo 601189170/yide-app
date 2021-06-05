@@ -144,6 +144,7 @@
     <string name="check_all">全选</string>
     <string name="choose_class">所在班级</string>
     <string name="carbon_copy_people">抄送人</string>
+    <string name="select_carbon_copy_people">选择抄送人</string>
     <string name="carbon_copy_people_text">抄送%s人</string>
 
     <!--考勤-->

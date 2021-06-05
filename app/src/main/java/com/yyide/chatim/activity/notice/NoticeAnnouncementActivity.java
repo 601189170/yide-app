@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.notice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,12 +14,20 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeAnnouncementPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeAnnouncementView;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.fragment.NoticeFragment;
+import com.yyide.chatim.model.EventMessage;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +63,9 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         title.setText(R.string.notice_announcement_title);
-        hasNoticePermission = getIntent().getBooleanExtra("hasNoticePermission", false);
+        EventBus.getDefault().register(this);
+        hasNoticePermission = MMKV.defaultMMKV().decodeBool("hasNoticePermission",false);
+        //hasNoticePermission = getIntent().getBooleanExtra("hasNoticePermission", false);
         initViewPager();
     }
 
@@ -120,5 +131,18 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     @Override
     public void showError() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(EventMessage messageEvent) {
+        if (BaseConstant.TYPE_UPDATE_NOTICE_TAB.equals(messageEvent.getCode())) {
+            mViewpager.setCurrentItem(1);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.yyide.chatim.net;
 
 
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
+import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceCheckRsp;
@@ -479,4 +480,10 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/face/cloud-face/attendance/viewAttendance")
     Observable<AttendanceCheckRsp> viewAttendance(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/school/cloud-school/notice/scope/app/v1/queryDeptMemberByDeptId
+    //查询部门所属成员
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/school/cloud-school/notice/scope/app/v1/queryDeptMemberByDeptId")
+    Observable<AddressBookRsp> queryDeptMemberByDeptId(@QueryMap HashMap<String, Object> map);
 }

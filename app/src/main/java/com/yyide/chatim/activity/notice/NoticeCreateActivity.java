@@ -23,12 +23,16 @@ import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeCreatePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeCreateView;
 import com.yyide.chatim.model.AddUserAnnouncementBody;
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.utils.DateUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -189,6 +193,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         }
         String jsonString = JSON.toJSONString(body);
         Log.e(TAG, "commit: " + jsonString);
+        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_TAB, ""));
         mvpPresenter.addUserAnnouncement(jsonString);
     }
 

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,11 +32,14 @@ import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.leave.AddressBookActivity;
 import com.yyide.chatim.activity.leave.LeaveCarbonCopyPeopleActivity;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
+import com.yyide.chatim.activity.notice.NoticeScopeActivity;
 import com.yyide.chatim.adapter.leave.LeaveReasonTagAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.DeptSelectPop;
+import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
@@ -56,6 +60,8 @@ import java.util.Optional;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,6 +90,9 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     LinearLayout ll_copyer_list;
     @BindView(R.id.btn_commit)
     Button btn_commit;
+    @BindView(R.id.iv_add_staff)
+    ImageView iv_add_staff;
+    private static int REQUEST_CODE = 100;
     private TimePickerDialog mDialogAll;
     private List<LeaveDeptRsp.DataBean> deptList = new ArrayList<>();
     private String startTime;
@@ -91,8 +100,8 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String leaveReason = "2";
     private String reason="";
     private long deptId;
-    private List<Long> carbonCopyPeopleId;
-    private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList;
+    private List<Long> carbonCopyPeopleId = new ArrayList<>();
+    private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList = new ArrayList<>();
     private String deptName;
 
     public RequestLeaveStaffFragment() {
@@ -149,6 +158,11 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         btn_commit.setClickable(false);
         mvpPresenter.queryDeptInfoByTeacherId();
         mvpPresenter.queryLeavePhraseList(2);
+
+        iv_add_staff.setOnClickListener(v->{
+            Intent intent = new Intent(getActivity(), AddressBookActivity.class);
+            startActivityForResult(intent,REQUEST_CODE);
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -333,40 +347,40 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             //超送人
             final List<ApproverRsp.DataBean.ListBean> list = data.getList();
             if (list!= null && !list.isEmpty()){
-                carbonCopyPeopleId = new ArrayList<>();
-                carbonCopyPeopleList = new ArrayList<>();
-                for (ApproverRsp.DataBean.ListBean listBean : list) {
-                    final long userId = listBean.getUserId();
-                    carbonCopyPeopleId.add(userId);
-                    carbonCopyPeopleList.add(listBean);
-                    if (carbonCopyPeopleId.size()<3){
-                        final String name = listBean.getName();
-                        final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
-                        final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
-                        final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
-                        showImage(listBean.getImage(),iv_user_head);
-                        tv_copyer_name.setText(name);
-                        ll_copyer_list.addView(view1);
-                    }
-                }
+//                carbonCopyPeopleId = new ArrayList<>();
+//                carbonCopyPeopleList = new ArrayList<>();
+//                for (ApproverRsp.DataBean.ListBean listBean : list) {
+//                    final long userId = listBean.getUserId();
+//                    carbonCopyPeopleId.add(userId);
+//                    carbonCopyPeopleList.add(listBean);
+//                    if (carbonCopyPeopleId.size()<3){
+//                        final String name = listBean.getName();
+//                        final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
+//                        final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+//                        final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
+//                        showImage(listBean.getImage(),iv_user_head);
+//                        tv_copyer_name.setText(name);
+//                        ll_copyer_list.addView(view1);
+//                    }
+//                }
                 //更多
-                if (carbonCopyPeopleId.size()>3){
-                    final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
-                    final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
-                    final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
-                    tv_copyer_name.setText("查看全部");
-                    userHeadImage.setImageResource(R.drawable.icon_read_more);
-                    view1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Intent intent = new Intent(getActivity(), LeaveCarbonCopyPeopleActivity.class);
-                            intent.putExtra("carbonCopyPeople", JSON.toJSONString(carbonCopyPeopleList));
-                            intent.putExtra("type",1);
-                            startActivity(intent);
-                        }
-                    });
-                    ll_copyer_list.addView(view1);
-                }
+//                if (carbonCopyPeopleId.size()>3){
+//                    final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
+//                    final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+//                    final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
+//                    tv_copyer_name.setText("查看全部");
+//                    userHeadImage.setImageResource(R.drawable.icon_read_more);
+//                    view1.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            final Intent intent = new Intent(getActivity(), LeaveCarbonCopyPeopleActivity.class);
+//                            intent.putExtra("carbonCopyPeople", JSON.toJSONString(carbonCopyPeopleList));
+//                            intent.putExtra("type",1);
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    ll_copyer_list.addView(view1);
+//                }
             }
         }
     }
@@ -422,5 +436,67 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     @Override
     public void leavePhraseFail(String msg) {
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG, "onActivityResult: requestCode=" + requestCode + ",resultCode=" + resultCode);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            String deptList = data.getStringExtra("deptList");
+            Log.e(TAG, "onActivityResult: " + deptList);
+            if (!TextUtils.isDigitsOnly(deptList)){
+                final List<AddressBookRsp.DataBean> dataBeans = JSON.parseArray(deptList, AddressBookRsp.DataBean.class);
+                for (int i = 0; i < dataBeans.size(); i++) {
+                    final AddressBookRsp.DataBean dataBean = dataBeans.get(i);
+                    carbonCopyPeopleId.add(dataBean.getTeacherId());
+                    final ApproverRsp.DataBean.ListBean listBean = new ApproverRsp.DataBean.ListBean();
+                    listBean.setImage(dataBean.getImage());
+                    listBean.setName(dataBean.getTeacherName());
+                    listBean.setUserId(dataBean.getTeacherId());
+                    carbonCopyPeopleList.add(listBean);
+                    if (carbonCopyPeopleId.size() <3) {
+                        final String name = dataBean.getTeacherName();
+                        final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
+                        final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                        final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
+                        showImage(dataBean.getImage(), iv_user_head);
+                        tv_copyer_name.setText(name);
+                        ll_copyer_list.addView(view1);
+                    }
+                }
+
+                if (carbonCopyPeopleId.size() == 3){
+                    final ApproverRsp.DataBean.ListBean dataBean = carbonCopyPeopleList.get(2);
+                    final String name = dataBean.getName();
+                    final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
+                    final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                    final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
+                    showImage(dataBean.getImage(), iv_user_head);
+                    tv_copyer_name.setText(name);
+                    ll_copyer_list.addView(view1);
+                }
+                //更多
+                final int childCount = ll_copyer_list.getChildCount();
+                if (carbonCopyPeopleId.size()>=3 && childCount<=3){
+                    final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
+                    ll_copyer_list.removeView(view1);
+                    final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
+                    final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
+                    tv_copyer_name.setText("查看全部");
+                    userHeadImage.setImageResource(R.drawable.icon_read_more);
+                    view1.setOnClickListener(v -> {
+                        final Intent intent = new Intent(getActivity(), LeaveCarbonCopyPeopleActivity.class);
+                        intent.putExtra("carbonCopyPeople", JSON.toJSONString(carbonCopyPeopleList));
+                        intent.putExtra("type",1);
+                        startActivity(intent);
+                    });
+                    ll_copyer_list.addView(view1);
+                }
+            }
+        }
     }
 }
