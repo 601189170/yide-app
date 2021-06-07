@@ -148,6 +148,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
     @Override
     public void onStart() {
         super.onStart();
+        Log.e(TAG, "onStart: ");
         if (getActivity() instanceof NoticeAnnouncementActivity){
             NoticeAnnouncementActivity activity = (NoticeAnnouncementActivity) getActivity();
             boolean other = activity.other2;
@@ -162,11 +163,13 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG, "onDestroy: " );
         if (publishNoticeAnnouncementListAdapter != null){
             publishNoticeAnnouncementListAdapter.cancelTimer();
         }
+
     }
 
     @Override
@@ -191,7 +194,10 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         if (!records.isEmpty()) {
             list.addAll(records);
         }
-        publishNoticeAnnouncementListAdapter.notifyDataSetChanged();
+        if (publishNoticeAnnouncementListAdapter != null){
+            publishNoticeAnnouncementListAdapter.cancelTimer();
+            publishNoticeAnnouncementListAdapter.notifyDataSetChanged();
+        }
         showBlankPage();
     }
     public void showBlankPage(){

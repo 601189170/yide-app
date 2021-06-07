@@ -46,6 +46,9 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @BindView(R.id.tv_title)
     TextView tv_title;
 
+    @BindView(R.id.tv_null_notice)
+    TextView tv_null_notice;
+
     private boolean jump = true;
     private HomeNoticeRsp.DataBean data;
 
@@ -101,6 +104,8 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
             if (data != null) {
                 MMKV.defaultMMKV().encode("hasNoticePermission",data.isHasNoticePermission());
 //                jump = true;
+                notice_content.setVisibility(View.VISIBLE);
+                tv_null_notice.setVisibility(View.GONE);
                 notice_content.setText(data.getContent());
                 notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(), "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
                 if (!TextUtils.isEmpty(data.getTitle())) {
@@ -109,7 +114,9 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
                 }
             } else {
 //                jump = false;
-                notice_content.setText("暂无消息公告");
+                tv_title.setVisibility(View.GONE);
+                notice_content.setVisibility(View.GONE);
+                tv_null_notice.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -117,6 +124,8 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @Override
     public void noticeHomeFail(String msg) {
         Log.e(TAG, "noticeHomeFail: " + msg);
-        notice_content.setText("暂无消息公告");
+        tv_title.setVisibility(View.GONE);
+        notice_content.setVisibility(View.GONE);
+        tv_null_notice.setVisibility(View.VISIBLE);
     }
 }

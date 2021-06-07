@@ -28,7 +28,7 @@
         android:textColor="#303133"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
-        android:text="风扇电机开了房间数量级方式房价来说就分开了司法局时间发生了房价开始了减肥福建省令肌肤生龙卷风解放了时间粉丝滤镜街坊四邻减分"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_line" />
 
@@ -118,7 +118,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
-            android:text="@string/notice_confirm_number_text"
             android:textColor="#ff999999"
             android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -137,6 +136,7 @@
             android:text="通知确认统计"
             android:textColor="#2C8AFF"
             android:textSize="@dimen/text_14"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

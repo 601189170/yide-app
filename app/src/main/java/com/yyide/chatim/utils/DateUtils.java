@@ -160,7 +160,12 @@ public class DateUtils {
         String nowtime = simpleDateFormat.format(curDate);
         try {
             // 获得两个时间的毫秒时间差异
-            diff = Math.abs(simpleDateFormat.parse(nowtime).getTime() - simpleDateFormat.parse(endTime).getTime());
+            final long timeDiff = simpleDateFormat.parse(nowtime).getTime() - simpleDateFormat.parse(endTime).getTime();
+            if (timeDiff >= 0){
+                Log.e("dateDiff", "dateDiff: 倒计时过期");
+                return new long[]{};
+            }
+            diff = Math.abs(timeDiff);
             long day = diff / nd;// 计算差多少天
             long hour = diff % nd / nh;// 计算差多少小时
             long min = diff % nd % nh / nm;// 计算差多少分钟

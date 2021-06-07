@@ -78,7 +78,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         if (sendObject != null  && (sendObject.equals("学生") || sendObject.equals("2"))){
             gp_bottom.setVisibility(View.GONE);
         }
-        initView(type);
+        //initView(type);
         initData();
     }
 
@@ -187,6 +187,7 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
         Log.e(TAG, "noticeDetail: " + noticeDetailRsp.toString());
         if (noticeDetailRsp.getCode() == 200) {
             if (data != null) {
+                initView(type);
                 id = data.getId();//出推送过过来的通知确认
                 String productionTime = DateUtils.formatTime(data.getProductionTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
                 tv_notice_title.setText(data.getTitle());

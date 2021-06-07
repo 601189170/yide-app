@@ -51,6 +51,7 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
 
     public boolean isLastPage = false;
     private Timer timer;
+    private TimerTask timerTask;
 
     public void setOnlyOnePage(boolean onlyOnePage) {
         this.onlyOnePage = onlyOnePage;
@@ -98,6 +99,7 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             ViewHolder holder1 = (ViewHolder) holder;
             NoticeListRsp.DataBean.RecordsBean noticeAnnouncementModel = data.get(position);
             String timingTime = noticeAnnouncementModel.getTimingTime();
+            Log.e(TAG, "onBindViewHolder: timingTime="+timingTime);
             if (!TextUtils.isEmpty(timingTime)) {
                 // DateUtils.formatTime(timingTime,)
                 long[] dateDiff = DateUtils.dateDiff(timingTime);
@@ -113,24 +115,34 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
                     if (timer == null){
                         timer = new Timer();
                     }
-                    final TimerTask timerTask = new TimerTask(){
+                    timerTask = new TimerTask() {
                         @Override
                         public void run() {
                             long[] dateDiff = DateUtils.dateDiff(timingTime);
-                            ((Activity)context).runOnUiThread(() -> {
-                                if (dateDiff[0] == 0 && dateDiff[1]==0&& dateDiff[2]==0&& dateDiff[3]==0){
-                                    this.cancel();
+                            if (dateDiff.length == 4) {
+                                ((Activity) context).runOnUiThread(() -> {
+                                    if (dateDiff[0] == 0 && dateDiff[1] == 0 && dateDiff[2] == 0 && dateDiff[3] == 0) {
+                                        this.cancel();
+                                        noticeAnnouncementModel.setTimingTime(null);
+                                        holder1.tv_timed_send_time.setVisibility(View.GONE);
+                                        return;
+                                    }
+                                    if (dateDiff[0] != 0) {
+                                        String string = context.getString(R.string.timed_send_long_text);
+                                        holder1.tv_timed_send_time.setText(String.format(string, dateDiff[0]));
+                                    } else {
+                                        String string = context.getString(R.string.timed_send_text);
+                                        holder1.tv_timed_send_time.setText(String.format(string, dateDiff[1], dateDiff[2], dateDiff[3]));
+                                    }
+                                });
+                            } else {
+                                this.cancel();
+                                ((Activity) context).runOnUiThread(() -> {
+                                    noticeAnnouncementModel.setTimingTime(null);
                                     holder1.tv_timed_send_time.setVisibility(View.GONE);
-                                    return;
-                                }
-                                if (dateDiff[0] != 0) {
-                                    String string = context.getString(R.string.timed_send_long_text);
-                                    holder1.tv_timed_send_time.setText(String.format(string, dateDiff[0]));
-                                } else {
-                                    String string = context.getString(R.string.timed_send_text);
-                                    holder1.tv_timed_send_time.setText(String.format(string, dateDiff[1], dateDiff[2],dateDiff[3]));
-                                }
-                            });
+                                });
+                            }
+
                         }
                     };
                     timer.schedule(timerTask,0,1000);

@@ -71,12 +71,12 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
         Log.e(TAG, "onBindViewHolder isUnfold: " + bean.isUnfold());
         if (bean.isUnfold()) {
             //bean.setUnfold(false);
-            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_up));
+            holder.btn_level.setImageResource(R.drawable.icon_up);
             holder.mRecyclerView.setVisibility(View.VISIBLE);
             holder.mRecyclerView2.setVisibility(View.VISIBLE);
         } else {
             //bean.setUnfold(true);
-            holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
+            holder.btn_level.setImageResource(R.drawable.icon_down);
             holder.mRecyclerView.setVisibility(View.GONE);
             holder.mRecyclerView2.setVisibility(View.GONE);
         }
@@ -89,8 +89,6 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
                 onCheckBoxChangeListener.change();
             });
         }
-        holder.btn_level.setVisibility(View.VISIBLE);
-        holder.btn_level.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_down));
 
         holder.itemView.setOnClickListener(v -> {
             Log.e(TAG, "onBindViewHolder: onclick is unfold:" + bean.isUnfold());
