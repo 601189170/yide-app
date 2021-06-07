@@ -333,9 +333,11 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         final ApproverRsp.DataBean data = approverRsp.getData();
         if (approverRsp.getCode() != 200){
             ToastUtils.showShort(approverRsp.getMsg());
+            iv_add_staff.setVisibility(View.GONE);
             return;
         }
         if (data != null){
+            iv_add_staff.setVisibility(View.VISIBLE);
             //审批人
             ll_approver_list.removeAllViews();
             ll_copyer_list.removeAllViews();

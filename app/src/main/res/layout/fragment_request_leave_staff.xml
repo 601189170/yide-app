@@ -263,7 +263,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line2"
-                    android:visibility="visible"/>
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/ll_copyer_list"

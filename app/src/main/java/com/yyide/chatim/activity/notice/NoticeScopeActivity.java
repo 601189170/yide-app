@@ -3,9 +3,12 @@ package com.yyide.chatim.activity.notice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +43,10 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     TextView tv_selected_member;
     //private TreeRecyclerAdapter adapter = new TreeRecyclerAdapter(TreeRecyclerType.SHOW_EXPAND);
     List<NoticeScopeBean> noticeScopeBeans = new ArrayList<>();
-
+    @BindView(R.id.blank_page)
+    ConstraintLayout blank_page;
+    @BindView(R.id.gp_main_content)
+    Group gp_main_content;
     private NoticeScopeAdapter adapter;
     private int sendObj;
 
@@ -326,12 +332,14 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 noticeScopeBeans.add(noticeScopeBean);
             }
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
-            if (noticeScopeBeans.isEmpty()){
-                ToastUtils.showShort("没有找到通知范围数据！");
-            }
+//            if (noticeScopeBeans.isEmpty()){
+//                ToastUtils.showShort("没有找到通知范围数据！");
+//            }
+            showBlank(noticeScopeBeans.isEmpty());
             adapter.notifyDataSetChanged();
         } else {
             ToastUtils.showShort("请求数据失败:"+studentScopeRsp.getMsg());
+            showBlank(true);
         }
     }
 
@@ -340,6 +348,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     public void getStudentScopeFail(String msg) {
         Log.e(TAG, "getStudentScopeFail: " + "请求数据失败：" + msg);
         ToastUtils.showShort("请求数据失败：" + msg);
+        showBlank(true);
     }
 
     @Override
@@ -395,12 +404,14 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 departmentTotal++;
             }
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
-            if (noticeScopeBeans.isEmpty()){
-                ToastUtils.showShort("没有找到通知范围数据！");
-            }
+//            if (noticeScopeBeans.isEmpty()){
+//                ToastUtils.showShort("没有找到通知范围数据！");
+//            }
+            showBlank(noticeScopeBeans.isEmpty());
             adapter.notifyDataSetChanged();
         } else {
             ToastUtils.showShort("请求数据失败:"+departmentScopeRsp.getMsg());
+            showBlank(true);
         }
     }
 
@@ -408,6 +419,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     public void getDepartmentListFail(String msg) {
         Log.e(TAG, "getDepartmentListFail: " + "请求数据失败：" + msg);
         ToastUtils.showShort("请求数据失败：" + msg);
+        showBlank(true);
     }
 
     @Override
@@ -446,12 +458,14 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
                 noticeScopeBeans.add(noticeScopeBean);
             }
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
-            if (noticeScopeBeans.isEmpty()){
-                ToastUtils.showShort("没有找到通知范围数据！");
-            }
+//            if (noticeScopeBeans.isEmpty()){
+//                ToastUtils.showShort("没有找到通知范围数据！");
+//            }
+            showBlank(noticeScopeBeans.isEmpty());
             adapter.notifyDataSetChanged();
         } else {
             ToastUtils.showShort("请求数据失败:"+universityScopeRsp.getMsg());
+            showBlank(true);
         }
     }
 
@@ -459,5 +473,11 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     public void getUniversityListFail(String msg) {
         Log.e(TAG, "getUniversityListFail: " + "请求数据失败：" + msg);
         ToastUtils.showShort("请求数据失败：" + msg);
+        showBlank(true);
+    }
+
+    private void showBlank(boolean show){
+        blank_page.setVisibility(show? View.VISIBLE:View.GONE);
+        gp_main_content.setVisibility(show?View.GONE:View.VISIBLE);
     }
 }
