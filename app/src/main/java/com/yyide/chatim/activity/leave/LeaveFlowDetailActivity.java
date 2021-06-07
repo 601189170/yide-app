@@ -34,6 +34,7 @@ import com.yyide.chatim.model.LeaveFlowBean;
 import com.yyide.chatim.presenter.leave.LeaveDetailPresenter;
 import com.yyide.chatim.utils.ButtonUtils;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.leave.LeaveDetailView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -325,6 +326,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                     tv_copyer_name.setText(listBean.getName());
                     showImage(listBean.getImage(),iv_user_head);
                     ll_copyer_list.addView(view1);
+                    setViewLayoutParams(view1, StatusBarUtils.dip2px(this,45),0);
                 }
             }
             if (leaveFlowCopyerList.size()>3){
@@ -439,5 +441,16 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             blank_page.setVisibility(View.GONE);
             cl_content.setVisibility(View.VISIBLE);
         }
+    }
+
+
+    /**
+     * 重设 view 的宽高
+     */
+    public static void setViewLayoutParams(View view, int nWidth, int nHeight) {
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
+        lp.width = nWidth;
+        lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        view.setLayoutParams(lp);
     }
 }
