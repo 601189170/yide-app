@@ -12,6 +12,7 @@
         android:theme="@style/CheckBoxTheme"
         android:clickable="false"
         android:enabled="false"
+        android:button="@null"
         android:background="@drawable/icon_checkbox_unenabled"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"

@@ -3,9 +3,12 @@ package com.yyide.chatim.activity.leave;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +43,11 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
 //    CheckBox checkBox;
     @BindView(R.id.tv_selected_member)
     TextView tv_selected_member;
+
+    @BindView(R.id.blank_page)
+    ConstraintLayout blank_page;
+    @BindView(R.id.gp_main_content)
+    Group gp_main_content;
     //private TreeRecyclerAdapter adapter = new TreeRecyclerAdapter(TreeRecyclerType.SHOW_EXPAND);
     List<AddressBookBean> noticeScopeBeans = new ArrayList<>();
 
@@ -391,12 +399,15 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
                 departmentTotal++;
             }
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
-            if (noticeScopeBeans.isEmpty()) {
-                ToastUtils.showShort("没有找到通知范围数据！");
-            }
+            showBlank(noticeScopeBeans.isEmpty());
+//            if (noticeScopeBeans.isEmpty()) {
+//                //ToastUtils.showShort("没有找到通知范围数据！");
+//                showBlank(noticeScopeBeans.isEmpty());
+//            }
             adapter.notifyDataSetChanged();
         } else {
             ToastUtils.showShort("请求数据失败:" + departmentScopeRsp.getMsg());
+            showBlank(true);
         }
     }
 
@@ -404,6 +415,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
     public void getDepartmentListFail(String msg) {
         Log.e(TAG, "getDepartmentListFail: " + "请求数据失败：" + msg);
         ToastUtils.showShort("请求数据失败：" + msg);
+        showBlank(true);
     }
 
     @Override
@@ -479,5 +491,10 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
     @Override
     public void getDeptMemberListFail(String msg) {
         Log.e(TAG, "getDeptMemberListFail: " + msg);
+    }
+
+    private void showBlank(boolean show){
+        blank_page.setVisibility(show?View.VISIBLE:View.GONE);
+        gp_main_content.setVisibility(show?View.GONE:View.VISIBLE);
     }
 }
