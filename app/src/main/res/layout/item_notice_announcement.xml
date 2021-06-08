@@ -26,17 +26,17 @@
 
         <TextView
             android:id="@+id/tv_notice"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="放假通知"
+            android:text=""
             android:textColor="@color/text_303133"
             android:textStyle="bold"
             android:textSize="@dimen/text_16"
             android:singleLine="true"
-            android:maxEms="5"
+            android:maxEms="12"
             android:layout_marginStart="@dimen/dp_50"
             android:layout_marginEnd="@dimen/dp_35"
-            app:layout_constraintLeft_toRightOf="@+id/iv_pic"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_pic" />
 
         <TextView
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:text="某某某老师发布"
+            android:text=""
             android:textColor="#ff909399"
             android:textSize="@dimen/text_12"
             app:layout_constraintStart_toStartOf="@+id/tv_notice"
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_15"
-            android:text="03.06 09:00"
+            android:text=""
             android:textColor="@color/text_909399"
             android:textSize="@dimen/text_12"
             app:layout_constraintBottom_toBottomOf="@+id/tv_notice_author"
@@ -75,33 +75,20 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_notice_author" />
 
         <TextView
-            android:id="@+id/tv_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="各位同事："
-            android:textColor="@color/text_666666"
-            android:textSize="@dimen/text_14"
-            android:layout_marginStart="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_20"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
-
-        <TextView
             android:id="@+id/tv_notice_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_20"
             android:layout_marginEnd="@dimen/dp_15"
             android:ellipsize="end"
             android:lines="3"
-            android:text="按照国家节假日某某某某某某某某某某某某某某某某某按照国家节假日某某某某某某某某某某某某某某某某某
-某某某某某某某某某某某某某某某某"
+            android:text=""
             android:textColor="@color/text_666666"
             android:textSize="@dimen/text_13"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+            app:layout_constraintTop_toBottomOf="@+id/view" />
 
         <TextView
             android:id="@+id/tv_confirm"

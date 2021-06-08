@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -101,6 +102,8 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             String timingTime = noticeAnnouncementModel.getTimingTime();
             Log.e(TAG, "onBindViewHolder: timingTime="+timingTime);
             if (!TextUtils.isEmpty(timingTime)) {
+                holder1.tv_notice.setMaxEms(5);
+                holder1.tv_notice.setEllipsize(TextUtils.TruncateAt.END);
                 // DateUtils.formatTime(timingTime,)
                 long[] dateDiff = DateUtils.dateDiff(timingTime);
                 if (dateDiff.length == 4) {
@@ -138,6 +141,8 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
                             } else {
                                 this.cancel();
                                 ((Activity) context).runOnUiThread(() -> {
+                                    holder1.tv_notice.setMaxEms(12);
+                                    holder1.tv_notice.setEllipsize(TextUtils.TruncateAt.END);
                                     noticeAnnouncementModel.setTimingTime(null);
                                     holder1.tv_timed_send_time.setVisibility(View.GONE);
                                 });
@@ -148,6 +153,8 @@ public class PublishNoticeAnnouncementListAdapter extends RecyclerView.Adapter {
                     timer.schedule(timerTask,0,1000);
                 }
             } else {
+                holder1.tv_notice.setMaxEms(12);
+                holder1.tv_notice.setEllipsize(TextUtils.TruncateAt.END);
                 holder1.tv_timed_send_time.setVisibility(View.GONE);
             }
 
