@@ -56,7 +56,7 @@ public class FaceUploadPresenter extends BasePresenter<FaceUploadView> {
         } else {
             Map<String, RequestBody> params = new HashMap<>();
             params.put("name", convertToRequestBody(name));
-            params.put("depId", convertToRequestBody("" + depId));
+            //params.put("depId", convertToRequestBody("" + depId));
             File file = new File(facePath);
             boolean exists = file.exists();
             Log.e("FaceUploadPresenter", facePath + "数据是否存在: " + exists);
