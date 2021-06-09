@@ -86,9 +86,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     TextView title;
 
     private GetUserSchoolRsp.DataBean userInfo;
-
     private int classesId;
-    private int depId;
     private String realname;
 
     @Override
@@ -107,9 +105,8 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         }
         initData();
         classesId = SpData.getIdentityInfo().classesId;
-        depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
-        Log.e(TAG, "getFaceData: name=" + realname + ",classId=" + classesId + ",depId=" + depId);
+        Log.e(TAG, "getFaceData: name=" + realname + ",classId=" + classesId);
     }
 
     @Override
@@ -132,7 +129,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname, classesId, depId);
+        mvpPresenter.getFaceData(realname, classesId);
     }
 
     @Override

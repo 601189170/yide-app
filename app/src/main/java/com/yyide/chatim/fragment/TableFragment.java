@@ -114,24 +114,22 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                 if (dataBean != null) {
                     setTableMsg(dataBean);
                 } else {
-                    className.setText("今日课已上完");
-                    subjectName.setText("");
-                    time.setText("");
-                    tips.setText("");
-                    table_next.setVisibility(View.GONE);
-                    iv_tips.setVisibility(View.GONE);
-                    iv_logo.setVisibility(View.GONE);
+                    setDefaultView();
                 }
             } else {
-                className.setText("今日课已上完");
-                subjectName.setText("");
-                time.setText("");
-                tips.setText("");
-                table_next.setVisibility(View.GONE);
-                iv_tips.setVisibility(View.GONE);
-                iv_logo.setVisibility(View.GONE);
+                setDefaultView();
             }
         }
+    }
+
+    private void setDefaultView() {
+        className.setText("今日课已上完");
+        subjectName.setText("");
+        time.setText("");
+        tips.setText("");
+        table_next.setVisibility(View.GONE);
+        iv_tips.setVisibility(View.GONE);
+        iv_logo.setVisibility(View.GONE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -171,6 +169,6 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
 
     @Override
     public void SelectSchByTeaidFail(String msg) {
-
+        setDefaultView();
     }
 }

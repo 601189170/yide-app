@@ -1,15 +1,18 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.blankj.utilcode.util.MetaDataUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.contrarywind.adapter.WheelAdapter;
@@ -41,6 +44,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentAttendanceBinding mViewBinding;
     private int index;
+
     public static TeacherStudentAttendanceFragment newInstance(int index) {
         TeacherStudentAttendanceFragment fragment = new TeacherStudentAttendanceFragment();
         Bundle args = new Bundle();
@@ -142,7 +146,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     @SuppressLint("SetTextI18n")
     private void setDataView(AttendanceCheckRsp.DataBean item) {
         if (item.getAttendancesForm() != null && item.getAttendancesForm().size() > 0) {
-            if(item.getAttendancesForm().size() < index){
+            if (item.getAttendancesForm().size() < index) {
                 index = 0;
             }
             itemStudents = item.getAttendancesForm().get(index).getStudents();
@@ -242,9 +246,31 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean, BaseViewHolder>(R.layout.item_attendance_student) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item) {
-            holder.setText(R.id.tv_student_name, item.getName())
-                    .setText(R.id.tv_student_time, item.getTime())
+            holder.setText(R.id.tv_student_name, !TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名")
                     .setText(R.id.tv_status, item.getStatusType());
+            if (!TextUtils.isEmpty(item.getStatus())) {
+                switch (item.getStatus()) {
+                    case "0"://正常
+//                        status = "正常";
+                        break;
+                    case "1"://缺勤
+//                        status = "缺勤";
+                        break;
+                    case "2"://迟到
+                        TextView tvTime = holder.getView(R.id.tv_student_time);
+                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        tvTime.setTextColor(Color.parseColor("#F66C6C"));
+                        break;
+                    case "3"://早退
+                        break;
+                    case "4":
+                        String startTime = DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                        String endTime = DateUtils.formatTime(item.getEndDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                        holder.setText(R.id.tv_student_event, "请假时间");
+                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
+                        break;
+                }
+            }
         }
     };
 

@@ -116,11 +116,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         childFragmentManager = getChildFragmentManager();
-        fragmentTransaction = childFragmentManager.beginTransaction();
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         initVerticalTextview();
+        initFragment();
         mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
     }
@@ -195,55 +195,90 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     private FragmentManager childFragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    void setFragment() {
-        clearFragment();
+    private void replaceFragment() {
+        fragmentTransaction = childFragmentManager.beginTransaction();
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
             //校长身份
             tableContent.setVisibility(View.GONE);
+            bannerContent.setVisibility(View.GONE);
+            workContent.setVisibility(View.GONE);
+            studentHonorContent.setVisibility(View.GONE);
+            classHonorContent.setVisibility(View.GONE);
+            kqContent.setVisibility(View.VISIBLE);
+            noticeContent.setVisibility(View.VISIBLE);
             //通知
-            fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
+            fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //班级考勤情况
-            fragmentTransaction.add(R.id.kq_content, AttendanceSchoolFragment.newInstance());
+            fragmentTransaction.replace(R.id.kq_content, AttendanceSchoolFragment.newInstance());
         } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             //家长身份
             tableContent.setVisibility(View.VISIBLE);
+            bannerContent.setVisibility(View.VISIBLE);
+            noticeContent.setVisibility(View.VISIBLE);
+            workContent.setVisibility(View.VISIBLE);
+            kqContent.setVisibility(View.VISIBLE);
+            studentHonorContent.setVisibility(View.VISIBLE);
+            classHonorContent.setVisibility(View.VISIBLE);
             //班级课表
-            fragmentTransaction.add(R.id.table_content, new TableFragment());
+            fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //通知
-            fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
+            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
-            fragmentTransaction.add(R.id.kq_content, new AttendanceParentsFragment());
+            fragmentTransaction.replace(R.id.kq_content, new AttendanceParentsFragment());
             //班级相册轮播
-            fragmentTransaction.add(R.id.banner_content, new BannerFragment());
+            fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
             //班级作业
-            fragmentTransaction.add(R.id.work_content, new WorkFragment());
+            fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级学生荣誉
-            fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
+            fragmentTransaction.replace(R.id.student_honor_content, new StudentHonorFragment());
         } else {
             tableContent.setVisibility(View.VISIBLE);
+            tableContent.setVisibility(View.VISIBLE);
+            bannerContent.setVisibility(View.VISIBLE);
+            workContent.setVisibility(View.VISIBLE);
+            studentHonorContent.setVisibility(View.VISIBLE);
+            classHonorContent.setVisibility(View.VISIBLE);
             //班级课表
-            fragmentTransaction.add(R.id.table_content, new TableFragment());
+            fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //通知
-            fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
+            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
-            fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
+            fragmentTransaction.replace(R.id.kq_content, new AttendanceFragment());
             //班级相册轮播
-            fragmentTransaction.add(R.id.banner_content, new BannerFragment());
+            fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
             //班级作业
-            fragmentTransaction.add(R.id.work_content, new WorkFragment());
+            fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级相册
-            fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
+            fragmentTransaction.replace(R.id.class_honor_content, new ClassHonorFragment());
             //班级学生荣誉
-            fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
+            fragmentTransaction.replace(R.id.student_honor_content, new StudentHonorFragment());
         }
         fragmentTransaction.commit();
     }
 
-    void clearFragment() {
-        int num = getFragmentManager().getBackStackEntryCount();
-        for (int i = 0; i < num; i++) {
-            getFragmentManager().popBackStack();
-        }
+    private void initFragment() {
+        fragmentTransaction = childFragmentManager.beginTransaction();
+        //班级课表
+        fragmentTransaction.add(R.id.table_content, new TableFragment());
+        //通知
+        fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
+        //班级考勤情况
+        fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
+        //班级相册轮播
+        fragmentTransaction.add(R.id.banner_content, new BannerFragment());
+        //班级作业
+        fragmentTransaction.add(R.id.work_content, new WorkFragment());
+        //班级相册
+        fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
+        //班级学生荣誉
+        fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
+        fragmentTransaction.commit();
+        tableContent.setVisibility(View.GONE);
+        tableContent.setVisibility(View.GONE);
+        bannerContent.setVisibility(View.GONE);
+        workContent.setVisibility(View.GONE);
+        studentHonorContent.setVisibility(View.GONE);
+        classHonorContent.setVisibility(View.GONE);
     }
 
     @Override
@@ -255,7 +290,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             SpData.setIdentityInfo(rsp);
         }
         setSchoolInfo();
-        setFragment();
+        replaceFragment();
     }
 
     void setSchoolInfo() {

@@ -80,8 +80,8 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         adapter = new NoBookItemAdapter();
         adapter2 = new NoBookItemAdapter();
         listview.setAdapter(adapter);
-        listview.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter.getItem(position).list, adapter.getItem(position).parentName, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name, "staff", "origin"));
-        listview2.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter2.getItem(position).list, adapter2.getItem(position).parentName, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name, "student", "origin"));
+        listview.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter.getItem(position).list, adapter.getItem(position).parentName, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name, "staff", ""));
+        listview2.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter2.getItem(position).list, adapter2.getItem(position).parentName, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name, "student", ""));
     }
 
     /**
@@ -95,7 +95,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         intent.putParcelableArrayListExtra("listBean", list);
         intent.putExtra("id", id);
         intent.putExtra("name", name);
-        intent.putExtra("schoolName", TextUtils.isEmpty(schoolName) ? pName.getText().toString().trim() : schoolName);
+        intent.putExtra("schoolName", schoolName);
         intent.putExtra("schoolType", schoolType);
         intent.putExtra("type", type);
         intent.putExtra("organization", organization);
@@ -152,7 +152,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
                 for (ListByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
                     listBeans1.add(listBean);
                 }
-                original.setOnClickListener(v -> setPostData(listBeans1, rsp.data.get(0).parentName, String.valueOf(rsp.data.get(0).id), rsp.data.get(0).name, "staff", ""));
+                original.setOnClickListener(v -> setPostData(listBeans1, rsp.data.get(0).parentName, String.valueOf(rsp.data.get(0).id), rsp.data.get(0).name, "staff", "origin"));
             }
             adapter.notifyData(listBeans1);
         }
@@ -165,14 +165,14 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             //小初高组织结构
             ArrayList<ListByAppRsp.DataBean.ListBean> listBeans = new ArrayList<>();
             if (rsp.data != null && rsp.data.size() > 0) {
+                ListByAppRsp.DataBean.ListBean item = new ListByAppRsp.DataBean.ListBean();
                 for (ListByAppRsp.DataBean listBean : rsp.data) {
-                    ListByAppRsp.DataBean.ListBean item = new ListByAppRsp.DataBean.ListBean();
                     item.name = listBean.name;
                     item.id = listBean.id;
                     item.list = listBean.list;
                     listBeans.add(item);
                 }
-                student.setOnClickListener(v -> setPostData(listBeans, pName.getText().toString().trim(), "", "", "student", "origin"));
+                student.setOnClickListener(v -> setPostData(listBeans, item.parentName, item.id + "", item.name, "student", "origin"));
             }
             listview2.setAdapter(adapter2);
             adapter2.notifyData(listBeans);

@@ -140,7 +140,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         //登录IM
         //处理失败时点击切换重新登录IM
         prepareThirdPushToken();
-
     }
 
     private void prepareThirdPushToken() {
@@ -153,7 +152,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         DemoLog.i(TAG, "onNewIntent");
         mCallModel = (CallModel) intent.getSerializableExtra(Constants.CHAT_INFO);
     }
-
 
     @Override
     protected MainPresenter createPresenter() {
@@ -266,7 +264,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             }
         }
     }
-
 
     @Override
     public void updateUnread(int count) {

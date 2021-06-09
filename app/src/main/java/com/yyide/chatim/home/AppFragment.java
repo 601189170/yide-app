@@ -132,7 +132,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
             recylAppAdapter.setPosition(position);
 //            recyclerViewApp.smoothScrollToPosition(position);
             recy.smoothScrollToPosition(position);
-            ((LinearLayoutManager)recyclerViewApp.getLayoutManager()).scrollToPositionWithOffset(position,0);
+            ((LinearLayoutManager) recyclerViewApp.getLayoutManager()).scrollToPositionWithOffset(position, 0);
         });
 
 //        recy.setNestedScrollingEnabled(false);
@@ -239,7 +239,14 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null && model.getData().getRecords() != null) {
                 recylAppAdapter.notifydata(model.getData().getRecords());
-                appAdapter.setList(model.getData().getRecords());
+                List<AppItemBean.DataBean.RecordsBean> records = model.getData().getRecords();
+//                if (records != null && records.size() > 0) {
+//                    for (int i = 0; i < 7; i++) {
+//                        AppItemBean.DataBean.RecordsBean item = new AppItemBean.DataBean.RecordsBean();
+//                        records.add(item);
+//                    }
+//                }
+                appAdapter.setList(records);
             }
         }
     }

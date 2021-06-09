@@ -199,7 +199,6 @@ public class WebViewActivity extends BaseActivity {
                     mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
                 }
                 mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
-                mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
             }
 
             @Override
@@ -284,51 +283,18 @@ public class WebViewActivity extends BaseActivity {
     }
 
     @JavascriptInterface
-    public String getToken() {
-        if (mWebView != null) {
-            mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
-        }
-        return SpData.User() != null ? SpData.User().getToken() : "";
-    }
-
-    @JavascriptInterface
-    public void postMessage(String msg) {
+    public String postMessage(String msg) {
         if (!TextUtils.isEmpty(msg)) {
             WebModel webModel = JSON.parseObject(msg, WebModel.class);
             if (webModel != null) {
                 if ("backApp".equalsIgnoreCase(webModel.getEnentName())) {
                     finish();
+                } else if ("getToken".equalsIgnoreCase(webModel.getEnentName())) {
+                    return SpData.User() != null ? SpData.User().getToken() : "";
                 }
             }
         }
-    }
-
-    /**
-     * 获取软键盘的高度 * *
-     *
-     * @param rootView *
-     */
-    int heightDifference;
-
-    private int getSoftKeyboardHeight(View rootView) {
-        final ViewTreeObserver.OnGlobalLayoutListener layoutListener
-                = new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect rect = new Rect();
-                rootView.getWindowVisibleDisplayFrame(rect);
-                int screenHeight = rootView.getRootView().getHeight();
-                heightDifference = screenHeight - rect.bottom;
-                //设置一个阀值来判断软键盘是否弹出
-                boolean visible = heightDifference > screenHeight / 3;
-                if (visible) {
-                    rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            }
-
-        };
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
-        return heightDifference;
+        return "";
     }
 
     @Override

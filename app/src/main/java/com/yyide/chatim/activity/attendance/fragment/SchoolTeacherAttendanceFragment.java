@@ -130,7 +130,7 @@ public class SchoolTeacherAttendanceFragment extends BaseMvpFragment<AttendanceC
             case R.id.tv_normal:
                 mViewBinding.tvNormal.setChecked(true);
                 mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemStudents != null ? itemStudents.getPeople() : null);
+                adapter.setList(itemStudents != null ? itemStudents.getApplyPeople() : null);
                 break;
         }
     }
@@ -138,7 +138,8 @@ public class SchoolTeacherAttendanceFragment extends BaseMvpFragment<AttendanceC
     @SuppressLint("SetTextI18n")
     private void setDataView(AttendanceCheckRsp.DataBean item) {
         if (item.getAttendancesForm() != null && item.getAttendancesForm().size() > 0) {
-            if (item.getAttendancesForm().size() < index) {
+            index = item.getSchoolPeopleAllForm() != null ? index - item.getSchoolPeopleAllForm().size() : 0;
+            if (index > item.getAttendancesForm().size()) {
                 index = 0;
             }
             itemStudents = item.getAttendancesForm().get(index).getTeachers();

@@ -47,14 +47,37 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
     public View getView(ViewGroup container, final int position) {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.item_attendance_parents, null);
         AttendanceCheckRsp.DataBean.AttendancesFormBean item = list.get(position);
-        if(item != null && item.getStudents() != null){
+        if (item != null && item.getStudents() != null) {
             AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = item.getStudents();
             TextView attendanceName = view.findViewById(R.id.tv_attendance_type);
+            TextView tv_desc = view.findViewById(R.id.tv_desc);
             TextView tv_attendance_time = view.findViewById(R.id.tv_attendance_time);
             TextView tv_attendance_status = view.findViewById(R.id.tv_attendance_status);
             attendanceName.setText(students.getName());
             tv_attendance_status.setText(students.getStatusType());
-            tv_attendance_time.setText("打卡时间：" + students.getApplyDate());
+            tv_desc.setText(students.getSubjectName());
+            if (!TextUtils.isEmpty(students.getType())) {
+                switch (students.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
+                    case "0":
+                        tv_attendance_time.setText("打卡时间：" + students.getApplyDate());
+                        break;
+                    case "1":
+                        tv_attendance_time.setText("缺勤时间：" + students.getApplyDate());
+                        break;
+                    case "2":
+                        tv_attendance_time.setText("迟到时间：" + students.getApplyDate());
+                        break;
+                    case "3":
+                        tv_attendance_time.setText("早退时间：" + students.getApplyDate());
+                        break;
+                    case "4":
+                        tv_attendance_time.setText("请假时间：" + students.getStartTime());
+                        break;
+                    default:
+                        tv_attendance_time.setText("未打卡");
+                        break;
+                }
+            }
             view.setOnClickListener(v -> {
                 AttendanceActivity.start(view.getContext(), item.getPeopleType(), position);
             });

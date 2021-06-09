@@ -110,7 +110,7 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
     public List<NoteTabBean> remove(int position) {
         List<NoteTabBean> noteTabBeans = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            if (i < position) {
+            if (position > i) {
                 noteTabBeans.add(list.get(i));
             }
         }

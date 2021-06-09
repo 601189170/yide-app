@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -28,15 +28,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
-                    android:orientation="horizontal"
                     android:layout_marginStart="@dimen/dp_8"
-                    android:layout_marginEnd="@dimen/dp_8">
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:orientation="horizontal">
 
                     <FrameLayout
                         android:id="@+id/table_content"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <FrameLayout
                         android:id="@+id/notice_content"
@@ -49,8 +49,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="3dp">
+                    android:orientation="horizontal">
 
                     <FrameLayout
                         android:id="@+id/kq_content"
@@ -120,6 +119,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </com.yyide.chatim.widget.VpSwipeRefreshLayout>
 </LinearLayout>

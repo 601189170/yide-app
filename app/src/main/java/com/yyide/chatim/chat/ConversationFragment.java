@@ -88,6 +88,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     @BindView(R.id.tv_unNum)
     TextView tv_unNum;
     private int nextSeq = 0;
+    private int total = 0;
+    private int msgTotal = 0;
 
     @Nullable
     @Override
@@ -168,13 +170,13 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 //        titleBarLayout.setBackgroundColor(R.color.black);
 //使设置好的布局参数应用到控件
 //        imageView.setLayoutParams(params);
-        //mvpPresenter.getUserNoticePage(1, 1);
+        mvpPresenter.getUserNoticePage(1, 1);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
     }
 
     private void initTitleAction() {
@@ -283,13 +285,27 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         if (userNoticeRsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
             List<UserMsgNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
             if (records != null && records.size() > 0) {
-                final int total = userNoticeRsp.getData().getTotal();
-                tv_unNum.setVisibility(View.VISIBLE);
-                tv_unNum.setText(total + "");
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN_MESSAGE_NUMBER, "", total));
-            } else {
-                tv_unNum.setVisibility(View.GONE);
+                total = userNoticeRsp.getData().getTotal();
+                setMessageCount(total + msgTotal);
             }
+        }
+    }
+
+    /**
+     * 设置未读数量
+     *
+     * @param count
+     */
+    private void setMessageCount(int count) {
+        if (count > 0) {
+            tv_unNum.setVisibility(View.VISIBLE);
+            if (count > 99) {
+                tv_unNum.setText("99+");
+            } else {
+                tv_unNum.setText(count + "");
+            }
+        } else {
+            tv_unNum.setVisibility(View.GONE);
         }
     }
 
@@ -306,7 +322,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -314,8 +330,9 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         if (BaseConstant.TYPE_IM_LOGIN.equals(messageEvent.getCode()) ||
                 BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             initView();
-        } else if (BaseConstant.TYPE_MESSAGE_UPDATE.equals(messageEvent.getCode())) {
-            //mvpPresenter.getUserNoticePage(1, 1);
+        } else if (BaseConstant.TYPE_MESSAGE_NUM.equals(messageEvent.getCode())) {
+            msgTotal = messageEvent.getCount();
+            setMessageCount(msgTotal + total);
         }
     }
 

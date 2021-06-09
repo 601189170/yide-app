@@ -42,7 +42,8 @@ public class AttendanceAdapter extends LoopPagerAdapter {
             , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
     };
     private boolean isSchool;
-    public void setIsSchool(boolean isSchool){
+
+    public void setIsSchool(boolean isSchool) {
         this.isSchool = isSchool;
     }
 
@@ -75,6 +76,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         qj.setText(item.getLeave() + " 人");
         number.setText(item.getNumber() + " 人");
         PieChart piechart = view.findViewById(R.id.piechart);
+        piechart.setTouchEnabled(false);
         InitPieChart.InitPieChart(((Activity) container.getContext()), piechart);
         List<PieEntry> entries = new ArrayList<>();
         int absence = item.getAbsence();
@@ -100,8 +102,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         view.setOnClickListener(v -> {
             AttendanceActivity.start(view.getContext(), item.getPeopleType(), position);
         });
-        constraintLayout5.setOnClickListener(v -> AttendanceActivity.start(view.getContext(), item.getPeopleType(), position));
-
+        piechart.setOnClickListener(v -> AttendanceActivity.start(view.getContext(), item.getPeopleType(), position));
         return view;
     }
 
