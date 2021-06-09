@@ -260,5 +260,9 @@ public class DayStatisticsFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewBinding = null;
+    }
 }

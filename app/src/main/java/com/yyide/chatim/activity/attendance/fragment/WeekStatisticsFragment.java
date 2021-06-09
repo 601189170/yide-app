@@ -206,4 +206,10 @@ public class WeekStatisticsFragment extends Fragment {
         });
 
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewBinding = null;
+    }
 }

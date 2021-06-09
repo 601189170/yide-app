@@ -65,7 +65,6 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
         title.setText(R.string.notice_announcement_title);
         EventBus.getDefault().register(this);
         hasNoticePermission = MMKV.defaultMMKV().decodeBool("hasNoticePermission",false);
-        //hasNoticePermission = getIntent().getBooleanExtra("hasNoticePermission", false);
         initViewPager();
     }
 
@@ -75,10 +74,12 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
             floatingActionButton.setVisibility(View.GONE);
             mTablayout.setVisibility(View.GONE);
         }
-        NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");//我的通知
+        //我的通知
+        NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");
         fragments.add(my_notice);
         if (SpData.getIdentityInfo().staffIdentity() && hasNoticePermission){
-            PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");//我的发布
+            //我的发布
+            PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");
             fragments.add(my_release);
         }
         mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
@@ -98,15 +99,12 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
                 return fragments.size();
             }
         });
-        new TabLayoutMediator(mTablayout, mViewpager, true, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                //这里需要根据position修改tab的样式和文字等
-                if (position == 0) {
-                    tab.setText(R.string.notice_tab_my_notice);
-                } else {
-                    tab.setText(R.string.notice_tab_my_release);
-                }
+        new TabLayoutMediator(mTablayout, mViewpager, true, (tab, position) -> {
+            //这里需要根据position修改tab的样式和文字等
+            if (position == 0) {
+                tab.setText(R.string.notice_tab_my_notice);
+            } else {
+                tab.setText(R.string.notice_tab_my_release);
             }
         }).attach();
     }
