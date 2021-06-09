@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.NoticeAnnouncementModel;
+import com.yyide.chatim.utils.StringUtils;
 import com.yyide.chatim.view.FootView;
 
 import java.util.List;
@@ -89,7 +90,8 @@ public class NoticeAnnouncementListAdapter extends RecyclerView.Adapter {
             holder1.tv_notice.setText(noticeAnnouncementModel.getNoticeTitle());
             holder1.tv_notice_time.setText(noticeAnnouncementModel.getNoticeTime());
             holder1.tv_notice_author.setText(String.format(context.getString(R.string.notice_release_obj_text),noticeAnnouncementModel.getNoticeAuthor()));
-            holder1.tv_notice_content.setText(noticeAnnouncementModel.getNoticeContent());
+            final String content = noticeAnnouncementModel.getNoticeContent();
+            holder1.tv_notice_content.setText(StringUtils.firstLineRetractText(context,content));
 
             if ("1".equals(noticeAnnouncementModel.getStatus())){
                 holder1.tv_confirm.setText("已确认");

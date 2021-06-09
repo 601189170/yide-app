@@ -23,6 +23,7 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -106,7 +107,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
 //                jump = true;
                 notice_content.setVisibility(View.VISIBLE);
                 tv_null_notice.setVisibility(View.GONE);
-                notice_content.setText(data.getContent());
+                notice_content.setText(StringUtils.firstLineRetractText(getContext(),data.getContent()));
                 notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(), "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
                 if (!TextUtils.isEmpty(data.getTitle())) {
                     tv_title.setVisibility(View.VISIBLE);

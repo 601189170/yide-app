@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.notice;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -126,5 +127,6 @@ public class NoticeTemplateActivity extends BaseMvpActivity<NoticeTemplatePresen
     @Override
     public void templateTypeFail(String msg) {
         Log.e(TAG, "templateTypeFail: "+msg );
+        mTablayout.setVisibility(View.GONE);
     }
 }

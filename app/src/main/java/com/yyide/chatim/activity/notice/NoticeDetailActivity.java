@@ -20,6 +20,7 @@ import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -193,7 +194,8 @@ public class NoticeDetailActivity extends BaseMvpActivity<NoticeDetailPresenter>
                 tv_notice_title.setText(data.getTitle());
                 tv_notice_author.setText(String.format(this.getString(R.string.notice_release_obj_text), data.getProductionTarget()));
                 tv_notice_time.setText(productionTime);
-                tv_notice_content.setText(Html.fromHtml(data.getContent()));
+                final String content = data.getContent();
+                tv_notice_content.setText(StringUtils.firstLineRetractText(this,content));
 
                 //notice_confirm_number_text
                 String string = getString(R.string.notice_confirm_number_text);
