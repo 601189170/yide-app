@@ -119,18 +119,16 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
                         .setText(R.id.tv_notice_content, Html.fromHtml(o.getContent()));
             }
         };
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                Log.e(TAG, "onItemClick: "+position );
-                TemplateListRsp.DataBean.RecordsBean recordsBean = (TemplateListRsp.DataBean.RecordsBean)adapter.getData().get(position);
-                Intent intent = new Intent(getActivity(), NoticeCreateActivity.class);
-                intent.putExtra("name",recordsBean.getName());
-                intent.putExtra("content",recordsBean.getContent());
-                intent.putExtra("template",true);
-                startActivity(intent);
-                getActivity().finish();
-            }
+
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            Log.e(TAG, "onItemClick: "+position );
+            TemplateListRsp.DataBean.RecordsBean recordsBean = (TemplateListRsp.DataBean.RecordsBean)adapter.getData().get(position);
+            Intent intent = new Intent(getActivity(), NoticeCreateActivity.class);
+            intent.putExtra("name",recordsBean.getName());
+            intent.putExtra("content",recordsBean.getContent());
+            intent.putExtra("template",true);
+            startActivity(intent);
+            getActivity().finish();
         });
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -166,8 +164,7 @@ public class NoticeTemplateListFragment extends BaseMvpFragment<NoticeTemplateLi
             if (!records.isEmpty()){
                 load = true;
                 list.clear();
-                List<TemplateListRsp.DataBean.RecordsBean> messages = records;
-                list.addAll(messages);
+                list.addAll(records);
                 adapter.setList(list);
             }
         }
