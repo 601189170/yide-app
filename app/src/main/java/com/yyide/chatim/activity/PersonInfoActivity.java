@@ -127,7 +127,7 @@ public class PersonInfoActivity extends BaseActivity {
                 }
             }
             subject.setText(TextUtils.isEmpty(stringBuffer.toString()) ? "暂无科目" : stringBuffer.toString());
-            sex.setText(!TextUtils.isEmpty(bean.sex) ? "0".equals(bean.sex) ? "男" : "女" : "无");
+            sex.setText(!TextUtils.isEmpty(bean.sex) ? "1".equals(bean.sex) ? "男" : "女" : "无");
             tv_class_name.setText(TextUtils.isEmpty(bean.classesName) ? "未知班级" : bean.classesName);
             phone.setText(!TextUtils.isEmpty(bean.phone) ? setMobile(bean.phone) : "暂无手机号码");
             address.setText(!TextUtils.isEmpty(bean.address) ? bean.address : "暂无住址");

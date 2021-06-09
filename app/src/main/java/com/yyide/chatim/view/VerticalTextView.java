@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -99,6 +100,8 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
         TextView tv = new TextView(context);
         tv.setTextColor(Color.parseColor("#1F2833"));
         tv.setTextSize(14);
+        tv.setSingleLine();
+        tv.setEllipsize(TextUtils.TruncateAt.END);
         tv.setClickable(true);
         tv.setOnClickListener(v -> {
             if (itemClickListener != null && textList.size() > 0 && index != -1) {

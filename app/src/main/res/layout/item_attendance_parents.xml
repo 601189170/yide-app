@@ -23,7 +23,7 @@
         android:layout_height="75dp"
         android:layout_marginStart="@dimen/dp_50"
         android:layout_marginTop="@dimen/dp_15"
-        android:src="@drawable/icon_attendance_normal"
+        android:src="@mipmap/icon_home_attendance_normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_attendance_type" />
 
@@ -32,7 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_8"
-        android:text="课堂"
         android:textColor="@color/text_1E1E1E"
         android:textSize="@dimen/text_18"
         android:textStyle="bold"
@@ -40,19 +39,23 @@
         app:layout_constraintStart_toStartOf="@+id/img"
         app:layout_constraintTop_toBottomOf="@+id/img" />
 
-    <androidx.constraintlayout.widget.Guideline
+    <View
         android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        android:layout_width="1dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="@dimen/dp_30"
+        android:background="#EEF2F8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img" />
 
     <TextView
         android:id="@+id/tv_attendance_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:textColor="#ff1e1e1e"
+        android:layout_marginStart="@dimen/dp_12"
+        android:textColor="#2C8AFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -62,10 +65,10 @@
         android:id="@+id/tv_attendance_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_12"
         android:textColor="#ff909399"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/tv_attendance_status"
         app:layout_constraintTop_toBottomOf="@+id/tv_attendance_status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

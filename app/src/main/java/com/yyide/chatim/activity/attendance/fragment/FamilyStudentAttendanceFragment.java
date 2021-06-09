@@ -17,15 +17,14 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentFamilyHeadBinding;
-import com.yyide.chatim.dialog.AttendancePop;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.presenter.AttendanceCheckPresenter;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.AttendanceCheckView;
 
 import org.jetbrains.annotations.NotNull;
@@ -120,36 +119,43 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
             if (students != null) {
                 ImageView img = holder.getView(R.id.iv_img);
                 TextView leave_desc = holder.getView(R.id.tv_attendance_leave_desc);
-                holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, students.getTime()))
-                        .setText(R.id.tv_attendance_time, getString(R.string.attendance_time_text, students.getRequiredTime()))
-                        .setText(R.id.tv_event_name, students.getSection() > 0 ? students.getSubjectName() : students.getName());
-
+                holder.setText(R.id.tv_event_name, !TextUtils.isEmpty(students.getSubjectName()) ? students.getSubjectName() : students.getThingName());
+//                if(){
+                    holder.setText(R.id.tv_attendance_time, getString(R.string.attendance_time_text, students.getApplyDate()));
+//                } else {
+//                    holder.setText(R.id.tv_attendance_time, getString(R.string.attendance_leave_time_text, students.getApplyDate()));
+//                }
                 if (!TextUtils.isEmpty(students.getType())) {
                     switch (students.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                         case "0":
                             leave_desc.setText("正常");
                             leave_desc.setTextColor(Color.parseColor("#5DADFF"));
                             img.setImageResource(R.drawable.icon_attendance_normal);
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, students.getApplyDate()));
                             break;
                         case "1":
-                            leave_desc.setText("未签退");
+                            leave_desc.setText("缺勤");
                             leave_desc.setTextColor(Color.parseColor("#919399"));
                             img.setImageResource(R.drawable.icon_attendance_no_sign_in);
+//                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, students.getApplyDate()));
                             break;
                         case "2":
                             leave_desc.setText("迟到");
                             leave_desc.setTextColor(Color.parseColor("#F66C6C"));
                             img.setImageResource(R.drawable.icon_attendance_late);
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_time_text, students.getTime()));
                             break;
                         case "3":
                             leave_desc.setText("早退");
                             leave_desc.setTextColor(Color.parseColor("#63DAAB"));
                             img.setImageResource(R.drawable.icon_attendance_leave_early);
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_time_text, DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm")));
                             break;
                         case "4":
                             leave_desc.setText("请假");
                             leave_desc.setTextColor(Color.parseColor("#F6BD16"));
                             img.setImageResource(R.drawable.icon_attendance_ask_for_leave);
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_ask_leave_text, students.getStartTime()+ "-" + students.getEndTime()));
                             break;
                     }
                 }

@@ -11,12 +11,17 @@ import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.fragment.TodoMsgPageFragment;
 import com.yyide.chatim.model.TodoRsp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -30,10 +35,12 @@ public class TodoMsgFragment extends BaseFragment {
     CheckedTextView tab2;
     @BindView(R.id.tab3)
     CheckedTextView tab3;
+    @BindView(R.id.viewpager)
+    ViewPager viewpager;
     private View mBaseView;
-    @BindView(R.id.content)
-    FrameLayout content;
     private int type;
+    private List<Fragment> fragments = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +52,52 @@ public class TodoMsgFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
-        if(type > 0){
+
+        fragments.add(TodoMsgPageFragment.newInstance(3));
+        fragments.add(TodoMsgPageFragment.newInstance(0));
+        fragments.add(TodoMsgPageFragment.newInstance(1));
+        viewpager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+            @Override
+            public Fragment getItem(int position) {
+                return fragments.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return fragments.size();
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                switch (position) {
+                    case 0:
+                        return "全部";
+                    case 1:
+                        return "待办";
+                    case 2:
+                        return "已办";
+                }
+                return null;
+            }
+        });
+
+        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                setTab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        if (type > 0) {
             setTab(type);
         } else {
             setTab(0);
@@ -84,41 +136,19 @@ public class TodoMsgFragment extends BaseFragment {
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
-        FragmentManager fm = getChildFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
-        Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
-        Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
-        if (fg1 != null) ft.hide(fg1);
-        if (fg2 != null) ft.hide(fg2);
-        if (fg3 != null) ft.hide(fg3);
-
         switch (position) {//0待办 1 已拒绝 3全部
             case 0:
-                if (fg1 == null) {
-                    fg1 = TodoMsgPageFragment.newInstance(3);
-                    ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));
-                } else
-                    ft.show(fg1);
+                viewpager.setCurrentItem(0);
                 tab1.setChecked(true);
                 break;
             case 1:
-                if (fg2 == null) {
-                    fg2 = TodoMsgPageFragment.newInstance(0);
-                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
-                } else
-                    ft.show(fg2);
+                viewpager.setCurrentItem(1);
                 tab2.setChecked(true);
                 break;
             case 2:
-                if (fg3 == null) {
-                    fg3 = TodoMsgPageFragment.newInstance(1);
-                    ft.add(R.id.content, fg3, String.valueOf(tab3.getId()));
-                } else
-                    ft.show(fg3);
+                viewpager.setCurrentItem(2);
                 tab3.setChecked(true);
                 break;
         }
-        ft.commitAllowingStateLoss();
     }
 }

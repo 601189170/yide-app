@@ -88,8 +88,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     @BindView(R.id.tv_unNum)
     TextView tv_unNum;
     private int nextSeq = 0;
-    private int total = 0;
-    private int msgTotal = 0;
 
     @Nullable
     @Override
@@ -285,8 +283,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         if (userNoticeRsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
             List<UserMsgNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
             if (records != null && records.size() > 0) {
-                total = userNoticeRsp.getData().getTotal();
-                setMessageCount(total + msgTotal);
+                int total = userNoticeRsp.getData().getTotal();
+                setMessageCount(total);
             }
         }
     }
@@ -330,9 +328,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         if (BaseConstant.TYPE_IM_LOGIN.equals(messageEvent.getCode()) ||
                 BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             initView();
-        } else if (BaseConstant.TYPE_MESSAGE_NUM.equals(messageEvent.getCode())) {
-            msgTotal = messageEvent.getCount();
-            setMessageCount(msgTotal + total);
         }
     }
 

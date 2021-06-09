@@ -42,7 +42,6 @@ public class NoBookItemAdapter extends BaseAdapter {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.notebook_item, null, false);
         TextView item = VHUtil.ViewHolder.get(view, R.id.name);
         item.setText(getItem(position).name);
-
         return view;
     }
     public void notifyData(List<ListByAppRsp.DataBean.ListBean> list) {

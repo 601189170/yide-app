@@ -116,7 +116,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             PieChart piechart = holder.getView(R.id.piechart);
             if (item1 != null) {
                 holder.setText(R.id.tv_attendance_type, item1.getAttName());
-                holder.setText(R.id.tv_desc, "0".equals(item1.getAttendanceType()) ? "签到" : "签退");
+                holder.setText(R.id.tv_desc, item1.getThingName());
                 setPieChart(item1, piechart);
                 constraintLayout1.setOnClickListener(v -> {
                     AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
@@ -127,7 +127,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             if (item2 != null) {
                 constraintLayout2.setVisibility(View.VISIBLE);
                 holder.setText(R.id.tv_attendance_type2, item2.getAttName());
-                holder.setText(R.id.tv_desc2, "0".equals(item2.getAttendanceType()) ? "签到" : "签退");
+                holder.setText(R.id.tv_desc2, item1.getThingName());
                 constraintLayout2.setOnClickListener(v -> {
                     AttendanceActivity.start(getContext(), item2.getPeopleType(), item2.getIndex());
                 });

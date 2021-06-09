@@ -146,7 +146,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onRefresh() {
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
-        mvpPresenter.getUserSchool();
+        //mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
     }
 
@@ -331,6 +331,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     @Override
     public void getIndexMyNotice(TodoRsp rsp) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
             tv_todo.setVisibility(View.VISIBLE);

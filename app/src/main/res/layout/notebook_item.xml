@@ -13,7 +13,6 @@
             android:layout_height="wrap_content" />
         <TextView
             android:layout_marginLeft="62dp"
-            android:text="教务部"
             android:textColor="@color/text_212121"
             android:textSize="@dimen/sp_14"
             android:layout_gravity="center_vertical"

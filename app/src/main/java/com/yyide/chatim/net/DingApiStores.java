@@ -233,6 +233,11 @@ public interface DingApiStores {
 
     //查询应用列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/application/me/sort")
+    Observable<ResultBean> sort(@Body RequestBody requestBody);
+
+    //查询应用列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/backstage/cloud-backstage/application/search")
     Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
 

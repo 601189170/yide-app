@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.appbar.AppBarLayout;
 import com.yyide.chatim.R;
@@ -41,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import lombok.val;
 
 
 public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView, SwipeRefreshLayout.OnRefreshListener {
@@ -178,6 +182,21 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         rightBtn.setOnClickListener(v -> {
             startActivity(new Intent(mActivity, AppManagerActivity.class));
         });
+
+    }
+
+    private void setListViewHeight(RecyclerView listView) {
+        int totalHeight = 0;
+        int i = 0;
+        int len = listView.getAdapter().getItemCount();
+        while (i < len) {
+            View childView = listView.getLayoutManager().findViewByPosition(i);
+            totalHeight += childView.getHeight() + SizeUtils.dp2px(10);
+            i++;
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + ScreenUtils.getScreenHeight();
+        listView.setLayoutParams(params);
     }
 
     @Override
@@ -240,13 +259,8 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
             if (model.getData() != null && model.getData().getRecords() != null) {
                 recylAppAdapter.notifydata(model.getData().getRecords());
                 List<AppItemBean.DataBean.RecordsBean> records = model.getData().getRecords();
-//                if (records != null && records.size() > 0) {
-//                    for (int i = 0; i < 7; i++) {
-//                        AppItemBean.DataBean.RecordsBean item = new AppItemBean.DataBean.RecordsBean();
-//                        records.add(item);
-//                    }
-//                }
                 appAdapter.setList(records);
+                recyclerViewApp.getViewTreeObserver().addOnGlobalLayoutListener(() -> setListViewHeight(recyclerViewApp));
             }
         }
     }

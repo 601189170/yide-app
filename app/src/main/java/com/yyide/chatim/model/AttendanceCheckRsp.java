@@ -112,6 +112,9 @@ public class AttendanceCheckRsp {
                 private String peopleType;//N 老师 Y 学生
                 private String type;
                 private String time;
+                private String deviceName;
+                private String thingName;
+                private String IdentityType;//N 学生考勤 Y 事件考勤
                 private List<?> studentIds;
                 private List<PeopleBean> people;
                 private List<PeopleBean> latePeople;
@@ -130,7 +133,7 @@ public class AttendanceCheckRsp {
 
                 public String getStatusType() {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                     String str = "";
-                    if(TextUtils.isEmpty(type)){
+                    if (TextUtils.isEmpty(type)) {
                         return str;
                     }
                     switch (type) {
@@ -159,6 +162,22 @@ public class AttendanceCheckRsp {
 
                 public void setTime(String time) {
                     this.time = time;
+                }
+
+                public String getDeviceName() {
+                    return deviceName;
+                }
+
+                public void setDeviceName(String deviceName) {
+                    this.deviceName = deviceName;
+                }
+
+                public String getThingName() {
+                    return thingName;
+                }
+
+                public void setThingName(String thingName) {
+                    this.thingName = thingName;
                 }
 
                 public String getAttendanceData() {
@@ -378,7 +397,7 @@ public class AttendanceCheckRsp {
 
                     public String getStatusType() {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                         String str = "";
-                        if(TextUtils.isEmpty(status)){
+                        if (TextUtils.isEmpty(status)) {
                             return "";
                         }
                         switch (status) {
@@ -766,6 +785,7 @@ public class AttendanceCheckRsp {
             private int absence;
             private int leave;
             private int index;
+            private int thingName;
             private String peopleType;//Y 老师 N 学生
             private String attName;
             private String attendanceType;
@@ -781,6 +801,14 @@ public class AttendanceCheckRsp {
 
             public void setAttendanceType(String attendanceType) {
                 this.attendanceType = attendanceType;
+            }
+
+            public int getThingName() {
+                return thingName;
+            }
+
+            public void setThingName(int thingName) {
+                this.thingName = thingName;
             }
 
             public int getIndex() {

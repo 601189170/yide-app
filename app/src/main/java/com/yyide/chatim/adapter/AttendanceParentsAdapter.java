@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,6 +22,7 @@ import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.InitPieChart;
 
 import java.util.ArrayList;
@@ -53,28 +55,27 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
             TextView tv_desc = view.findViewById(R.id.tv_desc);
             TextView tv_attendance_time = view.findViewById(R.id.tv_attendance_time);
             TextView tv_attendance_status = view.findViewById(R.id.tv_attendance_status);
+            ImageView img = view.findViewById(R.id.img);
             attendanceName.setText(students.getName());
             tv_attendance_status.setText(students.getStatusType());
-            tv_desc.setText(students.getSubjectName());
+            tv_desc.setText(TextUtils.isEmpty(students.getSubjectName()) ? students.getThingName() : students.getSubjectName());
             if (!TextUtils.isEmpty(students.getType())) {
                 switch (students.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                     case "0":
-                        tv_attendance_time.setText("打卡时间：" + students.getApplyDate());
+                    case "2":
+                    case "3":
+                        tv_attendance_time.setText("打卡时间：" + DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        img.setImageResource(R.mipmap.icon_home_attendance_normal);
+                        tv_attendance_status.setTextColor(Color.parseColor("#2C8AFF"));
                         break;
                     case "1":
-                        tv_attendance_time.setText("缺勤时间：" + students.getApplyDate());
-                        break;
-                    case "2":
-                        tv_attendance_time.setText("迟到时间：" + students.getApplyDate());
-                        break;
-                    case "3":
-                        tv_attendance_time.setText("早退时间：" + students.getApplyDate());
-                        break;
                     case "4":
-                        tv_attendance_time.setText("请假时间：" + students.getStartTime());
+                        tv_attendance_status.setTextColor(Color.parseColor("#919399"));
+                        img.setImageResource(R.mipmap.icon_home_attendance_absenteeism);
+                        //tv_attendance_time.setText("请假：" + students.getStartTime());
                         break;
                     default:
-                        tv_attendance_time.setText("未打卡");
+                        //tv_attendance_time.setText("未打卡");
                         break;
                 }
             }

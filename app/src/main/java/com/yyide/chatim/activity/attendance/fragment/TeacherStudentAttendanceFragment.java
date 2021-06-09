@@ -224,7 +224,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
             mViewBinding.tvAttendanceTitle.setText(itemStudents.getSection() > 0 ? itemStudents.getSubjectName() : itemStudents.getName());
             mViewBinding.tvDesc.setText(itemStudents.getName());
-            mViewBinding.tvAttendanceTime.setText("考勤时间 " + itemStudents.getRequiredTime());
+            mViewBinding.tvAttendanceTime.setText("考勤时间 " + itemStudents.getApplyDate());
             mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
             if (!TextUtils.isEmpty(itemStudents.getRate())) {
                 try {

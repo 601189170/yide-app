@@ -153,7 +153,12 @@
     <string name="attendance_title">考勤</string>
     <string name="statistics_title">统计</string>
     <string name="attendance_time_text">考勤时间 %s</string>
+    <string name="attendance_leave_time_text">离校时间 %s</string>
     <string name="attendance_punch_card_text">打卡时间：%s</string>
+    <string name="attendance_late_text">迟到时间：%s</string>
+    <string name="attendance_leave_text">早退时间：%s</string>
+    <string name="attendance_ask_leave_text">请假时间：%s</string>
+
     <string name="attendance_time_format">%d次</string>
     <string name="month">%d月</string>
     <string name="week">%s - %s</string>
