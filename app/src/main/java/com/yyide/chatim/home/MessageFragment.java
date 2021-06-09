@@ -58,8 +58,6 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     private View mBaseView;
     private int type = 0;
     private TodoMsgFragment fragment;
-    private int todoCount = 0;
-    private int messageCount = 0;
 
     @Nullable
     @Override
@@ -157,13 +155,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             setBookView();
         } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
-            todoCount = messageEvent.getCount();
-            Log.d(TAG, "TYPE_MESSAGE_TODO_NUM>>:" + messageCount);
-            setNumber(messageCount + todoCount);
-        } else if(BaseConstant.TYPE_MESSAGE_NUM.equals(messageEvent.getCode())){
-            messageCount = messageEvent.getCount();
-            Log.d(TAG, "TYPE_MESSAGE_NUM>>:" + messageCount);
-            setNumber(messageCount + todoCount);
+            setNumber(messageEvent.getCount());
         }
     }
 
@@ -178,8 +170,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         Log.d(TAG, "messageNumberSuccess>>:" + model.getData().getTotal());
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             if (model.getData() != null) {
-                todoCount = model.getData().getTotal();
-                setNumber(todoCount + messageCount);
+                setNumber(model.getData().getTotal());
             }
         }
     }
@@ -190,7 +181,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         if (msgView != null) {
             msgView.setBackgroundColor(Color.parseColor("#fb2d24"));
         }
-        if(count > 0){
+        if (count > 0) {
             mSlidingTabLayout.showMsg(1, count);
         } else {
             mSlidingTabLayout.hideMsg(1);

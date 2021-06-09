@@ -47,7 +47,6 @@ import java.util.List;
 /**
  * desc 校长考情.
  * time 2021年6月3日17:08:28
- *
  */
 public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
 
@@ -95,6 +94,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     }
 
     private void initView() {
+        mViewBinding.getRoot().setVisibility(View.INVISIBLE);
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mViewBinding.recyclerview.setAdapter(adapter);
     }
@@ -114,26 +114,25 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             ConstraintLayout constraintLayout2 = holder.getView(R.id.constraintLayout);
             PieChart piechart2 = holder.getView(R.id.piechart2);
             PieChart piechart = holder.getView(R.id.piechart);
-            piechart2.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
-            piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
-
-            if(item1 != null){
+            if (item1 != null) {
                 holder.setText(R.id.tv_attendance_type, item1.getAttName());
                 holder.setText(R.id.tv_desc, "0".equals(item1.getAttendanceType()) ? "签到" : "签退");
                 setPieChart(item1, piechart);
                 constraintLayout1.setOnClickListener(v -> {
                     AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
                 });
-                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
+                piechart.setTouchEnabled(false);
+                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), item1.getIndex()));
             }
-            if(item2 != null){
+            if (item2 != null) {
                 constraintLayout2.setVisibility(View.VISIBLE);
                 holder.setText(R.id.tv_attendance_type2, item2.getAttName());
                 holder.setText(R.id.tv_desc2, "0".equals(item2.getAttendanceType()) ? "签到" : "签退");
-                piechart2.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item)));
                 constraintLayout2.setOnClickListener(v -> {
-                    AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
+                    AttendanceActivity.start(getContext(), item2.getPeopleType(), item2.getIndex());
                 });
+                piechart2.setTouchEnabled(false);
+                piechart2.setOnClickListener(v -> AttendanceActivity.start(getContext(), item2.getPeopleType(), item2.getIndex()));
                 setPieChart(item2, piechart2);
             } else {
                 constraintLayout2.setVisibility(View.GONE);
@@ -195,16 +194,23 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
 
         //数据处理
         List<AttendanceSchoolBean> list = new ArrayList<>();
-        if(schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0){
-            for (int i = 0; i <= schoolPeopleAllFormBeanList.size(); i++) {
+        if (schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) {
+            for (int i = 0; i < schoolPeopleAllFormBeanList.size(); i++) {
                 AttendanceSchoolBean attendanceSchoolBean = new AttendanceSchoolBean();
-                attendanceSchoolBean.setItem1(schoolPeopleAllFormBeanList.get(i));
+                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean = schoolPeopleAllFormBeanList.get(i);
+                schoolPeopleAllFormBean.setIndex(i);
+                attendanceSchoolBean.setItem1(schoolPeopleAllFormBean);
                 i++;
-                if(i < schoolPeopleAllFormBeanList.size()){
-                    attendanceSchoolBean.setItem2(schoolPeopleAllFormBeanList.get(i));
+                if (i < schoolPeopleAllFormBeanList.size()) {
+                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean2 = schoolPeopleAllFormBeanList.get(i);
+                    schoolPeopleAllFormBean2.setIndex(i);
+                    attendanceSchoolBean.setItem2(schoolPeopleAllFormBean2);
                 }
                 list.add(attendanceSchoolBean);
             }
+        }
+        if (list != null && list.size() > 0) {
+            mViewBinding.getRoot().setVisibility(View.VISIBLE);
         }
         adapter.setList(list);
     }

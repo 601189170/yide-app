@@ -101,7 +101,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
         if (dataBean != null) {
             tv_class_name.setText(dataBean.classesName + "\t " + dataBean.subjectName);
             tv_after_class_name.setText(dataBean.classesName);
-            tv_code.setText("第" + dataBean.section + "节");
+            tv_code.setText("0".equals(dataBean.section) ? "早读" : "第" + dataBean.section + "节");
             tv_time.setText(dataBean.fromDateTime + "-" + dataBean.toDateTime);
             et_input_before_class.setText(dataBean.beforeClass);
             et_input_after_class.setText(dataBean.afterClass);
@@ -136,6 +136,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initTextListener() {
 
         et_input_before_class.addTextChangedListener(new TextWatcher() {

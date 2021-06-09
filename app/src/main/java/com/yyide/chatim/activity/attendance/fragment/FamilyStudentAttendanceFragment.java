@@ -42,6 +42,7 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
     private FragmentFamilyHeadBinding mViewBinding;
     private String TAG = FamilyStudentAttendanceFragment.class.getSimpleName();
     private int index;
+
     public static FamilyStudentAttendanceFragment newInstance(int index) {
         FamilyStudentAttendanceFragment fragment = new FamilyStudentAttendanceFragment();
         Bundle args = new Bundle();
@@ -81,7 +82,7 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
         List<AttendanceCheckRsp.DataBean.AttendancesFormBean> attendancesForm = item.getAttendancesForm();
         adapter.setList(attendancesForm);
         if (attendancesForm != null && attendancesForm.size() > 0) {
-            if(attendancesForm.size() < index){
+            if (attendancesForm.size() < index) {
                 index = 0;
             }
             AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = attendancesForm.get(index).getStudents();
@@ -119,12 +120,12 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
             if (students != null) {
                 ImageView img = holder.getView(R.id.iv_img);
                 TextView leave_desc = holder.getView(R.id.tv_attendance_leave_desc);
-                holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, students.getApplyDate()))
+                holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, students.getTime()))
                         .setText(R.id.tv_attendance_time, getString(R.string.attendance_time_text, students.getRequiredTime()))
                         .setText(R.id.tv_event_name, students.getSection() > 0 ? students.getSubjectName() : students.getName());
 
-                if (!TextUtils.isEmpty(students.getAttendanceType())) {
-                    switch (students.getAttendanceType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
+                if (!TextUtils.isEmpty(students.getType())) {
+                    switch (students.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                         case "0":
                             leave_desc.setText("正常");
                             leave_desc.setTextColor(Color.parseColor("#5DADFF"));
@@ -146,7 +147,7 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
                             img.setImageResource(R.drawable.icon_attendance_leave_early);
                             break;
                         case "4":
-                            leave_desc.setText("无效打卡");
+                            leave_desc.setText("请假");
                             leave_desc.setTextColor(Color.parseColor("#F6BD16"));
                             img.setImageResource(R.drawable.icon_attendance_ask_for_leave);
                             break;

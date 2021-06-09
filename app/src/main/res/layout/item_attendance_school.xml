@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_8"
-    app:cardBackgroundColor="@color/white"
-    app:cardUseCompatPadding="true"
-    app:cardElevation="@dimen/dp_2"
-    app:cardCornerRadius="@dimen/dp_10">
-
 <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/dp_10">
@@ -19,31 +10,31 @@
         android:id="@+id/constraintLayout1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp_5"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
         android:layout_marginBottom="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
+        app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
         app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    <TextView
-        android:id="@+id/tv_attendance_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
-        android:background="@drawable/home_attendance_bg"
-        android:padding="@dimen/dp_5"
-        android:textColor="#ff1e1e1e"
-        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_attendance_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:background="@drawable/home_attendance_bg"
+            android:padding="@dimen/dp_5"
+            android:textColor="#ff1e1e1e"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/piechart"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:layout_marginTop="@dimen/dp_10"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/dp_10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_attendance_type" />
@@ -52,10 +43,10 @@
             android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="false"
             android:textColor="@color/text_1E1E1E"
             android:textSize="@dimen/text_18"
             android:textStyle="bold"
-            android:clickable="false"
             app:layout_constraintEnd_toEndOf="@+id/piechart"
             app:layout_constraintStart_toStartOf="@+id/piechart"
             app:layout_constraintTop_toBottomOf="@+id/piechart" />
@@ -90,8 +81,8 @@
             android:id="@+id/piechart2"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:layout_marginTop="@dimen/dp_10"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/dp_10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_attendance_type2" />
@@ -108,4 +99,3 @@
             app:layout_constraintTop_toBottomOf="@+id/piechart2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>

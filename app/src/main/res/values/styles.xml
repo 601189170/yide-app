@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="splashActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@mipmap/ic_launcher</item>
     </style>
 
     <style name="shareDialog" parent="@android:style/Theme.Dialog">
@@ -79,7 +85,6 @@
         <item name="android:windowExitAnimation">@anim/am_bottom_out</item>
     </style>
 
-
     <!-- DevideIntoGroupActivity -->
     <style name="MyDialogStyle" parent="@android:style/Theme.Holo.Dialog">
         <item name="android:windowFrame">@null</item>
@@ -106,12 +111,6 @@
     <style name="dialogWindowAnim" mce_bogus="1" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/dialog_enter_anim</item>
         <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
-    </style>
-
-    <!-- Base application theme. -->
-    <style name="SplashActivityTheme" parent="android:Theme.Holo.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="RadioGroupButtonStyle">

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/dp_20"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/tv_attendance_type"
         android:layout_width="wrap_content"
@@ -32,13 +31,14 @@
         android:id="@+id/tv_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="课堂"
         android:textColor="@color/text_1E1E1E"
         android:textSize="@dimen/text_18"
-        android:layout_marginTop="@dimen/dp_10"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/img"
         app:layout_constraintStart_toStartOf="@+id/img"
-        app:layout_constraintTop_toBottomOf="@+id/img"/>
+        app:layout_constraintTop_toBottomOf="@+id/img" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -51,6 +51,7 @@
         android:id="@+id/tv_attendance_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
         android:textColor="#ff1e1e1e"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,9 +62,9 @@
         android:id="@+id/tv_attendance_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
         android:textColor="#ff909399"
         android:textSize="14sp"
-        android:layout_marginTop="@dimen/dp_20"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/tv_attendance_status" />
 
