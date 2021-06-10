@@ -72,7 +72,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         title.setText("人脸采集");
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.png"));
         classesId = SpData.getIdentityInfo().classesId;
-        depId = SpData.getIdentityInfo().teacherDepId;
+        //depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
         Log.e("FaceUploadPresenter", "getFaceData: name="+realname +",classId="+classesId+",depId="+depId);
         //人名或者id为空则不能上传人脸
@@ -92,11 +92,11 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                     mvpPresenter.getFaceData(realname,classesId , depId);
                 }
             } else {
-                if (depId == 0) {
-                    warnTip("当前账号部门Id为空不能采集人脸");
-                } else {
+//                if (depId == 0) {
+//                    warnTip("当前账号部门Id为空不能采集人脸");
+//                } else {
                     mvpPresenter.getFaceData(realname, classesId, depId);
-                }
+//                }
             }
         }
     }
