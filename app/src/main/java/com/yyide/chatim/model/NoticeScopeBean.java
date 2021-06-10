@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NoticeScopeBean {
-    private int id;
+    private long id;
     private String name;
     private boolean checked;
     private boolean unfold;
@@ -27,18 +27,18 @@ public class NoticeScopeBean {
     private boolean hasNext = true;
     private List<NoticeScopeBean> list;
 
-    public NoticeScopeBean(int id, String name) {
+    public NoticeScopeBean(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public NoticeScopeBean(int id, String name, String type) {
+    public NoticeScopeBean(long id, String name, String type) {
         this.id = id;
         this.name = name;
         this.type = type;
     }
 
-    public NoticeScopeBean(int id, String name, String type, boolean hasNext) {
+    public NoticeScopeBean(long id, String name, String type, boolean hasNext) {
         this.id = id;
         this.name = name;
         this.type = type;

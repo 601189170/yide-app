@@ -13,7 +13,7 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
         attachView(view);
     }
 
-    public void noticeDetail(int id, long signId, int type) {
+    public void noticeDetail(long id, long signId, int type) {
         Log.e("NoticeDetailPresenter", "noticeDetail: " + id + ",type=" + type);
         mvpView.showLoading();
         if (type == 1) {
@@ -70,7 +70,7 @@ public class NoticeDetailPresenter extends BasePresenter<NoticeDetailView> {
         }
     }
 
-    public void updateMyNoticeDetails(int id) {
+    public void updateMyNoticeDetails(long id) {
         mvpView.showLoading();
         addSubscription(dingApiStores.updateMyNoticeDetails(id), new ApiCallback<BaseRsp>() {
             @Override

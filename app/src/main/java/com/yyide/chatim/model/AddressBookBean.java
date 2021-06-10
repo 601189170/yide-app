@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressBookBean {
-    private int id;
+    private long id;
     private String name;
     private boolean checked;
     private boolean unfold;
@@ -30,18 +30,18 @@ public class AddressBookBean {
     //部门成员列表
     private List<AddressBookRsp.DataBean> deptMemberList = new ArrayList<>();
 
-    public AddressBookBean(int id, String name) {
+    public AddressBookBean(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public AddressBookBean(int id, String name, int level) {
+    public AddressBookBean(long id, String name, int level) {
         this.id = id;
         this.name = name;
         this.level = level;
     }
 
-    public AddressBookBean(int id, String name, int level, boolean hasNext) {
+    public AddressBookBean(long id, String name, int level, boolean hasNext) {
         this.id = id;
         this.name = name;
         this.level = level;

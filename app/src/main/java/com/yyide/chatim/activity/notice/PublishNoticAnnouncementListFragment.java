@@ -126,7 +126,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
 
             @Override
             public void delete(int position) {
-                int id = list.get(position).getId();
+                long id = list.get(position).getId();
                 DialogUtil.showAlertDialog(getActivity(), "确定删除？", "删除通知公告并将其他相关信息一并删除", "取消", "确定", new DialogUtil.OnClickListener() {
                     @Override
                     public void onCancel(View view) {

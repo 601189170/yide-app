@@ -35,7 +35,7 @@ public class PublishAnnouncementFragmentPresenter extends BasePresenter<PublishA
      * 删除我发布的公告
      * @param id
      */
-    public void delAnnouncement(int id){
+    public void delAnnouncement(long id){
         mvpView.showLoading();
         addSubscription(dingApiStores.delAnnouncement(id), new ApiCallback<BaseRsp>() {
             @Override

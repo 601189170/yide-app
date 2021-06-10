@@ -280,7 +280,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
 
     private List<String> getIds(List<AddressBookBean> noticeScopeBeans, List<String> ids) {
         for (AddressBookBean noticeScopeBean : noticeScopeBeans) {
-            int id = noticeScopeBean.getId();
+            long id = noticeScopeBean.getId();
             ids.add("" + id);
             List<AddressBookBean> list = noticeScopeBean.getList();
             if (list != null && !list.isEmpty()) {

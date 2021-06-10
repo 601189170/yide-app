@@ -42,7 +42,7 @@ public class LeaveListRsp {
         @Data
         public static class RecordsBean {
             private String name;
-            private int id;
+            private long id;
             private String type;
             private String approvalResult;
             private String initiateTime;

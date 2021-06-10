@@ -142,7 +142,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     private List<String> getAllCheckedClassIds(List<NoticeScopeBean> beanList, List<String> ids) {
         for (NoticeScopeBean bean : beanList) {
             if ((bean.getList() == null || bean.getList().isEmpty()) && bean.isChecked() && ((schoolType.equals("Y") && bean.getType().equals("1")) ||(!schoolType.equals("Y")&&bean.getType().equals("2")) )) {
-                int id = bean.getId();
+                long id = bean.getId();
                 ids.add("" + id);
             } else if (bean.getList() != null && !bean.getList().isEmpty()) {
                 getAllCheckedClassIds(bean.getList(), ids);
@@ -163,7 +163,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
     private List<String> getAllCheckedDepartmentIds(List<NoticeScopeBean> beanList, List<String> ids) {
         for (NoticeScopeBean bean : beanList) {
             if (bean.isChecked()) {
-                int id = bean.getId();
+                long id = bean.getId();
                 ids.add("" + id);
             }
             if (bean.getList() != null && !bean.getList().isEmpty()) {
@@ -282,7 +282,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
 
     private List<String> getIds(List<NoticeScopeBean> noticeScopeBeans, List<String> ids) {
         for (NoticeScopeBean noticeScopeBean : noticeScopeBeans) {
-            int id = noticeScopeBean.getId();
+            long id = noticeScopeBean.getId();
             ids.add("" + id);
             List<NoticeScopeBean> list = noticeScopeBean.getList();
             if (list != null && !list.isEmpty()) {

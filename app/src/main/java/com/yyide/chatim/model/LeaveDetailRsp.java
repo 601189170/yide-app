@@ -38,7 +38,7 @@ public class LeaveDetailRsp {
         private String approvalTime;
         private String approvalResult;
         private String approverImage;
-        private int id;
+        private long id;
         private List<ListBean> list;
         private Object leaveCourseFormList;
         private Object ccbid;
@@ -54,7 +54,7 @@ public class LeaveDetailRsp {
         @NoArgsConstructor
         @Data
         public static class ListBean {
-            private int userId;
+            private long userId;
             private String name;
             private String image;
         }

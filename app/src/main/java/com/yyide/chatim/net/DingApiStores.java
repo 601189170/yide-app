@@ -199,12 +199,12 @@ public interface DingApiStores {
     //获取我的公告详情
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/message-server/cloud-message/user/notice/getMyNoticeDetails")
-    Observable<NoticeDetailRsp> getMyNoticeDetails(@Query("id") int id);
+    Observable<NoticeDetailRsp> getMyNoticeDetails(@Query("id") long id);
 
     //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyReleaseNotice
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/message-server/cloud-message/user/announcement/getMyReleaseNotice")
-    Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") int id);
+    Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") long id);
 
     //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyNoticeBySignId
     @Headers({"Content-Type: application/json", "Accept: application/json"})
@@ -255,11 +255,11 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/delAnnouncement
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/message-server/cloud-message/user/announcement/delAnnouncement")
-    Observable<BaseRsp> delAnnouncement(@Query("id") int id);
+    Observable<BaseRsp> delAnnouncement(@Query("id") long id);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/message-server/cloud-message/user/notice/updateMyNoticeDetails")
-    Observable<BaseRsp> updateMyNoticeDetails(@Query("id") int id);
+    Observable<BaseRsp> updateMyNoticeDetails(@Query("id") long id);
 
     //确认详情（多少人未确认）
     //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getConfirmDetails
