@@ -44,7 +44,7 @@ public class UserMsgNoticeRsp {
             private String title;
             private String content;
             private int userId;
-            private int id;
+            private long id;
             private long signId;
             private Object remakeData;
             private String firstData;

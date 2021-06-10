@@ -88,7 +88,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     private GetUserSchoolRsp.DataBean userInfo;
     private int classesId;
     private String realname;
-
+    private int depId;
     @Override
     public int getContentViewID() {
         return R.layout.activity_user_layout;
@@ -106,6 +106,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         initData();
         classesId = SpData.getIdentityInfo().classesId;
         realname = SpData.getIdentityInfo().realname;
+        depId = SpData.getIdentityInfo().teacherDepId;
         Log.e(TAG, "getFaceData: name=" + realname + ",classId=" + classesId);
     }
 
@@ -129,7 +130,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname, classesId);
+        mvpPresenter.getFaceData(realname, classesId,depId);
     }
 
     @Override
@@ -167,6 +168,8 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 break;
             case R.id.back_layout:
                 finish();
+                break;
+            default:
                 break;
         }
     }
