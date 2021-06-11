@@ -28,8 +28,8 @@ public class LeaveDeptRsp {
     public static class DataBean {
         private String deptName;
         private long deptId;
-        private int deptHeadId;
-        private int schoolId;
+        private long deptHeadId;
+        private long schoolId;
         private String type;
         private int isDefault;
     }

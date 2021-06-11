@@ -65,8 +65,8 @@ public class StudentScopeRsp {
             private String showType;
             private String showName;
             private int level;
-            private int schoolId;
-            private int learningSectionId;
+            private long schoolId;
+            private long learningSectionId;
             private List<ListBean> list;
             private String type;
             private String isExitInd;
@@ -88,9 +88,9 @@ public class StudentScopeRsp {
                 private int schoolId;
                 private String alias;
                 private String showType;
-                private int gradeId;
+                private long gradeId;
                 private String showName;
-                private int headmasterId;
+                private long headmasterId;
                 private Object secondHeadmasterId;
                 private String type;
                 private String headmaster;

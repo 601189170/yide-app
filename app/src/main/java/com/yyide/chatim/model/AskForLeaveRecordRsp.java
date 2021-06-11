@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class AskForLeaveRecordRsp {
-    private int id;
+    private long id;
     private int status;//1,审批中，2，已撤销，3，审批通过 4，审批拒绝
     private String title;
     private String date;
