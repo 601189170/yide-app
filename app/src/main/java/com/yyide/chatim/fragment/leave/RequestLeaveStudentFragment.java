@@ -450,6 +450,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     @Override
     public void approverFail(String msg) {
         Log.e(TAG, "approverFail: "+msg );
+        ToastUtils.showLong(msg);
     }
 
     @Override
@@ -478,12 +479,15 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             tags.clear();
             tags.addAll(data);
             leaveReasonTagAdapter.notifyDataSetChanged();
+        }else {
+            ToastUtils.showLong(leavePhraseRsp.getMsg());
         }
     }
 
     @Override
     public void leavePhraseFail(String msg) {
-
+        Log.e(TAG, "leavePhraseFail: "+msg );
+        ToastUtils.showLong(msg);
     }
     /**
      * 重设 view 的宽高

@@ -404,7 +404,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
 
     @Override
     public void approverFail(String msg) {
-
+        ToastUtils.showLong(msg);
     }
 
     @Override
@@ -443,7 +443,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     @Override
     public void leavePhraseFail(String msg) {
         Log.e(TAG, "leavePhraseFail: "+msg );
-        ToastUtils.showLong("服务器异常！");
+        ToastUtils.showLong(msg);
     }
 
     private List<AddressBookRsp.DataBean> filterCopyerList(List<AddressBookRsp.DataBean> list) {
