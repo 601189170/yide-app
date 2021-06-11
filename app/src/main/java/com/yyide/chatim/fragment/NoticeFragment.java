@@ -119,6 +119,10 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
                 notice_content.setVisibility(View.GONE);
                 tv_null_notice.setVisibility(View.VISIBLE);
             }
+        }else {
+            tv_title.setVisibility(View.GONE);
+            notice_content.setVisibility(View.GONE);
+            tv_null_notice.setVisibility(View.VISIBLE);
         }
     }
 
