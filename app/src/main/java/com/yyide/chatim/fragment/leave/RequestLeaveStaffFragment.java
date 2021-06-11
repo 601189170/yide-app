@@ -429,17 +429,21 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
 
     @Override
     public void leavePhrase(LeavePhraseRsp leavePhraseRsp) {
+        Log.e(TAG, "leavePhrase: "+leavePhraseRsp.toString() );
         if (leavePhraseRsp.getCode() == 200){
             final List<LeavePhraseRsp.DataBean> data = leavePhraseRsp.getData();
             tags.clear();
             tags.addAll(data);
             leaveReasonTagAdapter.notifyDataSetChanged();
+        }else {
+            ToastUtils.showLong(leavePhraseRsp.getMsg());
         }
     }
 
     @Override
     public void leavePhraseFail(String msg) {
-
+        Log.e(TAG, "leavePhraseFail: "+msg );
+        ToastUtils.showLong("服务器异常！");
     }
 
     private List<AddressBookRsp.DataBean> filterCopyerList(List<AddressBookRsp.DataBean> list) {

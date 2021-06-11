@@ -27,6 +27,6 @@ public class LeavePhraseRsp {
     @Data
     public static class DataBean {
         private String tag;
-        private int id;
+        private long id;
     }
 }

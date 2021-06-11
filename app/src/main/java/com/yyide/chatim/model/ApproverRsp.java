@@ -32,7 +32,7 @@ public class ApproverRsp {
         @NoArgsConstructor
         @Data
         public static class PeopleFormBean {
-            private int userId;
+            private long userId;
             private String name;
             private String image;
         }

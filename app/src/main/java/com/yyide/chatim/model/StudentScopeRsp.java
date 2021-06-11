@@ -42,7 +42,7 @@ public class StudentScopeRsp {
         private Object alias;
         private Object showType;
         private String showName;
-        private int schoolId;
+        private long schoolId;
         private List<ListBeanX> list;
         private String type;
         private String isExitInd;
@@ -85,7 +85,7 @@ public class StudentScopeRsp {
                 private int size;
                 private int current;
                 private String name;
-                private int schoolId;
+                private long schoolId;
                 private String alias;
                 private String showType;
                 private long gradeId;
