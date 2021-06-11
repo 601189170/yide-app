@@ -6,5 +6,5 @@ package com.yyide.chatim.model;
 
 public class SchoolRsp {
 
-    public int userId;
+    public String userId;
 }

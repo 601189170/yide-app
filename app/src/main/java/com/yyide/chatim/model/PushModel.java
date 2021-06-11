@@ -5,7 +5,7 @@ public class PushModel {
     private String pushType;//消息类型 1 通知公告 2 代办 3系统通知
     private String signId;
     private String title;
-    private int id;
+    private long id;
 
     public String getPushType() {
         return pushType;
@@ -31,11 +31,11 @@ public class PushModel {
         this.title = title;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 }

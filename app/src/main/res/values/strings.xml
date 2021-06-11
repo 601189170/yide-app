@@ -6,6 +6,9 @@
     <string name="chat_delete">删除聊天</string>
     <string name="quit_chat_top">取消置顶</string>
 
+    //通用
+    <string name="confirm">确定</string>
+
     // 登录相关
     <string name="account">用户名</string>
     <string name="password">密码</string>

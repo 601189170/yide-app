@@ -41,26 +41,21 @@ public class AttendanceAdapter extends LoopPagerAdapter {
             Color.rgb(145, 147, 153), Color.rgb(246, 189, 22)
             , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
     };
-    private boolean isSchool;
 
-    public void setIsSchool(boolean isSchool) {
-        this.isSchool = isSchool;
-    }
-
-    public List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> list = new ArrayList<>();
+    public List<AttendanceCheckRsp.DataBean.AttendancesFormBean> list = new ArrayList<>();
 
     public AttendanceAdapter(RollPagerView viewPager) {
         super(viewPager);
     }
 
-    private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean getItem(int position) {
+    private AttendanceCheckRsp.DataBean.AttendancesFormBean getItem(int position) {
         return list.get(position);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     public View getView(ViewGroup container, final int position) {
-        AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item = list.get(position);
+        AttendanceCheckRsp.DataBean.AttendancesFormBean.Students item = list.get(position).getStudents();
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.attce_item, null);
         TextView cd = view.findViewById(R.id.cd);
         TextView qq = view.findViewById(R.id.qq);
@@ -68,9 +63,8 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         TextView attendanceName = view.findViewById(R.id.tv_attendance_type);
         TextView number = view.findViewById(R.id.tv_attendance_number);
         TextView tv_desc = view.findViewById(R.id.tv_desc);
-        ConstraintLayout constraintLayout5 = view.findViewById(R.id.constraintLayout5);
-        attendanceName.setText(item.getAttName());
-        tv_desc.setText("0".equals(item.getAttendanceType()) ? "签到" : "未签到");
+        attendanceName.setText(item.getName());
+        tv_desc.setText(TextUtils.isEmpty(item.getSubjectName()) ? item.getThingName() : item.getSubjectName());
         qq.setText(item.getAbsence() + " 人");
         cd.setText(item.getLate() + " 人");
         qj.setText(item.getLeave() + " 人");
@@ -108,10 +102,10 @@ public class AttendanceAdapter extends LoopPagerAdapter {
 
     @Override
     public int getRealCount() {
-        return list.size();
+        return list != null ? list.size() : 0;
     }
 
-    public void notifyData(List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> list) {
+    public void notifyData(List<AttendanceCheckRsp.DataBean.AttendancesFormBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

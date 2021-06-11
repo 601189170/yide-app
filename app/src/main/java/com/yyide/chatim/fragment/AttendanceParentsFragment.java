@@ -15,7 +15,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.AttendanceAdapter;
 import com.yyide.chatim.adapter.AttendanceParentsAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;

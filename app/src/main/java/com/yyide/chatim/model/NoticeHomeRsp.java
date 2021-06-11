@@ -46,7 +46,7 @@ public class NoticeHomeRsp {
         private String productionTarget;
         private String productionTime;
         private String content;
-        private Integer id;
+        private long id;
         private String signId;
         private String timingTime;
         private String type;
@@ -86,11 +86,11 @@ public class NoticeHomeRsp {
             this.content = content;
         }
 
-        public Integer getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(long id) {
             this.id = id;
         }
 

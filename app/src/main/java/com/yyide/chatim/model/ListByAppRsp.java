@@ -49,7 +49,7 @@ public class ListByAppRsp {
         public String createdDateTime;
         public int current;
         public String delInd;
-        public int id;
+        public long id;
         public String isExitInd;
         public int level;
         public String name;
@@ -88,7 +88,7 @@ public class ListByAppRsp {
              * isExitInd : Y
              */
 
-            public int id;
+            public long id;
             public String delInd;
             public String createdBy;
             public String createdDateTime;
@@ -112,7 +112,7 @@ public class ListByAppRsp {
             }
 
             public ListBean(Parcel in) {
-                id = in.readInt();
+                id = in.readLong();
                 delInd = in.readString();
                 createdBy = in.readString();
                 createdDateTime = in.readString();
@@ -152,7 +152,7 @@ public class ListByAppRsp {
 
             @Override
             public void writeToParcel(Parcel dest, int flags) {
-                dest.writeInt(id);
+                dest.writeLong(id);
                 dest.writeString(delInd);
                 dest.writeString(createdBy);
                 dest.writeString(createdDateTime);

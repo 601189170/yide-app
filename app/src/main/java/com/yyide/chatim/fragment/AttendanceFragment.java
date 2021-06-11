@@ -141,21 +141,14 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
                 AttendanceCheckRsp.DataBean.AttendancesFormBean.Students item = itemBean.getStudents();
                 if (itemBean.getStudents() != null) {
                     AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
-                    schoolBean.setAbsence(item.getAbsence());
-                    schoolBean.setApplyNum(item.getApplyNum());
-                    schoolBean.setAttName(item.getName());
-                    schoolBean.setLate(item.getLate());
-                    schoolBean.setLeave(item.getLeave());
-                    schoolBean.setNumber(item.getNumber());
-                    schoolBean.setRate(item.getRate());
-                    schoolBean.setPeopleType(item.getPeopleType());
+                    schoolBean.setStudents(item);
                     schoolPeopleAllFormBeanList.add(schoolBean);
                 }
             }
         }
         announRoll.setAdapter(announAdapter);
         constraintLayout.setVisibility((schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) ? View.GONE : View.VISIBLE);
-        announAdapter.notifyData(schoolPeopleAllFormBeanList);
+        announAdapter.notifyData(dataBean.getAttendancesForm());
         indexAdapter.setList(schoolPeopleAllFormBeanList);
     }
 

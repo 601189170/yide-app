@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class TableRsp implements Serializable {
 
-    public String id;
+    public long id;
 
     public String subjectsName;
 

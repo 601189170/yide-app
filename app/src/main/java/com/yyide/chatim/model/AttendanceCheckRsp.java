@@ -114,7 +114,7 @@ public class AttendanceCheckRsp {
                 private String time;
                 private String deviceName;
                 private String thingName;
-                private String IdentityType;//N 学生考勤 Y 事件考勤
+                private String identityType;//N 学生考勤 Y 事件考勤
                 private List<?> studentIds;
                 private List<PeopleBean> people;
                 private List<PeopleBean> latePeople;
@@ -154,6 +154,14 @@ public class AttendanceCheckRsp {
                             break;
                     }
                     return str;
+                }
+
+                public String getIdentityType() {
+                    return identityType;
+                }
+
+                public void setIdentityType(String identityType) {
+                    this.identityType = identityType;
                 }
 
                 public String getTime() {
@@ -794,6 +802,15 @@ public class AttendanceCheckRsp {
             private List<?> leavePeople;
             private List<?> absencePeople;
             private List<GradeListBean> gradeList;
+            private AttendancesFormBean.Students students;
+
+            public AttendancesFormBean.Students getStudents() {
+                return students;
+            }
+
+            public void setStudents(AttendancesFormBean.Students students) {
+                this.students = students;
+            }
 
             public String getAttendanceType() {
                 return attendanceType;

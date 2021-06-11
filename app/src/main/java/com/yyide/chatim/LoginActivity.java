@@ -438,7 +438,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     }
 
-    private void initIm(int userId, String userSig) {
+    private void initIm(String userId, String userSig) {
         TUIKit.login(String.valueOf(userId), userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {

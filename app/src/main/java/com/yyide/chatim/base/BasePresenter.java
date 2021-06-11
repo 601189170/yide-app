@@ -5,7 +5,6 @@ package com.yyide.chatim.base;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.net.DingApiStores;
 import com.yyide.chatim.net.VideoApiStores;
-import com.yyide.chatim.net.ZhihuApiStores;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -20,23 +19,19 @@ import rx.subscriptions.CompositeSubscription;
 public class BasePresenter<V> {
     public V mvpView;
     protected VideoApiStores videoapiStores;
-    protected ZhihuApiStores zhihuApiStores;
     protected DingApiStores dingApiStores;
     private CompositeSubscription mCompositeSubscription;
 
     public void attachView(V mvpView) {
         this.mvpView = mvpView;
         videoapiStores = AppClient.getVideoRetrofit().create(VideoApiStores.class);
-        zhihuApiStores = AppClient.getZhiHURetrofit().create(ZhihuApiStores.class);
         dingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
     }
-
 
     public void detachView() {
         this.mvpView = null;
         onUnsubscribe();
     }
-
 
     //RXjava取消注册，以避免内存泄露
     public void onUnsubscribe() {

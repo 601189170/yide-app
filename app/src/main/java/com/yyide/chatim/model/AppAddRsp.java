@@ -99,7 +99,7 @@ public class AppAddRsp {
         }
 
         public static class RecordsBean {
-            private Integer id;
+            private long id;
             private Integer total;
             private Integer size;
             private Integer current;
@@ -109,11 +109,11 @@ public class AppAddRsp {
             private String path;
             private Boolean isAdd;//true 已添加  false 未添加
 
-            public Integer getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(Integer id) {
+            public void setId(long id) {
                 this.id = id;
             }
 

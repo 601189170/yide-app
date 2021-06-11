@@ -170,6 +170,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         Log.d(TAG, "messageNumberSuccess>>:" + model.getData().getTotal());
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             if (model.getData() != null) {
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", model.getData().getTotal()));
                 setNumber(model.getData().getTotal());
             }
         }

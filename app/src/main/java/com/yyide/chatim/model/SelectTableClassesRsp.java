@@ -33,7 +33,7 @@ public class SelectTableClassesRsp {
     }
 
     public static class DataBean {
-        private int id;
+        private long id;
         private String delInd;
         private String createdBy;
         private String createdDateTime;
@@ -53,11 +53,11 @@ public class SelectTableClassesRsp {
         private String type;
         private List<DataBean> list;
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 

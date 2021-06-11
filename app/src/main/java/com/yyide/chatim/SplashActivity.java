@@ -71,8 +71,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     void Tologin(String username, String password) {
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().userId > 0) {
-            int userId = SpData.getIdentityInfo().userId;
+        if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().userId)) {
+            String userId = SpData.getIdentityInfo().userId;
             RequestBody body = new FormBody.Builder()
                     .add("username", username)
                     .add("password", password)

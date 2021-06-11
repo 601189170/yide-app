@@ -22,6 +22,7 @@ import rx.subscriptions.CompositeSubscription;
 public class BaseFragment extends Fragment {
     public Activity mActivity;
     private LoadingTools loadingTools;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -54,13 +55,13 @@ public class BaseFragment extends Fragment {
     }
 
     public void showProgressDialog2() {
-        if(loadingTools != null && !getActivity().isFinishing()){
+        if (loadingTools != null && !getActivity().isFinishing()) {
             loadingTools.showLoading();
         }
     }
 
     public void dismissProgressDialog2() {
-        if(loadingTools != null){
+        if (loadingTools != null) {
             loadingTools.closeLoading();
         }
     }

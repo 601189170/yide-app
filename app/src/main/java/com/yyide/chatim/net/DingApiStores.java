@@ -231,10 +231,10 @@ public interface DingApiStores {
     @POST("/management/cloud-system/app/application/group/list")
     Observable<AppItemBean> getAppList(@Body RequestBody requestBody);
 
-    //查询应用列表
+    //应用排序
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/application/me/sort")
-    Observable<ResultBean> sort(@Body RequestBody requestBody);
+    Observable<ResultBean> appSort(@Body RequestBody requestBody);
 
     //查询应用列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
@@ -344,11 +344,11 @@ public interface DingApiStores {
 
     //添加应用列表
     @POST("/management/cloud-system/app/application/me/add/{id}")
-    Observable<ResultBean> addApp(@Path("id") int id);
+    Observable<ResultBean> addApp(@Path("id") long id);
 
     //删除应用
     @POST("/management/cloud-system/app/application/me/del/{id}")
-    Observable<ResultBean> deleteApp(@Path("id") int id);
+    Observable<ResultBean> deleteApp(@Path("id") long id);
 
     //获取班级作业信息
     @GET("/timetable/cloud-timetable/schedule/selectSchByClassId?")

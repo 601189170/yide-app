@@ -222,9 +222,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     private void setData() {
         if (itemStudents != null) {
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvAttendanceTitle.setText(itemStudents.getSection() > 0 ? itemStudents.getSubjectName() : itemStudents.getName());
-            mViewBinding.tvDesc.setText(itemStudents.getName());
-            mViewBinding.tvAttendanceTime.setText("考勤时间 " + itemStudents.getApplyDate());
+            mViewBinding.tvAttendanceTitle.setText(itemStudents.getName());
+            mViewBinding.tvDesc.setText(TextUtils.isEmpty(itemStudents.getSubjectName()) ? itemStudents.getThingName() : itemStudents.getSubjectName());
+            mViewBinding.tvAttendanceTime.setText("考勤时间 " + (!TextUtils.isEmpty(itemStudents.getRequiredTime()) ? itemStudents.getRequiredTime() : itemStudents.getStartTime()));
             mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
             if (!TextUtils.isEmpty(itemStudents.getRate())) {
                 try {
@@ -292,5 +292,11 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     @Override
     public void showError() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewBinding = null;
     }
 }

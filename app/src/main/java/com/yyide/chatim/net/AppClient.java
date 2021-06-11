@@ -51,18 +51,6 @@ public class AppClient {
         return mVideoRetrofit;
     }
 
-    public static Retrofit getZhiHURetrofit() {
-        if (mZhiHuRetrofit == null) {
-            mZhiHuRetrofit = new Retrofit.Builder()
-                    .baseUrl(ZhihuApiStores.API_SERVER_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .client(getOkHttpClient())
-                    .build();
-        }
-        return mZhiHuRetrofit;
-    }
-
     public static Retrofit getDingRetrofit() {
         if (mDingRetrofit == null) {
             mDingRetrofit = new Retrofit.Builder()

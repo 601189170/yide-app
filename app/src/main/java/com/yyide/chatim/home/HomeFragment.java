@@ -120,8 +120,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         initVerticalTextview();
-        initFragment();
-        mvpPresenter.getUserSchool();
+        replaceFragment();
+        setSchoolInfo();
+        //mvpPresenter.getUserSchool();
         mvpPresenter.getHomeNotice();
     }
 
@@ -257,22 +258,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     private void initFragment() {
-        fragmentTransaction = childFragmentManager.beginTransaction();
-        //班级课表
-        fragmentTransaction.add(R.id.table_content, new TableFragment());
-        //通知
-        fragmentTransaction.add(R.id.notice_content, new NoticeFragment());
-        //班级考勤情况
-        fragmentTransaction.add(R.id.kq_content, new AttendanceFragment());
-        //班级相册轮播
-        fragmentTransaction.add(R.id.banner_content, new BannerFragment());
-        //班级作业
-        fragmentTransaction.add(R.id.work_content, new WorkFragment());
-        //班级相册
-        fragmentTransaction.add(R.id.class_honor_content, new ClassHonorFragment());
-        //班级学生荣誉
-        fragmentTransaction.add(R.id.student_honor_content, new StudentHonorFragment());
-        fragmentTransaction.commit();
         tableContent.setVisibility(View.GONE);
         tableContent.setVisibility(View.GONE);
         bannerContent.setVisibility(View.GONE);
@@ -314,6 +299,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             }
         } else if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
             mvpPresenter.getHomeNotice();
+        } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            setSchoolInfo();
+            replaceFragment();
         }
     }
 

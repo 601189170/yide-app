@@ -248,4 +248,11 @@ public class SchoolTeacherAttendanceFragment extends BaseMvpFragment<AttendanceC
     public void showError() {
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewBinding = null;
+    }
+
 }

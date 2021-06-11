@@ -42,7 +42,7 @@ public class AppAddPresenter extends BasePresenter<AppAddView> {
         });
     }
 
-    public void addApp(int id) {
+    public void addApp(long id) {
 //        mvpView.showLoading();
         addSubscription(dingApiStores.addApp(id), new ApiCallback<ResultBean>() {
             @Override

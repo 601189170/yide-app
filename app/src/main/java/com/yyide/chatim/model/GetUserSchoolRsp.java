@@ -90,14 +90,14 @@ public class GetUserSchoolRsp {
         public String realname;
         public String username;
         public String password;
-        public int userId;
+        public String userId;
         public int schoolId;
         public int classesId;
         public String classesName;
         public int parentId;
         public String schoolName;
         public String schoolType;//Y 大学 N小初高
-        public int teacherId;
+        public String teacherId;
         public Object dataPerInd;
         public Object depIds;
         public String status;
@@ -127,7 +127,7 @@ public class GetUserSchoolRsp {
             public String classesName;
             public String teacherInd;
             public String classesTeacher;
-            public int teacherId;
+            public String teacherId;
 
         }
     }

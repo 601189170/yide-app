@@ -208,6 +208,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             versionResponse.setUpdateAddress("https://3550d97d52.eachqr.com/aaa4e3fce9f117f73e433ba180dca3f0bab26438.apk?auth_key=1620374642-0-0-d1a8b5e8c43704c29455ab8c077319aa");
             versionResponse.setUpdateContent("1、更新内容\n2、更新内容\n3、更新内容");
             download(versionResponse);
+        } else if(BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())){
+            todoCount = messageEvent.getCount();
+            setMessageCount(todoCount + messageCount + noticeCount);
+        } else if(BaseConstant.TYPE_NOTICE_NUM.equals(messageEvent.getCode())){
+            noticeCount = messageEvent.getCount();
+            setMessageCount(todoCount + messageCount + noticeCount);
         }
     }
 
@@ -259,21 +265,25 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         String alias = SPUtils.getInstance().getString(BaseConstant.JG_ALIAS_NAME);
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
         if (identityInfo != null) {
-            if (SpData.getIdentityInfo().userId > 0 && !String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
-                JPushInterface.setAlias(this, ++sequence, SpData.getIdentityInfo().userId + "");
+            if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
+                JPushInterface.setAlias(this, ++sequence, SpData.getIdentityInfo().userId);
             }
         }
     }
 
     @Override
     public void updateUnread(int count) {
-        setMessageCount(count);
+        messageCount = count;
+        setMessageCount(todoCount + messageCount + noticeCount);
         // 华为离线推送角标
 //        HUAWEIHmsMessageService.updateBadge(this, count);
     }
 
+    private int messageCount = 0;//消息数量
+    private int noticeCount = 0;//消息通知数量
+    private int todoCount = 0;//代办数量
+
     private void setMessageCount(int count) {
-        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_NUM, "", count));
         Log.e("Chatim", "updateUnread==>: " + count);
         if (count > 0) {
             msgTotalUnread.setVisibility(View.VISIBLE);

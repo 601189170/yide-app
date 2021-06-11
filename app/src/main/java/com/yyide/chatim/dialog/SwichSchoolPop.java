@@ -164,12 +164,12 @@ public class SwichSchoolPop extends PopupWindow {
         });
     }
 
-    void Tologin(int userId) {
+    void Tologin(String userId) {
         String userName = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         RequestBody body = new FormBody.Builder()
                 .add("username", userName)
                 .add("password", SPUtils.getInstance().getString(BaseConstant.PASSWORD))
-                .add("userId", String.valueOf(userId))
+                .add("userId", userId)
                 .add("client_id", "yide-cloud")
                 .add("grant_type", "password")
                 .add("client_secret", "yide1234567")

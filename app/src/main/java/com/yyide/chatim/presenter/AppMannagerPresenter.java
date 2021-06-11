@@ -35,7 +35,7 @@ public class AppMannagerPresenter extends BasePresenter<AppManagerView> {
         });
     }
 
-    public void deleteApp(int id) {
+    public void deleteApp(long id) {
         mvpView.showLoading();
         addSubscription(dingApiStores.deleteApp(id), new ApiCallback<ResultBean>() {
             @Override

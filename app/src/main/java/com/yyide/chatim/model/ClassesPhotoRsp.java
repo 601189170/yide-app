@@ -33,7 +33,7 @@ public class ClassesPhotoRsp {
     }
 
     public static class DataBean {
-        private Integer id;
+        private long id;
         private String delInd;
         private Object createdBy;
         private String createdDateTime;
@@ -51,11 +51,11 @@ public class ClassesPhotoRsp {
         private String sort;
         private List<AlbumEntityBean> albumEntity;
 
-        public Integer getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(long id) {
             this.id = id;
         }
 

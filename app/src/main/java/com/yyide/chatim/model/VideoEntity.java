@@ -18,7 +18,7 @@ public class VideoEntity {
      * likes_count : 51
      */
 
-    private int id;
+    private long id;
     private String url;
     private String cover_pic;
     private String screen_name;
@@ -28,11 +28,11 @@ public class VideoEntity {
     private int comments_count;
     private int likes_count;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

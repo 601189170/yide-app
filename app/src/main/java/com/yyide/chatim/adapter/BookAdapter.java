@@ -19,12 +19,12 @@ import java.util.List;
  */
 
 public class BookAdapter extends BaseAdapter {
-   public List<String> list=new ArrayList<>();
+    public List<String> list = new ArrayList<>();
 
 
     @Override
     public int getCount() {
-        return list.size();
+        return list != null ? list.size() : 0;
     }
 
     @Override
@@ -42,10 +42,11 @@ public class BookAdapter extends BaseAdapter {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.book_item, null, false);
         ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
-        GlideUtil.loadImage(view.getContext(),getItem(position),item);
+        GlideUtil.loadImage(view.getContext(), getItem(position), item);
         return view;
     }
-    public void notifyData( List<String> list) {
+
+    public void notifyData(List<String> list) {
         this.list = list;
         notifyDataSetChanged();
     }

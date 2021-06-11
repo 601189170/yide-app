@@ -161,12 +161,12 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private void setData() {
         context.runOnUiThread(() -> {
             setCache();
-            my_info.setText("我的信息");
-//            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)) {
-//            } else {
-//                my_info.setText("学生信息");
-//            }
-            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+                my_info.setText("学生信息");
+            } else {
+                my_info.setText("我的信息");
+            }
+            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
             head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
             GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
@@ -213,7 +213,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         //hide();
         switch (v.getId()) {
             case R.id.layout1://切换班级
-                new SwichClassPop(context).setOnCheckCallBack(() -> user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : ""));
+                if(SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0){
+                    new SwichClassPop(context).setOnCheckCallBack(() -> user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : ""));
+                }
                 break;
             case R.id.layout2://切换身份（学校）
                 new SwichSchoolPop(context).setOnCheckCallBack(() -> {

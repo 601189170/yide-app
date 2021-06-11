@@ -302,7 +302,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     }
 
     @Override
-    public void OnSelectClassesListener(int classesId, String classesName) {
+    public void OnSelectClassesListener(long classesId, String classesName) {
         className.setText(classesName);
         mvpPresenter.listTimeDataByApp(classesId + "");
     }

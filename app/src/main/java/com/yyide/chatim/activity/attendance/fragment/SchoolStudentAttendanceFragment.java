@@ -152,4 +152,9 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
         Log.d(TAG, "getHomeAttendanceFail-->>" + msg);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewBinding = null;
+    }
 }

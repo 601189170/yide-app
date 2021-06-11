@@ -77,7 +77,14 @@
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".activity.attendance.StatisticsActivity"></activity>
+        <activity
+            android:name=".activity.AppSortActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activity.attendance.StatisticsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activity.attendance.AttendanceActivity"
             android:screenOrientation="portrait" />
@@ -204,8 +211,8 @@
         </activity>
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/splashActivityTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/splashActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -334,12 +341,11 @@
         <activity
             android:name=".activity.leave.AskForLeaveActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <!--请假抄送人界面-->
-        <activity android:name=".activity.leave.LeaveCarbonCopyPeopleActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- 请假抄送人界面 -->
+        <activity
+            android:name=".activity.leave.LeaveCarbonCopyPeopleActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activity.leave.LeaveFlowDetailActivity"
             android:screenOrientation="portrait"

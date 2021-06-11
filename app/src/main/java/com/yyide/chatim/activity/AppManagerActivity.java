@@ -43,12 +43,11 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
     LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
-    @BindView(R.id.tv_name)
-    TextView tv_name;
-    @BindView(R.id.fz)
-    FrameLayout fz;
+    @BindView(R.id.fl_app_sort)
+    FrameLayout fl_app_sort;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
+    private MyAppListRsp myAppListRsp = new MyAppListRsp();
     private BaseQuickAdapter<MyAppListRsp.DataBean, BaseViewHolder> baseQuickAdapter;
     private MyAppListRsp.DataBean dataBean;
 
@@ -78,7 +77,7 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
             protected void convert(@NotNull BaseViewHolder holder, MyAppListRsp.DataBean item) {
                 ImageView iv_app_icon = holder.getView(R.id.iv_app_icon);
                 ImageView iv_del = holder.getView(R.id.iv_del);
-                TextView name = holder.getView(R.id.tv_name);
+                TextView name = holder.getView(R.id.tv_app_name);
                 if (!TextUtils.isEmpty(item.getImg())) {
                     GlideUtil.loadCircleImage(AppManagerActivity.this, item.getImg(), iv_app_icon);
                 }
@@ -129,11 +128,16 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
         super.onDestroy();
     }
 
-    @OnClick({R.id.back_layout})
+    @OnClick({R.id.back_layout, R.id.fl_app_sort})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_layout:
                 finish();
+                break;
+            case R.id.fl_app_sort:
+                Intent intent = new Intent(this, AppSortActivity.class);
+                intent.putExtra("appBean", myAppListRsp);
+                startActivity(intent);
                 break;
         }
     }
@@ -143,6 +147,8 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
         hideLoading();
         if (model != null && model.getData() != null) {
             List<MyAppListRsp.DataBean> data = model.getData();
+            fl_app_sort.setVisibility(View.VISIBLE);
+            myAppListRsp = model;
             MyAppListRsp.DataBean itemBean = new MyAppListRsp.DataBean();
             itemBean.setAppType("editor");
             itemBean.setName("添加");

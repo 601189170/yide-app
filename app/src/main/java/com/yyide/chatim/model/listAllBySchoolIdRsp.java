@@ -15,8 +15,6 @@ public class listAllBySchoolIdRsp {
     public String message;
     public List<DataBean> data;
 
-   
-
     public static class DataBean {
         /**
          * id : 1
@@ -39,7 +37,7 @@ public class listAllBySchoolIdRsp {
          * type : 2
          */
 
-        public int id;
+        public long id;
         public String delInd;
         public String createdBy;
         public String createdDateTime;
@@ -58,6 +56,5 @@ public class listAllBySchoolIdRsp {
         public Object secondHeadmasterId;
         public String type;
 
-     
     }
 }

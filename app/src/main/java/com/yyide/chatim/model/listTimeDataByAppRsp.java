@@ -47,7 +47,7 @@ public class listTimeDataByAppRsp {
          * timetableType : 每周课表相同
          */
 
-        public Object id;
+        public long id;
         public String delInd;
         public String createdBy;
         public String createdDateTime;
@@ -101,7 +101,7 @@ public class listTimeDataByAppRsp {
              * classesTeacher : 挖掘师傅1
              */
 
-            public int id;
+            public long id;
             public String delInd;
             public String createdBy;
             public String createdDateTime;

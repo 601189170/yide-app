@@ -175,8 +175,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-    }
 
+    }
     private void initTitleAction() {
         mConversationLayout.getTitleBar().setOnRightClickListener(new View.OnClickListener() {
             @Override
@@ -284,6 +284,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             List<UserMsgNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
             if (records != null && records.size() > 0) {
                 int total = userNoticeRsp.getData().getTotal();
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_NOTICE_NUM, "", total));
                 setMessageCount(total);
             }
         }

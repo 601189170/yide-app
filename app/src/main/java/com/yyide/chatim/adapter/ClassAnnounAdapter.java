@@ -73,7 +73,7 @@ public class ClassAnnounAdapter extends LoopPagerAdapter {
 
     @Override
     public int getRealCount() {
-        return list.size();
+        return list != null ? list.size() : 0;
     }
 
     public void notifyData(List<ClassesPhotoBannerRsp.DataBean> list) {

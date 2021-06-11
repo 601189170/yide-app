@@ -40,7 +40,7 @@ public class SwichTableClassPop extends PopupWindow {
     }
 
     public interface SelectClasses {
-        void OnSelectClassesListener(int id, String classesName);
+        void OnSelectClassesListener(long id, String classesName);
     }
 
     public SwichTableClassPop(Activity context, List<SelectTableClassesRsp.DataBean> dataBeansList) {

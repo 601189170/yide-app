@@ -13,5 +13,4 @@ public class WeekTime {
     public String day;
     public String week;
 
-
 }
