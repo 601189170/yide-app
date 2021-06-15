@@ -14,6 +14,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentSchoolMasterAttendanceBinding;
 import com.yyide.chatim.dialog.AttendancePop;
@@ -30,16 +31,16 @@ import java.util.List;
  * time 2021年5月31日15:52:14
  * other lrz
  */
-public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView {
+public class SchoolStudentAttendanceFragment extends BaseFragment {
 
     private FragmentSchoolMasterAttendanceBinding mViewBinding;
     private String TAG = SchoolStudentAttendanceFragment.class.getSimpleName();
-    private int index;
+    private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemStudents;
 
-    public static SchoolStudentAttendanceFragment newInstance(int index) {
+    public static SchoolStudentAttendanceFragment newInstance(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean students) {
         SchoolStudentAttendanceFragment fragment = new SchoolStudentAttendanceFragment();
         Bundle args = new Bundle();
-        args.putInt("index", index);
+        args.putSerializable("students", students);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +49,7 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            index = getArguments().getInt("index");
+            itemStudents = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean) getArguments().getSerializable("students");
         }
     }
 
@@ -65,24 +66,13 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
         mViewBinding.clContent.setVisibility(View.GONE);
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewBinding.recyclerview.setAdapter(adapter);
-        mvpPresenter.attendance("");
+        setDataView(itemStudents);
     }
 
-    @Override
-    protected AttendanceCheckPresenter createPresenter() {
-        return new AttendanceCheckPresenter(this);
-    }
-
-    private void setDataView(AttendanceCheckRsp.DataBean item) {
-        if (item.getSchoolPeopleAllForm() != null && item.getSchoolPeopleAllForm().size() > 0) {
-            if (item.getSchoolPeopleAllForm().size() < index) {
-                index = 0;
-            }
-            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemStudents = item.getSchoolPeopleAllForm().get(index);
-
+    private void setDataView(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item) {
+        if (item != null) {
             if (itemStudents != null) {
                 mViewBinding.clContent.setVisibility(View.VISIBLE);
-                mViewBinding.tvAttendanceTitle.setText(itemStudents.getAttName());
                 mViewBinding.tvEventName.setText(itemStudents.getAttName());
                 mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
                 if (!TextUtils.isEmpty(itemStudents.getRate())) {
@@ -97,31 +87,6 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
                 mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
                 mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsence() + "");
                 adapter.setList(itemStudents.getGradeList());
-
-                List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllForm = item.getSchoolPeopleAllForm();
-                mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-                    AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
-                        @Override
-                        public int getItemsCount() {
-                            return schoolPeopleAllForm.size();
-                        }
-
-                        @Override
-                        public Object getItem(int index) {
-                            return schoolPeopleAllForm.get(index).getAttName();
-                        }
-
-                        @Override
-                        public int indexOf(Object o) {
-                            return schoolPeopleAllForm.indexOf(o);
-                        }
-                    }, "");
-                    attendancePop.setOnSelectListener(index -> {
-                        mViewBinding.tvAttendanceTitle.setText(schoolPeopleAllForm.get(index).getAttName());
-                        adapter.setList(schoolPeopleAllForm.get(index).getGradeList());
-                    });
-                });
-
             }
         }
     }
@@ -136,21 +101,6 @@ public class SchoolStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
                     .setText(R.id.tv_ask_for_leave_num, item.getLeave() + "");
         }
     };
-
-    @Override
-    public void getAttendanceSuccess(AttendanceCheckRsp model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
-            AttendanceCheckRsp.DataBean data = model.getData();
-            if (data != null) {
-                setDataView(data);
-            }
-        }
-    }
-
-    @Override
-    public void getAttendanceFail(String msg) {
-        Log.d(TAG, "getHomeAttendanceFail-->>" + msg);
-    }
 
     @Override
     public void onDestroy() {

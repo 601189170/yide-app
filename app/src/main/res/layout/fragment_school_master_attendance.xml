@@ -16,20 +16,6 @@
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        android:layout="@layout/empty"/>-->
 
-    <TextView
-        android:id="@+id/tv_attendance_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_12"
-        android:drawableRight="@mipmap/icon_down"
-        android:drawablePadding="@dimen/dp_5"
-        android:textColor="@color/text_1E1E1E"
-        android:textSize="@dimen/text_15"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"

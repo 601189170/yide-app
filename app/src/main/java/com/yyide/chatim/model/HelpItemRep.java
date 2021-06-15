@@ -66,7 +66,7 @@ public class HelpItemRep {
              * @website http://www.json.cn/java2pojo/
              */
 
-            private int id;
+            private long id;
             private String delInd;
             private String createdBy;
             private String createdDateTime;
@@ -84,11 +84,11 @@ public class HelpItemRep {
             private String status;//0是富文本，1是视频
             private String video;
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 

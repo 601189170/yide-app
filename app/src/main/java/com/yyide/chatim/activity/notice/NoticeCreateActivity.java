@@ -182,7 +182,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         body.setClassCardIds(classCardIds);
         body.setClassesIds(classesIds);
         body.setIsTiming(isTiming);
-        int schoolId = SpData.getIdentityInfo().schoolId;
+        long schoolId = SpData.getIdentityInfo().schoolId;
         body.setSchoolId(schoolId);
         if (isTiming){
             body.setTimingTime(timingTime);

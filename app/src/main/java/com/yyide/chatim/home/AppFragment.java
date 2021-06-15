@@ -260,7 +260,6 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 recylAppAdapter.notifydata(model.getData().getRecords());
                 List<AppItemBean.DataBean.RecordsBean> records = model.getData().getRecords();
                 appAdapter.setList(records);
-                recyclerViewApp.getViewTreeObserver().addOnGlobalLayoutListener(() -> setListViewHeight(recyclerViewApp));
             }
         }
     }

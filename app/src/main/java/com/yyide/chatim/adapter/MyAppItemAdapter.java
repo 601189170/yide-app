@@ -46,15 +46,14 @@ public class MyAppItemAdapter extends BaseAdapter {
         ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
         TextView name = VHUtil.ViewHolder.get(view, R.id.name);
         MyAppListRsp.DataBean dataBean = getItem(position);
-        if (dataBean != null) {
+        if ("editor".equals(getItem(position).getAppType())) {
+            item.setImageResource(R.drawable.icon_bj);
+        } else {
             if (!TextUtils.isEmpty(dataBean.getImg())) {
                 GlideUtil.loadCircleImage(view.getContext(), dataBean.getImg(), item);
             }
-            name.setText(dataBean.getName());
         }
-        if ("editor".equals(getItem(position).getAppType())) {
-            item.setImageResource(R.drawable.icon_bj);
-        }
+        name.setText(dataBean.getName());
         return view;
     }
 

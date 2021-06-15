@@ -4,13 +4,13 @@ import java.util.List;
 
 public class PreparesLessonRep {
     private long id;
-    private int timetableSchedulSubId;
+    private long timetableSchedulSubId;
 
     private String beforeClass;
 
     private String afterClass;
 
-    private int lessonsId;
+    private long lessonsId;
 
     private String lessonsDate;
 
@@ -18,11 +18,11 @@ public class PreparesLessonRep {
 
     private List<LessonsSubEntityList> lessonsSubEntityList;
 
-    public void setTimetableSchedulSubId(int timetableSchedulSubId) {
+    public void setTimetableSchedulSubId(long timetableSchedulSubId) {
         this.timetableSchedulSubId = timetableSchedulSubId;
     }
 
-    public int getTimetableSchedulSubId() {
+    public long getTimetableSchedulSubId() {
         return this.timetableSchedulSubId;
     }
 
@@ -50,11 +50,11 @@ public class PreparesLessonRep {
         return this.teachToolList;
     }
 
-    public int getLessonsId() {
+    public long getLessonsId() {
         return lessonsId;
     }
 
-    public void setLessonsId(int lessonsId) {
+    public void setLessonsId(long lessonsId) {
         this.lessonsId = lessonsId;
     }
 

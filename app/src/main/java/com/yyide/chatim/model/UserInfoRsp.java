@@ -110,7 +110,7 @@ public class UserInfoRsp {
          * accommodation : null
          */
 
-        private int id;
+        private long id;
         private String delInd;
         private String createdBy;
         private String createdDateTime;
@@ -145,7 +145,7 @@ public class UserInfoRsp {
         private String faceInformation;
         private String address;
         private String specialty;
-        private int schoolId;
+        private long schoolId;
         private String remarks;
         private String classesId;
         private String classesName;
@@ -187,11 +187,11 @@ public class UserInfoRsp {
             this.departmentName = departmentName;
         }
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 
@@ -467,11 +467,11 @@ public class UserInfoRsp {
             this.specialty = specialty;
         }
 
-        public int getSchoolId() {
+        public long getSchoolId() {
             return schoolId;
         }
 
-        public void setSchoolId(int schoolId) {
+        public void setSchoolId(long schoolId) {
             this.schoolId = schoolId;
         }
 

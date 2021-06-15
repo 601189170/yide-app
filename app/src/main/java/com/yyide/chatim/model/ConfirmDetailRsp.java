@@ -128,14 +128,14 @@ public class ConfirmDetailRsp {
              * userName : fasfds
              */
 
-            private int userId;
+            private long userId;
             private String name;
 
-            public int getUserId() {
+            public long getUserId() {
                 return userId;
             }
 
-            public void setUserId(int userId) {
+            public void setUserId(long userId) {
                 this.userId = userId;
             }
 

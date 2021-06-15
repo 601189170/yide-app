@@ -17,7 +17,7 @@ public class HomeBannerPresenter extends BasePresenter<HomeBannerView> {
         attachView(view);
     }
 
-    public void getClassPhotoList(String classId, int schoolId) {
+    public void getClassPhotoList(String classId, long schoolId) {
         Map<String, Object> map = new HashMap<>();
         map.put("classesId", classId);
         map.put("schoolId", schoolId);

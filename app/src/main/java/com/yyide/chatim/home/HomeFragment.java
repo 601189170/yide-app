@@ -200,15 +200,15 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         fragmentTransaction = childFragmentManager.beginTransaction();
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
             //校长身份
-            tableContent.setVisibility(View.GONE);
             bannerContent.setVisibility(View.GONE);
             workContent.setVisibility(View.GONE);
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);
+            tableContent.setVisibility(View.GONE);
             kqContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             //通知
-            fragmentTransaction.replace(R.id.table_content, new TableFragment());
+            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, AttendanceSchoolFragment.newInstance());
         } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {

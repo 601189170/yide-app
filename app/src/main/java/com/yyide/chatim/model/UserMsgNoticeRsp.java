@@ -33,7 +33,7 @@ public class UserMsgNoticeRsp {
         private List<?> orders;
         private boolean optimizeCountSql;
         private boolean hitCount;
-        private Object countId;
+        private long countId;
         private Object maxLimit;
         private boolean searchCount;
         private int pages;
@@ -43,7 +43,7 @@ public class UserMsgNoticeRsp {
         public static class RecordsBean {
             private String title;
             private String content;
-            private int userId;
+            private long userId;
             private long id;
             private long signId;
             private Object remakeData;

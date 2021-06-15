@@ -152,7 +152,7 @@ public class TodoRsp{
              * sendObject : null
              */
 
-            private int id;
+            private long id;
             private String delInd;
             private Object createdBy;
             private String createdDateTime;
@@ -208,7 +208,7 @@ public class TodoRsp{
                 this.firstData = firstData;
             }
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
@@ -220,7 +220,7 @@ public class TodoRsp{
                 this.callId = callId;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 

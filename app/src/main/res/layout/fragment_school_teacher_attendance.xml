@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/color_F5F8FC"
-                android:paddingTop="60dp">
+                android:paddingTop="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -32,9 +32,9 @@
                     android:background="@mipmap/icon_attendance_bg"
                     android:paddingStart="@dimen/dp_15"
                     android:paddingEnd="@dimen/dp_15"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/tv_desc"
@@ -233,47 +233,14 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/color_F5F8FC"
-                app:contentInsetStart="0dp"
-                app:layout_collapseMode="pin">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tv_attendance_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:drawableRight="@mipmap/icon_down"
-                        android:drawablePadding="@dimen/dp_5"
-                        android:textColor="@color/text_1E1E1E"
-                        android:textSize="@dimen/text_15"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_class_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        android:textColor="@color/text_606266"
-                        android:drawableEnd="@mipmap/icon_down"
-                        android:drawablePadding="@dimen/dp_5"
-                        android:visibility="gone"
-                        android:textSize="@dimen/text_14"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_attendance_title" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.appcompat.widget.Toolbar>
+            <!--            <androidx.appcompat.widget.Toolbar-->
+            <!--                android:id="@+id/toolbar"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@color/color_F5F8FC"-->
+            <!--                app:contentInsetStart="0dp"-->
+            <!--                app:layout_collapseMode="pin">-->
+            <!--            </androidx.appcompat.widget.Toolbar>-->
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

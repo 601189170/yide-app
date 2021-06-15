@@ -109,8 +109,8 @@ public class UserNoticeRsp {
 
             private String title;
             private String content;
-            private int userId;
-            private int id;
+            private long userId;
+            private long id;
             private long signId;
             private String remakeData;
             private String firstData;
@@ -136,19 +136,19 @@ public class UserNoticeRsp {
                 this.content = content;
             }
 
-            public int getUserId() {
+            public long getUserId() {
                 return userId;
             }
 
-            public void setUserId(int userId) {
+            public void setUserId(long userId) {
                 this.userId = userId;
             }
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 

@@ -137,7 +137,7 @@ public class TemplateTypeRsp {
              * tempName : 安全
              */
 
-            private int id;
+            private long id;
             private String delInd;
             private String createdBy;
             private Object createdDateTime;
@@ -149,11 +149,11 @@ public class TemplateTypeRsp {
             private int current;
             private String tempName;
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 

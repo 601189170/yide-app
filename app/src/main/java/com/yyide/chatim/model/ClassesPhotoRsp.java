@@ -44,8 +44,8 @@ public class ClassesPhotoRsp {
         private Integer size;
         private Integer current;
         private String name;
-        private Object schoolId;
-        private Object classesId;
+        private long schoolId;
+        private long classesId;
         private String show;
         private Object kind;
         private String sort;
@@ -139,19 +139,19 @@ public class ClassesPhotoRsp {
             this.name = name;
         }
 
-        public Object getSchoolId() {
+        public long getSchoolId() {
             return schoolId;
         }
 
-        public void setSchoolId(Object schoolId) {
+        public void setSchoolId(long schoolId) {
             this.schoolId = schoolId;
         }
 
-        public Object getClassesId() {
+        public long getClassesId() {
             return classesId;
         }
 
-        public void setClassesId(Object classesId) {
+        public void setClassesId(long classesId) {
             this.classesId = classesId;
         }
 

@@ -37,9 +37,9 @@ public class SelectUserSchoolRsp {
         public String username;
         public String password;
         public Object userId;
-        public int schoolId;
+        public long schoolId;
         public String schoolName;
-        public Object teacherId;
+        public long teacherId;
         public Object dataPerInd;
         public Object depIds;
         public Object status;

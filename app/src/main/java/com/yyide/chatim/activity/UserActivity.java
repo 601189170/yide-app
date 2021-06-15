@@ -86,9 +86,9 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     TextView title;
 
     private GetUserSchoolRsp.DataBean userInfo;
-    private int classesId;
+    private long classesId;
     private String realname;
-    private int depId;
+    private long depId;
     @Override
     public int getContentViewID() {
         return R.layout.activity_user_layout;

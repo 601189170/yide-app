@@ -42,7 +42,7 @@ public class SelectSchByTeaidRsp {
          * toDateTime : 11:15
          */
 
-        public int id;
+        public long id;
         public String delInd;
         public Object createdBy;
         public String createdDateTime;
@@ -56,8 +56,8 @@ public class SelectSchByTeaidRsp {
         public String classesId;
         public String classesName;
         public String classesTeacher;
-        public int teacherId;
-        public int schoolId;
+        public long teacherId;
+        public long schoolId;
         public String schoolType;
         public String section;
         public int weekTime;
@@ -66,8 +66,8 @@ public class SelectSchByTeaidRsp {
         public String beforeClass;
         public String afterClass;
         public String teachTool;
-        public int subid;
-        public int lessonsId;
+        public long subid;
+        public long lessonsId;
         public List<String> teachToolList;
         public List<String> lessonsSubEntityList;
     }

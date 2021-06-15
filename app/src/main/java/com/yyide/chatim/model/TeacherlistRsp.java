@@ -124,11 +124,11 @@ public class TeacherlistRsp implements Serializable {
             public String faceInformation;
             public String address;
             public String specialty;
-            public int schoolId;
-            public int userId;
+            public long schoolId;
+            public long userId;
             public String remarks;
             public Object departmentName;
-            public int departmentId;
+            public long departmentId;
             public List<DepartmentsBean> departments;
             public List<SubjectsBean> subjects;
             public List<?> roles;
@@ -160,7 +160,7 @@ public class TeacherlistRsp implements Serializable {
                  * schoolId : 524
                  */
 
-                public int id;
+                public long id;
                 public String delInd;
                 public String createdBy;
                 public String createdDateTime;
@@ -170,10 +170,10 @@ public class TeacherlistRsp implements Serializable {
                 public int total;
                 public int size;
                 public int current;
-                public int departmentId;
+                public long departmentId;
                 public String departmentName;
-                public int teacherId;
-                public int schoolId;
+                public long teacherId;
+                public long schoolId;
 
 
             }
@@ -195,7 +195,7 @@ public class TeacherlistRsp implements Serializable {
                  * schoolId : 524
                  */
 
-                public int id;
+                public long id;
                 public String delInd;
                 public String createdBy;
                 public String createdDateTime;
@@ -205,10 +205,10 @@ public class TeacherlistRsp implements Serializable {
                 public int total;
                 public int size;
                 public int current;
-                public int subjectId;
+                public long subjectId;
                 public String subjectName;
-                public int teacherId;
-                public int schoolId;
+                public long teacherId;
+                public long schoolId;
 
 
             }

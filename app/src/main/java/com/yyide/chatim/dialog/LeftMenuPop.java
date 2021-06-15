@@ -242,8 +242,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 setCache();
                 break;
             case R.id.layout8://版本更新
-//                ToastUtils.showShort("已是最新版本");
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
+                ToastUtils.showShort("已是最新版本");
+                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
                 break;
             case R.id.exit://退出登录
 //                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);

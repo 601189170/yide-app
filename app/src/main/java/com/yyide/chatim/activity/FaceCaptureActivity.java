@@ -57,8 +57,8 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     Button btn_start_capture;//已经上传过人脸的，显示重新采集，默认开始采集
 
     private static final int REQUEST_TAKE_PHOTO = 1;
-    private int classesId;
-    private int depId;
+    private long classesId;
+    private long depId;
     private String realname;
 
     @Override

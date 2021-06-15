@@ -33,7 +33,7 @@ public class LeaveListRsp {
         private List<?> orders;
         private boolean optimizeCountSql;
         private boolean hitCount;
-        private Object countId;
+        private long countId;
         private Object maxLimit;
         private boolean searchCount;
         private int pages;

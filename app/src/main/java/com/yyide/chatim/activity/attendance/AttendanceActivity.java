@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.attendance.fragment.SchoolAttendanceFragment;
 import com.yyide.chatim.activity.attendance.fragment.TeacherStudentAttendanceFragment;
 import com.yyide.chatim.activity.attendance.fragment.FamilyStudentAttendanceFragment;
 import com.yyide.chatim.activity.attendance.fragment.SchoolTeacherAttendanceFragment;
@@ -56,17 +57,19 @@ public class AttendanceActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
             //校长考情展示
-            if ("N".equals(type)) {
-                fragmentTransaction.add(R.id.fl_content, SchoolTeacherAttendanceFragment.newInstance(index));
-            } else {
-                fragmentTransaction.add(R.id.fl_content, SchoolStudentAttendanceFragment.newInstance(index));
-            }
+//            if ("N".equals(type)) {
+//                fragmentTransaction.replace(R.id.fl_content, SchoolTeacherAttendanceFragment.newInstance(index));
+//            } else {
+//                fragmentTransaction.replace(R.id.fl_content, SchoolStudentAttendanceFragment.newInstance(index));
+//            }
+
+            fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(index));
         } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             //家长考情
-            fragmentTransaction.add(R.id.fl_content, FamilyStudentAttendanceFragment.newInstance(index));
+            fragmentTransaction.replace(R.id.fl_content, FamilyStudentAttendanceFragment.newInstance(index));
         } else {
             //教师教职工 考情详情
-            fragmentTransaction.add(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(index));
+            fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(index));
         }
         fragmentTransaction.commit();
     }

@@ -52,7 +52,7 @@ public class AppItemBean {
              * owner : null
              */
 
-            private int id;
+            private long id;
             private String delInd;
             private String name;
             private String schoolId;
@@ -90,7 +90,7 @@ public class AppItemBean {
                  * isAdd : null
                  */
 
-                private int id;
+                private long id;
                 private String delInd;
                 private String createdBy;
                 private String createdDateTime;

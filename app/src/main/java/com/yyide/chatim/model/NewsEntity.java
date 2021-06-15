@@ -60,7 +60,7 @@ public class NewsEntity {
 
     public static class StoriesBean {
         private int type;
-        private int id;
+        private long id;
         private String ga_prefix;
         private String title;
         private List<String> images;
@@ -73,11 +73,11 @@ public class NewsEntity {
             this.type = type;
         }
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 
@@ -109,7 +109,7 @@ public class NewsEntity {
     public static class TopStoriesBean {
         private String image;
         private int type;
-        private int id;
+        private long id;
         private String ga_prefix;
         private String title;
 
@@ -129,11 +129,11 @@ public class NewsEntity {
             this.type = type;
         }
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 

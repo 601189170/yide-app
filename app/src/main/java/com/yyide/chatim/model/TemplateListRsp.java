@@ -35,7 +35,7 @@ public class TemplateListRsp {
         @Data
         @NoArgsConstructor
         public static class RecordsBean {
-            private int id;
+            private long id;
             private String delInd;
             private Object createdBy;
             private String createdDateTime;
@@ -49,7 +49,7 @@ public class TemplateListRsp {
             private Object type;
             private String status;
             private String content;
-            private int tempId;
+            private long tempId;
             private Object messages;
         }
     }

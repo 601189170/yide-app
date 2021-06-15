@@ -81,9 +81,10 @@ public class GetUserSchoolRsp {
 
         /**
          * 判断当前是否是教职工
+         *
          * @return 默认是教职工
          */
-        public boolean staffIdentity(){
+        public boolean staffIdentity() {
             return TextUtils.isEmpty(status) || (!TYPE_PARENTS.equals(status) && !TYPE_STUDENT.equals(status));
         }
 
@@ -91,10 +92,10 @@ public class GetUserSchoolRsp {
         public String username;
         public String password;
         public String userId;
-        public int schoolId;
-        public int classesId;
+        public long schoolId;
+        public long classesId;
         public String classesName;
-        public int parentId;
+        public long parentId;
         public String schoolName;
         public String schoolType;//Y 大学 N小初高
         public String teacherId;

@@ -33,16 +33,16 @@ public class ClassesPhotoBannerRsp {
     }
 
     public static class DataBean {
-        private int classifyId;
+        private long classifyId;
         private String name;
         private String url;
         private String type;
 
-        public int getClassifyId() {
+        public long getClassifyId() {
             return classifyId;
         }
 
-        public void setClassifyId(int classifyId) {
+        public void setClassifyId(long classifyId) {
             this.classifyId = classifyId;
         }
 

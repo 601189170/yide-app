@@ -25,7 +25,7 @@ public class FaceUploadPresenter extends BasePresenter<FaceUploadView> {
         attachView(view);
     }
 
-    public void updateFaceData(String name, int classId,int depId, String facePath) {
+    public void updateFaceData(String name, long classId,long depId, String facePath) {
         Log.e("FaceUploadPresenter", "updateFaceData: name="+name +",classId="+classId+",depId="+depId+",facePath="+facePath);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
@@ -81,7 +81,7 @@ public class FaceUploadPresenter extends BasePresenter<FaceUploadView> {
         }
     }
 
-    public void getFaceData(String name, int classId,int depId){
+    public void getFaceData(String name, long classId,long depId){
         Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId+",depId="+depId);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
