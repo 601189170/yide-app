@@ -3,6 +3,7 @@ package com.yyide.chatim.view.leave;
 import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
+import com.yyide.chatim.model.DepartmentScopeRsp2;
 import com.yyide.chatim.model.StudentScopeRsp;
 import com.yyide.chatim.model.UniversityScopeRsp;
 
@@ -12,6 +13,9 @@ public interface AddressBookView extends BaseView {
 
     void getDepartmentListSuccess(DepartmentScopeRsp departmentScopeRsp);
     void getDepartmentListFail(String msg);
+
+    void getDepartmentListSuccess2(DepartmentScopeRsp2 departmentScopeRsp2);
+    void getDepartmentListFail2(String msg);
 
     void getUniversityListSuccess(UniversityScopeRsp universityScopeRsp);
     void getUniversityListFail(String msg);

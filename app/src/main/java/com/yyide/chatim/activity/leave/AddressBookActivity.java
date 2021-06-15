@@ -22,6 +22,7 @@ import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.AddressBookBean;
+import com.yyide.chatim.model.DepartmentScopeRsp2;
 import com.yyide.chatim.model.StudentScopeRsp;
 import com.yyide.chatim.model.UniversityScopeRsp;
 import com.yyide.chatim.presenter.leave.AddressBookPresenter;
@@ -87,7 +88,8 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
 
         } else {
             //选择部门
-            mvpPresenter.getDepartmentList();
+            //mvpPresenter.getDepartmentList();
+            mvpPresenter.queryDepartmentOverrideList();
         }
     }
 
@@ -108,9 +110,9 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
         });
 
         adapter.setOnItemClickListener(addressBookBean -> {
-                    Log.e(TAG, "setOnItemClickListener: id=" + addressBookBean.getId() + " ,level=" + addressBookBean.getLevel());
+                    Log.e(TAG, "setOnItemClickListener: id=" + addressBookBean.getId() + " ,level=" + addressBookBean.getLevel()+",isExitInd="+addressBookBean.getIsExitInd());
                     this.addressBookBean = addressBookBean;
-                    if (addressBookBean.getDeptMemberList() != null && addressBookBean.getDeptMemberList().isEmpty()){
+                    if (addressBookBean.getDeptMemberList() != null && addressBookBean.getDeptMemberList().isEmpty() && "Y".equals(addressBookBean.getIsExitInd())){
                         mvpPresenter.queryDeptMemberByDeptId(addressBookBean.getId(), addressBookBean.getLevel());
                     }else {
                         Log.e(TAG, "setOnItemClickListener: 已经请求过数据不在请求" );
@@ -274,7 +276,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
         //返回上一页
         Intent intent = getIntent();
         intent.putExtra("deptList", JSON.toJSONString(deptList));
-        this.setResult(this.RESULT_OK, intent);
+        this.setResult(RESULT_OK, intent);
         finish();
     }
 
@@ -356,7 +358,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
                     continue;
                 }
                 List<DepartmentScopeRsp.DataBean.ListBeanXX> list = datum.getList();
-                AddressBookBean noticeScopeBean = new AddressBookBean(datum.getId(), datum.getName(),datum.getLevel());
+                AddressBookBean noticeScopeBean = new AddressBookBean(datum.getId(), datum.getName(),datum.getLevel(),"Y");
                 List<AddressBookBean> noticeScopeBeans1 = new ArrayList<>();
                 if (list.isEmpty()) {
                     departmentTotal++;
@@ -365,7 +367,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
                 }
                 for (DepartmentScopeRsp.DataBean.ListBeanXX listBeanXX : list) {
                     List<DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX> list1 = listBeanXX.getList();
-                    AddressBookBean noticeScopeBean2 = new AddressBookBean(listBeanXX.getId(), listBeanXX.getName(),listBeanXX.getLevel());
+                    AddressBookBean noticeScopeBean2 = new AddressBookBean(listBeanXX.getId(), listBeanXX.getName(),listBeanXX.getLevel(),"Y");
                     if (list1.isEmpty()) {
                         departmentTotal++;
                         noticeScopeBeans1.add(noticeScopeBean2);
@@ -374,7 +376,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
                     List<AddressBookBean> noticeScopeBeans2 = new ArrayList<>();
                     for (DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX listBeanX : list1) {
                         List<DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX.ListBean> list2 = listBeanX.getList();
-                        AddressBookBean noticeScopeBean3 = new AddressBookBean(listBeanX.getId(), listBeanX.getName(),listBeanX.getLevel());
+                        AddressBookBean noticeScopeBean3 = new AddressBookBean(listBeanX.getId(), listBeanX.getName(),listBeanX.getLevel(),"Y");
                         if (list2.isEmpty()) {
                             departmentTotal++;
                             noticeScopeBeans2.add(noticeScopeBean3);
@@ -383,7 +385,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
                         List<AddressBookBean> noticeScopeBeans3 = new ArrayList<>();
                         for (DepartmentScopeRsp.DataBean.ListBeanXX.ListBeanX.ListBean listBean : list2) {
                             departmentTotal++;
-                            AddressBookBean noticeScopeBean4 = new AddressBookBean(listBean.getId(), listBean.getName(),listBean.getLevel());
+                            AddressBookBean noticeScopeBean4 = new AddressBookBean(listBean.getId(), listBean.getName(),listBean.getLevel(),"Y");
                             noticeScopeBeans3.add(noticeScopeBean4);
                         }
                         noticeScopeBean3.setList(noticeScopeBeans3);
@@ -414,6 +416,78 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
     @Override
     public void getDepartmentListFail(String msg) {
         Log.e(TAG, "getDepartmentListFail: " + "请求数据失败：" + msg);
+        ToastUtils.showShort("请求数据失败：" + msg);
+        showBlank(true);
+    }
+
+    @Override
+    public void getDepartmentListSuccess2(DepartmentScopeRsp2 departmentScopeRsp2) {
+        Log.e(TAG, "getDepartmentListSuccess2: " + departmentScopeRsp2.toString());
+        if (departmentScopeRsp2.getCode() == 200) {
+            noticeScopeBeans.clear();
+            for (DepartmentScopeRsp2.DataBean datum : departmentScopeRsp2.getData()) {
+                if (datum == null) {
+                    continue;
+                }
+                List<DepartmentScopeRsp2.DataBean.ListBeanXX> list = datum.getList();
+                AddressBookBean noticeScopeBean = new AddressBookBean(datum.getId(), datum.getName(),datum.getLevel(),datum.getIsExitInd());
+                List<AddressBookBean> noticeScopeBeans1 = new ArrayList<>();
+                if (list.isEmpty()) {
+                    departmentTotal++;
+                    noticeScopeBeans.add(noticeScopeBean);
+                    continue;
+                }
+                for (DepartmentScopeRsp2.DataBean.ListBeanXX listBeanXX : list) {
+                    List<DepartmentScopeRsp2.DataBean.ListBeanXX.ListBeanX> list1 = listBeanXX.getList();
+                    AddressBookBean noticeScopeBean2 = new AddressBookBean(listBeanXX.getId(), listBeanXX.getName(),listBeanXX.getLevel(),listBeanXX.getIsExitInd());
+                    if (list1.isEmpty()) {
+                        departmentTotal++;
+                        noticeScopeBeans1.add(noticeScopeBean2);
+                        continue;
+                    }
+                    List<AddressBookBean> noticeScopeBeans2 = new ArrayList<>();
+                    for (DepartmentScopeRsp2.DataBean.ListBeanXX.ListBeanX listBeanX : list1) {
+                        List<DepartmentScopeRsp2.DataBean.ListBeanXX.ListBeanX.ListBean> list2 = listBeanX.getList();
+                        AddressBookBean noticeScopeBean3 = new AddressBookBean(listBeanX.getId(), listBeanX.getName(),listBeanX.getLevel(),listBeanX.getIsExitInd());
+                        if (list2.isEmpty()) {
+                            departmentTotal++;
+                            noticeScopeBeans2.add(noticeScopeBean3);
+                            continue;
+                        }
+                        List<AddressBookBean> noticeScopeBeans3 = new ArrayList<>();
+                        for (DepartmentScopeRsp2.DataBean.ListBeanXX.ListBeanX.ListBean listBean : list2) {
+                            departmentTotal++;
+                            AddressBookBean noticeScopeBean4 = new AddressBookBean(listBean.getId(), listBean.getName(),listBean.getLevel(),listBean.getIsExitInd());
+                            noticeScopeBeans3.add(noticeScopeBean4);
+                        }
+                        noticeScopeBean3.setList(noticeScopeBeans3);
+                        noticeScopeBeans2.add(noticeScopeBean3);
+                        departmentTotal++;
+                    }
+                    noticeScopeBean2.setList(noticeScopeBeans2);
+                    noticeScopeBeans1.add(noticeScopeBean2);
+                    departmentTotal++;
+                }
+                noticeScopeBean.setList(noticeScopeBeans1);
+                noticeScopeBeans.add(noticeScopeBean);
+                departmentTotal++;
+            }
+            Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
+            showBlank(noticeScopeBeans.isEmpty());
+//            if (noticeScopeBeans.isEmpty()) {
+//                //ToastUtils.showShort("没有找到通知范围数据！");
+//                showBlank(noticeScopeBeans.isEmpty());
+//            }
+            adapter.notifyDataSetChanged();
+        } else {
+            ToastUtils.showShort("请求数据失败:" + departmentScopeRsp2.getMsg());
+            showBlank(true);
+        }
+    }
+
+    @Override
+    public void getDepartmentListFail2(String msg) {
+        Log.e(TAG, "getDepartmentListFail2: " + "请求数据失败：" + msg);
         ToastUtils.showShort("请求数据失败：" + msg);
         showBlank(true);
     }

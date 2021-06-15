@@ -7,6 +7,7 @@ import com.yyide.chatim.activity.notice.view.NoticeScopeView;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
+import com.yyide.chatim.model.DepartmentScopeRsp2;
 import com.yyide.chatim.model.StudentScopeRsp;
 import com.yyide.chatim.model.UniversityScopeRsp;
 import com.yyide.chatim.net.ApiCallback;
@@ -89,6 +90,28 @@ public class AddressBookPresenter extends BasePresenter<AddressBookView> {
             @Override
             public void onFailure(String msg) {
                 mvpView.getDepartmentListFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void queryDepartmentOverrideList(){
+        mvpView.showLoading();
+        Map map = new HashMap<String,Object>();
+        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        addSubscription(dingApiStores.queryDepartmentOverrideList(body),new ApiCallback<DepartmentScopeRsp2>(){
+            @Override
+            public void onSuccess(DepartmentScopeRsp2 model) {
+                mvpView.getDepartmentListSuccess2(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getDepartmentListFail2(msg);
             }
 
             @Override

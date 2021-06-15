@@ -8,6 +8,7 @@ import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
+import com.yyide.chatim.model.DepartmentScopeRsp2;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveListRsp;
@@ -281,6 +282,12 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/message/notice/scope/getDepartmentList")
     Observable<DepartmentScopeRsp> getDepartmentList(@Body RequestBody requestBody);
+
+    //https://api.uat.edu.1d1j.net/management/cloud-system/message/notice/scope/v1/app/queryDepartmentOverrideList
+    //获取部门列表-权限校验
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/message/notice/scope/v1/app/queryDepartmentOverrideList")
+    Observable<DepartmentScopeRsp2> queryDepartmentOverrideList(@Body RequestBody requestBody);
 
     //查询是否有备课
     @Headers({"Content-Type: application/json", "Accept: application/json"})

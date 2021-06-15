@@ -361,7 +361,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         final ApproverRsp.DataBean data = approverRsp.getData();
         if (approverRsp.getCode() != 200){
             ToastUtils.showShort(approverRsp.getMsg());
-            iv_add_staff.setVisibility(View.GONE);
+            removeAllViews();
             return;
         }
         if (data != null){
@@ -433,6 +433,17 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     @Override
     public void approverFail(String msg) {
         ToastUtils.showLong(msg);
+        removeAllViews();
+    }
+
+    private void removeAllViews() {
+        iv_add_staff.setVisibility(View.GONE);
+        ll_approver_list.removeAllViews();
+        ll_copyer_list.removeAllViews();
+        btn_commit.setAlpha(0.5f);
+        btn_commit.setClickable(false);
+        carbonCopyPeopleId.clear();
+        carbonCopyPeopleList.clear();
     }
 
     @Override

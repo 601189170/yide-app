@@ -27,6 +27,7 @@ public class AddressBookBean {
     private int level;//学段【中学】 表示 0学段 1年级 2班级 【大学 】0 系 1 班级
     private boolean hasNext = true;
     private List<AddressBookBean> list;
+    private String isExitInd;
     //部门成员列表
     private List<AddressBookRsp.DataBean> deptMemberList = new ArrayList<>();
 
@@ -35,10 +36,11 @@ public class AddressBookBean {
         this.name = name;
     }
 
-    public AddressBookBean(long id, String name, int level) {
+    public AddressBookBean(long id, String name, int level,String isExitInd) {
         this.id = id;
         this.name = name;
         this.level = level;
+        this.isExitInd = isExitInd;
     }
 
     public AddressBookBean(long id, String name, int level, boolean hasNext) {
