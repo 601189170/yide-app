@@ -28,5 +28,6 @@ public class LeavePhraseRsp {
     public static class DataBean {
         private String tag;
         private long id;
+        private boolean checked;
     }
 }

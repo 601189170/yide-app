@@ -277,7 +277,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         //返回上一页
         Intent intent = getIntent();
         intent.putExtra("ids", classesIds);
-        this.setResult(this.RESULT_OK, intent);
+        this.setResult(RESULT_OK, intent);
         finish();
     }
 

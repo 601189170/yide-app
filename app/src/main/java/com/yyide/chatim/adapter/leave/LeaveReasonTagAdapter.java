@@ -53,6 +53,11 @@ public class LeaveReasonTagAdapter extends RecyclerView.Adapter<LeaveReasonTagAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LeavePhraseRsp.DataBean tag = data.get(position);
         holder.tv_tag.setText(tag.getTag());
+        if (tag.isChecked()){
+            holder.itemView.setBackgroundResource(R.drawable.leave_reason_tag_selected_bg_shape);
+        }else {
+            holder.itemView.setBackgroundResource(R.drawable.leave_reason_tag_bg_shape);
+        }
         holder.itemView.setOnClickListener(v -> {
             onClickedListener.onClicked(position);
         });

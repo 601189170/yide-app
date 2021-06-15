@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -153,8 +155,17 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         leaveReasonTagAdapter.setOnClickedListener(position -> {
             LeavePhraseRsp.DataBean tag = tags.get(position);
             //editLeaveReason.setText(tag.getTag());
-            reason += tag.getTag();
+            if (!tag.isChecked()) {
+                reason += tag.getTag();
+            }else {
+                reason = reason.replace(tag.getTag(),"");
+            }
+            Log.e(TAG, "onViewCreated: "+reason);
             editLeaveReason.setText(reason);
+
+            //修改状态
+            tag.setChecked(!tag.isChecked());
+            leaveReasonTagAdapter.notifyDataSetChanged();
         });
         btn_commit.setAlpha(0.5f);
         btn_commit.setClickable(false);
@@ -164,6 +175,23 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         iv_add_staff.setOnClickListener(v->{
             Intent intent = new Intent(getActivity(), AddressBookActivity.class);
             startActivityForResult(intent,REQUEST_CODE);
+        });
+
+        editLeaveReason.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    reason = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
     }
 

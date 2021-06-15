@@ -3,7 +3,9 @@ package com.yyide.chatim.fragment.leave;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,8 +165,18 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         recyclerviewTagHint.setAdapter(leaveReasonTagAdapter);
         leaveReasonTagAdapter.setOnClickedListener(position -> {
             LeavePhraseRsp.DataBean tag = tags.get(position);
-            reason += tag.getTag();
+            //editLeaveReason.setText(tag.getTag());
+            if (!tag.isChecked()) {
+                reason += tag.getTag();
+            }else {
+                reason = reason.replace(tag.getTag(),"");
+            }
+            Log.e(TAG, "onViewCreated: "+reason);
             editLeaveReason.setText(reason);
+
+            //修改状态
+            tag.setChecked(!tag.isChecked());
+            leaveReasonTagAdapter.notifyDataSetChanged();
         });
         accordingCourseLeave(false);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -212,6 +224,23 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         //请求审批流程
         mvpPresenter.getApprover(classesId);
         mvpPresenter.queryLeavePhraseList(1);
+
+        editLeaveReason.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                reason = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     /**
