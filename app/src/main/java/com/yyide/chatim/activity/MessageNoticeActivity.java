@@ -114,7 +114,13 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                         break;
                 }
             } else if("1".equals(recordsBean.getIsText())){
-                MessageDetailActivity.start(this, recordsBean);
+                if ("3".equals(recordsBean.getAttributeType())) {
+                    //跳转人脸采集
+                    startActivity(new Intent(this, FaceCaptureActivity.class));
+                } else {
+                    //其他消息显示文本详情
+                    MessageDetailActivity.start(this, recordsBean);
+                }
             }
         });
     }
