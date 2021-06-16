@@ -103,7 +103,7 @@ public class AddressBookPresenter extends BasePresenter<AddressBookView> {
         mvpView.showLoading();
         Map map = new HashMap<String,Object>();
         RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
-        addSubscription(dingApiStores.queryDepartmentOverrideList(body),new ApiCallback<DepartmentScopeRsp2>(){
+        addSubscription(dingApiStores.queryOrganizationStructure(body),new ApiCallback<DepartmentScopeRsp2>(){
             @Override
             public void onSuccess(DepartmentScopeRsp2 model) {
                 mvpView.getDepartmentListSuccess2(model);
