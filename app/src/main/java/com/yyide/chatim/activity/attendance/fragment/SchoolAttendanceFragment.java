@@ -79,9 +79,9 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
         }
 
         if ("N".equals(schoolPeopleAllFormBean.getPeopleType())) {
-            getChildFragmentManager().beginTransaction().replace(R.id.fl_content, SchoolTeacherAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolTeacherAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
         } else {
-            getChildFragmentManager().beginTransaction().replace(R.id.fl_content, SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
         }
         mViewBinding.tvAttendanceTitle.setText(schoolPeopleAllFormBean.attName);
         if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
@@ -122,9 +122,10 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
                 mViewBinding.tvAttendanceTitle.setText(bean.attName);
                 if ("N".equals(bean.getPeopleType())) {
-                    getChildFragmentManager().beginTransaction().replace(R.id.fl_content, SchoolTeacherAttendanceFragment.newInstance(bean)).commit();
+
+                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolTeacherAttendanceFragment.newInstance(bean)).commit();
                 } else {
-                    getChildFragmentManager().beginTransaction().replace(R.id.fl_content, SchoolStudentAttendanceFragment.newInstance(bean)).commit();
+                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean)).commit();
                 }
             });
         });
@@ -147,9 +148,6 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
 
     private void setListData(AttendanceCheckRsp.DataBean dataBean) {
         List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllFormBeanList = new ArrayList<>();
-        if (dataBean.getSchoolPeopleAllForm() != null) {
-            schoolPeopleAllFormBeanList.addAll(dataBean.getSchoolPeopleAllForm());
-        }
         if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
             for (AttendanceCheckRsp.DataBean.AttendancesFormBean item : dataBean.getAttendancesForm()) {
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
@@ -164,6 +162,9 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
                 schoolBean.setTeachers(item.getTeachers());
                 schoolPeopleAllFormBeanList.add(schoolBean);
             }
+        }
+        if (dataBean.getSchoolPeopleAllForm() != null) {
+            schoolPeopleAllFormBeanList.addAll(schoolPeopleAllFormBeanList.size(), dataBean.getSchoolPeopleAllForm());
         }
         dataBean.schoolPeopleAllForm = schoolPeopleAllFormBeanList;
         initView(dataBean);

@@ -299,7 +299,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             }
         } else if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
             mvpPresenter.getHomeNotice();
-        } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+        } else if (BaseConstant.TYPE_HOME_CHECK_IDENTITY.equals(messageEvent.getCode())) {
             setSchoolInfo();
             replaceFragment();
         }

@@ -248,17 +248,23 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item) {
             holder.setText(R.id.tv_student_name, !TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名")
                     .setText(R.id.tv_status, item.getStatusType());
+            TextView tvTime = holder.getView(R.id.tv_student_time);
+            holder.setText(R.id.tv_student_time, "");
+            holder.setText(R.id.tv_student_event, "");
             if (!TextUtils.isEmpty(item.getStatus())) {
                 switch (item.getStatus()) {
                     case "0"://正常
 //                        status = "正常";
+                        holder.setText(R.id.tv_student_event, item.getDeviceName());
+                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "1"://缺勤
 //                        status = "缺勤";
                         break;
                     case "2"://迟到
-                        TextView tvTime = holder.getView(R.id.tv_student_time);
-                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        holder.setText(R.id.tv_student_event, item.getDeviceName());
+                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvTime.setTextColor(Color.parseColor("#F66C6C"));
                         break;
                     case "3"://早退
@@ -268,6 +274,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         String endTime = DateUtils.formatTime(item.getEndDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         holder.setText(R.id.tv_student_event, "请假时间");
                         holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
+                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
                         break;
                 }
             }

@@ -113,6 +113,8 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                     default:
                         break;
                 }
+            } else if("1".equals(recordsBean.getIsText())){
+                MessageDetailActivity.start(this, recordsBean);
             }
         });
     }

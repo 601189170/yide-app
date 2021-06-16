@@ -80,36 +80,14 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
     private void setDataView(AttendanceCheckRsp.DataBean item) {
         List<AttendanceCheckRsp.DataBean.AttendancesFormBean> attendancesForm = item.getAttendancesForm();
         adapter.setList(attendancesForm);
-        if (attendancesForm != null && attendancesForm.size() > 0) {
-            if (attendancesForm.size() < index) {
-                index = 0;
-            }
-            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = attendancesForm.get(index).getStudents();
-            mViewBinding.tvAttendanceType.setText(students.getName());
-        }
-        mViewBinding.tvClassName.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
-
-//        mViewBinding.tvAttendanceType.setOnClickListener(v -> {
-//            AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
-//                @Override
-//                public int getItemsCount() {
-//                    return attendancesForm.size();
-//                }
-//
-//                @Override
-//                public Object getItem(int index) {
-//                    return attendancesForm.get(index).getStudents().getName();
-//                }
-//
-//                @Override
-//                public int indexOf(Object o) {
-//                    return attendancesForm.indexOf(o);
-//                }
-//            });
-//            attendancePop.setOnSelectListener(index -> {
-//                //itemStudents = item.getAttendancesForm().get(index).getStudents();
-//            });
-//        });
+//        if (attendancesForm != null && attendancesForm.size() > 0) {
+//            if (attendancesForm.size() < index) {
+//                index = 0;
+//            }
+//            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = attendancesForm.get(index).getStudents();
+//            mViewBinding.tvAttendanceType.setText(students.getName());
+//        }
+//        mViewBinding.tvClassName.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
     }
 
     BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean, BaseViewHolder>(R.layout.item_attendance_family_head) {
@@ -119,37 +97,41 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
             if (students != null) {
                 ImageView img = holder.getView(R.id.iv_img);
                 TextView leave_desc = holder.getView(R.id.tv_attendance_leave_desc);
+                if(!TextUtils.isEmpty(students.getSubjectName())){
+                    holder.setText(R.id.tv_event_name, students.getSubjectName());
+                } else if(!TextUtils.isEmpty(students.getThingName())){
+                    holder.setText(R.id.tv_event_name, students.getThingName());
+                } else {
+                    holder.setText(R.id.tv_event_name, students.getName());
+                }
+
                 holder.setText(R.id.tv_event_name, !TextUtils.isEmpty(students.getSubjectName()) ? students.getSubjectName() : students.getThingName());
-//                if(){
-                    holder.setText(R.id.tv_attendance_time, getString(R.string.attendance_time_text, students.getApplyDate()));
-//                } else {
-//                    holder.setText(R.id.tv_attendance_time, getString(R.string.attendance_leave_time_text, students.getApplyDate()));
-//                }
+                holder.setText(R.id.tv_attendance_time, getString(R.string.attendance_time_text, students.getApplyDate()));
                 if (!TextUtils.isEmpty(students.getType())) {
                     switch (students.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                         case "0":
                             leave_desc.setText("正常");
                             leave_desc.setTextColor(Color.parseColor("#5DADFF"));
                             img.setImageResource(R.drawable.icon_attendance_normal);
-                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, students.getApplyDate()));
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm")));
                             break;
                         case "1":
                             leave_desc.setText("缺勤");
                             leave_desc.setTextColor(Color.parseColor("#919399"));
                             img.setImageResource(R.drawable.icon_attendance_no_sign_in);
-//                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, students.getApplyDate()));
+                            //holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm")));
                             break;
                         case "2":
                             leave_desc.setText("迟到");
                             leave_desc.setTextColor(Color.parseColor("#F66C6C"));
                             img.setImageResource(R.drawable.icon_attendance_late);
-                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_time_text, students.getTime()));
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm")));
                             break;
                         case "3":
                             leave_desc.setText("早退");
                             leave_desc.setTextColor(Color.parseColor("#63DAAB"));
                             img.setImageResource(R.drawable.icon_attendance_leave_early);
-                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_time_text, DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm")));
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_punch_card_text, DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm")));
                             break;
                         case "4":
                             leave_desc.setText("请假");
