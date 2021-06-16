@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.AddressBookBean;
+import com.yyide.chatim.model.DepartmentScopeRsp2;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
 public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.ViewHolder> {
     private static final String TAG = AddressBookAdapter.class.getSimpleName();
     private Context context;
-    private List<AddressBookBean> data;
+    private List<DepartmentScopeRsp2.DataBean> data;
     //private boolean unfold = false;
 
     public void setOnCheckBoxChangeListener(OnCheckBoxChangeListener onCheckBoxChangeListener) {
@@ -48,7 +49,7 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
 
     private OnItemClickListener onItemClickListener;
 
-    public AddressBookAdapter(Context context, List<AddressBookBean> data) {
+    public AddressBookAdapter(Context context, List<DepartmentScopeRsp2.DataBean> data) {
         this.context = context;
         this.data = data;
 
@@ -65,7 +66,7 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setIsRecyclable(false);//禁止复用
-        AddressBookBean bean = data.get(position);
+        DepartmentScopeRsp2.DataBean bean = data.get(position);
         holder.tv_title.setText(bean.getName());
         holder.checkBox.setChecked(bean.isChecked());
         Log.e(TAG, "onBindViewHolder isUnfold: " + bean.isUnfold());
@@ -133,7 +134,7 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
     }
 
     public interface OnItemClickListener {
-        void onItemClick(AddressBookBean addressBookBean);
+        void onItemClick(DepartmentScopeRsp2.DataBean addressBookBean);
     }
 
     /**

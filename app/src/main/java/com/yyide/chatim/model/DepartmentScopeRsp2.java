@@ -1,5 +1,6 @@
 package com.yyide.chatim.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -38,73 +39,15 @@ public class DepartmentScopeRsp2 {
         private long headId;
         private String headName;
         private int sort;
-        private List<ListBeanXX> list;
+        private List<DataBean> list;
         private int peopleNum;
         private Object schoolLogo;
         private String isExitInd;
         private int groupType;
 
-        @NoArgsConstructor
-        @Data
-        public static class ListBeanXX {
-            private long id;
-            private int level;
-            private String type;
-            private String name;
-            private String showName;
-            private long parentId;
-            private long schoolId;
-            private String parentName;
-            private long headId;
-            private String headName;
-            private int sort;
-            private List<ListBeanX> list;
-            private int peopleNum;
-            private Object schoolLogo;
-            private String isExitInd;
-            private int groupType;
-
-            @NoArgsConstructor
-            @Data
-            public static class ListBeanX {
-                private long id;
-                private int level;
-                private String type;
-                private String name;
-                private String showName;
-                private long parentId;
-                private long schoolId;
-                private String parentName;
-                private long headId;
-                private String headName;
-                private int sort;
-                private List<ListBean> list;
-                private int peopleNum;
-                private Object schoolLogo;
-                private String isExitInd;
-                private int groupType;
-
-                @NoArgsConstructor
-                @Data
-                public static class ListBean {
-                    private long id;
-                    private int level;
-                    private String type;
-                    private String name;
-                    private String showName;
-                    private long parentId;
-                    private long schoolId;
-                    private String parentName;
-                    private long headId;
-                    private String headName;
-                    private int sort;
-                    private List<?> list;
-                    private int peopleNum;
-                    private Object schoolLogo;
-                    private String isExitInd;
-                    private int groupType;
-                }
-            }
-        }
+        private boolean checked;
+        private boolean unfold;
+        //部门成员列表
+        private List<AddressBookRsp.DataBean> deptMemberList = new ArrayList<>();
     }
 }

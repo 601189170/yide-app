@@ -24,81 +24,6 @@ public class AddressBookPresenter extends BasePresenter<AddressBookView> {
         attachView(view);
     }
 
-    /**
-     * 获取学段
-     */
-    public void getSectionList(){
-        mvpView.showLoading();
-        Map map = new HashMap<String,Object>();
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
-        addSubscription(dingApiStores.getSectionList(body),new ApiCallback<StudentScopeRsp>(){
-
-            @Override
-            public void onSuccess(StudentScopeRsp model) {
-                mvpView.getStudentScopeSuccess(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getStudentScopeFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
-
-    /**
-     * 查询大学学段
-     */
-    public void queryDepartmentClassList(){
-        mvpView.showLoading();
-        Map map = new HashMap<String,Object>();
-        Log.e(TAG, "queryDepartmentClassList: "+JSON.toJSONString(map));
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
-        addSubscription(dingApiStores.queryDepartmentClassList(body),new ApiCallback<UniversityScopeRsp>(){
-
-            @Override
-            public void onSuccess(UniversityScopeRsp model) {
-                mvpView.getUniversityListSuccess(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getUniversityListFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
-
-    public void getDepartmentList(){
-        mvpView.showLoading();
-        Map map = new HashMap<String,Object>();
-        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
-        addSubscription(dingApiStores.getDepartmentList(body),new ApiCallback<DepartmentScopeRsp>(){
-            @Override
-            public void onSuccess(DepartmentScopeRsp model) {
-                mvpView.getDepartmentListSuccess(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getDepartmentListFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
-
     public void queryDepartmentOverrideList(){
         mvpView.showLoading();
         Map map = new HashMap<String,Object>();
@@ -135,7 +60,7 @@ public class AddressBookPresenter extends BasePresenter<AddressBookView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getDepartmentListFail(msg);
+                mvpView.getDeptMemberListFail(msg);
             }
 
             @Override
