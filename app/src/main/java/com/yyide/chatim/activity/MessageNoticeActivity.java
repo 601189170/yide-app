@@ -97,9 +97,6 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
             if (recordsBean != null && "0".equals(recordsBean.getStatus())) {
                 mvpPresenter.updateMyNoticeDetails(recordsBean.getSignId());
             }
-            if (recordsBean.getAttributeType() == null){
-                return;
-            }
             if ("2".equals(recordsBean.getIsText())) {
                 //不是纯文本，需要跳转详情
                 switch (recordsBean.getAttributeType()) {
@@ -116,15 +113,8 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                     default:
                         break;
                 }
-            } else {
-                switch (recordsBean.getAttributeType()) {
-                    case "3":
-                        //跳转人脸采集
-                        startActivity(new Intent(this, FaceCaptureActivity.class));
-                        break;
-                    default:
-                        break;
-                }
+            } else if("1".equals(recordsBean.getIsText())){
+                MessageDetailActivity.start(this, recordsBean);
             }
         });
     }

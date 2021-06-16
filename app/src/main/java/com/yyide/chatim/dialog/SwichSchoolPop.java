@@ -311,6 +311,8 @@ public class SwichSchoolPop extends PopupWindow {
 //                context.startActivity(intent);
                 //刷新首页数据
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_HOME_CHECK_IDENTITY, ""));
+
                 if (mOnCheckCallBack != null) {
                     mOnCheckCallBack.onCheckCallBack();
                 }

@@ -79,8 +79,8 @@ public class BaseConstant {
     public static final String TYPE_MAIN = "type_main";
     public static final String TYPE_IM_LOGIN = "type_im_login";
     public static final String TYPE_MESSAGE_UPDATE = "type_message_update";
-    public static final String TYPE_MAIN_MESSAGE_NUMBER = "type_main_message_number";
     public static final String TYPE_UPDATE_HOME = "type_update_home";
+    public static final String TYPE_HOME_CHECK_IDENTITY = "type_home_check_identity";
     public static final String TYPE_UPDATE_NOTICE_TAB = "type_update_notice_tab";
     public static final String TYPE_UPDATE_REMOTE_NOTICE = "type_update_remote_notice";
     public static final String TYPE_MESSAGE_TODO_NUM = "type_message_todo_num";

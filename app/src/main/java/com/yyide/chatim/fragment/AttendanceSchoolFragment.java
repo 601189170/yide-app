@@ -37,6 +37,7 @@ import com.yyide.chatim.presenter.AttendancePresenter;
 import com.yyide.chatim.utils.InitPieChart;
 import com.yyide.chatim.view.AttendanceCheckView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +66,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         if (getArguments() != null) {
 
         }
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -127,7 +129,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             if (item2 != null) {
                 constraintLayout2.setVisibility(View.VISIBLE);
                 holder.setText(R.id.tv_attendance_type2, item2.getAttName());
-                holder.setText(R.id.tv_desc2, item1.getThingName());
+                holder.setText(R.id.tv_desc2, item2.getThingName());
                 constraintLayout2.setOnClickListener(v -> {
                     AttendanceActivity.start(getContext(), item2.getPeopleType(), item2.getIndex());
                 });
@@ -174,9 +176,6 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
 
     private void setData(AttendanceCheckRsp.DataBean dataBean) {
         List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllFormBeanList = new ArrayList<>();
-        if (dataBean.getSchoolPeopleAllForm() != null) {
-            schoolPeopleAllFormBeanList.addAll(dataBean.getSchoolPeopleAllForm());
-        }
         if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
             for (AttendanceCheckRsp.DataBean.AttendancesFormBean item : dataBean.getAttendancesForm()) {
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
@@ -188,10 +187,14 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
                 schoolBean.setNumber(item.getNumberA());
                 schoolBean.setRate(item.getRateA());
                 schoolBean.setPeopleType(item.getPeopleType());
+                schoolBean.setThingName(item.getTeachers() != null ? item.getTeachers().getThingName() : "");
                 schoolPeopleAllFormBeanList.add(schoolBean);
             }
         }
 
+        if (dataBean.getSchoolPeopleAllForm() != null) {
+            schoolPeopleAllFormBeanList.addAll(schoolPeopleAllFormBeanList.size(), dataBean.getSchoolPeopleAllForm());
+        }
         //数据处理
         List<AttendanceSchoolBean> list = new ArrayList<>();
         if (schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) {
@@ -239,5 +242,11 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     @Override
     public void getAttendanceFail(String msg) {
         Log.e("TAG", "getAttendanceFail==>: " + msg);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

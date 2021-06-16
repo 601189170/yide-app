@@ -1,5 +1,8 @@
 package com.yyide.chatim.model;
 
+import android.net.sip.SipErrorCode;
+
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
@@ -16,7 +19,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Data
-public class UserMsgNoticeRsp {
+public class UserMsgNoticeRsp implements Serializable{
 
     private int code;
     private boolean success;
@@ -25,7 +28,7 @@ public class UserMsgNoticeRsp {
 
     @NoArgsConstructor
     @Data
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         private List<RecordsBean> records;
         private int total;
         private int size;
@@ -40,7 +43,7 @@ public class UserMsgNoticeRsp {
 
         @NoArgsConstructor
         @Data
-        public static class RecordsBean {
+        public static class RecordsBean implements Serializable{
             private String title;
             private String content;
             private long userId;
@@ -50,7 +53,7 @@ public class UserMsgNoticeRsp {
             private String firstData;
             private long callId;
             private String attributeType;
-            private String isText;
+            private String isText;//是否纯文本 1 是 2不是
             private String status;//读取状态 1 已读/同意 0未读 2拒绝 3 撤消
             private String sendTime;
         }
