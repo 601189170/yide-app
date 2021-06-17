@@ -365,13 +365,19 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             return;
         }
         if (data != null){
-            iv_add_staff.setVisibility(View.VISIBLE);
             //审批人
             ll_approver_list.removeAllViews();
             ll_copyer_list.removeAllViews();
+            final ApproverRsp.DataBean.PeopleFormBean peopleForm = data.getPeopleForm();
+            if (peopleForm == null){
+                btn_commit.setAlpha(0.5f);
+                btn_commit.setClickable(false);
+                ToastUtils.showLong("没有指定审批人，不能使用请假功能！");
+                return;
+            }
             btn_commit.setAlpha(1f);
             btn_commit.setClickable(true);
-            final ApproverRsp.DataBean.PeopleFormBean peopleForm = data.getPeopleForm();
+            iv_add_staff.setVisibility(View.VISIBLE);
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
             final TextView tv_approver_name = view.findViewById(R.id.tv_approver_name);
             tv_approver_name.setText(peopleForm.getName());

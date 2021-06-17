@@ -415,10 +415,17 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             return;
         }
         if (data != null){
-            btn_commit.setAlpha(1f);
-            btn_commit.setClickable(true);
             //审批人
             final ApproverRsp.DataBean.PeopleFormBean peopleForm = data.getPeopleForm();
+            if (peopleForm == null){
+                btn_commit.setAlpha(0.5f);
+                btn_commit.setClickable(false);
+                ToastUtils.showLong("没有指定审批人，不能使用请假功能！");
+                return;
+            }
+
+            btn_commit.setAlpha(1f);
+            btn_commit.setClickable(true);
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
             final TextView tv_approver_name = view.findViewById(R.id.tv_approver_name);
             tv_approver_name.setText(peopleForm.getName());
