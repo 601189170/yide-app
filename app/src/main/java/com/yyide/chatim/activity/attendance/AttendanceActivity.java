@@ -45,7 +45,7 @@ public class AttendanceActivity extends BaseActivity {
     }
 
     private void initView() {
-        String type = getIntent().getStringExtra("type");
+//        String type = getIntent().getStringExtra("type");
         int index = getIntent().getIntExtra("index", 0);
         mViewBinding.top.title.setText(R.string.attendance_title);
         mViewBinding.top.tvRight.setVisibility(View.GONE);

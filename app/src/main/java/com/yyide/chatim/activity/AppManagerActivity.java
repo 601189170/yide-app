@@ -78,15 +78,15 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
                 ImageView iv_app_icon = holder.getView(R.id.iv_app_icon);
                 ImageView iv_del = holder.getView(R.id.iv_del);
                 TextView name = holder.getView(R.id.tv_app_name);
-                if (!TextUtils.isEmpty(item.getImg())) {
-                    GlideUtil.loadCircleImage(AppManagerActivity.this, item.getImg(), iv_app_icon);
-                }
                 name.setText(item.getName());
                 if ("editor".equals(item.getAppType())) {
                     iv_del.setVisibility(View.GONE);
-                    iv_app_icon.setBackground(getResources().getDrawable(R.drawable.icon_bj));
+                    iv_app_icon.setImageResource(R.drawable.icon_bj);
                 } else {
                     iv_del.setVisibility(View.VISIBLE);
+                    if (!TextUtils.isEmpty(item.getImg())) {
+                        GlideUtil.loadCircleImage(AppManagerActivity.this, item.getImg(), iv_app_icon);
+                    }
                 }
                 iv_del.setOnClickListener(v -> {
                     dataBean = item;

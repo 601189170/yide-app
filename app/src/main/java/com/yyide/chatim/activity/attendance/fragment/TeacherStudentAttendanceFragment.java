@@ -254,13 +254,11 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             if (!TextUtils.isEmpty(item.getStatus())) {
                 switch (item.getStatus()) {
                     case "0"://正常
-//                        status = "正常";
                         holder.setText(R.id.tv_student_event, item.getDeviceName());
                         holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "1"://缺勤
-//                        status = "缺勤";
                         break;
                     case "2"://迟到
                         holder.setText(R.id.tv_student_event, item.getDeviceName());

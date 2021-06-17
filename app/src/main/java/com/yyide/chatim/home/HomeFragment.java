@@ -127,16 +127,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     void initVerticalTextview() {
-        List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps = new ArrayList<>();
-        TodoRsp.DataBean.RecordsBean dataBean = new TodoRsp.DataBean.RecordsBean();
-        dataBean.setFirstData("暂无待办数据");
-        noticeHomeRsps.add(dataBean);
-        if (noticeHomeRsps != null) {
-            list.clear();
-            for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
-                list.add(item.getFirstData());
-            }
-        }
+        setData();
         mVerticalTextView.setResources(list);
         mVerticalTextView.setTextStillTime(4000);
         mVerticalTextView.setOnItemClickListener(i -> {
@@ -321,18 +312,34 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void getIndexMyNotice(TodoRsp rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
-        if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
-            tv_todo.setVisibility(View.VISIBLE);
-            tv_todo.setText(rsp.getData().getTotal() + "");
-            if (rsp.getData().getRecords() != null) {
-                list.clear();
-                for (TodoRsp.DataBean.RecordsBean item : rsp.getData().getRecords()) {
-                    list.add(item.getFirstData());
+        if(rsp.getCode() == BaseConstant.REQUEST_SUCCES2){
+            if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
+                tv_todo.setVisibility(View.VISIBLE);
+                tv_todo.setText(rsp.getData().getTotal() + "");
+                if (rsp.getData().getRecords() != null) {
+                    list.clear();
+                    for (TodoRsp.DataBean.RecordsBean item : rsp.getData().getRecords()) {
+                        list.add(item.getFirstData());
+                    }
                 }
+                mVerticalTextView.setResources(list);
+            } else {
+                tv_todo.setVisibility(View.GONE);
+                setData();
             }
-            mVerticalTextView.setResources(list);
-        } else {
-            tv_todo.setVisibility(View.GONE);
+        }
+    }
+
+    private void setData() {
+        List<TodoRsp.DataBean.RecordsBean> noticeHomeRsps = new ArrayList<>();
+        TodoRsp.DataBean.RecordsBean dataBean = new TodoRsp.DataBean.RecordsBean();
+        dataBean.setFirstData("暂无待办数据");
+        noticeHomeRsps.add(dataBean);
+        if (noticeHomeRsps != null) {
+            list.clear();
+            for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
+                list.add(item.getFirstData());
+            }
         }
     }
 

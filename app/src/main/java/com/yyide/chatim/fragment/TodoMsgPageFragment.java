@@ -89,7 +89,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
         initView();
     }
 
@@ -202,7 +202,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode()) ||BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             pageNum = 1;
             mvpPresenter.getMessageTransaction(pageNum, pageSize, String.valueOf(mParam1));
         }
@@ -248,6 +248,6 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     @Override
     public void onDestroy() {
         super.onDestroy();
-       // EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
     }
 }

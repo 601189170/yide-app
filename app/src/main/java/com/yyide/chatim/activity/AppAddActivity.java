@@ -60,12 +60,9 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
     private void initView() {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         addAdapter = new AppAddAdapter();
-        addAdapter.setAddClickListener(new AppAddAdapter.AddClickListener() {
-            @Override
-            public void OnAddClickListener(AppAddRsp.DataBean.RecordsBean item) {
-                recordsBean = item;
-                mvpPresenter.addApp(item.getId());
-            }
+        addAdapter.setAddClickListener(item -> {
+            recordsBean = item;
+            mvpPresenter.addApp(item.getId());
         });
         addAdapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
             //上拉加载时取消下拉刷新

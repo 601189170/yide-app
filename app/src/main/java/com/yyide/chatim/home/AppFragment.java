@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -24,6 +23,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
+import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.adapter.AppAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import lombok.val;
 
 
 public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView, SwipeRefreshLayout.OnRefreshListener {
@@ -103,6 +102,8 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                 case "通知公告":
                     intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
                     startActivity(intent);
+//                    intent = new Intent(getActivity(), NewNoticeAnnouncementActivity.class);
+//                    startActivity(intent);
                     break;
                 case "请假":
                     //ToastUtils.showShort("请假");

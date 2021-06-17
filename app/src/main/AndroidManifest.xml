@@ -77,7 +77,10 @@
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".activity.MessageDetailActivity"></activity>
+        <activity android:name=".activity.newnotice.NewNoticeAnnouncementActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MessageDetailActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.AppSortActivity"
             android:screenOrientation="portrait"

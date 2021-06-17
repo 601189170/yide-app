@@ -214,7 +214,14 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.layout1://切换班级
                 if(SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0){
-                    new SwichClassPop(context).setOnCheckCallBack(() -> user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : ""));
+                    new SwichClassPop(context).setOnCheckCallBack(() -> {
+                        if(SpData.getClassInfo() != null && "N".equals(SpData.getClassInfo().teacherInd)){
+                            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "老师" : "");
+                        } else {
+                            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
+                        }
+                        user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+                    });
                 }
                 break;
             case R.id.layout2://切换身份（学校）

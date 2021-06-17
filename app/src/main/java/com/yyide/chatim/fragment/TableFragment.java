@@ -123,7 +123,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     }
 
     private void setDefaultView() {
-        className.setText("今日课已上完");
+        className.setText("今日无课");
         subjectName.setText("");
         time.setText("");
         tips.setText("");

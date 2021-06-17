@@ -371,6 +371,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         Log.e(TAG, "repealResult: " + baseRsp.toString());
         if (baseRsp.getCode() == 200) {
             mvpPresenter.queryLeaveDetailsById(id);
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
             ToastUtils.showShort("撤销失败："+baseRsp.getMsg());
         }
@@ -387,11 +388,10 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         if (baseRsp.getCode() == 200){
             ToastUtils.showShort("审批成功");
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
-            finish();
         } else {
             ToastUtils.showShort("审批失败："+baseRsp.getMsg());
-            finish();
         }
+        finish();
     }
 
     @Override
