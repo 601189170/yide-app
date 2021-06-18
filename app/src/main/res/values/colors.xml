@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#2C8AFF</color>
     <color name="colorAccent">#2C8AFF</color>
 
-
+    <color name="theme_bg">#F7FAFC</color>
     <color name="gray">#D8D8D8</color>
     <color name="white">#FFFFFF</color>
     <color name="white10">#50FFFFFF</color>
@@ -73,7 +73,7 @@
     <color name="hint">#BFBFBF</color>
     <color name="hs">#F8F8F8</color>
     <color name="hs2">#F7F7FD</color>
-    <color name="item_view_selected_color">#cfcfcf  </color>
+    <color name="item_view_selected_color">#cfcfcf</color>
 
     <color name="item_view_normal_color">#FFFFFFFF</color>
     <color name="orderCheck">#3782FF</color>
@@ -91,7 +91,7 @@
 
     <color name="colorDateSelect">#2C8AFF</color>
     <color name="colorTodayText">#2C8AFF</color>
-   <!-- //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
+    <!-- //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
     <color name="attendance_normal">#5DADFF</color>
     <color name="attendance_late">#F66C6C</color>
     <color name="attendance_leave_early">#63DAAB</color>

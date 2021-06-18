@@ -28,6 +28,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemTeachersBean;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentSchoolTeacherAttendanceBinding mViewBinding;
+
     public static SchoolTeacherAttendanceFragment newInstance(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean teachersBean) {
         SchoolTeacherAttendanceFragment fragment = new SchoolTeacherAttendanceFragment();
         Bundle args = new Bundle();
@@ -74,29 +75,29 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
 
     @SuppressLint("SetTextI18n")
     private void setData() {
-        if (itemTeachersBean != null) {
+        if (itemTeachersBean != null && itemTeachersBean.getTeachers() != null) {
+            AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers = itemTeachersBean.getTeachers();
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvDesc.setText(itemTeachersBean.getAttName());
-            if(itemTeachersBean.getTeachers() != null){
-                mViewBinding.tvAttendanceTime.setText("考勤时间 " +
-                        (!TextUtils.isEmpty(itemTeachersBean.getTeachers().getRequiredTime()) ?
-                                itemTeachersBean.getTeachers().getRequiredTime() :
-                                itemTeachersBean.getTeachers().getApplyDate()));
-            }
-            mViewBinding.tvAttendanceRate.setText(itemTeachersBean.getRate());
-            if (!TextUtils.isEmpty(itemTeachersBean.getRate())) {
+            mViewBinding.tvDesc.setText(teachers.getThingName());
+            mViewBinding.tvAttendanceTime.setText("考勤时间 " +
+                    (!TextUtils.isEmpty(teachers.getRequiredTime()) ?
+                            teachers.getRequiredTime() :
+                            teachers.getApplyDate()));
+            mViewBinding.tvAttendanceRate.setText(teachers.getRate());
+            if (!TextUtils.isEmpty(teachers.getRate())) {
                 try {
-                    mViewBinding.progress.setProgress(Double.valueOf(itemTeachersBean.getRate()).intValue());
+                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            mViewBinding.tvBeTo.setText(itemTeachersBean.getNumber() + "");
-            mViewBinding.tvLateNum.setText(itemTeachersBean.getLate() + "");
-            mViewBinding.tvLeaveNum.setText(itemTeachersBean.getLeave() + "");
-            mViewBinding.tvNormalNum.setText(itemTeachersBean.getApplyNum() + "");
-            mViewBinding.tvAbsenteeismNum.setText(itemTeachersBean.getAbsence() + "");
-            adapter.setList(itemTeachersBean.getPeople());
+            mViewBinding.tvBeTo.setText(teachers.getNumber() + "");
+            mViewBinding.tvLateNum.setText(("0".equals(teachers.getGoOutStatus()) ? teachers.getLate() : teachers.getLeaveEarly()) + "");
+            mViewBinding.tvLateName.setText("0".equals(teachers.getGoOutStatus()) ? "迟到" : "早退");
+            mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
+            mViewBinding.tvNormalNum.setText(teachers.getApplyNum() + "");
+            mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
+            adapter.setList(teachers.getPeople());
         }
     }
 
@@ -146,6 +147,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item) {
             holder.setText(R.id.tv_student_name, item.getName())
                     .setText(R.id.tv_student_time, item.getTime())
+                    .setText(R.id.tv_student_event, item.getDeviceName())
                     .setText(R.id.tv_status, item.getStatusType());
         }
     };

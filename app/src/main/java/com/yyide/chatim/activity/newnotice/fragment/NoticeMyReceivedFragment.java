@@ -16,6 +16,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.newnotice.NoticeMyReceivedAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentNoticeMyReceviedListBinding;
@@ -39,6 +40,7 @@ public class NoticeMyReceivedFragment extends BaseMvpFragment<NoticeReceivedPres
 
     private final String TAG = NoticeMyReceivedFragment.class.getSimpleName();
     private FragmentNoticeMyReceviedListBinding viewBinding;
+    private int pageNum = 1;
 
     public static NoticeMyReceivedFragment newInstance() {
         NoticeMyReceivedFragment fragment = new NoticeMyReceivedFragment();
@@ -77,37 +79,36 @@ public class NoticeMyReceivedFragment extends BaseMvpFragment<NoticeReceivedPres
         viewBinding.tvToday.setOnClickListener(this);
         viewBinding.tvThisWeek.setOnClickListener(this);
         viewBinding.tvThisMonth.setOnClickListener(this);
+        NoticeMyReceivedAdapter receivedAdapter = new NoticeMyReceivedAdapter(R.layout.item_notice_my_recevied);
         viewBinding.list.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         viewBinding.list.addItemDecoration(new ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(12)));
-        viewBinding.list.setAdapter(adapter);
-        adapter.setEmptyView(R.layout.empty);
-        adapter.getEmptyLayout().setOnClickListener(v -> {
+        viewBinding.list.setAdapter(receivedAdapter);
+        receivedAdapter.setEmptyView(R.layout.empty);
+        receivedAdapter.getEmptyLayout().setOnClickListener(v -> {
             //点击空数据界面刷新当前页数据
             ToastUtils.showShort("getEmptyLayout To Data");
         });
-        adapter.setOnItemClickListener((adapter, view, position) -> {
+        receivedAdapter.setOnItemClickListener((adapter, view, position) -> {
 
         });
+        receivedAdapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
+            //上拉加载时取消下拉刷新
+//            mSwipeRefreshLayout.setRefreshing(false);
+            receivedAdapter.getLoadMoreModule().setEnableLoadMore(true);
+            //请求数据
+            pageNum++;
+            //mvpPresenter.getHelpList(pageSize, pageNum);
+        });
+        receivedAdapter.getLoadMoreModule().setAutoLoadMore(true);
+        //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
+        receivedAdapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
 
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             list.add("");
         }
-        adapter.setList(list);
+        receivedAdapter.setList(list);
     }
-
-    private final BaseQuickAdapter<String, BaseViewHolder> adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_notice_my_recevied) {
-
-        @Override
-        protected void convert(@NotNull BaseViewHolder holder, String s) {
-            ItemNoticeMyReceviedBinding view = ItemNoticeMyReceviedBinding.bind(holder.itemView);
-//            view.tvNoticeTitle.setText("");
-//            view.tvNoticeAuthor.setText("");
-//            view.tvNoticeTime.setText("");
-            //view.ivNoticeImg
-            //view.ivIconImg
-        }
-    };
 
     @Override
     public void onClick(View v) {
@@ -131,8 +132,24 @@ public class NoticeMyReceivedFragment extends BaseMvpFragment<NoticeReceivedPres
 
     @Override
     public void getMyReceivedList(ResultBean model) {
-        if(model.getCode() == BaseConstant.REQUEST_SUCCES2){
-
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+//            if (pageNum == 1) {
+//                if (model != null && model.getData() != null) {
+//                    adapter.setList(model.getData().getRecords());
+//                }
+//            } else {
+//                if (model != null && model.getData() != null) {
+//                    adapter.addData(model.getData().getRecords());
+//                }
+//            }
+//            if (model.getData() != null && model.getData().getRecords() != null) {
+//                if (model.getData().getRecords().size() < pageSize) {
+//                    //如果不够一页,显示没有更多数据布局
+//                    adapter.getLoadMoreModule().loadMoreEnd();
+//                } else {
+//                    adapter.getLoadMoreModule().loadMoreComplete();
+//                }
+//            }
         }
     }
 

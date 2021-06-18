@@ -180,4 +180,9 @@
     <string name="notice_tab_my_received">我收到的</string>
     <string name="notice_tab_my_push">我发布的</string>
     <string name="notice_tab_push">发布通知</string>
+    <string name="notice_confirm_count">已确认：</string>
+    <string name="notice_has_withdrawn">已撤回</string>
+    <string name="notice_my_push_title">我发布的通知</string>
+
+    <string name="app_commonly_title">常用应用</string>
 </resources>

@@ -100,10 +100,10 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                     startActivity(intent);
                     break;
                 case "通知公告":
-                    intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
-                    startActivity(intent);
-//                    intent = new Intent(getActivity(), NewNoticeAnnouncementActivity.class);
+//                    intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
 //                    startActivity(intent);
+                    intent = new Intent(getActivity(), NewNoticeAnnouncementActivity.class);
+                    startActivity(intent);
                     break;
                 case "请假":
                     //ToastUtils.showShort("请假");

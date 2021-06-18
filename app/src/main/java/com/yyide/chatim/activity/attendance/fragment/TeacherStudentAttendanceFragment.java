@@ -104,16 +104,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     @Override
     public void onClick(View v) {
-        mViewBinding.tvAll.setChecked(false);
-        mViewBinding.tvAbsenteeism.setChecked(false);
-        mViewBinding.tvLeave.setChecked(false);
-        mViewBinding.tvLate.setChecked(false);
-        mViewBinding.tvNormal.setChecked(false);
-        mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.text_1E1E1E));
-        mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.text_1E1E1E));
-        mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.text_1E1E1E));
-        mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.text_1E1E1E));
-        mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.text_1E1E1E));
+        initClickView();
         switch (v.getId()) {
             case R.id.tv_all:
                 mViewBinding.tvAll.setChecked(true);
@@ -141,6 +132,19 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 adapter.setList(itemStudents != null ? itemStudents.getApplyPeople() : null);
                 break;
         }
+    }
+
+    private void initClickView() {
+        mViewBinding.tvAll.setChecked(false);
+        mViewBinding.tvAbsenteeism.setChecked(false);
+        mViewBinding.tvLeave.setChecked(false);
+        mViewBinding.tvLate.setChecked(false);
+        mViewBinding.tvNormal.setChecked(false);
+        mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.text_1E1E1E));
+        mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.text_1E1E1E));
+        mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.text_1E1E1E));
+        mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.text_1E1E1E));
+        mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.text_1E1E1E));
     }
 
     @SuppressLint("SetTextI18n")
@@ -238,7 +242,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
             mViewBinding.tvNormalNum.setText(itemStudents.getApplyNum() + "");
             mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsence() + "");
-
+            initClickView();
+            mViewBinding.tvAll.setChecked(true);
+            mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
             adapter.setList(itemStudents.getPeople());
         }
     }

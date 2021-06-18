@@ -41,10 +41,11 @@ public class AppSortActivity extends BaseMvpActivity<AppSortPresenter> implement
 
     private void initView() {
         MyAppListRsp appList = (MyAppListRsp) getIntent().getSerializableExtra("appBean");
+        mViewBinding.top.title.setText("排序");
         mViewBinding.top.tvRight.setText(R.string.confirm);
         mViewBinding.top.tvRight.setVisibility(View.VISIBLE);
         //剔除添加Item
-        if(appList != null && appList.getData() != null && appList.getData().size() > 0){
+        if (appList != null && appList.getData() != null && appList.getData().size() > 0) {
             appList.getData().remove(appList.getData().size() - 1);
         }
         AppSortAdapter adapter = new AppSortAdapter(appList.getData(), this);
@@ -65,7 +66,7 @@ public class AppSortActivity extends BaseMvpActivity<AppSortPresenter> implement
 
     @Override
     public void sendAppSortSuccess(ResultBean model) {
-        if(model.getCode() == BaseConstant.REQUEST_SUCCES2){
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP_MANAGER, ""));
             finish();
         }

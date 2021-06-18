@@ -47,7 +47,7 @@ public class AttendanceCheckRsp implements Serializable {
 
             @NoArgsConstructor
             @Data
-            public static class Students implements Serializable{
+            public static class Students implements Serializable {
                 public int number;
                 public int applyNum;
                 public int late;
@@ -114,6 +114,7 @@ public class AttendanceCheckRsp implements Serializable {
                     public String startDate;
                     public String endDate;
                     public String deviceName;
+
                     public String getStatusType() {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                         String str = "";
                         if (TextUtils.isEmpty(status)) {
@@ -145,13 +146,14 @@ public class AttendanceCheckRsp implements Serializable {
 
             @NoArgsConstructor
             @Data
-            public static class TeachersBean implements Serializable{
+            public static class TeachersBean implements Serializable {
                 public int number;
                 public int applyNum;
                 public int late;
                 public int leaveEarly;
                 public int absence;
                 public int leave;
+                public String goOutStatus;//0:签到，1:签退
                 public String rate;
                 public String applyDate;
                 public String startTime;
@@ -160,6 +162,7 @@ public class AttendanceCheckRsp implements Serializable {
                 public String endTime;
                 public String name;
                 public int section;
+                public String peopleType;
                 public List<String> studentIds;
                 public List<Students.PeopleBean> people;
                 public List<Students.PeopleBean> latePeople;

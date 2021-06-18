@@ -115,6 +115,7 @@ public class AttendanceParentsFragment extends BaseMvpFragment<AttendancePresent
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", AttendanceParentsFragment.class.getSimpleName());
+            announAdapter.notifyData(null);
             getHomeAttendance();
         }
     }

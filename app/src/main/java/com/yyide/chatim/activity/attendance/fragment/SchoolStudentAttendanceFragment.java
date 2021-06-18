@@ -2,7 +2,6 @@ package com.yyide.chatim.activity.attendance.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
-import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.activity.attendance.AttendanceClassStudentActivity;
 import com.yyide.chatim.base.BaseFragment;
-import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentSchoolMasterAttendanceBinding;
-import com.yyide.chatim.dialog.AttendancePop;
 import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.presenter.AttendanceCheckPresenter;
-import com.yyide.chatim.view.AttendanceCheckView;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * desc 校长考情学生
@@ -66,6 +58,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         mViewBinding.clContent.setVisibility(View.GONE);
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewBinding.recyclerview.setAdapter(adapter);
+        adapter.setOnItemClickListener((adapter, view1, position) -> AttendanceClassStudentActivity.start(getContext(), itemStudents, position));
         setDataView(itemStudents);
     }
 
@@ -73,7 +66,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         if (item != null) {
             if (itemStudents != null) {
                 mViewBinding.clContent.setVisibility(View.VISIBLE);
-                mViewBinding.tvEventName.setText(itemStudents.getAttName());
+                mViewBinding.tvEventName.setText(itemStudents.getThingName());
                 mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
                 if (!TextUtils.isEmpty(itemStudents.getRate())) {
                     try {

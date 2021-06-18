@@ -60,7 +60,7 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        title.setText("应用管理");
+        title.setText(R.string.app_commonly_title);
         initAdapter();
         mvpPresenter.getMyAppList();
     }

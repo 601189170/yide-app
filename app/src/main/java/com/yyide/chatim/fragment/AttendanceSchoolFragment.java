@@ -86,6 +86,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+            adapter.setList(null);
             mvpPresenter.homeAttendance("");
         }
     }
@@ -106,6 +107,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             Color.rgb(145, 147, 153), Color.rgb(246, 189, 22)
             , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
     };
+
     private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceSchoolBean, BaseViewHolder>(R.layout.item_attendance_school) {
 
         @Override
@@ -179,15 +181,18 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
             for (AttendanceCheckRsp.DataBean.AttendancesFormBean item : dataBean.getAttendancesForm()) {
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
-                schoolBean.setAbsence(item.getAbsenceA());
-                schoolBean.setApplyNum(item.getApplyNumA());
-                schoolBean.setAttName(item.getAttNameA());
-                schoolBean.setLate(item.getLateA());
-                schoolBean.setLeave(item.getLeaveA());
-                schoolBean.setNumber(item.getNumberA());
-                schoolBean.setRate(item.getRateA());
-                schoolBean.setPeopleType(item.getPeopleType());
-                schoolBean.setThingName(item.getTeachers() != null ? item.getTeachers().getThingName() : "");
+                AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers = item.getTeachers();
+                if(teachers != null){
+                    schoolBean.setAbsence(teachers.getAbsence());
+                    schoolBean.setApplyNum(teachers.getApplyNum());
+                    schoolBean.setAttName(teachers.getName());
+                    schoolBean.setLate(teachers.getLate());
+                    schoolBean.setLeave(teachers.getLeave());
+                    schoolBean.setNumber(teachers.getNumber());
+                    schoolBean.setRate(teachers.getRate());
+                    schoolBean.setPeopleType(teachers.getPeopleType());
+                    schoolBean.setThingName(teachers.getThingName());
+                }
                 schoolPeopleAllFormBeanList.add(schoolBean);
             }
         }

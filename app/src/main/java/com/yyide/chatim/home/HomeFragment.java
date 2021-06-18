@@ -132,6 +132,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mVerticalTextView.setTextStillTime(4000);
         mVerticalTextView.setOnItemClickListener(i -> {
             mListener.jumpFragment(1);
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
         });
     }
 

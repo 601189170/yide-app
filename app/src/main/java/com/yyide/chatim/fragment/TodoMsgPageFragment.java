@@ -89,8 +89,22 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
         initView();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (EventBus.getDefault().isRegistered(this))//加上判断
+            EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     private void initView() {
@@ -202,7 +216,9 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode()) ||BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode()) ||
+                BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode()) ||
+                BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
             pageNum = 1;
             mvpPresenter.getMessageTransaction(pageNum, pageSize, String.valueOf(mParam1));
         }
@@ -218,7 +234,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageSuccess: " + noticeHomeRsp.toString());
         if (BaseConstant.REQUEST_SUCCES2 == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
-            if(mParam1 == 0){
+            if (mParam1 == 0) {
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
             }
             List<TodoRsp.DataBean.RecordsBean> data = noticeHomeRsp.getData().getRecords();
@@ -243,11 +259,5 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageFail: " + msg);
         ToastUtils.showShort(msg);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 }

@@ -101,6 +101,8 @@
                 android:layout_marginLeft="35dp"
                 android:layout_marginRight="15dp"
                 android:textColor="@color/white"
+                android:lines="3"
+                android:ellipsize="end"
                 android:textSize="11sp" />
         </FrameLayout>
     </FrameLayout>

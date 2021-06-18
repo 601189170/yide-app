@@ -25,6 +25,7 @@
         android:layout_marginTop="@dimen/dp_8"
         android:scaleType="centerCrop"
         android:src="@drawable/ask_for_leave_time_bg_shape"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_notice_img"
         app:left_bottom_radius="2dp"
@@ -36,7 +37,8 @@
         android:id="@+id/tv_notice_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_5"
+        android:ellipsize="end"
+        android:lines="1"
         android:text="端午节放假通知"
         android:textColor="#ff333333"
         android:textSize="14sp"
@@ -44,27 +46,18 @@
         app:layout_constraintTop_toTopOf="@+id/iv_icon_img" />
 
     <TextView
-        android:id="@+id/tv_notice_author"
-        android:layout_width="0dp"
+        android:id="@+id/tv_notice_confirm"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_4"
+        android:drawablePadding="@dimen/dp_4"
         android:ellipsize="end"
         android:lines="1"
-        android:text="欧阳娜娜… "
+        android:text="@string/notice_confirm_count"
         android:textColor="#ff999999"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/tv_notice_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_notice_title" />
 
-    <TextView
-        android:id="@+id/tv_notice_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2021/06/12 10:00 "
-        android:textColor="#ff999999"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_notice_author"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_notice_author" />
 </androidx.constraintlayout.widget.ConstraintLayout>

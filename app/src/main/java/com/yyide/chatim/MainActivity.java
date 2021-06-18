@@ -208,10 +208,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             versionResponse.setUpdateAddress("https://3550d97d52.eachqr.com/aaa4e3fce9f117f73e433ba180dca3f0bab26438.apk?auth_key=1620374642-0-0-d1a8b5e8c43704c29455ab8c077319aa");
             versionResponse.setUpdateContent("1、更新内容\n2、更新内容\n3、更新内容");
             download(versionResponse);
-        } else if(BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())){
+        } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
             todoCount = messageEvent.getCount();
             setMessageCount(todoCount + messageCount + noticeCount);
-        } else if(BaseConstant.TYPE_NOTICE_NUM.equals(messageEvent.getCode())){
+        } else if (BaseConstant.TYPE_NOTICE_NUM.equals(messageEvent.getCode())) {
             noticeCount = messageEvent.getCount();
             setMessageCount(todoCount + messageCount + noticeCount);
         }
@@ -466,6 +466,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     ft.show(fg2);
                 }
                 tab2.setChecked(true);
+                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 break;
             case 2:
                 if (fg3 == null) {
