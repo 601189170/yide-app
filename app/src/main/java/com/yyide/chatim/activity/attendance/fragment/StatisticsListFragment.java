@@ -12,12 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.attendance.WeekStatisticsListAdapter;
 import com.yyide.chatim.databinding.FragmentStatisticsListBinding;
-import com.yyide.chatim.model.WeekStatisticsBean;
+import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +34,13 @@ public class StatisticsListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String type;
     private String mParam2;
-    private List<WeekStatisticsBean> data;
+    private WeekStatisticsListAdapter weekStatisticsListAdapter;
+
+    public void setData(List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> data) {
+        this.data = data;
+    }
+
+    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> data;
     public StatisticsListFragment() {
         // Required empty public constructor
     }
@@ -70,45 +76,24 @@ public class StatisticsListFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_statistics_list, container, false);
     }
-    private void initdata(){
-        data = new ArrayList<>();
-        for (int i = 1; i <= 10; i++) {
-            final WeekStatisticsBean weekStatisticsBean = new WeekStatisticsBean();
-            weekStatisticsBean.setName("张大大("+type+")");
-            weekStatisticsBean.setTime(i);
-            weekStatisticsBean.setChecked(false);
-            List<WeekStatisticsBean.DataBean> list = new ArrayList<>();
-            for (int j = 0; j < i; j++) {
-                final WeekStatisticsBean.DataBean data = new WeekStatisticsBean.DataBean();
-                data.setStatus("未打卡");
-                data.setTime("05.31");
-                data.setTitle("上午到校");
-                list.add(data);
-            }
-            weekStatisticsBean.setDataBeanList(list);
-            data.add(weekStatisticsBean);
-        }
-    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initdata();
+        Log.e(TAG, "onViewCreated: "+type+",data="+ JSON.toJSONString(data));
+        if (data == null){
+            return;
+        }
         final FragmentStatisticsListBinding bind = FragmentStatisticsListBinding.bind(view);
-        final WeekStatisticsListAdapter weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
+        weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         bind.recyclerview.setAdapter(weekStatisticsListAdapter);
-        weekStatisticsListAdapter.setOnClickedListener(position -> {
-            final WeekStatisticsBean weekStatisticsBean = data.get(position);
-            if (weekStatisticsBean.isChecked()){
-               weekStatisticsBean.setChecked(false);
-                weekStatisticsListAdapter.notifyDataSetChanged();
-            }else {
-                for (WeekStatisticsBean datum : data) {
-                    datum.setChecked(false);
-                }
-                weekStatisticsBean.setChecked(true);
-                weekStatisticsListAdapter.notifyDataSetChanged();
-            }
-        });
+
+        if (data !=null && data.isEmpty()) {
+            bind.blankPage.setVisibility(View.VISIBLE);
+        } else {
+            bind.blankPage.setVisibility(View.GONE);
+        }
+
     }
 }

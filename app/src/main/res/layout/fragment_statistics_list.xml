@@ -11,4 +11,12 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:listitem="@layout/item_statistics_list"/>
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/blank_page"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:visibility="gone">
+
+    <include layout="@layout/layout_blank_page2" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

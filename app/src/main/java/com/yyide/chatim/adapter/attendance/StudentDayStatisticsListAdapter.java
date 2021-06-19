@@ -2,23 +2,23 @@ package com.yyide.chatim.adapter.attendance;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yyide.chatim.R;
 import com.yyide.chatim.databinding.ItemStudentAttendanceDayStatisticsBinding;
-import com.yyide.chatim.model.DayStatisticsBean;
-import com.yyide.chatim.model.StudentDayStatisticsBean;
+import com.yyide.chatim.model.AttendanceDayStatsRsp;
+import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * @Description: adapter
@@ -30,8 +30,9 @@ import butterknife.ButterKnife;
  * @Version: 1.0
  */
 public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<StudentDayStatisticsListAdapter.ViewHolder> {
+    private static final String TAG = StudentDayStatisticsListAdapter.class.getSimpleName();
     private Context context;
-    private List<StudentDayStatisticsBean> data;
+    private List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> data;
 
     public void setOnClickedListener(OnClickedListener onClickedListener) {
         this.onClickedListener = onClickedListener;
@@ -39,7 +40,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
 
     private OnClickedListener onClickedListener;
 
-    public StudentDayStatisticsListAdapter(Context context, List<StudentDayStatisticsBean> data) {
+    public StudentDayStatisticsListAdapter(Context context, List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> data) {
         this.context = context;
         this.data = data;
 
@@ -54,46 +55,87 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final StudentDayStatisticsBean dayStatisticsBean = data.get(position);
-        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getTime());
+        final AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean dayStatisticsBean = data.get(position);
+        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getStartTime());
         holder.mViewBanding.tvAttendanceTime.setText(attendanceTime);
-        holder.mViewBanding.tvEventName.setText(dayStatisticsBean.getEventName());
-        final String eventTime = dayStatisticsBean.getEventTime();
-        holder.mViewBanding.tvEventTime.setText(eventTime);
+        final String thingName = dayStatisticsBean.getThingName();
+        if (!TextUtils.isEmpty(thingName)) {
+            holder.mViewBanding.tvEventName.setText(dayStatisticsBean.getThingName());
+        }else {
+            holder.mViewBanding.tvEventName.setText(dayStatisticsBean.getSubjectName());
+        }
+        final String eventTime = String.format(context.getString(R.string.attendance_punch_card_text),dayStatisticsBean.getApplyDate());
+        final String eventTime2 = String.format(context.getString(R.string.attendance_ask_leave_text),dayStatisticsBean.getApplyDate());
         //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假
-        switch (dayStatisticsBean.getEventStatus()){
-            case 1:
+        //0正常、1缺勤、2迟到/3早退,4请假）
+        switch (dayStatisticsBean.getType()){
+            case 0:
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_normal));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_normal));
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_normal);
-                holder.mViewBanding.ivEventFaceRecognize.setVisibility(View.VISIBLE);
+                showFaceImage(holder.mViewBanding.ivEventFaceRecognize,dayStatisticsBean.getPath());
+                holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
+                holder.mViewBanding.tvEventTime.setText(eventTime);
                 break;
             case 2:
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_late));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_late));
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_late);
+                showFaceImage(holder.mViewBanding.ivEventFaceRecognize,dayStatisticsBean.getPath());
+                holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
+                holder.mViewBanding.tvEventTime.setText(eventTime);
                 break;
             case 3:
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_leave_early));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_leave_early));
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_leave_early);
+                showFaceImage(holder.mViewBanding.ivEventFaceRecognize,dayStatisticsBean.getPath());
+                holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
+                holder.mViewBanding.tvEventTime.setText(eventTime);
                 break;
-            case 4:
-                holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_no_sign_in));
+            case 1:
+                holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_absence));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_no_sign_in));
                 holder.mViewBanding.tvEventTime.setVisibility(View.GONE);
                 holder.mViewBanding.ivEventFaceRecognize.setVisibility(View.GONE);
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_no_sign_in);
                 break;
-            case 5:
+            case 4:
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_ask_for_leave));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_ask_for_leave));
                 holder.mViewBanding.ivEventFaceRecognize.setVisibility(View.GONE);
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_ask_for_leave);
+                holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
+                holder.mViewBanding.tvEventTime.setText(eventTime2);
                 break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 显示打卡图片
+     * @param imageView
+     * @param path
+     */
+    private void showFaceImage(ImageView imageView,String path){
+        Log.e(TAG, "showFaceImage: "+path );
+        if (TextUtils.isEmpty(path)){
+            imageView.setVisibility(View.GONE);
+            return;
+        }
+        imageView.setVisibility(View.VISIBLE);
+        String facePath = path;
+        if (!path.contains("https//") && !path.contains("http://")){
+            facePath = "http://"+path;
+        }
+        Glide.with(context)
+                .load(facePath)
+                .placeholder(R.drawable.default_head)
+                .error(R.drawable.default_head)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imageView);
     }
 
     @Override

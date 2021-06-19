@@ -1,23 +1,20 @@
 package com.yyide.chatim.adapter.attendance;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.DayStatisticsBean;
-import com.yyide.chatim.model.LeaveFlowBean;
+import com.yyide.chatim.databinding.ItemAttendanceDayStatisticsBinding;
+import com.yyide.chatim.model.AttendanceDayStatsRsp;
+import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * @Description: adapter
@@ -30,7 +27,7 @@ import butterknife.ButterKnife;
  */
 public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatisticsListAdapter.ViewHolder> {
     private Context context;
-    private List<DayStatisticsBean> data;
+    private List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> data;
 
     public void setOnClickedListener(OnClickedListener onClickedListener) {
         this.onClickedListener = onClickedListener;
@@ -38,7 +35,7 @@ public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatistics
 
     private OnClickedListener onClickedListener;
 
-    public DayStatisticsListAdapter(Context context, List<DayStatisticsBean> data) {
+    public DayStatisticsListAdapter(Context context, List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> data) {
         this.context = context;
         this.data = data;
 
@@ -53,17 +50,24 @@ public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatistics
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final DayStatisticsBean dayStatisticsBean = data.get(position);
-        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getTime());
-        holder.tv_attendance_time.setText(attendanceTime);
-        holder.tv_attendance_rate.setText(""+dayStatisticsBean.getRate());
-        holder.tv_due_num.setText(""+dayStatisticsBean.getDue());
-        holder.tv_normal_num.setText(""+dayStatisticsBean.getNormal());
-        holder.tv_absence_num.setText(""+dayStatisticsBean.getAbsence());
-        holder.tv_ask_for_leave_num.setText(""+dayStatisticsBean.getAsk_for_leave());
-        holder.tv_late_num.setText(""+dayStatisticsBean.getLate());
+        final AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean dayStatisticsBean = data.get(position);
+        final String thingName = dayStatisticsBean.getThingName();
+        if (!TextUtils.isEmpty(thingName)) {
+            holder.binding.tvEventName.setText(dayStatisticsBean.getThingName());
+        }else {
+            holder.binding.tvEventName.setText(dayStatisticsBean.getSubjectName());
+        }
+        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getStartTime());
+        holder.binding.tvAttendanceTime.setText(attendanceTime);
+        holder.binding.tvAttendanceRate.setText(dayStatisticsBean.getRate());
+        holder.binding.tvDueNum.setText(String.valueOf(dayStatisticsBean.getNumber()));
+        holder.binding.tvNormalNum.setText(String.valueOf(dayStatisticsBean.getApplyNum()));
+        holder.binding.tvAbsenceNum.setText(String.valueOf(dayStatisticsBean.getAbsence()));
+        holder.binding.tvAskForLeaveNum.setText(String.valueOf(dayStatisticsBean.getLeave()));
+        holder.binding.tvLateNum.setText(String.valueOf(dayStatisticsBean.getLate()));
 
-
+        holder.itemView.setOnClickListener(v ->
+                onClickedListener.onClicked(position));
     }
 
     @Override
@@ -72,32 +76,10 @@ public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatistics
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.tv_attendance_time)
-        TextView tv_attendance_time;
-
-        @BindView(R.id.tv_attendance_rate)
-        TextView tv_attendance_rate;
-
-        @BindView(R.id.tv_due_num)
-        TextView tv_due_num;
-
-        @BindView(R.id.tv_normal_num)
-        TextView tv_normal_num;
-
-        @BindView(R.id.tv_absence_num)
-        TextView tv_absence_num;
-
-        @BindView(R.id.tv_ask_for_leave_num)
-        TextView tv_ask_for_leave_num;
-
-        @BindView(R.id.tv_late_num)
-        TextView tv_late_num;
-
-
+        private final ItemAttendanceDayStatisticsBinding binding;
         public ViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this, view);
+            binding = ItemAttendanceDayStatisticsBinding.bind(view);
         }
     }
 

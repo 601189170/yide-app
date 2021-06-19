@@ -194,4 +194,7 @@
     <string name="notice_release_time_title">发布时刻</string>
 
     <string name="app_commonly_title">常用应用</string>
+    <string name="attendance_absence">缺勤</string>
+    <string name="attendance_leave_time">请假时间</string>
+    <string name="attendance_event_name">班牌打卡</string>
 </resources>

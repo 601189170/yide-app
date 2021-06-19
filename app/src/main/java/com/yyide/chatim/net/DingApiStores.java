@@ -6,6 +6,8 @@ import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceDayStatsRsp;
+import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.DepartmentScopeRsp2;
@@ -504,4 +506,24 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/school/cloud-school/notice/scope/app/v1/queryDeptMemberByDeptId")
     Observable<AddressBookRsp> queryDeptMemberByDeptId(@QueryMap HashMap<String, Object> map);
+
+    /**
+     * 考勤统计 dateType 1：日，2：周，3：月
+     * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/viewAttStatistics
+     * @param requestBody body
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/viewAttStatistics")
+    Observable<AttendanceDayStatsRsp> viewAttDayStatistics(@Body RequestBody requestBody);
+
+    /**
+     * 考勤统计 dateType 1：日，2：周，3：月
+     * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/viewAttStatistics
+     * @param requestBody body
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/viewAttStatistics")
+    Observable<AttendanceWeekStatsRsp> viewAttWeekMonthStatistics(@Body RequestBody requestBody);
 }

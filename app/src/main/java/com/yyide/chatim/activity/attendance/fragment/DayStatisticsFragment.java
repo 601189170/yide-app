@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -18,20 +19,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
 import com.beiing.weekcalendar.WeekCalendar;
 import com.beiing.weekcalendar.listener.GetViewHelper;
 import com.beiing.weekcalendar.utils.CalendarUtil;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.attendance.StatisticsDetailActivity;
 import com.yyide.chatim.adapter.attendance.DayStatisticsListAdapter;
 import com.yyide.chatim.adapter.attendance.StudentDayStatisticsListAdapter;
+import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
-import com.yyide.chatim.model.DayStatisticsBean;
+import com.yyide.chatim.model.AttendanceDayStatsRsp;
+import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
-import com.yyide.chatim.model.StudentDayStatisticsBean;
+import com.yyide.chatim.presenter.attendance.DayStatisticsPresenter;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.view.attendace.DayStatisticsView;
 
 import org.joda.time.DateTime;
 
@@ -46,14 +52,21 @@ import java.util.Optional;
  * Use the {@link DayStatisticsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DayStatisticsFragment extends Fragment {
+public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresenter> implements DayStatisticsView {
     private static final String TAG = DayStatisticsFragment.class.getSimpleName();
     private List<DateTime> eventDates;
-    private List<DayStatisticsBean> data;
-    private List<StudentDayStatisticsBean> studentDayStatisticsBeanList;
+    private final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> data = new ArrayList<>();
+    private final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean> attendancesFormBeanList = new ArrayList<>();
+
     private FragmentDayStatisticsBinding mViewBinding;
     private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
     private List<LeaveDeptRsp.DataBean> eventList = new ArrayList<>();
+    private String currentDate;//当前选择的日期
+    private String currentClass;//当前班级
+    private String currentClassName;//当前班级
+    private String currentEvent;//当前事件
+    private DayStatisticsListAdapter dayStatisticsListAdapter;
+    private StudentDayStatisticsListAdapter studentDayStatisticsListAdapter;
 
     public DayStatisticsFragment() {
         // Required empty public constructor
@@ -106,49 +119,22 @@ public class DayStatisticsFragment extends Fragment {
         }
     }
 
-    private void initEventData() {
-        eventList.clear();
-        for (int i = 0; i < 3; i++) {
-            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            dataBean.setIsDefault(i == 1 ? 1 : 0);
-            dataBean.setDeptName("学生出入校考勤上午到校" + i);
-            dataBean.setDeptId(i + 100);
-            eventList.add(dataBean);
-        }
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final FragmentDayStatisticsBinding bind = FragmentDayStatisticsBinding.bind(view);
-        mViewBinding = bind;
+        mViewBinding = FragmentDayStatisticsBinding.bind(view);
         eventDates = new ArrayList<>();
         initClassData();
-        initEventData();
-        final String time = DateUtils.switchTime(new Date(), "yyyy-MM-dd");
+        String time = DateUtils.switchTime(new Date(), "yyyy-MM-dd");
         mViewBinding.tvCurrentDate.setText(time);
-        final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        final LeaveDeptRsp.DataBean dataBean = eventOptional.get();
-        mViewBinding.tvAttendanceType.setText(dataBean.getDeptName());
-        if (eventList.size() <= 1) {
-            mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, null, null);
-        } else {
-            Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
-            //设置图片大小，必须设置
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, drawable, null);
-            mViewBinding.tvAttendanceType.setOnClickListener(v -> {
-                final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 3, eventList);
-                deptSelectPop.setOnCheckedListener((id, dept) -> {
-                    Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
-                    mViewBinding.tvAttendanceType.setText(dept);
-                });
-            });
-        }
+        currentDate = DateUtils.formatTime(time,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");
+
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
         mViewBinding.tvClassName.setText(clazzBean.getDeptName());
+        currentClass = ""+clazzBean.getDeptId();
+        currentClassName = clazzBean.getDeptName();
         if (classList.size() <= 1) {
             mViewBinding.tvSwitch.setVisibility(View.GONE);
         } else {
@@ -158,6 +144,9 @@ public class DayStatisticsFragment extends Fragment {
                         deptSelectPop.setOnCheckedListener((id, dept) -> {
                             Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
                             mViewBinding.tvClassName.setText(dept);
+                            currentClass = ""+id;
+                            currentClassName = dept;
+                            queryAttStatsData(currentClass,currentDate);
                         });
                     }
             );
@@ -216,49 +205,147 @@ public class DayStatisticsFragment extends Fragment {
             String text = selectDate.toString("yyyy-MM-dd");
             this.mViewBinding.tvCurrentDate.setText(text);
             Log.e(TAG, "onDateSelect: " + text);
+            currentDate = DateUtils.formatTime(text,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");;
+            queryAttStatsData(currentClass,currentDate);
         });
 
         RecyclerView recyclerview = view.findViewById(R.id.recyclerview);
-        initdata();
-        if (SpData.getIdentityInfo().staffIdentity()){
-            final DayStatisticsListAdapter dayStatisticsListAdapter = new DayStatisticsListAdapter(getContext(), data);
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            //统计-日-班主任和教师视角
+            dayStatisticsListAdapter = new DayStatisticsListAdapter(getContext(), data);
             recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerview.setAdapter(dayStatisticsListAdapter);
-        }else {
-            final StudentDayStatisticsListAdapter studentDayStatisticsListAdapter = new StudentDayStatisticsListAdapter(getActivity(), studentDayStatisticsBeanList);
+            dayStatisticsListAdapter.setOnClickedListener(position -> {
+                //进入考勤详情页
+                //final AttendanceStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = data.get(position);
+                AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBeanData = null;
+                for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesFormBeanList) {
+                        if (currentEvent.equals(attendancesFormBean.getAttNameA())){
+                            attendancesFormBeanData = attendancesFormBean;
+                            break;
+                        }
+                }
+                if (attendancesFormBeanData == null){
+                    return;
+                }
+                final String jsonString = JSON.toJSONString(attendancesFormBeanData);
+                Log.e(TAG, "进入考勤详情页: "+jsonString );
+                final Intent intent = new Intent(getActivity(), StatisticsDetailActivity.class);
+                intent.putExtra("data",jsonString);
+                intent.putExtra("currentClass",currentClassName);
+                startActivity(intent);
+            });
+        } else {
+            //统计-日-家长视角
+            studentDayStatisticsListAdapter = new StudentDayStatisticsListAdapter(getActivity(), data);
             recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerview.setAdapter(studentDayStatisticsListAdapter);
         }
+        //请求数据
+        queryAttStatsData(currentClass,currentDate);
     }
 
-    private void initdata() {
-        data = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            final DayStatisticsBean dayStatisticsBean = new DayStatisticsBean();
-            dayStatisticsBean.setTime("2021-03-04");
-            dayStatisticsBean.setAbsence(23);
-            dayStatisticsBean.setDue(12);
-            dayStatisticsBean.setLate(34);
-            dayStatisticsBean.setNormal(32);
-            dayStatisticsBean.setRate(50);
-            dayStatisticsBean.setAsk_for_leave(32);
-            data.add(dayStatisticsBean);
-        }
+    private void queryAttStatsData(String classId,String searchTime){
+        mvpPresenter.getAttendanceStatsData(classId,searchTime,"1");
+    }
 
-        studentDayStatisticsBeanList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            final StudentDayStatisticsBean studentDayStatisticsBean = new StudentDayStatisticsBean();
-            studentDayStatisticsBean.setEventName("上午到校"+i);
-            studentDayStatisticsBean.setTime("2021-03-04");
-            studentDayStatisticsBean.setEventStatus((int)(Math.random()*10)+1);
-            studentDayStatisticsBean.setEventTime("打卡时间：07:0"+i);
-            studentDayStatisticsBeanList.add(studentDayStatisticsBean);
-        }
+    @Override
+    protected DayStatisticsPresenter createPresenter() {
+        return new DayStatisticsPresenter(this);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mViewBinding = null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void attendanceStatisticsSuccess(AttendanceDayStatsRsp attendanceWeekStatsRsp) {
+        Log.e(TAG, "attendanceStatisticsSuccess: " + attendanceWeekStatsRsp.toString());
+        if (attendanceWeekStatsRsp.getCode() == 200){
+            if (attendanceWeekStatsRsp.getData() == null) {
+                return;
+            }
+            if (attendanceWeekStatsRsp.getData().getAttendancesForm() == null){
+                return;
+            }
+            attendancesFormBeanList.clear();
+            attendancesFormBeanList.addAll(attendanceWeekStatsRsp.getData().getAttendancesForm());
+            data.clear();
+            currentEvent = attendancesFormBeanList.get(0).getAttNameA();
+            data.addAll(attendancesFormBeanList.get(0).getStudentLists());
+            //更新布局
+            if (SpData.getIdentityInfo().staffIdentity()) {
+                dayStatisticsListAdapter.notifyDataSetChanged();
+            }else {
+                studentDayStatisticsListAdapter.notifyDataSetChanged();
+            }
+            initEventData();
+        }
+    }
+
+
+    private void showData(String eventName){
+        List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> studentListsBean = null;
+        for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesFormBeanList) {
+            if (attendancesFormBean.getAttNameA().equals(eventName)) {
+                studentListsBean = attendancesFormBean.getStudentLists();
+                break;
+            }
+        }
+
+        if (studentListsBean == null){
+            Log.e(TAG, "showData: data is null");
+            return;
+        }
+        data.clear();
+        data.addAll(studentListsBean);
+        //更新布局
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            dayStatisticsListAdapter.notifyDataSetChanged();
+        }else {
+            studentDayStatisticsListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initEventData() {
+        eventList.clear();
+        for (int i = 0; i < attendancesFormBeanList.size(); i++) {
+            final AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = attendancesFormBeanList.get(i);
+            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+            dataBean.setIsDefault(i == 0 ? 1 : 0);
+            dataBean.setDeptName(attendancesFormBean.getAttNameA());
+            dataBean.setDeptId(i + 100);
+            eventList.add(dataBean);
+        }
+
+        final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+        final LeaveDeptRsp.DataBean dataBean = eventOptional.get();
+        mViewBinding.tvAttendanceType.setText(dataBean.getDeptName());
+        if (eventList.size() <= 1) {
+            mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, null, null);
+        } else {
+            Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
+            //设置图片大小，必须设置
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, drawable, null);
+            mViewBinding.tvAttendanceType.setOnClickListener(v -> {
+                final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 3, eventList);
+                deptSelectPop.setOnCheckedListener((id, dept) -> {
+                    Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
+                    mViewBinding.tvAttendanceType.setText(dept);
+                    currentEvent = dept;
+                    showData(dept);
+                });
+            });
+        }
+    }
+
+    @Override
+    public void attendanceStatisticsFail(String msg) {
+        Log.e(TAG, "attendanceStatisticsFail: " + msg);
     }
 }
