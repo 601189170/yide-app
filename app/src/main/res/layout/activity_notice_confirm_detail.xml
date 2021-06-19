@@ -81,24 +81,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_16"
-                    android:text="发布方式"
+                    android:text="@string/notice_people"
                     android:textColor="#ff333333"
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_16"
-                    android:textColor="#ff666666"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toStartOf="@+id/textView13"
-                    app:layout_constraintTop_toTopOf="@+id/tv_push_way" />
-
-                <TextView
-                    android:id="@+id/textView13"
+                    android:id="@+id/tv_push_people"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_16"
@@ -110,7 +100,7 @@
                 <View
                     android:id="@+id/view_line"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_16"
                     android:background="#E4E7ED"
@@ -123,7 +113,7 @@
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_16"
                     android:layout_marginBottom="@dimen/dp_16"
-                    android:text="通知范围"
+                    android:text="@string/notice_time"
                     android:textColor="#ff333333"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -131,69 +121,18 @@
                     app:layout_constraintTop_toBottomOf="@+id/view_line" />
 
                 <TextView
+                    android:id="@+id/tv_push_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_16"
-                    android:gravity="right"
                     android:textColor="#ff666666"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textView15"
                     app:layout_constraintTop_toTopOf="@+id/textView15" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
-                android:paddingStart="@dimen/dp_20"
-                android:paddingTop="@dimen/dp_16"
-                android:paddingBottom="@dimen/dp_16">
-
-                <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="已读/未读"
-                    android:textColor="#ff333333"
-                    android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_read"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_16"
-                    android:drawableEnd="@drawable/ic_baseline_more_horiz_24"
-                    android:drawablePadding="@dimen/dp_4"
-                    android:gravity="center"
-                    android:text="10/30"
-                    android:textColor="#ff666666"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
             <Button
-                android:id="@+id/btn_to_withdraw"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_40"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:layout_marginBottom="@dimen/dp_40"
-                android:background="@drawable/bg_conrners_white_20"
-                android:gravity="center"
-                android:text="@string/notice_to_withdrawn"
-                android:visibility="gone"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_15" />
-
-            <Button
-                android:id="@+id/btn_commit"
+                android:id="@+id/btn_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_44"
                 android:layout_marginStart="@dimen/dp_20"
@@ -202,7 +141,7 @@
                 android:layout_marginBottom="@dimen/dp_40"
                 android:background="@drawable/bg_corners_gray2_22"
                 android:gravity="center"
-                android:text="@string/notice_has_withdrawn"
+                android:text="@string/notice_have_been_confirmed"
                 android:textColor="@color/black10"
                 android:textSize="@dimen/text_15" />
         </LinearLayout>

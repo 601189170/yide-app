@@ -6,6 +6,11 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityNoticeDetail2Binding;
 
+/**
+ * desc （通知公告）我的发布通知详情
+ * author lrz
+ * time 2021年6月19日
+ */
 public class NoticeDetailActivity extends BaseActivity {
 
     private ActivityNoticeDetail2Binding detailBinding;

@@ -466,7 +466,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     ft.show(fg2);
                 }
                 tab2.setChecked(true);
-                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 break;
             case 2:
                 if (fg3 == null) {
@@ -508,6 +507,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 if (!UserInfo.getInstance().isAutoLogin()) {
                     getUserSig();
                 }
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 setTab(1, 0);
                 break;
             case R.id.tab3_layout:

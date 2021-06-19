@@ -7,34 +7,25 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.TableAdapter;
 import com.yyide.chatim.adapter.TableItemAdapter;
 import com.yyide.chatim.adapter.TableSectionAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.dialog.AttendancePop;
-import com.yyide.chatim.dialog.SwichClassPop;
-import com.yyide.chatim.dialog.SwichTableClassPop;
+import com.yyide.chatim.dialog.SwitchTableClassPop;
 import com.yyide.chatim.dialog.SwitchClassPopNew;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
-import com.yyide.chatim.model.TableRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.presenter.ClassTablePresenter;
@@ -48,15 +39,11 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import okhttp3.OkHttpClient;
 
 
-public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> implements ClassTableView, SwichTableClassPop.SelectClasses {
+public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> implements ClassTableView, SwitchTableClassPop.SelectClasses {
 
     @BindView(R.id.grid)
     GridView grid;
@@ -149,7 +136,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
         } else {
             if (data != null && data.size() > 0) {
-                swichTableClassPop = new SwichTableClassPop(getActivity(), data);
+                swichTableClassPop = new SwitchTableClassPop(getActivity(), data);
                 swichTableClassPop.setSelectClasses(this);
             } else {
                 ToastUtils.showShort("暂无切换班级");
@@ -287,7 +274,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         Log.d("selectTableClassListSuccess", msg);
     }
 
-    private SwichTableClassPop swichTableClassPop;
+    private SwitchTableClassPop swichTableClassPop;
 
     @Override
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {

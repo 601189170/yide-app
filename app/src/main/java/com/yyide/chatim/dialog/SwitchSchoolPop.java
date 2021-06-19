@@ -49,14 +49,14 @@ import okhttp3.Response;
  * Created by Administrator on 2019/5/15.
  */
 
-public class SwichSchoolPop extends PopupWindow {
+public class SwitchSchoolPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
     OkHttpClient mOkHttpClient = new OkHttpClient();
     LoadingTools loadingTools;
 
-    public SwichSchoolPop(Activity context) {
+    public SwitchSchoolPop(Activity context) {
         this.context = context;
         init();
     }

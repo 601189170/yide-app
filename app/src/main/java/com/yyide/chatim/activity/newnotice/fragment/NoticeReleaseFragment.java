@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.newnotice.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,10 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.newnotice.NoticePushAdapter;
+import com.yyide.chatim.activity.newnotice.NoticeTemplateReleaseDetailActivity;
 import com.yyide.chatim.databinding.FragmentNoticePushBinding;
 import com.yyide.chatim.widget.itemDocoretion.ItemDecorationPowerful;
 
@@ -32,14 +32,14 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  */
-public class NoticePushFragment extends Fragment {
+public class NoticeReleaseFragment extends Fragment {
 
     private FragmentNoticePushBinding pushBinding;
     private int pageNum = 1;
     private int checkPosition = 0;
 
-    public static NoticePushFragment newInstance() {
-        NoticePushFragment fragment = new NoticePushFragment();
+    public static NoticeReleaseFragment newInstance() {
+        NoticeReleaseFragment fragment = new NoticeReleaseFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -76,7 +76,7 @@ public class NoticePushFragment extends Fragment {
         listTabs.add("推荐7");
         listTabs.add("推荐8");
         listTabs.add("推荐9");
-        //导航TAB 列表
+        //导航TAB 列表 模板发布
         pushBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         pushBinding.recyclerview.addItemDecoration(new ItemDecorationPowerful(ItemDecorationPowerful.HORIZONTAL_DIV, Color.TRANSPARENT, SizeUtils.dp2px(5)));
         pushBinding.recyclerview.setAdapter(adapter);
@@ -87,7 +87,7 @@ public class NoticePushFragment extends Fragment {
             pushBinding.recyclerview.smoothScrollToPosition(position);
         });
         //通知模板数据列表
-        NoticePushAdapter mAdapter = new NoticePushAdapter(R.layout.item_notice_push);
+        NoticeReleaseAdapter mAdapter = new NoticeReleaseAdapter(R.layout.item_notice_push);
         pushBinding.list.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         pushBinding.list.addItemDecoration(new ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(12)));
         pushBinding.list.setAdapter(mAdapter);
@@ -97,9 +97,11 @@ public class NoticePushFragment extends Fragment {
             //点击空数据界面刷新当前页数据
             ToastUtils.showShort("getEmptyLayout To Data");
         });
-        mAdapter.setOnItemClickListener((adapter, view, position) -> {
 
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            startActivity(new Intent(getContext(), NoticeTemplateReleaseDetailActivity.class));
         });
+
         mAdapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
             //上拉加载时取消下拉刷新
 //            mSwipeRefreshLayout.setRefreshing(false);

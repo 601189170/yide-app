@@ -3,12 +3,9 @@ package com.yyide.chatim.dialog;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,10 +16,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 
-import com.blankj.utilcode.util.CacheDiskUtils;
-import com.blankj.utilcode.util.CacheDoubleUtils;
-import com.blankj.utilcode.util.FileUtils;
-import com.blankj.utilcode.util.SDCardUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -38,11 +31,8 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.utils.FileCacheUtils;
 import com.yyide.chatim.utils.GlideUtil;
-import com.yyide.chatim.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.math.BigDecimal;
 
 
 /**
@@ -214,7 +204,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.layout1://切换班级
                 if(SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0){
-                    new SwichClassPop(context).setOnCheckCallBack(() -> {
+                    new SwitchClassPop(context).setOnCheckCallBack(() -> {
                         if(SpData.getClassInfo() != null && "N".equals(SpData.getClassInfo().teacherInd)){
                             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "老师" : "");
                         } else {
@@ -225,7 +215,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 }
                 break;
             case R.id.layout2://切换身份（学校）
-                new SwichSchoolPop(context).setOnCheckCallBack(() -> {
+                new SwitchSchoolPop(context).setOnCheckCallBack(() -> {
                     setData();
                 });
                 break;

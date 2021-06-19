@@ -27,7 +27,7 @@ import java.util.List;
  * Created by Administrator on 2019/5/15.
  */
 
-public class SwichTableClassPop extends PopupWindow {
+public class SwitchTableClassPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
@@ -43,7 +43,7 @@ public class SwichTableClassPop extends PopupWindow {
         void OnSelectClassesListener(long id, String classesName);
     }
 
-    public SwichTableClassPop(Activity context, List<SelectTableClassesRsp.DataBean> dataBeansList) {
+    public SwitchTableClassPop(Activity context, List<SelectTableClassesRsp.DataBean> dataBeansList) {
         this.context = context;
         this.dataBeansList = dataBeansList;
         init();

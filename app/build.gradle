@@ -93,7 +93,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '30.0.3'
+//    buildToolsVersion '30.0.3'
 //    // 在MobSDK的扩展中注册SMSSDK的相关信息
 //    MobSDK {
 //        appKey "19aa2f667f410"

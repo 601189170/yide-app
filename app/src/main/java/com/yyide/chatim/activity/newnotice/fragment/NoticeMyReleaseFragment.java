@@ -22,7 +22,6 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentNoticeMyPushListBinding;
 import com.yyide.chatim.databinding.ItemNoticeMyPushBinding;
-import com.yyide.chatim.databinding.ItemNoticeMyReceviedBinding;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.presenter.NoticeReceivedPresenter;
 import com.yyide.chatim.view.NoticeReceivedView;
@@ -38,13 +37,13 @@ import java.util.List;
  * auther lrz
  * time  2021年6月17日11:00:27
  */
-public class NoticeMyPushFragment extends BaseMvpFragment<NoticeReceivedPresenter> implements NoticeReceivedView {
+public class NoticeMyReleaseFragment extends BaseMvpFragment<NoticeReceivedPresenter> implements NoticeReceivedView {
 
-    private final String TAG = NoticeMyPushFragment.class.getSimpleName();
+    private final String TAG = NoticeMyReleaseFragment.class.getSimpleName();
     private FragmentNoticeMyPushListBinding viewBinding;
 
-    public static NoticeMyPushFragment newInstance() {
-        NoticeMyPushFragment fragment = new NoticeMyPushFragment();
+    public static NoticeMyReleaseFragment newInstance() {
+        NoticeMyReleaseFragment fragment = new NoticeMyReleaseFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

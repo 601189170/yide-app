@@ -89,23 +89,6 @@
     <string name="live_is_over">直播已结束</string>
     <string name="student_honor_count">%d荣誉</string>
 
-    <!--通知模块-->
-    <string name="notice_announcement_title">通知公告</string>
-    <string name="notice_template_title">通知模板</string>
-    <string name="notice_scope_title">通知范围</string>
-    <string name="notice_confirm_detail_title">确认详情</string>
-    <string name="notice_create_title">创建通知</string>
-    <string name="notice_to_confirm">去确认</string>
-    <string name="notice_tab_my_notice">我的通知</string>
-    <string name="notice_tab_my_release">我的发布</string>
-    <string name="notice_select_number">已选择(%d)</string>
-    <string name="notice_send_obj">发送对象：%s</string>
-    <string name="notice_confirm_number">（%d/%d）已确认</string>
-    <string name="notice_confirm_number_text">已确认（%d/%d）</string>
-    <string name="notice_scope_number_text">已选择(%d)</string>
-    <string name="timed_send_text">%d小时%d分钟%d秒后发送</string>
-    <string name="timed_send_long_text">%d天后发送</string>
-
     <!--Im-->
     <string name="call_timeout">本次通话已超时</string>
     <string name="call_notification">音视频邀请消息通知</string>
@@ -176,13 +159,39 @@
 
     <string name="retract">\u3000\u3000%s</string>
 
-    <!--新通知公告-->
+    <!--通知模块-->
+    <string name="notice_announcement_title">通知公告</string>
+    <string name="notice_release_title">发布通知</string>
+
+    <string name="notice_template_title">通知模板</string>
+    <string name="notice_scope_title">通知范围</string>
+    <string name="notice_confirm_detail_title">确认详情</string>
+    <string name="notice_create_title">创建通知</string>
+    <string name="notice_to_confirm">去确认</string>
+    <string name="notice_tab_my_notice">我的通知</string>
+    <string name="notice_tab_my_release">我的发布</string>
+    <string name="notice_select_number">已选择(%d)</string>
+    <string name="notice_send_obj">发送对象：%s</string>
+    <string name="notice_confirm_number">（%d/%d）已确认</string>
+    <string name="notice_confirm_number_text">已确认（%d/%d）</string>
+    <string name="notice_scope_number_text">已选择(%d)</string>
+    <string name="timed_send_text">%d小时%d分钟%d秒后发送</string>
+    <string name="timed_send_long_text">%d天后发送</string>
+    <string name="notice_my_push_title">我发布的通知</string>
     <string name="notice_tab_my_received">我收到的</string>
     <string name="notice_tab_my_push">我发布的</string>
     <string name="notice_tab_push">发布通知</string>
     <string name="notice_confirm_count">已确认：</string>
     <string name="notice_has_withdrawn">已撤回</string>
-    <string name="notice_my_push_title">我发布的通知</string>
+    <string name="notice_have_been_confirmed">已确认</string>
+    <string name="notice_to_withdrawn">撤回</string>
+    <string name="notice_people">发布人</string>
+    <string name="notice_push">发布</string>
+    <string name="notice_timing_push">定时发布</string>
+    <string name="notice_time">发布时间</string>
+    <string name="notice_immediately_push">立即发布</string>
+    <string name="notice_preview_title">预览</string>
+    <string name="notice_release_time_title">发布时刻</string>
 
     <string name="app_commonly_title">常用应用</string>
 </resources>

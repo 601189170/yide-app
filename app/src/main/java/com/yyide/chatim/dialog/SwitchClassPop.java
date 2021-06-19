@@ -48,12 +48,12 @@ import okhttp3.Response;
  * Created by Administrator on 2019/5/15.
  */
 
-public class SwichClassPop extends PopupWindow {
+public class SwitchClassPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
 
-    public SwichClassPop(Activity context) {
+    public SwitchClassPop(Activity context) {
         this.context = context;
         init();
     }

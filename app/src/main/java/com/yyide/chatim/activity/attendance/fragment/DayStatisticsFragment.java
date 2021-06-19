@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.beiing.weekcalendar.WeekCalendar;
-import com.beiing.weekcalendar.listener.DateSelectListener;
 import com.beiing.weekcalendar.listener.GetViewHelper;
 import com.beiing.weekcalendar.utils.CalendarUtil;
 import com.yyide.chatim.R;
@@ -28,7 +27,6 @@ import com.yyide.chatim.adapter.attendance.DayStatisticsListAdapter;
 import com.yyide.chatim.adapter.attendance.StudentDayStatisticsListAdapter;
 import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
-import com.yyide.chatim.dialog.SwichClassPop;
 import com.yyide.chatim.model.DayStatisticsBean;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
@@ -42,8 +40,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import butterknife.BindView;
 
 /**
  * A simple {@link Fragment} subclass.

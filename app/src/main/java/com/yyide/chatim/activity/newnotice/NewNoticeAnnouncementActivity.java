@@ -7,9 +7,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.newnotice.fragment.NoticeMyPushFragment;
+import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReleaseFragment;
 import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReceivedFragment;
-import com.yyide.chatim.activity.newnotice.fragment.NoticePushFragment;
+import com.yyide.chatim.activity.newnotice.fragment.NoticeReleaseFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityNoticeBinding;
 
@@ -52,10 +52,10 @@ public class NewNoticeAnnouncementActivity extends BaseActivity {
                         fragment = NoticeMyReceivedFragment.newInstance();
                         break;
                     case 1:
-                        fragment = NoticeMyPushFragment.newInstance();
+                        fragment = NoticeMyReleaseFragment.newInstance();
                         break;
                     case 2:
-                        fragment = NoticePushFragment.newInstance();
+                        fragment = NoticeReleaseFragment.newInstance();
                         break;
                 }
                 return fragment;

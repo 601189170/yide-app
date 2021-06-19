@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.utils.GlideUtil;
@@ -50,7 +51,9 @@ public class AppAdapter extends BaseQuickAdapter<AppItemBean.DataBean.RecordsBea
             Intent intent;
             switch (adapter.getItem(position1).getName()) {
                 case "通知公告":
-                    intent = new Intent(view1.getContext(), NoticeAnnouncementActivity.class);
+//                    intent = new Intent(view1.getContext(), NoticeAnnouncementActivity.class);
+//                    view1.getContext().startActivity(intent);
+                    intent = new Intent(view1.getContext(), NewNoticeAnnouncementActivity.class);
                     view1.getContext().startActivity(intent);
                     break;
                 case "请假":

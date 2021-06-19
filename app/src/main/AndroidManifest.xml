@@ -77,7 +77,9 @@
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
-        <activity android:name=".activity.attendance.AttendanceClassStudentActivity"></activity>
+        <activity android:name=".activity.newnotice.NoticeTemplateReleaseDetailActivity"></activity>
+        <activity android:name=".activity.newnotice.NoticeConfirmDetailActivity"></activity>
+        <activity android:name=".activity.attendance.AttendanceClassStudentActivity" />
         <activity
             android:name=".activity.newnotice.NoticeDetailActivity"
             android:screenOrientation="portrait" />

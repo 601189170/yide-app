@@ -13,20 +13,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.newnotice.NoticeMyReceivedAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentNoticeMyReceviedListBinding;
-import com.yyide.chatim.databinding.ItemNoticeMyReceviedBinding;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.presenter.NoticeReceivedPresenter;
 import com.yyide.chatim.view.NoticeReceivedView;
 import com.yyide.chatim.widget.itemDocoretion.ItemDecorationPowerful;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;

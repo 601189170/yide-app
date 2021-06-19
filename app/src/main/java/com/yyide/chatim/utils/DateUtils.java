@@ -203,4 +203,6 @@ public class DateUtils {
         dates[1] = endDayOfWeek.getMonthValue()+"."+endDayOfWeek.getDayOfMonth();
         return dates;
     }
+
+
 }

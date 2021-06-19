@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity.newnotice;
+package com.yyide.chatim.activity.newnotice.fragment;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
