@@ -171,28 +171,32 @@ public class StatisticsListDetailFragment extends Fragment {
     }
 
     private void initPeopleListView() {
-        viewBinding.clAttendanceType.setVisibility(View.VISIBLE);
         List<String> listTab = new ArrayList<>();
         listTab.add("应到");
         listTab.add("正常");
         listTab.add("缺勤");
         listTab.add("请假");
         listTab.add("迟到");
-
+        fragments.clear();
         final StatisticsListFragment allListFragment = StatisticsListFragment.newInstance(listTab.get(0));
+        Log.e(TAG, "allListFragment: "+JSON.toJSONString(allPeople) );
         allListFragment.setData(allPeople);
         fragments.add(allListFragment);
         final StatisticsListFragment normalListFragment = StatisticsListFragment.newInstance(listTab.get(1));
+        Log.e(TAG, "normalListFragment: "+JSON.toJSONString(normalPeople) );
         normalListFragment.setData(normalPeople);
         fragments.add(normalListFragment);
         final StatisticsListFragment absenceListFragment = StatisticsListFragment.newInstance(listTab.get(2));
+        Log.e(TAG, "absenceListFragment: "+JSON.toJSONString(absencePeople) );
         absenceListFragment.setData(absencePeople);
         fragments.add(absenceListFragment);
         final StatisticsListFragment leaveListFragment = StatisticsListFragment.newInstance(listTab.get(3));
+        Log.e(TAG, "leaveListFragment: "+JSON.toJSONString(leavePeople) );
         leaveListFragment.setData(leavePeople);
         fragments.add(leaveListFragment);
 
         final StatisticsListFragment lateFragment = StatisticsListFragment.newInstance(listTab.get(4));
+        Log.e(TAG, "lateFragment: "+JSON.toJSONString(latePeople) );
         lateFragment.setData(latePeople);
         fragments.add(lateFragment);
 
@@ -213,7 +217,6 @@ public class StatisticsListDetailFragment extends Fragment {
         });
 
         viewBinding.rgAttendanceType.setOnCheckedChangeListener((group, checkedId) -> {
-            Log.e(TAG, "initPeopleListView: " + checkedId);
             switch (checkedId) {
                 case R.id.rb_all_people:
                     viewBinding.viewpager.setCurrentItem(0);
