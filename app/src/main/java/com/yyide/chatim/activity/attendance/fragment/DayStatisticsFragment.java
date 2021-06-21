@@ -262,7 +262,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
 
     private void showBlank(boolean show){
         mViewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
-        mViewBinding.recyclerview.setVisibility(show?View.GONE:View.VISIBLE);
+        //mViewBinding.recyclerview.setVisibility(show?View.GONE:View.VISIBLE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
