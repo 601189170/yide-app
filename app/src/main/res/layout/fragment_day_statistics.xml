@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.attendance.fragment.WeekStatisticsFragment">
+    tools:context=".activity.attendance.fragment.DayStatisticsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -205,5 +205,14 @@
         android:paddingEnd="@dimen/dp_12"
         android:paddingBottom="@dimen/dp_16"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:layout_constraintTop_toTopOf="parent" />
+         />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/blank_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:visibility="gone">
+
+        <include layout="@layout/layout_blank_page" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

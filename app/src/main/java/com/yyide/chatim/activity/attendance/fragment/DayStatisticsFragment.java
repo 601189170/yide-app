@@ -260,6 +260,11 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         mViewBinding = null;
     }
 
+    private void showBlank(boolean show){
+        mViewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
+        mViewBinding.recyclerview.setVisibility(show?View.GONE:View.VISIBLE);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void attendanceStatisticsSuccess(AttendanceDayStatsRsp attendanceWeekStatsRsp) {
@@ -268,12 +273,19 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
             if (attendanceWeekStatsRsp.getData() == null) {
                 return;
             }
-            if (attendanceWeekStatsRsp.getData().getAttendancesForm() == null){
+            attendancesFormBeanList.clear();
+            data.clear();
+            final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean> attendancesForm = attendanceWeekStatsRsp.getData().getAttendancesForm();
+            if (attendancesForm == null || attendancesForm.isEmpty()){
+                eventList.clear();
+                currentEvent = "";
+                mViewBinding.tvAttendanceType.setText("");
+                mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, null, null);
+                showBlank(true);
                 return;
             }
-            attendancesFormBeanList.clear();
-            attendancesFormBeanList.addAll(attendanceWeekStatsRsp.getData().getAttendancesForm());
-            data.clear();
+            showBlank(false);
+            attendancesFormBeanList.addAll(attendancesForm);
             currentEvent = attendancesFormBeanList.get(0).getAttNameA();
             data.addAll(attendancesFormBeanList.get(0).getStudentLists());
             //更新布局
@@ -324,6 +336,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
 
         final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         final LeaveDeptRsp.DataBean dataBean = eventOptional.get();
+        mViewBinding.tvAttendanceType.setVisibility(View.VISIBLE);
         mViewBinding.tvAttendanceType.setText(dataBean.getDeptName());
         if (eventList.size() <= 1) {
             mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, null, null);
@@ -347,5 +360,10 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     @Override
     public void attendanceStatisticsFail(String msg) {
         Log.e(TAG, "attendanceStatisticsFail: " + msg);
+        eventList.clear();
+        currentEvent = "";
+        mViewBinding.tvAttendanceType.setText("");
+        mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, null, null);
+        showBlank(true);
     }
 }
