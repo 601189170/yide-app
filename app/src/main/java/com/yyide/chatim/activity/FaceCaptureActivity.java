@@ -84,7 +84,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             warnTip("当前账号姓名为空不能采集人脸");
         } else {
             if (!SpData.getIdentityInfo().staffIdentity()) {
-                final int userId = Integer.parseInt(SpData.getIdentityInfo().userId);
+                final long userId = Long.parseLong(SpData.getIdentityInfo().userId);
                 if (classesId == 0 && userId == 0) {
                     warnTip("当前账号学生Id为空不能采集人脸");
                 } else {
