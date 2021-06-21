@@ -77,6 +77,8 @@ public class AttendanceDayStatsRsp {
                 private List<PeopleBean> applyPeople;
                 private String peopleType;
                 private String path;
+                private String startDate;
+                private String endDate;
                 private String classesName;
                 private String attId;
                 private String thingName;

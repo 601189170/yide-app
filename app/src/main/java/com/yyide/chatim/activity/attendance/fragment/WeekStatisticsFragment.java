@@ -234,6 +234,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         listTab.add("迟到");
         listTab.add("请假");
         listTab.add("早退");
+        fragments.clear();
         final StatisticsListFragment absenceListFragment = StatisticsListFragment.newInstance(listTab.get(0));
         absenceListFragment.setData(absencePeople);
         fragments.add(absenceListFragment);
@@ -288,7 +289,6 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         });
 
         mViewBinding.rgAttendanceType.setOnCheckedChangeListener((group, checkedId) -> {
-            Log.e(TAG, "initPeopleListView: "+checkedId );
             switch (checkedId) {
                 case R.id.rb_absence:
                     mViewBinding.viewpager.setCurrentItem(0);
@@ -431,22 +431,26 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         mViewBinding.tvLateNum.setText(String.valueOf(studentsBean.getLate()));
         //早退人数
         mViewBinding.tvLateEarlyNum.setText(String.valueOf(studentsBean.getLeaveEarly()));
-
+        //0正常、1缺勤、2迟到/3早退,4请假
         latePeople.clear();
-        latePeople.addAll(filterNullStatusData(studentsBean.getLatePeople()));
+        latePeople.addAll(filterNullStatusData("2",studentsBean.getLatePeople()));
         absencePeople.clear();
-        absencePeople.addAll(filterNullStatusData(studentsBean.getAbsencePeople()));
+        absencePeople.addAll(filterNullStatusData("1",studentsBean.getAbsencePeople()));
         leavePeople.clear();
-        leavePeople.addAll(filterNullStatusData(studentsBean.getLeavePeople()));
+        leavePeople.addAll(filterNullStatusData("4",studentsBean.getLeavePeople()));
         leaveEarlyPeople.clear();
-        leaveEarlyPeople.addAll(filterNullStatusData(studentsBean.getLeaveEarlyPeople()));
+        leaveEarlyPeople.addAll(filterNullStatusData("3",studentsBean.getLeaveEarlyPeople()));
         //mViewBinding.viewpager.notify();
         initPeopleListView();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> filterNullStatusData(List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> peopleBeanList) {
-        return peopleBeanList.stream().filter(it -> !TextUtils.isEmpty(it.getStatus())).collect(Collectors.toList());
+    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> filterNullStatusData(String status,List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> peopleBeanList) {
+        //return peopleBeanList.stream().filter(it -> !TextUtils.isEmpty(it.getStatus())).collect(Collectors.toList());
+        for (AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean peopleBean : peopleBeanList) {
+            peopleBean.setStatus(status);
+        }
+        return peopleBeanList;
     }
 
     @Override

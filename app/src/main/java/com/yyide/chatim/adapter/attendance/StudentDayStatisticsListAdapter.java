@@ -17,6 +17,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.databinding.ItemStudentAttendanceDayStatisticsBinding;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
+import com.yyide.chatim.utils.DateUtils;
 
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
             holder.mViewBanding.tvEventName.setText(dayStatisticsBean.getSubjectName());
         }
         final String eventTime = String.format(context.getString(R.string.attendance_punch_card_text),dayStatisticsBean.getApplyDate());
-        final String eventTime2 = String.format(context.getString(R.string.attendance_ask_leave_text),dayStatisticsBean.getApplyDate());
+
         //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假
         //0正常、1缺勤、2迟到/3早退,4请假）
         switch (dayStatisticsBean.getType()){
@@ -106,6 +107,9 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
                 holder.mViewBanding.ivEventFaceRecognize.setVisibility(View.GONE);
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_ask_for_leave);
                 holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
+                final String data1 = DateUtils.formatTime(dayStatisticsBean.getStartDate(), null, "MM.dd HH:mm");
+                final String data2 = DateUtils.formatTime(dayStatisticsBean.getEndDate(), null, "MM.dd HH:mm");
+                final String eventTime2 = String.format(context.getString(R.string.attendance_ask_leave_text),data1 + "-" + data2);
                 holder.mViewBanding.tvEventTime.setText(eventTime2);
                 break;
             default:

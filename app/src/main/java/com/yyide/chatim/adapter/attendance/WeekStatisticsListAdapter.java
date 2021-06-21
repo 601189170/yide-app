@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.databinding.ItemWeekMonthStatisticsListBinding;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.utils.DateUtils;
@@ -52,7 +53,10 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean weekStatisticsBean = data.get(position);
         final String name = weekStatisticsBean.getName();
-        holder.viewBinding.tvName.setText(name);
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            holder.viewBinding.tvName.setText(name);
+        }
+
         final String status = weekStatisticsBean.getStatus();
         //0正常、1缺勤、2迟到/3早退,4请假）
         switch (status) {
@@ -95,6 +99,22 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
             case "1":
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_absence));
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
+                if (!SpData.getIdentityInfo().staffIdentity()){
+                    final String subjectName = weekStatisticsBean.getSubjectName();
+                    final String thingName = weekStatisticsBean.getThingName();
+                    final String absenceDate = weekStatisticsBean.getTime();
+                    final String date = DateUtils.formatTime(absenceDate, null, "MM.dd");
+                    if (!TextUtils.isEmpty(thingName)){
+                        holder.viewBinding.tvName.setText(date+" "+thingName);
+                    }else {
+                        if (!TextUtils.isEmpty(subjectName)){
+                            holder.viewBinding.tvName.setText(date+" "+subjectName);
+                        }else {
+                            holder.viewBinding.tvName.setText(date);
+                        }
+
+                    }
+                }
                 break;
             case "4":
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_ask_for_leave));

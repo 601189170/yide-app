@@ -169,7 +169,7 @@ public class StatisticsListDetailFragment extends Fragment {
         peopleBean1.setSubjectName(peopleBean.getSubjectName());
         return peopleBean1;
     }
-
+    //26025351|163343191|212818853|158947220|161871426|261080355|34928708
     private void initPeopleListView() {
         List<String> listTab = new ArrayList<>();
         listTab.add("应到");
@@ -179,27 +179,27 @@ public class StatisticsListDetailFragment extends Fragment {
         listTab.add("迟到");
         fragments.clear();
         final StatisticsListFragment allListFragment = StatisticsListFragment.newInstance(listTab.get(0));
-        Log.e(TAG, "allListFragment: "+JSON.toJSONString(allPeople) );
+        Log.e(TAG, "hashCode "+allListFragment.hashCode()+"allListFragment: "+JSON.toJSONString(allPeople) );
         allListFragment.setData(allPeople);
         fragments.add(allListFragment);
         final StatisticsListFragment normalListFragment = StatisticsListFragment.newInstance(listTab.get(1));
-        Log.e(TAG, "normalListFragment: "+JSON.toJSONString(normalPeople) );
+        Log.e(TAG, "hashCode "+normalListFragment.hashCode()+"normalListFragment: "+JSON.toJSONString(normalPeople) );
         normalListFragment.setData(normalPeople);
         fragments.add(normalListFragment);
         final StatisticsListFragment absenceListFragment = StatisticsListFragment.newInstance(listTab.get(2));
-        Log.e(TAG, "absenceListFragment: "+JSON.toJSONString(absencePeople) );
+        Log.e(TAG, "hashCode "+absenceListFragment.hashCode()+"absenceListFragment: "+JSON.toJSONString(absencePeople) );
         absenceListFragment.setData(absencePeople);
         fragments.add(absenceListFragment);
         final StatisticsListFragment leaveListFragment = StatisticsListFragment.newInstance(listTab.get(3));
-        Log.e(TAG, "leaveListFragment: "+JSON.toJSONString(leavePeople) );
+        Log.e(TAG, "hashCode "+leaveListFragment.hashCode()+"leaveListFragment: "+JSON.toJSONString(leavePeople) );
         leaveListFragment.setData(leavePeople);
         fragments.add(leaveListFragment);
 
         final StatisticsListFragment lateFragment = StatisticsListFragment.newInstance(listTab.get(4));
-        Log.e(TAG, "lateFragment: "+JSON.toJSONString(latePeople) );
+        Log.e(TAG, "hashCode "+lateFragment.hashCode()+"lateFragment: "+JSON.toJSONString(latePeople) );
         lateFragment.setData(latePeople);
         fragments.add(lateFragment);
-
+        viewBinding.viewpager.setCurrentItem(0);
         viewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         viewBinding.viewpager.setUserInputEnabled(false);
         viewBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {

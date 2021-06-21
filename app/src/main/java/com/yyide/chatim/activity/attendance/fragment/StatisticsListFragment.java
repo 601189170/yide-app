@@ -18,6 +18,7 @@ import com.yyide.chatim.adapter.attendance.WeekStatisticsListAdapter;
 import com.yyide.chatim.databinding.FragmentStatisticsListBinding;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class StatisticsListFragment extends Fragment {
         this.data = data;
     }
 
-    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> data;
+    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> data = new ArrayList<>();
     public StatisticsListFragment() {
         // Required empty public constructor
     }
@@ -80,10 +81,10 @@ public class StatisticsListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG, "onViewCreated: "+type+",data="+ JSON.toJSONString(data));
-        if (data == null){
-            return;
-        }
+        Log.e(TAG, "onViewCreated: "+type+",hashCode,"+this.hashCode()+" data="+ JSON.toJSONString(data));
+//        if (data == null){
+//            return;
+//        }
         final FragmentStatisticsListBinding bind = FragmentStatisticsListBinding.bind(view);
         weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
