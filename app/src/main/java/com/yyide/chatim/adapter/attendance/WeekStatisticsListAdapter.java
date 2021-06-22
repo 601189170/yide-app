@@ -87,6 +87,10 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                 final String time1 = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time1);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late));
+                if (!SpData.getIdentityInfo().staffIdentity()){
+                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
+                    holder.viewBinding.tvName.setText(date);
+                }
                 break;
             case "3":
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_leave_early));
@@ -99,6 +103,10 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                 final String time2 = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time2);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
+                if (!SpData.getIdentityInfo().staffIdentity()){
+                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
+                    holder.viewBinding.tvName.setText(date);
+                }
                 break;
             case "1":
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_absence));
@@ -128,6 +136,10 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                 final String data2 = DateUtils.formatTime(weekStatisticsBean.getEndDate(), null, "MM.dd HH:mm");
                 holder.viewBinding.tvEventTime.setText(data1 + "-" + data2);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_leave));
+                if (!SpData.getIdentityInfo().staffIdentity()){
+                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
+                    holder.viewBinding.tvName.setText(date);
+                }
                 break;
             default:
                 break;
