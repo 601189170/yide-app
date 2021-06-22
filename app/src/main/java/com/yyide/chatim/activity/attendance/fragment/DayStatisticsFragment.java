@@ -127,7 +127,8 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         eventDates = new ArrayList<>();
         initClassData();
         String time = DateUtils.switchTime(new Date(), "yyyy-MM-dd");
-        mViewBinding.tvCurrentDate.setText(time);
+        final String time1 = DateUtils.formatTime(time, "yyyy-MM-dd", "MM月");
+        mViewBinding.tvCurrentDate.setText(time1);
         currentDate = DateUtils.formatTime(time,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");
 
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
@@ -203,7 +204,8 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
 
         weekCalendar.setDateSelectListener(selectDate -> {
             String text = selectDate.toString("yyyy-MM-dd");
-            this.mViewBinding.tvCurrentDate.setText(text);
+            final String time2 = DateUtils.formatTime(text, "yyyy-MM-dd", "MM月");
+            this.mViewBinding.tvCurrentDate.setText(time2);
             Log.e(TAG, "onDateSelect: " + text);
             currentDate = DateUtils.formatTime(text,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");;
             queryAttStatsData(currentClass,currentDate);
