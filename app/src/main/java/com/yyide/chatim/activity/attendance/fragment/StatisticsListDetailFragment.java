@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -177,66 +178,90 @@ public class StatisticsListDetailFragment extends Fragment {
         listTab.add("缺勤");
         listTab.add("请假");
         listTab.add("迟到");
-        fragments.clear();
-        final StatisticsListFragment allListFragment = StatisticsListFragment.newInstance(listTab.get(0));
-        Log.e(TAG, "hashCode "+allListFragment.hashCode()+"allListFragment: "+JSON.toJSONString(allPeople) );
-        allListFragment.setData(allPeople);
-        fragments.add(allListFragment);
-        final StatisticsListFragment normalListFragment = StatisticsListFragment.newInstance(listTab.get(1));
-        Log.e(TAG, "hashCode "+normalListFragment.hashCode()+"normalListFragment: "+JSON.toJSONString(normalPeople) );
-        normalListFragment.setData(normalPeople);
-        fragments.add(normalListFragment);
-        final StatisticsListFragment absenceListFragment = StatisticsListFragment.newInstance(listTab.get(2));
-        Log.e(TAG, "hashCode "+absenceListFragment.hashCode()+"absenceListFragment: "+JSON.toJSONString(absencePeople) );
-        absenceListFragment.setData(absencePeople);
-        fragments.add(absenceListFragment);
-        final StatisticsListFragment leaveListFragment = StatisticsListFragment.newInstance(listTab.get(3));
-        Log.e(TAG, "hashCode "+leaveListFragment.hashCode()+"leaveListFragment: "+JSON.toJSONString(leavePeople) );
-        leaveListFragment.setData(leavePeople);
-        fragments.add(leaveListFragment);
-
-        final StatisticsListFragment lateFragment = StatisticsListFragment.newInstance(listTab.get(4));
-        Log.e(TAG, "hashCode "+lateFragment.hashCode()+"lateFragment: "+JSON.toJSONString(latePeople) );
-        lateFragment.setData(latePeople);
-        fragments.add(lateFragment);
-        viewBinding.viewpager.setCurrentItem(0);
-        viewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        viewBinding.viewpager.setUserInputEnabled(false);
-        viewBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {
-            @NonNull
-            @Override
-            public Fragment createFragment(int position) {
-                Log.e(TAG, "switch fragment: " + position);
-                return fragments.get(position);
-            }
-
-            @Override
-            public int getItemCount() {
-                return listTab.isEmpty() ? 0 : listTab.size();
-            }
-        });
+        showBlank(allPeople.isEmpty());
+        WeekStatisticsListAdapter weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), allPeople);
+        viewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        viewBinding.recyclerview.setAdapter(weekStatisticsListAdapter);
+//        fragments.clear();
+//        final StatisticsListFragment allListFragment = StatisticsListFragment.newInstance(listTab.get(0));
+//        Log.e(TAG, "hashCode "+allListFragment.hashCode()+"allListFragment: "+JSON.toJSONString(allPeople) );
+//        allListFragment.setData(allPeople);
+//        fragments.add(allListFragment);
+//        final StatisticsListFragment normalListFragment = StatisticsListFragment.newInstance(listTab.get(1));
+//        Log.e(TAG, "hashCode "+normalListFragment.hashCode()+"normalListFragment: "+JSON.toJSONString(normalPeople) );
+//        normalListFragment.setData(normalPeople);
+//        fragments.add(normalListFragment);
+//        final StatisticsListFragment absenceListFragment = StatisticsListFragment.newInstance(listTab.get(2));
+//        Log.e(TAG, "hashCode "+absenceListFragment.hashCode()+"absenceListFragment: "+JSON.toJSONString(absencePeople) );
+//        absenceListFragment.setData(absencePeople);
+//        fragments.add(absenceListFragment);
+//        final StatisticsListFragment leaveListFragment = StatisticsListFragment.newInstance(listTab.get(3));
+//        Log.e(TAG, "hashCode "+leaveListFragment.hashCode()+"leaveListFragment: "+JSON.toJSONString(leavePeople) );
+//        leaveListFragment.setData(leavePeople);
+//        fragments.add(leaveListFragment);
+//
+//        final StatisticsListFragment lateFragment = StatisticsListFragment.newInstance(listTab.get(4));
+//        Log.e(TAG, "hashCode "+lateFragment.hashCode()+"lateFragment: "+JSON.toJSONString(latePeople) );
+//        lateFragment.setData(latePeople);
+//        fragments.add(lateFragment);
+//        viewBinding.viewpager.setCurrentItem(0);
+//        viewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+//        viewBinding.viewpager.setUserInputEnabled(false);
+//        viewBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {
+//            @NonNull
+//            @Override
+//            public Fragment createFragment(int position) {
+//                Log.e(TAG, "switch fragment: " + position);
+//                return fragments.get(position);
+//            }
+//
+//            @Override
+//            public int getItemCount() {
+//                return listTab.isEmpty() ? 0 : listTab.size();
+//            }
+//        });
 
         viewBinding.rgAttendanceType.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb_all_people:
-                    viewBinding.viewpager.setCurrentItem(0);
+                    //viewBinding.viewpager.setCurrentItem(0);
+                    weekStatisticsListAdapter.setData(allPeople);
+                    weekStatisticsListAdapter.notifyDataSetChanged();
+                    showBlank(allPeople.isEmpty());
                     break;
                 case R.id.rb_normal:
-                    viewBinding.viewpager.setCurrentItem(1);
+                    //viewBinding.viewpager.setCurrentItem(1);
+                    weekStatisticsListAdapter.setData(normalPeople);
+                    weekStatisticsListAdapter.notifyDataSetChanged();
+                    showBlank(normalPeople.isEmpty());
                     break;
                 case R.id.rb_absence:
-                    viewBinding.viewpager.setCurrentItem(2);
+                    //viewBinding.viewpager.setCurrentItem(2);
+                    weekStatisticsListAdapter.setData(absencePeople);
+                    weekStatisticsListAdapter.notifyDataSetChanged();
+                    showBlank(absencePeople.isEmpty());
                     break;
                 case R.id.rb_leave:
-                    viewBinding.viewpager.setCurrentItem(3);
+                    //viewBinding.viewpager.setCurrentItem(3);
+                    weekStatisticsListAdapter.setData(leavePeople);
+                    weekStatisticsListAdapter.notifyDataSetChanged();
+                    showBlank(leavePeople.isEmpty());
                     break;
                 case R.id.rb_late:
-                    viewBinding.viewpager.setCurrentItem(4);
+                    //viewBinding.viewpager.setCurrentItem(4);
+                    weekStatisticsListAdapter.setData(latePeople);
+                    weekStatisticsListAdapter.notifyDataSetChanged();
+                    showBlank(latePeople.isEmpty());
                     break;
 
                 default:
                     break;
             }
         });
+    }
+
+    private void showBlank(boolean show){
+        viewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
+        //mViewBinding.recyclerview.setVisibility(show?View.GONE:View.VISIBLE);
     }
 }
