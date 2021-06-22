@@ -24,7 +24,6 @@ import com.yyide.chatim.activity.AppManagerActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity;
-import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.adapter.AppAdapter;
 import com.yyide.chatim.adapter.MyAppItemAdapter;
 import com.yyide.chatim.adapter.RecylAppAdapter;

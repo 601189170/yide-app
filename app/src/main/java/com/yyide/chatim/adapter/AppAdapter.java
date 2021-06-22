@@ -1,31 +1,19 @@
 package com.yyide.chatim.adapter;
 
 import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity;
-import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.utils.GlideUtil;
-import com.yyide.chatim.utils.VHUtil;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2019/3/29.

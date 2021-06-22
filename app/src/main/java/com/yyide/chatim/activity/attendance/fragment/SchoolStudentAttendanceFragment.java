@@ -18,6 +18,9 @@ import com.yyide.chatim.model.AttendanceCheckRsp;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * desc 校长考情学生
  * time 2021年5月31日15:52:14
@@ -66,7 +69,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         if (item != null) {
             if (itemStudents != null) {
                 mViewBinding.clContent.setVisibility(View.VISIBLE);
-                mViewBinding.tvEventName.setText(itemStudents.getThingName());
+                mViewBinding.tvEventName.setText(TextUtils.isEmpty(itemStudents.getThingName()) ? itemStudents.getAttName() : itemStudents.getThingName());
                 mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
                 if (!TextUtils.isEmpty(itemStudents.getRate())) {
                     try {
@@ -75,14 +78,26 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                 }
-                mViewBinding.tvNumber.setText("(" + itemStudents.getNumber() + "人)");
                 mViewBinding.tvLateNum.setText(itemStudents.getLate() + "");
                 mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
                 mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsence() + "");
-                adapter.setList(itemStudents.getGradeList());
+                adapter.setList(remove(itemStudents.getGradeList()));
             }
         }
     }
+
+    //使用iterator，这个是java和Android源码中经常使用到的一种方法，所以最为推荐
+    public List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean> remove(List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean> list) {
+        Iterator<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean> sListIterator = list.iterator();
+        while (sListIterator.hasNext()) {
+            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean item = sListIterator.next();
+            if (item.getNumber() == 0) {
+                sListIterator.remove();
+            }
+        }
+        return list;
+    }
+
 
     private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean, BaseViewHolder>(R.layout.item_school) {
         @Override

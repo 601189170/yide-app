@@ -154,6 +154,8 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 index = 0;
             }
             itemStudents = item.getAttendancesForm().get(index).getStudents();
+        } else {
+            itemStudents = null;
         }
         mViewBinding.tvClassName.setOnClickListener(v -> {
             List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
@@ -173,6 +175,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                     return classList.indexOf(o);
                 }
             }, "");
+            attendancePop.setCurrentItem(mViewBinding.tvClassName.getText().toString().trim());
             attendancePop.setOnSelectListener(index -> {
                 mViewBinding.tvClassName.setText(classList.get(index).classesName);
                 mvpPresenter.attendance(classList.get(index).classesId);
@@ -196,6 +199,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                     return item.getAttendancesForm().indexOf(o);
                 }
             }, "");
+            attendancePop.setCurrentItem(mViewBinding.tvAttendanceTitle.getText().toString().trim());
             attendancePop.setOnSelectListener(index -> {
                 itemStudents = item.getAttendancesForm().get(index).getStudents();
                 setData();
@@ -242,11 +246,22 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
             mViewBinding.tvNormalNum.setText(itemStudents.getApplyNum() + "");
             mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsence() + "");
-            initClickView();
-            mViewBinding.tvAll.setChecked(true);
-            mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
-            adapter.setList(itemStudents.getPeople());
+        } else {
+            mViewBinding.progress.setProgress(0);
+            mViewBinding.tvAttendanceTitle.setText("");
+            mViewBinding.tvDesc.setText("");
+            mViewBinding.tvAttendanceTime.setText("考勤时间 ");
+            mViewBinding.tvAttendanceRate.setText("0");
+            mViewBinding.tvBeTo.setText("0");
+            mViewBinding.tvLateNum.setText("0");
+            mViewBinding.tvLeaveNum.setText("0");
+            mViewBinding.tvNormalNum.setText("0");
+            mViewBinding.tvAbsenteeismNum.setText("0");
         }
+        initClickView();
+        mViewBinding.tvAll.setChecked(true);
+        mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
+        adapter.setList(itemStudents != null ? itemStudents.getPeople() : null);
     }
 
     private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean, BaseViewHolder>(R.layout.item_attendance_student) {
