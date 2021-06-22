@@ -117,7 +117,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
                     return item.schoolPeopleAllForm.indexOf(o);
                 }
             }, "");
-
+            attendancePop.setCurrentItem(mViewBinding.tvAttendanceTitle.getText().toString().trim());
             attendancePop.setOnSelectListener(index -> {
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
                 mViewBinding.tvAttendanceTitle.setText(bean.attName);

@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SchoolTeacherAttendanceFragment extends BaseFragment implements View.OnClickListener {
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemTeachersBean;
+    private AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentSchoolTeacherAttendanceBinding mViewBinding;
 
@@ -63,26 +64,20 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewBinding.recyclerview.setAdapter(adapter);
         adapter.setEmptyView(R.layout.empty_top);
-        mViewBinding.tvAll.setOnClickListener(this);
         mViewBinding.tvAbsenteeism.setOnClickListener(this);
         mViewBinding.tvLeave.setOnClickListener(this);
         mViewBinding.tvLate.setOnClickListener(this);
-        mViewBinding.tvNormal.setOnClickListener(this);
-        mViewBinding.tvAll.setChecked(true);
-        mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
+        mViewBinding.tvAbsenteeism.setChecked(true);
+        mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
         setData();
     }
 
     @SuppressLint("SetTextI18n")
     private void setData() {
         if (itemTeachersBean != null && itemTeachersBean.getTeachers() != null) {
-            AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers = itemTeachersBean.getTeachers();
+            teachers = itemTeachersBean.getTeachers();
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvDesc.setText(teachers.getThingName());
-            mViewBinding.tvAttendanceTime.setText("考勤时间 " +
-                    (!TextUtils.isEmpty(teachers.getRequiredTime()) ?
-                            teachers.getRequiredTime() :
-                            teachers.getApplyDate()));
+            mViewBinding.tvEventName.setText(TextUtils.isEmpty(teachers.getThingName()) ? teachers.getName() : teachers.getThingName());
             mViewBinding.tvAttendanceRate.setText(teachers.getRate());
             if (!TextUtils.isEmpty(teachers.getRate())) {
                 try {
@@ -91,53 +86,41 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
                     e.printStackTrace();
                 }
             }
-            mViewBinding.tvBeTo.setText(teachers.getNumber() + "");
             mViewBinding.tvLateNum.setText(("0".equals(teachers.getGoOutStatus()) ? teachers.getLate() : teachers.getLeaveEarly()) + "");
             mViewBinding.tvLateName.setText("0".equals(teachers.getGoOutStatus()) ? "迟到" : "早退");
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
-            mViewBinding.tvNormalNum.setText(teachers.getApplyNum() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
-            adapter.setList(teachers.getPeople());
+            mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
+            adapter.setList(teachers.getAbsencePeople());
         }
     }
 
     @Override
     public void onClick(View v) {
-        mViewBinding.tvAll.setChecked(false);
         mViewBinding.tvAbsenteeism.setChecked(false);
         mViewBinding.tvLeave.setChecked(false);
         mViewBinding.tvLate.setChecked(false);
-        mViewBinding.tvNormal.setChecked(false);
-        mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.text_1E1E1E));
         mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.text_1E1E1E));
         mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.text_1E1E1E));
         mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.text_1E1E1E));
-        mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.text_1E1E1E));
         switch (v.getId()) {
-            case R.id.tv_all:
-                mViewBinding.tvAll.setChecked(true);
-                mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getPeople() : null);
-                break;
             case R.id.tv_absenteeism:
                 mViewBinding.tvAbsenteeism.setChecked(true);
                 mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getAbsencePeople() : null);
+                adapter.setList(teachers != null ? teachers.getAbsencePeople() : null);
+                mViewBinding.tvNum.setText((teachers != null ? teachers.getAbsencePeople().size() : 0) + "人");
                 break;
             case R.id.tv_leave:
                 mViewBinding.tvLeave.setChecked(true);
                 mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getLeavePeople() : null);
+                adapter.setList(teachers != null ? teachers.getLeavePeople() : null);
+                mViewBinding.tvNum.setText((teachers != null ? teachers.getLeavePeople().size() : 0) + "人");
                 break;
             case R.id.tv_late:
                 mViewBinding.tvLate.setChecked(true);
                 mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getLatePeople() : null);
-                break;
-            case R.id.tv_normal:
-                mViewBinding.tvNormal.setChecked(true);
-                mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getApplyPeople() : null);
+                adapter.setList(teachers != null ? teachers.getLatePeople() : null);
+                mViewBinding.tvNum.setText((teachers != null ? teachers.getLatePeople().size() : 0) + "人");
                 break;
         }
     }

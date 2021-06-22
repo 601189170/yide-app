@@ -1,6 +1,7 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -16,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.view.WheelView;
+import com.google.common.collect.EvictingQueue;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -30,9 +32,29 @@ public class AttendancePop extends PopupWindow {
     Window mWindow;
     private int selectIndex;
     private SelectClasses mSelectClasses;
+    private WheelView wheelView;
+    private WheelAdapter wheelAdapter;
 
     public void setOnSelectListener(SelectClasses selectClasses) {
         this.mSelectClasses = selectClasses;
+    }
+
+    public void setCurrentItem(String name) {
+        int index = 0;
+        if (wheelAdapter != null && !TextUtils.isEmpty(name)) {
+            for (int i = 0; i < wheelAdapter.getItemsCount(); i++) {
+                if (name.equals(wheelAdapter.getItem(i))) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        
+        if (index < wheelAdapter.getItemsCount()) {
+            if (wheelView != null) {
+                wheelView.setCurrentItem(index);
+            }
+        }
     }
 
     public interface SelectClasses {
@@ -41,6 +63,7 @@ public class AttendancePop extends PopupWindow {
 
     public AttendancePop(Activity context, WheelAdapter wheelAdapter, String leftText) {
         this.context = context;
+        this.wheelAdapter = wheelAdapter;
         init(wheelAdapter, leftText);
     }
 
@@ -49,7 +72,7 @@ public class AttendancePop extends PopupWindow {
         TextView confirm = mView.findViewById(R.id.confirm);
         TextView leftDesc = mView.findViewById(R.id.cancel);
         ConstraintLayout bg = mView.findViewById(R.id.bg);
-        WheelView wheelView = mView.findViewById(R.id.departments);
+        wheelView = mView.findViewById(R.id.departments);
         confirm.setOnClickListener(v -> {
             if (mSelectClasses != null) {
                 mSelectClasses.OnSelectClassesListener(selectIndex);

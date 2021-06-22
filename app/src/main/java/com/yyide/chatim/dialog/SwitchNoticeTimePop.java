@@ -1,9 +1,9 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.view.WheelView;
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.SelectTableClassesRsp;
-import com.yyide.chatim.widget.ArrayWheelAdapter;
+import com.yyide.chatim.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,16 +33,19 @@ public class SwitchNoticeTimePop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
-    private SelectClasses mSelectClasses;
-    private TimeWheelAdapter timeWheelAdapter = new TimeWheelAdapter(getHour(0));
-    private TimeWheelAdapter timeWheelAdapter1 = new TimeWheelAdapter(getMinute(0));
+    private SelectDateListener mSelectDateListener;
+    private TimeWheelAdapter hoursWheelAdapter = new TimeWheelAdapter(getHour(0), "时");
+    private TimeWheelAdapter minuteWheelAdapter = new TimeWheelAdapter(getMinute(-1), "分");
+    private int hours;
+    private int minute;
+    private String date;
 
-    public void setSelectClasses(SelectClasses selectClasses) {
-        this.mSelectClasses = selectClasses;
+    public void setSelectClasses(SelectDateListener selectClasses) {
+        this.mSelectDateListener = selectClasses;
     }
 
-    public interface SelectClasses {
-        void OnSelectClassesListener(long id, String classesName);
+    public interface SelectDateListener {
+        void onSelectDateListener(String date);
     }
 
     public SwitchNoticeTimePop(Activity context) {
@@ -59,9 +61,16 @@ public class SwitchNoticeTimePop extends PopupWindow {
         WheelView time = mView.findViewById(R.id.time);
         WheelView hour_time = mView.findViewById(R.id.hour_time);
         WheelView minute_time = mView.findViewById(R.id.minute_time);
-        confirm.setOnClickListener(v -> {
 
+        confirm.setOnClickListener(v -> {
+            if (mSelectDateListener != null) {
+                mSelectDateListener.onSelectDateListener(getDateTime(date, hours, minute));
+            }
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
         });
+
         bg.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
@@ -76,28 +85,49 @@ public class SwitchNoticeTimePop extends PopupWindow {
         time.setCyclic(false);
         time.setTextColorCenter(context.getResources().getColor(R.color.text_212121));
         time.setTextColorOut(context.getResources().getColor(R.color.text_666666));
-        time.setAdapter(new TimeWheelAdapter(getDate()));
-        time.setCurrentItem(-1);
+        TimeWheelAdapter timeWheelAdapter = new TimeWheelAdapter(getDate(), "");
+        time.setAdapter(timeWheelAdapter);
+        time.setCurrentItem(0);
         time.setOnItemSelectedListener(index -> {
-            timeWheelAdapter = new TimeWheelAdapter(getHour(index));
-            hour_time.setAdapter(timeWheelAdapter);
+            date = (String) timeWheelAdapter.getItem(index);
+            this.hoursWheelAdapter = null;
+            minuteWheelAdapter = null;
+            this.hoursWheelAdapter = new TimeWheelAdapter(getHour(index), "时");
+            hour_time.setAdapter(this.hoursWheelAdapter);
+            minuteWheelAdapter = new TimeWheelAdapter(getMinute(index), "分");
+            minute_time.setAdapter(minuteWheelAdapter);
+            hours = 0;
+            minute = 0;
+            hour_time.setCurrentItem(0);
+            minute_time.setCurrentItem(0);
         });
 
         hour_time.setCyclic(false);
         hour_time.setTextColorCenter(context.getResources().getColor(R.color.text_212121));
         hour_time.setTextColorOut(context.getResources().getColor(R.color.text_666666));
-        hour_time.setCurrentItem(-1);
-        hour_time.setAdapter(timeWheelAdapter);
+        hour_time.setAdapter(this.hoursWheelAdapter);
+        hour_time.setCurrentItem(0);
+        hours = hoursWheelAdapter.getItemValue(hour_time.getCurrentItem());
         hour_time.setOnItemSelectedListener(index -> {
-            timeWheelAdapter1 = new TimeWheelAdapter(getMinute(index));
-            minute_time.setAdapter(timeWheelAdapter1);
+            hours = hoursWheelAdapter.getItemValue(index);
+            minuteWheelAdapter = null;
+            if ("明天".equals(date)) {
+                index++;
+            }
+            minuteWheelAdapter = new TimeWheelAdapter(getMinute(index), "分");
+            minute_time.setAdapter(minuteWheelAdapter);
         });
 
         minute_time.setCyclic(false);
         minute_time.setTextColorCenter(context.getResources().getColor(R.color.text_212121));
         minute_time.setTextColorOut(context.getResources().getColor(R.color.text_666666));
-        minute_time.setCurrentItem(-1);
-        minute_time.setAdapter(timeWheelAdapter1);
+        minute_time.setAdapter(minuteWheelAdapter);
+        minute_time.setCurrentItem(0);
+        minute = minuteWheelAdapter.getItemValue(hour_time.getCurrentItem());
+        minute_time.setOnItemSelectedListener(index -> {
+            minute = (Integer) minuteWheelAdapter.getItemValue(index);
+        });
+
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
 
@@ -145,9 +175,15 @@ public class SwitchNoticeTimePop extends PopupWindow {
 
     public class TimeWheelAdapter implements WheelAdapter {
         private List<String> stringList = new ArrayList<>();
+        private String tip;
 
-        public TimeWheelAdapter(List<String> list) {
+        public TimeWheelAdapter(List<String> list, String tip) {
             this.stringList = list;
+            this.tip = tip;
+        }
+
+        public int getItemValue(int index) {
+            return Integer.parseInt(stringList.get(index));
         }
 
         @Override
@@ -157,14 +193,29 @@ public class SwitchNoticeTimePop extends PopupWindow {
 
         @Override
         public Object getItem(int index) {
-            return stringList.get(index);
+            return stringList.get(index) + tip;
         }
 
         @Override
         public int indexOf(Object o) {
             return stringList.indexOf(o);
         }
-    };
+    }
+
+    private String getDateTime(String date, int hours, int minute) {
+        Log.d("SwitchNoticeTimePop", "hours-->>>:" + hours + "   minute-->>>：" + minute);
+        Calendar c = Calendar.getInstance();
+        if ("明天".equals(date)) {
+            c.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        c.clear(Calendar.HOUR_OF_DAY);
+        c.clear(Calendar.MINUTE);
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, 00);
+        Log.d("SwitchNoticeTimePop", "getDateTime-->>>:" + DateUtils.switchTime(c.getTime()));
+        return DateUtils.switchTime(c.getTime());
+    }
 
     private List<String> getDate() {
         List<String> stringList = new ArrayList<>();
@@ -175,20 +226,34 @@ public class SwitchNoticeTimePop extends PopupWindow {
 
     private List<String> getHour(int index) {
         Calendar calendar = Calendar.getInstance();
+        if (index > 0) {
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+        }
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         List<String> stringList = new ArrayList<>();
         for (int i = hour; i < 24; i++) {
-            stringList.add(hour++ + "时");
+            if (i < 10) {
+                stringList.add("0" + hour++ + "");
+            } else {
+                stringList.add(hour++ + "");
+            }
         }
         return stringList;
     }
 
     private List<String> getMinute(int index) {
         Calendar calendar = Calendar.getInstance();
+        if (index > 0) {
+            calendar.set(Calendar.MINUTE, 0);
+        }
         int minute = calendar.get(Calendar.MINUTE);
         List<String> stringList = new ArrayList<>();
         for (int i = minute; i < 60; i++) {
-            stringList.add(minute++ + "分");
+            if (i < 10) {
+                stringList.add("0" + minute++ + "");
+            } else {
+                stringList.add(minute++ + "");
+            }
         }
         return stringList;
     }

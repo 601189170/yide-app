@@ -162,6 +162,8 @@
     <!--通知模块-->
     <string name="notice_announcement_title">通知公告</string>
     <string name="notice_release_title">发布通知</string>
+    <string name="notice_un_confirm_title">未确认人员</string>
+    <string name="notice_designated_personnel_title">选择指定人员/设备</string>
 
     <string name="notice_template_title">通知模板</string>
     <string name="notice_scope_title">通知范围</string>
@@ -178,9 +180,6 @@
     <string name="timed_send_text">%d小时%d分钟%d秒后发送</string>
     <string name="timed_send_long_text">%d天后发送</string>
     <string name="notice_my_push_title">我发布的通知</string>
-    <string name="notice_tab_my_received">我收到的</string>
-    <string name="notice_tab_my_push">我发布的</string>
-    <string name="notice_tab_push">发布通知</string>
     <string name="notice_confirm_count">已确认：</string>
     <string name="notice_has_withdrawn">已撤回</string>
     <string name="notice_have_been_confirmed">已确认</string>
@@ -191,7 +190,19 @@
     <string name="notice_time">发布时间</string>
     <string name="notice_immediately_push">立即发布</string>
     <string name="notice_preview_title">预览</string>
-    <string name="notice_release_time_title">发布时刻</string>
+    <string name="notice_release_time_title">发布时刻</string>D
+    <string name="notice_input_title_number">%d/30</string>
+    <string name="notice_input_content_number">%d/2000</string>
+    <string name="notice_timing_push_input">请选择定时发布时间</string>
+    <string name="notice_chosen_people_number">已选择教师%s人</string>
+
+    <string name="notice_tab_my_received">我收到的</string>
+    <string name="notice_tab_my_push">我发布的</string>
+    <string name="notice_tab_push">发布通知</string>
+
+    <string name="notice_tab_teacher">教师</string>
+    <string name="notice_tab_patriarch">家长</string>
+    <string name="notice_tab_class_card">班牌</string>
 
     <string name="app_commonly_title">常用应用</string>
     <string name="attendance_absence">缺勤</string>

@@ -334,6 +334,9 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     public void getFail(String msg) {
         hideLoading();
         Log.e(TAG, "onFailure: " + msg);
+        if(BuildConfig.DEBUG){
+            ToastUtils.showShort(msg);
+        }
     }
 
     @Override
