@@ -83,6 +83,7 @@ public class AttendanceDayStatsRsp {
                 private String attId;
                 private String thingName;
                 private int dateType;
+                private String time;
                 private int page;
 
                 @NoArgsConstructor

@@ -65,7 +65,9 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
         }else {
             holder.mViewBanding.tvEventName.setText(dayStatisticsBean.getSubjectName());
         }
-        final String eventTime = String.format(context.getString(R.string.attendance_punch_card_text),dayStatisticsBean.getApplyDate());
+        final String time = dayStatisticsBean.getTime();
+        final String formatTime = DateUtils.formatTime(time, "", "HH:mm");
+        final String eventTime = String.format(context.getString(R.string.attendance_punch_card_text),formatTime);
 
         //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假
         //0正常、1缺勤、2迟到/3早退,4请假）
