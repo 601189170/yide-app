@@ -208,4 +208,5 @@
     <string name="attendance_absence">缺勤</string>
     <string name="attendance_leave_time">请假时间</string>
     <string name="attendance_event_name">班牌打卡</string>
+    <string name="attendance_class_section">第%s节</string>
 </resources>

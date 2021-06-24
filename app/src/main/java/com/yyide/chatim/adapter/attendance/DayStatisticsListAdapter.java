@@ -13,6 +13,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.databinding.ItemAttendanceDayStatisticsBinding;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
+import com.yyide.chatim.utils.DateUtils;
 
 import java.util.List;
 
@@ -55,7 +56,9 @@ public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatistics
         if (!TextUtils.isEmpty(thingName)) {
             holder.binding.tvEventName.setText(dayStatisticsBean.getThingName());
         }else {
-            holder.binding.tvEventName.setText(dayStatisticsBean.getSubjectName());
+            final int section = dayStatisticsBean.getSection();
+            String sectionUppercase = String.format(context.getString(R.string.attendance_class_section),DateUtils.sectionUppercase(section));
+            holder.binding.tvEventName.setText(dayStatisticsBean.getSubjectName()+" "+ sectionUppercase);
         }
         final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getStartTime());
         holder.binding.tvAttendanceTime.setText(attendanceTime);
