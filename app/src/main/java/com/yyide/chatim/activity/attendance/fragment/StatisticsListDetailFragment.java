@@ -12,12 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
-import com.yyide.chatim.adapter.attendance.WeekStatisticsListAdapter;
+import com.yyide.chatim.adapter.attendance.DayStatisticsDetailListAdapter;
 import com.yyide.chatim.databinding.FragmentStatisticsListDetailBinding;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
@@ -35,7 +33,6 @@ public class StatisticsListDetailFragment extends Fragment {
     private static final String ARG_TYPE = "type";
     private String type;
     private String mParam2;
-    private WeekStatisticsListAdapter weekStatisticsListAdapter;
     private final List<Fragment> fragments = new ArrayList<>();
     private FragmentStatisticsListDetailBinding viewBinding;
 
@@ -179,7 +176,7 @@ public class StatisticsListDetailFragment extends Fragment {
         listTab.add("请假");
         listTab.add("迟到");
         showBlank(allPeople.isEmpty());
-        WeekStatisticsListAdapter weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), allPeople);
+        DayStatisticsDetailListAdapter weekStatisticsListAdapter = new DayStatisticsDetailListAdapter(getContext(), allPeople);
         viewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         viewBinding.recyclerview.setAdapter(weekStatisticsListAdapter);
 //        fragments.clear();

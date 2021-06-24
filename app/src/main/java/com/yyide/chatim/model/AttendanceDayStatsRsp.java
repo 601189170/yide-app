@@ -67,6 +67,7 @@ public class AttendanceDayStatsRsp {
                 private String subjectName;
                 private String applyDate;
                 private String startTime;
+                private String requiredTime;
                 private String endTime;
                 private List<?> studentIds;
                 private List<PeopleBean> people;

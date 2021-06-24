@@ -316,10 +316,13 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         mViewBinding.tvClassName.setText(clazzBean.getDeptName());
         currentClass = "" + clazzBean.getDeptId();
         if (classList.size() <= 1) {
-            mViewBinding.tvSwitch.setVisibility(View.GONE);
+            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
         } else {
-            mViewBinding.tvSwitch.setVisibility(View.VISIBLE);
-            mViewBinding.tvSwitch.setOnClickListener(v -> {
+            Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
+            //设置图片大小，必须设置
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
+            mViewBinding.tvClassName.setOnClickListener(v -> {
                         final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
                         deptSelectPop.setOnCheckedListener((id, dept) -> {
                             Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);

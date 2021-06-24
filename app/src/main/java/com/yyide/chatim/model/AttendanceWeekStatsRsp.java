@@ -98,6 +98,10 @@ public class AttendanceWeekStatsRsp {
                     private String endDate;
                     private String thingName;
                     private String path;
+                    //分组
+                    private List<PeopleBean> specialPeople;
+                    private int specialCount;
+                    private boolean checked;
                 }
             }
         }

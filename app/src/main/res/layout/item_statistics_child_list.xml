@@ -8,18 +8,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
-        android:text="05.17 上午到校"
+        android:text=""
         android:textColor="#1E1E1E"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/tv_attendance_time"
+        android:id="@+id/tv_event_time_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#ff606266"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="130dp"
+        />
+    <TextView
+        android:id="@+id/tv_event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#ff606266"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toRightOf="@id/tv_event_time_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/dp_8"
+        />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tv_event_time_title,tv_event_time"
+        android:visibility="visible"
+        />
+    <TextView
+        android:id="@+id/tv_attendance_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_20"
-        android:text="未打卡"
+        android:text=""
         android:textColor="#606266"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@id/tv_name"

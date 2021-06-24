@@ -7,13 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.databinding.ItemStatisticsListBinding;
 import com.yyide.chatim.databinding.ItemWeekMonthStatisticsListBinding;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
+import com.yyide.chatim.model.WeekStatisticsBean;
 import com.yyide.chatim.utils.DateUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -49,7 +56,7 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_week_month_statistics_list, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_statistics_list, parent, false);
         return new ViewHolder(view);
     }
 
@@ -59,114 +66,107 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
         final String name = weekStatisticsBean.getName();
         if (SpData.getIdentityInfo().staffIdentity()) {
             holder.viewBinding.tvName.setText(name);
+        }else {
+            final String time = weekStatisticsBean.getTime();
+            String date = DateUtils.formatTime(time, null, "MM.dd");
+            final String subjectName = weekStatisticsBean.getSubjectName();
+            if (TextUtils.isEmpty(subjectName)){
+                holder.viewBinding.tvName.setText(date);
+            }else {
+                holder.viewBinding.tvName.setText(subjectName);
+            }
         }
 
-        final String status = weekStatisticsBean.getStatus();
-        //0正常、1缺勤、2迟到/3早退,4请假）
-        switch (status) {
-            case "0":
-                holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_normal));
-                holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
-                if (TextUtils.isEmpty(weekStatisticsBean.getDeviceName())) {
-                    holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_event_name));
-                } else {
-                    holder.viewBinding.tvEventTimeTitle.setText(weekStatisticsBean.getDeviceName());
+        final String string = context.getString(R.string.attendance_time_format);
+        holder.viewBinding.tvAttendanceTime.setText(String.format(string,weekStatisticsBean.getSpecialCount()));
+        //holder.viewBinding.tvName.setText(weekStatisticsBean.getName());
+        holder.viewBinding.childRecyclerview.setLayoutManager(new LinearLayoutManager(context));
+        BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean, BaseViewHolder>(R.layout.item_statistics_child_list) {
+            @Override
+            protected void convert(@NotNull BaseViewHolder baseViewHolder, AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean dataBean) {
+                final String date = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
+                if (!TextUtils.isEmpty(dataBean.getThingName())){
+                    baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getThingName());
+                }else if (!TextUtils.isEmpty(dataBean.getSubjectName())){
+                    baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getSubjectName());
+                }else {
+                    final int section = dataBean.getSection();
+                    String sectionUppercase = String.format(context.getString(R.string.attendance_class_section),DateUtils.sectionUppercase(section));
+                    baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase);
                 }
-                final String time = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
-                holder.viewBinding.tvEventTime.setText(time);
-                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_normal));
-                break;
-            case "2":
-                holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_late));
-                holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
-                if (TextUtils.isEmpty(weekStatisticsBean.getDeviceName())) {
-                    holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_event_name));
-                } else {
-                    holder.viewBinding.tvEventTimeTitle.setText(weekStatisticsBean.getDeviceName());
+
+                String status = dataBean.getStatus();
+                if (status == null){
+                    status = "";
                 }
-                final String time1 = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
-                holder.viewBinding.tvEventTime.setText(time1);
-                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late));
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
-                    holder.viewBinding.tvName.setText(date);
-                }
-                break;
-            case "3":
-                holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_leave_early));
-                holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
-                if (TextUtils.isEmpty(weekStatisticsBean.getDeviceName())) {
-                    holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_event_name));
-                } else {
-                    holder.viewBinding.tvEventTimeTitle.setText(weekStatisticsBean.getDeviceName());
-                }
-                final String time2 = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
-                holder.viewBinding.tvEventTime.setText(time2);
-                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
-                    holder.viewBinding.tvName.setText(date);
-                }
-                break;
-            case "1":
-                holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_absence));
-                holder.viewBinding.gpEventTime.setVisibility(View.GONE);
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String subjectName = weekStatisticsBean.getSubjectName();
-                    final String thingName = weekStatisticsBean.getThingName();
-                    final String absenceDate = weekStatisticsBean.getTime();
-                    final String date = DateUtils.formatTime(absenceDate, null, "MM.dd");
-                    if (!TextUtils.isEmpty(thingName)){
-                        holder.viewBinding.tvName.setText(date+" "+thingName);
-                    }else {
-                        if (!TextUtils.isEmpty(subjectName)){
-                            holder.viewBinding.tvName.setText(date+" "+subjectName);
+                //0正常、1缺勤、2迟到/3早退,4请假）
+                switch (status) {
+                    case "0":
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_normal));
+                        break;
+                    case "1":
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_absence));
+                        baseViewHolder.setVisible(R.id.gp_event_time,false);
+                        break;
+                    case "2":
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_late));
+                        baseViewHolder.setVisible(R.id.gp_event_time,true);
+                        if (!TextUtils.isEmpty(dataBean.getDeviceName())){
+                            baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getDeviceName());
                         }else {
-                            holder.viewBinding.tvName.setText(date);
+                            baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
                         }
+                        final String date1 = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
+                        baseViewHolder.setText(R.id.tv_event_time,date1);
+                        baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late));
+                        break;
+                    case "3":
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_leave_early));
+                        baseViewHolder.setVisible(R.id.gp_event_time,true);
+                        if (!TextUtils.isEmpty(dataBean.getDeviceName())){
+                            baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getDeviceName());
+                        }else {
+                            baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
+                        }
+                        final String date2 = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
+                        baseViewHolder.setText(R.id.tv_event_time,date2);
+                        baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late_early));
+                        break;
+                    case "4":
+                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_ask_for_leave));
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
+                        baseViewHolder.setVisible(R.id.gp_event_time,true);
+                        baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_leave_time));
+                        baseViewHolder.setText(R.id.tv_event_time,"");
+                        baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_leave));
+                        final String data1 = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd HH:mm");
+                        final String data2 = DateUtils.formatTime(weekStatisticsBean.getEndDate(), null, "MM.dd HH:mm");
+                        baseViewHolder.setText(R.id.tv_event_time,data1+"-"+data2);
+                        break;
 
-                    }
+                    default:
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
+                        baseViewHolder.setVisible(R.id.gp_event_time,false);
+                        break;
                 }
-                break;
-            case "4":
-                holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_ask_for_leave));
-                holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
-                holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_leave_time));
-                final String data1 = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd HH:mm");
-                final String data2 = DateUtils.formatTime(weekStatisticsBean.getEndDate(), null, "MM.dd HH:mm");
-                holder.viewBinding.tvEventTime.setText(data1 + "-" + data2);
-                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_leave));
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
-                    holder.viewBinding.tvName.setText(date);
-                }
-                break;
-            default:
-                break;
+            }
+        };
+        holder.viewBinding.childRecyclerview.setAdapter(adapter);
+        adapter.setList(weekStatisticsBean.getSpecialPeople());
+        holder.viewBinding.childRecyclerview.setVisibility(weekStatisticsBean.isChecked()?View.VISIBLE:View.GONE);
+        if (weekStatisticsBean.isChecked()) {
+            holder.viewBinding.ivDirection.setImageResource(R.drawable.icon_arrow_up);
+        }else {
+            holder.viewBinding.ivDirection.setImageResource(R.drawable.icon_arrow_down);
         }
-        //final String string = context.getString(R.string.attendance_time_format);
-        //holder.tv_attendance_time.setText(String.format(string,weekStatisticsBean.getTime()));
-//        holder.child_recyclerview.setLayoutManager(new LinearLayoutManager(context));
-//        BaseQuickAdapter adapter = new BaseQuickAdapter<WeekStatisticsBean.DataBean, BaseViewHolder>(R.layout.item_statistics_child_list) {
-//            @Override
-//            protected void convert(@NotNull BaseViewHolder baseViewHolder, WeekStatisticsBean.DataBean dataBean) {
-//                baseViewHolder
-//                        .setText(R.id.tv_name, dataBean.getTime()+" "+dataBean.getTitle())
-//                        .setText(R.id.tv_attendance_time, dataBean.getStatus());
-//            }
-//        };
-//        holder.child_recyclerview.setAdapter(adapter);
-//        adapter.setList(weekStatisticsBean.getDataBeanList());
-//        holder.child_recyclerview.setVisibility(weekStatisticsBean.isChecked()?View.VISIBLE:View.GONE);
-//        if (weekStatisticsBean.isChecked()) {
-//            holder.iv_direction.setImageResource(R.drawable.icon_arrow_up);
-//        }else {
-//            holder.iv_direction.setImageResource(R.drawable.icon_arrow_down);
-//        }
         //设置一级点击事件
-//        holder.itemView.setOnClickListener(v -> {
-//                onClickedListener.onClicked(position);
-//        });
+        holder.itemView.setOnClickListener(v -> {
+            onClickedListener.onClicked(position);
+        });
     }
 
     @Override
@@ -176,11 +176,11 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemWeekMonthStatisticsListBinding viewBinding;
+        private final ItemStatisticsListBinding viewBinding;
 
         public ViewHolder(View view) {
             super(view);
-            viewBinding = ItemWeekMonthStatisticsListBinding.bind(view);
+            viewBinding = ItemStatisticsListBinding.bind(view);
         }
     }
 

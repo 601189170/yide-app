@@ -89,6 +89,11 @@ public class StatisticsListFragment extends Fragment {
         weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         bind.recyclerview.setAdapter(weekStatisticsListAdapter);
+        weekStatisticsListAdapter.setOnClickedListener(position -> {
+            final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean peopleBean = data.get(position);
+            peopleBean.setChecked(!peopleBean.isChecked());
+            weekStatisticsListAdapter.notifyDataSetChanged();
+        });
 
         if (data !=null && data.isEmpty()) {
             bind.blankPage.setVisibility(View.VISIBLE);

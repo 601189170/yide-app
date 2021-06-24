@@ -43,23 +43,14 @@
                     android:id="@+id/tv_class_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="12dp"
                     android:text=""
+                    android:drawablePadding="@dimen/dp_10"
                     android:textColor="#606266"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toBottomOf="@id/tv_attendance_type"
-                    app:layout_constraintEnd_toStartOf="@+id/tv_switch"
-                    app:layout_constraintTop_toTopOf="@+id/tv_attendance_type" />
-
-                <TextView
-                    android:id="@+id/tv_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:text="切换"
-                    android:textColor="@color/colorAccent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_class_name" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_attendance_type" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
