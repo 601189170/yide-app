@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReceivedFragment
 import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReleaseFragment
-import com.yyide.chatim.activity.newnotice.fragment.NoticeReleaseFragment
+import com.yyide.chatim.activity.newnotice.fragment.NoticeTemplateReleaseFragment
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityNoticeBinding
 import java.util.*
@@ -39,7 +39,7 @@ class NewNoticeAnnouncementActivity : BaseActivity() {
                 when (position) {
                     0 -> fragment = NoticeMyReceivedFragment.Companion.newInstance()
                     1 -> fragment = NoticeMyReleaseFragment.Companion.newInstance()
-                    2 -> fragment = NoticeReleaseFragment.Companion.newInstance()
+                    2 -> fragment = NoticeTemplateReleaseFragment.Companion.newInstance()
                 }
                 return fragment
             }

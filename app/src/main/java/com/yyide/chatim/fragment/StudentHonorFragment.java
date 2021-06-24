@@ -72,7 +72,7 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
         });
         iv_bg.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), WebViewActivity.class);
-            intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
+            intent.putExtra("url", (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) ? BaseConstant.STUDENT_FAMILY_URL : BaseConstant.STUDENT_HONOR_URL);
             view.getContext().startActivity(intent);
         });
         announRoll.setPlayDelay(5000);

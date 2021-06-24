@@ -6,18 +6,23 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
+import com.yyide.chatim.activity.attendance.AttendanceSchoolTeacherAdapter;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.databinding.FragmentSchoolTeacherAttendanceBinding;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.widget.treeview.adapter.SingleLayoutTreeAdapter;
+import com.yyide.chatim.widget.treeview.model.TreeNode;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * desc 教师教职工考情详情
@@ -29,6 +34,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
     private AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentSchoolTeacherAttendanceBinding mViewBinding;
+    private AttendanceSchoolTeacherAdapter adapter;
 
     public static SchoolTeacherAttendanceFragment newInstance(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean teachersBean) {
         SchoolTeacherAttendanceFragment fragment = new SchoolTeacherAttendanceFragment();
@@ -61,9 +67,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
 
     private void initView() {
         mViewBinding.constraintLayout.setVisibility(View.GONE);
-        mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-        mViewBinding.recyclerview.setAdapter(adapter);
-        adapter.setEmptyView(R.layout.empty_top);
+
         mViewBinding.tvAbsenteeism.setOnClickListener(this);
         mViewBinding.tvLeave.setOnClickListener(this);
         mViewBinding.tvLate.setOnClickListener(this);
@@ -71,6 +75,8 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
         setData();
     }
+
+    private List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> dataToBind = new ArrayList<>();
 
     @SuppressLint("SetTextI18n")
     private void setData() {
@@ -88,11 +94,52 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             }
             mViewBinding.tvLateNum.setText(("0".equals(teachers.getGoOutStatus()) ? teachers.getLate() : teachers.getLeaveEarly()) + "");
             mViewBinding.tvLateName.setText("0".equals(teachers.getGoOutStatus()) ? "迟到" : "早退");
+            mViewBinding.tvLate.setText("0".equals(teachers.getGoOutStatus()) ? "迟到" : "早退");
+
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
-            adapter.setList(teachers.getAbsencePeople());
+            dataToBind.addAll(convertDataToTreeNode(teachers.getAbsencePeople()));
+            adapter = new AttendanceSchoolTeacherAdapter(R.layout.item_attendance_student, dataToBind, teachers.goOutStatus);
+            mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+            mViewBinding.recyclerview.setAdapter(adapter);
+            adapter.setEmptyView(R.layout.empty_top);
+            adapter.setOnTreeClickedListener(new SingleLayoutTreeAdapter.OnTreeClickedListener() {
+                @Override
+                public void onNodeClicked(View view, TreeNode node, int position) {
+                    TextView tvStatus = view.findViewById(R.id.tv_status);
+                    if (node.isExpand()) {
+                        tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_up), null);
+                    } else {
+                        tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_down), null);
+                    }
+                }
+
+                @Override
+                public void onLeafClicked(View view, TreeNode node, int position) {
+
+                }
+            });
         }
+    }
+
+    private List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> convertDataToTreeNode(List<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean> datas) {
+        List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> nodes = new ArrayList<>();
+        Map<String, TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> map = new HashMap();
+        for (int i = 0; i < datas.size(); i++) {
+            List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> childs = new ArrayList<>();
+            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean peopleBean = datas.get(i);
+            TreeNode treeNode = new TreeNode(peopleBean, -1);
+            for (AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean childItem : peopleBean.getSpecialPeople()) {
+                TreeNode child = new TreeNode<>(childItem, -1);
+                child.setParent(treeNode);
+                childs.add(child);
+            }
+            treeNode.setChildren(childs);
+            nodes.add(treeNode);
+            map.put(i + "", treeNode);
+        }
+        return nodes;
     }
 
     @Override
@@ -107,33 +154,23 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             case R.id.tv_absenteeism:
                 mViewBinding.tvAbsenteeism.setChecked(true);
                 mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(teachers != null ? teachers.getAbsencePeople() : null);
+                adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getAbsencePeople()) : null);
                 mViewBinding.tvNum.setText((teachers != null ? teachers.getAbsencePeople().size() : 0) + "人");
                 break;
             case R.id.tv_leave:
                 mViewBinding.tvLeave.setChecked(true);
                 mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(teachers != null ? teachers.getLeavePeople() : null);
+                adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLeavePeople()) : null);
                 mViewBinding.tvNum.setText((teachers != null ? teachers.getLeavePeople().size() : 0) + "人");
                 break;
             case R.id.tv_late:
                 mViewBinding.tvLate.setChecked(true);
                 mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(teachers != null ? teachers.getLatePeople() : null);
+                adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLatePeople()) : null);
                 mViewBinding.tvNum.setText((teachers != null ? teachers.getLatePeople().size() : 0) + "人");
                 break;
         }
     }
-
-    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean, BaseViewHolder>(R.layout.item_attendance_student) {
-        @Override
-        protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item) {
-            holder.setText(R.id.tv_student_name, item.getName())
-                    .setText(R.id.tv_student_time, item.getTime())
-                    .setText(R.id.tv_student_event, item.getDeviceName())
-                    .setText(R.id.tv_status, item.getStatusType());
-        }
-    };
 
     @Override
     public void onDestroy() {

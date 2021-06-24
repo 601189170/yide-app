@@ -154,8 +154,13 @@
     <string name="attendance_leave_early">早退</string>
     <string name="attendance_no_sign_in">未签到</string>
     <string name="attendance_ask_for_leave">请假</string>
+    <string name="attendance_node">%d节</string>
+    <string name="attendance_leave_time">请假时间</string>
+    <string name="attendance_event_name">班牌打卡</string>
+    <string name="attendance_class_section">第%s节</string>
+    <string name="attendance_absence">缺勤</string>
+
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="retract">\u3000\u3000%s</string>
 
@@ -164,7 +169,6 @@
     <string name="notice_release_title">发布通知</string>
     <string name="notice_un_confirm_title">未确认人员</string>
     <string name="notice_designated_personnel_title">选择指定人员/设备</string>
-
     <string name="notice_template_title">通知模板</string>
     <string name="notice_scope_title">通知范围</string>
     <string name="notice_confirm_detail_title">确认详情</string>
@@ -181,7 +185,9 @@
     <string name="timed_send_long_text">%d天后发送</string>
     <string name="notice_my_push_title">我发布的通知</string>
     <string name="notice_confirm_count">已确认：</string>
+    <string name="notice_read_html"><b>%s<font color='#2C8AFF'>%d</font><font color='#999999'>/%d</font></b></string>
     <string name="notice_has_withdrawn">已撤回</string>
+    <string name="notice_have_read">已读</string>
     <string name="notice_have_been_confirmed">已确认</string>
     <string name="notice_to_withdrawn">撤回</string>
     <string name="notice_people">发布人</string>
@@ -195,18 +201,19 @@
     <string name="notice_input_content_number">%d/2000</string>
     <string name="notice_timing_push_input">请选择定时发布时间</string>
     <string name="notice_chosen_people_number">已选择教师%s人</string>
-
+    <string name="notice_un_confirm_number">未确认%s人</string>
+    <string name="notice_remind_everyone">提醒全部人员</string>
+    <string name="notice_time_release">%d分钟后发布 </string>
+    <string name="notice_time_hours_release">%d小时后发布 </string>
+    <string name="notice_read">已读/未读</string>
+    <string name="notice_confirm_result">确认结果</string>
     <string name="notice_tab_my_received">我收到的</string>
     <string name="notice_tab_my_push">我发布的</string>
     <string name="notice_tab_push">发布通知</string>
-
     <string name="notice_tab_teacher">教师</string>
     <string name="notice_tab_patriarch">家长</string>
     <string name="notice_tab_class_card">班牌</string>
+    <string name="notice_confirm_roger_that">确认收到</string>
 
     <string name="app_commonly_title">常用应用</string>
-    <string name="attendance_absence">缺勤</string>
-    <string name="attendance_leave_time">请假时间</string>
-    <string name="attendance_event_name">班牌打卡</string>
-    <string name="attendance_class_section">第%s节</string>
 </resources>

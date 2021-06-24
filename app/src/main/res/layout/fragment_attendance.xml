@@ -63,7 +63,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
                     <TextView
-                        android:id="@+id/textview1"
+                        android:id="@+id/tv_sign"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="6dp"
@@ -84,9 +84,9 @@
                         android:text="0"
                         android:textColor="#ffffde00"
                         android:textSize="24sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textview1"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_sign"
                         app:layout_constraintEnd_toStartOf="@+id/textView12"
-                        app:layout_constraintTop_toTopOf="@+id/textview1" />
+                        app:layout_constraintTop_toTopOf="@+id/tv_sign" />
 
                     <TextView
                         android:id="@+id/textView12"
@@ -170,6 +170,7 @@
                         app:layout_constraintTop_toTopOf="@+id/tv_normal_num" />
 
                     <TextView
+                        android:id="@+id/tv_absenteeism_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_5"
@@ -217,6 +218,7 @@
                         app:layout_constraintTop_toTopOf="@+id/tv_leave_num" />
 
                     <TextView
+                        android:id="@+id/tv_late_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_5"

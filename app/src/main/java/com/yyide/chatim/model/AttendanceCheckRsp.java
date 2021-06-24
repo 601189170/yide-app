@@ -2,6 +2,8 @@ package com.yyide.chatim.model;
 
 import android.text.TextUtils;
 
+import com.yyide.chatim.widget.treeview.model.NodeId;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class AttendanceCheckRsp implements Serializable {
             public String thingName;
             public String peopleType;
             public String attNameA;
+            public String identityType;//N 学生考勤 Y 事件考勤
             public List<Students.PeopleBean> peopleA;
             public List<Students.PeopleBean> latePeopleA;
             public List<Students.PeopleBean> leavePeopleA;
@@ -71,6 +74,7 @@ public class AttendanceCheckRsp implements Serializable {
                 public String time;
                 public String deviceName;
                 public String thingName;
+                public String goOutStatus;//0:签到，1:签退
                 public String identityType;//N 学生考勤 Y 事件考勤
                 public List<String> studentIds;
                 public List<PeopleBean> people;
@@ -107,13 +111,16 @@ public class AttendanceCheckRsp implements Serializable {
 
                 @NoArgsConstructor
                 @Data
-                public static class PeopleBean implements Serializable {
+                public static class PeopleBean implements Serializable, NodeId {
                     public String name;
                     public String status;
                     public String time;
                     public String startDate;
                     public String endDate;
                     public String deviceName;
+                    public String goOutStatus;//0:签到，1:签退
+                    public List<PeopleBean> specialPeople;
+                    public int specialCount;
 
                     public String getStatusType() {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                         String str = "";
@@ -140,6 +147,15 @@ public class AttendanceCheckRsp implements Serializable {
                         return str;
                     }
 
+                    @Override
+                    public String getId() {
+                        return "1";
+                    }
+
+                    @Override
+                    public String getPId() {
+                        return "";
+                    }
                 }
 
             }
@@ -159,6 +175,7 @@ public class AttendanceCheckRsp implements Serializable {
                 public String startTime;
                 public String requiredTime;
                 public String thingName;
+                public String identityType;//N 学生考勤 Y 事件考勤
                 public String endTime;
                 public String name;
                 public int section;
@@ -188,6 +205,7 @@ public class AttendanceCheckRsp implements Serializable {
             public String thingName;
             public String peopleType;//Y 老师 N 学生
             public String attName;
+            public String identityType;//Y 课堂考勤 N 事件考勤
             public String attendanceType;
             public String requiredTime;
             public List<?> people;

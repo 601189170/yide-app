@@ -1,6 +1,5 @@
 package com.yyide.chatim.activity.newnotice
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils

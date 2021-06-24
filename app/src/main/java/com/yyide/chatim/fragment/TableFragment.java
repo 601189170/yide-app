@@ -101,7 +101,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                     long mMillisecond = DateUtils.getWhenPoint(minute);
                     if (item.weekTime == (weekDay - 1)) {
                         if (mMillisecond > toDateTime) {//课后
-                            //className.setText("今日无课");
+                            setDefaultView("今日课已上完");
                         } else if (mMillisecond < fromDataTime) {//课前
                             dataBean = item;
                             break;
@@ -111,19 +111,17 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                         }
                     }
                 }
-                if (dataBean != null) {
-                    setTableMsg(dataBean);
-                } else {
-                    setDefaultView();
-                }
-            } else {
-                setDefaultView();
             }
+        }
+        if (dataBean != null) {
+            setTableMsg(dataBean);
+        } else {
+            setDefaultView("今日无课");
         }
     }
 
-    private void setDefaultView() {
-        className.setText("今日无课");
+    private void setDefaultView(String string) {
+        className.setText(string);
         subjectName.setText("");
         time.setText("");
         tips.setText("");
@@ -169,6 +167,6 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
 
     @Override
     public void SelectSchByTeaidFail(String msg) {
-        setDefaultView();
+        setDefaultView("今日无课");
     }
 }

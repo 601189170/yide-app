@@ -229,14 +229,18 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <ImageView
+            <com.yyide.chatim.widget.RadiusImageView
                 android:id="@+id/logo"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="left"
                 android:layout_marginStart="@dimen/dp_30"
                 android:layout_marginTop="220dp"
-                android:src="@mipmap/icon_login_logo"
+                android:src="@mipmap/ic_launcher_logo"
+                app:left_bottom_radius="6dp"
+                app:right_bottom_radius="6dp"
+                app:right_top_radius="6dp"
+                app:left_top_radius="6dp"
                 android:visibility="visible" />
         </RelativeLayout>
     </LinearLayout>

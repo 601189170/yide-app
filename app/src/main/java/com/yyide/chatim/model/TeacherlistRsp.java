@@ -100,7 +100,7 @@ public class TeacherlistRsp implements Serializable {
             public String phone;
             public String userName;
             public String email;
-            public String sex;
+            public String sex; //1 男  0 女
             public String classesName;//班级名称
             public String primaryGuardianPhone;//主监护人
             public String deputyGuardianPhone;//副监护人

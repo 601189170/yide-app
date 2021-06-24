@@ -30,7 +30,10 @@ import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
+import com.yyide.chatim.model.NoticeItemBean;
 import com.yyide.chatim.model.NoticeListRsp;
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
+import com.yyide.chatim.model.NoticeReleaseTemplateBean;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SearchRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
@@ -387,7 +390,7 @@ public interface DingApiStores {
 
     //获取消息代办列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/notice/getMessageTransaction")
+    @GET("/message-server/cloud-message/user/notice/getMessage/android")
     Observable<TodoRsp> getMessageTransaction(@QueryMap HashMap<String, Object> map);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
@@ -510,6 +513,7 @@ public interface DingApiStores {
     /**
      * 考勤统计 dateType 1：日，2：周，3：月
      * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/viewAttStatistics
+     *
      * @param requestBody body
      * @return
      */
@@ -520,10 +524,43 @@ public interface DingApiStores {
     /**
      * 考勤统计 dateType 1：日，2：周，3：月
      * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/viewAttStatistics
+     *
      * @param requestBody body
      * @return
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/face/cloud-face/attendance/viewAttStatistics")
     Observable<AttendanceWeekStatsRsp> viewAttWeekMonthStatistics(@Body RequestBody requestBody);
+
+    //查询我发布的通知公告列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/message-server/cloud-message/app/message/publish/list")
+    Observable<NoticeItemBean> myNoticeList(@Body RequestBody requestBody);
+
+    //发布通知公告详情
+    @GET("/message-server/cloud-message/app/message/publish/{id}")
+    Observable<NoticeMyReleaseDetailBean> publishDetail(@Path("id") long id);
+
+    //发布通知公告详情
+    @GET("/message-server/cloud-message/app/message/publish/retract/{id}")
+    Observable<ResultBean> retract(@Path("id") long id);
+
+    //我收到的通知列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/message-server/cloud-message/app/message/receive/list")
+    Observable<NoticeItemBean> myReceiverNoticeList(@Body RequestBody requestBody);
+
+    //我收到的确认通知
+    @GET("/message-server/cloud-message/app/message/receive/confirm/{id}")
+    Observable<ResultBean> confirmNotice(@Path("id") long id);
+
+    //通知模板列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/message-server/cloud-message/app/message/template/list")
+    Observable<NoticeReleaseTemplateBean> templateNoticeList(@Body RequestBody requestBody);
+
+    //发布通知
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/message-server/cloud-message/app/message/publish/do")
+    Observable<ResultBean> releaseNotice(@Body RequestBody requestBody);
 }

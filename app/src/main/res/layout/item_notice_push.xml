@@ -41,7 +41,6 @@
         android:layout_marginTop="@dimen/dp_8"
         android:ellipsize="end"
         android:lines="1"
-        android:text="端午节放假通知"
         android:textColor="#ff333333"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/iv_icon_img"

@@ -10,6 +10,9 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityNoticeReleasePersonnelBinding
 import java.util.*
 
+/**
+ * 发布选择指定人员列表
+ */
 class NoticeDesignatedPersonnelActivity : BaseActivity() {
     private var personnelBinding: ActivityNoticeReleasePersonnelBinding? = null
     override fun getContentViewID(): Int {

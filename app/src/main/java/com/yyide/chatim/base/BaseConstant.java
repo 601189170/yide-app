@@ -25,7 +25,7 @@ public class BaseConstant {
     //线上版本APPID
     public static final int SDKAPPID_RELEASE = 1400511951;
     //UAT- APPID
-    public static final int SDKAPPID_UAT = 1400537733;
+    public static final int SDKAPPID_UAT = 1400511951;//1400537733
 
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
@@ -38,7 +38,7 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.148:8888";
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
@@ -91,5 +91,6 @@ public class BaseConstant {
     public static final String TYPE_PREPARES_SAVE = "type_prepares_save";
     public static final String TYPE_UPDATE_APP_MANAGER = "type_update_app_manager";
     public static final String TYPE_UPDATE_APP = "type_update_app";
+    public static final String TYPE_UPDATE_NOTICE_MY_RELEASE = "type_update_notice_my_release";
 
 }

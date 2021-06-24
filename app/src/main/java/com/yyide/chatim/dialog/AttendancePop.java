@@ -49,7 +49,7 @@ public class AttendancePop extends PopupWindow {
                 }
             }
         }
-        
+
         if (index < wheelAdapter.getItemsCount()) {
             if (wheelView != null) {
                 wheelView.setCurrentItem(index);
@@ -75,7 +75,7 @@ public class AttendancePop extends PopupWindow {
         wheelView = mView.findViewById(R.id.departments);
         confirm.setOnClickListener(v -> {
             if (mSelectClasses != null) {
-                mSelectClasses.OnSelectClassesListener(selectIndex);
+                mSelectClasses.OnSelectClassesListener(wheelView.getCurrentItem());
             }
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
@@ -92,9 +92,6 @@ public class AttendancePop extends PopupWindow {
         wheelView.setTextColorOut(context.getResources().getColor(R.color.text_666666));
         wheelView.setAdapter(wheelAdapter);
         wheelView.setCurrentItem(-1);
-        wheelView.setOnItemSelectedListener(index -> {
-            this.selectIndex = index;
-        });
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);

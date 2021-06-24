@@ -210,8 +210,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             noticeContent.setVisibility(View.VISIBLE);
             workContent.setVisibility(View.VISIBLE);
             kqContent.setVisibility(View.VISIBLE);
-            studentHonorContent.setVisibility(View.VISIBLE);
-            classHonorContent.setVisibility(View.VISIBLE);
+            studentHonorContent.setVisibility(View.GONE);
+            classHonorContent.setVisibility(View.GONE);
             //班级课表
             fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //通知
@@ -219,11 +219,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, new AttendanceParentsFragment());
             //班级相册轮播
-            fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
+//            fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
             //班级作业
             fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级学生荣誉
-            fragmentTransaction.replace(R.id.student_honor_content, new StudentHonorFragment());
+//            fragmentTransaction.replace(R.id.student_honor_content, new StudentHonorFragment());
         } else {
             tableContent.setVisibility(View.VISIBLE);
             tableContent.setVisibility(View.VISIBLE);
@@ -313,7 +313,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void getIndexMyNotice(TodoRsp rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
-        if(rsp.getCode() == BaseConstant.REQUEST_SUCCES2){
+        if (rsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
             if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
                 tv_todo.setVisibility(View.VISIBLE);
                 tv_todo.setText(rsp.getData().getTotal() + "");

@@ -1,29 +1,21 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentSchoolAttendanceBinding;
-import com.yyide.chatim.databinding.FragmentSchoolMasterAttendanceBinding;
 import com.yyide.chatim.dialog.AttendancePop;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.presenter.AttendanceCheckPresenter;
 import com.yyide.chatim.view.AttendanceCheckView;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +71,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
         }
 
         if ("N".equals(schoolPeopleAllFormBean.getPeopleType())) {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolTeacherAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
+            startFragment(schoolPeopleAllFormBean);
         } else {
             getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
         }
@@ -122,12 +114,20 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
                 mViewBinding.tvAttendanceTitle.setText(bean.attName);
                 if ("N".equals(bean.getPeopleType())) {
-                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolTeacherAttendanceFragment.newInstance(bean)).commit();
+                    startFragment(bean);
                 } else {
                     getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean)).commit();
                 }
             });
         });
+    }
+
+    private void startFragment(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean) {
+        if ("Y".equals(bean.getIdentityType())) {
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolTeacherAttendanceFragment.newInstance(bean)).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolEventTeacherAttendanceFragment.newInstance(bean)).commit();
+        }
     }
 
     @Override
@@ -160,6 +160,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
                     schoolBean.setNumber(teachers.getNumber());
                     schoolBean.setThingName(teachers.getThingName());
                     schoolBean.setRequiredTime(teachers.getRequiredTime());
+                    schoolBean.setIdentityType(item.getIdentityType());
                     schoolBean.setRate(teachers.getRate());
                     schoolBean.setPeopleType(item.getPeopleType());
                     schoolBean.setTeachers(teachers);

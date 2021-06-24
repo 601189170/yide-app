@@ -18,6 +18,7 @@
         android:paddingStart="@dimen/dp_16"
         android:paddingEnd="@dimen/dp_16"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_attendance_title">
 
@@ -95,13 +96,12 @@
             android:id="@+id/tv_absenteeism_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_16"
             android:gravity="center"
             android:text="0"
             android:textColor="@color/white"
             android:textSize="@dimen/text_18"
-            app:layout_constraintEnd_toStartOf="@+id/tv_leave_num"
+            android:layout_marginStart="@dimen/dp_20"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progress" />
@@ -118,40 +118,16 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_absenteeism_num" />
 
         <TextView
-            android:id="@+id/tv_leave_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="0"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_18"
-            app:layout_constraintEnd_toStartOf="@+id/tv_late_num"
-            app:layout_constraintStart_toEndOf="@+id/tv_absenteeism_num"
-            app:layout_constraintTop_toTopOf="@+id/tv_absenteeism_num" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_5"
-            android:text="请假"
-            android:textColor="#ffffffff"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="@+id/tv_leave_num"
-            app:layout_constraintStart_toStartOf="@+id/tv_leave_num"
-            app:layout_constraintTop_toBottomOf="@+id/tv_leave_num" />
-
-        <TextView
             android:id="@+id/tv_late_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_10"
             android:gravity="center"
             android:text="0"
             android:textColor="@color/white"
             android:textSize="@dimen/text_18"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_leave_num"
-            app:layout_constraintTop_toTopOf="@+id/tv_leave_num" />
+            app:layout_constraintEnd_toStartOf="@+id/tv_leave_num"
+            app:layout_constraintStart_toStartOf="@+id/tv_absenteeism_num"
+            app:layout_constraintTop_toTopOf="@+id/tv_absenteeism_num" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -163,6 +139,29 @@
             app:layout_constraintEnd_toEndOf="@+id/tv_late_num"
             app:layout_constraintStart_toStartOf="@+id/tv_late_num"
             app:layout_constraintTop_toBottomOf="@+id/tv_late_num" />
+
+        <TextView
+            android:id="@+id/tv_leave_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_late_num" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="请假"
+            android:textColor="#ffffffff"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_leave_num"
+            app:layout_constraintStart_toStartOf="@+id/tv_leave_num"
+            app:layout_constraintTop_toBottomOf="@+id/tv_leave_num" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

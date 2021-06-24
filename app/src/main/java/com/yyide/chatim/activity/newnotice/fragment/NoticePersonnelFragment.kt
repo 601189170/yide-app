@@ -17,6 +17,7 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentNoticePersonnelListBinding
 import com.yyide.chatim.databinding.ItemNoticePersonnelBinding
+import com.yyide.chatim.model.NoticeItemBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeReceivedPresenter
 import com.yyide.chatim.view.NoticeReceivedView
@@ -93,8 +94,11 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), Not
         }
     }
 
-    override fun getMyReceivedList(model: ResultBean) {
-        if (model.code == BaseConstant.REQUEST_SUCCES2) {
+    override fun getMyReceivedList(model: NoticeItemBean?) {
+        if (model != null) {
+            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+
+            }
         }
     }
 

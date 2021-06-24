@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -12,8 +11,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.attendance.fragment.SchoolStudentAttendanceFragment;
-import com.yyide.chatim.activity.attendance.fragment.SchoolTeacherAttendanceFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityAttendanceClassStudentBinding;
 import com.yyide.chatim.dialog.AttendancePop;

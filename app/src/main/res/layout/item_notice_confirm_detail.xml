@@ -17,9 +17,9 @@
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout5"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -119,19 +119,19 @@
             app:layout_constraintTop_toTopOf="@+id/textView15" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/btn_confirm"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_40"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:layout_marginBottom="@dimen/dp_40"
-                android:background="@drawable/bg_corners_gray2_22"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:gravity="center"
-                android:text="@string/notice_have_been_confirmed"
-                android:textColor="@color/black10"
-                android:textSize="@dimen/text_15" />
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:background="@drawable/bg_corners_blue_20"
+        android:gravity="center"
+        android:text="@string/notice_confirm_roger_that"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_15"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

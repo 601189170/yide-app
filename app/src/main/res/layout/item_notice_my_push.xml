@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -39,7 +40,6 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:lines="1"
-        android:text="端午节放假通知"
         android:textColor="#ff333333"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/iv_icon_img"
@@ -53,8 +53,6 @@
         android:drawablePadding="@dimen/dp_4"
         android:ellipsize="end"
         android:lines="1"
-        android:text="@string/notice_confirm_count"
-        android:textColor="#ff999999"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/tv_notice_time"
         app:layout_constraintStart_toStartOf="parent"
