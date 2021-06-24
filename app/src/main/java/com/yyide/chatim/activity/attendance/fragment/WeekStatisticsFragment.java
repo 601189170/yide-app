@@ -312,27 +312,29 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initClassView() {
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
-        mViewBinding.tvClassName.setText(clazzBean.getDeptName());
-        currentClass = "" + clazzBean.getDeptId();
-        if (classList.size() <= 1) {
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
-        } else {
-            Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
-            //设置图片大小，必须设置
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
-            mViewBinding.tvClassName.setOnClickListener(v -> {
-                        final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
-                        deptSelectPop.setOnCheckedListener((id, dept) -> {
-                            Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
-                            mViewBinding.tvClassName.setText(dept);
-                            currentClass = "" + id;
-                            currentPage = 1;
-                            queryAttStatsData(currentClass, currentDate,1);
-                        });
-                    }
-            );
+        if (classOptional.isPresent()){
+            final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
+            mViewBinding.tvClassName.setText(clazzBean.getDeptName());
+            currentClass = "" + clazzBean.getDeptId();
+            if (classList.size() <= 1) {
+                mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+            } else {
+                Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
+                mViewBinding.tvClassName.setOnClickListener(v -> {
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
+                            deptSelectPop.setOnCheckedListener((id, dept) -> {
+                                Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
+                                mViewBinding.tvClassName.setText(dept);
+                                currentClass = "" + id;
+                                currentPage = 1;
+                                queryAttStatsData(currentClass, currentDate,1);
+                            });
+                        }
+                );
+            }
         }
     }
 

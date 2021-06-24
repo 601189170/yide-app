@@ -132,28 +132,30 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         currentDate = DateUtils.formatTime(time,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");
 
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
-        mViewBinding.tvClassName.setText(clazzBean.getDeptName());
-        currentClass = ""+clazzBean.getDeptId();
-        currentClassName = clazzBean.getDeptName();
-        if (classList.size() <= 1) {
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
-        } else {
-            Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
-            //设置图片大小，必须设置
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
-            mViewBinding.tvClassName.setOnClickListener(v -> {
-                        final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
-                        deptSelectPop.setOnCheckedListener((id, dept) -> {
-                            Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
-                            mViewBinding.tvClassName.setText(dept);
-                            currentClass = ""+id;
-                            currentClassName = dept;
-                            queryAttStatsData(currentClass,currentDate);
-                        });
-                    }
-            );
+        if (classOptional.isPresent()) {
+            final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
+            mViewBinding.tvClassName.setText(clazzBean.getDeptName());
+            currentClass = ""+clazzBean.getDeptId();
+            currentClassName = clazzBean.getDeptName();
+            if (classList.size() <= 1) {
+                mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+            } else {
+                Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
+                mViewBinding.tvClassName.setOnClickListener(v -> {
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
+                            deptSelectPop.setOnCheckedListener((id, dept) -> {
+                                Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
+                                mViewBinding.tvClassName.setText(dept);
+                                currentClass = ""+id;
+                                currentClassName = dept;
+                                queryAttStatsData(currentClass,currentDate);
+                            });
+                        }
+                );
+            }
         }
 
         final WeekCalendar weekCalendar = view.findViewById(R.id.week_calendar);

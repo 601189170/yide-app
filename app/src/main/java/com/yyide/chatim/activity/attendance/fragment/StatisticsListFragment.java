@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
+import com.yyide.chatim.adapter.attendance.DayStatisticsDetailListAdapter;
 import com.yyide.chatim.adapter.attendance.WeekStatisticsListAdapter;
 import com.yyide.chatim.databinding.FragmentStatisticsListBinding;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
@@ -36,6 +38,7 @@ public class StatisticsListFragment extends Fragment {
     private String type;
     private String mParam2;
     private WeekStatisticsListAdapter weekStatisticsListAdapter;
+    private DayStatisticsDetailListAdapter dayStatisticsDetailListAdapter;
 
     public void setData(List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> data) {
         this.data = data;
@@ -86,14 +89,22 @@ public class StatisticsListFragment extends Fragment {
 //            return;
 //        }
         final FragmentStatisticsListBinding bind = FragmentStatisticsListBinding.bind(view);
-        weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
-        bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-        bind.recyclerview.setAdapter(weekStatisticsListAdapter);
-        weekStatisticsListAdapter.setOnClickedListener(position -> {
-            final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean peopleBean = data.get(position);
-            peopleBean.setChecked(!peopleBean.isChecked());
-            weekStatisticsListAdapter.notifyDataSetChanged();
-        });
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
+            bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+            bind.recyclerview.setAdapter(weekStatisticsListAdapter);
+            weekStatisticsListAdapter.setOnClickedListener(position -> {
+                final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean peopleBean = data.get(position);
+                peopleBean.setChecked(!peopleBean.isChecked());
+                weekStatisticsListAdapter.notifyDataSetChanged();
+            });
+        }else {
+            dayStatisticsDetailListAdapter = new DayStatisticsDetailListAdapter(getContext(), data);
+            bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+            bind.recyclerview.setAdapter(dayStatisticsDetailListAdapter);
+        }
+
+
 
         if (data !=null && data.isEmpty()) {
             bind.blankPage.setVisibility(View.VISIBLE);
