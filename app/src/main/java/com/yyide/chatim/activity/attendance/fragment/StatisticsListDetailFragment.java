@@ -109,7 +109,7 @@ public class StatisticsListDetailFragment extends Fragment {
         //签到率tv_attendance_rate
         viewBinding.tvAttendanceRate.setText(data.getRate());
         //tv_attendance_time考勤时间
-        viewBinding.tvAttendanceTime.setText(data.getStartTime());
+        viewBinding.tvAttendanceTime.setText(data.getApplyDate());
         //考勤进度
         final String rate = data.getRate();
         try {

@@ -57,7 +57,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean dayStatisticsBean = data.get(position);
-        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getRequiredTime());
+        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getApplyDate());
         holder.mViewBanding.tvAttendanceTime.setText(attendanceTime);
         final String thingName = dayStatisticsBean.getThingName();
         if (!TextUtils.isEmpty(thingName)) {

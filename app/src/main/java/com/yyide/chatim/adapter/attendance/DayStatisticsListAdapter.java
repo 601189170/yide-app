@@ -57,10 +57,10 @@ public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatistics
             holder.binding.tvEventName.setText(dayStatisticsBean.getThingName());
         }else {
             final int section = dayStatisticsBean.getSection();
-            String sectionUppercase = String.format(context.getString(R.string.attendance_class_section),DateUtils.sectionUppercase(section));
+            String sectionUppercase = DateUtils.sectionDesc(context,section);
             holder.binding.tvEventName.setText(dayStatisticsBean.getSubjectName()+" "+ sectionUppercase);
         }
-        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getRequiredTime());
+        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), dayStatisticsBean.getApplyDate());
         holder.binding.tvAttendanceTime.setText(attendanceTime);
         holder.binding.tvAttendanceRate.setText(dayStatisticsBean.getRate());
         holder.binding.tvDueNum.setText(String.valueOf(dayStatisticsBean.getNumber()));

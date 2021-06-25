@@ -1,11 +1,14 @@
 package com.yyide.chatim.utils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+
+import com.yyide.chatim.R;
 
 import net.sf.saxon.functions.Data;
 
@@ -385,6 +388,12 @@ public class DateUtils {
         return dates;
     }
 
+    public static String sectionDesc(Context context,int section){
+        if (section == 0){
+            return "早读";
+        }
+        return String.format(context.getString(R.string.attendance_class_section),sectionUppercase(section));
+    }
 
     public static String sectionUppercase(int section) {
         switch (section) {

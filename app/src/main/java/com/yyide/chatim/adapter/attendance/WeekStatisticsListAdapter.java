@@ -91,7 +91,7 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                     baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getSubjectName());
                 }else {
                     final int section = dataBean.getSection();
-                    String sectionUppercase = String.format(context.getString(R.string.attendance_class_section),DateUtils.sectionUppercase(section));
+                    String sectionUppercase = DateUtils.sectionDesc(context,section);
                     baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase);
                 }
 
