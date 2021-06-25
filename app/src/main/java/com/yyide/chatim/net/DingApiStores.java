@@ -554,6 +554,10 @@ public interface DingApiStores {
     @GET("/message-server/cloud-message/app/message/receive/confirm/{id}")
     Observable<ResultBean> confirmNotice(@Path("id") long id);
 
+    //我收到的确认詳情
+    @GET("/message-server/cloud-message/app/message/publish/{messagePublishId}")
+    Observable<NoticeMyReleaseDetailBean> confirmNoticeDetail(@Path("messagePublishId") long id);
+
     //通知模板列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/message-server/cloud-message/app/message/template/list")

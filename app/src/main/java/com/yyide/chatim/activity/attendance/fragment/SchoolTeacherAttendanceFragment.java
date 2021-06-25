@@ -92,9 +92,9 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
                     e.printStackTrace();
                 }
             }
-            mViewBinding.tvLateNum.setText(("0".equals(teachers.getGoOutStatus()) ? teachers.getLate() : teachers.getLeaveEarly()) + "");
-            mViewBinding.tvLateName.setText("0".equals(teachers.getGoOutStatus()) ? "迟到" : "早退");
-            mViewBinding.tvLate.setText("0".equals(teachers.getGoOutStatus()) ? "迟到" : "早退");
+            mViewBinding.tvLateNum.setText(teachers.getLate() + "");
+//            mViewBinding.tvLateName.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
+//            mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
 
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");

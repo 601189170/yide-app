@@ -87,6 +87,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     @Override
     public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
         Log.e(TAG, "SelectSchByTeaid: " + JSON.toJSONString(rsp));
+        boolean isTable = false;
         SelectSchByTeaidRsp.DataBean dataBean = null;
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             if (rsp.data != null && rsp.data.size() > 0) {
@@ -101,7 +102,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                     long mMillisecond = DateUtils.getWhenPoint(minute);
                     if (item.weekTime == (weekDay - 1)) {
                         if (mMillisecond > toDateTime) {//课后
-                            setDefaultView("今日课已上完");
+                            isTable = true;
                         } else if (mMillisecond < fromDataTime) {//课前
                             dataBean = item;
                             break;
@@ -115,6 +116,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         }
         if (dataBean != null) {
             setTableMsg(dataBean);
+        } else if (isTable) {
+            setDefaultView("今日课已上完");
         } else {
             setDefaultView("今日无课");
         }

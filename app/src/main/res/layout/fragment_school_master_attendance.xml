@@ -130,6 +130,7 @@
             app:layout_constraintTop_toTopOf="@+id/tv_absenteeism_num" />
 
         <TextView
+            android:id="@+id/tv_Late"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_5"

@@ -40,6 +40,7 @@ public class NoticeItemBean {
             public String timerDate;
             public String type;
             public String coverImgpath;
+            public long messagePublishId;
             public String imgpath;
             public int height;
             public int width;

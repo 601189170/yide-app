@@ -109,13 +109,13 @@
                         android:id="@+id/tv_absenteeism_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_8"
+                        android:layout_marginStart="@dimen/dp_10"
                         android:layout_marginTop="@dimen/dp_16"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_18"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_leave_num"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_late_num"
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/progress" />
@@ -135,13 +135,14 @@
                         android:id="@+id/tv_leave_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_18"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_late_num"
-                        app:layout_constraintStart_toEndOf="@+id/tv_absenteeism_num"
-                        app:layout_constraintTop_toTopOf="@+id/tv_absenteeism_num" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_late_num"
+                        app:layout_constraintTop_toTopOf="@+id/tv_late_num" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -158,14 +159,13 @@
                         android:id="@+id/tv_late_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/dp_10"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_18"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tv_leave_num"
-                        app:layout_constraintTop_toTopOf="@+id/tv_leave_num" />
+                        app:layout_constraintEnd_toStartOf="@+id/tv_leave_num"
+                        app:layout_constraintStart_toEndOf="@+id/tv_absenteeism_num"
+                        app:layout_constraintTop_toTopOf="@+id/tv_absenteeism_num" />
 
                     <TextView
                         android:id="@+id/tv_late_name"
@@ -180,15 +180,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/tv_late_num" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!--            <androidx.appcompat.widget.Toolbar-->
-            <!--                android:id="@+id/toolbar"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@color/color_F5F8FC"-->
-            <!--                app:contentInsetStart="0dp"-->
-            <!--                app:layout_collapseMode="pin">-->
-            <!--            </androidx.appcompat.widget.Toolbar>-->
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -221,10 +212,10 @@
                 android:id="@+id/tv_leave"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_15"
                 android:background="@drawable/selector_checked_tv"
                 android:gravity="center"
                 android:paddingStart="@dimen/dp_14"
-                android:layout_marginStart="@dimen/dp_15"
                 android:paddingTop="5dp"
                 android:paddingEnd="@dimen/dp_14"
                 android:paddingBottom="5dp"
@@ -238,10 +229,10 @@
                 android:id="@+id/tv_late"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_15"
                 android:background="@drawable/selector_checked_tv"
                 android:gravity="center"
                 android:paddingStart="@dimen/dp_14"
-                android:layout_marginStart="@dimen/dp_15"
                 android:paddingTop="5dp"
                 android:paddingEnd="@dimen/dp_14"
                 android:paddingBottom="5dp"

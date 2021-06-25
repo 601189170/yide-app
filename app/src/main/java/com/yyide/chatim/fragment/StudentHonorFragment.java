@@ -36,7 +36,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
-
+/**
+ * 学生作品
+ */
 public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter> implements StudentHonorView {
 
     private View mBaseView;
@@ -151,7 +153,7 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
 
     @Override
     public void getStudentHonorFail(String msg) {
-
+        Log.d("getStudentHonorFail", "getStudentHonorFail>>> " + msg);
     }
 
     @Override

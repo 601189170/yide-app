@@ -208,6 +208,7 @@ public class AttendanceCheckRsp implements Serializable {
             public String identityType;//Y 课堂考勤 N 事件考勤
             public String attendanceType;
             public String requiredTime;
+            public String goOutStatus;//0:签到，1:签退
             public List<?> people;
             public List<?> latePeople;
             public List<?> leavePeople;

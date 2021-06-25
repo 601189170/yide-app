@@ -72,7 +72,7 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
         viewBinding!!.tvThisWeek.setOnClickListener(this)
         viewBinding!!.tvThisMonth.setOnClickListener(this)
         viewBinding!!.list.layoutManager = GridLayoutManager(activity, 2)
-        viewBinding!!.list.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(12f)))
+        viewBinding!!.list.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(10f)))
         viewBinding!!.list.adapter = receivedAdapter
         receivedAdapter.setEmptyView(R.layout.empty)
         receivedAdapter.emptyLayout!!.setOnClickListener {
@@ -81,6 +81,7 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
         }
         receivedAdapter.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int ->
             var intent = Intent(context, NoticeConfirmDetailActivity::class.java)
+            intent.putExtra("messagePublishId", receivedAdapter.getItem(position).messagePublishId)
             startActivity(intent)
         }
         receivedAdapter.loadMoreModule.setOnLoadMoreListener {
@@ -104,24 +105,28 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
         viewBinding!!.tvToday.setTextColor(context!!.resources.getColor(R.color.text_1E1E1E))
         viewBinding!!.tvThisWeek.setTextColor(context!!.resources.getColor(R.color.text_1E1E1E))
         viewBinding!!.tvThisMonth.setTextColor(context!!.resources.getColor(R.color.text_1E1E1E))
-        if (v.id == viewBinding!!.tvToday.id) {
-            viewBinding!!.tvToday.isChecked = true
-            viewBinding!!.tvToday.setTextColor(Color.WHITE)
-            startData = DateUtils.getDayBegin()
-            endData = DateUtils.getDate(System.currentTimeMillis())
-            Log.d(TAG, "Day startDate:.>>> :$startData\t endDate>>> $endData")
-        } else if (v.id == viewBinding!!.tvThisWeek.id) {
-            viewBinding!!.tvThisWeek.isChecked = true
-            viewBinding!!.tvThisWeek.setTextColor(Color.WHITE)
-            startData = DateUtils.getDate(DateUtils.getBeginDayOfWeek().time)
-            endData = DateUtils.getDate(System.currentTimeMillis())
-            Log.d(TAG, "Week startDate:.>>> :$startData\t endDate>>> $endData")
-        } else if (v.id == viewBinding!!.tvThisMonth.id) {
-            viewBinding!!.tvThisMonth.isChecked = true
-            viewBinding!!.tvThisMonth.setTextColor(Color.WHITE)
-            startData = DateUtils.getDate(DateUtils.getBeginDayOfMonth().time)
-            endData = DateUtils.getDate(System.currentTimeMillis())
-            Log.d(TAG, "Month startDate:.>>> :$startData\t endDate>>> $endData")
+        when (v.id) {
+            viewBinding!!.tvToday.id -> {
+                viewBinding!!.tvToday.isChecked = true
+                viewBinding!!.tvToday.setTextColor(Color.WHITE)
+                startData = DateUtils.getDayBegin()
+                endData = DateUtils.getDate(System.currentTimeMillis())
+                Log.d(TAG, "Day startDate:.>>> :$startData\t endDate>>> $endData")
+            }
+            viewBinding!!.tvThisWeek.id -> {
+                viewBinding!!.tvThisWeek.isChecked = true
+                viewBinding!!.tvThisWeek.setTextColor(Color.WHITE)
+                startData = DateUtils.getDate(DateUtils.getBeginDayOfWeek().time)
+                endData = DateUtils.getDate(System.currentTimeMillis())
+                Log.d(TAG, "Week startDate:.>>> :$startData\t endDate>>> $endData")
+            }
+            viewBinding!!.tvThisMonth.id -> {
+                viewBinding!!.tvThisMonth.isChecked = true
+                viewBinding!!.tvThisMonth.setTextColor(Color.WHITE)
+                startData = DateUtils.getDate(DateUtils.getBeginDayOfMonth().time)
+                endData = DateUtils.getDate(System.currentTimeMillis())
+                Log.d(TAG, "Month startDate:.>>> :$startData\t endDate>>> $endData")
+            }
         }
         pageNum = 1
         mvpPresenter?.getReceiverNoticeList(startData, endData, pageNum, pageSize);

@@ -35,6 +35,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
+/**
+ * 班级相册
+ */
 public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> implements ClassPhotoView {
 
     private View mBaseView;

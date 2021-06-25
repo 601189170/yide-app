@@ -291,7 +291,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             msgTotalUnread.setVisibility(View.GONE);
         }
         String unreadStr = "" + count;
-        if (count > 100) {
+        if (count >= 100) {
             unreadStr = "99+";
         }
         msgTotalUnread.setText(unreadStr);

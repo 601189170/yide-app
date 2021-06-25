@@ -125,7 +125,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 mViewBinding.tvLate.setChecked(true);
                 mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
                 if (itemStudents != null) {
-                    adapter.setList("0".equals(itemStudents.getGoOutStatus()) ? itemStudents.getLatePeople() : itemStudents.getLeaveEarlyPeople());
+                    adapter.setList("1".equals(itemStudents.getGoOutStatus()) ? itemStudents.getLeaveEarlyPeople() : itemStudents.getLatePeople());
                 }
                 break;
             case R.id.tv_normal:

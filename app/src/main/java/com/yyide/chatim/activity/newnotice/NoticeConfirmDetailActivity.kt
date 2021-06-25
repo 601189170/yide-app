@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +14,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityNoticeConfirmDetailBinding
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean
+import com.yyide.chatim.net.ApiCallback
 
 class NoticeConfirmDetailActivity : BaseActivity() {
     private var confirmDetailBinding: ActivityNoticeConfirmDetailBinding? = null
@@ -30,6 +32,41 @@ class NoticeConfirmDetailActivity : BaseActivity() {
         confirmDetailBinding = ActivityNoticeConfirmDetailBinding.inflate(layoutInflater)
         setContentView(confirmDetailBinding!!.root)
         initView()
+        getDetail(intent.getLongExtra("messagePublishId", -1))
+    }
+
+    private fun getDetail(publishId: Long) {
+        showLoading()
+        addSubscription(mDingApiStores.confirmNoticeDetail(publishId), object : ApiCallback<NoticeMyReleaseDetailBean?>() {
+            override fun onSuccess(model: NoticeMyReleaseDetailBean?) {
+                if (model != null) {
+                    if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
+                        confirmDetailBinding?.detail?.tvNoticeTitle?.text = model.data.title
+                        confirmDetailBinding?.detail?.tvNoticeContent?.text = model.data.content
+                        confirmDetailBinding?.detail?.tvPushTime?.text = model.data.timerDate
+                        confirmDetailBinding?.detail?.tvPushPeople?.text = model.data.publisher
+                        if (model.data.isConfirm) {
+                            confirmDetailBinding?.detail?.btnConfirm?.isClickable = true
+                            confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_blue_20)
+                            confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_confirm_roger_that)
+                        } else {
+                            confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
+                            confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
+                            confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_have_been_confirmed)
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(msg: String) {
+
+            }
+
+            override fun onFinish() {
+                hideLoading()
+            }
+
+        })
     }
 
     private fun initView() {

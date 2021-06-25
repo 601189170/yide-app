@@ -98,14 +98,14 @@ public class StudentHonorRsp {
         }
 
         public static class RecordsBean {
-            private int id;
-            private int studentId;
+            private long id;
+            private long studentId;
             private String studentName;
             private String workName;
             private String workDesc;
             private Boolean isFine;
-            private int schoolId;
-            private int classesId;
+            private long schoolId;
+            private long classesId;
             private int likeCount;
             private int commentCount;
             private List<String> worksUrl;
@@ -115,19 +115,19 @@ public class StudentHonorRsp {
             private String createdBy;
             private String userImg;
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
-            public int getStudentId() {
+            public long getStudentId() {
                 return studentId;
             }
 
-            public void setStudentId(int studentId) {
+            public void setStudentId(long studentId) {
                 this.studentId = studentId;
             }
 
@@ -163,19 +163,19 @@ public class StudentHonorRsp {
                 this.isFine = isFine;
             }
 
-            public int getSchoolId() {
+            public long getSchoolId() {
                 return schoolId;
             }
 
-            public void setSchoolId(int schoolId) {
+            public void setSchoolId(long schoolId) {
                 this.schoolId = schoolId;
             }
 
-            public int getClassesId() {
+            public long getClassesId() {
                 return classesId;
             }
 
-            public void setClassesId(int classesId) {
+            public void setClassesId(long classesId) {
                 this.classesId = classesId;
             }
 

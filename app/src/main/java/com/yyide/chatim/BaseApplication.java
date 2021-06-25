@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.multidex.MultiDex;
 
 import com.blankj.utilcode.util.Utils;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.v2.V2TIMCallback;
@@ -46,6 +47,8 @@ public class BaseApplication extends Application {
         super.onCreate();
         instance = this;
 
+        //内存泄露檢測
+        LeakCanary.install(this);
         //blankj初始化
         Utils.init(this);
         MultiDex.install(this);

@@ -7,6 +7,8 @@ import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
+import com.yyide.chatim.net.AppClient;
+import com.yyide.chatim.net.DingApiStores;
 import com.yyide.chatim.utils.LoadingTools;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,6 +24,7 @@ import rx.subscriptions.CompositeSubscription;
 public class BaseFragment extends Fragment {
     public Activity mActivity;
     private LoadingTools loadingTools;
+    protected DingApiStores mDingApiStores;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class BaseFragment extends Fragment {
         ButterKnife.bind(this, view);
         mActivity = getActivity();
         loadingTools = new LoadingTools(getActivity());
+        mDingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
     }
 
     @Override

@@ -23,6 +23,7 @@ public class NoticeMyReleaseDetailBean {
         public int height;
         public int width;
         public int notifyRange;
+        public String publisher;
         public List<String> notifies;
     }
 }

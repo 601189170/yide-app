@@ -78,9 +78,10 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                 }
-                mViewBinding.tvLateNum.setText(itemStudents.getLate() + "");
+                mViewBinding.tvLateNum.setText(("1".equals(itemStudents.getGoOutStatus()) ? itemStudents.getLeaveEarly() : itemStudents.getLate()) + "");
                 mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
                 mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsence() + "");
+                mViewBinding.tvLate.setText("1".equals(itemStudents.getGoOutStatus()) ? "早退" : "迟到");
                 adapter.setList(remove(itemStudents.getGradeList()));
             }
         }

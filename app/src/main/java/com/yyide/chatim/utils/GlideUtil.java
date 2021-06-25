@@ -40,14 +40,14 @@ public class GlideUtil {
     //圆图
     public static void loadCircleImage(Context context, String url, ImageView imageView) {
         RequestOptions myOptions = new RequestOptions()
-                .circleCrop().placeholder(R.mipmap.de1).error(R.mipmap.de1);
+                .circleCrop().placeholder(R.drawable.bg_corners_blue100).error(R.drawable.bg_corners_blue100);
         Glide.with(context).load(GlideUtil.DataUrl(url)).apply(myOptions).into(imageView);
     }
 
     //圆图
     public static void loadCircleImage(Context context, Drawable drawable, ImageView imageView) {
         RequestOptions myOptions = new RequestOptions()
-                .circleCrop().placeholder(R.mipmap.de1).error(R.mipmap.de1);
+                .circleCrop().placeholder(R.drawable.bg_corners_blue100).error(R.drawable.bg_corners_blue100);
         Glide.with(context).load(drawable).apply(myOptions).into(imageView);
     }
 
