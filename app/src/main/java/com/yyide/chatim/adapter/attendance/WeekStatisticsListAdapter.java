@@ -119,7 +119,7 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                         }else {
                             baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
                         }
-                        final String date1 = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
+                        final String date1 = DateUtils.formatTime(dataBean.getTime(), null, "HH:mm");
                         baseViewHolder.setText(R.id.tv_event_time,date1);
                         baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late));
                         break;
@@ -132,7 +132,7 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                         }else {
                             baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
                         }
-                        final String date2 = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
+                        final String date2 = DateUtils.formatTime(dataBean.getTime(), null, "HH:mm");
                         baseViewHolder.setText(R.id.tv_event_time,date2);
                         baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late_early));
                         break;
