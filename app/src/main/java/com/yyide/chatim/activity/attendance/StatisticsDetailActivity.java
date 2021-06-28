@@ -34,6 +34,7 @@ public class StatisticsDetailActivity extends BaseActivity {
     private final List<Fragment> fragments = new ArrayList<>();
     private final List<String> listTab = new ArrayList<>();
     private String currentClass;
+    private int position;
 
     @Override
     public int getContentViewID() {
@@ -46,6 +47,7 @@ public class StatisticsDetailActivity extends BaseActivity {
         mViewBinding = ActivityStatisticsDetailBinding.inflate(getLayoutInflater());
         setContentView(mViewBinding.getRoot());
         final String data = getIntent().getStringExtra("data");
+        position = getIntent().getIntExtra("position", 0);
         currentClass = getIntent().getStringExtra("currentClass");
         mViewBinding.tvEventClass.setText(currentClass);
         Log.e(TAG, "onCreate: "+data );
@@ -109,5 +111,8 @@ public class StatisticsDetailActivity extends BaseActivity {
             Log.e(TAG, "initViewPager: "+name );
             tab.setText(name);
         }).attach();
+
+        //默认选中第几个tab
+        mViewBinding.viewpager.setCurrentItem(position,false);
     }
 }

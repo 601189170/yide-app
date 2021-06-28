@@ -179,14 +179,14 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         initClassData();
         initClassView();
         if (isWeekStatistics) {
-            mViewBinding.tvWeeklyStatistical.setText("每周统计");
+            mViewBinding.tvWeeklyStatistical.setText(getString(R.string.weekly_statistical));
             final Calendar calendar = Calendar.getInstance();
             final int weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
             week = weekOfMonth;
             currentWeek = weekOfMonth;
             setWeek();
         } else {
-            mViewBinding.tvWeeklyStatistical.setText("每月统计");
+            mViewBinding.tvWeeklyStatistical.setText(getString(R.string.monthly_statistical));
             //获取当前默认日期
             final Calendar calendar = Calendar.getInstance();
             Log.e(TAG, "calendar: " + calendar);
@@ -196,6 +196,12 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             currentMonth = month;
             setMonth();
         }
+        if (SpData.getIdentityInfo().staffIdentity()){
+            mViewBinding.tvWeeklyStatisticalSubhead.setText(getString(R.string.statistical_man_time));
+        }else {
+            mViewBinding.tvWeeklyStatisticalSubhead.setText(getString(R.string.statistical_time));
+        }
+
 
         //queryAttStatsData(currentClass, currentDate,currentPage);
         mViewBinding.ivLeft.setOnClickListener(v -> {
@@ -466,6 +472,6 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
     private void showBlank(boolean show){
         mViewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
-        mViewBinding.constraintLayout.setVisibility(show?View.GONE:View.VISIBLE);
+        //mViewBinding.constraintLayout.setVisibility(show?View.GONE:View.VISIBLE);
     }
 }

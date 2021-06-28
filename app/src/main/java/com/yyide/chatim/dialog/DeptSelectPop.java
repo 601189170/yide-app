@@ -30,6 +30,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.leave.LeaveReasonTagAdapter;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
+import com.yyide.chatim.utils.ButtonUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,9 @@ public class DeptSelectPop extends PopupWindow {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public DeptSelectPop(Activity context, int type,List<LeaveDeptRsp.DataBean> dataBeansList) {
+        if (ButtonUtils.isFastDoubleClick(context.hashCode(),1500)){
+            return;
+        }
         this.context = context;
         this.dataBeansList = dataBeansList;
         init(type);

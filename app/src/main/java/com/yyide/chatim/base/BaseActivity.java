@@ -22,6 +22,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.net.DingApiStores;
+import com.yyide.chatim.utils.ButtonUtils;
 import com.yyide.chatim.utils.ClickUtils;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
@@ -77,7 +78,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     //无参跳转
     protected void jupm(Context context, Class activity) {
-        startActivity(new Intent(context, activity));
+        if (!ButtonUtils.isFastDoubleClick(activity.hashCode(),1500)){
+            startActivity(new Intent(context, activity));
+        }
     }
 
     //带参跳转

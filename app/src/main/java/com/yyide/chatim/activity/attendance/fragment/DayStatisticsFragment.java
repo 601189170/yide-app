@@ -239,6 +239,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
                 Log.e(TAG, "进入考勤详情页: "+jsonString );
                 final Intent intent = new Intent(getActivity(), StatisticsDetailActivity.class);
                 intent.putExtra("data",jsonString);
+                intent.putExtra("position",position);
                 intent.putExtra("currentClass",currentClassName);
                 startActivity(intent);
             });
