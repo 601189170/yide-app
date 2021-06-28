@@ -105,6 +105,11 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     }
 
     private void initClassData() {
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            final String studentName = SpData.getIdentityInfo().studentName;
+            mViewBinding.tvClassName.setText(studentName);
+            return;
+        }
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
         final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
@@ -126,38 +131,11 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         mViewBinding = FragmentDayStatisticsBinding.bind(view);
         eventDates = new ArrayList<>();
         initClassData();
+        initClassView();
         String time = DateUtils.switchTime(new Date(), "yyyy-MM-dd");
         final String time1 = DateUtils.formatTime(time, "yyyy-MM-dd", "MM月");
         mViewBinding.tvCurrentDate.setText(time1);
         currentDate = DateUtils.formatTime(time,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");
-
-        final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        if (classOptional.isPresent()) {
-            final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
-            mViewBinding.tvClassName.setText(clazzBean.getDeptName());
-            currentClass = ""+clazzBean.getDeptId();
-            currentClassName = clazzBean.getDeptName();
-            if (classList.size() <= 1) {
-                mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
-            } else {
-                Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
-                //设置图片大小，必须设置
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
-                mViewBinding.tvClassName.setOnClickListener(v -> {
-                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
-                            deptSelectPop.setOnCheckedListener((id, dept) -> {
-                                Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
-                                mViewBinding.tvClassName.setText(dept);
-                                currentClass = ""+id;
-                                currentClassName = dept;
-                                queryAttStatsData(currentClass,currentDate);
-                            });
-                        }
-                );
-            }
-        }
-
         final WeekCalendar weekCalendar = view.findViewById(R.id.week_calendar);
         weekCalendar.setGetViewHelper(new GetViewHelper() {
             @Override
@@ -251,6 +229,36 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         }
         //请求数据
         queryAttStatsData(currentClass,currentDate);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initClassView() {
+        final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+        if (classOptional.isPresent() && SpData.getIdentityInfo().staffIdentity()) {
+            final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
+            mViewBinding.tvClassName.setText(clazzBean.getDeptName());
+            currentClass = ""+clazzBean.getDeptId();
+            currentClassName = clazzBean.getDeptName();
+            if (classList.size() <= 1) {
+                mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+            } else {
+                Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
+                mViewBinding.tvClassName.setOnClickListener(v -> {
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
+                            deptSelectPop.setOnCheckedListener((id, dept) -> {
+                                Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
+                                mViewBinding.tvClassName.setText(dept);
+                                currentClass = ""+id;
+                                currentClassName = dept;
+                                queryAttStatsData(currentClass,currentDate);
+                            });
+                        }
+                );
+            }
+        }
     }
 
     private void queryAttStatsData(String classId,String searchTime){

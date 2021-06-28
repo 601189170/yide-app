@@ -115,6 +115,7 @@ public class GetUserSchoolRsp {
         public String img;
         public List<FormBean> form;
         public boolean isCurrentUser;
+        public String studentName;
 
         public static class FormBean {
             /**

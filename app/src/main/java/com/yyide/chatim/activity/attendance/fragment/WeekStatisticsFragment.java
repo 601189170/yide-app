@@ -153,6 +153,11 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     }
 
     private void initClassData() {
+        if (!SpData.getIdentityInfo().staffIdentity()){
+            final String studentName = SpData.getIdentityInfo().studentName;
+            mViewBinding.tvClassName.setText(studentName);
+            return;
+        }
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
         final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
@@ -318,7 +323,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initClassView() {
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        if (classOptional.isPresent()){
+        if (SpData.getIdentityInfo().staffIdentity() && classOptional.isPresent()){
             final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
             mViewBinding.tvClassName.setText(clazzBean.getDeptName());
             currentClass = "" + clazzBean.getDeptId();
