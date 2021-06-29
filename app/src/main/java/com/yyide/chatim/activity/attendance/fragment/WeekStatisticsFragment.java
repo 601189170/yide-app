@@ -604,11 +604,14 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             mViewBinding.layoutHeadTeacherEvent.getRoot().setVisibility(View.GONE);
             if (isWeekStatistics){
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatistical.setText(getString(R.string.weekly_statistical));
+                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText("周课程数量");
             }else {
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatistical.setText(getString(R.string.monthly_statistical));
+                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText("月课程数量");
             }
             mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatisticalSubhead.setText(getString(R.string.statistical_man_time));
-
+            //课程总数
+            mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourseNum.setText(String.valueOf(studentsBean.getSchNum()));
             //缺勤人数
             mViewBinding.layoutHeadTeacherCourse.tvAbsenceNum.setText(String.valueOf(studentsBean.getAbsence()));
             //请假人数

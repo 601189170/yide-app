@@ -57,6 +57,7 @@ public class AttendanceWeekStatsRsp {
                 private int leaveEarly;
                 private int absence;
                 private int leave;
+                private int schNum;//课程数
                 private String name;
                 private int type;
                 private int section;
@@ -83,6 +84,7 @@ public class AttendanceWeekStatsRsp {
                 private String thingName;
                 private int dateType;
                 private String identityType;
+                private String beginDate;
 
 
                 @NoArgsConstructor
