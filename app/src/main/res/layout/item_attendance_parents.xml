@@ -54,7 +54,7 @@
         android:id="@+id/tv_attendance_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginStart="@dimen/dp_30"
         android:textColor="#2C8AFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

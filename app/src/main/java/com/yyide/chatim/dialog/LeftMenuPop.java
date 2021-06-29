@@ -23,9 +23,11 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.PowerActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
+import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -87,6 +89,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         LinearLayout layout6 = mView.findViewById(R.id.layout6);
         LinearLayout layout7 = mView.findViewById(R.id.layout7);
         LinearLayout layout8 = mView.findViewById(R.id.layout8);
+        LinearLayout layout9 = mView.findViewById(R.id.layout9);
+        LinearLayout layout10 = mView.findViewById(R.id.layout10);
+
         mView.findViewById(R.id.exit).setOnClickListener(this);
         layout1.setOnClickListener(this);
         layout2.setOnClickListener(this);
@@ -96,6 +101,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         layout6.setOnClickListener(this);
         layout7.setOnClickListener(this);
         layout8.setOnClickListener(this);
+        layout9.setOnClickListener(this);
+        layout10.setOnClickListener(this);
         setData();
 //        new BottomMenuPop(context);
         layout.setOnTouchListener((v, event) -> true);
@@ -203,9 +210,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         //hide();
         switch (v.getId()) {
             case R.id.layout1://切换班级
-                if(SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0){
+                if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0) {
                     new SwitchClassPop(context).setOnCheckCallBack(() -> {
-                        if(SpData.getClassInfo() != null && "N".equals(SpData.getClassInfo().teacherInd)){
+                        if (SpData.getClassInfo() != null && "N".equals(SpData.getClassInfo().teacherInd)) {
                             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "老师" : "");
                         } else {
                             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
@@ -241,6 +248,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             case R.id.layout8://版本更新
                 ToastUtils.showShort("已是最新版本");
                 //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
+                break;
+            case R.id.layout9:
+                break;
+            case R.id.layout10:
+                WebViewActivity.startTitle(context, BaseConstant.PRIVACY_URL, context.getString(R.string.privacyt_title));
                 break;
             case R.id.exit://退出登录
 //                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeHomePresenter;
@@ -65,7 +66,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         ll_notice.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), NoticeAnnouncementActivity.class);
+            Intent intent = new Intent(getActivity(), NewNoticeAnnouncementActivity.class);
             startActivity(intent);
         });
     }
@@ -103,11 +104,11 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         if (homeNoticeRsp.getCode() == 200) {
             data = homeNoticeRsp.getData();
             if (data != null) {
-                MMKV.defaultMMKV().encode("hasNoticePermission",data.isHasNoticePermission());
+                MMKV.defaultMMKV().encode("hasNoticePermission", data.isHasNoticePermission());
 //                jump = true;
                 notice_content.setVisibility(View.VISIBLE);
                 tv_null_notice.setVisibility(View.GONE);
-                notice_content.setText(StringUtils.firstLineRetractText(getContext(),data.getContent()));
+                notice_content.setText(StringUtils.firstLineRetractText(getContext(), data.getContent()));
                 notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(), "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
                 if (!TextUtils.isEmpty(data.getTitle())) {
                     tv_title.setVisibility(View.VISIBLE);
@@ -119,7 +120,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
                 notice_content.setVisibility(View.GONE);
                 tv_null_notice.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
             tv_title.setVisibility(View.GONE);
             notice_content.setVisibility(View.GONE);
             tv_null_notice.setVisibility(View.VISIBLE);

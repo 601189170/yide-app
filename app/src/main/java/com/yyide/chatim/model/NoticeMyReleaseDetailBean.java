@@ -13,9 +13,9 @@ public class NoticeMyReleaseDetailBean {
         public long id;
         public String title;
         public String content;
-        public Boolean isConfirm;
-        public Boolean isRetract;
-        public Boolean isTimer;
+        public boolean isConfirm;
+        public boolean isRetract;
+        public boolean isTimer;
         public String timerDate;
         public int type;
         public String coverImgpath;

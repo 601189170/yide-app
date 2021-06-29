@@ -32,6 +32,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.KeyboardUtils;
@@ -41,6 +42,7 @@ import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.WebJsObject;
 import com.yyide.chatim.model.WebModel;
 import com.yyide.chatim.utils.LogUtil;
 
@@ -48,11 +50,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WebViewActivity extends BaseActivity {
-
-    @Override
-    public int getContentViewID() {
-        return R.layout.activity_webview;
-    }
 
     String currentUrl;
     private FrameLayout fl_webview;
@@ -68,7 +65,14 @@ public class WebViewActivity extends BaseActivity {
     private static final String PARAM_URL = "url";
     private static final String PARAM_TYPE = "type";
     private static final String PARAM_JSON = "json";
+    private static final String PARAM_TITLE = "title";
     private String json;
+    private String title;
+
+    @Override
+    public int getContentViewID() {
+        return R.layout.activity_webview;
+    }
 
     public static void start(Context context, String url, String json) {
         Intent intent = new Intent(context, WebViewActivity.class);
@@ -77,23 +81,36 @@ public class WebViewActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
+    public static void startTitle(Context context, String url, String title) {
+        Intent intent = new Intent(context, WebViewActivity.class);
+        intent.putExtra(PARAM_URL, url);
+        intent.putExtra(PARAM_TITLE, title);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUrl = getIntent().getStringExtra(PARAM_URL);
+        title = getIntent().getStringExtra(PARAM_TITLE);
         type = getIntent().getStringExtra(PARAM_TYPE);
         json = getIntent().getStringExtra(PARAM_JSON);
         initView();
-
         initAnimtor();
-
         initWebView();
     }
 
     @SuppressLint("CheckResult")
     private void initView() {
+        View view = findViewById(R.id.top);
         fl_webview = findViewById(R.id.fl_webview);
         pb_webview = findViewById(R.id.pb_webview);
+        TextView tvTitle = findViewById(R.id.title);
+        if (!TextUtils.isEmpty(title)) {
+            view.setVisibility(View.VISIBLE);
+            tvTitle.setText(title);
+        }
+        findViewById(R.id.back_layout).setOnClickListener(v -> finish());
     }
 
     private void initAnimtor() {
@@ -104,6 +121,7 @@ public class WebViewActivity extends BaseActivity {
         pbAnim.start();
     }
 
+    @SuppressLint("JavascriptInterface")
     private void initWebView() {
 //        KeyboardUtils.registerSoftInputChangedListener(this, height -> {
 //            mWebView.loadUrl("javascript:sendH5Event('" + "softHeight" + "','" + height + "')");
@@ -156,7 +174,6 @@ public class WebViewActivity extends BaseActivity {
 
             }
 
-
             //For Android  >= 4.1
             public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
                 uploadMessage = valueCallback;
@@ -172,7 +189,7 @@ public class WebViewActivity extends BaseActivity {
             }
         });
         mWebView.loadUrl(currentUrl);
-        mWebView.addJavascriptInterface(WebViewActivity.this, "android");
+        mWebView.addJavascriptInterface(new WebJsObject(WebViewActivity.this), "android");
 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
@@ -188,17 +205,14 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
-//                Map<String, Object> map = new HashMap<>();
-//                map.put("setToken", SpData.User().getToken());
-//                map.put("setScanJson", json);
-//                map.put("setSchoolId", SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolId : "");
-//                mWebView.loadUrl("javascript:sendH5Event('" + "paramsJson" + "','" + JSON.toJSONString(map) + "')");
-                mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
-                if (SpData.getIdentityInfo() != null) {
-                    mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
+                if (SpData.User() != null) {
+                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
+                    mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
+                    if (SpData.getIdentityInfo() != null) {
+                        mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
+                    }
+                    mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
                 }
-                mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
             }
 
             @Override

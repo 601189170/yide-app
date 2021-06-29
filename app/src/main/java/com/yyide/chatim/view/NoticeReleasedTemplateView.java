@@ -10,6 +10,6 @@ import com.yyide.chatim.model.NoticeReleaseTemplateBean;
  */
 public interface NoticeReleasedTemplateView extends BaseView {
     void getNoticeReleasedList(NoticeReleaseTemplateBean model);
-
+    void getNoticeReleasedClassifyList(NoticeReleaseTemplateBean model);
     void getNoticeReleasedFail(String msg);
 }

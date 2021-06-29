@@ -38,9 +38,9 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.147:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
+            public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
     public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
@@ -57,6 +57,8 @@ public class BaseConstant {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    //隐私协议
+    public static final String PRIVACY_URL = "https://file.1d1j.cn/privacy.html";
     /**
      * request Code 从相册选择照片不裁切
      **/
@@ -85,6 +87,7 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_REMOTE_NOTICE = "type_update_remote_notice";
     public static final String TYPE_MESSAGE_TODO_NUM = "type_message_todo_num";
     public static final String TYPE_NOTICE_NUM = "type_message_num";
+    public static final String TYPE_NOTICE_PUSH_BLANK = "type_notice_push_blank";
 
     public static final String TYPE_LEAVE = "type_leave";
     public static final String TYPE_UPDATE_IMG = "type_update_img";

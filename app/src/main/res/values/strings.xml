@@ -76,19 +76,6 @@
 
     <string name="privacy_text">已同意《<a href="http://privacy.qq.com/">隐私政策</a>》</string>
 
-    // 场景
-    <string name="live_scenes_live_room">视频直播</string>
-    <string name="live_scenes_voice_room">语音聊天室</string>
-    <string name="live_voice_room_room_title" formatted="false">房间号: %d</string>
-    <string name="live_voice_room_numer_format" formatted="false">%d人在看</string>
-    <string name="live_voice_room_agree">同意</string>
-    <string name="live_voice_room_warning_not_empty">"输入不能为空!"</string>
-    <string name="live_voice_room_send">发送</string>
-    <string name="live_voice_room_already_agree">已同意</string>
-    <string name="live_voice_room_main_title" formatted="false">%1s(%2d)</string>
-    <string name="live_is_over">直播已结束</string>
-    <string name="student_honor_count">%d荣誉</string>
-
     <!--Im-->
     <string name="call_timeout">本次通话已超时</string>
     <string name="call_notification">音视频邀请消息通知</string>
@@ -162,7 +149,7 @@
     <string name="attendance_no_clock_in">未打卡</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-
+    <string name="student_honor_count">%d荣誉</string>
     <string name="retract">\u3000\u3000%s</string>
 
     <!--通知模块-->
@@ -185,8 +172,8 @@
     <string name="timed_send_text">%d小时%d分钟%d秒后发送</string>
     <string name="timed_send_long_text">%d天后发送</string>
     <string name="notice_my_push_title">我发布的通知</string>
-    <string name="notice_confirm_count">已确认：</string>
-    <string name="notice_read_html"><b>%s<font color='#2C8AFF'>%d</font><font color='#999999'>/%d</font></b></string>
+    <string name="notice_confirm_count">已确认</string>
+    <string name="notice_read_html"><b>%s ：<font color="#2C8AFF">%d</font><font color='#999999'>/%d</font></b></string>
     <string name="notice_has_withdrawn">已撤回</string>
     <string name="notice_have_read">已读</string>
     <string name="notice_have_been_confirmed">已确认</string>
@@ -196,13 +183,14 @@
     <string name="notice_timing_push">定时发布</string>
     <string name="notice_time">发布时间</string>
     <string name="notice_immediately_push">立即发布</string>
-    <string name="notice_preview_title">预览</string>
+    <string name="notice_need_to_confirm">是否需要确认</string>
+    <string name="notice_preview_title">预览</string>privacy_exit
     <string name="notice_release_time_title">发布时刻</string>D
     <string name="notice_input_title_number">%d/30</string>
     <string name="notice_input_content_number">%d/2000</string>
     <string name="notice_timing_push_input">请选择定时发布时间</string>
     <string name="notice_chosen_people_number">已选择教师%s人</string>
-    <string name="notice_un_confirm_number">未确认%s人</string>
+    <string name="notice_un_confirm_number">未确认%d人</string>
     <string name="notice_remind_everyone">提醒全部人员</string>
     <string name="notice_time_release">%d分钟后发布 </string>
     <string name="notice_time_hours_release">%d小时后发布 </string>
@@ -215,10 +203,22 @@
     <string name="notice_tab_patriarch">家长</string>
     <string name="notice_tab_class_card">班牌</string>
     <string name="notice_confirm_roger_that">确认收到</string>
+    <string name="notice_input_title">请在此处输入标题</string>
+    <string name="notice_input_content">在这里输入内容</string>
+
+    //隐私政策
+    <string name="privacy_tips">\t\t\t\t一加壹App重视用户的个人信息和隐私保护，我们依据最新的法律法规要求，更新制定了隐私政策，请您务必仔细阅读，充分理解 "服务协议" 和 "隐私政策" 各条件，包括但不限于:为了向您提供即时资讯、内容分享等服务，我们需要收集您的设备信息、操作日志等个人信息，您可以在“设置”中查看、变更、删除个人信息并管理你的授权。你可点击阅读《用户服务协议》和《隐私政策》了解详细信息。如您对协议内容有任何疑问、意见或建议，可通过客服与我们联系，如你同意并接受全部条款后，请点击“同意”开始接受我们的服务。</string>
+    <string name="privacy_tips_key1">《用户服务协议》</string>
+    <string name="privacyt_title">隐私政策</string>
+    <string name="privacy_tips_key2">《隐私政策》</string>
+    <string name="privacy_exit">不同意</string>
+    <string name="privacy_agree">同意</string>
 
     <string name="app_commonly_title">常用应用</string>
     <string name="statistical_man_time">（人次）</string>
     <string name="statistical_time">（次数）</string>
     <string name="weekly_statistical">每周统计</string>
     <string name="monthly_statistical">每月统计</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

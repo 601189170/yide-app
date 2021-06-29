@@ -74,11 +74,9 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
             mvpPresenter?.getMyNoticeList(pageNum, pageSize)
 
         }
-        mAdapter.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int ->
+        mAdapter.setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
             val intent = Intent(activity, NoticeDetailActivity::class.java)
-            if (mAdapter != null) {
-                intent.putExtra("id", mAdapter.getItem(position).id)
-            };
+            intent.putExtra("id", mAdapter.getItem(position).id);
             startActivity(intent)
         }
         viewBinding!!.swipeRefreshLayout.isRefreshing = false
@@ -99,7 +97,7 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
         mvpPresenter?.getMyNoticeList(pageNum, pageSize)
     }
 
-    private val mAdapter: BaseQuickAdapter<NoticeItemBean.DataBean.RecordsBean, BaseViewHolder> = object : BaseQuickAdapter<NoticeItemBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_my_push) , LoadMoreModule {
+    private val mAdapter: BaseQuickAdapter<NoticeItemBean.DataBean.RecordsBean, BaseViewHolder> = object : BaseQuickAdapter<NoticeItemBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_my_push), LoadMoreModule {
 
         @RequiresApi(Build.VERSION_CODES.N)
         override fun convert(holder: BaseViewHolder, item: NoticeItemBean.DataBean.RecordsBean) {
@@ -115,12 +113,13 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
                 if (!TextUtils.isEmpty(item.timerDate)) {
                     time = DateUtils.parseTimestamp(item.timerDate, "yyyy-MM-dd HH:mm:ss")
                 }
+                val typeString = if (item.isConfirm) getString(R.string.notice_confirm_count) else getString(R.string.notice_have_read)
+                val html = typeString + "：<b><font color=\"#2C8AFF\">" + item.confirmOrReadNum + "</font><font color=\"#999999\">/" + item.totalNum + "</font></b>";
                 if (item.isConfirm) {//已确认
-                    val typeString = if (item.isConfirm) getString(R.string.notice_confirm_count) else getString(R.string.notice_un_confirm_number)
-                    view.tvNoticeConfirm.text = Html.fromHtml(getString(R.string.notice_read_html, typeString, item.confirmOrReadNum, item.totalNum), Html.FROM_HTML_OPTION_USE_CSS_COLORS)
+                    view.tvNoticeConfirm.text = Html.fromHtml(html, Html.FROM_HTML_OPTION_USE_CSS_COLORS)
                     view.tvNoticeConfirm.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.mipmap.icon_notice_confirm), null, null, null)
                 } else {//已读
-                    view.tvNoticeConfirm.text = getString(R.string.notice_have_read)
+                    view.tvNoticeConfirm.text = Html.fromHtml(html, Html.FROM_HTML_OPTION_USE_CSS_COLORS)
                     view.tvNoticeConfirm.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.mipmap.icon_notice_read), null, null, null)
                 }
 

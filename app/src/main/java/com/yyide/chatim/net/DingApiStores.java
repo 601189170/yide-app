@@ -34,6 +34,7 @@ import com.yyide.chatim.model.NoticeItemBean;
 import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.NoticeReleaseTemplateBean;
+import com.yyide.chatim.model.NoticeUnreadPeopleBean;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SearchRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
@@ -545,6 +546,11 @@ public interface DingApiStores {
     @GET("/message-server/cloud-message/app/message/publish/retract/{id}")
     Observable<ResultBean> retract(@Path("id") long id);
 
+    //发布通知未读未确认人员列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/message-server/cloud-message/app/message/publish/unconfirm/users")
+    Observable<NoticeUnreadPeopleBean> noticeUnreadList(@Body RequestBody requestBody);
+
     //我收到的通知列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/message-server/cloud-message/app/message/receive/list")
@@ -563,7 +569,12 @@ public interface DingApiStores {
     @POST("/message-server/cloud-message/app/message/template/list")
     Observable<NoticeReleaseTemplateBean> templateNoticeList(@Body RequestBody requestBody);
 
-    //发布通知
+    //通知模板分类列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/message-server/cloud-message/app/message/template/type/list")
+    Observable<NoticeReleaseTemplateBean> templateNoticeClassifyList(@Body RequestBody requestBody);
+
+    //发布空白模板通知
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/message-server/cloud-message/app/message/publish/do")
     Observable<ResultBean> releaseNotice(@Body RequestBody requestBody);

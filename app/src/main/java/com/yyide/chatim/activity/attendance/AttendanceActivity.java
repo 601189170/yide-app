@@ -66,9 +66,6 @@ public class AttendanceActivity extends BaseActivity {
 //            }
 
             fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(index));
-        } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-            //家长考情
-            fragmentTransaction.replace(R.id.fl_content, FamilyStudentAttendanceFragment.newInstance(index));
         } else {
             //教师教职工 考情详情
             fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(index));

@@ -77,7 +77,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), Not
         }
     }
 
-    private fun confirm(){
+    private fun confirm() {
 
     }
 

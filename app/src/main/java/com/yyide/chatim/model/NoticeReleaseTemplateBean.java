@@ -22,7 +22,6 @@ public class NoticeReleaseTemplateBean {
         public Boolean searchCount;
         public int pages;
 
-
         public static class RecordsBean {
             public long id;
             public String delInd;
@@ -34,6 +33,8 @@ public class NoticeReleaseTemplateBean {
             public int total;
             public int size;
             public int current;
+            public String coverImg;
+
             public String messageTemplateTypeId;
             public String name;
             public String title;

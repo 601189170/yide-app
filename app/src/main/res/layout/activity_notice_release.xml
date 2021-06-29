@@ -36,7 +36,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:hint="请在此处输入标题"
+                    android:hint="@string/notice_input_title"
                     android:maxLength="30"
                     android:padding="10dp"
                     android:paddingStart="@dimen/dp_12"
@@ -84,16 +84,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/view2">
 
                 <EditText
-                    android:id="@+id/et_input_before_class"
+                    android:id="@+id/et_input_content"
                     android:layout_width="match_parent"
                     android:layout_height="370dp"
                     android:background="@color/white"
                     android:gravity="left"
-                    android:hint="在这里输入内容"
+                    android:hint="@string/notice_input_content"
+                    android:inputType="textMultiLine"
                     android:maxLength="2000"
                     android:padding="12dp"
-                    android:inputType="textMultiLine"
                     android:scrollbars="vertical"
+                    android:scrollbarStyle="outsideOverlay"
                     android:textColor="@color/text_666666"
                     android:textColorHint="#BCC1CB"
                     android:textSize="@dimen/text_14"
@@ -106,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_12"
                     android:layout_marginBottom="@dimen/dp_8"
                     android:text="0/2000"
                     android:textColor="#ffbcc1cb"
@@ -114,13 +116,13 @@
                     app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_range"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:paddingBottom="@dimen/dp_17"
                 app:layout_constraintTop_toBottomOf="@+id/et_input_before_class">
 
@@ -151,6 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:background="@color/white"
                 android:paddingBottom="@dimen/dp_17"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -173,10 +176,11 @@
                     android:id="@+id/switch1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:switchMinWidth="@dimen/dp_38"
-                    android:thumb="@drawable/switch_custom_thumb_selector"
-                    android:track="@drawable/switch_custom_track_selector"
+                    android:checked="true"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:thumb="@drawable/switch_thumb"
+                    android:track="@drawable/switch_track"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_timing_push"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -188,6 +192,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:paddingBottom="@dimen/dp_17"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
@@ -240,7 +245,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
-                android:id="@+id/tv_push"
+                android:id="@+id/btn_push"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_40"
                 android:layout_marginLeft="@dimen/dp_20"

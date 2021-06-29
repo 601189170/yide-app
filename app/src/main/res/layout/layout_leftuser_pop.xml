@@ -37,12 +37,12 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="right|center_vertical"
-                        android:src="@drawable/default_head"
                         android:scaleType="centerCrop"
+                        android:src="@drawable/default_head"
                         app:left_bottom_radius="6dp"
+                        app:left_top_radius="6dp"
                         app:right_bottom_radius="6dp"
-                        app:right_top_radius="6dp"
-                        app:left_top_radius="6dp"/>
+                        app:right_top_radius="6dp" />
 
                     <TextView
                         android:id="@+id/user_name"
@@ -422,13 +422,57 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="18dp"
-                    android:background="@color/line_11" />
+                    android:background="@color/line_11"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/layout9"
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
                     android:background="@color/white"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="18dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/my_icon9" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="关于"
+                        android:textColor="#1E232A"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_right" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="18dp"
+                    android:background="@color/line_11" />
+
+                <LinearLayout
+                    android:id="@+id/layout10"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:background="@color/white"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="20dp"
@@ -444,7 +488,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="关于"
+                        android:text="隐私政策"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
 

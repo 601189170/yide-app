@@ -1,20 +1,35 @@
 package com.yyide.chatim;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
+import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -58,10 +73,14 @@ public class SplashActivity extends AppCompatActivity {
         initData();
         Log.e(TAG, "loginName: " + JSON.toJSONString(loginName));
         Log.e(TAG, "passWord: " + JSON.toJSONString(passWord));
-        if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
-            Tologin(loginName, passWord);
+        if (!MMKV.defaultMMKV().decodeBool(SP_PRIVACY, false)) {
+            showPrivacy();
         } else {
-            startLogin();
+            if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
+                Tologin(loginName, passWord);
+            } else {
+                new Handler().postDelayed(() -> startLogin(), 3000);
+            }
         }
     }
 
@@ -166,5 +185,100 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private String SP_PRIVACY = "sp_privacy";
+
+    /**
+     * 显示用户协议和隐私政策
+     */
+    private void showPrivacy() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(R.layout.dialog_privacy);
+        TextView tv_privacy_tips = dialog.findViewById(R.id.tv_privacy_tips);
+        TextView btn_exit = dialog.findViewById(R.id.btn_exit);
+        TextView btn_enter = dialog.findViewById(R.id.btn_enter);
+        dialog.show();
+
+        String string = getResources().getString(R.string.privacy_tips);
+        String key1 = getResources().getString(R.string.privacy_tips_key1);
+        String key2 = getResources().getString(R.string.privacy_tips_key2);
+        int index1 = string.indexOf(key1);
+        int index2 = string.indexOf(key2);
+
+        //需要显示的字串
+        SpannableString spannedString = new SpannableString(string);
+        //设置点击字体颜色
+        ForegroundColorSpan colorSpan1 = new ForegroundColorSpan(getResources().getColor(R.color.blue));
+        spannedString.setSpan(colorSpan1, index1, index1 + key1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        ForegroundColorSpan colorSpan2 = new ForegroundColorSpan(getResources().getColor(R.color.blue));
+        spannedString.setSpan(colorSpan2, index2, index2 + key2.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        //设置点击字体大小
+        AbsoluteSizeSpan sizeSpan1 = new AbsoluteSizeSpan(14, true);
+        spannedString.setSpan(sizeSpan1, index1, index1 + key1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        AbsoluteSizeSpan sizeSpan2 = new AbsoluteSizeSpan(14, true);
+        spannedString.setSpan(sizeSpan2, index2, index2 + key2.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        //设置点击事件
+        ClickableSpan clickableSpan1 = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacyt_title));
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                //点击事件去掉下划线
+                ds.setUnderlineText(false);
+            }
+        };
+        spannedString.setSpan(clickableSpan1, index1, index1 + key1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
+        ClickableSpan clickableSpan2 = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacyt_title));
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                //点击事件去掉下划线
+                ds.setUnderlineText(false);
+            }
+        };
+        spannedString.setSpan(clickableSpan2, index2, index2 + key2.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
+        //设置点击后的颜色为透明，否则会一直出现高亮
+        tv_privacy_tips.setHighlightColor(Color.TRANSPARENT);
+        //开始响应点击事件
+        tv_privacy_tips.setMovementMethod(LinkMovementMethod.getInstance());
+
+        tv_privacy_tips.setText(spannedString);
+
+        //设置弹框宽度占屏幕的80%
+        WindowManager m = getWindowManager();
+        Display defaultDisplay = m.getDefaultDisplay();
+        final WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = (int) (defaultDisplay.getWidth() * 0.90);
+        dialog.getWindow().setAttributes(params);
+
+        btn_exit.setOnClickListener(v -> {
+            dialog.dismiss();
+            MMKV.defaultMMKV().encode(SP_PRIVACY, false);
+            finish();
+        });
+
+        btn_enter.setOnClickListener(v -> {
+            dialog.dismiss();
+            MMKV.defaultMMKV().encode(SP_PRIVACY, true);
+            if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
+                Tologin(loginName, passWord);
+            } else {
+                startLogin();
+            }
+        });
+
     }
 }

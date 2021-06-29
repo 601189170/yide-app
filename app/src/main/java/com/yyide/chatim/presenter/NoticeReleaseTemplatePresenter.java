@@ -17,8 +17,15 @@ public class NoticeReleaseTemplatePresenter extends BasePresenter<NoticeReleased
         attachView(view);
     }
 
-    public void templateNoticeList(int current, int size) {
+    /**
+     * 模板列表
+     *
+     * @param current
+     * @param size
+     */
+    public void templateNoticeList(long messageTemplateTypeId, int current, int size) {
         HashMap<String, Object> map = new HashMap<>();
+        map.put("messageTemplateTypeId", messageTemplateTypeId);
         map.put("current", current);
         map.put("size", size);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
@@ -27,6 +34,36 @@ public class NoticeReleaseTemplatePresenter extends BasePresenter<NoticeReleased
             @Override
             public void onSuccess(NoticeReleaseTemplateBean model) {
                 mvpView.getNoticeReleasedList(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getNoticeReleasedFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    /**
+     * 模板分类列表
+     *
+     * @param current
+     * @param size
+     */
+    public void templateNoticeClassifyList(int current, int size) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("current", current);
+        map.put("size", size);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        mvpView.showLoading();
+        addSubscription(dingApiStores.templateNoticeClassifyList(body), new ApiCallback<NoticeReleaseTemplateBean>() {
+            @Override
+            public void onSuccess(NoticeReleaseTemplateBean model) {
+                mvpView.getNoticeReleasedClassifyList(model);
             }
 
             @Override

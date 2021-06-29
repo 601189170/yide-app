@@ -57,8 +57,8 @@ public class GlideUtil {
         Glide.with(context).load(path)
                 .centerCrop()
                 .apply(roundOptions)
-                .placeholder(R.mipmap.icon_class)
-                .error(R.mipmap.icon_class)
+                .placeholder(R.drawable.bg_corners_blue)
+                .error(R.drawable.bg_corners_blue)
                 .into(img);
     }
 

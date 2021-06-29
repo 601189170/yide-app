@@ -222,7 +222,7 @@ public class PersonInfoActivity extends BaseActivity {
             case R.id.iv_phone_master:
                 if (!TextUtils.isEmpty(bean.primaryGuardianPhone)) {
                     Intent intent = new Intent(Intent.ACTION_CALL);
-                    Uri data = Uri.parse("tel:" + bean.phone);
+                    Uri data = Uri.parse("tel:" + bean.primaryGuardianPhone);
                     intent.setData(data);
                     startActivity(intent);
                 }
@@ -230,7 +230,7 @@ public class PersonInfoActivity extends BaseActivity {
             case R.id.iv_phone_vice:
                 if (!TextUtils.isEmpty(bean.deputyGuardianPhone)) {
                     Intent intent = new Intent(Intent.ACTION_CALL);
-                    Uri data = Uri.parse("tel:" + bean.phone);
+                    Uri data = Uri.parse("tel:" + bean.deputyGuardianPhone);
                     intent.setData(data);
                     startActivity(intent);
                 }

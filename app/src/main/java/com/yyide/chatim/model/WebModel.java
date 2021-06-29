@@ -3,7 +3,17 @@ package com.yyide.chatim.model;
 public class WebModel {
 
     private String enentName;
+    private String subIds;
 //    private ParamsBean params;
+
+
+    public String getSubIds() {
+        return subIds;
+    }
+
+    public void setSubIds(String subIds) {
+        this.subIds = subIds;
+    }
 
     public String getEnentName() {
         return enentName;

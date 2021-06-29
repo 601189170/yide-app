@@ -22,13 +22,13 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         personnelBinding = ActivityNoticeReleasePersonnelBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_notice_release_personnel)
+        setContentView(personnelBinding!!.root)
         initView()
     }
 
     private fun initView() {
         personnelBinding!!.top.title.setText(R.string.notice_designated_personnel_title)
-        personnelBinding!!.top.backLayout.setOnClickListener { v: View? -> finish() }
+        personnelBinding!!.top.backLayout.setOnClickListener { finish() }
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add(getString(R.string.notice_tab_teacher))
         mTitles.add(getString(R.string.notice_tab_patriarch))

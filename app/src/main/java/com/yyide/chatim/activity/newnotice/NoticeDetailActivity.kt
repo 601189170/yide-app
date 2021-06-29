@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.EventBus
  */
 class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDetailView {
     private var detailBinding: ActivityNoticeDetail2Binding? = null
+    private var itemBean: NoticeMyReleaseDetailBean.DataBean? = null
 
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_detail2
@@ -42,11 +43,14 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
     private fun initView() {
         detailBinding!!.include.title.setText(R.string.notice_my_push_title)
-        detailBinding!!.include.backLayout.setOnClickListener { v: View? -> finish() }
-
+        detailBinding!!.include.backLayout.setOnClickListener { finish() }
+        detailBinding!!.clReadUnread.setOnClickListener {
+            NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0);
+        }
     }
 
     private fun setDate(item: NoticeMyReleaseDetailBean.DataBean) {
+        itemBean = item
         if (item != null) {
             detailBinding!!.tvNoticeTitle.text = item.title
             detailBinding!!.tvNoticeContent.text = item.content
