@@ -156,6 +156,7 @@
                     app:layout_constraintTop_toTopOf="@+id/tv_normal_num" />
 
                 <TextView
+                    android:id="@+id/tv_absence"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_5"
@@ -203,6 +204,7 @@
                     app:layout_constraintTop_toTopOf="@+id/tv_leave_num" />
 
                 <TextView
+                    android:id="@+id/tv_late"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_5"

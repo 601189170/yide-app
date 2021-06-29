@@ -46,7 +46,8 @@ public class StatisticsListDetailFragment extends Fragment {
     private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> leavePeople = new ArrayList<>();
     //迟到的数据列表
     private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> latePeople = new ArrayList<>();
-
+    //早退
+    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> leaveEarlyPeople = new ArrayList<>();
     public void setData(AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean data) {
         this.data = data;
     }
@@ -105,11 +106,28 @@ public class StatisticsListDetailFragment extends Fragment {
         //请假人数tv_leave_num
         viewBinding.tvLeaveNum.setText(String.valueOf(data.getLeave()));
         //迟到人数tv_late_num
-        viewBinding.tvLateNum.setText(String.valueOf(data.getLate()));
+        //viewBinding.tvLateNum.setText(String.valueOf(data.getLate()));
         //签到率tv_attendance_rate
         viewBinding.tvAttendanceRate.setText(data.getRate());
         //tv_attendance_time考勤时间
         viewBinding.tvAttendanceTime.setText(data.getApplyDate());
+        if (data.getGoOutStatus() == 1){
+            //签退
+            viewBinding.textview1.setText("签退率:");
+            viewBinding.tvAbsence.setText("未签退");
+            viewBinding.rbLate.setText("早退");
+            viewBinding.rbAbsence.setText("未签退");
+            viewBinding.tvLate.setText("早退");
+            viewBinding.tvLateNum.setText(String.valueOf(data.getLeaveEarly()));
+        }else {
+            //签到
+            viewBinding.textview1.setText("签到率:");
+            viewBinding.tvAbsence.setText("缺勤");
+            viewBinding.rbLate.setText("迟到");
+            viewBinding.rbAbsence.setText("缺勤");
+            viewBinding.tvLate.setText("迟到");
+            viewBinding.tvLateNum.setText(String.valueOf(data.getLate()));
+        }
         //考勤进度
         final String rate = data.getRate();
         try {
@@ -144,11 +162,20 @@ public class StatisticsListDetailFragment extends Fragment {
             leavePeople.add(castDataType(person));
         }
 
-        latePeople.clear();
-        final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean.PeopleBean> latePeopleList = data.getLatePeople();
-        for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean.PeopleBean person : latePeopleList) {
-            latePeople.add(castDataType(person));
+        if (data.getGoOutStatus() == 1){
+            leaveEarlyPeople.clear();
+            final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean.PeopleBean> leaveEarlyPeopleList = data.getLeaveEarlyPeople();
+            for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean.PeopleBean person : leaveEarlyPeopleList) {
+                leaveEarlyPeople.add(castDataType(person));
+            }
+        }else {
+            latePeople.clear();
+            final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean.PeopleBean> latePeopleList = data.getLatePeople();
+            for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean.PeopleBean person : latePeopleList) {
+                latePeople.add(castDataType(person));
+            }
         }
+
         initPeopleListView();
     }
 
@@ -246,9 +273,15 @@ public class StatisticsListDetailFragment extends Fragment {
                     break;
                 case R.id.rb_late:
                     //viewBinding.viewpager.setCurrentItem(4);
-                    weekStatisticsListAdapter.setData(latePeople);
-                    weekStatisticsListAdapter.notifyDataSetChanged();
-                    showBlank(latePeople.isEmpty());
+                    if (data.getGoOutStatus() == 1){
+                        weekStatisticsListAdapter.setData(leaveEarlyPeople);
+                        weekStatisticsListAdapter.notifyDataSetChanged();
+                        showBlank(leaveEarlyPeople.isEmpty());
+                    }else {
+                        weekStatisticsListAdapter.setData(latePeople);
+                        weekStatisticsListAdapter.notifyDataSetChanged();
+                        showBlank(latePeople.isEmpty());
+                    }
                     break;
 
                 default:

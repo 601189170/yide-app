@@ -85,6 +85,7 @@ public class AttendanceDayStatsRsp {
                 private String thingName;
                 private int dateType;
                 private String time;
+                private int goOutStatus;
                 private int page;
 
                 @NoArgsConstructor
