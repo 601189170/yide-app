@@ -84,14 +84,26 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
         BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean, BaseViewHolder>(R.layout.item_statistics_child_list) {
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean dataBean) {
-                final String date = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
+                String date = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
                 if (!TextUtils.isEmpty(dataBean.getThingName())){
                     baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getThingName());
                 }else if (!TextUtils.isEmpty(dataBean.getSubjectName())){
-                    baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getSubjectName());
+                    if (TextUtils.isEmpty(date)){
+                        date = DateUtils.formatTime(dataBean.getStartDate(), null, "MM.dd");
+                    }
+                    if (!"4".equals(dataBean.getStatus())){
+                        final int section = dataBean.getSection();
+                        String sectionUppercase = DateUtils.sectionDesc(context,section);
+                        baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase+" "+dataBean.getSubjectName());
+                    }else {
+                        baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getSubjectName());
+                    }
                 }else {
                     final int section = dataBean.getSection();
                     String sectionUppercase = DateUtils.sectionDesc(context,section);
+                    if (TextUtils.isEmpty(date)){
+                        date = DateUtils.formatTime(dataBean.getStartDate(), null, "MM.dd");
+                    }
                     baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase);
                 }
 
@@ -107,11 +119,11 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                         break;
                     case "1":
                         baseViewHolder.setVisible(R.id.tv_attendance_status,true);
-                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_absence));
+                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_no_clock_in));
                         baseViewHolder.setVisible(R.id.gp_event_time,false);
                         break;
                     case "2":
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_late));
                         baseViewHolder.setVisible(R.id.gp_event_time,true);
                         if (!TextUtils.isEmpty(dataBean.getDeviceName())){
@@ -124,7 +136,7 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
                         baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late));
                         break;
                     case "3":
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_leave_early));
                         baseViewHolder.setVisible(R.id.gp_event_time,true);
                         if (!TextUtils.isEmpty(dataBean.getDeviceName())){

@@ -21,6 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="上午到校"
+            android:maxEms="6"
+            android:singleLine="true"
             android:textColor="#ff1e1e1e"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"

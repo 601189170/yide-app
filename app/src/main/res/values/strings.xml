@@ -156,9 +156,10 @@
     <string name="attendance_ask_for_leave">请假</string>
     <string name="attendance_node">%d节</string>
     <string name="attendance_leave_time">请假时间</string>
-    <string name="attendance_event_name">班牌打卡</string>
+    <string name="attendance_event_name">班牌考勤</string>
     <string name="attendance_class_section">第%s节</string>
     <string name="attendance_absence">缺勤</string>
+    <string name="attendance_no_clock_in">未打卡</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

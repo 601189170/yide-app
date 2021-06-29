@@ -22,10 +22,10 @@
         android:text=""
         android:textColor="#ff606266"
         android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_event_time"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="130dp"
+        android:layout_marginEnd="@dimen/dp_6"
         />
     <TextView
         android:id="@+id/tv_event_time"
@@ -34,10 +34,10 @@
         android:text=""
         android:textColor="#ff606266"
         android:textSize="13sp"
-        app:layout_constraintLeft_toRightOf="@id/tv_event_time_title"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_20"
         />
     <androidx.constraintlayout.widget.Group
         android:id="@+id/gp_event_time"
@@ -54,6 +54,7 @@
         android:text=""
         android:textColor="#606266"
         android:textSize="13sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/tv_name"
         app:layout_constraintTop_toTopOf="@id/tv_name"
         app:layout_constraintRight_toRightOf="parent" />
