@@ -422,4 +422,17 @@ public class DateUtils {
         }
         return "" + section;
     }
+
+    public static boolean minMonth(String beginData, int currentMonth) {
+        final String time = formatTime(beginData, null, "MM");
+        try {
+            final int anInt = Integer.parseInt(time);
+            if (currentMonth <= anInt) {
+                return true;
+            }
+        } catch (Exception exception) {
+            return false;
+        }
+        return false;
+    }
 }
