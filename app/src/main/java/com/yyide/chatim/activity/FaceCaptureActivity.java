@@ -283,6 +283,8 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         ToastUtils.showShort(""+baseRsp.getMsg());
         if (baseRsp.getCode() == 200){
             tv_face_capture_tip.setText("人脸上传成功");
+        }else {
+            tv_face_capture_tip.setText("人脸上传失败");
         }
         mvpPresenter.getFaceData(realname,classesId,depId);
     }
