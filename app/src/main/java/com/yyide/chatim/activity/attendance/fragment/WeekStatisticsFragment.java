@@ -207,9 +207,17 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
                 mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.VISIBLE);
-                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
+                //mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
             }
-            mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(String.format(format1, monthWeek[0], monthWeek[1]));
+            if (DateUtils.minWeek(beginDate,monthWeek[0])){
+                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
+                final String minDate = DateUtils.formatTime(beginDate, null, "MM.dd");
+                mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(String.format(format1, minDate, monthWeek[1]));
+            }else {
+                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
+                mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(String.format(format1, monthWeek[0], monthWeek[1]));
+            }
+
         }
         if (!init){
             queryAttStatsData(currentClass, currentDate,currentPage);
@@ -265,7 +273,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         initClassView();
         if (isWeekStatistics) {
             final Calendar calendar = Calendar.getInstance();
-            final int weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
+            final int weekOfMonth = calendar.get(Calendar.WEEK_OF_YEAR);
             week = weekOfMonth;
             currentWeek = weekOfMonth;
             setWeek(false);

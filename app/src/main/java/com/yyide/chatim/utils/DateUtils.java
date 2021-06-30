@@ -374,7 +374,7 @@ public class DateUtils {
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.WEEK_OF_MONTH, week);
+        calendar.set(Calendar.WEEK_OF_YEAR, week);
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String[] dates = {"", ""};
         LocalDate inputDate = LocalDate.parse(simpleDateFormat.format(calendar.getTime()));
@@ -433,6 +433,36 @@ public class DateUtils {
         } catch (Exception exception) {
             return false;
         }
+        return false;
+    }
+
+    /**
+     * 判断beginDate是否是最小的时间限制
+     * @param beginDate 最小时间限制
+     * @param currentMinWeekDate 当前时间最小
+     * @return
+     */
+    public static boolean minWeek(String beginDate,String currentMinWeekDate){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MM.dd");
+        try {
+            final Date date = simpleDateFormat.parse(beginDate);
+            Date date2 = simpleDateFormat2.parse(currentMinWeekDate);
+            final Calendar instance = Calendar.getInstance();
+            final int year = instance.get(Calendar.YEAR);
+            assert date2 != null;
+            instance.setTime(date2);
+            instance.set(Calendar.YEAR,year);
+            date2 = instance.getTime();
+            Log.e(TAG, "minWeek: "+instance.toString() );
+            assert date != null;
+            if (date.getTime()>=date2.getTime()){
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 }
