@@ -216,12 +216,12 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         }
         final LeaveDetailRsp.DataBean data = leaveDetailRsp.getData();
         leaveFlowBeanList.clear();
-        if ("1".equals(data.getLeaveType())) {
-            //监护人
-            tv_department.setText(getString(R.string.choose_class));
-        } else {
+        if ("2".equals(data.getLeaveType())) {
             //教职工
             tv_department.setText(R.string.in_department);
+        } else {
+            //监护人
+            tv_department.setText(getString(R.string.choose_class));
         }
 
         tv_leave_title.setText(data.getName());
