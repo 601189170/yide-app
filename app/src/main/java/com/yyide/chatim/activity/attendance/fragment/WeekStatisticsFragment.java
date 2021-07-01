@@ -82,13 +82,14 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     private String beginDate;
     private boolean refresh;
 
-    public WeekStatisticsFragment() {
+    public WeekStatisticsFragment(String type) {
         // Required empty public constructor
+        this.type = type;
     }
 
 
     public static WeekStatisticsFragment newInstance(String type) {
-        WeekStatisticsFragment fragment = new WeekStatisticsFragment();
+        WeekStatisticsFragment fragment = new WeekStatisticsFragment("");
         Bundle args = new Bundle();
         args.putString(ARG_TYPE, type);
         fragment.setArguments(args);
@@ -365,30 +366,50 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             }
         });
 
-        if (SpData.getIdentityInfo().staffIdentity()) {
+        if (SpData.getIdentityInfo().staffIdentity() && !absencePeople.isEmpty()) {
             mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+            mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number), absencePeople.size()));
         } else {
             mViewBinding.tvPeopleCount.setVisibility(View.GONE);
         }
 
-        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),absencePeople.size()));
         mViewBinding.rgAttendanceType.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb_absence:
                     mViewBinding.viewpager.setCurrentItem(0);
-                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),absencePeople.size()));
+                    if (absencePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
+                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+                    }else {
+                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),absencePeople.size()));
+                    }
                     break;
                 case R.id.rb_late:
                     mViewBinding.viewpager.setCurrentItem(1);
-                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),latePeople.size()));
+                    if (latePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
+                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+                    }else {
+                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),latePeople.size()));
+                    }
                     break;
                 case R.id.rb_leave:
                     mViewBinding.viewpager.setCurrentItem(2);
-                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leavePeople.size()));
+                    if (leavePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
+                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+                    }else {
+                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leavePeople.size()));
+                    }
                     break;
                 case R.id.rb_leave_early:
                     mViewBinding.viewpager.setCurrentItem(3);
-                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leaveEarlyPeople.size()));
+                    if (leaveEarlyPeople.isEmpty()  || !SpData.getIdentityInfo().staffIdentity()){
+                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+                    }else {
+                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leaveEarlyPeople.size()));
+                    }
                     break;
 
                 default:
