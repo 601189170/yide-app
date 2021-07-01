@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity;
+package com.yyide.chatim.activity.newnotice;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -18,7 +19,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -38,14 +41,13 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.WebModel;
 
-public class WebViewActivity extends BaseActivity {
+public class NoticeWebViewActivity extends BaseActivity {
 
     String currentUrl;
     private FrameLayout fl_webview;
     private ProgressBar pb_webview;
     private WebSettings webSettings;
     private WebView mWebView;
-    private String type;
     private ValueAnimator pbAnim;
     private TextView tvTitle;
 
@@ -56,19 +58,11 @@ public class WebViewActivity extends BaseActivity {
     private static final String PARAM_TYPE = "type";
     private static final String PARAM_JSON = "json";
     private static final String PARAM_TITLE = "title";
-    private String json;
     private String title;
 
     @Override
     public int getContentViewID() {
-        return R.layout.activity_webview;
-    }
-
-    public static void start(Context context, String url, String json) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(PARAM_URL, url);
-        intent.putExtra(PARAM_JSON, json);
-        context.startActivity(intent);
+        return R.layout.activity_notice_webview;
     }
 
     /**
@@ -77,7 +71,7 @@ public class WebViewActivity extends BaseActivity {
      * @param title   标题-会获取网页title
      */
     public static void startTitle(Context context, String url, String title) {
-        Intent intent = new Intent(context, WebViewActivity.class);
+        Intent intent = new Intent(context, NoticeWebViewActivity.class);
         intent.putExtra(PARAM_URL, url);
         intent.putExtra(PARAM_TITLE, title);
         context.startActivity(intent);
@@ -88,19 +82,31 @@ public class WebViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         currentUrl = getIntent().getStringExtra(PARAM_URL);
         title = getIntent().getStringExtra(PARAM_TITLE);
-        type = getIntent().getStringExtra(PARAM_TYPE);
-        json = getIntent().getStringExtra(PARAM_JSON);
+        setStatusBar();
         initView();
         initAnimtor();
         initWebView();
     }
 
+    private void setStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            findViewById(R.id.iv_status_bar).setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, StatusBarUtils.getStatusBarHeight(this)));
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.black));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.black));
+            int vis = getWindow().getDecorView().getSystemUiVisibility();
+            vis |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            getWindow().getDecorView().setSystemUiVisibility(vis);
+        }
+    }
+
     @SuppressLint("CheckResult")
     private void initView() {
-        View view = findViewById(R.id.top);
         fl_webview = findViewById(R.id.fl_webview);
         pb_webview = findViewById(R.id.pb_webview);
         tvTitle = findViewById(R.id.title);
+        tvTitle.setText(title);
+        findViewById(R.id.fl_title).setBackgroundColor(Color.TRANSPARENT);
         findViewById(R.id.back_layout).setOnClickListener(v -> finish());
     }
 
@@ -149,6 +155,12 @@ public class WebViewActivity extends BaseActivity {
         mWebView.setWebChromeClient(new WebChromeClient() {
 
             @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                Log.d("onConsoleMessage", "message>>>>:" + consoleMessage.message() + " lineNumber: " + consoleMessage.lineNumber());
+                return super.onConsoleMessage(consoleMessage);
+            }
+
+            @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 if (!TextUtils.isEmpty(title)) {
@@ -182,16 +194,17 @@ public class WebViewActivity extends BaseActivity {
 
             // For Android >= 5.0
             @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
                 uploadMessageAboveL = filePathCallback;
                 openImageChooserActivity();
                 return true;
             }
         });
         mWebView.loadUrl(currentUrl);
-        mWebView.addJavascriptInterface(WebViewActivity.this, "android");
+        mWebView.addJavascriptInterface(NoticeWebViewActivity.this, "android");
 
         mWebView.setWebViewClient(new WebViewClient() {
+
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
@@ -205,15 +218,15 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
-                if (SpData.User() != null) {
-                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
-                    mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
-                    if (SpData.getIdentityInfo() != null) {
-                        mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
-                    }
-                    mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
-                }
+//
+//                if (SpData.User() != null && isLoadJs) {
+//                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
+//                    mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
+//                    if (SpData.getIdentityInfo() != null) {
+//                        mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
+//                    }
+//                    mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
+//                }
             }
 
             @Override
@@ -244,6 +257,14 @@ public class WebViewActivity extends BaseActivity {
                     finish();
                 } else if ("getToken".equalsIgnoreCase(webModel.enentName)) {
                     return SpData.User() != null ? SpData.User().getToken() : "";
+                } else if ("save".equalsIgnoreCase(webModel.enentName)) {
+                    runOnUiThread(() -> {
+                        Intent intent = new Intent(NoticeWebViewActivity.this, NoticeTemplatePushActivity.class);
+                        intent.putExtra("params", webModel);
+                        startActivity(intent);
+                        finish();
+                    });
+
                 }
             }
         }

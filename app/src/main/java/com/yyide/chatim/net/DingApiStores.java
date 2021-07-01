@@ -33,6 +33,7 @@ import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.model.NoticeItemBean;
 import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
+import com.yyide.chatim.model.NoticePersonnelBean;
 import com.yyide.chatim.model.NoticeReleaseTemplateBean;
 import com.yyide.chatim.model.NoticeUnreadPeopleBean;
 import com.yyide.chatim.model.ResultBean;
@@ -564,6 +565,10 @@ public interface DingApiStores {
     @GET("/message-server/cloud-message/app/message/publish/{messagePublishId}")
     Observable<NoticeMyReleaseDetailBean> confirmNoticeDetail(@Path("messagePublishId") long id);
 
+    //首页通知弹窗
+    @GET("/message-server/cloud-message/app/message/publish/indexShow")
+    Observable<NoticeMyReleaseDetailBean> noticeShow();
+
     //通知模板列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/message-server/cloud-message/app/message/template/list")
@@ -578,4 +583,24 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/message-server/cloud-message/app/message/publish/do")
     Observable<ResultBean> releaseNotice(@Body RequestBody requestBody);
+
+    //我收到的确认詳情
+    @GET("/message-server/cloud-message/app/message/template/{id}")
+    Observable<NoticeReleaseTemplateBean> templateDetail(@Path("id") long id);
+
+    //通知范围学籍部门树形结构
+    @GET("/message-server/cloud-message/app/message/publish/specifieType/{specifieType}")
+    Observable<NoticePersonnelBean> specifieType(@Path("specifieType") String specifieType);
+
+    //班牌班级
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/notification/notificationClasses")
+    Observable<ResultBean> notificationClasses();
+
+    //班牌场地
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/notification/notificationSite")
+    Observable<ResultBean> notificationSite();
+
+
 }

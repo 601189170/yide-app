@@ -63,12 +63,13 @@
             app:layout_constraintTop_toTopOf="@+id/textView17"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-        <TextView
-            android:id="@+id/tv_select_number"
+        <CheckBox
+            android:id="@+id/cb_select_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_24"
             android:layout_marginBottom="@dimen/dp_6"
+            android:theme="@style/CheckBoxTheme"
             android:text="@string/notice_chosen_people_number"
             android:textColor="#ff999999"
             android:textSize="15sp"
@@ -85,46 +86,9 @@
             android:text="@string/confirm"
             android:textColor="@color/white"
             android:textSize="@dimen/text_15"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_select_number"
+            app:layout_constraintBottom_toBottomOf="@+id/cb_select_number"
             app:layout_constraintEnd_toEndOf="@+id/switch_push"
-            app:layout_constraintTop_toTopOf="@+id/tv_select_number" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/tv_un_confirm_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_12"
-            android:text="@string/notice_un_confirm_number"
-            android:textColor="#ff999999"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btn_remind"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_35"
-            android:layout_marginEnd="@dimen/dp_20"
-            android:background="@drawable/drawable_material_button_radius_22"
-            android:gravity="center"
-            android:paddingStart="@dimen/dp_20"
-            android:paddingEnd="@dimen/dp_20"
-            android:text="@string/notice_remind_everyone"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_15"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/cb_select_number" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

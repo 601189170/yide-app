@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.newnotice
 
 import android.os.Bundle
 import android.view.*
+import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import com.yyide.chatim.R
@@ -36,7 +37,7 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
         personnelBinding!!.viewpager.offscreenPageLimit = 3
         personnelBinding!!.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                val fragment: Fragment = NoticePersonnelFragment.newInstance()
+                val fragment: Fragment = NoticePersonnelFragment.newInstance(position.toString())
                 when (position) {
                     0, 1, 2 -> {
                     }
@@ -54,5 +55,7 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
         }
         personnelBinding!!.slidingTabLayout.setViewPager(personnelBinding!!.viewpager)
         personnelBinding!!.slidingTabLayout.currentTab = 0
+
     }
+
 }

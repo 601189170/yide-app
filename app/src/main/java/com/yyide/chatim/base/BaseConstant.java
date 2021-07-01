@@ -57,6 +57,9 @@ public class BaseConstant {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
+    //通知公告模板地址
+    public static final String TEMPLATE_URL = "http://192.168.3.147:8005/#/notice/edit/";
+
     //隐私协议
     public static final String PRIVACY_URL = "https://file.1d1j.cn/privacy.html";
     /**
@@ -88,6 +91,7 @@ public class BaseConstant {
     public static final String TYPE_MESSAGE_TODO_NUM = "type_message_todo_num";
     public static final String TYPE_NOTICE_NUM = "type_message_num";
     public static final String TYPE_NOTICE_PUSH_BLANK = "type_notice_push_blank";
+    public static final String TYPE_NOTICE_IS_CONFIRM = "type_notice_is_confirm";
 
     public static final String TYPE_LEAVE = "type_leave";
     public static final String TYPE_UPDATE_IMG = "type_update_img";

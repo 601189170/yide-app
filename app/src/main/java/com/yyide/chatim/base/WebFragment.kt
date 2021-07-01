@@ -1,5 +1,6 @@
 package com.yyide.chatim.base
 
+import android.annotation.SuppressLint
 import android.net.http.SslError
 import android.os.Bundle
 import android.text.TextUtils
@@ -51,6 +52,7 @@ class WebFragment : BaseFragment() {
         initWebView()
     }
 
+    @SuppressLint("JavascriptInterface")
     private fun initWebView() {
         mWebView = WebView(Utils.getApp().applicationContext)
         fragmentWebBinding.flContent.addView(mWebView)
@@ -89,7 +91,7 @@ class WebFragment : BaseFragment() {
             }
         }
         mWebView!!.loadUrl(url)
-        mWebView!!.addJavascriptInterface(WebJsObject(activity), "android")
+        mWebView!!.addJavascriptInterface(WebFragment(), "android")
         mWebView!!.webViewClient = object : WebViewClient() {
 
             override fun onPageFinished(view: WebView, url: String) {

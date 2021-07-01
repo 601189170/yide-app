@@ -15,6 +15,7 @@ import android.view.WindowManager;
  */
 public class StatusBarUtils {
     private static final String TAG = "StatusBarUtils";
+
     //设置Activity对应的顶部状态栏的颜色
     public static void setWindowStatusBarColor(Activity activity, int colorResId, boolean dark) {
         try {
