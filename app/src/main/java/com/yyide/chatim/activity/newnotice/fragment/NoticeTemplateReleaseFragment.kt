@@ -18,8 +18,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.newnotice.NoticeReleaseActivity
-import com.yyide.chatim.activity.newnotice.NoticeTemplateDetailActivity
+import com.yyide.chatim.activity.newnotice.NoticeGeneralPushActivity
+import com.yyide.chatim.activity.newnotice.NoticeWebViewActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentNoticePushBinding
@@ -92,9 +92,10 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
         mAdapter.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int ->
             val item: NoticeReleaseTemplateBean.DataBean.RecordsBean = mAdapter.getItem(position)
             if (item.type == 0) {
-                startActivity(Intent(context, NoticeReleaseActivity::class.java))
+                startActivity(Intent(context, NoticeGeneralPushActivity::class.java))
             } else {
-                startActivity(Intent(context, NoticeTemplateDetailActivity::class.java))
+                //startActivity(Intent(context, NoticeTemplateDetailActivity::class.java))
+                NoticeWebViewActivity.startTitle(activity, BaseConstant.TEMPLATE_URL + item.id, "")
             }
         }
         mAdapter.loadMoreModule.setOnLoadMoreListener {

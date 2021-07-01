@@ -21,6 +21,9 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 
+/**
+ * 通知主页
+ */
 class NewNoticeAnnouncementActivity : BaseActivity() {
     private var noticeBinding: ActivityNoticeBinding? = null
     override fun getContentViewID(): Int {

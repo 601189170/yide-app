@@ -1,37 +1,50 @@
 package com.yyide.chatim.model;
 
-public class WebModel {
+import java.io.Serializable;
+import java.util.List;
 
-    private String enentName;
-    private String subIds;
-//    private ParamsBean params;
+public class WebModel implements Serializable {
 
+    public String enentName;
+    public String subIds;
+    public ParamsBean params;
 
-    public String getSubIds() {
-        return subIds;
-    }
+    public static class ParamsBean implements Serializable {
 
-    public void setSubIds(String subIds) {
-        this.subIds = subIds;
-    }
+        public List<SubsBean> subs;
+        public String tempTitle;
+        public String tempId;
 
-    public String getEnentName() {
-        return enentName;
-    }
+        public List<SubsBean> getSubs() {
+            return subs;
+        }
 
-    public void setEnentName(String enentName) {
-        this.enentName = enentName;
-    }
+        public void setSubs(List<SubsBean> subs) {
+            this.subs = subs;
+        }
 
-//    public ParamsBean getParams() {
-//        return params;
-//    }
-//
-//    public void setParams(ParamsBean params) {
-//        this.params = params;
-//    }
+        public String getTempTitle() {
+            return tempTitle;
+        }
 
-    public static class ParamsBean {
+        public void setTempTitle(String tempTitle) {
+            this.tempTitle = tempTitle;
+        }
 
+        public String getTempId() {
+            return tempId;
+        }
+
+        public void setTempId(String tempId) {
+            this.tempId = tempId;
+        }
+
+        public static class SubsBean implements Serializable{
+            public String messageTemplateDetailId;
+            public Object file;
+            public String imgpath;
+            public String id;
+            public int showType;
+        }
     }
 }

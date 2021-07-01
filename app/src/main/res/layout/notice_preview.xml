@@ -1,84 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    app:cardBackgroundColor="@color/transparent"
+    app:cardCornerRadius="@dimen/dp_6"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_40"
-        android:layout_marginEnd="@dimen/dp_20"
-        android:layout_marginBottom="@dimen/dp_40"
-        android:paddingTop="@dimen/dp_40"
-        android:paddingBottom="@dimen/dp_40"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="@dimen/dp_4"
-        app:cardElevation="0dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.yyide.chatim.widget.RadiusImageView
+            android:id="@+id/iv_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/dp_16"
-            android:layout_marginEnd="@dimen/dp_16">
-
-            <TextView
-                android:id="@+id/tv_notice_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:text="疫情通知"
-                android:textColor="#ff1e1e1e"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_notice_content"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/dp_12"
-                android:text="近期，国内多地出现散发病例，疫情动态再度牵动人心。为保障全校师生安全，根据上级部门指示精神，经学校领导研究决定，为有效防控疫情，现把学校疫情防控相关要求布置如下，敬请全校师生、来访家长遵照执行：
-1、 全校教师、学生、来访家长及相关工作人员入校时必须佩戴口罩，查验体温正常后方可入校；
-2、 各班级要做好二次测体温制度，体温正常者方可进入班级学习；
-3、 各班做好请假登记制度，对班上请假学生请假原因和返校时间做好登记，如有异常情况立即报告学校政务处；
-4、 严格执行离市报告制度：全校师生如要离开本市外的地方，教师提前向教务主任报告，学生提前向本班班主任报告，返回工作（学习）岗位时应查验行程码和健康绿码后方可入校。
-疫情防控无小事，为了全校师生的生命健康，让我们一起克服困难，共克时艰。近期，国内多地出现散发病例，疫情动态再度牵动人心。为保障全校师生安全，根据上级部门指示精神，经学校领导研究决定，为有效防控疫情，现把学校疫情防控相关要求布置如下，敬请全校师生、来访家长遵照执行：
-1、 全校教师、学生、来访家长及相关工作人员入校时必须佩戴口罩，查验体温正常后方可入校；
-2、 各班级要做好二次测体温制度，体温正常者方可进入班级学习；
-3、 各班做好请假登记制度，对班上请假学生请假原因和返校时间做好登记，如有异常情况立即报告学校政务处；
-4、 严格执行离市报告制度：全校师生如要离开本市外的地方，教师提前向教务主任报告，学生提前向本班班主任报告，返回工作（学习）岗位时应查验行程码和健康绿码后方可入校。
-疫情防控无小事，为了全校师生的生命健康，让我们一起克服困难，共克时艰。近期，国内多地出现散发病例，疫情动态再度牵动人心。为保障全校师生安全，根据上级部门指示精神，经学校领导研究决定，为有效防控疫情，现把学校疫情防控相关要求布置如下，敬请全校师生、来访家长遵照执行：
-1、 全校教师、学生、来访家长及相关工作人员入校时必须佩戴口罩，查验体温正常后方可入校；
-2、 各班级要做好二次测体温制度，体温正常者方可进入班级学习；
-3、 各班做好请假登记制度，对班上请假学生请假原因和返校时间做好登记，如有异常情况立即报告学校政务处；
-4、 严格执行离市报告制度：全校师生如要离开本市外的地方，教师提前向教务主任报告，学生提前向本班班主任报告，返回工作（学习）岗位时应查验行程码和健康绿码后方可入校。
-疫情防控无小事，为了全校师生的生命健康，让我们一起克服困难，共克时艰。近期，国内多地出现散发病例，疫情动态再度牵动人心。为保障全校师生安全，根据上级部门指示精神，经学校领导研究决定，为有效防控疫情，现把学校疫情防控相关要求布置如下，敬请全校师生、来访家长遵照执行：
-1、 全校教师、学生、来访家长及相关工作人员入校时必须佩戴口罩，查验体温正常后方可入校；
-2、 各班级要做好二次测体温制度，体温正常者方可进入班级学习；
-3、 各班做好请假登记制度，对班上请假学生请假原因和返校时间做好登记，如有异常情况立即报告学校政务处；
-4、 严格执行离市报告制度：全校师生如要离开本市外的地方，教师提前向教务主任报告，学生提前向本班班主任报告，返回工作（学习）岗位时应查验行程码和健康绿码后方可入校。
-疫情防控无小事，为了全校师生的生命健康，让我们一起克服困难，共克时艰。近期，国内多地出现散发病例，疫情动态再度牵动人心。为保障全校师生安全，根据上级部门指示精神，经学校领导研究决定，为有效防控疫情，现把学校疫情防控相关要求布置如下，敬请全校师生、来访家长遵照执行：
-1、 全校教师、学生、来访家长及相关工作人员入校时必须佩戴口罩，查验体温正常后方可入校；
-2、 各班级要做好二次测体温制度，体温正常者方可进入班级学习；
-3、 各班做好请假登记制度，对班上请假学生请假原因和返校时间做好登记，如有异常情况立即报告学校政务处；
-4、 严格执行离市报告制度：全校师生如要离开本市外的地方，教师提前向教务主任报告，学生提前向本班班主任报告，返回工作（学习）岗位时应查验行程码和健康绿码后方可入校。
-疫情防控无小事，为了全校师生的生命健康，让我们一起克服困难，共克时艰。
-"
-                android:textColor="#ff7b7b7b"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_notice_title" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:scaleType="fitXY"
+            app:left_bottom_radius="@dimen/dp_6"
+            app:left_top_radius="@dimen/dp_6"
+            app:right_bottom_radius="@dimen/dp_6"
+            app:right_top_radius="@dimen/dp_6" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

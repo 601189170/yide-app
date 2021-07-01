@@ -4,13 +4,15 @@ import java.util.List;
 
 public class NoticeBlankReleaseBean {
 
-    public long messageTemplateId;
+    public String messageTemplateId;
     public String title;
     public String content;
     public Boolean isConfirm;
     public Boolean isTimer;
     public String timerDate;
     public int notifyRange;
+    public List<String> subIds;
+
     public List<RecordListBean> recordList;
 
 

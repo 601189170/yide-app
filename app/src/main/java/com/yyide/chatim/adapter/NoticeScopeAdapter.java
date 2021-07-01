@@ -57,7 +57,6 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
         return new ViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setIsRecyclable(false);//禁止复用
@@ -117,7 +116,7 @@ public class NoticeScopeAdapter extends RecyclerView.Adapter<NoticeScopeAdapter.
      * 递归实现下级是否选中
      * @param noticeScopeBean
      */
-    private void recursionChecked(NoticeScopeBean noticeScopeBean,boolean isChecked){
+    private void recursionChecked(NoticeScopeBean noticeScopeBean, boolean isChecked) {
         noticeScopeBean.setChecked(isChecked);
         if (noticeScopeBean.getList() != null) {
             for (NoticeScopeBean scopeBean : noticeScopeBean.getList()) {

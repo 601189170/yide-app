@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.newnotice
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -30,10 +31,10 @@ import org.greenrobot.eventbus.EventBus
  * TIME 2021年6月21日
  * VERSION 1.0
  */
-class NoticeReleaseActivity : BaseMvpActivity<NoticeReleasePresenter>(), NoticeBlankReleaseView {
+class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), NoticeBlankReleaseView {
     private var releaseBinding: ActivityNoticeReleaseBinding? = null
     private var isConfirm = false
-    private var isTimer = false
+    private var isTimer = true
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_release
     }
@@ -48,7 +49,12 @@ class NoticeReleaseActivity : BaseMvpActivity<NoticeReleasePresenter>(), NoticeB
     private fun initView() {
         releaseBinding!!.top.title.setText(R.string.notice_release_title)
         releaseBinding!!.top.backLayout.setOnClickListener { finish() }
-        releaseBinding!!.btnPush?.setOnClickListener { pushNotice() }
+        releaseBinding!!.btnPush.setOnClickListener { pushNotice() }
+        releaseBinding!!.clRange.setOnClickListener {
+            val intent = Intent()
+            intent.setClass(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            startActivity(intent)
+        }
         initListener()
     }
 
@@ -119,9 +125,13 @@ class NoticeReleaseActivity : BaseMvpActivity<NoticeReleasePresenter>(), NoticeB
                 releaseBinding!!.etInputContent.isFocusableInTouchMode = true;
                 releaseBinding!!.etInputContent.requestFocus();
             }
+            !isTimer -> {
+                ToastUtils.showShort(R.string.notice_input_push_time)
+            }
             else -> {
                 val itemBean = NoticeBlankReleaseBean();
-                itemBean.messageTemplateId = 1405486010163490820
+                //空白模板为固定ID
+                itemBean.messageTemplateId = "1405486010163490820"
                 itemBean.title = etTitle
                 itemBean.content = etContent
                 itemBean.isTimer = isTimer

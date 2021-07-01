@@ -9,6 +9,7 @@ public class EventMessage {
     private String code;
     private String message;
     private int count;
+    private boolean isBoolean;
 
     public EventMessage(String code, String message) {
         this.code = code;
@@ -21,6 +22,13 @@ public class EventMessage {
         this.count = count;
     }
 
+    public boolean isBoolean() {
+        return isBoolean;
+    }
+
+    public void setBoolean(boolean aBoolean) {
+        isBoolean = aBoolean;
+    }
 
     public String getCode() {
         return code;

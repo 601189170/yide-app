@@ -12,6 +12,8 @@
     <style name="splashActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@mipmap/ic_launcher</item>
+        <item name="android:windowNoTitle">true</item>
+<!--        <item name="android:windowFullscreen">true</item>-->
     </style>
 
     <style name="shareDialog" parent="@android:style/Theme.Dialog">
@@ -133,10 +135,12 @@
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/text_20</item>
     </style>
+
     <style name="MaterialAlertDialog.App.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">@dimen/text_16</item>
     </style>
+
     <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
@@ -146,23 +150,28 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">4dp</item>
     </style>
+
     <style name="ThemeOverlay.App.Button.TextButton" parent="">
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
+
     <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Button.TextButton</item>
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
         <item name="android:textSize">@dimen/text_18</item>
         <item name="android:textColor">@color/blue11</item>
     </style>
+
     <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorPrimary</item>
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@android:color/black</item>
         <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
-        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
-        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.App.Body.Text</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text
+        </item>
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.App.Body.Text
+        </item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>
         <item name="buttonBarNeutralButtonStyle">@style/Widget.App.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Button</item>
