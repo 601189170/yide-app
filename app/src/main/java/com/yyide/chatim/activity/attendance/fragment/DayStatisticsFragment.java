@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.beiing.weekcalendar.WeekCalendar;
@@ -52,7 +53,7 @@ import java.util.Optional;
  * Use the {@link DayStatisticsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresenter> implements DayStatisticsView {
+public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresenter> implements DayStatisticsView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = DayStatisticsFragment.class.getSimpleName();
     private List<DateTime> eventDates;
     private final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> data = new ArrayList<>();
@@ -67,6 +68,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     private String currentEvent;//当前事件
     private DayStatisticsListAdapter dayStatisticsListAdapter;
     private StudentDayStatisticsListAdapter studentDayStatisticsListAdapter;
+    private boolean refresh;
 
     public DayStatisticsFragment() {
         // Required empty public constructor
@@ -132,6 +134,11 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         eventDates = new ArrayList<>();
         initClassData();
         initClassView();
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener(this);
+        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            mViewBinding.swipeRefreshLayout.setEnabled(verticalOffset >= 0);//页面滑动到顶部，才可以下拉刷新
+        });
         String time = DateUtils.switchTime(new Date(), "yyyy-MM-dd");
         final String time1 = DateUtils.formatTime(time, "yyyy-MM-dd", "MM月");
         mViewBinding.tvCurrentDate.setText(time1);
@@ -285,6 +292,10 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     @Override
     public void attendanceStatisticsSuccess(AttendanceDayStatsRsp attendanceWeekStatsRsp) {
         Log.e(TAG, "attendanceStatisticsSuccess: " + attendanceWeekStatsRsp.toString());
+        if (refresh){
+            refresh = false;
+            mViewBinding.swipeRefreshLayout.setRefreshing(false);
+        }
         if (attendanceWeekStatsRsp.getCode() == 200){
             if (attendanceWeekStatsRsp.getData() == null) {
                 return;
@@ -376,10 +387,20 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     @Override
     public void attendanceStatisticsFail(String msg) {
         Log.e(TAG, "attendanceStatisticsFail: " + msg);
+        if (refresh){
+            refresh = false;
+            mViewBinding.swipeRefreshLayout.setRefreshing(false);
+        }
         eventList.clear();
         currentEvent = "";
         mViewBinding.tvAttendanceType.setText("");
         mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, null, null);
         showBlank(true);
+    }
+
+    @Override
+    public void onRefresh() {
+        refresh = true;
+        queryAttStatsData(currentClass,currentDate);
     }
 }

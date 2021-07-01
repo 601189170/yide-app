@@ -8,9 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.google.android.material.appbar.AppBarLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseMvpFragment;
@@ -42,7 +45,7 @@ import java.util.stream.Collectors;
  * Use the {@link WeekStatisticsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresenter> implements WeekMonthStatisticsView {
+public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresenter> implements WeekMonthStatisticsView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "WeekStatisticsFragment";
     private FragmentWeekStatisticsBinding mViewBinding;
     private List<Fragment> fragments = new ArrayList<>();
@@ -77,6 +80,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     private boolean identity;//确定是教师还是学生 true是学生  false 是老师
     private boolean eventType;//确实是否是课程考勤 true 事件考勤 false 课程考勤
     private String beginDate;
+    private boolean refresh;
 
     public WeekStatisticsFragment() {
         // Required empty public constructor
@@ -271,6 +275,11 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         //初始化班级view
         initClassData();
         initClassView();
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener(this);
+        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            mViewBinding.swipeRefreshLayout.setEnabled(verticalOffset >= 0);//页面滑动到顶部，才可以下拉刷新
+        });
         if (isWeekStatistics) {
             final Calendar calendar = Calendar.getInstance();
             final int weekOfMonth = calendar.get(Calendar.WEEK_OF_YEAR);
@@ -444,6 +453,10 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     @Override
     public void attendanceStatisticsSuccess(AttendanceWeekStatsRsp attendanceWeekStatsRsp) {
         Log.e(TAG, "attendanceStatisticsSuccess: " + attendanceWeekStatsRsp.toString());
+        if (refresh){
+            refresh = false;
+            mViewBinding.swipeRefreshLayout.setRefreshing(false);
+        }
         if (attendanceWeekStatsRsp.getCode() == 200) {
             if (attendanceWeekStatsRsp.getData() == null) {
                 showBlank(true);
@@ -704,11 +717,21 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     @Override
     public void attendanceStatisticsFail(String msg) {
         Log.e(TAG, "attendanceStatisticsFail: " + msg);
+        if (refresh){
+            refresh = false;
+            mViewBinding.swipeRefreshLayout.setRefreshing(false);
+        }
         showBlank(true);
     }
 
     private void showBlank(boolean show){
         mViewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
         //mViewBinding.constraintLayout.setVisibility(show?View.GONE:View.VISIBLE);
+    }
+
+    @Override
+    public void onRefresh() {
+        refresh = true;
+        queryAttStatsData(currentClass, currentDate, currentPage);
     }
 }
