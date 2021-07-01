@@ -365,19 +365,30 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             }
         });
 
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+        } else {
+            mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+        }
+
+        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),absencePeople.size()));
         mViewBinding.rgAttendanceType.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb_absence:
                     mViewBinding.viewpager.setCurrentItem(0);
+                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),absencePeople.size()));
                     break;
                 case R.id.rb_late:
                     mViewBinding.viewpager.setCurrentItem(1);
+                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),latePeople.size()));
                     break;
                 case R.id.rb_leave:
                     mViewBinding.viewpager.setCurrentItem(2);
+                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leavePeople.size()));
                     break;
                 case R.id.rb_leave_early:
                     mViewBinding.viewpager.setCurrentItem(3);
+                    mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leaveEarlyPeople.size()));
                     break;
 
                 default:

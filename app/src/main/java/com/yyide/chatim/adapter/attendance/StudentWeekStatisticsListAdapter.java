@@ -57,9 +57,24 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean weekStatisticsBean = data.get(position);
-        final String name = weekStatisticsBean.getName();
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            holder.viewBinding.tvName.setText(name);
+        String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
+        if (!TextUtils.isEmpty(weekStatisticsBean.getThingName())){
+            holder.viewBinding.tvName.setText(date+" "+weekStatisticsBean.getThingName());
+        }else if (!TextUtils.isEmpty(weekStatisticsBean.getSubjectName())){
+            if (TextUtils.isEmpty(date)){
+                date = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd");
+            }
+
+            final int section = weekStatisticsBean.getSection();
+            String sectionUppercase = DateUtils.sectionDesc(context,section);
+            holder.viewBinding.tvName.setText(date+" "+sectionUppercase);
+        }else {
+            final int section = weekStatisticsBean.getSection();
+            String sectionUppercase = DateUtils.sectionDesc(context,section);
+            if (TextUtils.isEmpty(date)){
+                date = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd");
+            }
+            holder.viewBinding.tvName.setText(date+" "+sectionUppercase);
         }
 
         final String status = weekStatisticsBean.getStatus();
@@ -90,10 +105,10 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 final String time1 = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time1);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late));
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
-                    holder.viewBinding.tvName.setText(date);
-                }
+//                if (!SpData.getIdentityInfo().staffIdentity()){
+//                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
+//                    holder.viewBinding.tvName.setText(date);
+//                }
                 break;
             case "3":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);
@@ -108,31 +123,31 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 final String time2 = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time2);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
-                    holder.viewBinding.tvName.setText(date);
-                }
+//                if (!SpData.getIdentityInfo().staffIdentity()){
+//                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
+//                    holder.viewBinding.tvName.setText(date);
+//                }
                 break;
             case "1":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_clock_in));
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String subjectName = weekStatisticsBean.getSubjectName();
-                    final String thingName = weekStatisticsBean.getThingName();
-                    final String absenceDate = weekStatisticsBean.getTime();
-                    final String date = DateUtils.formatTime(absenceDate, null, "MM.dd");
-                    if (!TextUtils.isEmpty(thingName)){
-                        holder.viewBinding.tvName.setText(date+" "+thingName);
-                    }else {
-                        if (!TextUtils.isEmpty(subjectName)){
-                            holder.viewBinding.tvName.setText(date+" "+subjectName);
-                        }else {
-                            holder.viewBinding.tvName.setText(date);
-                        }
-
-                    }
-                }
+//                if (!SpData.getIdentityInfo().staffIdentity()){
+//                    final String subjectName = weekStatisticsBean.getSubjectName();
+//                    final String thingName = weekStatisticsBean.getThingName();
+//                    final String absenceDate = weekStatisticsBean.getTime();
+//                    final String date = DateUtils.formatTime(absenceDate, null, "MM.dd");
+//                    if (!TextUtils.isEmpty(thingName)){
+//                        holder.viewBinding.tvName.setText(date+" "+thingName);
+//                    }else {
+//                        if (!TextUtils.isEmpty(subjectName)){
+//                            holder.viewBinding.tvName.setText(date+" "+subjectName);
+//                        }else {
+//                            holder.viewBinding.tvName.setText(date);
+//                        }
+//
+//                    }
+//                }
                 break;
             case "4":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);
@@ -143,10 +158,10 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 final String data2 = DateUtils.formatTime(weekStatisticsBean.getEndDate(), null, "MM.dd HH:mm");
                 holder.viewBinding.tvEventTime.setText(data1 + "-" + data2);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_leave));
-                if (!SpData.getIdentityInfo().staffIdentity()){
-                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
-                    holder.viewBinding.tvName.setText(date);
-                }
+//                if (!SpData.getIdentityInfo().staffIdentity()){
+//                    final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
+//                    holder.viewBinding.tvName.setText(date);
+//                }
                 break;
             default:
                 break;

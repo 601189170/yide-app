@@ -221,4 +221,5 @@
     <string name="monthly_statistical">每月统计</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="people_number">%d人</string>
 </resources>
