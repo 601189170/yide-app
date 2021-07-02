@@ -443,6 +443,9 @@ public class DateUtils {
      * @return
      */
     public static boolean minWeek(String beginDate,String currentMinWeekDate){
+        if (TextUtils.isEmpty(beginDate)){
+            return false;
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MM.dd");
         try {

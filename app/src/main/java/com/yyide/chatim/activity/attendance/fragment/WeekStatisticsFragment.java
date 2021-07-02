@@ -81,7 +81,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     private boolean eventType;//确实是否是课程考勤 true 事件考勤 false 课程考勤
     private String beginDate;
     private boolean refresh;
-
+    private boolean first = true;
     public WeekStatisticsFragment(String type) {
         // Required empty public constructor
         this.type = type;
@@ -109,6 +109,16 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_week_statistics, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: isWeekStatistics:"+isWeekStatistics +",first:"+first);
+        if (first && !isWeekStatistics) {
+            first = false;
+            queryAttStatsData(currentClass, currentDate, currentPage);
+        }
     }
 
     private void setMonth(boolean init) {
@@ -759,6 +769,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
     private void showBlank(boolean show){
         mViewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
+        mViewBinding.collapsingtoolbarlayout.setVisibility(show?View.GONE:View.VISIBLE);
         //mViewBinding.constraintLayout.setVisibility(show?View.GONE:View.VISIBLE);
     }
 
