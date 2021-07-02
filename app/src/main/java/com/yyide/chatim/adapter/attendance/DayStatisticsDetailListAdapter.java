@@ -102,7 +102,7 @@ public class DayStatisticsDetailListAdapter extends RecyclerView.Adapter<DayStat
                 }
                 final String time2 = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time2);
-                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
+                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_leave_early));
                 if (!SpData.getIdentityInfo().staffIdentity()){
                     final String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
                     holder.viewBinding.tvName.setText(date);
