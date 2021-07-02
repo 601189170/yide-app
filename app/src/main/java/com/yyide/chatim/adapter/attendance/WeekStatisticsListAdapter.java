@@ -85,24 +85,40 @@ public class WeekStatisticsListAdapter extends RecyclerView.Adapter<WeekStatisti
             @Override
             protected void convert(@NotNull BaseViewHolder baseViewHolder, AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean dataBean) {
                 String date = DateUtils.formatTime(dataBean.getTime(), null, "MM.dd");
-                if (!TextUtils.isEmpty(dataBean.getThingName())){
-                    baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getThingName());
-                }else if (!TextUtils.isEmpty(dataBean.getSubjectName())){
-                    if (TextUtils.isEmpty(date)){
-                        date = DateUtils.formatTime(dataBean.getStartDate(), null, "MM.dd");
+                if ("N".equals(weekStatisticsBean.getIdentityType())) {
+                    if (TextUtils.isEmpty(dataBean.getThingName())) {
+                        baseViewHolder.setText(R.id.tv_name, date);
+                    } else {
+                        baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getThingName());
                     }
 
+                } else {
                     final int section = dataBean.getSection();
-                    String sectionUppercase = DateUtils.sectionDesc(context,section);
-                    baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase);
-                }else {
-                    final int section = dataBean.getSection();
-                    String sectionUppercase = DateUtils.sectionDesc(context,section);
-                    if (TextUtils.isEmpty(date)){
+                    String sectionUppercase = DateUtils.sectionDesc(context, section);
+                    if (TextUtils.isEmpty(date)) {
                         date = DateUtils.formatTime(dataBean.getStartDate(), null, "MM.dd");
                     }
-                    baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase);
+                    baseViewHolder.setText(R.id.tv_name, date + " " + sectionUppercase);
                 }
+
+//                if (!TextUtils.isEmpty(dataBean.getThingName())){
+//                    baseViewHolder.setText(R.id.tv_name, date+" "+dataBean.getThingName());
+//                }else if (!TextUtils.isEmpty(dataBean.getSubjectName())){
+//                    if (TextUtils.isEmpty(date)){
+//                        date = DateUtils.formatTime(dataBean.getStartDate(), null, "MM.dd");
+//                    }
+//
+//                    final int section = dataBean.getSection();
+//                    String sectionUppercase = DateUtils.sectionDesc(context,section);
+//                    baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase);
+//                }else {
+//                    final int section = dataBean.getSection();
+//                    String sectionUppercase = DateUtils.sectionDesc(context,section);
+//                    if (TextUtils.isEmpty(date)){
+//                        date = DateUtils.formatTime(dataBean.getStartDate(), null, "MM.dd");
+//                    }
+//                    baseViewHolder.setText(R.id.tv_name, date+" "+sectionUppercase);
+//                }
 
                 String status = dataBean.getStatus();
                 if (status == null){

@@ -58,24 +58,39 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean weekStatisticsBean = data.get(position);
         String date = DateUtils.formatTime(weekStatisticsBean.getTime(), null, "MM.dd");
-        if (!TextUtils.isEmpty(weekStatisticsBean.getThingName())){
-            holder.viewBinding.tvName.setText(date+" "+weekStatisticsBean.getThingName());
-        }else if (!TextUtils.isEmpty(weekStatisticsBean.getSubjectName())){
-            if (TextUtils.isEmpty(date)){
-                date = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd");
+        if ("N".equals(weekStatisticsBean.getIdentityType())) {
+            if (TextUtils.isEmpty(weekStatisticsBean.getThingName())) {
+                holder.viewBinding.tvName.setText(date);
+            } else {
+                holder.viewBinding.tvName.setText(date + " " + weekStatisticsBean.getThingName());
             }
 
+        } else {
             final int section = weekStatisticsBean.getSection();
-            String sectionUppercase = DateUtils.sectionDesc(context,section);
-            holder.viewBinding.tvName.setText(date+" "+sectionUppercase);
-        }else {
-            final int section = weekStatisticsBean.getSection();
-            String sectionUppercase = DateUtils.sectionDesc(context,section);
-            if (TextUtils.isEmpty(date)){
+            String sectionUppercase = DateUtils.sectionDesc(context, section);
+            if (TextUtils.isEmpty(date)) {
                 date = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd");
             }
-            holder.viewBinding.tvName.setText(date+" "+sectionUppercase);
+            holder.viewBinding.tvName.setText(date + " " + sectionUppercase);
         }
+//        if (!TextUtils.isEmpty(weekStatisticsBean.getThingName())){
+//            holder.viewBinding.tvName.setText(date+" "+weekStatisticsBean.getThingName());
+//        }else if (!TextUtils.isEmpty(weekStatisticsBean.getSubjectName())){
+//            if (TextUtils.isEmpty(date)){
+//                date = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd");
+//            }
+//
+//            final int section = weekStatisticsBean.getSection();
+//            String sectionUppercase = DateUtils.sectionDesc(context,section);
+//            holder.viewBinding.tvName.setText(date+" "+sectionUppercase);
+//        }else {
+//            final int section = weekStatisticsBean.getSection();
+//            String sectionUppercase = DateUtils.sectionDesc(context,section);
+//            if (TextUtils.isEmpty(date)){
+//                date = DateUtils.formatTime(weekStatisticsBean.getStartDate(), null, "MM.dd");
+//            }
+//            holder.viewBinding.tvName.setText(date+" "+sectionUppercase);
+//        }
 
         final String status = weekStatisticsBean.getStatus();
         //0正常、1缺勤、2迟到/3早退,4请假）

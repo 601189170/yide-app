@@ -720,28 +720,29 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
             });
         }
-
+        final String identityType = studentsBean.getIdentityType();
         //0正常、1缺勤、2迟到/3早退,4请假
         latePeople.clear();
-        latePeople.addAll(filterNullStatusData("2",studentsBean.getLatePeople()));
+        latePeople.addAll(filterNullStatusData("2",identityType,studentsBean.getLatePeople()));
         absencePeople.clear();
-        absencePeople.addAll(filterNullStatusData("1",studentsBean.getAbsencePeople()));
+        absencePeople.addAll(filterNullStatusData("1",identityType,studentsBean.getAbsencePeople()));
         leavePeople.clear();
-        leavePeople.addAll(filterNullStatusData("4",studentsBean.getLeavePeople()));
+        leavePeople.addAll(filterNullStatusData("4",identityType,studentsBean.getLeavePeople()));
         leaveEarlyPeople.clear();
-        leaveEarlyPeople.addAll(filterNullStatusData("3",studentsBean.getLeaveEarlyPeople()));
+        leaveEarlyPeople.addAll(filterNullStatusData("3",identityType,studentsBean.getLeaveEarlyPeople()));
         //mViewBinding.viewpager.notify();
         initPeopleListView();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> filterNullStatusData(String status,List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> peopleBeanList) {
+    private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> filterNullStatusData(String status,String identityType,List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> peopleBeanList) {
         //return peopleBeanList.stream().filter(it -> !TextUtils.isEmpty(it.getStatus())).collect(Collectors.toList());
         if (peopleBeanList == null){
             return new ArrayList<>();
         }
         for (AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean peopleBean : peopleBeanList) {
             peopleBean.setStatus(status);
+            peopleBean.setIdentityType(identityType);
         }
         return peopleBeanList;
     }

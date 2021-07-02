@@ -102,6 +102,7 @@ public class AttendanceWeekStatsRsp {
                     private String endDate;
                     private String thingName;
                     private String path;
+                    private String identityType;
                     //分组
                     private List<PeopleBean> specialPeople;
                     private int specialCount;
