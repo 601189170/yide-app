@@ -216,7 +216,7 @@
 
     <string name="app_commonly_title">常用应用</string>
     <string name="statistical_man_time">（人次）</string>
-    <string name="statistical_time">（次数）</string>
+    <string name="statistical_time">（人次）</string>
     <string name="weekly_statistical">每周统计</string>
     <string name="monthly_statistical">每月统计</string>
     <!-- TODO: Remove or change this placeholder text -->
