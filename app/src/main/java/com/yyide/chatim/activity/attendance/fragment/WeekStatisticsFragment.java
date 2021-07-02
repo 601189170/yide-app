@@ -376,50 +376,50 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             }
         });
 
-        if (SpData.getIdentityInfo().staffIdentity() && !absencePeople.isEmpty()) {
-            mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
-            mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number), absencePeople.size()));
-        } else {
-            mViewBinding.tvPeopleCount.setVisibility(View.GONE);
-        }
+//        if (SpData.getIdentityInfo().staffIdentity() && !absencePeople.isEmpty()) {
+//            mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+//            mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number), absencePeople.size()));
+//        } else {
+//            mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+//        }
 
         mViewBinding.rgAttendanceType.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.rb_absence:
                     mViewBinding.viewpager.setCurrentItem(0);
-                    if (absencePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
-                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
-                    }else {
-                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
-                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),absencePeople.size()));
-                    }
+//                    if (absencePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
+//                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+//                    }else {
+//                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+//                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),absencePeople.size()));
+//                    }
                     break;
                 case R.id.rb_late:
                     mViewBinding.viewpager.setCurrentItem(1);
-                    if (latePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
-                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
-                    }else {
-                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
-                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),latePeople.size()));
-                    }
+//                    if (latePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
+//                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+//                    }else {
+//                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+//                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),latePeople.size()));
+//                    }
                     break;
                 case R.id.rb_leave:
                     mViewBinding.viewpager.setCurrentItem(2);
-                    if (leavePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
-                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
-                    }else {
-                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
-                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leavePeople.size()));
-                    }
+//                    if (leavePeople.isEmpty() || !SpData.getIdentityInfo().staffIdentity()){
+//                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+//                    }else {
+//                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+//                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leavePeople.size()));
+//                    }
                     break;
                 case R.id.rb_leave_early:
                     mViewBinding.viewpager.setCurrentItem(3);
-                    if (leaveEarlyPeople.isEmpty()  || !SpData.getIdentityInfo().staffIdentity()){
-                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
-                    }else {
-                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
-                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leaveEarlyPeople.size()));
-                    }
+//                    if (leaveEarlyPeople.isEmpty()  || !SpData.getIdentityInfo().staffIdentity()){
+//                        mViewBinding.tvPeopleCount.setVisibility(View.GONE);
+//                    }else {
+//                        mViewBinding.tvPeopleCount.setVisibility(View.VISIBLE);
+//                        mViewBinding.tvPeopleCount.setText(String.format(getString(R.string.people_number),leaveEarlyPeople.size()));
+//                    }
                     break;
 
                 default:
