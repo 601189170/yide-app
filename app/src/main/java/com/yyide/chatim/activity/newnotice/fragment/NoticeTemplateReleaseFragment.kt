@@ -2,18 +2,21 @@ package com.yyide.chatim.activity.newnotice.fragment
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckedTextView
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.annotation.NonNull
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SizeUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -29,6 +32,7 @@ import com.yyide.chatim.presenter.NoticeReleaseTemplatePresenter
 import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.view.NoticeReleasedTemplateView
 import com.yyide.chatim.widget.itemDocoretion.ItemDecorationPowerful
+
 
 /**
  * DESC 发布吗模板列表
@@ -60,7 +64,6 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
         mAdapter.loadMoreModule.isEnableLoadMore = false
         pageNum = 1
         messageTemplateTypeId?.let { mvpPresenter.templateNoticeList(it, pageNum, pageSize) }
-        mvpPresenter.templateNoticeClassifyList(1, 50)
     }
 
     private fun initView() {
@@ -80,24 +83,52 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
             pageNum = 1
             mvpPresenter.templateNoticeList(tabAdapter.getItem(position).id, pageNum, pageSize)
         }
+
+        val divider: Int = SizeUtils.dp2px(6f)
         //通知模板数据列表
-        pushBinding?.list?.layoutManager = GridLayoutManager(activity, 2)
-        pushBinding?.list?.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(12f)))
+        pushBinding?.list?.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        //manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        val gridItemDecoration = object : RecyclerView.ItemDecoration() {
+            @Override
+            override fun getItemOffsets(@NonNull outRect: Rect, @NonNull view: View, parent: RecyclerView, @NonNull state: RecyclerView.State) {
+                val layoutParams: StaggeredGridLayoutManager.LayoutParams = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
+                val spanIndex = layoutParams.spanIndex
+                val position = parent.getChildAdapterPosition(view)
+                outRect.bottom = divider;
+                if (position == 0 || position == 1) {
+                    outRect.top = divider * 2;
+                } else {
+                    outRect.top = 0;
+                }
+                if (spanIndex % 2 == 0) {//偶数项
+                    outRect.left = divider;
+                    outRect.right = divider / 2;
+                } else {
+                    outRect.left = divider / 2;
+                    outRect.right = divider;
+                }
+            }
+        }
+
+        pushBinding?.list?.addItemDecoration(gridItemDecoration)
         pushBinding?.list?.adapter = mAdapter
+        pushBinding?.list?.setItemViewCacheSize(0)
         mAdapter.setEmptyView(R.layout.empty)
         mAdapter.emptyLayout!!.setOnClickListener {
             //点击空数据界面刷新当前页数据
-            ToastUtils.showShort("getEmptyLayout To Data")
+            //ToastUtils.showShort("getEmptyLayout To Data")
         }
+
         mAdapter.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int ->
             val item: NoticeReleaseTemplateBean.DataBean.RecordsBean = mAdapter.getItem(position)
-            if (item.type == 0) {
+            if (position == 0) {
                 startActivity(Intent(context, NoticeGeneralPushActivity::class.java))
             } else {
                 //startActivity(Intent(context, NoticeTemplateDetailActivity::class.java))
                 NoticeWebViewActivity.startTitle(activity, BaseConstant.TEMPLATE_URL + item.id, "")
             }
         }
+
         mAdapter.loadMoreModule.setOnLoadMoreListener {
             //上拉加载时取消下拉刷新
 //            mSwipeRefreshLayout.setRefreshing(false);
@@ -132,10 +163,13 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
         override fun convert(holder: BaseViewHolder, itemBean: NoticeReleaseTemplateBean.DataBean.RecordsBean) {
             val pushBinding = ItemNoticePushBinding.bind(holder.itemView)
             pushBinding.tvNoticeTitle.text = itemBean.name
-            if (itemBean.type == 0) {
-                pushBinding.ivIconImg.setBackgroundResource(R.mipmap.icon_notice_add)
+            if (holder.adapterPosition == 0) {//空白模板
+                pushBinding.ivNoticeImg.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, SizeUtils.dp2px(140f))
+                pushBinding.ivNoticeImg.setImageResource(R.mipmap.icon_notice_add)
             } else {//1非空白模板
-                GlideUtil.loadImageRadius(context, itemBean.coverImg, pushBinding.ivIconImg, SizeUtils.dp2px(2f))
+                val height: Double = (ScreenUtils.getScreenHeight() * 0.4)
+                pushBinding.ivNoticeImg.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, height.toInt())
+                GlideUtil.loadImageRadius(context, itemBean.imgpath, pushBinding.ivNoticeImg, SizeUtils.dp2px(2f))
             }
         }
     }
@@ -171,11 +205,15 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
                 if (model.data != null && model.data.records != null) {
                     if (model.data.records.size < pageSize) {
                         //如果不够一页,显示没有更多数据布局
-                        mAdapter.loadMoreModule.loadMoreEnd()
+                        //mAdapter.loadMoreModule.loadMoreEnd()
                     } else {
                         mAdapter.loadMoreModule.loadMoreComplete()
                     }
+                } else {
+                    mAdapter.loadMoreModule.loadMoreComplete()
                 }
+            } else {
+                addItem()
             }
         }
     }
@@ -208,6 +246,7 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
     override fun getNoticeReleasedFail(msg: String?) {
         pushBinding?.swipeRefreshLayout?.isRefreshing = false
         Log.d(TAG, "getNoticeReleasedFail>>>>>：$msg")
+        addItem()
     }
 
 }

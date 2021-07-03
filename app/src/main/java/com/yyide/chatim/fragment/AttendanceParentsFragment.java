@@ -15,6 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.adapter.AttendanceParentsAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 家长查看学生考勤
@@ -109,6 +111,11 @@ public class AttendanceParentsFragment extends BaseMvpFragment<AttendancePresent
 
             }
         });
+    }
+
+    @OnClick({R.id.constraintLayout})
+    public void click(View v){
+        AttendanceActivity.start(getContext(), "", -1);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

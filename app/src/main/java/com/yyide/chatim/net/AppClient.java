@@ -105,6 +105,7 @@ public class AppClient {
                         .cacheControl(cacheControl)
                         .build();
             }
+
             Response originalResponse = chain.proceed(request);
             if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
                 int maxAge = 0; // read from cache

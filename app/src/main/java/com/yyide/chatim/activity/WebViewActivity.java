@@ -101,6 +101,9 @@ public class WebViewActivity extends BaseActivity {
         fl_webview = findViewById(R.id.fl_webview);
         pb_webview = findViewById(R.id.pb_webview);
         tvTitle = findViewById(R.id.title);
+        if(!TextUtils.isEmpty(title)){
+            view.setVisibility(View.VISIBLE);
+        }
         findViewById(R.id.back_layout).setOnClickListener(v -> finish());
     }
 

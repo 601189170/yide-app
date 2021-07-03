@@ -45,7 +45,7 @@ public class SwitchNoticeTimePop extends PopupWindow {
     }
 
     public interface SelectDateListener {
-        void onSelectDateListener(String date);
+        void onSelectDateListener(String date, String desc);
     }
 
     public SwitchNoticeTimePop(Activity context) {
@@ -61,15 +61,6 @@ public class SwitchNoticeTimePop extends PopupWindow {
         WheelView time = mView.findViewById(R.id.time);
         WheelView hour_time = mView.findViewById(R.id.hour_time);
         WheelView minute_time = mView.findViewById(R.id.minute_time);
-
-        confirm.setOnClickListener(v -> {
-            if (mSelectDateListener != null) {
-                mSelectDateListener.onSelectDateListener(getDateTime(date, hours, minute));
-            }
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-            }
-        });
 
         bg.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
@@ -147,6 +138,17 @@ public class SwitchNoticeTimePop extends PopupWindow {
             return false;
         });
 
+        confirm.setOnClickListener(v -> {
+            if (mSelectDateListener != null) {
+                mSelectDateListener.onSelectDateListener(getDateTime(date, hours, minute),
+                        (String) timeWheelAdapter.getItem(time.getCurrentItem()) + "\t"
+                                + hoursWheelAdapter.getItem(hour_time.getCurrentItem()) + ":"
+                                + minuteWheelAdapter.getItem(minute_time.getCurrentItem()));
+            }
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
+        });
         // 获取当前Activity的window
         Activity activity = (Activity) mView.getContext();
         if (activity != null) {

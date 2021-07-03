@@ -64,14 +64,50 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             if (!TextUtils.isEmpty(item.imgpath)) {
                 GlideUtil.loadImageRadius(baseContext, item.imgpath, detailBinding!!.ivBg, 8)
             }
+            var teacherNumber: Int = 0
+            var patriarchNumber: Int = 0
+            var brandClassNumber: Int = 0
+            var brandSiteNumber: Int = 0
+
             //通知范围
             if (item.notifyRange == 1) {//指定 部门发布
                 var stringBuffer = StringBuffer()
-                for (i in item.notifies.indices) {
-                    stringBuffer.append(item.notifies[i])
-                    if (i < item.notifies.size - 1) {
-                        stringBuffer.append("、")
+                item.notifies.forEachIndexed { index, notifiesBean ->
+                    when (notifiesBean.specifieType) {
+                        0 -> {
+                            notifiesBean.list.forEachIndexed { index, listBean ->
+                                teacherNumber += listBean.nums
+                            }
+                        }
+                        1 -> {
+                            notifiesBean.list.forEachIndexed { index, listBean ->
+                                patriarchNumber += listBean.nums
+                            }
+                        }
+                        2 -> {
+                            if (notifiesBean.list != null) {
+                                brandClassNumber = notifiesBean.list.size
+                            }
+                        }
+                        3 -> {
+                            if (notifiesBean.list != null) {
+                                brandSiteNumber = notifiesBean.list.size
+                            }
+                        }
                     }
+
+                }
+                if (brandClassNumber > 0) {
+                    stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber)).append("、")
+                }
+                if (patriarchNumber > 0) {
+                    stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+                }
+                if (teacherNumber > 0) {
+                    stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
+                }
+                if (brandSiteNumber > 0) {
+                    stringBuffer.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
                 }
                 detailBinding!!.tvNotificationRange.text = stringBuffer.toString()
             } else {
@@ -84,6 +120,8 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             } else {
                 detailBinding!!.tvReadDesc.text = getString(R.string.notice_read)
             }
+            detailBinding!!.tvRead.text = getString(R.string.dividing_line, item.confirmOrReadNum, item.totalNum)
+
 
 //            detailBinding!!.tvRead.text = item.
             detailBinding!!.btnCommit.isClickable = false

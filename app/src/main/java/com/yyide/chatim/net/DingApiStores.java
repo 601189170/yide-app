@@ -28,6 +28,7 @@ import com.yyide.chatim.model.HelpItemRep;
 import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.LoginRsp;
+import com.yyide.chatim.model.NoticeBrandBean;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.model.NoticeItemBean;
@@ -557,13 +558,13 @@ public interface DingApiStores {
     @POST("/message-server/cloud-message/app/message/receive/list")
     Observable<NoticeItemBean> myReceiverNoticeList(@Body RequestBody requestBody);
 
-    //我收到的确认通知
+    //我收到的-确认通知
     @GET("/message-server/cloud-message/app/message/receive/confirm/{id}")
     Observable<ResultBean> confirmNotice(@Path("id") long id);
 
     //我收到的确认詳情
-    @GET("/message-server/cloud-message/app/message/publish/{messagePublishId}")
-    Observable<NoticeMyReleaseDetailBean> confirmNoticeDetail(@Path("messagePublishId") long id);
+    @GET("/message-server/cloud-message/app/message/receive/{id}")
+    Observable<NoticeMyReleaseDetailBean> confirmNoticeDetail(@Path("id") long id);
 
     //首页通知弹窗
     @GET("/message-server/cloud-message/app/message/publish/indexShow")
@@ -595,12 +596,16 @@ public interface DingApiStores {
     //班牌班级
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/notification/notificationClasses")
-    Observable<ResultBean> notificationClasses();
+    Observable<NoticeBrandBean> notificationClasses();
 
     //班牌场地
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/notification/notificationSite")
-    Observable<ResultBean> notificationSite();
+    Observable<NoticeBrandBean> notificationSite();
 
+    //未读通知提醒
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("    /message-server/cloud-message/app/message/publish/unconfirm/users/notify")
+    Observable<ResultBean> unNoticeNotify(@Body RequestBody requestBody);
 
 }

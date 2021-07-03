@@ -116,6 +116,8 @@ public class AttendanceCheckRsp implements Serializable {
                     public String status;
                     public String time;
                     public String startDate;
+                    public String subjectName;
+                    public int section;
                     public String endDate;
                     public String deviceName;
                     public String goOutStatus;//0:签到，1:签退

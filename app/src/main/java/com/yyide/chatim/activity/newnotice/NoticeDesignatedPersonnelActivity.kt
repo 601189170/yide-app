@@ -6,6 +6,7 @@ import android.widget.CompoundButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.newnotice.fragment.NoticeBrandPersonnelFragment
 import com.yyide.chatim.activity.newnotice.fragment.NoticePersonnelFragment
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityNoticeReleasePersonnelBinding
@@ -37,9 +38,13 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
         personnelBinding!!.viewpager.offscreenPageLimit = 3
         personnelBinding!!.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                val fragment: Fragment = NoticePersonnelFragment.newInstance(position.toString())
+                var fragment: Fragment = NoticePersonnelFragment.newInstance(position.toString())
                 when (position) {
-                    0, 1, 2 -> {
+                    0, 1 -> {
+                        fragment = NoticePersonnelFragment.newInstance(position.toString())
+                    }
+                    2 -> {
+                        fragment = NoticeBrandPersonnelFragment.newInstance(position.toString())
                     }
                 }
                 return fragment

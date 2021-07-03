@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -18,25 +19,23 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentNoticeMyReceviedListBinding
 import com.yyide.chatim.model.NoticeItemBean
-import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeReceivedPresenter
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.view.NoticeReceivedView
 import com.yyide.chatim.widget.itemDocoretion.ItemDecorationPowerful
-import java.util.*
 
 /**
  * 我收到的通知列表
  * auther lrz
  * time  2021年6月17日11:00:27
  */
-class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), NoticeReceivedView, View.OnClickListener {
+class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), NoticeReceivedView, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private val TAG = NoticeMyReceivedFragment::class.java.simpleName
     private var viewBinding: FragmentNoticeMyReceviedListBinding? = null
     private var pageNum = 1
     private var pageSize = 20
     private val receivedAdapter = NoticeMyReceivedAdapter(R.layout.item_notice_my_recevied)
-    private var startData = DateUtils.getDate(System.currentTimeMillis())
+    private var startData = DateUtils.getDayBegin()
     private var endData = DateUtils.getDayEndDate(System.currentTimeMillis())
 
     companion object {
@@ -64,6 +63,13 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
         return NoticeReceivedPresenter(this)
     }
 
+    override fun onRefresh() {
+        pageNum = 1
+        startData = DateUtils.getDayBegin()
+        endData = DateUtils.getDayEndDate(System.currentTimeMillis())
+        mvpPresenter?.getReceiverNoticeList(startData, endData, pageNum, pageSize);
+    }
+
     private fun initView() {
         //默认选中第一个
         viewBinding!!.tvToday.isChecked = true
@@ -71,17 +77,22 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
         viewBinding!!.tvToday.setOnClickListener(this)
         viewBinding!!.tvThisWeek.setOnClickListener(this)
         viewBinding!!.tvThisMonth.setOnClickListener(this)
+
+        viewBinding!!.swipeRefreshLayout.isRefreshing = false
+        viewBinding!!.swipeRefreshLayout.setOnRefreshListener(this)
+        context?.resources?.getColor(R.color.colorAccent)?.let { viewBinding!!.swipeRefreshLayout.setColorSchemeColors(it) }
+
         viewBinding!!.list.layoutManager = GridLayoutManager(activity, 2)
         viewBinding!!.list.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(10f)))
         viewBinding!!.list.adapter = receivedAdapter
         receivedAdapter.setEmptyView(R.layout.empty)
         receivedAdapter.emptyLayout!!.setOnClickListener {
             //点击空数据界面刷新当前页数据
-            ToastUtils.showShort("getEmptyLayout To Data")
+            //ToastUtils.showShort("getEmptyLayout To Data")
         }
         receivedAdapter.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int ->
             var intent = Intent(context, NoticeConfirmDetailActivity::class.java)
-            intent.putExtra("messagePublishId", receivedAdapter.getItem(position).messagePublishId)
+            intent.putExtra("id", receivedAdapter.getItem(position).id)
             startActivity(intent)
         }
         receivedAdapter.loadMoreModule.setOnLoadMoreListener {
@@ -110,7 +121,7 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
                 viewBinding!!.tvToday.isChecked = true
                 viewBinding!!.tvToday.setTextColor(Color.WHITE)
                 startData = DateUtils.getDayBegin()
-                endData = DateUtils.getDate(System.currentTimeMillis())
+                endData = DateUtils.getDayEndDate(System.currentTimeMillis())
                 Log.d(TAG, "Day startDate:.>>> :$startData\t endDate>>> $endData")
             }
             viewBinding!!.tvThisWeek.id -> {
@@ -133,6 +144,7 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
     }
 
     override fun getMyReceivedList(model: NoticeItemBean?) {
+        viewBinding!!.swipeRefreshLayout.isRefreshing = false
         if (model?.code == BaseConstant.REQUEST_SUCCES2) {
             if (pageNum == 1) {
                 if (model?.data != null) {
@@ -146,15 +158,18 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
             if (model.data != null && model.data.records != null) {
                 if (model.data.records.size < pageSize) {
                     //如果不够一页,显示没有更多数据布局
-                    receivedAdapter.loadMoreModule.loadMoreEnd()
+                    //receivedAdapter.loadMoreModule.loadMoreEnd()
                 } else {
                     receivedAdapter.loadMoreModule.loadMoreComplete()
                 }
+            } else {
+                receivedAdapter.loadMoreModule.loadMoreComplete()
             }
         }
     }
 
     override fun getMyReceivedFail(msg: String) {
+        viewBinding!!.swipeRefreshLayout.isRefreshing = false
         Log.d(TAG, "getMyReceivedFail>>>>>：$msg")
     }
 

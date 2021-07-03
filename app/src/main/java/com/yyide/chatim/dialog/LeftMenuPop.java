@@ -25,6 +25,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.PowerActivity;
+import com.yyide.chatim.activity.PrivacyActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -252,7 +253,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             case R.id.layout9:
                 break;
             case R.id.layout10:
-                WebViewActivity.startTitle(context, BaseConstant.PRIVACY_URL, context.getString(R.string.privacyt_title));
+                WebViewActivity.startTitle(context, BaseConstant.PRIVACY_URL, context.getString(R.string.privacy_title));
+//                context.startActivity(new Intent(context, PrivacyActivity.class));
                 break;
             case R.id.exit://退出登录
 //                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);

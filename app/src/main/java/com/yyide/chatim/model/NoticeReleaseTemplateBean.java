@@ -34,7 +34,7 @@ public class NoticeReleaseTemplateBean {
             public int size;
             public int current;
             public String coverImg;
-
+            public String imgpath;
             public String messageTemplateTypeId;
             public String name;
             public String title;

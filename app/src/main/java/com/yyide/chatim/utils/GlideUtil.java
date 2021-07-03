@@ -5,9 +5,15 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.ClassesHonorPhotoListActivity;
 import com.yyide.chatim.net.GetData;
@@ -57,8 +63,8 @@ public class GlideUtil {
         Glide.with(context).load(path)
                 .centerCrop()
                 .apply(roundOptions)
-                .placeholder(R.drawable.bg_corners_blue)
-                .error(R.drawable.bg_corners_blue)
+                .placeholder(R.drawable.bg_corners_white)
+                .error(R.drawable.bg_corners_white)
                 .into(img);
     }
 

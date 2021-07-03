@@ -13,11 +13,13 @@ public class NoticePersonnelBean {
 
     public static class ListBean {
         public String name;
-        public String id;
+        public long id;
         public int level;
         public boolean check;
+        public int nums;
         public boolean unfold;//是否展开
-        public String parentId;
+        public long parentId;
+        public String type;
         public ArrayList<ListBean> list;
     }
 }

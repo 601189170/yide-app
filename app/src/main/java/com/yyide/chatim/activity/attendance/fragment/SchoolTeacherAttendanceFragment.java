@@ -100,7 +100,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
             dataToBind.addAll(convertDataToTreeNode(teachers.getAbsencePeople()));
-            adapter = new AttendanceSchoolTeacherAdapter(R.layout.item_attendance_student, dataToBind, teachers.goOutStatus);
+            adapter = new AttendanceSchoolTeacherAdapter(R.layout.item_attendance_school_teacher, dataToBind, teachers.goOutStatus);
             mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
             mViewBinding.recyclerview.setAdapter(adapter);
             adapter.setEmptyView(R.layout.empty_top);

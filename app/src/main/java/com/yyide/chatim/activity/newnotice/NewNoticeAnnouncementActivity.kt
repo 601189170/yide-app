@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit
 import com.yyide.chatim.MainActivity
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReceivedFragment
 import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReleaseFragment
 import com.yyide.chatim.activity.newnotice.fragment.NoticeTemplateReleaseFragment
@@ -16,6 +17,7 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityNoticeBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.GetAppVersionResponse
+import com.yyide.chatim.model.GetUserSchoolRsp
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -42,9 +44,17 @@ class NewNoticeAnnouncementActivity : BaseActivity() {
         noticeBinding!!.top.title.setText(R.string.notice_announcement_title)
         noticeBinding!!.top.backLayout.setOnClickListener { v: View? -> finish() }
         val mTitles: MutableList<String> = ArrayList()
-        mTitles.add(getString(R.string.notice_tab_my_received))
-        mTitles.add(getString(R.string.notice_tab_my_push))
-        mTitles.add(getString(R.string.notice_tab_push))
+
+        //
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS == SpData.getIdentityInfo().status) {
+            mTitles.add(getString(R.string.notice_tab_my_received))
+            noticeBinding!!.slidingTabLayout.visibility = View.GONE
+        } else {
+            mTitles.add(getString(R.string.notice_tab_my_received))
+            mTitles.add(getString(R.string.notice_tab_my_push))
+            mTitles.add(getString(R.string.notice_tab_push))
+        }
+
         noticeBinding!!.viewpager.offscreenPageLimit = 3
         noticeBinding!!.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {

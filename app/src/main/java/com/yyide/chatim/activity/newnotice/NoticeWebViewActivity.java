@@ -144,6 +144,7 @@ public class NoticeWebViewActivity extends BaseActivity {
         webSettings.setJavaScriptEnabled(true);
         //允许SessionStorage/LocalStorage存储
         webSettings.setDomStorageEnabled(true);
+        webSettings.setAppCacheEnabled(false);
         webSettings.setBlockNetworkImage(false);
 
         //缩放操作

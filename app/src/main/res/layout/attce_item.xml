@@ -149,6 +149,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view_line"
         android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="#EEF2F8"
@@ -169,14 +170,18 @@
 
     <TextView
         android:id="@+id/tv_desc"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_4"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
         android:textColor="@color/text_1E1E1E"
         android:textSize="@dimen/text_18"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/piechart"
-        app:layout_constraintStart_toStartOf="@+id/piechart"
+        app:layout_constraintEnd_toEndOf="@+id/view_line"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/piechart" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

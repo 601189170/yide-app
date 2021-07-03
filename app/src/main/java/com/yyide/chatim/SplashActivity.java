@@ -28,6 +28,8 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
+import com.yyide.chatim.activity.AgreementActivity;
+import com.yyide.chatim.activity.PrivacyActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -225,7 +227,7 @@ public class SplashActivity extends AppCompatActivity {
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacyt_title));
+                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacy_title));
             }
 
             @Override
@@ -239,7 +241,7 @@ public class SplashActivity extends AppCompatActivity {
         ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacyt_title));
+                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.AGREEMENT_URL, getString(R.string.agreement_title));
             }
 
             @Override

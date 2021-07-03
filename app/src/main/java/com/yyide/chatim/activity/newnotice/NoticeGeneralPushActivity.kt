@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.CompoundButton
+import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseConstant
@@ -19,10 +20,13 @@ import com.yyide.chatim.databinding.ActivityNoticeReleaseBinding
 import com.yyide.chatim.dialog.SwitchNoticeTimePop
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeBlankReleaseBean
+import com.yyide.chatim.model.NoticePersonnelBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeReleasePresenter
 import com.yyide.chatim.view.NoticeBlankReleaseView
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 /**
@@ -34,7 +38,9 @@ import org.greenrobot.eventbus.EventBus
 class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), NoticeBlankReleaseView {
     private var releaseBinding: ActivityNoticeReleaseBinding? = null
     private var isConfirm = false
-    private var isTimer = true
+    private var isTimer = false
+    private var timeData: String = ""
+
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_release
     }
@@ -43,6 +49,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         super.onCreate(savedInstanceState)
         releaseBinding = ActivityNoticeReleaseBinding.inflate(layoutInflater)
         setContentView(releaseBinding!!.root)
+        EventBus.getDefault().register(this)
         initView()
     }
 
@@ -80,7 +87,11 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     private fun initListener() {
         releaseBinding!!.switch1.setOnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
             if (isChecked) releaseBinding!!.clTimingTime.visibility = View.INVISIBLE else releaseBinding!!.clTimingTime.visibility = View.VISIBLE
-            isTimer = !isChecked
+            if (!isChecked) {
+                timeData = ""
+                releaseBinding!!.tvShowTimedTime.text = ""
+            }
+            isTimer = isChecked
         }
 
         releaseBinding!!.clTimingTime.setOnClickListener { showSelectTime() }
@@ -125,26 +136,96 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 releaseBinding!!.etInputContent.isFocusableInTouchMode = true;
                 releaseBinding!!.etInputContent.requestFocus();
             }
-            !isTimer -> {
+            (!releaseBinding!!.switch1.isChecked && TextUtils.isEmpty(timeData)) -> {
                 ToastUtils.showShort(R.string.notice_input_push_time)
             }
+            (list.isEmpty() || list.size == 0) -> {
+                ToastUtils.showShort("请选择通知范围")
+            }
             else -> {
-                val itemBean = NoticeBlankReleaseBean();
+                val itemBean = NoticeBlankReleaseBean()
                 //空白模板为固定ID
                 itemBean.messageTemplateId = "1405486010163490820"
                 itemBean.title = etTitle
                 itemBean.content = etContent
                 itemBean.isTimer = isTimer
+                itemBean.notifyRange = 1
                 itemBean.isConfirm = isConfirm
-                itemBean.timerDate = releaseBinding!!.tvShowTimedTime.text.toString().trim()
+                itemBean.timerDate = timeData
+                itemBean.recordList = list
                 mvpPresenter.releaseNotice(itemBean)
             }
         }
     }
 
+    val list = mutableListOf<NoticeBlankReleaseBean.RecordListBean>()
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun event(messageEvent: EventMessage) {
+        if (BaseConstant.TYPE_NOTICE_RANGE == messageEvent.code) {
+            Log.d("NoticePersonnelFragment", messageEvent.message)
+            if (!TextUtils.isEmpty(messageEvent.message)) {
+                val item: NoticeBlankReleaseBean = JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
+                isConfirm = item.isConfirm
+                if (item.recordList != null)
+                    list.addAll(list.size, item.recordList)
+                setCheckNumber()
+            }
+        }
+    }
+
+    private var teacherNumber: Int = 0
+    private var patriarchNumber: Int = 0
+    private var brandNumber: Int = 0
+    private var brandSiteNumber: Int = 0
+
+    private fun setCheckNumber() {
+        list.forEach { item ->
+            when (item.specifieType) {
+                "0" -> {//0教师 1家长 2班牌
+                    teacherNumber = item.nums
+                }
+                "1" -> {
+                    patriarchNumber = item.nums
+                }
+                "2" -> {
+                    brandNumber = item.nums
+                }
+                "3" -> {
+                    brandSiteNumber = item.nums
+                }
+            }
+        }
+        var descNumber: StringBuffer = StringBuffer()
+        if (teacherNumber > 0) {
+            descNumber.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
+        }
+        if (patriarchNumber > 0) {
+            descNumber.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+        }
+        if (brandNumber > 0) {
+            descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber)).append("、")
+        }
+        if (brandSiteNumber > 0) {
+            descNumber.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
+        }
+
+        releaseBinding!!.tvRange.text = descNumber.toString()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+    }
+
     private fun showSelectTime() {
         val switchNoticeTimePop = SwitchNoticeTimePop(this)
-        switchNoticeTimePop.setSelectClasses { date: String? -> releaseBinding!!.tvShowTimedTime.text = date }
+        switchNoticeTimePop.setSelectClasses { date: String?, desc: String? ->
+            releaseBinding!!.tvShowTimedTime.text = desc
+            if (date != null) {
+                timeData = date
+            }
+        }
     }
 
     override fun createPresenter(): NoticeReleasePresenter {
@@ -166,5 +247,10 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
 
     override fun getBlankReleaseFail(msg: String?) {
         Log.d("NoticeReleaseActivity", "getBlankReleaseFail$msg")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 }

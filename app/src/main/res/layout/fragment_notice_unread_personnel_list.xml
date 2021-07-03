@@ -27,43 +27,7 @@
         tools:layout_editor_absoluteX="115dp"
         tools:listitem="@layout/item_notice_personnel" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/tv_un_confirm_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_12"
-            android:text="@string/notice_un_confirm_number"
-            android:textColor="#ff999999"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btn_remind"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_35"
-            android:layout_marginEnd="@dimen/dp_20"
-            android:background="@drawable/drawable_material_button_radius_22"
-            android:gravity="center"
-            android:paddingStart="@dimen/dp_20"
-            android:paddingEnd="@dimen/dp_20"
-            android:text="@string/notice_remind_everyone"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_15"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

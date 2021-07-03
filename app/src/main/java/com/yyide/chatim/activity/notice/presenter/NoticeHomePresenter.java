@@ -4,6 +4,7 @@ import com.yyide.chatim.activity.notice.view.NoticeHomeView;
 import com.yyide.chatim.activity.notice.view.NoticeScopeView;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.HomeNoticeRsp;
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.net.ApiCallback;
 
 public class NoticeHomePresenter extends BasePresenter<NoticeHomeView> {
@@ -12,9 +13,9 @@ public class NoticeHomePresenter extends BasePresenter<NoticeHomeView> {
     }
 
     public void getHomeNotice(){
-        addSubscription(dingApiStores.getMyNoticeBacklog(), new ApiCallback<HomeNoticeRsp>() {
+        addSubscription(dingApiStores.noticeShow(), new ApiCallback<NoticeMyReleaseDetailBean>() {
             @Override
-            public void onSuccess(HomeNoticeRsp model) {
+            public void onSuccess(NoticeMyReleaseDetailBean model) {
                 mvpView.noticeHome(model);
             }
 

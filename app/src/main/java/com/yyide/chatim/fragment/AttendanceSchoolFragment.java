@@ -63,9 +63,6 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
         EventBus.getDefault().register(this);
     }
 
@@ -97,9 +94,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     }
 
     private void initView() {
-        mViewBinding.getRoot().setVisibility(View.INVISIBLE);
-        mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mViewBinding.recyclerview.setAdapter(adapter);
+
     }
 
     //    -->设置各区块的颜色
@@ -108,38 +103,21 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
     };
 
-    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceSchoolBean, BaseViewHolder>(R.layout.item_attendance_school) {
+    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder>(R.layout.item_attendance_school) {
 
         @Override
-        protected void convert(@NotNull BaseViewHolder holder, AttendanceSchoolBean item) {
-            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item1 = item.getItem1();
-            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item2 = item.getItem2();
+        protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item) {
             ConstraintLayout constraintLayout1 = holder.getView(R.id.constraintLayout1);
-            ConstraintLayout constraintLayout2 = holder.getView(R.id.constraintLayout);
-            PieChart piechart2 = holder.getView(R.id.piechart2);
             PieChart piechart = holder.getView(R.id.piechart);
-            if (item1 != null) {
-                holder.setText(R.id.tv_attendance_type, item1.getAttName());
-                holder.setText(R.id.tv_desc, item1.getThingName());
-                setPieChart(item1, piechart);
+            if (item != null) {
+                holder.setText(R.id.tv_attendance_type, item.getAttName());
+                holder.setText(R.id.tv_desc, item.getThingName());
+                setPieChart(item, piechart);
                 constraintLayout1.setOnClickListener(v -> {
-                    AttendanceActivity.start(getContext(), item1.getPeopleType(), getItemPosition(item));
+                    AttendanceActivity.start(getContext(), item.getPeopleType(), holder.getAdapterPosition());
                 });
                 piechart.setTouchEnabled(false);
-                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item1.getPeopleType(), item1.getIndex()));
-            }
-            if (item2 != null) {
-                constraintLayout2.setVisibility(View.VISIBLE);
-                holder.setText(R.id.tv_attendance_type2, item2.getAttName());
-                holder.setText(R.id.tv_desc2, item2.getThingName());
-                constraintLayout2.setOnClickListener(v -> {
-                    AttendanceActivity.start(getContext(), item2.getPeopleType(), item2.getIndex());
-                });
-                piechart2.setTouchEnabled(false);
-                piechart2.setOnClickListener(v -> AttendanceActivity.start(getContext(), item2.getPeopleType(), item2.getIndex()));
-                setPieChart(item2, piechart2);
-            } else {
-                constraintLayout2.setVisibility(View.GONE);
+                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item.getPeopleType(), holder.getAdapterPosition()));
             }
         }
 
@@ -182,7 +160,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             for (AttendanceCheckRsp.DataBean.AttendancesFormBean item : dataBean.getAttendancesForm()) {
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
                 AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers = item.getTeachers();
-                if(teachers != null){
+                if (teachers != null) {
                     schoolBean.setAbsence(teachers.getAbsence());
                     schoolBean.setApplyNum(teachers.getApplyNum());
                     schoolBean.setAttName(teachers.getName());
@@ -200,48 +178,15 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         if (dataBean.getSchoolPeopleAllForm() != null) {
             schoolPeopleAllFormBeanList.addAll(schoolPeopleAllFormBeanList.size(), dataBean.getSchoolPeopleAllForm());
         }
-        //数据处理
-        List<AttendanceSchoolBean> list = new ArrayList<>();
-        if (schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) {
-            for (int i = 0; i < schoolPeopleAllFormBeanList.size(); i++) {
-                AttendanceSchoolBean attendanceSchoolBean = new AttendanceSchoolBean();
-                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean = schoolPeopleAllFormBeanList.get(i);
-                schoolPeopleAllFormBean.setIndex(i);
-                attendanceSchoolBean.setItem1(schoolPeopleAllFormBean);
-                i++;
-                if (i < schoolPeopleAllFormBeanList.size()) {
-                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean2 = schoolPeopleAllFormBeanList.get(i);
-                    schoolPeopleAllFormBean2.setIndex(i);
-                    attendanceSchoolBean.setItem2(schoolPeopleAllFormBean2);
-                }
-                list.add(attendanceSchoolBean);
-            }
-        }
-        if (list != null && list.size() > 0) {
-            mViewBinding.getRoot().setVisibility(View.VISIBLE);
-        }
-        adapter.setList(list);
-    }
 
-    public class AttendanceSchoolBean {
-        private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item1;
-        private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item2;
-
-        public AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean getItem1() {
-            return item1;
+        //处理数组大于大于一个的时候用网格布局
+        if (schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 1) {
+            mViewBinding.recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        } else {
+            mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
-
-        public void setItem1(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item1) {
-            this.item1 = item1;
-        }
-
-        public AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean getItem2() {
-            return item2;
-        }
-
-        public void setItem2(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item2) {
-            this.item2 = item2;
-        }
+        mViewBinding.recyclerview.setAdapter(adapter);
+        adapter.setList(schoolPeopleAllFormBeanList);
     }
 
     @Override

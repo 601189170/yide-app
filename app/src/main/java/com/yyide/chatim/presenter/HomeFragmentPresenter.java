@@ -3,6 +3,8 @@ package com.yyide.chatim.presenter;
 
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.HomeFragmentView;
@@ -29,7 +31,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getUserSchoolDataFail(msg);
+                mvpView.getFail(msg);
             }
 
             @Override
@@ -39,13 +41,13 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         });
     }
 
-    public void getHomeNotice() {
+    public void getHomeTodo() {
 //        mvpView.showLoading();
         HashMap<String, Object> map = new HashMap();
         map.put("current", 1);
         map.put("size", 5);
         map.put("isOperation", 0);
-        addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
+        addSubscription(dingApiStores.noticeShow(), new ApiCallback<TodoRsp>() {
             @Override
             public void onSuccess(TodoRsp model) {
                 mvpView.getIndexMyNotice(model);
@@ -53,7 +55,46 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getUserSchoolDataFail(msg);
+                mvpView.getFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void getNotice() {
+        addSubscription(dingApiStores.noticeShow(), new ApiCallback<NoticeMyReleaseDetailBean>() {
+            @Override
+            public void onSuccess(NoticeMyReleaseDetailBean model) {
+                mvpView.getNotice(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void confirmNotice(long id){
+        mvpView.showLoading();
+        addSubscription(dingApiStores.confirmNotice(id), new ApiCallback<ResultBean>() {
+            @Override
+            public void onSuccess(ResultBean model) {
+                mvpView.confirmNotice(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getFail(msg);
             }
 
             @Override

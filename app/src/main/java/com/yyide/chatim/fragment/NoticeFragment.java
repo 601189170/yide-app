@@ -23,6 +23,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.HomeNoticeRsp;
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.StringUtils;
 
@@ -36,28 +37,22 @@ import butterknife.BindView;
 public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> implements NoticeHomeView {
     private static final String TAG = "NoticeFragment";
     private View mBaseView;
-    @BindView(R.id.notice_content)
-    TextView notice_content;
-
     @BindView(R.id.notice_time)
     TextView notice_time;
-
     @BindView(R.id.ll_notice)
     LinearLayout ll_notice;
-
     @BindView(R.id.tv_title)
     TextView tv_title;
-
-    @BindView(R.id.tv_null_notice)
-    TextView tv_null_notice;
+    @BindView(R.id.tv_notice_author)
+    TextView tv_notice_author;
 
     private boolean jump = true;
-    private HomeNoticeRsp.DataBean data;
+    private NoticeMyReleaseDetailBean.DataBean data;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mBaseView = inflater.inflate(R.layout.notice_fragmnet, container, false);
+        mBaseView = inflater.inflate(R.layout.notice_fragmnet_new, container, false);
         return mBaseView;
     }
 
@@ -99,39 +94,27 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     }
 
     @Override
-    public void noticeHome(HomeNoticeRsp homeNoticeRsp) {
+    public void noticeHome(NoticeMyReleaseDetailBean homeNoticeRsp) {
         Log.e(TAG, "noticeHome: " + homeNoticeRsp);
-        if (homeNoticeRsp.getCode() == 200) {
-            data = homeNoticeRsp.getData();
+        if (homeNoticeRsp.code == BaseConstant.REQUEST_SUCCES2) {
+            data = homeNoticeRsp.data;
             if (data != null) {
-                MMKV.defaultMMKV().encode("hasNoticePermission", data.isHasNoticePermission());
-//                jump = true;
-                notice_content.setVisibility(View.VISIBLE);
-                tv_null_notice.setVisibility(View.GONE);
-                notice_content.setText(StringUtils.firstLineRetractText(getContext(), data.getContent()));
-                notice_time.setText(DateUtils.formatTime(data.getProductionTime().toString(), "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd"));
-                if (!TextUtils.isEmpty(data.getTitle())) {
-                    tv_title.setVisibility(View.VISIBLE);
-                    tv_title.setText("《" + data.getTitle() + "》");
+                notice_time.setText(data.timerDate);
+                tv_notice_author.setText(data.publisher);
+                if (!TextUtils.isEmpty(data.title)) {
+                    tv_title.setText("《" + data.title + "》");
                 }
             } else {
-//                jump = false;
-                tv_title.setVisibility(View.GONE);
-                notice_content.setVisibility(View.GONE);
-                tv_null_notice.setVisibility(View.VISIBLE);
+                tv_title.setText("暂无公告");
             }
         } else {
-            tv_title.setVisibility(View.GONE);
-            notice_content.setVisibility(View.GONE);
-            tv_null_notice.setVisibility(View.VISIBLE);
+            tv_title.setText("暂无公告");
         }
     }
 
     @Override
     public void noticeHomeFail(String msg) {
         Log.e(TAG, "noticeHomeFail: " + msg);
-        tv_title.setVisibility(View.GONE);
-        notice_content.setVisibility(View.GONE);
-        tv_null_notice.setVisibility(View.VISIBLE);
+        tv_title.setText("暂无公告");
     }
 }

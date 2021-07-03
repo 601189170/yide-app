@@ -6,14 +6,17 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
+import com.yyide.chatim.activity.newnotice.NoticeConfirmDetailActivity;
 import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
@@ -59,13 +62,14 @@ public class PushMessageReceiver extends JPushMessageReceiver {
                 //发送消息类型 1 消息通知 2 代办 3系统通知 4 作业 5课表
                 PushModel pushModel = JSON.parseObject(message.notificationExtras, PushModel.class);
                 if ("1".equals(pushModel.getPushType())) {//通知公告消息
-                    Intent intent = new Intent(context, NoticeDetailActivity.class);
-                    intent.putExtra("type", 2);
-                    intent.putExtra("signId", pushModel.getSignId());
-                    intent.putExtra("id", pushModel.getId());
-                    intent.putExtra("status", "2");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    context.startActivity(intent);
+                    if (TextUtils.isEmpty(pushModel.getSignId())) {
+                        Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
+                        intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        context.startActivity(intent);
+                    } else {
+                        ToastUtils.showShort("消息已被撤回");
+                    }
                 } else if ("2".equals(pushModel.getPushType())) {//待办
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 } else if ("3".equals(pushModel.getPushType()) || "6".equals(pushModel.getPushType())) {//系统通知

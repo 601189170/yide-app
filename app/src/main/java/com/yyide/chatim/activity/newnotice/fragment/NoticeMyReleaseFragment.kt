@@ -65,7 +65,7 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
     private fun initView() {
         //默认选中第一个
         viewBinding!!.list.layoutManager = GridLayoutManager(activity, 2)
-        viewBinding!!.list.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(12f)))
+        viewBinding!!.list.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(6f)))
         viewBinding!!.list.adapter = mAdapter
         mAdapter.setEmptyView(R.layout.empty)
         mAdapter.emptyLayout!!.setOnClickListener {
@@ -97,13 +97,22 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
         mvpPresenter?.getMyNoticeList(pageNum, pageSize)
     }
 
-    private val mAdapter: BaseQuickAdapter<NoticeItemBean.DataBean.RecordsBean, BaseViewHolder> = object : BaseQuickAdapter<NoticeItemBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_my_push), LoadMoreModule {
+    private val mAdapter = object : BaseQuickAdapter<NoticeItemBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_my_push), LoadMoreModule {
 
         @RequiresApi(Build.VERSION_CODES.N)
         override fun convert(holder: BaseViewHolder, item: NoticeItemBean.DataBean.RecordsBean) {
             val view = ItemNoticeMyPushBinding.bind(holder.itemView)
             view.tvNoticeTitle.text = item.title
-            GlideUtil.loadImageRadius(context, item.coverImgpath, view.ivNoticeImg, 2)
+            if (item.type == 0) {//空白模板文本
+                view.clTemplate.visibility = View.INVISIBLE
+                view.clBlank.visibility = View.VISIBLE
+                view.tvTitle.text = item.title
+                view.tvContent.text = item.content
+            } else {
+                view.clBlank.visibility = View.GONE
+                view.clTemplate.visibility = View.VISIBLE
+                GlideUtil.loadImageRadius(context, item.imgpath, view.ivNoticeImg, 2)
+            }
 
             if (item.isRetract) {//撤回
                 view.tvNoticeConfirm.text = getString(R.string.notice_has_withdrawn)
@@ -162,10 +171,12 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
             if (model.data != null && model.data.records != null) {
                 if (model.data.records.size < pageSize) {
                     //如果不够一页,显示没有更多数据布局
-                    mAdapter.loadMoreModule.loadMoreEnd()
+                    //mAdapter.loadMoreModule.loadMoreEnd()
                 } else {
                     mAdapter.loadMoreModule.loadMoreComplete()
                 }
+            } else {
+                mAdapter.loadMoreModule.loadMoreComplete()
             }
         }
     }

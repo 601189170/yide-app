@@ -1,5 +1,6 @@
 package com.yyide.chatim;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,10 +26,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
@@ -35,13 +40,16 @@ import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.presenter.LoginPresenter;
 import com.yyide.chatim.utils.DemoLog;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.Utils;
 import com.yyide.chatim.view.LoginView;
 
@@ -334,7 +342,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     public void getFail(String msg) {
         hideLoading();
         Log.e(TAG, "onFailure: " + msg);
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             ToastUtils.showShort(msg);
         }
     }

@@ -32,9 +32,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_weight="1"
-                android:textColor="#222222"
+                android:ellipsize="end"
                 android:lines="1"
-                android:autoSizeTextType="uniform"
+                android:textColor="#222222"
                 android:textSize="14sp" />
 
             <TextView

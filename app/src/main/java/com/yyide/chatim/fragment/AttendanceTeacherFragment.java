@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,9 +15,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.adapter.AttendanceAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
-import com.yyide.chatim.adapter.leave.AttendanceSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AttendanceCheckRsp;
@@ -35,9 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
-public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
+public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
 
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
@@ -48,7 +48,7 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
     private View mBaseView;
     AttendanceAdapter announAdapter;
     IndexAdapter indexAdapter;
-    public String TAG = AttendanceFragment.class.getSimpleName();
+    public String TAG = AttendanceTeacherFragment.class.getSimpleName();
     private boolean isSchool = false;
 
     @Nullable
@@ -111,10 +111,15 @@ public class AttendanceFragment extends BaseMvpFragment<AttendancePresenter> imp
         });
     }
 
+    @OnClick({R.id.constraintLayout})
+    public void click(View v){
+        AttendanceActivity.start(getContext(), "", -1);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            Log.d("HomeRefresh", AttendanceFragment.class.getSimpleName());
+            Log.d("HomeRefresh", AttendanceTeacherFragment.class.getSimpleName());
             announAdapter.notifyData(null);
             getHomeAttendance();
         }

@@ -307,9 +307,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         holder.setText(R.id.tv_status, item.getStatusType());
                         String startTime = DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         String endTime = DateUtils.formatTime(item.getEndDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-                        holder.setText(R.id.tv_student_event, "请假时间");
-                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
-                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
+//                        holder.setText(R.id.tv_student_event, "请假时间");
+//                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
+//                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
                         break;
                 }
             }

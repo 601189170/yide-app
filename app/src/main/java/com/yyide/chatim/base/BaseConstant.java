@@ -38,11 +38,11 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.147:8888";//Dev 环境
+    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-            public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
+    //    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
-    public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
+    public static final String API_SERVER_URL = !BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
     public static final String API_SERVER_HTML_RELEASE = "https://cloud.edu.1d1j.cn";
     public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.net";
@@ -58,10 +58,16 @@ public class BaseConstant {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     //通知公告模板地址
-    public static final String TEMPLATE_URL = "http://192.168.3.147:8005/#/notice/edit/";
+//    public static final String TEMPLATE_URL_DEV = "http://192.168.3.147:8005/#/notice/edit/";
+    public static final String TEMPLATE_URL_RELEASE = "https://wap.edu.1d1j.cn/#/notice/edit/";
+    public static final String TEMPLATE_URL_DEV = "https://app.uat.edu.1d1j.net/#/notice/edit/";
+
+    public static final String TEMPLATE_URL = BuildConfig.DEBUG ? TEMPLATE_URL_DEV : TEMPLATE_URL_RELEASE;
 
     //隐私协议
-    public static final String PRIVACY_URL = "https://file.1d1j.cn/privacy.html";
+    public static final String PRIVACY_URL = "https://file.1d1j.cn/privacyPolicy.html";
+
+    public static final String AGREEMENT_URL = "https://file.1d1j.cn/serviceAgreement.html";
     /**
      * request Code 从相册选择照片不裁切
      **/
@@ -92,6 +98,9 @@ public class BaseConstant {
     public static final String TYPE_NOTICE_NUM = "type_message_num";
     public static final String TYPE_NOTICE_PUSH_BLANK = "type_notice_push_blank";
     public static final String TYPE_NOTICE_IS_CONFIRM = "type_notice_is_confirm";
+    public static final String TYPE_NOTICE_PERSONNEL = "type_notice_personnel";
+    public static final String TYPE_NOTICE_RANGE = "type_notice_range";
+    public static final String TYPE_NOTICE_UN_CONFIRM_NUMBER = "type_notice_un_confirm_number";
 
     public static final String TYPE_LEAVE = "type_leave";
     public static final String TYPE_UPDATE_IMG = "type_update_img";

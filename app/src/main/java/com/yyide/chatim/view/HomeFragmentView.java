@@ -5,6 +5,8 @@ import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.TodoRsp;
@@ -16,10 +18,13 @@ import com.yyide.chatim.model.UserLogoutRsp;
  */
 public interface HomeFragmentView extends BaseView {
 
+    void confirmNotice(ResultBean model);
+
+    void getNotice(NoticeMyReleaseDetailBean model);
 
     void getUserSchool(GetUserSchoolRsp rsp);
 
-    void getUserSchoolDataFail(String rsp);
+    void getFail(String rsp);
 
     void getIndexMyNotice(TodoRsp rsp);
 }

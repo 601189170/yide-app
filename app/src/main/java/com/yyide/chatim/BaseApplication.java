@@ -48,7 +48,7 @@ public class BaseApplication extends Application {
         instance = this;
 
         //内存泄露檢測
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         //blankj初始化
         Utils.init(this);
         MultiDex.install(this);

@@ -5,6 +5,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.NoticeItemBean;
 import com.yyide.chatim.model.NoticeUnreadPeopleBean;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.NoticeReceivedView;
 import com.yyide.chatim.view.NoticeUnreadPeopleView;

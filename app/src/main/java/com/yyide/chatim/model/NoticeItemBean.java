@@ -34,11 +34,13 @@ public class NoticeItemBean {
             public int current;
             public long id;
             public String title;
+            public String content;
             public boolean isConfirm;
             public boolean isRetract;
             public boolean isTimer;
             public String timerDate;
-            public String type;
+            public int type;
+            public String publisher;
             public String coverImgpath;
             public long messagePublishId;
             public String imgpath;

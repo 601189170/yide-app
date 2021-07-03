@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/dp_12"
     android:layout_marginTop="@dimen/dp_12"
-    android:background="@drawable/selector_checked_tv_white"
+    android:background="@drawable/selector_checked_tv_edf5ff"
     android:gravity="center"
     android:paddingStart="@dimen/dp_14"
     android:paddingTop="5dp"

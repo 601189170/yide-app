@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -16,9 +17,12 @@ import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentNoticeUnreadPersonnelListBinding
 import com.yyide.chatim.databinding.ItemNoticePersonnelBinding
 import com.yyide.chatim.databinding.ItemNoticeUnreadPersonnelBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeUnreadPeopleBean
+import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeUnreadPeoplePresenter
 import com.yyide.chatim.view.NoticeUnreadPeopleView
+import org.greenrobot.eventbus.EventBus
 
 /**
  * 我发布的通知 未读/已读 人员列表
@@ -75,6 +79,7 @@ class NoticeUnreadPersonnelFragment : BaseMvpFragment<NoticeUnreadPeoplePresente
         adapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
         //adapter.setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, _: Int -> startActivity(Intent(activity, NoticeDetailActivity::class.java)) }
         mvpPresenter?.getNoticeUnreadList(id, type, pageNum, pageSize)
+
     }
 
     private val adapter: BaseQuickAdapter<NoticeUnreadPeopleBean.DataBean.RecordsBean, BaseViewHolder> = object : BaseQuickAdapter<NoticeUnreadPeopleBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_unread_personnel), LoadMoreModule {
@@ -92,7 +97,7 @@ class NoticeUnreadPersonnelFragment : BaseMvpFragment<NoticeUnreadPeoplePresente
     override fun getUnreadPeopleList(model: NoticeUnreadPeopleBean?) {
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
-                viewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, model.data.total)
+                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER, "", model.data.total))
                 if (pageNum == 1) {
                     if (model?.data != null) {
                         adapter.setList(model.data.records)

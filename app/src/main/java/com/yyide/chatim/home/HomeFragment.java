@@ -1,34 +1,41 @@
 package com.yyide.chatim.home;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SizeUtils;
 import com.yyide.chatim.BuildConfig;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.dialog.LeftMenuPop;
-import com.yyide.chatim.fragment.AttendanceFragment;
+import com.yyide.chatim.fragment.AttendanceTeacherFragment;
 import com.yyide.chatim.fragment.AttendanceParentsFragment;
 import com.yyide.chatim.fragment.AttendanceSchoolFragment;
 import com.yyide.chatim.fragment.BannerFragment;
@@ -39,7 +46,8 @@ import com.yyide.chatim.fragment.TableFragment;
 import com.yyide.chatim.fragment.WorkFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.NoteTabBean;
+import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
+import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
@@ -123,7 +131,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         replaceFragment();
         setSchoolInfo();
         //mvpPresenter.getUserSchool();
-        mvpPresenter.getHomeNotice();
+        mvpPresenter.getHomeTodo();
+        //mvpPresenter.getNotice();
     }
 
     void initVerticalTextview() {
@@ -140,7 +149,44 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onRefresh() {
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
         //mvpPresenter.getUserSchool();
-        mvpPresenter.getHomeNotice();
+        mvpPresenter.getHomeTodo();
+    }
+
+    private void showNotice(NoticeMyReleaseDetailBean.DataBean model) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+        DialogHomeShowNoticeBinding previewBinding = DialogHomeShowNoticeBinding.inflate(getLayoutInflater());
+        alertDialog.setView(previewBinding.getRoot());
+        Dialog dialog = alertDialog.create();
+        dialog.show();
+        WindowManager m = getActivity().getWindowManager();
+        m.getDefaultDisplay(); //为获取屏幕宽、高
+        WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); //获取对话框当前的参数值
+        p.height = (int) (ScreenUtils.getScreenHeight() * 0.7); //高度设置为屏幕的0.3
+//        p.width = (int) (ScreenUtils.getScreenWidth()); //宽度设置为屏幕的0.5
+        //设置主窗体背景颜色为黑色
+        previewBinding.icClose.setOnClickListener(v -> dialog.dismiss());
+//        dialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
+        dialog.getWindow().setAttributes(p);//设置生效
+        if (model != null) {
+            if (model.type == 0) {
+                previewBinding.ivImg.setVisibility(View.GONE);
+                previewBinding.tvTitle.setText(model.title);
+                previewBinding.tvContent.setText(model.title);
+                previewBinding.tvContent.setMovementMethod(ScrollingMovementMethod.getInstance());
+            } else {
+                previewBinding.ivImg.setVisibility(View.VISIBLE);
+                GlideUtil.loadImageRadius(getActivity(), "", previewBinding.ivImg, SizeUtils.dp2px(6f));
+            }
+
+            if (model.isConfirm) {
+
+            } else {
+
+            }
+            previewBinding.btnConfirm.setOnClickListener(v -> {
+                mvpPresenter.confirmNotice(model.id);
+            });
+        }
     }
 
     @Override
@@ -236,7 +282,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             //通知
             fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
-            fragmentTransaction.replace(R.id.kq_content, new AttendanceFragment());
+            fragmentTransaction.replace(R.id.kq_content, new AttendanceTeacherFragment());
             //班级相册轮播
             fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
             //班级作业
@@ -256,6 +302,20 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         workContent.setVisibility(View.GONE);
         studentHonorContent.setVisibility(View.GONE);
         classHonorContent.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void confirmNotice(ResultBean model) {
+        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+
+        }
+    }
+
+    @Override
+    public void getNotice(NoticeMyReleaseDetailBean model) {
+        if (BaseConstant.REQUEST_SUCCES2 == model.code) {
+            showNotice(model.data);
+        }
     }
 
     @Override
@@ -290,7 +350,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
             }
         } else if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
-            mvpPresenter.getHomeNotice();
+            mvpPresenter.getHomeTodo();
         } else if (BaseConstant.TYPE_HOME_CHECK_IDENTITY.equals(messageEvent.getCode())) {
             setSchoolInfo();
             replaceFragment();
@@ -304,7 +364,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     @Override
-    public void getUserSchoolDataFail(String rsp) {
+    public void getFail(String rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
     }

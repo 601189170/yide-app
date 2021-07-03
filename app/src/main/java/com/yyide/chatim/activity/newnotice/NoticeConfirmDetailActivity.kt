@@ -11,6 +11,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.blankj.utilcode.util.SizeUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -18,7 +20,9 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityNoticeConfirmDetailBinding
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean
+import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.net.ApiCallback
+import com.yyide.chatim.utils.GlideUtil
 
 /**
  * 确认通知详情
@@ -29,6 +33,8 @@ class NoticeConfirmDetailActivity : BaseActivity() {
     private var confirmDetailBinding: ActivityNoticeConfirmDetailBinding? = null
     private lateinit var mAdapter: BaseQuickAdapter<String, BaseViewHolder>
     private val mDataList = java.util.ArrayList<String>()
+    private var detailId: Long = 0
+
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_confirm_detail
     }
@@ -38,7 +44,11 @@ class NoticeConfirmDetailActivity : BaseActivity() {
         confirmDetailBinding = ActivityNoticeConfirmDetailBinding.inflate(layoutInflater)
         setContentView(confirmDetailBinding!!.root)
         initView()
-        getDetail(intent.getLongExtra("messagePublishId", -1))
+        confirmDetailBinding?.detail?.btnConfirm?.setOnClickListener {
+            confirm()
+        }
+        detailId = intent.getLongExtra("id", -1);
+        getDetail(detailId)
     }
 
     private fun getDetail(publishId: Long) {
@@ -47,12 +57,18 @@ class NoticeConfirmDetailActivity : BaseActivity() {
             override fun onSuccess(model: NoticeMyReleaseDetailBean?) {
                 if (model != null) {
                     if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
-                        confirmDetailBinding!!.detail.btnConfirm.visibility = View.VISIBLE
-                        confirmDetailBinding?.detail?.tvNoticeTitle?.text = model.data.title
-                        confirmDetailBinding?.detail?.tvNoticeContent?.text = model.data.content
+                        if (model.data.type == 0) { //空白模板显示文本信息
+                            confirmDetailBinding?.detail?.tvNoticeTitle?.text = model.data.title
+                            confirmDetailBinding?.detail?.tvNoticeContent?.text = model.data.content
+                        } else {
+                            confirmDetailBinding?.detail?.clBlank?.visibility = View.GONE
+                            confirmDetailBinding?.detail?.clImg?.visibility = View.VISIBLE
+                            GlideUtil.loadImageRadius(mActivity, model.data.imgpath, confirmDetailBinding!!.detail.ivNoticeImg, SizeUtils.dp2px(4f))
+                        }
                         confirmDetailBinding?.detail?.tvPushTime?.text = model.data.timerDate
                         confirmDetailBinding?.detail?.tvPushPeople?.text = model.data.publisher
-                        if (model.data.isConfirm) {
+                        confirmDetailBinding!!.detail.btnConfirm.visibility = View.VISIBLE
+                        if (model.data.isConfirm && !model.data.confirmOrRead) {
                             confirmDetailBinding?.detail?.btnConfirm?.isClickable = true
                             confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_blue_20)
                             confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_confirm_roger_that)
@@ -61,12 +77,38 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                             confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
                             confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_have_been_confirmed)
                         }
+
                     }
                 }
             }
 
             override fun onFailure(msg: String) {
+                Log.e("onFailure", "---findTargetSnapPosition---")
+            }
 
+            override fun onFinish() {
+                hideLoading()
+            }
+
+        })
+    }
+
+    private fun confirm() {
+        showLoading()
+        addSubscription(mDingApiStores.confirmNotice(detailId), object : ApiCallback<ResultBean?>() {
+            override fun onSuccess(model: ResultBean?) {
+                if (model != null) {
+                    if (model.code == BaseConstant.REQUEST_SUCCES2) {
+                        ToastUtils.showShort(model.msg)
+                        confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
+                        confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
+                        confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_have_been_confirmed)
+                    }
+                }
+            }
+
+            override fun onFailure(msg: String) {
+                Log.e("onFailure", "---findTargetSnapPosition---")
             }
 
             override fun onFinish() {
