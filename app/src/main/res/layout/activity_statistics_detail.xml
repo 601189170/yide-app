@@ -74,6 +74,8 @@
                 app:tabIndicatorHeight="3dp"
                 app:tabMaxWidth="0dp"
                 app:tabMode="scrollable"
+                app:tabBackground="@color/transparent"
+                app:tabRippleColor="@color/transparent"
                 app:tabSelectedTextColor="#1E1E1E"
                 app:tabTextColor="#909399" />
         </androidx.constraintlayout.widget.ConstraintLayout>
