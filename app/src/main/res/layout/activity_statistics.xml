@@ -31,6 +31,8 @@
             app:tabIndicatorColor="@color/colorPrimaryDark"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorHeight="3dp"
+            app:tabBackground="@color/transparent"
+            app:tabRippleColor="@color/transparent"
             app:tabMaxWidth="0dp"
             app:tabMode="fixed"
             app:tabSelectedTextColor="#1E1E1E"
