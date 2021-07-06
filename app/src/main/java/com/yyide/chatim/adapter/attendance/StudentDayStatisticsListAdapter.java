@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter.attendance;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.PhotoViewActivity;
 import com.yyide.chatim.databinding.ItemStudentAttendanceDayStatisticsBinding;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
@@ -139,9 +141,15 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
                 .load(facePath)
                 .placeholder(R.drawable.default_head)
                 .error(R.drawable.default_head)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
+               // .skipMemoryCache(true)
+               // .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView);
+        String finalFacePath = facePath;
+        imageView.setOnClickListener((v)->{
+                Intent intent = new Intent(context, PhotoViewActivity.class);
+                intent.putExtra("path", finalFacePath);
+                context.startActivity(intent);
+        });
     }
 
     @Override
