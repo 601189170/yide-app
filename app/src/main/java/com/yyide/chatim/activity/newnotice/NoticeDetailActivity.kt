@@ -45,7 +45,8 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         detailBinding!!.include.title.setText(R.string.notice_my_push_title)
         detailBinding!!.include.backLayout.setOnClickListener { finish() }
         detailBinding!!.clReadUnread.setOnClickListener {
-            NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0);
+            NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0, itemBean?.confirmOrReadNum
+                    ?: 0)
         }
     }
 
@@ -55,14 +56,18 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             detailBinding!!.tvNoticeTitle.text = item.title
             detailBinding!!.tvNoticeContent.text = item.content
 
-            if (!TextUtils.isEmpty(item.timerDate)) {
+            if (item.isTimer) {
                 detailBinding!!.tvPushDesc.text = getString(R.string.notice_timing_push) + "\t\t" + item.timerDate
             } else {
-                detailBinding!!.tvPushDesc.text = if (item.type == 0) "空白模板" else "模板"  //通知公告类型 0空白模板 1非空白模板
+                detailBinding!!.tvPushDesc.text = "立即发布"  //通知公告类型 0空白模板 1非空白模板
             }
-
-            if (!TextUtils.isEmpty(item.imgpath)) {
-                GlideUtil.loadImageRadius(baseContext, item.imgpath, detailBinding!!.ivBg, 8)
+            if (item.type == 0) {
+                detailBinding!!.constraintLayout.visibility = View.VISIBLE
+            } else {
+                detailBinding!!.constraintLayout.visibility = View.GONE
+                if (!TextUtils.isEmpty(item.imgpath)) {
+                    GlideUtil.loadImageRadius(baseContext, item.imgpath, detailBinding!!.ivBg, 8)
+                }
             }
             var teacherNumber: Int = 0
             var patriarchNumber: Int = 0
@@ -98,10 +103,10 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
                 }
                 if (brandClassNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber)).append("、")
+                    stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber))
                 }
                 if (patriarchNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+                    stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber))
                 }
                 if (teacherNumber > 0) {
                     stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
@@ -109,7 +114,11 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
                 if (brandSiteNumber > 0) {
                     stringBuffer.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
                 }
-                detailBinding!!.tvNotificationRange.text = stringBuffer.toString()
+                if (!TextUtils.isEmpty(stringBuffer.toString()) && stringBuffer.toString().endsWith("、")) {
+                    detailBinding!!.tvNotificationRange.text = stringBuffer.toString().removeSuffix("、")
+                } else {
+                    detailBinding!!.tvNotificationRange.text = stringBuffer.toString()
+                }
             } else {
                 detailBinding!!.tvNotificationRange.text = "全校"
             }

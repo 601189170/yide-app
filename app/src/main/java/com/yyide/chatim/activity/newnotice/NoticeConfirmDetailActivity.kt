@@ -68,16 +68,19 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                         confirmDetailBinding?.detail?.tvPushTime?.text = model.data.timerDate
                         confirmDetailBinding?.detail?.tvPushPeople?.text = model.data.publisher
                         confirmDetailBinding!!.detail.btnConfirm.visibility = View.VISIBLE
-                        if (model.data.isConfirm && !model.data.confirmOrRead) {
-                            confirmDetailBinding?.detail?.btnConfirm?.isClickable = true
-                            confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_blue_20)
-                            confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_confirm_roger_that)
+                        if (model.data.isConfirm) {
+                            if (!model.data.confirmOrRead) {
+                                confirmDetailBinding?.detail?.btnConfirm?.isClickable = true
+                                confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_blue_20)
+                                confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_confirm_roger_that)
+                            } else {
+                                confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
+                                confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
+                                confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_have_been_confirmed)
+                            }
                         } else {
-                            confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
-                            confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
-                            confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_have_been_confirmed)
+                            confirmDetailBinding?.detail?.btnConfirm?.visibility = View.GONE
                         }
-
                     }
                 }
             }

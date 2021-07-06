@@ -38,15 +38,17 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-    //    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
+    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
     //线上环境
-    public static final String API_SERVER_URL = !BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
+    public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
+    //通知模板地址
     public static final String API_SERVER_HTML_RELEASE = "https://cloud.edu.1d1j.cn";
     public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.net";
     public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
+
     //学生作品
     public static final String STUDENT_HONOR_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/studentWorks";
     public static final String STUDENT_FAMILY_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/patriarchProduction";
@@ -79,6 +81,8 @@ public class BaseConstant {
 
     public final static String JG_ALIAS_NAME = "aliasName";
     public final static String JG_SEQUENCE = "sequence";
+
+    public static final  String SP_PRIVACY = "sp_privacy";
 
     /**
      * EventBus 常量

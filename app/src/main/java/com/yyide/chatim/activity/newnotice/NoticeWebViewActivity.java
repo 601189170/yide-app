@@ -34,6 +34,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.R;
@@ -41,7 +43,7 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.WebModel;
 
-public class NoticeWebViewActivity extends BaseActivity {
+public class NoticeWebViewActivity extends AppCompatActivity {
 
     String currentUrl;
     private FrameLayout fl_webview;
@@ -60,11 +62,6 @@ public class NoticeWebViewActivity extends BaseActivity {
     private static final String PARAM_TITLE = "title";
     private String title;
 
-    @Override
-    public int getContentViewID() {
-        return R.layout.activity_notice_webview;
-    }
-
     /**
      * @param context
      * @param url     HTTP地址
@@ -80,6 +77,7 @@ public class NoticeWebViewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notice_webview);
         currentUrl = getIntent().getStringExtra(PARAM_URL);
         title = getIntent().getStringExtra(PARAM_TITLE);
         setStatusBar();
@@ -90,7 +88,6 @@ public class NoticeWebViewActivity extends BaseActivity {
 
     private void setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            findViewById(R.id.iv_status_bar).setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, StatusBarUtils.getStatusBarHeight(this)));
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.black));
             getWindow().setNavigationBarColor(getResources().getColor(R.color.black));

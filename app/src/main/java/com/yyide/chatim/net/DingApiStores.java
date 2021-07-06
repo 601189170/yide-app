@@ -567,6 +567,7 @@ public interface DingApiStores {
     Observable<NoticeMyReleaseDetailBean> confirmNoticeDetail(@Path("id") long id);
 
     //首页通知弹窗
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/message-server/cloud-message/app/message/publish/indexShow")
     Observable<NoticeMyReleaseDetailBean> noticeShow();
 

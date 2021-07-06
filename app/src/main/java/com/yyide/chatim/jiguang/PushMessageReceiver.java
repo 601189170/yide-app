@@ -62,7 +62,7 @@ public class PushMessageReceiver extends JPushMessageReceiver {
                 //发送消息类型 1 消息通知 2 代办 3系统通知 4 作业 5课表
                 PushModel pushModel = JSON.parseObject(message.notificationExtras, PushModel.class);
                 if ("1".equals(pushModel.getPushType())) {//通知公告消息
-                    if (TextUtils.isEmpty(pushModel.getSignId())) {
+                    if (!TextUtils.isEmpty(pushModel.getSignId())) {
                         Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
                         intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

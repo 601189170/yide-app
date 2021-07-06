@@ -53,7 +53,12 @@ public class BaseApplication extends Application {
         Utils.init(this);
         MultiDex.install(this);
         MMKV.initialize(this); //初始化mmkv
+        if (MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
+            initSdk();
+        }
+    }
 
+    public void initSdk(){
         /**
          * TUIKit的初始化函数
          *

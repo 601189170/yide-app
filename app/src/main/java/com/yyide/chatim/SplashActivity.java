@@ -65,9 +65,14 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 设置状态栏透明
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+            int vis = getWindow().getDecorView().getSystemUiVisibility();
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            getWindow().getDecorView().setSystemUiVisibility(vis);
         }
         mFlashView = findViewById(R.id.flash_view);
         mUserInfo = UserInfo.getInstance();
@@ -75,7 +80,7 @@ public class SplashActivity extends AppCompatActivity {
         initData();
         Log.e(TAG, "loginName: " + JSON.toJSONString(loginName));
         Log.e(TAG, "passWord: " + JSON.toJSONString(passWord));
-        if (!MMKV.defaultMMKV().decodeBool(SP_PRIVACY, false)) {
+        if (!MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
             showPrivacy();
         } else {
             if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
@@ -189,8 +194,6 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
-    private String SP_PRIVACY = "sp_privacy";
-
     /**
      * 显示用户协议和隐私政策
      */
@@ -268,13 +271,14 @@ public class SplashActivity extends AppCompatActivity {
 
         btn_exit.setOnClickListener(v -> {
             dialog.dismiss();
-            MMKV.defaultMMKV().encode(SP_PRIVACY, false);
+            MMKV.defaultMMKV().encode(BaseConstant.SP_PRIVACY, false);
             finish();
         });
 
         btn_enter.setOnClickListener(v -> {
             dialog.dismiss();
-            MMKV.defaultMMKV().encode(SP_PRIVACY, true);
+            MMKV.defaultMMKV().encode(BaseConstant.SP_PRIVACY, true);
+            BaseApplication.getInstance().initSdk();
             if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
                 Tologin(loginName, passWord);
             } else {

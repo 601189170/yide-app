@@ -14,11 +14,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -27,6 +30,8 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.BuildConfig;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
@@ -132,7 +137,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         setSchoolInfo();
         //mvpPresenter.getUserSchool();
         mvpPresenter.getHomeTodo();
-        //mvpPresenter.getNotice();
+        mvpPresenter.getNotice();
     }
 
     void initVerticalTextview() {
@@ -152,40 +157,56 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mvpPresenter.getHomeTodo();
     }
 
+    private Dialog dialog;
+
     private void showNotice(NoticeMyReleaseDetailBean.DataBean model) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        DialogHomeShowNoticeBinding previewBinding = DialogHomeShowNoticeBinding.inflate(getLayoutInflater());
-        alertDialog.setView(previewBinding.getRoot());
-        Dialog dialog = alertDialog.create();
-        dialog.show();
-        WindowManager m = getActivity().getWindowManager();
-        m.getDefaultDisplay(); //为获取屏幕宽、高
-        WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); //获取对话框当前的参数值
-        p.height = (int) (ScreenUtils.getScreenHeight() * 0.7); //高度设置为屏幕的0.3
-//        p.width = (int) (ScreenUtils.getScreenWidth()); //宽度设置为屏幕的0.5
-        //设置主窗体背景颜色为黑色
-        previewBinding.icClose.setOnClickListener(v -> dialog.dismiss());
-//        dialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
-        dialog.getWindow().setAttributes(p);//设置生效
         if (model != null) {
-            if (model.type == 0) {
-                previewBinding.ivImg.setVisibility(View.GONE);
-                previewBinding.tvTitle.setText(model.title);
-                previewBinding.tvContent.setText(model.title);
-                previewBinding.tvContent.setMovementMethod(ScrollingMovementMethod.getInstance());
-            } else {
-                previewBinding.ivImg.setVisibility(View.VISIBLE);
-                GlideUtil.loadImageRadius(getActivity(), "", previewBinding.ivImg, SizeUtils.dp2px(6f));
+            long notice_id = MMKV.defaultMMKV().decodeLong("notice_id", -1);
+            if (model.isConfirm && !model.confirmOrRead) {//同一个Id不重复弹出
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                MMKV.defaultMMKV().encode("notice_id", model.id);
+                DialogHomeShowNoticeBinding previewBinding = DialogHomeShowNoticeBinding.inflate(getLayoutInflater());
+                alertDialog.setView(previewBinding.getRoot());
+                dialog = alertDialog.create();
+                dialog.show();
+                WindowManager m = getActivity().getWindowManager();
+                m.getDefaultDisplay(); //为获取屏幕宽、高
+                WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); //获取对话框当前的参数值
+                p.height = (int) (ScreenUtils.getScreenHeight() * 0.8); //高度设置为屏幕的0.3
+                p.width = (int) (ScreenUtils.getScreenWidth() * 0.8); //宽度设置为屏幕的0.5
+                //设置主窗体背景颜色为黑色
+                previewBinding.icClose.setOnClickListener(v -> dialog.dismiss());
+//        dialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
+                dialog.getWindow().setAttributes(p);//设置生效
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (ScreenUtils.getScreenHeight() * 0.6));
+                layoutParams.bottomMargin = SizeUtils.dp2px(20);
+                previewBinding.cardView.setLayoutParams(layoutParams);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                if (model.type == 0) {
+                    previewBinding.ivImg.setVisibility(View.GONE);
+                    previewBinding.nestedScrollView.setVisibility(View.VISIBLE);
+                    previewBinding.tvTitle.setText(model.title);
+                    previewBinding.tvContent.setText(model.content);
+                } else {
+                    previewBinding.ivImg.setVisibility(View.VISIBLE);
+                    previewBinding.nestedScrollView.setVisibility(View.GONE);
+                    GlideUtil.loadImageRadius(getActivity(), model.imgpath, previewBinding.ivImg, SizeUtils.dp2px(6f));
+                }
+
+                if (model.isConfirm) {//需要去人按钮
+                    if (!model.confirmOrRead) {
+                        previewBinding.btnConfirm.setVisibility(View.VISIBLE);
+                    } else {
+                        previewBinding.btnConfirm.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    previewBinding.btnConfirm.setVisibility(View.INVISIBLE);
+                }
+                previewBinding.btnConfirm.setOnClickListener(v -> {
+                    mvpPresenter.confirmNotice(model.id);
+                });
             }
-
-            if (model.isConfirm) {
-
-            } else {
-
-            }
-            previewBinding.btnConfirm.setOnClickListener(v -> {
-                mvpPresenter.confirmNotice(model.id);
-            });
         }
     }
 
@@ -307,7 +328,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void confirmNotice(ResultBean model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
-
+            //ToastUtils.showShort(model.getMsg());
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
         }
     }
 
@@ -396,11 +420,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         TodoRsp.DataBean.RecordsBean dataBean = new TodoRsp.DataBean.RecordsBean();
         dataBean.setFirstData("暂无待办数据");
         noticeHomeRsps.add(dataBean);
-        if (noticeHomeRsps != null) {
-            list.clear();
-            for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
-                list.add(item.getFirstData());
-            }
+        list.clear();
+        for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
+            list.add(item.getFirstData());
         }
     }
 

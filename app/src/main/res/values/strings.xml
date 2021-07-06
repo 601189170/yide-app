@@ -212,8 +212,8 @@
     <string name="notice_teacher_number">教师%d人</string>
     <string name="notice_patriarch_number">家长%d人</string>
     <string name="notice_brand_site_number">场地%d台</string>
-    <string name="notice_brand_check_class_number">班牌%d台</string>
-    <string name="notice_brand_class_number">已选班牌%d台</string>
+    <string name="notice_brand_check_class_number">班牌%d个</string>
+    <string name="notice_brand_class_number">已选班牌%d个</string>
     <string name="dividing_line">%d/%d</string>
 
 

@@ -47,7 +47,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         map.put("current", 1);
         map.put("size", 5);
         map.put("isOperation", 0);
-        addSubscription(dingApiStores.noticeShow(), new ApiCallback<TodoRsp>() {
+        addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
             @Override
             public void onSuccess(TodoRsp model) {
                 mvpView.getIndexMyNotice(model);

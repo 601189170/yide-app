@@ -83,11 +83,8 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
         if (itemTeachersBean != null && itemTeachersBean.getTeachers() != null) {
             teachers = itemTeachersBean.getTeachers();
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvDesc.setText(teachers.getThingName());
-            mViewBinding.tvAttendanceTime.setText("考勤时间 " +
-                    (!TextUtils.isEmpty(teachers.getRequiredTime()) ?
-                            teachers.getRequiredTime() :
-                            teachers.getApplyDate()));
+            mViewBinding.tvEventName.setText(teachers.getThingName());
+
             mViewBinding.tvAttendanceRate.setText(teachers.getRate());
             if (!TextUtils.isEmpty(teachers.getRate())) {
                 try {
@@ -96,7 +93,6 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
                     e.printStackTrace();
                 }
             }
-            mViewBinding.tvBeTo.setText(teachers.getNumber() + "");
             mViewBinding.tvLateNum.setText(teachers.getLate() + "");
 
             mViewBinding.tvLateNum.setText(("1".equals(teachers.getGoOutStatus()) ? teachers.getLeaveEarly() : teachers.getLate()) + "");
@@ -104,7 +100,6 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
             mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
 
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
-            mViewBinding.tvNormalNum.setText(teachers.getApplyNum() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             adapter.setList(teachers.getPeople());
         }

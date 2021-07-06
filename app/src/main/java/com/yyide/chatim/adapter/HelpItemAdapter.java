@@ -8,9 +8,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
@@ -23,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
@@ -36,10 +40,12 @@ import com.yyide.chatim.view.YDVideo;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
+import java.util.Hashtable;
 import java.util.List;
 
 public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder> implements LoadMoreModule {
     private YDVideo videoView;
+
     public void stop() {
         if (videoView != null) {
             videoView.onPause();
@@ -91,16 +97,18 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 //增加封面
                 ImageView imageView = new ImageView(holder.itemView.getContext());
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Glide.with(holder.itemView.getContext())
-                        .setDefaultRequestOptions(
-                                new RequestOptions()
-                                        .frame(0)
-                                        .centerCrop()
-                        )
-                        .load(itemBean.getVideo())
-                        .into(imageView);
+//                RequestOptions options = new RequestOptions();
+//                options.skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL)
+//                        .frame(1000000)
+//                        .centerCrop();
+//
+//                Glide.with(imageView)
+//                        .setDefaultRequestOptions(options)
+//                        .load(itemBean.getVideo())
+//                        .into(imageView);
+
                 videoView1.setThumbImageView(imageView);
-                videoView1.setUp(itemBean.getVideo(), false, "");
+                videoView1.setUp(itemBean.getVideo(), true, "");
                 break;
         }
     }

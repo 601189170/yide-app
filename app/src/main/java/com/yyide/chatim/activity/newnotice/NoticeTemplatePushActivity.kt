@@ -198,7 +198,11 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         if (brandSiteNumber > 0) {
             descNumber.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
         }
-        pushDetailBinding!!.tvRange.text = descNumber.toString()
+        if (!TextUtils.isEmpty(descNumber.toString()) && descNumber.toString().endsWith("、")) {
+            pushDetailBinding!!.tvRange.text = descNumber.toString().removeSuffix("、")
+        } else {
+            pushDetailBinding!!.tvRange.text = descNumber.toString()
+        }
     }
 
     override fun createPresenter(): NoticeTemplateGeneralPresenter {

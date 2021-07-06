@@ -20,8 +20,12 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.common.reflect.TypeToken;
 import com.tencent.imsdk.v2.V2TIMConversation;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
+import com.tencent.imsdk.v2.V2TIMFriendInfo;
+import com.tencent.imsdk.v2.V2TIMFriendshipListener;
+import com.tencent.imsdk.v2.V2TIMFriendshipManager;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
+import com.tencent.imsdk.v2.V2TIMValueCallback;
 import com.tencent.qcloud.tim.uikit.component.CustomLinearLayoutManager;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.component.action.PopDialogAdapter;
@@ -93,11 +97,22 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.conversation_fragment, container, false);
-        //initView();
         return mBaseView;
     }
 
     private void initView() {
+        V2TIMManager.getFriendshipManager().getFriendList(new V2TIMValueCallback<List<V2TIMFriendInfo>>() {
+            @Override
+            public void onError(int code, String desc) {
+
+            }
+
+            @Override
+            public void onSuccess(List<V2TIMFriendInfo> v2TIMFriendInfos) {
+                Log.d("", "");
+            }
+        });
+
         V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
             @Override
             public void onProgress(int progress) {
@@ -175,18 +190,15 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-
+        //initView();
     }
 
     private void initTitleAction() {
-        mConversationLayout.getTitleBar().setOnRightClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mMenu.isShowing()) {
-                    mMenu.hide();
-                } else {
-                    mMenu.show();
-                }
+        mConversationLayout.getTitleBar().setOnRightClickListener(view -> {
+            if (mMenu.isShowing()) {
+                mMenu.hide();
+            } else {
+                mMenu.show();
             }
         });
     }

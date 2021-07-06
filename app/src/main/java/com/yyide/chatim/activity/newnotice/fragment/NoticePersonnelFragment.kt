@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.newnotice.fragment
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -131,12 +132,11 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                     view.ivUnfold.setImageDrawable(context.resources.getDrawable(R.drawable.icon_down))
                     view.recyclerview.visibility = View.GONE
                 }
-                if (itemBean.list != null && itemBean.list.size > 0 && itemBean.list.get(0).parentId > 0) {
-                    view.recyclerview.layoutManager = LinearLayoutManager(context)
-                    val adapter = PersonnelAdapter()
-                    view.recyclerview.adapter = adapter
-                    adapter.setList(itemBean.list)
-                }
+
+                view.recyclerview.layoutManager = LinearLayoutManager(context)
+                val adapter = PersonnelAdapter()
+                view.recyclerview.adapter = adapter
+                adapter.setList(itemBean.list)
 
                 view.root.setOnClickListener { v: View? ->
                     Log.e(TAG, "onBindViewHolder: onclick is unfold:" + view.ivUnfold)
@@ -215,8 +215,13 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     private fun getAllCount(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>): Int {
         if (noticeScopeBean != null) {
             noticeScopeBean.forEachIndexed { index, listBean ->
-                total++
-                getAllCount(listBean.list)
+                if (TextUtils.isEmpty(listBean.name)) {
+                    noticeScopeBean.remove(listBean)
+                } else {
+                    total++
+                    getAllCount(listBean.list)
+                }
+
             }
         }
         return total
@@ -233,7 +238,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
         var recordList: MutableList<NoticeBlankReleaseBean.RecordListBean> = mutableListOf()
         var resultBean = NoticeBlankReleaseBean()
         var recordListBean = NoticeBlankReleaseBean.RecordListBean()
-        resultBean.isConfirm = viewBinding!!.cbSelectNumber.isChecked
+        resultBean.isConfirm = viewBinding!!.switchPush.isChecked
         recordListBean.specifieType = type
         recordListBean.nums = checkPeopleCount
         getCheckList(noticeScopeBean)

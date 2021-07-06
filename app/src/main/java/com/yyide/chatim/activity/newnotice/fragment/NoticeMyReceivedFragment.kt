@@ -65,8 +65,6 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
 
     override fun onRefresh() {
         pageNum = 1
-        startData = DateUtils.getDayBegin()
-        endData = DateUtils.getDayEndDate(System.currentTimeMillis())
         mvpPresenter?.getReceiverNoticeList(startData, endData, pageNum, pageSize);
     }
 
@@ -155,16 +153,17 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
                     receivedAdapter.addData(model.data.records)
                 }
             }
-            if (model.data != null && model.data.records != null) {
-                if (model.data.records.size < pageSize) {
-                    //如果不够一页,显示没有更多数据布局
-                    //receivedAdapter.loadMoreModule.loadMoreEnd()
-                } else {
-                    receivedAdapter.loadMoreModule.loadMoreComplete()
-                }
-            } else {
-                receivedAdapter.loadMoreModule.loadMoreComplete()
-            }
+            receivedAdapter.loadMoreModule.loadMoreComplete()
+//            if (model.data != null && model.data.records != null) {
+//                if (model.data.records.size < pageSize) {
+//                    //如果不够一页,显示没有更多数据布局
+//                    //receivedAdapter.loadMoreModule.loadMoreEnd()
+//                } else {
+//                    receivedAdapter.loadMoreModule.loadMoreComplete()
+//                }
+//            } else {
+//                receivedAdapter.loadMoreModule.loadMoreComplete()
+//            }
         }
     }
 

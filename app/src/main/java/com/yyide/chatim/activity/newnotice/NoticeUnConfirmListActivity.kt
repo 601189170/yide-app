@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.TabHost
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
@@ -25,20 +27,23 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.*
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener as OnPageChangeListener
 
 /**
  * 收到的通知详情未确认人员列表
  * 2021年6月28日
  *
  */
-class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>() , NoticeUnreadView {
+class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), NoticeUnreadView {
     private lateinit var mViewBinding: ActivityNoticeUnConfirmListBinding
     private var id: Long = 0
+    private var readCount: Int = 0
 
     companion object {
-        fun start(context: Context, id: Long) {
+        fun start(context: Context, id: Long, readCount: Int) {
             val intent = Intent(context, NoticeUnConfirmListActivity::class.java)
             intent.putExtra("id", id)
+            intent.putExtra("readCount", readCount)
             context.startActivity(intent)
         }
     }
@@ -50,6 +55,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>() , N
         EventBus.getDefault().register(this)
         initView()
         id = intent.getLongExtra("id", 0)
+        readCount = intent.getIntExtra("readCount", 0)
     }
 
     override fun getContentViewID(): Int {
@@ -63,7 +69,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>() , N
         mTitles.add(getString(R.string.notice_tab_teacher))
         mTitles.add(getString(R.string.notice_tab_patriarch))
 //        mTitles.add(getString(R.string.notice_tab_class_card))
-        mViewBinding.viewpager.offscreenPageLimit = 3
+        mViewBinding.viewpager.offscreenPageLimit = 0
         mViewBinding.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
                 return NoticeUnreadPersonnelFragment.newInstance(id, position)
@@ -77,21 +83,21 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>() , N
                 return mTitles[position]
             }
         }
+
         mViewBinding.slidingTabLayout.setViewPager(mViewBinding.viewpager)
         mViewBinding.slidingTabLayout.currentTab = 0
-
-        mViewBinding!!.btnRemind.setOnClickListener {
+        mViewBinding.btnRemind.setOnClickListener {
             mvpPresenter?.unNoticeNotify(id)
         }
     }
 
-    private var total: Int = 0
+    private var unCheckNumber: Int = 0
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun event(messageEvent: EventMessage) {
         if (BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER == messageEvent.code) {
-            total += messageEvent.count
-            mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, total)
+            unCheckNumber += messageEvent.count
+            mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, unCheckNumber - readCount)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.newnotice.fragment.adaoter
 
 import android.view.View
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -21,7 +22,7 @@ class NoticeMyReceivedAdapter(layoutResId: Int) : BaseQuickAdapter<NoticeItemBea
         } else {
             view.clBlank.visibility = View.GONE
             view.clTemplate.visibility = View.VISIBLE
-            GlideUtil.loadImageRadius(context, item.imgpath, view.ivNoticeImg, 2)
+            GlideUtil.loadImageRadius(context, item.imgpath, view.ivNoticeImg, 2, true)
         }
         view.tvNoticeTitle.text = item.title
         view.tvNoticeTime.text = item.timerDate

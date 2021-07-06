@@ -97,9 +97,9 @@ class NoticeUnreadPersonnelFragment : BaseMvpFragment<NoticeUnreadPeoplePresente
     override fun getUnreadPeopleList(model: NoticeUnreadPeopleBean?) {
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
-                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER, "", model.data.total))
                 if (pageNum == 1) {
                     if (model?.data != null) {
+                        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER, "", model.data.total))
                         adapter.setList(model.data.records)
                     }
                 } else {

@@ -7,12 +7,14 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
+import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager;
 
 public class YDVideo extends StandardGSYVideoPlayer {
@@ -65,18 +67,17 @@ public class YDVideo extends StandardGSYVideoPlayer {
     /* 初始化操作 */
     private void init() {
         //EXOPlayer内核，支持格式更多
-//        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
         //代理缓存模式，支持所有模式，不支持m3u8等，默认
 //        CacheFactory.setCacheManager(ProxyCacheManager.class);
         //系统内核模式
 //        PlayerFactory.setPlayManager(SystemPlayerManager.class);
         //ijk内核，默认模式
-        PlayerFactory.setPlayManager(IjkPlayerManager.class);
+//        PlayerFactory.setPlayManager(IjkPlayerManager.class);
         //exo缓存模式，支持m3u8，只支持exo
-        CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
-        //代理缓存模式，支持所有模式，不支持m3u8等，默认
-//        CacheFactory.setCacheManager(ProxyCacheManager.class);
-
+//        CacheFactory.setCacheManager(ExoPlayerCacheManager.class);
+//        代理缓存模式，支持所有模式，不支持m3u8等，默认
+        CacheFactory.setCacheManager(ProxyCacheManager.class);
         settingsVideo();
     }
 
@@ -101,7 +102,7 @@ public class YDVideo extends StandardGSYVideoPlayer {
         setViewShowState(mCurrentTimeTextView, VISIBLE);
         setViewShowState(mTotalTimeTextView, VISIBLE);
         //setEnlargeImageRes(R.drawable.full);
-       // setShrinkImageRes(R.drawable.full);
+        // setShrinkImageRes(R.drawable.full);
     }
 
     //拦截事件

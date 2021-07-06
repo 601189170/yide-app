@@ -41,9 +41,10 @@
                 <ImageView
                     android:id="@+id/iv_bg"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
@@ -62,10 +63,11 @@
 
                     <TextView
                         android:id="@+id/tv_notice_content"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_12"
-                        android:layout_marginBottom="160dp"
+                        android:layout_marginBottom="50dp"
+                        android:lines="20"
                         android:textColor="#ff7b7b7b"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -194,9 +196,9 @@
                 android:background="@drawable/bg_conrners_white_20"
                 android:gravity="center"
                 android:text="@string/notice_to_withdrawn"
-                android:visibility="gone"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_15" />
+                android:textSize="@dimen/text_15"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btn_commit"

@@ -11,16 +11,18 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.CompoundButton
+import androidx.appcompat.app.AlertDialog
 import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticeReleaseBinding
+import com.yyide.chatim.databinding.NoticeBlankPreviewBinding
 import com.yyide.chatim.dialog.SwitchNoticeTimePop
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeBlankReleaseBean
-import com.yyide.chatim.model.NoticePersonnelBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeReleasePresenter
 import com.yyide.chatim.view.NoticeBlankReleaseView
@@ -55,6 +57,9 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
 
     private fun initView() {
         releaseBinding!!.top.title.setText(R.string.notice_release_title)
+        releaseBinding!!.top.tvRight.setText(R.string.notice_preview_title)
+        releaseBinding!!.top.tvRight.visibility = View.VISIBLE
+        releaseBinding!!.top.tvRight.setOnClickListener { showPreView() }
         releaseBinding!!.top.backLayout.setOnClickListener { finish() }
         releaseBinding!!.btnPush.setOnClickListener { pushNotice() }
         releaseBinding!!.clRange.setOnClickListener {
@@ -63,6 +68,26 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
             startActivity(intent)
         }
         initListener()
+    }
+
+    private fun showPreView() {
+        val alertDialog = AlertDialog.Builder(this)
+        val previewBinding = NoticeBlankPreviewBinding.inflate(layoutInflater)
+        alertDialog.setView(previewBinding.root)
+        val dialog = alertDialog.create()
+        val m = windowManager
+        m.defaultDisplay //为获取屏幕宽、高
+        val p = dialog.window!!.attributes //获取对话框当前的参数值
+        p.height = ((ScreenUtils.getScreenHeight() * 0.8).toInt())
+//        p.width = ((ScreenUtils.getScreenWidth() * 0.6).toInt())
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        //设置主窗体背景颜色为黑色
+        previewBinding.nestedScrollView.layoutParams.height = ((ScreenUtils.getScreenHeight() * 0.6).toInt())
+        previewBinding.root.setOnClickListener { v: View? -> dialog.dismiss() }
+        previewBinding.tvTitle.text = releaseBinding?.etInputTitle?.text.toString().trim()
+        previewBinding.tvContent.text = "\t " + releaseBinding?.etInputContent?.text.toString().trim()
+        dialog.window!!.attributes = p //设置生效
+        dialog.show()
     }
 
     /**
@@ -196,7 +221,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 }
             }
         }
-        var descNumber: StringBuffer = StringBuffer()
+        var descNumber = StringBuffer()
         if (teacherNumber > 0) {
             descNumber.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
         }
@@ -209,13 +234,11 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         if (brandSiteNumber > 0) {
             descNumber.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
         }
-
-        releaseBinding!!.tvRange.text = descNumber.toString()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
+        if (!TextUtils.isEmpty(descNumber.toString()) && descNumber.toString().endsWith("、")) {
+            releaseBinding!!.tvRange.text = descNumber.toString().removeSuffix("、")
+        } else {
+            releaseBinding!!.tvRange.text = descNumber.toString()
+        }
     }
 
     private fun showSelectTime() {

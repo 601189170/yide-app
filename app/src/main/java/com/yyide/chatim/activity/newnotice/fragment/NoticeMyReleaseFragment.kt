@@ -111,7 +111,7 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
             } else {
                 view.clBlank.visibility = View.GONE
                 view.clTemplate.visibility = View.VISIBLE
-                GlideUtil.loadImageRadius(context, item.imgpath, view.ivNoticeImg, 2)
+                GlideUtil.loadImageRadius(context, item.imgpath, view.ivNoticeImg, 2, true)
             }
 
             if (item.isRetract) {//撤回
@@ -168,16 +168,17 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
                     mAdapter.addData(model.data.records)
                 }
             }
-            if (model.data != null && model.data.records != null) {
-                if (model.data.records.size < pageSize) {
-                    //如果不够一页,显示没有更多数据布局
-                    //mAdapter.loadMoreModule.loadMoreEnd()
-                } else {
-                    mAdapter.loadMoreModule.loadMoreComplete()
-                }
-            } else {
-                mAdapter.loadMoreModule.loadMoreComplete()
-            }
+            mAdapter.loadMoreModule.loadMoreComplete()
+//            if (model.data != null && model.data.records != null) {
+//                if (model.data.records.size < pageSize) {
+//                    //如果不够一页,显示没有更多数据布局
+//                    //mAdapter.loadMoreModule.loadMoreEnd()
+//                } else {
+//                    mAdapter.loadMoreModule.loadMoreComplete()
+//                }
+//            } else {
+//                mAdapter.loadMoreModule.loadMoreComplete()
+//            }
         }
     }
 
