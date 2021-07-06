@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -94,19 +95,19 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     @BindView(R.id.tab1)
     CheckedTextView tab1;
     @BindView(R.id.tab1_layout)
-    FrameLayout tab1Layout;
+    ConstraintLayout tab1Layout;
     @BindView(R.id.tab2)
     CheckedTextView tab2;
     @BindView(R.id.tab2_layout)
-    FrameLayout tab2Layout;
+    ConstraintLayout tab2Layout;
     @BindView(R.id.tab3)
     CheckedTextView tab3;
     @BindView(R.id.tab3_layout)
-    FrameLayout tab3Layout;
+    ConstraintLayout tab3Layout;
     @BindView(R.id.tab4)
     CheckedTextView tab4;
     @BindView(R.id.tab4_layout)
-    FrameLayout tab4Layout;
+    ConstraintLayout tab4Layout;
     @BindView(R.id.msg_total_unread)
     UnreadCountTextView msgTotalUnread;
     private MessageReceiver mMessageReceiver;
