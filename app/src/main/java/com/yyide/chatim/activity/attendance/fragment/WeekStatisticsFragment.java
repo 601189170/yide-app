@@ -277,8 +277,11 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewBinding = FragmentWeekStatisticsBinding.bind(view);
+        Log.e(TAG, "onViewCreated: "+type );
         if ("周统计".equals(type)) {
             isWeekStatistics = true;
+        } else {
+            first = false;
         }
         //确定当前用户身份
         identity = !SpData.getIdentityInfo().staffIdentity();
