@@ -116,7 +116,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 timeData = ""
                 releaseBinding!!.tvShowTimedTime.text = ""
             }
-            isTimer = isChecked
+            isTimer = !isChecked
         }
 
         releaseBinding!!.clTimingTime.setOnClickListener { showSelectTime() }
