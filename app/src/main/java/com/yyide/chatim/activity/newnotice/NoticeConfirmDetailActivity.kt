@@ -1,10 +1,10 @@
 package com.yyide.chatim.activity.newnotice
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.Button
 import android.widget.TextView
@@ -16,6 +16,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityNoticeConfirmDetailBinding
@@ -25,7 +26,7 @@ import com.yyide.chatim.net.ApiCallback
 import com.yyide.chatim.utils.GlideUtil
 
 /**
- * 确认通知详情
+ * 确认通知/已读通知 详情
  * 2021年6月28日
  * DESC: 是否已确认
  */
@@ -47,9 +48,14 @@ class NoticeConfirmDetailActivity : BaseActivity() {
         confirmDetailBinding?.detail?.btnConfirm?.setOnClickListener {
             confirm()
         }
+
+        confirmDetailBinding?.detail?.ivNoticeImg?.setOnClickListener { NoticeImageDialog.showPreView(this, imgPath) }
+
         detailId = intent.getLongExtra("id", -1);
         getDetail(detailId)
     }
+
+    private var imgPath = ""
 
     private fun getDetail(publishId: Long) {
         showLoading()
@@ -61,6 +67,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                             confirmDetailBinding?.detail?.tvNoticeTitle?.text = model.data.title
                             confirmDetailBinding?.detail?.tvNoticeContent?.text = model.data.content
                         } else {
+                            imgPath = model.data.imgpath
                             confirmDetailBinding?.detail?.clBlank?.visibility = View.GONE
                             confirmDetailBinding?.detail?.clImg?.visibility = View.VISIBLE
                             GlideUtil.loadImageRadius(mActivity, model.data.imgpath, confirmDetailBinding!!.detail.ivNoticeImg, SizeUtils.dp2px(4f))
@@ -80,6 +87,8 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                             }
                         } else {
                             confirmDetailBinding?.detail?.btnConfirm?.visibility = View.GONE
+                            //阅读五秒后确认已读
+                            Handler().postDelayed({ confirm() }, 5000)
                         }
                     }
                 }

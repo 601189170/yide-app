@@ -34,9 +34,12 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     private val TAG = NoticePersonnelFragment::class.java.simpleName
     private var viewBinding: FragmentNoticePersonnelListBinding? = null
     private var total: Int = 0
+    private var reverseCheckNumber = 0
     private var checkTotalNumber: Int = 0
     private var checkPeopleCount: Int = 0
     private var type: String? = null
+    private var isCheck: Boolean = false
+    private var checkLists = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
     private var list: ArrayList<NoticePersonnelBean.ListBean>? = null
     private val mAdapter: PersonnelAdapter = PersonnelAdapter()
 
@@ -49,11 +52,13 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         EventBus.getDefault().register(this)
-        initView()
-        type = arguments?.getString("type");
         if (arguments != null) {
-            mvpPresenter?.specifieTypeList(type)
+            type = arguments?.getString("type")
+            isCheck = arguments?.getBoolean("isCheck", false) == true
+            checkLists = arguments?.getParcelableArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>("list") as ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>
         }
+        mvpPresenter?.specifieTypeList(type)
+        initView()
     }
 
     override fun createPresenter(): NoticeDesignatedPersonnelPresenter {
@@ -72,7 +77,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                 mvpPresenter?.specifieTypeList(type)
             }
         }
-
+        viewBinding!!.switchPush.isChecked = isCheck
         viewBinding!!.switchPush.setOnCheckedChangeListener { compoundButton: CompoundButton, isCheck: Boolean ->
             val eventMessage = EventMessage(BaseConstant.TYPE_NOTICE_IS_CONFIRM, "")
             eventMessage.isBoolean = isCheck
@@ -104,7 +109,8 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     }
 
     private fun showNoticeScopeNumber(totalCount: Int) {
-        viewBinding!!.cbSelectNumber.text = getString(R.string.notice_chosen_people_number, checkPeopleCount)
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_CHECK_NUMBER, "" + type, checkPeopleCount))
+        viewBinding!!.cbSelectNumber.text = if (type == "0") getString(R.string.notice_chosen_people_number, checkPeopleCount) else getString(R.string.notice_parents_selected_number, checkPeopleCount)
         if (totalCount != 0 && totalCount == total) {
             viewBinding!!.cbSelectNumber.isChecked = totalCount == total
         } else {
@@ -117,11 +123,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
         override fun convert(holder: BaseViewHolder, itemBean: NoticePersonnelBean.ListBean) {
             val view = ItemNoticePersonnelBinding.bind(holder.itemView)
             view.cbCheck.text = itemBean.name
-//            if (this.itemCount < holder.adapterPosition - 1) {
-//                view.viewLine.visibility = View.VISIBLE
-//            } else {
-//                view.viewLine.visibility = View.INVISIBLE
-//            }
+
             if (itemBean.list != null && itemBean.list.isNotEmpty()) {
                 view.ivUnfold.visibility = View.VISIBLE
                 Log.e(TAG, "onBindViewHolder isUnfold: " + itemBean.unfold)
@@ -152,7 +154,6 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
             }
             //选中层级
             view.cbCheck.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
-//                    itemBean.unfold = isChecked
                 if (buttonView != null) {
                     if (!buttonView.isPressed) {
                         return@setOnCheckedChangeListener
@@ -160,11 +161,12 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                 }
                 checkTotalNumber = 0
                 checkPeopleCount = 0
+                itemBean.unfold = isChecked
                 itemBean.check = isChecked
-                recursionChecked(itemBean.list, isChecked);
-                //reverseElection(mAdapter.data as ArrayList<NoticePersonnelBean.ListBean>)
+                recursionChecked(itemBean.list, isChecked)
                 showNoticeScopeNumber(getCheckedNumber(mAdapter.data as ArrayList<NoticePersonnelBean.ListBean>))
-                notifyDataSetChanged()
+//                notifyDataSetChanged()
+                mAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -185,29 +187,6 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     }
 
     /**
-     * 递归实现反选
-     *
-     * @param noticeScopeBean
-     */
-    private fun reverseElection(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>) {
-        if (noticeScopeBean != null) {
-            noticeScopeBean.forEachIndexed { index, listBean ->
-                var childCount = 0
-                listBean.list.forEach() { childItem ->
-                    if (childItem.check) {
-                        childCount++
-                    }
-                }
-                if (childCount > 0) {
-                    listBean.check = childCount == listBean.list.size
-                } else {
-                    reverseElection(listBean.list)
-                }
-            }
-        }
-    }
-
-    /**
      * 获取全部数量
      *
      * @param noticeScopeBean
@@ -215,13 +194,18 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     private fun getAllCount(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>): Int {
         if (noticeScopeBean != null) {
             noticeScopeBean.forEachIndexed { index, listBean ->
-                if (TextUtils.isEmpty(listBean.name)) {
+                if (TextUtils.isEmpty(listBean.name)) {//处理没有名称的部门
                     noticeScopeBean.remove(listBean)
                 } else {
                     total++
+                    checkLists.forEach {
+                        if (listBean.id == it.specifieId) {
+                            reverseCheckNumber++
+                            listBean.check = true
+                        }
+                    }
                     getAllCount(listBean.list)
                 }
-
             }
         }
         return total
@@ -247,7 +231,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
             recordListBean.list = checkList
             resultBean.recordList = recordList
         } else {
-            return null
+            return resultBean
         }
         return resultBean
     }
@@ -292,7 +276,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
             viewBinding!!.switchPush.isChecked = messageEvent.isBoolean
         } else if (BaseConstant.TYPE_NOTICE_PERSONNEL == messageEvent.code) {
             val resultBean = getParams(mAdapter.data as ArrayList<NoticePersonnelBean.ListBean>)
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_RANGE, JSON.toJSONString(resultBean)))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_RANGE, JSON.toJSONString(resultBean), type))
             activity?.finish()
         }
     }
@@ -301,9 +285,11 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
                 list = model.data
-                mAdapter.setList(model.data)
                 total = 0
                 total = getAllCount(model.data)
+                getCheckedNumber(model.data)
+                showNoticeScopeNumber(reverseCheckNumber)
+                mAdapter.setList(model.data)
             }
         }
     }
@@ -319,10 +305,12 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     }
 
     companion object {
-        fun newInstance(type: String): NoticePersonnelFragment {
+        fun newInstance(type: String, listsBean: ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>, isCheck: Boolean): NoticePersonnelFragment {
             val fragment = NoticePersonnelFragment()
             val args = Bundle()
             args.putString("type", type)
+            args.putParcelableArrayList("list", listsBean)
+            args.putBoolean("isCheck", isCheck)
             fragment.arguments = args
             return fragment
         }

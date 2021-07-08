@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.newnotice
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -9,16 +10,16 @@ import android.view.Gravity
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
+import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticePushDetailBinding
-import com.yyide.chatim.databinding.NoticePreviewBinding
 import com.yyide.chatim.dialog.SwitchNoticeTimePop
 import com.yyide.chatim.model.*
 import com.yyide.chatim.presenter.NoticeTemplateGeneralPresenter
@@ -40,7 +41,8 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
     private var subIds = mutableListOf<String>()
     private var pushDate: String = ""
     private val REQUEST_CODE = 100
-    private val list = mutableListOf<NoticeBlankReleaseBean.RecordListBean>()
+    private val paramsMap = mutableMapOf<String, NoticeBlankReleaseBean>()
+    private val list = ArrayList<NoticeBlankReleaseBean.RecordListBean>()
 
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_push_detail
@@ -60,7 +62,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         pushDetailBinding!!.include.tvRight.setText(R.string.notice_preview_title)
         pushDetailBinding!!.include.tvRight.visibility = View.VISIBLE
         pushDetailBinding!!.include.backLayout.setOnClickListener { finish() }
-        pushDetailBinding!!.include.tvRight.setOnClickListener { showPreView() }
+        pushDetailBinding!!.include.tvRight.setOnClickListener { NoticeImageDialog.showPreView(this, imgPath) }
         pushDetailBinding!!.switchPush.isChecked = true
         pushDetailBinding!!.switchPush.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
@@ -71,9 +73,10 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         }
         pushDetailBinding!!.clThing.setOnClickListener { showSelectTime() }
         pushDetailBinding!!.clSelect.setOnClickListener {
-            val intent = Intent()
-            intent.setClass(this, NoticeDesignatedPersonnelActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE)
+            val intent = Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            intent.putParcelableArrayListExtra("list", list)
+            intent.putExtra("isCheck", isConfirm)
+            startActivity(intent)
         }
         pushDetailBinding!!.btnConfirm.setOnClickListener { sendNotice() }
         val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (ScreenUtils.getScreenHeight() * 0.6).toInt())
@@ -91,28 +94,6 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
             }
             GlideUtil.loadImageRadius(this, imgPath, pushDetailBinding!!.ivImg, SizeUtils.dp2px(4f))
         }
-    }
-
-    private fun showPreView() {
-        val alertDialog = AlertDialog.Builder(this)
-        val previewBinding = NoticePreviewBinding.inflate(layoutInflater)
-        alertDialog.setView(previewBinding.root)
-        val dialog = alertDialog.create()
-        val m = windowManager
-        m.defaultDisplay //为获取屏幕宽、高
-        val p = dialog.window!!.attributes //获取对话框当前的参数值
-        p.height = ScreenUtils.getScreenHeight() //高度设置为屏幕的0.3
-        p.width = ScreenUtils.getScreenWidth() //宽度设置为屏幕的0.5
-        //设置主窗体背景颜色为黑色
-        GlideUtil.loadImageRadius(this, imgPath, previewBinding.ivImg, SizeUtils.dp2px(10f))
-        previewBinding.root.setOnClickListener { v: View? -> dialog.dismiss() }
-        //previewBinding.tvNoticeTitle.setText("");
-        //previewBinding.tvNoticeContent.setText("");
-        dialog.window!!.decorView.setPadding(0, 0, 0, 0)
-        dialog.window!!.attributes = p //设置生效
-        dialog.show()
-        dialog.setOnDismissListener { window.decorView.alpha = 1f }
-        dialog.setOnShowListener { window.decorView.alpha = 0f }
     }
 
     private fun showSelectTime() {
@@ -156,9 +137,22 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
             Log.d("NoticePersonnelFragment", messageEvent.message)
             if (!TextUtils.isEmpty(messageEvent.message)) {
                 val item: NoticeBlankReleaseBean = JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
-                isConfirm = item.isConfirm
-                if (item.recordList != null)
-                    list.addAll(list.size, item.recordList)
+                when (messageEvent.type) {
+                    "0" -> {
+                        paramsMap["teacher"] = item
+                    }
+                    "1" -> {
+                        paramsMap["patriarch"] = item
+                    }
+                    "2" -> {
+                        paramsMap["brandClass"] = item
+                        paramsMap["brandSite"] = NoticeBlankReleaseBean()
+                    }
+                    "3" -> {
+                        paramsMap["brandClass"] = NoticeBlankReleaseBean()
+                        paramsMap["brandSite"] = item
+                    }
+                }
                 setCheckNumber()
             }
         }
@@ -169,39 +163,83 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
     private var brandNumber: Int = 0
     private var brandSiteNumber: Int = 0
     private fun setCheckNumber() {
-        list.forEach { item ->
-            when (item.specifieType) {
-                "0" -> {//0教师 1家长 2班牌
-                    teacherNumber = item.nums
+        //清空当前数据
+        list.clear()
+        for (key in paramsMap.entries) {
+            val item: NoticeBlankReleaseBean = key.value
+            when (key.key) {
+                "teacher" -> {
+                    if (item.recordList == null) {
+                        teacherNumber = 0
+                    }
                 }
-                "1" -> {
-                    patriarchNumber = item.nums
+                "patriarch" -> {
+                    if (item.recordList == null) {
+                        patriarchNumber = 0
+                    }
                 }
-                "2" -> {
-                    brandNumber = item.nums
+                "brandClass" -> {
+                    if (item.recordList == null) {
+                        brandNumber = 0
+                    }
                 }
-                "3" -> {
-                    brandSiteNumber = item.nums
+                "brandSite" -> {
+                    if (item.recordList == null) {
+                        brandSiteNumber = 0
+                    }
+                }
+            }
+
+            item.recordList?.forEach { item ->
+                when (item.specifieType) {
+                    "0" -> {//0教师 1家长 2班牌
+                        teacherNumber += item.nums
+                    }
+                    "1" -> {
+                        patriarchNumber += item.nums
+                    }
+                    "2" -> {
+                        brandNumber = item.nums
+                    }
+                    "3" -> {
+                        brandSiteNumber = item.nums
+                    }
                 }
             }
         }
+
+        for (item in paramsMap.values) {
+            if (item.recordList != null && item.recordList.size > 0) {
+                list.addAll(list.size, item.recordList)
+            }
+        }
+        Log.d("NoticePersonnelFragment", "paramsMap：" + JSON.toJSONString(paramsMap))
+
         var descNumber = StringBuffer()
         if (teacherNumber > 0) {
             descNumber.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
         }
+
         if (patriarchNumber > 0) {
             descNumber.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
         }
+
         if (brandNumber > 0) {
-            descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber))
+            descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber)).append("、")
         }
+
         if (brandSiteNumber > 0) {
             descNumber.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
         }
+
         if (!TextUtils.isEmpty(descNumber.toString()) && descNumber.toString().endsWith("、")) {
             pushDetailBinding!!.tvRange.text = descNumber.toString().removeSuffix("、")
         } else {
-            pushDetailBinding!!.tvRange.text = descNumber.toString()
+            if (TextUtils.isEmpty(descNumber.toString())) {
+                pushDetailBinding!!.tvRange.text = getString(R.string.please_select)
+            } else {
+                pushDetailBinding!!.tvRange.text = descNumber.toString()
+            }
         }
     }
 

@@ -68,7 +68,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add(getString(R.string.notice_tab_teacher))
         mTitles.add(getString(R.string.notice_tab_patriarch))
-//        mTitles.add(getString(R.string.notice_tab_class_card))
+        mViewBinding.tvUnConfirmNumber.text = getString(R.string.notice_un_confirm_number, 0)
         mViewBinding.viewpager.offscreenPageLimit = 0
         mViewBinding.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
@@ -97,7 +97,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
     fun event(messageEvent: EventMessage) {
         if (BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER == messageEvent.code) {
             unCheckNumber += messageEvent.count
-            mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, unCheckNumber - readCount)
+            mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, unCheckNumber)
         }
     }
 
@@ -111,7 +111,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
     override fun pushNotice(model: ResultBean?) {
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                ToastUtils.showShort(model.msg)
+                //ToastUtils.showShort(model.msg)
                 finish()
             }
         }

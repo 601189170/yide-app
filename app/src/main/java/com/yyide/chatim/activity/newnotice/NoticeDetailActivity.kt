@@ -5,16 +5,14 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import com.yyide.chatim.R
-import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticeDetail2Binding
 import com.yyide.chatim.model.EventMessage
-import com.yyide.chatim.model.NoticeItemBean
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeDetailPresenter
-import com.yyide.chatim.presenter.NoticeMyReleasePresenter
 import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.view.NoticeDetailView
 import org.greenrobot.eventbus.EventBus
@@ -48,6 +46,9 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0, itemBean?.confirmOrReadNum
                     ?: 0)
         }
+
+        detailBinding?.ivBg?.setOnClickListener { itemBean?.imgpath?.let { it1 -> NoticeImageDialog.showPreView(this, it1) } }
+
     }
 
     private fun setDate(item: NoticeMyReleaseDetailBean.DataBean) {
@@ -59,7 +60,7 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             if (item.isTimer) {
                 detailBinding!!.tvPushDesc.text = getString(R.string.notice_timing_push) + "\t\t" + item.timerDate
             } else {
-                detailBinding!!.tvPushDesc.text = "立即发布"  //通知公告类型 0空白模板 1非空白模板
+                detailBinding!!.tvPushDesc.text = "立即发布" + "\t\t" + item.timerDate //通知公告类型 0空白模板 1非空白模板
             }
             if (item.type == 0) {
                 detailBinding!!.constraintLayout.visibility = View.VISIBLE

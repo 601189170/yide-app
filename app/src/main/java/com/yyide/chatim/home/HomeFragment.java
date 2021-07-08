@@ -160,53 +160,49 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     private Dialog dialog;
 
     private void showNotice(NoticeMyReleaseDetailBean.DataBean model) {
-        if (model != null) {
-            long notice_id = MMKV.defaultMMKV().decodeLong("notice_id", -1);
-            if (model.isConfirm && !model.confirmOrRead) {//同一个Id不重复弹出
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                MMKV.defaultMMKV().encode("notice_id", model.id);
-                DialogHomeShowNoticeBinding previewBinding = DialogHomeShowNoticeBinding.inflate(getLayoutInflater());
-                alertDialog.setView(previewBinding.getRoot());
-                dialog = alertDialog.create();
-                dialog.show();
-                WindowManager m = getActivity().getWindowManager();
-                m.getDefaultDisplay(); //为获取屏幕宽、高
-                WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); //获取对话框当前的参数值
-                p.height = (int) (ScreenUtils.getScreenHeight() * 0.8); //高度设置为屏幕的0.3
-                p.width = (int) (ScreenUtils.getScreenWidth() * 0.8); //宽度设置为屏幕的0.5
-                //设置主窗体背景颜色为黑色
-                previewBinding.icClose.setOnClickListener(v -> dialog.dismiss());
+        if (model != null && model.isConfirm && !model.confirmOrRead) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+            DialogHomeShowNoticeBinding previewBinding = DialogHomeShowNoticeBinding.inflate(getLayoutInflater());
+            alertDialog.setView(previewBinding.getRoot());
+            dialog = alertDialog.create();
+            dialog.show();
+            WindowManager m = getActivity().getWindowManager();
+            m.getDefaultDisplay(); //为获取屏幕宽、高
+            WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); //获取对话框当前的参数值
+            p.height = (int) (ScreenUtils.getScreenHeight() * 0.8); //高度设置为屏幕的0.3
+            p.width = (int) (ScreenUtils.getScreenWidth() * 0.8); //宽度设置为屏幕的0.5
+            //设置主窗体背景颜色为黑色
+            previewBinding.icClose.setOnClickListener(v -> dialog.dismiss());
 //        dialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
-                dialog.getWindow().setAttributes(p);//设置生效
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (ScreenUtils.getScreenHeight() * 0.6));
-                layoutParams.bottomMargin = SizeUtils.dp2px(20);
-                previewBinding.cardView.setLayoutParams(layoutParams);
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setAttributes(p);//设置生效
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (ScreenUtils.getScreenHeight() * 0.6));
+            layoutParams.bottomMargin = SizeUtils.dp2px(20);
+            previewBinding.cardView.setLayoutParams(layoutParams);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-                if (model.type == 0) {
-                    previewBinding.ivImg.setVisibility(View.GONE);
-                    previewBinding.nestedScrollView.setVisibility(View.VISIBLE);
-                    previewBinding.tvTitle.setText(model.title);
-                    previewBinding.tvContent.setText(model.content);
-                } else {
-                    previewBinding.ivImg.setVisibility(View.VISIBLE);
-                    previewBinding.nestedScrollView.setVisibility(View.GONE);
-                    GlideUtil.loadImageRadius(getActivity(), model.imgpath, previewBinding.ivImg, SizeUtils.dp2px(6f));
-                }
+            if (model.type == 0) {
+                previewBinding.ivImg.setVisibility(View.GONE);
+                previewBinding.nestedScrollView.setVisibility(View.VISIBLE);
+                previewBinding.tvTitle.setText(model.title);
+                previewBinding.tvContent.setText(model.content);
+            } else {
+                previewBinding.ivImg.setVisibility(View.VISIBLE);
+                previewBinding.nestedScrollView.setVisibility(View.GONE);
+                GlideUtil.loadImageRadius(getActivity(), model.imgpath, previewBinding.ivImg, SizeUtils.dp2px(6f));
+            }
 
-                if (model.isConfirm) {//需要去人按钮
-                    if (!model.confirmOrRead) {
-                        previewBinding.btnConfirm.setVisibility(View.VISIBLE);
-                    } else {
-                        previewBinding.btnConfirm.setVisibility(View.INVISIBLE);
-                    }
+            if (model.isConfirm) {//需要去人按钮
+                if (!model.confirmOrRead) {
+                    previewBinding.btnConfirm.setVisibility(View.VISIBLE);
                 } else {
                     previewBinding.btnConfirm.setVisibility(View.INVISIBLE);
                 }
-                previewBinding.btnConfirm.setOnClickListener(v -> {
-                    mvpPresenter.confirmNotice(model.id);
-                });
+            } else {
+                previewBinding.btnConfirm.setVisibility(View.INVISIBLE);
             }
+            previewBinding.btnConfirm.setOnClickListener(v -> {
+                mvpPresenter.confirmNotice(model.id);
+            });
         }
     }
 

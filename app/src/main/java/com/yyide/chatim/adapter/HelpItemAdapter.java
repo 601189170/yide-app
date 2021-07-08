@@ -97,15 +97,9 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 //增加封面
                 ImageView imageView = new ImageView(holder.itemView.getContext());
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                RequestOptions options = new RequestOptions();
-//                options.skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL)
-//                        .frame(1000000)
-//                        .centerCrop();
-//
-//                Glide.with(imageView)
-//                        .setDefaultRequestOptions(options)
-//                        .load(itemBean.getVideo())
-//                        .into(imageView);
+                Glide.with(imageView)
+                        .load(itemBean.getVideo())
+                        .into(imageView);
 
                 videoView1.setThumbImageView(imageView);
                 videoView1.setUp(itemBean.getVideo(), true, "");

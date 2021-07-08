@@ -18,11 +18,15 @@ import com.yyide.chatim.activity.newnotice.fragment.adaoter.NoticeMyReceivedAdap
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentNoticeMyReceviedListBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeItemBean
 import com.yyide.chatim.presenter.NoticeReceivedPresenter
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.view.NoticeReceivedView
 import com.yyide.chatim.widget.itemDocoretion.ItemDecorationPowerful
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * 我收到的通知列表
@@ -55,6 +59,7 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        EventBus.getDefault().register(this)
         initView()
         mvpPresenter?.getReceiverNoticeList(startData, endData, pageNum, pageSize);
     }
@@ -66,6 +71,14 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
     override fun onRefresh() {
         pageNum = 1
         mvpPresenter?.getReceiverNoticeList(startData, endData, pageNum, pageSize);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun event(messageEvent: EventMessage) {
+        if (BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE == messageEvent.code) {
+            pageNum = 1
+            mvpPresenter?.getReceiverNoticeList(startData, endData, pageNum, pageSize);
+        }
     }
 
     private fun initView() {
@@ -175,6 +188,7 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
     override fun onDestroy() {
         super.onDestroy()
         viewBinding = null
+        EventBus.getDefault().unregister(this)
     }
 
 }

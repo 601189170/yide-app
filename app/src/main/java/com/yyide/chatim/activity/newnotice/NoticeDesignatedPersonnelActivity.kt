@@ -10,7 +10,9 @@ import com.yyide.chatim.activity.newnotice.fragment.NoticeBrandPersonnelFragment
 import com.yyide.chatim.activity.newnotice.fragment.NoticePersonnelFragment
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityNoticeReleasePersonnelBinding
+import com.yyide.chatim.model.NoticeBlankReleaseBean
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 发布选择指定人员列表
@@ -31,20 +33,46 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
     private fun initView() {
         personnelBinding!!.top.title.setText(R.string.notice_designated_personnel_title)
         personnelBinding!!.top.backLayout.setOnClickListener { finish() }
+        val listsBean: ArrayList<NoticeBlankReleaseBean.RecordListBean> = intent.getParcelableArrayListExtra("list")
+        val isCheck = intent.getBooleanExtra("isCheck", false)
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add(getString(R.string.notice_tab_teacher))
         mTitles.add(getString(R.string.notice_tab_patriarch))
         mTitles.add(getString(R.string.notice_tab_class_card))
+        var teacherList = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
+        var patriarchList = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
+        var brandList = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
+        var type: String = ""
+        //处理已选中的列表数据
+        listsBean.forEach { item ->
+            when (item.specifieType) {
+                "0" -> {
+                    teacherList = item.list as ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>
+                }
+                "1" -> {
+                    patriarchList = item.list as ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>
+                }
+                "2", "3" -> {
+                    brandList = item.list as ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>
+                    type = item.specifieType
+                }
+            }
+        }
+
         personnelBinding!!.viewpager.offscreenPageLimit = 3
         personnelBinding!!.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                var fragment: Fragment = NoticePersonnelFragment.newInstance(position.toString())
+                var fragment: Fragment = NoticePersonnelFragment.newInstance(position.toString(), teacherList, isCheck)
                 when (position) {
-                    0, 1 -> {
-                        fragment = NoticePersonnelFragment.newInstance(position.toString())
+                    0 -> {
+                        fragment = NoticePersonnelFragment.newInstance(position.toString(), teacherList, isCheck)
+
+                    }
+                    1 -> {
+                        fragment = NoticePersonnelFragment.newInstance(position.toString(), patriarchList, isCheck)
                     }
                     2 -> {
-                        fragment = NoticeBrandPersonnelFragment.newInstance(position.toString())
+                        fragment = NoticeBrandPersonnelFragment.newInstance(type, brandList, isCheck)
                     }
                 }
                 return fragment

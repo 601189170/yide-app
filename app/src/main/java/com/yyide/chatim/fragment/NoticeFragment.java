@@ -99,7 +99,13 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         if (homeNoticeRsp.code == BaseConstant.REQUEST_SUCCES2) {
             data = homeNoticeRsp.data;
             if (data != null) {
-                notice_time.setText(data.timerDate);
+                if (DateUtils.isToday(DateUtils.parseTimestamp(data.timerDate, ""))) {
+                    notice_time.setText(getString(R.string.notice_toDay, DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")));
+                } else if (DateUtils.isYesterday(DateUtils.parseTimestamp(data.timerDate, ""))) {
+                    notice_time.setText(getString(R.string.notice_yesterday, DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")));
+                } else {
+                    notice_time.setText(data.timerDate);
+                }
                 tv_notice_author.setText(data.publisher);
                 if (!TextUtils.isEmpty(data.title)) {
                     tv_title.setText("《" + data.title + "》");

@@ -5,8 +5,10 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.yyide.chatim.R
 import com.yyide.chatim.databinding.ItemNoticeMyReceviedBinding
 import com.yyide.chatim.model.NoticeItemBean
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.GlideUtil
 
 
@@ -25,7 +27,17 @@ class NoticeMyReceivedAdapter(layoutResId: Int) : BaseQuickAdapter<NoticeItemBea
             GlideUtil.loadImageRadius(context, item.imgpath, view.ivNoticeImg, 2, true)
         }
         view.tvNoticeTitle.text = item.title
-        view.tvNoticeTime.text = item.timerDate
+        when {
+            DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天
+                view.tvNoticeTime.text = context.getString(R.string.notice_toDay, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+            }
+            DateUtils.isYesterday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//昨天
+                view.tvNoticeTime.text = context.getString(R.string.notice_yesterday, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+            }
+            else -> {
+                view.tvNoticeTime.text = item.timerDate
+            }
+        }
         view.tvNoticeAuthor.text = item.publisher
     }
 }

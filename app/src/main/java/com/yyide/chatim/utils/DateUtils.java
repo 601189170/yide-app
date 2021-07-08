@@ -27,6 +27,34 @@ public class DateUtils {
     private static final String TAG = "DateUtils";
 
     /**
+     * 是否为今天
+     */
+    public static boolean isToday(Long timeStamp) {
+        Calendar todayCalendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeStamp);
+        if (calendar.get(Calendar.YEAR) == (todayCalendar.get(Calendar.YEAR))) {
+            int diffDay = todayCalendar.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR);
+            return diffDay == 0;
+        }
+        return false;
+    }
+
+    /**
+     * 是否为昨天
+     */
+    public static boolean isYesterday(Long timeStamp) {
+        Calendar todayCalendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeStamp);
+        if (calendar.get(Calendar.YEAR) == (todayCalendar.get(Calendar.YEAR))) {
+            int diffDay = todayCalendar.get(Calendar.DAY_OF_YEAR) - calendar.get(Calendar.DAY_OF_YEAR);
+            return diffDay == 1;
+        }
+        return false;
+    }
+
+    /**
      * 将时间戳转换为时间
      * <p>
      * s就是时间戳

@@ -24,7 +24,7 @@ import com.yyide.chatim.utils.DateUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * desc 教师教职工考情详情
+ * desc 教师教职工事件考情详情
  * time 2021年5月31日15:52:14
  * other lrz
  */
@@ -98,7 +98,8 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
             mViewBinding.tvLateNum.setText(("1".equals(teachers.getGoOutStatus()) ? teachers.getLeaveEarly() : teachers.getLate()) + "");
             mViewBinding.tvLateName.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
             mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
-
+            mViewBinding.tvAbsenteeism.setText("1".equals(teachers.getGoOutStatus()) ? "未签退" : "缺勤");
+            
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             adapter.setList(teachers.getPeople());

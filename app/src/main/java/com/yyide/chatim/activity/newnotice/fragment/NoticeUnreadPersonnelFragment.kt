@@ -98,12 +98,12 @@ class NoticeUnreadPersonnelFragment : BaseMvpFragment<NoticeUnreadPeoplePresente
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
                 if (pageNum == 1) {
-                    if (model?.data != null) {
+                    if (model.data != null) {
                         EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER, "", model.data.total))
                         adapter.setList(model.data.records)
                     }
                 } else {
-                    if (model?.data != null) {
+                    if (model.data != null) {
                         adapter.addData(model.data.records)
                     }
                 }

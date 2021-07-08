@@ -65,15 +65,26 @@
             android:id="@+id/cb_select_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_6"
-            android:theme="@style/CheckBoxTheme"
-            android:text="@string/notice_chosen_people_number"
-            android:textColor="#ff999999"
+            android:text="@string/select_all"
+            android:textColor="@color/text_333333"
             android:textSize="15sp"
+            android:theme="@style/CheckBoxTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView17"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+            app:layout_constraintTop_toBottomOf="@+id/textView17"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tv_checked_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_marginEnd="@dimen/dp_6"
+            app:layout_constraintEnd_toStartOf="@+id/btn_confirm"
+            app:layout_constraintStart_toEndOf="@+id/cb_select_number"
+            app:layout_constraintTop_toTopOf="@+id/cb_select_number" />
 
         <Button
             android:id="@+id/btn_confirm"

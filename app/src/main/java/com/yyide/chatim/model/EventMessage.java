@@ -9,6 +9,7 @@ public class EventMessage {
     private String code;
     private String message;
     private int count;
+    private String type;
     private boolean isBoolean;
 
     public EventMessage(String code, String message) {
@@ -20,6 +21,20 @@ public class EventMessage {
         this.code = code;
         this.message = message;
         this.count = count;
+    }
+
+    public EventMessage(String code, String message, String type) {
+        this.code = code;
+        this.message = message;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean isBoolean() {

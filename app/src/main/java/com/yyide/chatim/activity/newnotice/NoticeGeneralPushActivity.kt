@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.newnotice
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -42,6 +43,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     private var isConfirm = false
     private var isTimer = false
     private var timeData: String = ""
+    private val paramsMap = mutableMapOf<String, NoticeBlankReleaseBean>()
+    private val list = ArrayList<NoticeBlankReleaseBean.RecordListBean>()
 
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_release
@@ -63,8 +66,9 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         releaseBinding!!.top.backLayout.setOnClickListener { finish() }
         releaseBinding!!.btnPush.setOnClickListener { pushNotice() }
         releaseBinding!!.clRange.setOnClickListener {
-            val intent = Intent()
-            intent.setClass(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            val intent = Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            intent.putParcelableArrayListExtra("list", list)
+            intent.putExtra("isCheck", isConfirm)
             startActivity(intent)
         }
         initListener()
@@ -183,17 +187,28 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         }
     }
 
-    val list = mutableListOf<NoticeBlankReleaseBean.RecordListBean>()
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun event(messageEvent: EventMessage) {
         if (BaseConstant.TYPE_NOTICE_RANGE == messageEvent.code) {
-            Log.d("NoticePersonnelFragment", messageEvent.message)
             if (!TextUtils.isEmpty(messageEvent.message)) {
                 val item: NoticeBlankReleaseBean = JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
                 isConfirm = item.isConfirm
-                if (item.recordList != null)
-                    list.addAll(list.size, item.recordList)
+                when (messageEvent.type) {
+                    "0" -> {
+                        paramsMap["teacher"] = item
+                    }
+                    "1" -> {
+                        paramsMap["patriarch"] = item
+                    }
+                    "2" -> {
+                        paramsMap["brandClass"] = item
+                        paramsMap["brandSite"] = NoticeBlankReleaseBean()
+                    }
+                    "3" -> {
+                        paramsMap["brandClass"] = NoticeBlankReleaseBean()
+                        paramsMap["brandSite"] = item
+                    }
+                }
                 setCheckNumber()
             }
         }
@@ -204,40 +219,85 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     private var brandNumber: Int = 0
     private var brandSiteNumber: Int = 0
 
+    //处理请求参数
     private fun setCheckNumber() {
-        list.forEach { item ->
-            when (item.specifieType) {
-                "0" -> {//0教师 1家长 2班牌
-                    teacherNumber = item.nums
+        //清空当前数据
+        list.clear()
+        for (key in paramsMap.entries) {
+            val item: NoticeBlankReleaseBean = key.value
+            when (key.key) {
+                "teacher" -> {
+                    if (item.recordList == null) {
+                        teacherNumber = 0
+                    }
                 }
-                "1" -> {
-                    patriarchNumber = item.nums
+                "patriarch" -> {
+                    if (item.recordList == null) {
+                        patriarchNumber = 0
+                    }
                 }
-                "2" -> {
-                    brandNumber = item.nums
+                "brandClass" -> {
+                    if (item.recordList == null) {
+                        brandNumber = 0
+                    }
                 }
-                "3" -> {
-                    brandSiteNumber = item.nums
+                "brandSite" -> {
+                    if (item.recordList == null) {
+                        brandSiteNumber = 0
+                    }
+                }
+            }
+
+            item.recordList?.forEach { item ->
+                when (item.specifieType) {
+                    "0" -> {//0教师 1家长 2班牌
+                        teacherNumber += item.nums
+                    }
+                    "1" -> {
+                        patriarchNumber += item.nums
+                    }
+                    "2" -> {
+                        brandNumber = item.nums
+                    }
+                    "3" -> {
+                        brandSiteNumber = item.nums
+                    }
                 }
             }
         }
+
+        for (item in paramsMap.values) {
+            if (item.recordList != null && item.recordList.size > 0) {
+                list.addAll(list.size, item.recordList)
+            }
+        }
+        Log.d("NoticePersonnelFragment", "paramsMap：" + JSON.toJSONString(paramsMap))
+
         var descNumber = StringBuffer()
         if (teacherNumber > 0) {
             descNumber.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
         }
+
         if (patriarchNumber > 0) {
             descNumber.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
         }
+
         if (brandNumber > 0) {
             descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber)).append("、")
         }
+
         if (brandSiteNumber > 0) {
             descNumber.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
         }
+
         if (!TextUtils.isEmpty(descNumber.toString()) && descNumber.toString().endsWith("、")) {
             releaseBinding!!.tvRange.text = descNumber.toString().removeSuffix("、")
         } else {
-            releaseBinding!!.tvRange.text = descNumber.toString()
+            if (TextUtils.isEmpty(descNumber.toString())) {
+                releaseBinding!!.tvRange.text = getString(R.string.please_select)
+            } else {
+                releaseBinding!!.tvRange.text = descNumber.toString()
+            }
         }
     }
 
@@ -261,10 +321,12 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
 
     override fun getBlankReleaseSuccess(model: ResultBean?) {
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
-            ToastUtils.showLong(model.msg)
-            finish()
+            Handler().postDelayed({
+                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
+                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
+                ToastUtils.showLong(model.msg)
+                finish()
+            }, 500)
         }
     }
 
