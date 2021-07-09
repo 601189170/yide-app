@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
-            android:maxEms="10"
+            android:maxEms="12"
             android:singleLine="true"
             android:textColor="#ff1e1e1e"
             android:textSize="18sp"
@@ -38,7 +38,7 @@
             android:drawableLeft="@drawable/icon_attendance_time"
             android:drawablePadding="@dimen/dp_4"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/tv_attendance_rate_title" />
 
         <TextView
             android:id="@+id/tv_attendance_rate"
