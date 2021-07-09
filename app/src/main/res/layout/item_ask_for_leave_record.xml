@@ -21,6 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:maxEms="13"
+            android:singleLine="true"
             android:textColor="#ff333333"
             android:textSize="15sp"
             app:layout_constraintLeft_toLeftOf="parent"
