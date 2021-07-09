@@ -23,6 +23,7 @@ import com.yyide.chatim.databinding.ActivityNoticeConfirmDetailBinding
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.net.ApiCallback
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.GlideUtil
 
 /**
@@ -72,7 +73,17 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                             confirmDetailBinding?.detail?.clImg?.visibility = View.VISIBLE
                             GlideUtil.loadImageRadius(mActivity, model.data.imgpath, confirmDetailBinding!!.detail.ivNoticeImg, SizeUtils.dp2px(4f))
                         }
-                        confirmDetailBinding?.detail?.tvPushTime?.text = model.data.timerDate
+                        when {
+                            DateUtils.isToday(DateUtils.parseTimestamp(model.data.timerDate, "")) -> {//今天
+                                confirmDetailBinding?.detail?.tvPushTime?.text = getString(R.string.notice_toDay, DateUtils.formatTime(model.data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+                            }
+                            DateUtils.isYesterday(DateUtils.parseTimestamp(model.data.timerDate, "")) -> {//昨天
+                                confirmDetailBinding?.detail?.tvPushTime?.text = getString(R.string.notice_yesterday, DateUtils.formatTime(model.data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+                            }
+                            else -> {
+                                confirmDetailBinding?.detail?.tvPushTime?.text = model.data.timerDate
+                            }
+                        }
                         confirmDetailBinding?.detail?.tvPushPeople?.text = model.data.publisher
                         confirmDetailBinding!!.detail.btnConfirm.visibility = View.VISIBLE
                         if (model.data.isConfirm) {
@@ -111,7 +122,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
             override fun onSuccess(model: ResultBean?) {
                 if (model != null) {
                     if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                        ToastUtils.showShort(model.msg)
+                        //ToastUtils.showShort(model.msg)
                         confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
                         confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
                         confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_have_been_confirmed)

@@ -4,7 +4,6 @@ package com.yyide.chatim.base;
 
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.net.DingApiStores;
-import com.yyide.chatim.net.VideoApiStores;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -18,13 +17,11 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class BasePresenter<V> {
     public V mvpView;
-    protected VideoApiStores videoapiStores;
     protected DingApiStores dingApiStores;
     private CompositeSubscription mCompositeSubscription;
 
     public void attachView(V mvpView) {
         this.mvpView = mvpView;
-        videoapiStores = AppClient.getVideoRetrofit().create(VideoApiStores.class);
         dingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
     }
 

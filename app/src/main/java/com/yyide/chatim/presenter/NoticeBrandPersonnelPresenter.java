@@ -2,7 +2,6 @@ package com.yyide.chatim.presenter;
 
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.NoticeBrandBean;
-import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.NoticeBrandPersonnelView;
 

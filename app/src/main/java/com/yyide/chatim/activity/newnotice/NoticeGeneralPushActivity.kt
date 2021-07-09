@@ -200,13 +200,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                     "1" -> {
                         paramsMap["patriarch"] = item
                     }
-                    "2" -> {
+                    "2", "3" -> {
                         paramsMap["brandClass"] = item
-                        paramsMap["brandSite"] = NoticeBlankReleaseBean()
-                    }
-                    "3" -> {
-                        paramsMap["brandClass"] = NoticeBlankReleaseBean()
-                        paramsMap["brandSite"] = item
                     }
                 }
                 setCheckNumber()
@@ -217,12 +212,14 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     private var teacherNumber: Int = 0
     private var patriarchNumber: Int = 0
     private var brandNumber: Int = 0
-    private var brandSiteNumber: Int = 0
 
     //处理请求参数
     private fun setCheckNumber() {
         //清空当前数据
         list.clear()
+        teacherNumber = 0
+        patriarchNumber = 0
+        brandNumber = 0
         for (key in paramsMap.entries) {
             val item: NoticeBlankReleaseBean = key.value
             when (key.key) {
@@ -241,11 +238,6 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                         brandNumber = 0
                     }
                 }
-                "brandSite" -> {
-                    if (item.recordList == null) {
-                        brandSiteNumber = 0
-                    }
-                }
             }
 
             item.recordList?.forEach { item ->
@@ -256,11 +248,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                     "1" -> {
                         patriarchNumber += item.nums
                     }
-                    "2" -> {
+                    "2", "3" -> {
                         brandNumber = item.nums
-                    }
-                    "3" -> {
-                        brandSiteNumber = item.nums
                     }
                 }
             }
@@ -284,10 +273,6 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
 
         if (brandNumber > 0) {
             descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber)).append("、")
-        }
-
-        if (brandSiteNumber > 0) {
-            descNumber.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
         }
 
         if (!TextUtils.isEmpty(descNumber.toString()) && descNumber.toString().endsWith("、")) {

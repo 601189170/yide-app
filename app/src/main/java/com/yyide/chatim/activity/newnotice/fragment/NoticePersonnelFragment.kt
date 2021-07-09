@@ -202,6 +202,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                         if (listBean.id == it.specifieId) {
                             reverseCheckNumber++
                             listBean.check = true
+                            listBean.unfold = true
                         }
                     }
                     getAllCount(listBean.list)

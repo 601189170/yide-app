@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.newnotice
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -13,6 +14,7 @@ import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeDetailPresenter
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.view.NoticeDetailView
 import org.greenrobot.eventbus.EventBus
@@ -51,16 +53,27 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setDate(item: NoticeMyReleaseDetailBean.DataBean) {
         itemBean = item
         if (item != null) {
             detailBinding!!.tvNoticeTitle.text = item.title
             detailBinding!!.tvNoticeContent.text = item.content
-
+            var timeDate = when {
+                DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天
+                    getString(R.string.notice_toDay, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+                }
+                DateUtils.isYesterday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//昨天
+                    getString(R.string.notice_yesterday, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+                }
+                else -> {
+                    item.timerDate
+                }
+            }
             if (item.isTimer) {
-                detailBinding!!.tvPushDesc.text = getString(R.string.notice_timing_push) + "\t\t" + item.timerDate
+                detailBinding!!.tvPushDesc.text = getString(R.string.notice_timing_push) + "\t\t" + timeDate
             } else {
-                detailBinding!!.tvPushDesc.text = "立即发布" + "\t\t" + item.timerDate //通知公告类型 0空白模板 1非空白模板
+                detailBinding!!.tvPushDesc.text = getString(R.string.notice_immediately_push) + "\t\t" + timeDate //通知公告类型 0空白模板 1非空白模板
             }
             if (item.type == 0) {
                 detailBinding!!.constraintLayout.visibility = View.VISIBLE
@@ -73,8 +86,6 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             var teacherNumber: Int = 0
             var patriarchNumber: Int = 0
             var brandClassNumber: Int = 0
-            var brandSiteNumber: Int = 0
-
             //通知范围
             if (item.notifyRange == 1) {//指定 部门发布
                 var stringBuffer = StringBuffer()
@@ -90,14 +101,9 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
                                 patriarchNumber += listBean.nums
                             }
                         }
-                        2 -> {
+                        2, 3 -> {
                             if (notifiesBean.list != null) {
                                 brandClassNumber = notifiesBean.list.size
-                            }
-                        }
-                        3 -> {
-                            if (notifiesBean.list != null) {
-                                brandSiteNumber = notifiesBean.list.size
                             }
                         }
                     }
@@ -111,9 +117,6 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
                 }
                 if (teacherNumber > 0) {
                     stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
-                }
-                if (brandSiteNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_brand_site_number, brandSiteNumber))
                 }
                 if (!TextUtils.isEmpty(stringBuffer.toString()) && stringBuffer.toString().endsWith("、")) {
                     detailBinding!!.tvNotificationRange.text = stringBuffer.toString().removeSuffix("、")

@@ -39,18 +39,6 @@ public class AppClient {
     public static Retrofit mDingRetrofit;
     private static OkHttpClient okHttpClient;
 
-    public static Retrofit getVideoRetrofit() {
-        if (mVideoRetrofit == null) {
-            mVideoRetrofit = new Retrofit.Builder()
-                    .baseUrl(VideoApiStores.API_SERVER_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .client(getOkHttpClient())
-                    .build();
-        }
-        return mVideoRetrofit;
-    }
-
     public static Retrofit getDingRetrofit() {
         if (mDingRetrofit == null) {
             mDingRetrofit = new Retrofit.Builder()
