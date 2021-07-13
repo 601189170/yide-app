@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserSigRsp;
@@ -120,6 +121,25 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onSuccess(GetUserSchoolRsp model) {
                 mvpView.getUserSchool(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        });
+    }
+
+    public void accountSwitch(){
+//        mvpView.showLoading();
+        addSubscription(dingApiStores.accountSwitch("reg"), new ApiCallback<LoginAccountBean>() {
+            @Override
+            public void onSuccess(LoginAccountBean model) {
+                mvpView.getAccountSwitch(model);
             }
 
             @Override

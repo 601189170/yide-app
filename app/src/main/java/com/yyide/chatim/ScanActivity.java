@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -42,6 +45,10 @@ import okhttp3.Response;
 
 public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
 
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.back_layout)
+    LinearLayout back_layout;
     @BindView(R.id.zbarview)
     ZBarView zbarview;
     int i;
@@ -54,7 +61,9 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        title.setText("扫码");
         zbarview.setDelegate(this);
+        back_layout.setOnClickListener(v -> finish());
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -77,18 +86,6 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
         } else {
             ToastUtils.showShort(result);
         }
-//        ToastUtils.showShort("onScanQRCodeSuccess==>"+result.toString());
-//        if (result.contains("id:")) {
-//            ResultRsp bean = JSON.parseObject(result, ResultRsp.class);
-//        if (isshow)
-//            Identity(DecryptUtils.decrypt(result));
-//        }
-//        if (zbarview!=null) new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                zbarview.startSpot();
-//            }
-//        },3000);
         finish();
     }
 

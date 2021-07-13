@@ -63,6 +63,11 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         TextView attendanceName = view.findViewById(R.id.tv_attendance_type);
         TextView number = view.findViewById(R.id.tv_attendance_number);
         TextView tv_desc = view.findViewById(R.id.tv_desc);
+        TextView tv_absenteeism_text = view.findViewById(R.id.tv_absenteeism_text);
+        TextView tv_leave_text = view.findViewById(R.id.tv_leave_text);
+
+        tv_absenteeism_text.setText("1".equals(item.getGoOutStatus()) ? "未签退" : "缺勤");
+        tv_leave_text.setText("1".equals(item.getGoOutStatus()) ? "早退" : "迟到");
         attendanceName.setText(item.getName());
         tv_desc.setText(TextUtils.isEmpty(item.getSubjectName()) ? item.getThingName() : item.getSubjectName());
         qq.setText(item.getAbsence() + " 人");
@@ -84,7 +89,8 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         entries.add(new PieEntry(item.getLeave(), "请假"));
         entries.add(new PieEntry(item.getLate(), "迟到"));
         entries.add(new PieEntry(item.getApplyNum(), "实到"));
-        piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + "考勤率");
+        String desc = !TextUtils.isEmpty(item.getGoOutStatus()) ? ("1".equals(item.getGoOutStatus()) ? "签退率" : "签到率") : "考勤率";
+        piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + desc);
         piechart.setCenterTextSize(12);
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setSliceSpace(0);//设置饼块之间的间隔

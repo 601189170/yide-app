@@ -108,7 +108,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
                 }
                 tv_notice_author.setText(data.publisher);
                 if (!TextUtils.isEmpty(data.title)) {
-                    tv_title.setText("《" + data.title + "》");
+                    tv_title.setText(data.title);
                 }
             } else {
                 tv_title.setText("暂无公告");

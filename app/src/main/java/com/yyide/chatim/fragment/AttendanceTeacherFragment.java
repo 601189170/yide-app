@@ -1,5 +1,6 @@
 package com.yyide.chatim.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
+import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.adapter.AttendanceAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
@@ -112,8 +114,8 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
     }
 
     @OnClick({R.id.constraintLayout})
-    public void click(View v){
-        AttendanceActivity.start(getContext(), "", -1);
+    public void click(View v) {
+        startActivity(new Intent(getContext(), StatisticsActivity.class));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

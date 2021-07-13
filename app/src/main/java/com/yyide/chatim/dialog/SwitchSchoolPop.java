@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
@@ -80,7 +81,12 @@ public class SwitchSchoolPop extends PopupWindow {
         if (SpData.Schoolinfo() != null && SpData.Schoolinfo().data != null) {
             adapter.notifyData(SpData.Schoolinfo().data);
         }
-
+        TextView tv_cancel = mView.findViewById(R.id.tv_cancel);
+        tv_cancel.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
+        });
         listview.setOnItemClickListener((parent, view, position, id) -> {
             adapter.setIndex(position);
             selectUserSchool(adapter.getItem(position));

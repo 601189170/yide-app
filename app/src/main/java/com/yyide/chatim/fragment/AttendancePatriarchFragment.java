@@ -1,5 +1,6 @@
 package com.yyide.chatim.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
+import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.adapter.AttendanceParentsAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
@@ -30,7 +32,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,7 +40,7 @@ import butterknife.OnClick;
 /**
  * 家长查看学生考勤
  */
-public class AttendanceParentsFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
+public class AttendancePatriarchFragment extends BaseMvpFragment<AttendancePresenter> implements AttendanceCheckView {
 
     @BindView(R.id.announRoll)
     RollPagerView announRoll;
@@ -50,7 +51,7 @@ public class AttendanceParentsFragment extends BaseMvpFragment<AttendancePresent
     private View mBaseView;
     AttendanceParentsAdapter announAdapter;
     IndexAdapter indexAdapter;
-    public String TAG = AttendanceParentsFragment.class.getSimpleName();
+    public String TAG = AttendancePatriarchFragment.class.getSimpleName();
     private boolean isSchool = false;
 
     @Nullable
@@ -89,7 +90,6 @@ public class AttendanceParentsFragment extends BaseMvpFragment<AttendancePresent
         //处理是否为校长身份
         announRoll.setHintView(null);
         announRoll.setPlayDelay(5000);
-
         mHot.setLayoutManager(new LinearLayoutManager(mActivity, RecyclerView.HORIZONTAL, false));
         mHot.setAdapter(indexAdapter);
         ViewPager viewPager = announRoll.getViewPager();
@@ -114,14 +114,14 @@ public class AttendanceParentsFragment extends BaseMvpFragment<AttendancePresent
     }
 
     @OnClick({R.id.constraintLayout})
-    public void click(View v){
-        AttendanceActivity.start(getContext(), "", -1);
+    public void click(View v) {
+        startActivity(new Intent(getContext(), StatisticsActivity.class));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            Log.d("HomeRefresh", AttendanceParentsFragment.class.getSimpleName());
+            Log.d("HomeRefresh", AttendancePatriarchFragment.class.getSimpleName());
             announAdapter.notifyData(null);
             getHomeAttendance();
         }

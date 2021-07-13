@@ -90,8 +90,8 @@ public class GlideUtil {
                 .centerCrop()
                 .apply(roundOptions)
                 .transform(new FitTopTransformation())
-                .placeholder(R.drawable.bg_corners_white)
-                .error(R.drawable.bg_corners_white)
+                .placeholder(R.mipmap.icon_placeholder)
+                .error(R.mipmap.icon_placeholder)
                 .into(img);
     }
 

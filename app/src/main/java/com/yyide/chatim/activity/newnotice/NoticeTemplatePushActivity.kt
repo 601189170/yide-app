@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
@@ -137,6 +138,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
             Log.d("NoticePersonnelFragment", messageEvent.message)
             if (!TextUtils.isEmpty(messageEvent.message)) {
                 val item: NoticeBlankReleaseBean = JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
+                isConfirm = item.isConfirm
                 when (messageEvent.type) {
                     "0" -> {
                         paramsMap["teacher"] = item
@@ -244,10 +246,12 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
 
     override fun pushTemplateSuccess(model: ResultBean?) {
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
-            ToastUtils.showLong(model.msg)
-            finish()
+            Handler().postDelayed({
+                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
+                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
+                ToastUtils.showLong(model.msg)
+                finish()
+            }, 500)
         }
     }
 

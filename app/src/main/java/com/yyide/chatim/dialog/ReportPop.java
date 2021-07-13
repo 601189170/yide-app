@@ -1,6 +1,7 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -10,35 +11,37 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.SPUtils;
-import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.SwichClassAdapter;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.GetUserSchoolRsp;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import org.greenrobot.eventbus.EventBus;
+import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.yyide.chatim.R;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.utils.LoadingTools;
+
+import org.jetbrains.annotations.NotNull;
+import org.objectweb.asm.Handle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * Created by Administrator on 2019/5/15.
+ * 举报
  */
 
-public class SwitchClassPopNew extends PopupWindow {
+public class ReportPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
-    private GetUserSchoolRsp.DataBean.FormBean classBean;
 
-    public SwitchClassPopNew(Activity context, GetUserSchoolRsp.DataBean.FormBean classBean) {
+    public ReportPop(Activity context) {
         this.context = context;
-        this.classBean = classBean;
         init();
     }
 
@@ -53,49 +56,28 @@ public class SwitchClassPopNew extends PopupWindow {
     }
 
     private void init() {
-        int index = 0;
-        final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_class_pop, null);
+        final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_report_pop, null);
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
 
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
-        TextView tv_cancel = mView.findViewById(R.id.tv_cancel);
-        tv_cancel.setOnClickListener(v -> {
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-            }
-        });
         FrameLayout bg = mView.findViewById(R.id.bg);
-        ListView listview = mView.findViewById(R.id.listview);
-        SwichClassAdapter adapter = new SwichClassAdapter();
+        RecyclerView listview = mView.findViewById(R.id.listview);
+        listview.setLayoutManager(new LinearLayoutManager(context));
         listview.setAdapter(adapter);
-        //保存班级ID用于切换班级业务逻辑使用
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
-            adapter.notifyData(SpData.getIdentityInfo().form);
-            for (int i = 0; i < SpData.getIdentityInfo().form.size(); i++) {
-                if (classBean != null
-                        && classBean.classesId != null
-                        && classBean.classesId.equals(SpData.getIdentityInfo().form.get(i).classesId)) {
-                    index = i;
-                    break;
+        adapter.setList(initList());
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            LoadingTools loadingTools = new LoadingTools(context);
+            loadingTools.showLoading();
+            new Handler().postDelayed(() -> {
+                ToastUtils.showShort("举报已被受理");
+                loadingTools.closeLoading();
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
                 }
-            }
-        }
-        adapter.setIndex(index);
-        listview.setOnItemClickListener((parent, view, position, id) -> {
-            adapter.setIndex(position);
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-            }
-            if (mOnCheckCallBack != null) {
-                mOnCheckCallBack.onCheckCallBack(adapter.getItem(position));
-            }
-//                ActivityUtils.finishAllActivities();
-//                Intent intent = new Intent(context, MainActivity.class);
-//                context.startActivity(intent);
+            }, 1500);
         });
-
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(false);
         popupWindow.setBackgroundDrawable(null);
@@ -110,12 +92,16 @@ public class SwitchClassPopNew extends PopupWindow {
             }
             return false;
         });
-        bg.setOnClickListener(v -> {
-
+        TextView tv_cancel = mView.findViewById(R.id.tv_cancel);
+        tv_cancel.setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }
-
+        });
+        bg.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
         });
         // 获取当前Activity的window
         Activity activity = (Activity) mView.getContext();
@@ -141,7 +127,25 @@ public class SwitchClassPopNew extends PopupWindow {
             }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
-
     }
+
+    private List<String> initList() {
+        List<String> lists = new ArrayList<>();
+        lists.add("发布色情/违法信息");
+        lists.add("存在欺诈骗钱行为");
+        lists.add("冒充他人");
+        lists.add("账号可能被盗用了");
+        lists.add("侵犯未成年人权益");
+        lists.add("存在其他违规行为");
+        return lists;
+    }
+
+    private BaseQuickAdapter<String, BaseViewHolder> adapter = new BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_report) {
+
+        @Override
+        protected void convert(@NotNull BaseViewHolder holder, String s) {
+            holder.setText(R.id.tv_text, s);
+        }
+    };
 
 }

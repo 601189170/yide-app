@@ -26,6 +26,13 @@ class NoticeMyReceivedAdapter(layoutResId: Int) : BaseQuickAdapter<NoticeItemBea
             view.clTemplate.visibility = View.VISIBLE
             GlideUtil.loadImageRadius(context, item.imgpath, view.ivNoticeImg, 2, true)
         }
+
+        if (item.confirmOrRead) {//是否已读
+            view.ivIconImg.setImageResource(R.mipmap.icon_notice_active)
+        } else {
+            view.ivIconImg.setImageResource(R.mipmap.icon_notice_unread)
+        }
+        
         view.tvNoticeTitle.text = item.title
         when {
             DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天

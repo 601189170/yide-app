@@ -1,6 +1,5 @@
 package com.yyide.chatim;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,7 +10,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,30 +24,26 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
+import com.yyide.chatim.activity.RegisterActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.LoginRsp;
-import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.presenter.LoginPresenter;
 import com.yyide.chatim.utils.DemoLog;
-import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.Utils;
 import com.yyide.chatim.view.LoginView;
 
@@ -88,6 +82,8 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     EditText vCode;
     @BindView(R.id.del)
     ImageView del;
+    @BindView(R.id.forgot)
+    TextView forgot;
     private TimeCount time;
     private boolean isPwd;
     OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -110,7 +106,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            //getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             int vis = getWindow().getDecorView().getSystemUiVisibility();
             vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -123,6 +119,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         passwordEdit.setText(TextUtils.isEmpty(password) ? "" : password);
         time = new TimeCount(120000, 1000);
         alphaAnimation();
+        mvpPresenter.accountSwitch();
     }
 
     @Override
@@ -169,13 +166,17 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     void click(View view) {
         switch (view.getId()) {
             case R.id.forgot:
-                String userName = userEdit.getText().toString().trim();
-                Intent intent = new Intent(this, ResetPassWordActivity.class);
-                if (!TextUtils.isEmpty(userName) && RegexUtils.isMobileExact(userName)) {
-                    intent.putExtra("phone", userName);
+                if (!isForget) {
+                    String userName = userEdit.getText().toString().trim();
+                    Intent intent = new Intent(this, ResetPassWordActivity.class);
+                    if (!TextUtils.isEmpty(userName) && RegexUtils.isMobileExact(userName)) {
+                        intent.putExtra("phone", userName);
+                    }
+                    intent.putExtra("isForgot", true);
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, RegisterActivity.class));
                 }
-                intent.putExtra("isForgot", true);
-                startActivity(intent);
                 break;
             case R.id.tv_login:
                 //startActivity(new Intent(this, StatisticsActivity.class));
@@ -361,6 +362,21 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         } else {
             hideLoading();
             ToastUtils.showShort(rsp.msg);
+        }
+    }
+
+    private boolean isForget = false;
+
+    @Override
+    public void getAccountSwitch(LoginAccountBean model) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {//1开启 0关闭
+            if (model.getData() != null && "1".equals(model.getData().getValue())) {
+                forgot.setText(model.getData().getName());
+                isForget = true;
+            } else {
+                isForget = false;
+                forgot.setText(R.string.forget);
+            }
         }
     }
 

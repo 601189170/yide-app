@@ -90,7 +90,6 @@
             android:layout_height="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_8"
             android:scaleType="centerCrop"
-            android:src="@mipmap/icon_notice_active"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:left_bottom_radius="2dp"

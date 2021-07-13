@@ -22,6 +22,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.activity.newnotice.NoticeDetailActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
+import com.yyide.chatim.databinding.EmptyBinding
 import com.yyide.chatim.databinding.FragmentNoticeMyPushListBinding
 import com.yyide.chatim.databinding.ItemNoticeMyPushBinding
 import com.yyide.chatim.model.EventMessage
@@ -67,7 +68,9 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
         viewBinding!!.list.layoutManager = GridLayoutManager(activity, 2)
         viewBinding!!.list.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(6f)))
         viewBinding!!.list.adapter = mAdapter
-        mAdapter.setEmptyView(R.layout.empty)
+        val emptyBinding = EmptyBinding.inflate(layoutInflater)
+        mAdapter.setEmptyView(emptyBinding.root)
+        emptyBinding.tvDesc.text = "还没有发布任何通知"
         mAdapter.emptyLayout!!.setOnClickListener {
             //点击空数据界面刷新当前页数据
             pageNum = 1

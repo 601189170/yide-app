@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
@@ -75,6 +76,12 @@ public class SwitchClassPop extends PopupWindow {
 
         FrameLayout bg = mView.findViewById(R.id.bg);
         ListView listview = mView.findViewById(R.id.listview);
+        TextView tv_cancel = mView.findViewById(R.id.tv_cancel);
+        tv_cancel.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
+        });
         SwichClassAdapter adapter = new SwichClassAdapter();
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用

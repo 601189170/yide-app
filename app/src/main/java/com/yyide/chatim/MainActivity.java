@@ -234,7 +234,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         if (Build.VERSION.SDK_INT >= 23) {
             mPermissionList = new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.CALL_PHONE,
                     Manifest.permission.READ_LOGS,
                     Manifest.permission.READ_PHONE_STATE,
@@ -244,8 +243,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     Manifest.permission.GET_ACCOUNTS,
                     Manifest.permission.WRITE_SETTINGS,
                     Manifest.permission.WRITE_APN_SETTINGS,
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.RECORD_AUDIO//音频
+                    Manifest.permission.CAMERA
+//                    Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.RECORD_AUDIO//音频
             };
             requestPermissions(mPermissionList, 1);
             //ActivityCompat.requestPermissions(getActivity(), mPermissionList, 123);

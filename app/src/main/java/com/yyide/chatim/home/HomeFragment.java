@@ -3,10 +3,8 @@ package com.yyide.chatim.home;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,8 +26,6 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
-import com.blankj.utilcode.util.ToastUtils;
-import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.BuildConfig;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
@@ -41,7 +35,7 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.fragment.AttendanceTeacherFragment;
-import com.yyide.chatim.fragment.AttendanceParentsFragment;
+import com.yyide.chatim.fragment.AttendancePatriarchFragment;
 import com.yyide.chatim.fragment.AttendanceSchoolFragment;
 import com.yyide.chatim.fragment.BannerFragment;
 import com.yyide.chatim.fragment.ClassHonorFragment;
@@ -280,7 +274,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             //通知
             fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
-            fragmentTransaction.replace(R.id.kq_content, new AttendanceParentsFragment());
+            fragmentTransaction.replace(R.id.kq_content, new AttendancePatriarchFragment());
             //班级相册轮播
 //            fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
             //班级作业

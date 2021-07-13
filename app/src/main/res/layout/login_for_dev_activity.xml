@@ -221,8 +221,8 @@
                         android:id="@+id/forgot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="忘记密码？"
+                        android:layout_alignParentEnd="true"
+                        android:text="@string/forget"
                         android:textColor="@color/tab_color"
                         android:textSize="@dimen/text_12"
                         android:textStyle="bold" />

@@ -35,8 +35,9 @@ public class NoticeItemBean {
             public long id;
             public String title;
             public String content;
-            public boolean isConfirm;
+            public boolean isConfirm;//是否需要确认
             public boolean isRetract;
+            public boolean confirmOrRead;//是否已读
             public boolean isTimer;
             public String timerDate;
             public int type;

@@ -20,11 +20,13 @@ import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityNoticeConfirmDetailBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.net.ApiCallback
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.GlideUtil
+import org.greenrobot.eventbus.EventBus
 
 /**
  * 确认通知/已读通知 详情
@@ -47,6 +49,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
         setContentView(confirmDetailBinding!!.root)
         initView()
         confirmDetailBinding?.detail?.btnConfirm?.setOnClickListener {
+            showLoading()
             confirm()
         }
 
@@ -117,15 +120,14 @@ class NoticeConfirmDetailActivity : BaseActivity() {
     }
 
     private fun confirm() {
-        showLoading()
         addSubscription(mDingApiStores.confirmNotice(detailId), object : ApiCallback<ResultBean?>() {
             override fun onSuccess(model: ResultBean?) {
                 if (model != null) {
                     if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                        //ToastUtils.showShort(model.msg)
                         confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
                         confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
                         confirmDetailBinding?.detail?.btnConfirm?.text = getString(R.string.notice_have_been_confirmed)
+                        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_CONFIRM_RECEIVER, "" + detailId))
                     }
                 }
             }

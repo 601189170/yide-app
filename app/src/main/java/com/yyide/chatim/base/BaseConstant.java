@@ -106,6 +106,7 @@ public class BaseConstant {
     public static final String TYPE_NOTICE_RANGE = "type_notice_range";
     public static final String TYPE_NOTICE_UN_CONFIRM_NUMBER = "type_notice_un_confirm_number";
     public static final String TYPE_NOTICE_CHECK_NUMBER = "type_notice_check_number";
+    public static final String TYPE_NOTICE_CONFIRM_RECEIVER = "type_notice_confirm_receiver";
 
     public static final String TYPE_LEAVE = "type_leave";
     public static final String TYPE_UPDATE_IMG = "type_update_img";

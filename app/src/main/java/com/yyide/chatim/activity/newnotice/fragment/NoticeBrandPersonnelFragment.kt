@@ -219,7 +219,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
      */
     private var childCheckCount = 0
     private fun reverseElection(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>) {
-        noticeScopeBean.forEachIndexed { index, listBean ->
+        noticeScopeBean.forEachIndexed { _, listBean ->
             if (listBean.list != null) {
                 listBean.list.forEach() { childItem ->
                     if (childItem.check) {
@@ -243,7 +243,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
      * @param noticeScopeBean
      */
     private fun getAllCount(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>): Int {
-        noticeScopeBean.forEachIndexed { index, listBean ->
+        noticeScopeBean.forEachIndexed { _, listBean ->
             if (TextUtils.isEmpty(listBean.name)) {//处理没有名称的部门
                 noticeScopeBean.remove(listBean)
             } else {
@@ -272,7 +272,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
      *
      * @param noticeScopeBean
      */
-    private fun getParams(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>): NoticeBlankReleaseBean? {
+    private fun getParams(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>): NoticeBlankReleaseBean {
         checkLists.clear()
         val rangeList: MutableList<NoticeBlankReleaseBean.RecordListBean.ListBean> = mutableListOf()
         val recordList: MutableList<NoticeBlankReleaseBean.RecordListBean> = mutableListOf()
@@ -287,12 +287,11 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
             recordListBean.list = rangeList
             resultBean.recordList = recordList
         }
-        resultBean.recordList = recordList
         return resultBean
     }
 
     private fun getCheckList(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>, rangeList: MutableList<NoticeBlankReleaseBean.RecordListBean.ListBean>) {
-        noticeScopeBean.forEachIndexed { index, listBean ->
+        noticeScopeBean.forEachIndexed { _, listBean ->
             if (listBean.check) {
                 val item = NoticeBlankReleaseBean.RecordListBean.ListBean()
                 if (type == "3" && listBean.parendId > 0) {
@@ -320,7 +319,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
      */
     var checkCountAll = 0
     private fun getCheckedNumber(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>): Int {
-        noticeScopeBean.forEachIndexed { index, listBean ->
+        noticeScopeBean.forEachIndexed { _, listBean ->
             if (listBean.check) {
                 if (type == "3" && listBean.parendId > 0) {
                     checkTotalNumber++
@@ -353,7 +352,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
                 } else {
                     patriarchNumber = messageEvent.count
                 }
-                viewBinding!!.tvCheckedNumber.text = getString(R.string.notice_brand_class_number, teacherNumber, patriarchNumber, getCheckedNumber(mAdapter.data as ArrayList<NoticeBrandBean.DataBean>))
+                viewBinding!!.tvCheckedNumber.text = getString(R.string.notice_brand_class_number, teacherNumber, patriarchNumber, checkTotalNumber)
             }
         }
     }

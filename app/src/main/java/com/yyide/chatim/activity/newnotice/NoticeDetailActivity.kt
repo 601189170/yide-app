@@ -109,14 +109,14 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
                     }
 
                 }
-                if (brandClassNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber))
-                }
-                if (patriarchNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber))
-                }
                 if (teacherNumber > 0) {
                     stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
+                }
+                if (patriarchNumber > 0) {
+                    stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+                }
+                if (brandClassNumber > 0) {
+                    stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber))
                 }
                 if (!TextUtils.isEmpty(stringBuffer.toString()) && stringBuffer.toString().endsWith("、")) {
                     detailBinding!!.tvNotificationRange.text = stringBuffer.toString().removeSuffix("、")
@@ -141,6 +141,7 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             if (item.isRetract) {//是否已撤回
                 detailBinding!!.btnToWithdraw.visibility = View.GONE
                 detailBinding!!.btnCommit.visibility = View.VISIBLE
+                detailBinding!!.clReadUnread.visibility = View.GONE
             } else {
                 detailBinding!!.btnToWithdraw.visibility = View.VISIBLE
                 detailBinding!!.btnCommit.visibility = View.GONE

@@ -3,6 +3,7 @@ package com.yyide.chatim.view;
 
 import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
 import com.yyide.chatim.model.UserSigRsp;
@@ -24,5 +25,7 @@ public interface LoginView extends BaseView {
     void getFail(String msg);
 
     void getUserSchool(GetUserSchoolRsp rsp);
+
+    void getAccountSwitch(LoginAccountBean model);
 
 }

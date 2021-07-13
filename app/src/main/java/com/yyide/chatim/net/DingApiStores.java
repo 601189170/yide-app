@@ -15,6 +15,7 @@ import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveListRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
+import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.MessageNumberRsp;
 import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
@@ -609,4 +610,17 @@ public interface DingApiStores {
     @POST("    /message-server/cloud-message/app/message/publish/unconfirm/users/notify")
     Observable<ResultBean> unNoticeNotify(@Body RequestBody requestBody);
 
+    //获取登录页面开关
+    @GET("/management/cloud-system/app/sys/switch/{key}")
+    Observable<LoginAccountBean> accountSwitch(@Path("key") String key);
+
+    //获取注册手机短信
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @POST("/management/cloud-system/app/user/reg/smsVerification")
+    Observable<ResultBean> getRegisterSms(@Body RequestBody info);
+
+    //注册
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @POST("/management/cloud-system/app/user/reg")
+    Observable<ResultBean> register(@Body RequestBody info);
 }

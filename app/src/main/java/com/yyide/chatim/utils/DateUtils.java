@@ -72,12 +72,15 @@ public class DateUtils {
      * <p>
      * s就是时间戳
      */
-    public static String getDate(long s) {
-        String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
-        Date date = new Date(s);
-        res = simpleDateFormat.format(date);
-        return res;
+    public static String getDate(long dateTime) {
+        String time = "";
+        try {
+            SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            time = sDateFormat.format(new Date(dateTime + 0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return time;
     }
 
     /**
@@ -416,11 +419,11 @@ public class DateUtils {
         return dates;
     }
 
-    public static String sectionDesc(Context context,int section){
-        if (section == 0){
+    public static String sectionDesc(Context context, int section) {
+        if (section == 0) {
             return "早读";
         }
-        return String.format(context.getString(R.string.attendance_class_section),convert(section));
+        return String.format(context.getString(R.string.attendance_class_section), convert(section));
     }
 
     public static String sectionUppercase(int section) {
@@ -466,7 +469,7 @@ public class DateUtils {
                     String cc = convert(n);
                     sb.append(cc);
                 } else {
-                    if (0==tmp && 0==n) {
+                    if (0 == tmp && 0 == n) {
 
                     } else {
                         sb.append(single[n]);
@@ -486,7 +489,7 @@ public class DateUtils {
             sb.append(single[number]);
         }
         String ret = sb.toString();
-        if (ret.length()==0){
+        if (ret.length() == 0) {
             return "零";
         }
         String last = String.valueOf(ret.charAt(ret.length() - 1));
@@ -494,8 +497,8 @@ public class DateUtils {
             ret = ret.substring(0, ret.length() - 1);
         }
 
-        if (sb.length() >=2){
-            if (sb.charAt(0)=='一' && sb.charAt(1) == '十'){
+        if (sb.length() >= 2) {
+            if (sb.charAt(0) == '一' && sb.charAt(1) == '十') {
                 sb.deleteCharAt(0);
                 ret = sb.toString();
             }
@@ -518,12 +521,13 @@ public class DateUtils {
 
     /**
      * 判断beginDate是否是最小的时间限制
-     * @param beginDate 最小时间限制
+     *
+     * @param beginDate          最小时间限制
      * @param currentMinWeekDate 当前时间最小
      * @return
      */
-    public static boolean minWeek(String beginDate,String currentMinWeekDate){
-        if (TextUtils.isEmpty(beginDate)){
+    public static boolean minWeek(String beginDate, String currentMinWeekDate) {
+        if (TextUtils.isEmpty(beginDate)) {
             return false;
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
@@ -535,11 +539,11 @@ public class DateUtils {
             final int year = instance.get(Calendar.YEAR);
             assert date2 != null;
             instance.setTime(date2);
-            instance.set(Calendar.YEAR,year);
+            instance.set(Calendar.YEAR, year);
             date2 = instance.getTime();
-            Log.e(TAG, "minWeek: "+instance.toString() );
+            Log.e(TAG, "minWeek: " + instance.toString());
             assert date != null;
-            if (date.getTime()>=date2.getTime()){
+            if (date.getTime() >= date2.getTime()) {
                 return true;
             }
         } catch (Exception e) {

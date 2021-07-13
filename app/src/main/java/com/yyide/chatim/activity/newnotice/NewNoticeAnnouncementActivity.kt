@@ -42,11 +42,11 @@ class NewNoticeAnnouncementActivity : BaseActivity() {
 
     private fun initView() {
         noticeBinding!!.top.title.setText(R.string.notice_announcement_title)
-        noticeBinding!!.top.backLayout.setOnClickListener { v: View? -> finish() }
+        noticeBinding!!.top.backLayout.setOnClickListener { finish() }
         val mTitles: MutableList<String> = ArrayList()
 
-        //
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS == SpData.getIdentityInfo().status) {
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS == SpData.getIdentityInfo().status
+                || GetUserSchoolRsp.DataBean.TYPE_TEACHER == SpData.getIdentityInfo().status) {
             mTitles.add(getString(R.string.notice_tab_my_received))
             noticeBinding!!.slidingTabLayout.visibility = View.GONE
         } else {
@@ -58,7 +58,7 @@ class NewNoticeAnnouncementActivity : BaseActivity() {
         noticeBinding!!.viewpager.offscreenPageLimit = 3
         noticeBinding!!.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                var fragment: Fragment = NoticeMyReceivedFragment.Companion.newInstance()
+                var fragment: Fragment = NoticeMyReceivedFragment.newInstance()
                 when (position) {
                     0 -> fragment = NoticeMyReceivedFragment.newInstance()
                     1 -> fragment = NoticeMyReleaseFragment.newInstance()

@@ -2,6 +2,8 @@ package com.yyide.chatim;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -74,12 +76,19 @@ public class SplashActivity extends AppCompatActivity {
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
             getWindow().getDecorView().setSystemUiVisibility(vis);
         }
+
+        //设置固定字体大小
+        Resources res = getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+
         mFlashView = findViewById(R.id.flash_view);
         mUserInfo = UserInfo.getInstance();
-        Log.e(TAG, "mUserInfo: " + JSON.toJSONString(mUserInfo));
+        //Log.e(TAG, "mUserInfo: " + JSON.toJSONString(mUserInfo));
         initData();
-        Log.e(TAG, "loginName: " + JSON.toJSONString(loginName));
-        Log.e(TAG, "passWord: " + JSON.toJSONString(passWord));
+        //Log.e(TAG, "loginName: " + JSON.toJSONString(loginName));
+        //Log.e(TAG, "passWord: " + JSON.toJSONString(passWord));
         if (!MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
             showPrivacy();
         } else {
@@ -230,7 +239,7 @@ public class SplashActivity extends AppCompatActivity {
         ClickableSpan clickableSpan1 = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacy_title));
+                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.AGREEMENT_URL, getString(R.string.agreement_title));
             }
 
             @Override
@@ -244,7 +253,8 @@ public class SplashActivity extends AppCompatActivity {
         ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
             public void onClick(View view) {
-                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.AGREEMENT_URL, getString(R.string.agreement_title));
+                WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacy_title));
+
             }
 
             @Override

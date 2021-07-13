@@ -144,6 +144,7 @@
                     android:layout_marginEnd="@dimen/dp_16"
                     android:gravity="right"
                     android:textColor="#ff666666"
+                    android:drawableEnd="@drawable/ic_baseline_more_horiz_24"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView15"
@@ -211,6 +212,7 @@
                 android:background="@drawable/bg_corners_gray2_22"
                 android:clickable="false"
                 android:gravity="center"
+                android:visibility="invisible"
                 android:text="@string/notice_has_withdrawn"
                 android:textColor="@color/black10"
                 android:textSize="@dimen/text_15" />

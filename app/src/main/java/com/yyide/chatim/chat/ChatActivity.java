@@ -14,6 +14,8 @@ import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
+import com.yyide.chatim.dialog.ReportPop;
+import com.yyide.chatim.dialog.SwitchClassPopNew;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
@@ -32,6 +34,8 @@ public class ChatActivity extends BaseActivity {
     private ChatInfo mChatInfo;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.tv_right)
+    TextView tvRight;
 
     @Override
     public int getContentViewID() {
@@ -44,9 +48,17 @@ public class ChatActivity extends BaseActivity {
         chat(getIntent());
     }
 
-    @OnClick(R.id.back_layout)
-    void click(View view){
-        finish();
+    @OnClick({R.id.back_layout, R.id.tv_right})
+    void click(View view) {
+        switch (view.getId()) {
+            case R.id.back_layout:
+                finish();
+                break;
+            case R.id.tv_right://举报
+                ReportPop reportPop = new ReportPop(this);
+                break;
+        }
+
     }
 
     @Override
@@ -81,9 +93,11 @@ public class ChatActivity extends BaseActivity {
 //        } else {
         mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
 //        }
-        if(mChatInfo != null){
+        if (mChatInfo != null) {
             title.setText(mChatInfo.getChatName());
         }
+        tvRight.setVisibility(View.VISIBLE);
+        tvRight.setText("举报");
 
         if (V2TIMManager.getInstance().getLoginStatus() == V2TIM_STATUS_LOGINED) {
             mChatFragment = new ChatFragment();

@@ -43,7 +43,6 @@
     <string name="tab_conversation_tab_text">消息</string>
     <string name="tab_profile_tab_text">我</string>
     <string name="tab_scenes_tab_text">直播</string>
-
     <string name="home_attendance">数据考勤</string>
 
     // "+"menu相关
@@ -64,7 +63,7 @@
     <string name="tips_empty_group_type">请选择加群方式</string>
     <string name="no_friend_apply">暂无好友申请</string>
     <string name="newestVersion">已经是最新版本</string>
-
+    <string name="forget">忘记密码？</string>
 
     // 新朋友
     <string name="request_agree">同意</string>
@@ -213,7 +212,7 @@
     <string name="notice_brand">按班级</string>
     <string name="notice_teacher_number">教师%d人</string>
     <string name="notice_patriarch_number">家长%d人</string>
-    <string name="notice_brand_check_class_number">班牌%d个</string>
+    <string name="notice_brand_check_class_number">班牌%d台</string>
     <string name="notice_brand_class_number">已选择教师%d人、家长%d人、班牌%d个</string>
     <string name="notice_toDay">今天%s</string>
     <string name="notice_yesterday">昨天%s</string>
@@ -221,13 +220,15 @@
     <string name="select_all">全选</string>
 
     //隐私政策
-    <string name="privacy_tips">\t\t\t\t一加壹App重视用户的个人信息和隐私保护，我们依据最新的法律法规要求，更新制定了隐私政策，请您务必仔细阅读，充分理解 "服务协议" 和 "隐私政策" 各条件，包括但不限于:为了向您提供即时资讯、内容分享等服务，我们需要收集您的设备信息、操作日志等个人信息，您可以在“设置”中查看、变更、删除个人信息并管理你的授权。你可点击阅读《服务协议》和《隐私政策》了解详细信息。如您对协议内容有任何疑问、意见或建议，可通过客服与我们联系，如你同意并接受全部条款后，请点击“同意”开始接受我们的服务。</string>
-    <string name="privacy_tips_key1">《服务协议》</string>
+    <string name="privacy_tips">\t\t\t\t一加壹App重视用户的个人信息和隐私保护，我们依据最新的法律法规要求，更新制定了隐私政策，请您务必仔细阅读，充分理解 "用户协议" 和 "隐私政策" 各条件，包括但不限于:为了向您提供即时资讯、内容分享等服务，我们需要收集您的设备信息、操作日志等个人信息，您可以在“设置”中查看、变更、删除个人信息并管理你的授权。你可点击阅读《用户协议》和《隐私政策》了解详细信息。如您对协议内容有任何疑问、意见或建议，可通过客服与我们联系，如你同意并接受全部条款后，请点击“同意”开始接受我们的服务。</string>
+    <string name="privacy_tips_key1">《用户协议》</string>
     <string name="privacy_title">隐私政策</string>
-    <string name="agreement_title">服务协议</string>
+    <string name="agreement_title">用户协议</string>
     <string name="privacy_tips_key2">《隐私政策》</string>
     <string name="privacy_exit">不同意</string>
     <string name="privacy_agree">同意</string>
+
+    <string name="register">注册</string>
 
     <string name="app_commonly_title">常用应用</string>
     <string name="statistical_man_time">（人次）</string>

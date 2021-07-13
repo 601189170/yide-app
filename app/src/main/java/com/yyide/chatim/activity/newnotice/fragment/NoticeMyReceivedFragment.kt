@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.newnotice.fragment
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.yyide.chatim.activity.newnotice.NoticeConfirmDetailActivity
 import com.yyide.chatim.activity.newnotice.fragment.adaoter.NoticeMyReceivedAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
+import com.yyide.chatim.databinding.EmptyBinding
 import com.yyide.chatim.databinding.FragmentNoticeMyReceviedListBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeItemBean
@@ -78,6 +80,17 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
         if (BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE == messageEvent.code) {
             pageNum = 1
             mvpPresenter?.getReceiverNoticeList(startData, endData, pageNum, pageSize);
+        } else if (BaseConstant.TYPE_NOTICE_CONFIRM_RECEIVER == messageEvent.code) {
+            //循环列表数据更新已确认item
+            if (!TextUtils.isEmpty(messageEvent.message)) {
+                receivedAdapter.data.forEachIndexed { index, item ->
+                    if (item.id == messageEvent.message.toLong()) {
+                        item.confirmOrRead = true
+                        receivedAdapter.notifyItemChanged(index)
+                        return
+                    }
+                }
+            }
         }
     }
 
@@ -96,7 +109,9 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
         viewBinding!!.list.layoutManager = GridLayoutManager(activity, 2)
         viewBinding!!.list.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.GRID_DIV, Color.TRANSPARENT, SizeUtils.dp2px(10f)))
         viewBinding!!.list.adapter = receivedAdapter
-        receivedAdapter.setEmptyView(R.layout.empty)
+        val emptyBinding = EmptyBinding.inflate(layoutInflater)
+        receivedAdapter.setEmptyView(emptyBinding.root)
+        emptyBinding.tvDesc.text = "还没有收到任何通知"
         receivedAdapter.emptyLayout!!.setOnClickListener {
             //点击空数据界面刷新当前页数据
             //ToastUtils.showShort("getEmptyLayout To Data")
