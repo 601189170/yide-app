@@ -135,6 +135,12 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="WindowStateProjectService">
+    <state x="542" y="302" key="#PSD" timestamp="1626167376171">
+      <screen x="0" y="0" width="2048" height="1112" />
+    </state>
+    <state x="542" y="302" key="#PSD/0.0.2048.1112@0.0.2048.1112" timestamp="1626167376171" />
+  </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
       <pinned-members>
