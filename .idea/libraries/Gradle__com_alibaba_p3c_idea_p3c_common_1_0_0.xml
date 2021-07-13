@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.alibaba.p3c.idea:p3c-common:1.0.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.alibaba.p3c.idea/p3c-common/1.0.0/bc05ff30e26b6ceffd989281136078f7b3abda45/p3c-common-1.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.alibaba.p3c.idea/p3c-common/1.0.0/1381251779616284d6744486b4ae5ce49e131879/p3c-common-1.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.alibaba.p3c.idea/p3c-common/1.0.0/f73262d6f3c554bf8339472b9814c1423284a974/p3c-common-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: net.sourceforge.pmd:pmd-core:5.5.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.pmd/pmd-core/5.5.2/137facc46f9ee8e8099959a5b04f586514d5695c/pmd-core-5.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.pmd/pmd-core/5.5.2/f76703576a7b80567d2cdd90ba30839fa4cd6059/pmd-core-5.5.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sourceforge.pmd/pmd-core/5.5.2/512b46b91ceb4422af04c51427ec8838233ba84d/pmd-core-5.5.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
