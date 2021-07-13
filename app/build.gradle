@@ -1,0 +1,218 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.huawei.agconnect'
+apply plugin: 'kotlin-android'
+
+android {
+
+    signingConfigs {
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            storeFile file('/school.jks')
+            storePassword 'hao12345'
+            keyPassword 'hao12345'
+            keyAlias 'school'
+        }
+        debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            storeFile file('/school.jks')
+            storePassword 'hao12345'
+            keyPassword 'hao12345'
+            keyAlias 'school'
+        }
+    }
+
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId "com.yyide.chatim"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 100
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                //              Master Secret    e2cfe288703428279f01ecb0
+                JPUSH_PKGNAME : "com.yyide.chatim",
+                JPUSH_APPKEY  : "143ab02bc474008f39f26f97", //极光开发平台上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                //meizu_config_start
+                MEIZU_APPKEY  : "MZ-魅族的APPKEY",
+                MEIZU_APPID   : "MZ-魅族的APPID",
+                //meizu_config_end
+                //xiaomi_config_start
+                XIAOMI_APPID  : "MI-2882303761519922795",
+                XIAOMI_APPKEY : "MI-5201992213795",
+                //xiaomi_config_end
+                //oppo_config_start
+                OPPO_APPKEY   : "OP-b73f1a5b44af4e2d9a7200b15a521808",
+                OPPO_APPID    : "OP-30531663",
+                OPPO_APPSECRET: "OP-13ee3e7c24cd43af91242879d555c747",
+                //oppo_config_end
+                //vivo_config_start
+                VIVO_APPKEY   : "vivo的APPKEY",
+                VIVO_APPID    : "vivo的APPID",
+                //vivo_config_end
+
+        ]
+        signingConfig signingConfigs.release
+    }
+
+    // 自定义打包名称
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "yide_APK_${buildType.name}_V${versionName}_${generateTime()}.apk"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ['assets']
+        }
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs', '../tuikit-live/libs'
+        }
+        maven { url "https://mirrors.tencent.com/repository/maven/tencent_public" }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+//    buildToolsVersion '30.0.3'
+//    // 在MobSDK的扩展中注册SMSSDK的相关信息
+//    MobSDK {
+//        appKey "19aa2f667f410"
+//        appSecret "c73e7cd6726d6853309ba4f4baaa2c1b"
+//        SMSSDK {}
+//    }
+//    MobSDK {
+//        fp true //严格模式
+//    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+}
+//构建时间
+static def generateTime() {
+    return new Date().format("yyyy_MM_dd_HH_mm_ss")
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //tabLayout
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    //万能适配器
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+    //折叠列表
+    implementation 'com.github.Jlanglang:TreeRecyclerView:1.3.1.1'
+    //日期选择器查看最新版本请前往github，仅支持androidx
+    //implementation 'com.github.loperSeven:DateTimePicker:0.1.0'
+
+    implementation 'com.nineoldandroids:library:2.4.0'
+    //——TimePickerView 时间选择器，支持年月日时分，年月日，年月，时分等格式。
+    //——OptionsPickerView 选项选择器，支持一，二，三级选项选择，并且可以设置是否联动
+    implementation 'com.contrarywind:wheelview:4.1.0'
+    implementation 'com.alibaba:fastjson:1.2.54'
+    implementation 'com.alibaba:fastjson:1.2.54'
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    //添加此行
+    implementation 'com.android.support:multidex:1.0.3'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+    implementation 'com.jzxiang.pickerview:TimePickerDialog:1.0.0'
+    // 腾讯bugly--sdk
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    //视频bo'fa//
+    implementation 'com.shuyu:GSYVideoPlayer:8.1.2'
+    //Utils
+    implementation 'com.blankj:utilcode:1.30.6'
+
+    //对话框
+    implementation 'com.github.SheHuan:NiceDialog:1.1.9'
+
+    //zipfile
+    implementation 'top.zibin:Luban:1.1.8'
+    //Rxjava系列
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.2.1'
+
+    // 基础依赖包，必须要依赖
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    implementation project(':jiguang')
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.google.android:flexbox:1.0.0'
+//    implementation 'com.tencent.imsdk:tuikit-live:5.1.56'
+    implementation 'com.tencent.imsdk:tuikit:5.1.56'
+
+    implementation 'cn.bingoogolapple:bga-qrcode-zbar:1.3.6'
+//    implementation 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.jude:rollviewpager:1.3.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+    implementation 'org.raphets:roundimageview:1.2.0'
+    implementation 'com.github.paradoxie:AutoVerticalTextview:0.1'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:25.2.0'
+
+    implementation 'com.tencent:mmkv-static:1.0.24'
+//    //implementation 'com.github.yalantis:ucrop:2.2.6'
+    implementation 'com.kevin:crop:1.0.2'
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    //Alibaba Java Coding Guidelines    
+    compileOnly 'com.alibaba.p3c.idea:p3c-common:1.0.0'
+
+    //图片查看器
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+
+    implementation(name: 'weekcalendar-release', ext: 'aar')
+    implementation 'joda-time:joda-time:2.9.1'
+}
+

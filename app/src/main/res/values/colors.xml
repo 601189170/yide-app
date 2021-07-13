@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2C8AFF</color>
+    <color name="colorPrimaryDark">#2C8AFF</color>
+    <color name="colorAccent">#2C8AFF</color>
+
+    <color name="theme_bg">#F7FAFC</color>
+    <color name="gray">#D8D8D8</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white10">#50FFFFFF</color>
+    <color name="white2">#FEFEFE</color>
+    <color name="white3">#FFFFFE</color>
+    <color name="white4">#EEF4FF</color>
+    <color name="white5">#E0EBFF</color>
+    <color name="white6">#F3F7FF</color>
+    <color name="white7">#FBFDFF</color>
+    <color name="zs">#103782ff</color>
+    <color name="black">#000</color>
+    <color name="black2">#262626</color>
+    <color name="black3">#504F4F</color>
+    <color name="black4">#474F74</color>
+    <color name="black5">#656565</color>
+    <color name="black6">#50000000</color>
+    <color name="black7">#30000000</color>
+    <color name="black8">#CC000000</color>
+    <color name="black9">#333333</color>
+    <color name="black10">#666666</color>
+    <color name="jured">#FF6600</color>
+    <color name="jured2">#FF5F00</color>
+    <color name="zongse">#834401</color>
+    <color name="home_huise">#E7E7E7</color>
+    <color name="home_E7">#A7A7A7</color>
+    <color name="line">#E7E7E7</color>
+    <color name="annoBg">#E3EDFF</color>
+    <color name="line2">#EEEEEE</color>
+    <color name="line3">#EEF1FD</color>
+    <color name="line4">#EBF2FF</color>
+    <color name="line5">#F7FAFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="yellow">#FFD24B</color>
+    <color name="yellow2">#FFE610</color>
+    <color name="yellow3">#FFEC69</color>
+    <color name="yellow4">#FEEA00</color>
+    <color name="blue">#37A4FF</color>
+    <color name="blue2">#51B0FF</color>
+    <color name="blue3">#5B69FE</color>
+    <color name="blue4">#3782FF</color>
+    <color name="blue5">#C3DAFF</color>
+    <color name="blue6">#DCE9FF</color>
+    <color name="blue7">#4F91FF</color>
+    <color name="blue8">#4E7BA3</color>
+    <color name="blue9">#389CFF</color>
+    <color name="blue11">#2C8AFF</color>
+    <color name="linelv">#F6F8FE</color>
+    <color name="color_cccccc">#CCCCCC</color>
+    <color name="color_DCDFE6">#DCDFE6</color>
+
+    <color name="red">#FE5D61</color>
+    <color name="news">#6ea4ff</color>
+
+    <color name="color_F5F8FC">#F5F8FC</color>
+
+    <!--字体颜色-->
+    <color name="text_666666">#ff666666</color>
+    <color name="text_909399">#ff909399</color>
+    <color name="text_303133">#ff303133</color>
+    <color name="text_606266">#606266</color>
+    <color name="text_212121">#ff212121</color>
+    <color name="text_1E1E1E">#1E1E1E</color>
+    <color name="text_333333">#333333</color>
+    <color name="text_999999">#ff999999</color>
+
+    <color name="linetalbe">#B6D0F3</color>
+    <color name="hint">#BFBFBF</color>
+    <color name="hs">#F8F8F8</color>
+    <color name="hs2">#F7F7FD</color>
+    <color name="item_view_selected_color">#cfcfcf</color>
+
+    <color name="item_view_normal_color">#FFFFFFFF</color>
+    <color name="orderCheck">#3782FF</color>
+    <color name="dot_selected_color">#ababab</color>
+    <color name="orderUnCheck">#E7ECF7</color>
+    <color name="red1">#FF6A6E</color>
+    <color name="black11">#999999</color>
+    <color name="blue10">#5092FF</color>
+    <color name="black12">#505050</color>
+    <color name="alfph">#50000000</color>
+    <color name="line_10">#EEF2F8</color>
+    <color name="line_11">#DCDFE6</color>
+    <color name="line_E4E7ED">#E4E7ED</color>
+    <color name="face_warn">#F7A200</color>
+
+    <color name="colorDateSelect">#2C8AFF</color>
+    <color name="colorTodayText">#2C8AFF</color>
+    <!-- //考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
+    <color name="attendance_normal">#5DADFF</color>
+    <color name="attendance_late">#F66C6C</color>
+    <color name="attendance_leave_early">#63DAAB</color>
+    <color name="attendance_no_sign_in">#919399</color>
+    <color name="attendance_ask_for_leave">#F6BD16</color>
+
+    <color name="attendance_time_normal">#606266</color>
+    <color name="attendance_time_late">#F66C6C</color>
+    <color name="attendance_time_late_early">#F66C6C</color>
+    <color name="attendance_time_leave">#F6BD16</color>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_blank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_no_data"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="暂无数据"
+        android:textColor="#999999"
+        android:textSize="@dimen/text_16"
+        app:layout_constraintLeft_toLeftOf="@id/iv_blank"
+        app:layout_constraintRight_toRightOf="@id/iv_blank"
+        app:layout_constraintTop_toBottomOf="@id/iv_blank"
+        android:layout_marginTop="@dimen/dp_10"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

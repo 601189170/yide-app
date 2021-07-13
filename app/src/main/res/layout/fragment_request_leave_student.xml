@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F5F8FC"
+            android:paddingBottom="70dp">
+
+            <RadioGroup
+                android:id="@+id/rg_time_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:background="@drawable/bg_white_corner_14dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RadioButton
+                    android:id="@+id/rb_according_course"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ask_for_leave_time_type_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/according_course"
+                    android:textColor="@color/black_white_color2"
+                    android:textSize="@dimen/text_13" />
+
+                <RadioButton
+                    android:id="@+id/rb_according_date"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ask_for_leave_time_type_selector"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="@string/according_date"
+                    android:textColor="@color/black_white_color2"
+                    android:textSize="@dimen/text_13" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/tv_ask_for_leave_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="19dp"
+                android:text="@string/ask_for_leave_time"
+                android:textColor="#ff2c8aff"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rg_time_type" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_ask_for_leave_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_ask_for_leave_time">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_start_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingEnd="@dimen/dp_20"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/start_time"
+                        android:textColor="#ff212121"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/icon_right"
+                        android:drawablePadding="@dimen/dp_5"
+                        android:text="@string/please_select"
+                        android:textColor="#ff666666"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/line1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="#DCDFE6"
+                    app:layout_constraintTop_toBottomOf="@id/cl_start_time" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_end_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingEnd="@dimen/dp_20"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/end_time"
+                        android:textColor="#ff212121"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/icon_right"
+                        android:drawablePadding="@dimen/dp_5"
+                        android:text="@string/please_select"
+                        android:textColor="#ff666666"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gp_according_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="cl_start_time,cl_end_time,line1" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_ask_for_leave_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingEnd="@dimen/dp_20"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date_for_leave"
+                        android:textColor="#ff212121"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_ask_for_leave_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/icon_right"
+                        android:drawablePadding="@dimen/dp_5"
+                        android:text="@string/please_select"
+                        android:textColor="#ff666666"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/tv_leave_course"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/section_for_leave"
+                    android:textColor="#ff2c8aff"
+                    android:textSize="14sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_ask_for_leave_date"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"/>
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/check_all"
+                    android:textColor="@color/text_212121"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:theme="@style/CheckBoxTheme"
+                    app:layout_constraintTop_toTopOf="@id/tv_leave_course"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_leave_course"
+                    app:layout_constraintRight_toRightOf="parent"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_course"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tv_leave_course"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:paddingStart="@dimen/dp_20"
+                    android:paddingEnd="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_16"
+                    android:paddingBottom="@dimen/dp_16"/>
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/gp_according_course"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:constraint_referenced_ids="cl_ask_for_leave_date,tv_leave_course,checkBox,recyclerview_course"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_reason_leave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="@string/reason_for_leave"
+                android:textColor="#ff2c8aff"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_ask_for_leave_time" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_reason_leave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/tv_reason_leave">
+
+                <EditText
+                    android:id="@+id/et_reason_leave"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:background="@drawable/leave_reason_input_box_bg_shape"
+                    android:hint="@string/input_reason_for_leave"
+                    android:padding="@dimen/dp_10"
+                    android:textColorHint="#BCC1CB"
+                    android:textSize="@dimen/text_13"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_tag_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_16"
+                    app:layout_constraintTop_toBottomOf="@id/et_reason_leave" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_department"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingEnd="@dimen/dp_20"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_reason_leave">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_class"
+                    android:textColor="#ff212121"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_department"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dp_5"
+                    android:textColor="#ff666666"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="@string/flow"
+                android:textColor="#ff2c8aff"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_department" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_flow"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/tv_flow">
+
+                <TextView
+                    android:id="@+id/tv_approver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:text="@string/approver_required"
+                    android:textColor="#ff999999"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:src="@drawable/icon_add_staff"
+                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
+                <LinearLayout
+                    android:id="@+id/ll_approver_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_50"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"/>
+
+                <View
+                    android:id="@+id/line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginStart="48dp"
+                    android:background="#DCDFE6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_copy_people"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:text="@string/copy_people"
+                    android:textColor="#ff999999"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:src="@drawable/icon_add_staff"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    android:visibility="gone"/>
+                <LinearLayout
+                    android:id="@+id/ll_copyer_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_50"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"/>
+                <View
+                    android:id="@+id/view_dot"
+                    android:layout_width="@dimen/dp_8"
+                    android:layout_height="@dimen/dp_8"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="@drawable/black11_dot_shape"
+                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="@dimen/dp_8"
+                    android:layout_height="@dimen/dp_8"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="@drawable/black11_dot_shape"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="21dp"
+                    android:layout_marginBottom="21dp"
+                    android:background="@color/black11"
+                    app:layout_constraintLeft_toLeftOf="@id/view_dot"
+                    app:layout_constraintRight_toRightOf="@id/view_dot" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btn_commit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:background="@drawable/bg_blue"
+                android:text="@string/commit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_18"
+                app:layout_constraintTop_toBottomOf="@id/cl_flow" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

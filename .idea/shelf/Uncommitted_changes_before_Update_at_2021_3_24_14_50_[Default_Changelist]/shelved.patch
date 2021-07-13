@@ -1,0 +1,1594 @@
+Index: app/src/main/res/layout/dialog_loading1.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:id=\"@+id/dialog_loading_view\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:gravity=\"center\"\r\n    android:orientation=\"vertical\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"150dp\"\r\n        android:layout_height=\"110dp\"\r\n        android:background=\"#50000000\"\r\n        android:gravity=\"center\"\r\n        android:orientation=\"vertical\"\r\n        android:paddingBottom=\"10dp\"\r\n        android:paddingLeft=\"21dp\"\r\n        android:paddingRight=\"21dp\"\r\n        android:paddingTop=\"10dp\">\r\n\r\n        <ProgressBar\r\n            android:id=\"@+id/progressBar1\"\r\n            android:layout_width=\"35dp\"\r\n            android:layout_height=\"35dp\"\r\n            android:layout_gravity=\"center_horizontal\"\r\n            android:indeterminateBehavior=\"repeat\"\r\n            android:indeterminateDrawable=\"@drawable/bg_progress2\"\r\n            android:indeterminateOnly=\"true\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/tipTextView\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginTop=\"15dp\"\r\n            android:text=\"加载中...\"\r\n            android:textColor=\"#f0f0f0\"\r\n            android:textSize=\"15sp\" />\r\n    </LinearLayout>\r\n\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/dialog_loading1.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/res/layout/dialog_loading1.xml	(date 1616504739618)
+@@ -21,9 +21,9 @@
+             android:id="@+id/progressBar1"
+             android:layout_width="35dp"
+             android:layout_height="35dp"
++            style="?android:attr/progressBarStyle"
+             android:layout_gravity="center_horizontal"
+             android:indeterminateBehavior="repeat"
+-            android:indeterminateDrawable="@drawable/bg_progress2"
+             android:indeterminateOnly="true" />
+ 
+         <TextView
+@@ -35,5 +35,4 @@
+             android:textColor="#f0f0f0"
+             android:textSize="15sp" />
+     </LinearLayout>
+-
+ </LinearLayout>
+Index: app/src/main/res/layout/activity_person_info.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\"com.yyide.chatim.ScanActivity\">\r\n\r\n    <include\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        layout=\"@layout/title_layout2\"\r\n        ></include>\r\n<LinearLayout\r\n    android:background=\"@color/white\"\r\n    android:layout_marginTop=\"10dp\"\r\n    android:gravity=\"center_vertical\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"84dp\">\r\n    <ImageView\r\n\r\n        android:layout_marginLeft=\"24dp\"\r\n        android:layout_width=\"60dp\"\r\n        android:layout_height=\"60dp\" />\r\n    <LinearLayout\r\n        android:layout_marginLeft=\"20dp\"\r\n        android:orientation=\"vertical\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\">\r\n        <TextView\r\n            android:text=\"陈章章\"\r\n            android:textColor=\"#212121\"\r\n            android:textSize=\"15sp\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\" />\r\n        <TextView\r\n            android:text=\"上课中\"\r\n            android:layout_marginTop=\"14dp\"\r\n            android:textColor=\"#212121\"\r\n            android:textSize=\"15sp\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\" />\r\n    </LinearLayout>\r\n\r\n\r\n</LinearLayout>\r\n    <LinearLayout\r\n        android:layout_marginTop=\"10dp\"\r\n        android:background=\"@color/white\"\r\n        android:orientation=\"vertical\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n        <LinearLayout\r\n            android:paddingLeft=\"20dp\"\r\n            android:orientation=\"vertical\"\r\n            android:gravity=\"center_vertical\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"84dp\">\r\n            <LinearLayout\r\n\r\n                android:orientation=\"vertical\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\">\r\n\r\n\r\n            <TextView\r\n                android:textColor=\"#666666\"\r\n                android:textSize=\"13sp\"\r\n                android:text=\"姓名\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\" />\r\n            <TextView\r\n                android:id=\"@+id/name\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:textColor=\"#212121\"\r\n                android:textSize=\"15sp\"\r\n                android:text=\"张飞\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\" />\r\n            </LinearLayout>\r\n        </LinearLayout>\r\n        <TextView\r\n            android:layout_marginLeft=\"20dp\"\r\n            android:background=\"#DCDFE6\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\" />\r\n\r\n        <LinearLayout\r\n            android:paddingLeft=\"20dp\"\r\n            android:orientation=\"horizontal\"\r\n            android:gravity=\"center_vertical\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"84dp\">\r\n            <LinearLayout\r\n\r\n                android:orientation=\"vertical\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\">\r\n\r\n\r\n                <TextView\r\n                    android:textColor=\"#666666\"\r\n                    android:textSize=\"13sp\"\r\n                    android:text=\"手机\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n                <LinearLayout\r\n                    android:layout_marginTop=\"15dp\"\r\n                    android:orientation=\"horizontal\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\">\r\n\r\n\r\n                <TextView\r\n                    android:id=\"@+id/phone\"\r\n                    android:textColor=\"#212121\"\r\n                    android:textSize=\"15sp\"\r\n                    android:text=\"135****0413\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n\r\n                    <TextView\r\n                        android:text=\"显示\"\r\n                        android:textColor=\"#2C8AFF\"\r\n                        android:layout_marginLeft=\"16dp\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\" />\r\n                </LinearLayout>\r\n\r\n            </LinearLayout>\r\n            <TextView\r\n\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"wrap_content\" />\r\n            <TextView\r\n                android:layout_marginRight=\"12dp\"\r\n                android:background=\"@drawable/icon_ld\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\" />\r\n        </LinearLayout>\r\n        <TextView\r\n            android:layout_marginLeft=\"20dp\"\r\n            android:background=\"#DCDFE6\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\" />\r\n\r\n        <LinearLayout\r\n            android:paddingLeft=\"20dp\"\r\n            android:orientation=\"vertical\"\r\n            android:gravity=\"center_vertical\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"84dp\">\r\n            <LinearLayout\r\n\r\n                android:orientation=\"vertical\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\">\r\n\r\n\r\n                <TextView\r\n                    android:textColor=\"#666666\"\r\n                    android:textSize=\"13sp\"\r\n                    android:text=\"邮箱\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n                <TextView\r\n                    android:id=\"@+id/adress\"\r\n                    android:layout_marginTop=\"15dp\"\r\n                    android:textColor=\"#212121\"\r\n                    android:textSize=\"15sp\"\r\n                    android:text=\"1327767601@qq.com\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n            </LinearLayout>\r\n        </LinearLayout>\r\n        <TextView\r\n            android:layout_marginLeft=\"20dp\"\r\n            android:background=\"#DCDFE6\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\" />\r\n        <LinearLayout\r\n            android:paddingLeft=\"20dp\"\r\n            android:orientation=\"vertical\"\r\n            android:gravity=\"center_vertical\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"84dp\">\r\n            <LinearLayout\r\n\r\n                android:orientation=\"vertical\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\">\r\n\r\n\r\n                <TextView\r\n                    android:textColor=\"#666666\"\r\n                    android:textSize=\"13sp\"\r\n                    android:text=\"性别\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n                <TextView\r\n                    android:id=\"@+id/sex\"\r\n                    android:layout_marginTop=\"15dp\"\r\n                    android:textColor=\"#212121\"\r\n                    android:textSize=\"15sp\"\r\n                    android:text=\"女\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n            </LinearLayout>\r\n        </LinearLayout>\r\n        <TextView\r\n            android:layout_marginLeft=\"20dp\"\r\n            android:background=\"#DCDFE6\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1dp\" />\r\n        <LinearLayout\r\n            android:paddingLeft=\"20dp\"\r\n            android:orientation=\"vertical\"\r\n            android:gravity=\"center_vertical\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"84dp\">\r\n            <LinearLayout\r\n\r\n                android:orientation=\"vertical\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\">\r\n\r\n\r\n                <TextView\r\n                    android:textColor=\"#666666\"\r\n                    android:textSize=\"13sp\"\r\n                    android:text=\"教授科目\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n                <TextView\r\n                    android:id=\"@+id/subject\"\r\n                    android:layout_marginTop=\"15dp\"\r\n                    android:textColor=\"#212121\"\r\n                    android:textSize=\"15sp\"\r\n                    android:text=\"语文、艺术\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\" />\r\n            </LinearLayout>\r\n        </LinearLayout>\r\n\r\n    </LinearLayout>\r\n\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_person_info.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/res/layout/activity_person_info.xml	(date 1616504739657)
+@@ -8,240 +8,262 @@
+     tools:context="com.yyide.chatim.ScanActivity">
+ 
+     <include
++        layout="@layout/title_layout2"
+         android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        layout="@layout/title_layout2"
+-        ></include>
+-<LinearLayout
+-    android:background="@color/white"
+-    android:layout_marginTop="10dp"
+-    android:gravity="center_vertical"
+-    android:layout_width="match_parent"
+-    android:layout_height="84dp">
+-    <ImageView
+-
+-        android:layout_marginLeft="24dp"
+-        android:layout_width="60dp"
+-        android:layout_height="60dp" />
+-    <LinearLayout
+-        android:layout_marginLeft="20dp"
+-        android:orientation="vertical"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content">
+-        <TextView
+-            android:text="陈章章"
+-            android:textColor="#212121"
+-            android:textSize="15sp"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content" />
+-        <TextView
+-            android:text="上课中"
+-            android:layout_marginTop="14dp"
+-            android:textColor="#212121"
+-            android:textSize="15sp"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content" />
+-    </LinearLayout>
++        android:layout_height="wrap_content" />
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="84dp"
++        android:layout_marginTop="10dp"
++        android:background="@color/white"
++        android:gravity="center_vertical">
++
++        <ImageView
++            android:layout_width="60dp"
++            android:layout_height="60dp"
++            android:layout_marginLeft="24dp" />
++
++        <LinearLayout
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginLeft="20dp"
++            android:orientation="vertical">
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:text="陈章章"
++                android:textColor="#212121"
++                android:textSize="15sp" />
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="14dp"
++                android:text="上课中"
++                android:textColor="#212121"
++                android:textSize="15sp" />
++        </LinearLayout>
+ 
+ 
+-</LinearLayout>
++    </LinearLayout>
++
+     <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
+         android:layout_marginTop="10dp"
+         android:background="@color/white"
+-        android:orientation="vertical"
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent">
+-
+-        <LinearLayout
+-            android:paddingLeft="20dp"
++        android:orientation="vertical">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="84dp"
++            android:gravity="center_vertical"
+             android:orientation="vertical"
+-            android:gravity="center_vertical"
+-            android:layout_width="match_parent"
+-            android:layout_height="84dp">
++            android:paddingLeft="20dp">
++
+             <LinearLayout
+ 
+-                android:orientation="vertical"
+                 android:layout_width="wrap_content"
+-                android:layout_height="wrap_content">
++                android:layout_height="wrap_content"
++                android:orientation="vertical">
+ 
+ 
+-            <TextView
+-                android:textColor="#666666"
+-                android:textSize="13sp"
+-                android:text="姓名"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content" />
+-            <TextView
+-                android:id="@+id/name"
+-                android:layout_marginTop="15dp"
+-                android:textColor="#212121"
+-                android:textSize="15sp"
+-                android:text="张飞"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content" />
++                <TextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="姓名"
++                    android:textColor="#666666"
++                    android:textSize="13sp" />
++
++                <TextView
++                    android:id="@+id/name"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_marginTop="15dp"
++                    android:text="张飞"
++                    android:textColor="#212121"
++                    android:textSize="15sp" />
+             </LinearLayout>
+         </LinearLayout>
++
+         <TextView
++            android:layout_width="match_parent"
++            android:layout_height="1dp"
+             android:layout_marginLeft="20dp"
+-            android:background="#DCDFE6"
++            android:background="#DCDFE6" />
++
++        <LinearLayout
+             android:layout_width="match_parent"
+-            android:layout_height="1dp" />
+-
+-        <LinearLayout
+-            android:paddingLeft="20dp"
++            android:layout_height="84dp"
++            android:gravity="center_vertical"
+             android:orientation="horizontal"
+-            android:gravity="center_vertical"
+-            android:layout_width="match_parent"
+-            android:layout_height="84dp">
++            android:paddingLeft="20dp">
++
+             <LinearLayout
+ 
+-                android:orientation="vertical"
+                 android:layout_width="wrap_content"
+-                android:layout_height="wrap_content">
++                android:layout_height="wrap_content"
++                android:orientation="vertical">
+ 
+ 
+                 <TextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="手机"
+                     android:textColor="#666666"
+-                    android:textSize="13sp"
+-                    android:text="手机"
++                    android:textSize="13sp" />
++
++                <LinearLayout
+                     android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
+-                <LinearLayout
++                    android:layout_height="wrap_content"
+                     android:layout_marginTop="15dp"
+-                    android:orientation="horizontal"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content">
++                    android:orientation="horizontal">
+ 
+ 
+-                <TextView
+-                    android:id="@+id/phone"
+-                    android:textColor="#212121"
+-                    android:textSize="15sp"
+-                    android:text="135****0413"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
++                    <TextView
++                        android:id="@+id/phone"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="135****0413"
++                        android:textColor="#212121"
++                        android:textSize="15sp" />
+ 
+                     <TextView
+-                        android:text="显示"
+-                        android:textColor="#2C8AFF"
+-                        android:layout_marginLeft="16dp"
+                         android:layout_width="wrap_content"
+-                        android:layout_height="wrap_content" />
++                        android:layout_height="wrap_content"
++                        android:layout_marginLeft="16dp"
++                        android:text="显示"
++                        android:textColor="#2C8AFF" />
+                 </LinearLayout>
+ 
+             </LinearLayout>
++
+             <TextView
+ 
+-                android:layout_weight="1"
+                 android:layout_width="0dp"
+-                android:layout_height="wrap_content" />
++                android:layout_height="wrap_content"
++                android:layout_weight="1" />
++
+             <TextView
+-                android:layout_marginRight="12dp"
+-                android:background="@drawable/icon_ld"
+                 android:layout_width="wrap_content"
+-                android:layout_height="wrap_content" />
++                android:layout_height="wrap_content"
++                android:layout_marginRight="12dp"
++                android:background="@drawable/icon_ld" />
+         </LinearLayout>
++
+         <TextView
++            android:layout_width="match_parent"
++            android:layout_height="1dp"
+             android:layout_marginLeft="20dp"
+-            android:background="#DCDFE6"
++            android:background="#DCDFE6" />
++
++        <LinearLayout
+             android:layout_width="match_parent"
+-            android:layout_height="1dp" />
+-
+-        <LinearLayout
+-            android:paddingLeft="20dp"
++            android:layout_height="84dp"
++            android:gravity="center_vertical"
+             android:orientation="vertical"
+-            android:gravity="center_vertical"
+-            android:layout_width="match_parent"
+-            android:layout_height="84dp">
++            android:paddingLeft="20dp">
++
+             <LinearLayout
+ 
+-                android:orientation="vertical"
+                 android:layout_width="wrap_content"
+-                android:layout_height="wrap_content">
++                android:layout_height="wrap_content"
++                android:orientation="vertical">
+ 
+ 
+                 <TextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:text="邮箱"
+                     android:textColor="#666666"
+-                    android:textSize="13sp"
+-                    android:text="邮箱"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
++                    android:textSize="13sp" />
++
+                 <TextView
+                     android:id="@+id/adress"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
+                     android:layout_marginTop="15dp"
++                    android:text="1327767601@qq.com"
+                     android:textColor="#212121"
+-                    android:textSize="15sp"
+-                    android:text="1327767601@qq.com"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
++                    android:textSize="15sp" />
+             </LinearLayout>
+         </LinearLayout>
++
+         <TextView
+-            android:layout_marginLeft="20dp"
+-            android:background="#DCDFE6"
+             android:layout_width="match_parent"
+-            android:layout_height="1dp" />
++            android:layout_height="1dp"
++            android:layout_marginLeft="20dp"
++            android:background="#DCDFE6" />
++
+         <LinearLayout
+-            android:paddingLeft="20dp"
+-            android:orientation="vertical"
+-            android:gravity="center_vertical"
+             android:layout_width="match_parent"
+-            android:layout_height="84dp">
+-            <LinearLayout
+-
+-                android:orientation="vertical"
++            android:layout_height="84dp"
++            android:gravity="center_vertical"
++            android:orientation="vertical"
++            android:paddingLeft="20dp">
++
++            <LinearLayout
++
+                 android:layout_width="wrap_content"
+-                android:layout_height="wrap_content">
++                android:layout_height="wrap_content"
++                android:orientation="vertical">
+ 
+ 
+                 <TextView
+-                    android:textColor="#666666"
+-                    android:textSize="13sp"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
+                     android:text="性别"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
++                    android:textColor="#666666"
++                    android:textSize="13sp" />
++
+                 <TextView
+                     android:id="@+id/sex"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
+                     android:layout_marginTop="15dp"
++                    android:text="女"
+                     android:textColor="#212121"
+-                    android:textSize="15sp"
+-                    android:text="女"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
++                    android:textSize="15sp" />
+             </LinearLayout>
+         </LinearLayout>
++
+         <TextView
++            android:layout_width="match_parent"
++            android:layout_height="1dp"
+             android:layout_marginLeft="20dp"
+-            android:background="#DCDFE6"
++            android:background="#DCDFE6" />
++
++        <LinearLayout
+             android:layout_width="match_parent"
+-            android:layout_height="1dp" />
+-        <LinearLayout
+-            android:paddingLeft="20dp"
++            android:layout_height="84dp"
++            android:gravity="center_vertical"
+             android:orientation="vertical"
+-            android:gravity="center_vertical"
+-            android:layout_width="match_parent"
+-            android:layout_height="84dp">
++            android:paddingLeft="20dp">
++
+             <LinearLayout
+ 
+-                android:orientation="vertical"
+                 android:layout_width="wrap_content"
+-                android:layout_height="wrap_content">
++                android:layout_height="wrap_content"
++                android:orientation="vertical">
+ 
+ 
+                 <TextView
+-                    android:textColor="#666666"
+-                    android:textSize="13sp"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
+                     android:text="教授科目"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
++                    android:textColor="#666666"
++                    android:textSize="13sp" />
++
+                 <TextView
+                     android:id="@+id/subject"
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
+                     android:layout_marginTop="15dp"
+-                    android:textColor="#212121"
+-                    android:textSize="15sp"
+                     android:text="语文、艺术"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content" />
++                    android:textColor="#212121"
++                    android:textSize="15sp" />
+             </LinearLayout>
+         </LinearLayout>
+ 
+Index: app/src/main/res/layout/help_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n              android:orientation=\"vertical\"\r\n              android:background=\"@color/white\"\r\n              android:layout_width=\"match_parent\"\r\n              android:layout_height=\"match_parent\">\r\n\r\n    <TextView\r\n        android:textColor=\"#222222\"\r\n        android:textSize=\"18sp\"\r\n        android:text=\"帮助\"\r\n        android:textStyle=\"bold\"\r\n        android:gravity=\"center\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"44dp\" />\r\n  <LinearLayout\r\n      android:paddingBottom=\"8dp\"\r\n      android:paddingLeft=\"12dp\"\r\n      android:paddingRight=\"12dp\"\r\n      android:orientation=\"horizontal\"\r\n      android:layout_width=\"match_parent\"\r\n      android:layout_height=\"109dp\">\r\n    <FrameLayout\r\n        android:orientation=\"horizontal\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_weight=\"1\"\r\n        android:background=\"@drawable/bg_corners_blued_10\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n    <TextView\r\n        android:layout_gravity=\"right|bottom\"\r\n        android:background=\"@drawable/help_rm\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\" />\r\n      <TextView\r\n          android:text=\"入门指南\"\r\n          android:textSize=\"18sp\"\r\n          android:textStyle=\"bold\"\r\n          android:textColor=\"#183764\"\r\n          android:layout_marginTop=\"18dp\"\r\n          android:layout_marginLeft=\"13dp\"\r\n          android:layout_width=\"wrap_content\"\r\n          android:layout_height=\"wrap_content\" />\r\n      <TextView\r\n          android:id=\"@+id/rmtext\"\r\n          android:text=\"视频和文字教程，帮助你快速上手\"\r\n          android:textSize=\"12sp\"\r\n          android:textColor=\"#183764\"\r\n          android:layout_marginTop=\"49dp\"\r\n          android:layout_marginLeft=\"13dp\"\r\n          android:layout_width=\"wrap_content\"\r\n          android:layout_height=\"wrap_content\" />\r\n\r\n    </FrameLayout>\r\n    <TextView\r\n\r\n        android:layout_width=\"12dp\"\r\n        android:layout_height=\"wrap_content\" />\r\n    <FrameLayout\r\n        android:orientation=\"horizontal\"\r\n        android:layout_width=\"0dp\"\r\n        android:background=\"@drawable/bg_corners_redd_10\"\r\n        android:layout_weight=\"1\"\r\n        android:layout_height=\"match_parent\">\r\n      <TextView\r\n\r\n          android:text=\"进阶使用\"\r\n          android:textSize=\"18sp\"\r\n          android:textStyle=\"bold\"\r\n          android:textColor=\"#7A3133\"\r\n          android:layout_marginTop=\"18dp\"\r\n          android:layout_marginLeft=\"13dp\"\r\n          android:layout_width=\"wrap_content\"\r\n          android:layout_height=\"wrap_content\" />\r\n      <TextView\r\n          android:id=\"@+id/jjtext\"\r\n\r\n          android:text=\"便捷省心的应用操作技巧\"\r\n          android:textSize=\"12sp\"\r\n          android:textColor=\"#7A3133\"\r\n          android:layout_marginTop=\"49dp\"\r\n          android:layout_marginLeft=\"13dp\"\r\n          android:layout_width=\"wrap_content\"\r\n          android:layout_height=\"wrap_content\" />\r\n      <TextView\r\n          android:layout_gravity=\"right|bottom\"\r\n          android:background=\"@drawable/help_jj\"\r\n          android:layout_width=\"wrap_content\"\r\n          android:layout_height=\"wrap_content\" />\r\n\r\n\r\n    </FrameLayout>\r\n  </LinearLayout>\r\n  <TextView\r\n      android:background=\"#F5F8FC\"\r\n      android:layout_width=\"match_parent\"\r\n      android:layout_height=\"8dp\" />\r\n  <LinearLayout\r\n      android:paddingLeft=\"24dp\"\r\n      android:paddingRight=\"24dp\"\r\n      android:layout_weight=\"1\"\r\n      android:layout_width=\"match_parent\"\r\n      android:layout_height=\"0dp\">\r\n    <LinearLayout\r\n        android:gravity=\"center_vertical\"\r\n        android:layout_marginTop=\"23dp\"\r\n        android:orientation=\"horizontal\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\">\r\n\r\n\r\n    <TextView\r\n\r\n        android:background=\"@drawable/bg_gradite_blue\"\r\n        android:layout_width=\"3dp\"\r\n        android:layout_height=\"10dp\" />\r\n      <TextView\r\n          android:layout_marginLeft=\"5dp\"\r\n          android:textColor=\"#222222\"\r\n          android:textStyle=\"bold\"\r\n          android:textSize=\"16sp\"\r\n          android:text=\"常见问题\"\r\n          android:layout_width=\"wrap_content\"\r\n          android:layout_height=\"wrap_content\" />\r\n    </LinearLayout>\r\n  </LinearLayout>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/help_layout.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/res/layout/help_layout.xml	(date 1616504739663)
+@@ -1,129 +1,134 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<LinearLayout
+-    xmlns:android="http://schemas.android.com/apk/res/android"
+-              android:orientation="vertical"
+-              android:background="@color/white"
+-              android:layout_width="match_parent"
+-              android:layout_height="match_parent">
+-
+-    <TextView
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/white"
++    android:orientation="vertical">
++
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="44dp"
++        android:gravity="center"
++        android:text="帮助"
+         android:textColor="#222222"
+         android:textSize="18sp"
+-        android:text="帮助"
+-        android:textStyle="bold"
+-        android:gravity="center"
+-        android:layout_width="match_parent"
+-        android:layout_height="44dp" />
+-  <LinearLayout
+-      android:paddingBottom="8dp"
+-      android:paddingLeft="12dp"
+-      android:paddingRight="12dp"
+-      android:orientation="horizontal"
+-      android:layout_width="match_parent"
+-      android:layout_height="109dp">
+-    <FrameLayout
+-        android:orientation="horizontal"
+-        android:layout_width="0dp"
+-        android:layout_weight="1"
+-        android:background="@drawable/bg_corners_blued_10"
+-        android:layout_height="match_parent">
+-
++        android:textStyle="bold" />
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="109dp"
++        android:orientation="horizontal"
++        android:paddingLeft="12dp"
++        android:paddingRight="12dp"
++        android:paddingBottom="8dp">
++
++        <FrameLayout
++            android:layout_width="0dp"
++            android:layout_height="match_parent"
++            android:layout_weight="1"
++            android:background="@drawable/bg_corners_blued_10"
++            android:orientation="horizontal">
+ 
+-    <TextView
+-        android:layout_gravity="right|bottom"
+-        android:background="@drawable/help_rm"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content" />
+-      <TextView
+-          android:text="入门指南"
+-          android:textSize="18sp"
+-          android:textStyle="bold"
+-          android:textColor="#183764"
+-          android:layout_marginTop="18dp"
+-          android:layout_marginLeft="13dp"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content" />
+-      <TextView
+-          android:id="@+id/rmtext"
+-          android:text="视频和文字教程，帮助你快速上手"
+-          android:textSize="12sp"
+-          android:textColor="#183764"
+-          android:layout_marginTop="49dp"
+-          android:layout_marginLeft="13dp"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content" />
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_gravity="right|bottom"
++                android:background="@drawable/help_rm" />
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginLeft="13dp"
++                android:layout_marginTop="18dp"
++                android:text="入门指南"
++                android:textColor="#183764"
++                android:textSize="18sp"
++                android:textStyle="bold" />
++
++            <TextView
++                android:id="@+id/rmtext"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginLeft="13dp"
++                android:layout_marginTop="49dp"
++                android:text="视频和文字教程，帮助你快速上手"
++                android:textColor="#183764"
++                android:textSize="12sp" />
+ 
+-    </FrameLayout>
+-    <TextView
+-
+-        android:layout_width="12dp"
+-        android:layout_height="wrap_content" />
+-    <FrameLayout
+-        android:orientation="horizontal"
+-        android:layout_width="0dp"
+-        android:background="@drawable/bg_corners_redd_10"
+-        android:layout_weight="1"
+-        android:layout_height="match_parent">
+-      <TextView
+-
+-          android:text="进阶使用"
+-          android:textSize="18sp"
+-          android:textStyle="bold"
+-          android:textColor="#7A3133"
+-          android:layout_marginTop="18dp"
+-          android:layout_marginLeft="13dp"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content" />
+-      <TextView
+-          android:id="@+id/jjtext"
+-
+-          android:text="便捷省心的应用操作技巧"
+-          android:textSize="12sp"
+-          android:textColor="#7A3133"
+-          android:layout_marginTop="49dp"
+-          android:layout_marginLeft="13dp"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content" />
+-      <TextView
+-          android:layout_gravity="right|bottom"
+-          android:background="@drawable/help_jj"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content" />
+-
++        </FrameLayout>
++
++        <TextView
++            android:layout_width="12dp"
++            android:layout_height="wrap_content" />
++
++        <FrameLayout
++            android:layout_width="0dp"
++            android:layout_height="match_parent"
++            android:layout_weight="1"
++            android:background="@drawable/bg_corners_redd_10"
++            android:orientation="horizontal">
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginLeft="13dp"
++                android:layout_marginTop="18dp"
++                android:text="进阶使用"
++                android:textColor="#7A3133"
++                android:textSize="18sp"
++                android:textStyle="bold" />
++
++            <TextView
++                android:id="@+id/jjtext"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginLeft="13dp"
++                android:layout_marginTop="49dp"
++                android:text="便捷省心的应用操作技巧"
++                android:textColor="#7A3133"
++                android:textSize="12sp" />
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_gravity="right|bottom"
++                android:background="@drawable/help_jj" />
+ 
+-    </FrameLayout>
+-  </LinearLayout>
+-  <TextView
+-      android:background="#F5F8FC"
+-      android:layout_width="match_parent"
+-      android:layout_height="8dp" />
+-  <LinearLayout
+-      android:paddingLeft="24dp"
+-      android:paddingRight="24dp"
+-      android:layout_weight="1"
+-      android:layout_width="match_parent"
+-      android:layout_height="0dp">
+-    <LinearLayout
+-        android:gravity="center_vertical"
+-        android:layout_marginTop="23dp"
+-        android:orientation="horizontal"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content">
+-
++        </FrameLayout>
++    </LinearLayout>
++
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="8dp"
++        android:background="#F5F8FC" />
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="0dp"
++        android:layout_weight="1"
++        android:paddingLeft="24dp"
++        android:paddingRight="24dp">
++
++        <LinearLayout
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="23dp"
++            android:gravity="center_vertical"
++            android:orientation="horizontal">
+ 
+-    <TextView
+-
+-        android:background="@drawable/bg_gradite_blue"
+-        android:layout_width="3dp"
+-        android:layout_height="10dp" />
+-      <TextView
+-          android:layout_marginLeft="5dp"
+-          android:textColor="#222222"
+-          android:textStyle="bold"
+-          android:textSize="16sp"
+-          android:text="常见问题"
+-          android:layout_width="wrap_content"
+-          android:layout_height="wrap_content" />
+-    </LinearLayout>
+-  </LinearLayout>
++            <TextView
++                android:layout_width="3dp"
++                android:layout_height="10dp"
++                android:background="@drawable/bg_gradite_blue" />
++
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginLeft="5dp"
++                android:text="常见问题"
++                android:textColor="#222222"
++                android:textSize="16sp"
++                android:textStyle="bold" />
++        </LinearLayout>
++    </LinearLayout>
+ </LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_power_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:background=\"#F5F8FC\"\r\n    android:layout_height=\"match_parent\"\r\n    >\r\n    <include\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        layout=\"@layout/title_layout2\"\r\n        ></include>\r\n    <ScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n    <LinearLayout\r\n        android:orientation=\"vertical\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n    <include\r\n        layout=\"@layout/tk_layout\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        ></include>\r\n    <include\r\n        layout=\"@layout/jz_layout\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        ></include>\r\n    <include\r\n        layout=\"@layout/jzg_layout\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        ></include>\r\n\r\n    <FrameLayout\r\n        android:background=\"@color/white\"\r\n        android:layout_marginTop=\"10dp\"\r\n        android:id=\"@+id/layout10\"\r\n        android:paddingLeft=\"20dp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"50dp\">\r\n        <TextView\r\n            android:text=\"班主任可发送班级通知公告\"\r\n            android:textSize=\"15sp\"\r\n            android:layout_gravity=\"center_vertical\"\r\n            android:textColor=\"#212121\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\" />\r\n        <CheckedTextView\r\n            android:layout_gravity=\"center_vertical|right\"\r\n            android:layout_marginRight=\"22dp\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\" />\r\n    </FrameLayout>\r\n    </LinearLayout>\r\n    </ScrollView>\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_power_layout.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/res/layout/activity_power_layout.xml	(date 1616504739670)
+@@ -3,60 +3,62 @@
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+-    android:orientation="vertical"
+-    android:background="#F5F8FC"
+     android:layout_height="match_parent"
+-    >
++    android:background="#F5F8FC"
++    android:orientation="vertical">
++
+     <include
++        layout="@layout/title_layout2"
+         android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        layout="@layout/title_layout2"
+-        ></include>
++        android:layout_height="wrap_content" />
++
+     <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+-    <LinearLayout
+-        android:orientation="vertical"
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:orientation="vertical">
+ 
+ 
+-    <include
+-        layout="@layout/tk_layout"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        ></include>
+-    <include
+-        layout="@layout/jz_layout"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        ></include>
+-    <include
+-        layout="@layout/jzg_layout"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        ></include>
++            <include
++                layout="@layout/tk_layout"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content" />
++
++            <include
++                layout="@layout/jz_layout"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content" />
++
++            <include
++                layout="@layout/jzg_layout"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content" />
+ 
+-    <FrameLayout
+-        android:background="@color/white"
+-        android:layout_marginTop="10dp"
+-        android:id="@+id/layout10"
+-        android:paddingLeft="20dp"
+-        android:layout_width="match_parent"
+-        android:layout_height="50dp">
+-        <TextView
+-            android:text="班主任可发送班级通知公告"
+-            android:textSize="15sp"
+-            android:layout_gravity="center_vertical"
+-            android:textColor="#212121"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content" />
+-        <CheckedTextView
+-            android:layout_gravity="center_vertical|right"
+-            android:layout_marginRight="22dp"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content" />
+-    </FrameLayout>
+-    </LinearLayout>
++            <FrameLayout
++                android:id="@+id/layout10"
++                android:layout_width="match_parent"
++                android:layout_height="50dp"
++                android:layout_marginTop="10dp"
++                android:background="@color/white"
++                android:paddingLeft="20dp">
++
++                <TextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_gravity="center_vertical"
++                    android:text="班主任可发送班级通知公告"
++                    android:textColor="#212121"
++                    android:textSize="15sp" />
++
++                <CheckedTextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:layout_gravity="center_vertical|right"
++                    android:layout_marginEnd="22dp" />
++            </FrameLayout>
++        </LinearLayout>
+     </ScrollView>
+ </LinearLayout>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/app/app.iml\" filepath=\"$PROJECT_DIR$/app/app.iml\" />\r\n      <module fileurl=\"file://$PROJECT_DIR$/chatim.iml\" filepath=\"$PROJECT_DIR$/chatim.iml\" />\r\n      <module fileurl=\"file://$PROJECT_DIR$/jiguang/jiguang.iml\" filepath=\"$PROJECT_DIR$/jiguang/jiguang.iml\" />\r\n      <module fileurl=\"file://D:\\yyide\\chatim\\.idea\\yideapp.iml\" filepath=\"D:\\yyide\\chatim\\.idea\\yideapp.iml\" />\r\n      <module fileurl=\"file://D:\\yyide\\chatim\\.idea\\modules\\app\\yideapp.app.iml\" filepath=\"D:\\yyide\\chatim\\.idea\\modules\\app\\yideapp.app.iml\" />\r\n      <module fileurl=\"file://D:\\yyide\\chatim\\.idea\\modules\\jiguang\\yideapp.jiguang.iml\" filepath=\"D:\\yyide\\chatim\\.idea\\modules\\jiguang\\yideapp.jiguang.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ .idea/modules.xml	(date 1616547619827)
+@@ -2,12 +2,9 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+-      <module fileurl="file://$PROJECT_DIR$/chatim.iml" filepath="$PROJECT_DIR$/chatim.iml" />
+-      <module fileurl="file://$PROJECT_DIR$/jiguang/jiguang.iml" filepath="$PROJECT_DIR$/jiguang/jiguang.iml" />
+-      <module fileurl="file://D:\yyide\chatim\.idea\yideapp.iml" filepath="D:\yyide\chatim\.idea\yideapp.iml" />
+-      <module fileurl="file://D:\yyide\chatim\.idea\modules\app\yideapp.app.iml" filepath="D:\yyide\chatim\.idea\modules\app\yideapp.app.iml" />
+-      <module fileurl="file://D:\yyide\chatim\.idea\modules\jiguang\yideapp.jiguang.iml" filepath="D:\yyide\chatim\.idea\modules\jiguang\yideapp.jiguang.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/yideapp.iml" filepath="$PROJECT_DIR$/.idea/modules/yideapp.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/yideapp.app.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" filepath="$PROJECT_DIR$/.idea/modules/jiguang/yideapp.jiguang.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    package=\"com.yyide.chatim\">\r\n\r\n    <uses-sdk tools:overrideLibrary=\"tv.danmaku.ijk.media.player_arm64, tv.danmaku.ijk.media.player_x86_64\" />\r\n    <!-- ********wifi******** -->\r\n    <uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n    <uses-permission android:name=\"android.permission.RECORD_AUDIO\" />\r\n    <uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />\r\n    <uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />\r\n    <uses-permission android:name=\"android.permission.READ_LOGS\" />\r\n    <uses-permission android:name=\"android.permission.VIBRATE\" />\r\n    <uses-permission android:name=\"android.permission.REQUEST_INSTALL_PACKAGES\" />\r\n    <uses-permission android:name=\"android.permission.BLUETOOTH\" />\r\n    <uses-permission android:name=\"android.permission.SYSTEM_ALERT_WINDOW\" />\r\n    <uses-permission android:name=\"android.permission.CALL_PHONE\" />\r\n\r\n    <!-- ********OPPO 推送 start******** -->\r\n    <uses-permission android:name=\"com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE\" />\r\n    <uses-permission android:name=\"com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE\" />\r\n    <!-- ********OPPO 推送 end******** -->\r\n\r\n    <uses-feature android:name=\"android.hardware.Camera\" />\r\n    <uses-feature android:name=\"android.hardware.camera.autofocus\" />\r\n\r\n\r\n    <!-- ********华为推送权限设置******** -->\r\n    <permission\r\n        android:name=\"com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG\"\r\n        android:protectionLevel=\"signatureOrSystem\" />\r\n\r\n    <uses-permission android:name=\"com.huawei.android.launcher.permission.CHANGE_BADGE\" />\r\n    <uses-permission android:name=\"com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG\" />\r\n\r\n    <!-- ********小米推送权限设置******** -->\r\n    <permission\r\n        android:name=\"com.tencent.qcloud.tim.tuikit.permission.MIPUSH_RECEIVE\"\r\n        android:protectionLevel=\"signature\" />\r\n\r\n    <uses-permission android:name=\"com.tencent.qcloud.tim.tuikit.permission.MIPUSH_RECEIVE\" />\r\n\r\n    <!-- ********魅族推送权限设置******** -->\r\n    <!-- 兼容flyme5.0以下版本，魅族内部集成pushSDK必填，不然无法收到消息 -->\r\n    <uses-permission android:name=\"com.meizu.flyme.push.permission.RECEIVE\" />\r\n\r\n    <permission\r\n        android:name=\"com.tencent.qcloud.tim.tuikit.push.permission.MESSAGE\"\r\n        android:protectionLevel=\"signature\" />\r\n\r\n    <uses-permission android:name=\"com.tencent.qcloud.tim.tuikit.push.permission.MESSAGE\" />\r\n\r\n    <!-- 兼容flyme3.0配置权限 -->\r\n    <uses-permission android:name=\"com.meizu.c2dm.permission.RECEIVE\" />\r\n\r\n    <permission\r\n        android:name=\"com.tencent.qcloud.tim.tuikit.permission.C2D_MESSAGE\"\r\n        android:protectionLevel=\"signature\" />\r\n\r\n    <uses-permission android:name=\"com.tencent.qcloud.tim.tuikit.permission.C2D_MESSAGE\" />\r\n\r\n    <application\r\n        android:name=\".BaseApplication\"\r\n        android:allowBackup=\"true\"\r\n        android:appComponentFactory=\"androidx.core.app.CoreComponentFactory\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/NoTitleFullscreen\"\r\n        android:usesCleartextTraffic=\"true\"\r\n\r\n        tools:replace=\"android:icon\">\r\n        <!--android:theme=\"@style/AppTheme\"-->\r\n\r\n\r\n        <uses-library\r\n            android:name=\"org.apache.http.legacy\"\r\n            android:required=\"false\" />\r\n\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\">\r\n\r\n            <!-- <intent-filter> -->\r\n            <!-- <action android:name=\"android.intent.action.MAIN\" /> -->\r\n\r\n\r\n            <!-- <category android:name=\"android.intent.category.LAUNCHER\" /> -->\r\n            <!-- </intent-filter> -->\r\n        </activity>\r\n\r\n        <!--<meta-data-->\r\n        <!--android:name=\"design_width_in_dp\"-->\r\n        <!--android:value=\"1080\" />-->\r\n        <!--<meta-data-->\r\n        <!--android:name=\"design_height_in_dp\"-->\r\n        <!--android:value=\"1920\" />-->\r\n\r\n        <activity android:name=\".jiguang.NoticeActivity\"/>\r\n        <!-- Since JCore2.0.0 Required SDK核心功能 -->\r\n        <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->\r\n        <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->\r\n        <service\r\n            android:name=\".jiguang.MyService\"\r\n            android:enabled=\"true\"\r\n            android:exported=\"false\"\r\n            android:process=\":pushcore\">\r\n            <intent-filter>\r\n                <action android:name=\"cn.jiguang.user.service.action\" />\r\n            </intent-filter>\r\n        </service>\r\n        <!-- Required since 3.0.7 -->\r\n        <!-- 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 -->\r\n        <!-- 3.3.0开始所有事件将通过该类回调 -->\r\n        <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->\r\n        <receiver\r\n            android:name=\".jiguang.MyReceiver\"\r\n            android:enabled=\"true\"\r\n            android:exported=\"false\">\r\n            <intent-filter>\r\n                <action android:name=\"cn.jpush.android.intent.REGISTRATION\" /> <!-- Required  用户注册SDK的intent -->\r\n                <action android:name=\"cn.jpush.android.intent.MESSAGE_RECEIVED\" /> <!-- Required  用户接收SDK消息的intent -->\r\n                <action android:name=\"cn.jpush.android.intent.NOTIFICATION_RECEIVED\" /> <!-- Required  用户接收SDK通知栏信息的intent -->\r\n                <action android:name=\"cn.jpush.android.intent.NOTIFICATION_OPENED\" /> <!-- Required  用户打开自定义通知栏的intent -->\r\n                <action android:name=\"cn.jpush.android.intent.CONNECTION\" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->\r\n                <category android:name=\"com.yyide.chatim\" />\r\n            </intent-filter>\r\n        </receiver>\r\n        <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->\r\n        <!-- since 3.3.0 接收JPush相关事件 -->\r\n        <receiver android:name=\".jiguang.PushMessageReceiver\">\r\n            <intent-filter>\r\n                <action android:name=\"cn.jpush.android.intent.RECEIVE_MESSAGE\" />\r\n\r\n                <category android:name=\"com.yyide.chatim\" />\r\n            </intent-filter>\r\n        </receiver>\r\n\r\n        <activity android:name=\".LoginActivity\">\r\n\r\n            <!-- <intent-filter> -->\r\n            <!-- <action android:name=\"android.intent.action.MAIN\" /> -->\r\n\r\n\r\n            <!-- <category android:name=\"android.intent.category.LAUNCHER\" /> -->\r\n            <!-- </intent-filter> -->\r\n        </activity>\r\n        <activity android:name=\".SplashActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".chat.ChatActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.ResetPassWordActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.UserActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.SexActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.CheckPhoneActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.PersonInfoActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.PowerActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.FriendProfileActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.TableActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".activity.NoteBookActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n        <activity\r\n            android:name=\".ScanActivity\"\r\n            android:screenOrientation=\"portrait\"\r\n            android:windowSoftInputMode=\"stateHidden|adjustPan\" />\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/AndroidManifest.xml	(date 1616554669457)
+@@ -10,7 +10,6 @@
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+-
+     <uses-permission android:name="android.permission.INTERNET" />
+     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+@@ -24,33 +23,22 @@
+     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+     <uses-permission android:name="android.permission.BLUETOOTH" />
+     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+-    <uses-permission android:name="android.permission.CALL_PHONE" />
+-
+-    <!-- ********OPPO 推送 start******** -->
++    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- ********OPPO 推送 start******** -->
+     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+-    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" />
+-    <!-- ********OPPO 推送 end******** -->
+-
++    <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" /> <!-- ********OPPO 推送 end******** -->
+     <uses-feature android:name="android.hardware.Camera" />
+-    <uses-feature android:name="android.hardware.camera.autofocus" />
+-
+-
+-    <!-- ********华为推送权限设置******** -->
++    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- ********华为推送权限设置******** -->
+     <permission
+         android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG"
+         android:protectionLevel="signatureOrSystem" />
+ 
+     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+-    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG" />
+-
+-    <!-- ********小米推送权限设置******** -->
++    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG" /> <!-- ********小米推送权限设置******** -->
+     <permission
+         android:name="com.tencent.qcloud.tim.tuikit.permission.MIPUSH_RECEIVE"
+         android:protectionLevel="signature" />
+ 
+-    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.MIPUSH_RECEIVE" />
+-
+-    <!-- ********魅族推送权限设置******** -->
++    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.MIPUSH_RECEIVE" /> <!-- ********魅族推送权限设置******** -->
+     <!-- 兼容flyme5.0以下版本，魅族内部集成pushSDK必填，不然无法收到消息 -->
+     <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" />
+ 
+@@ -58,9 +46,7 @@
+         android:name="com.tencent.qcloud.tim.tuikit.push.permission.MESSAGE"
+         android:protectionLevel="signature" />
+ 
+-    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.push.permission.MESSAGE" />
+-
+-    <!-- 兼容flyme3.0配置权限 -->
++    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.push.permission.MESSAGE" /> <!-- 兼容flyme3.0配置权限 -->
+     <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
+ 
+     <permission
+@@ -79,11 +65,9 @@
+         android:supportsRtl="true"
+         android:theme="@style/NoTitleFullscreen"
+         android:usesCleartextTraffic="true"
+-
+         tools:replace="android:icon">
+-        <!--android:theme="@style/AppTheme"-->
+-
+-
++        <activity android:name=".notice.NoticeConfirmDetailActivity"></activity>
++        <!-- android:theme="@style/AppTheme" -->
+         <uses-library
+             android:name="org.apache.http.legacy"
+             android:required="false" />
+@@ -99,17 +83,13 @@
+ 
+             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+             <!-- </intent-filter> -->
+-        </activity>
+-
+-        <!--<meta-data-->
+-        <!--android:name="design_width_in_dp"-->
+-        <!--android:value="1080" />-->
+-        <!--<meta-data-->
+-        <!--android:name="design_height_in_dp"-->
+-        <!--android:value="1920" />-->
+-
+-        <activity android:name=".jiguang.NoticeActivity"/>
+-        <!-- Since JCore2.0.0 Required SDK核心功能 -->
++        </activity> <!-- <meta-data -->
++        <!-- android:name="design_width_in_dp" -->
++        <!-- android:value="1080" /> -->
++        <!-- <meta-data -->
++        <!-- android:name="design_height_in_dp" -->
++        <!-- android:value="1920" /> -->
++        <activity android:name=".jiguang.NoticeActivity" /> <!-- Since JCore2.0.0 Required SDK核心功能 -->
+         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
+         <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
+         <service
+@@ -120,8 +100,7 @@
+             <intent-filter>
+                 <action android:name="cn.jiguang.user.service.action" />
+             </intent-filter>
+-        </service>
+-        <!-- Required since 3.0.7 -->
++        </service> <!-- Required since 3.0.7 -->
+         <!-- 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 -->
+         <!-- 3.3.0开始所有事件将通过该类回调 -->
+         <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
+@@ -137,8 +116,7 @@
+                 <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                 <category android:name="com.yyide.chatim" />
+             </intent-filter>
+-        </receiver>
+-        <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
++        </receiver> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
+         <!-- since 3.3.0 接收JPush相关事件 -->
+         <receiver android:name=".jiguang.PushMessageReceiver">
+             <intent-filter>
+Index: app/src/main/java/com/yyide/chatim/notice/NoticeItemFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/yyide/chatim/notice/NoticeItemFragment.java	(date 1616568581951)
++++ app/src/main/java/com/yyide/chatim/notice/NoticeItemFragment.java	(date 1616568581951)
+@@ -0,0 +1,65 @@
++package com.yyide.chatim.notice;
++
++import android.content.Context;
++import android.os.Bundle;
++
++import androidx.annotation.NonNull;
++import androidx.fragment.app.Fragment;
++import androidx.recyclerview.widget.GridLayoutManager;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++import com.chad.library.adapter.base.BaseQuickAdapter;
++import com.chad.library.adapter.base.viewholder.BaseViewHolder;
++import com.yyide.chatim.R;
++
++import org.jetbrains.annotations.NotNull;
++
++/**
++ * A fragment representing a list of Items.
++ */
++public class NoticeItemFragment extends Fragment {
++
++    /**
++     * Mandatory empty constructor for the fragment manager to instantiate the
++     * fragment (e.g. upon screen orientation changes).
++     */
++    public NoticeItemFragment() {
++    }
++
++    // TODO: Customize parameter initialization
++    public static NoticeItemFragment newInstance() {
++        NoticeItemFragment fragment = new NoticeItemFragment();
++        Bundle args = new Bundle();
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
++        // Set the adapter
++        if (view instanceof RecyclerView) {
++            Context context = view.getContext();
++            RecyclerView recyclerView = (RecyclerView) view;
++            recyclerView.setLayoutManager(new LinearLayoutManager(context));
++            recyclerView.setAdapter(new BaseQuickAdapter<String, BaseViewHolder>(R.layout.fragment_item) {
++                @Override
++                protected void convert(@NotNull BaseViewHolder baseViewHolder, String str) {
++                    baseViewHolder.setText(R.id.tv_notice_name, str);
++                }
++            });
++        }
++        return view;
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/home_fragmnet.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:background=\"#F7FAFC\"\r\n    android:layout_height=\"match_parent\">\r\n    <include\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        layout=\"@layout/home_title_layout\"\r\n        ></include>\r\n    <ScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n\r\n    <LinearLayout\r\n        android:layout_margin=\"2dp\"\r\n        android:orientation=\"vertical\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n        <LinearLayout\r\n\r\n            android:orientation=\"horizontal\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"179dp\">\r\n            <FrameLayout\r\n\r\n                android:id=\"@+id/table_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n\r\n                android:layout_marginLeft=\"2dp\"\r\n                android:layout_marginTop=\"2dp\"\r\n                android:layout_height=\"match_parent\">\r\n\r\n            </FrameLayout>\r\n\r\n            <FrameLayout\r\n\r\n                android:layout_marginRight=\"10dp\"\r\n                android:layout_marginTop=\"8dp\"\r\n                android:layout_marginBottom=\"7dp\"\r\n                android:id=\"@+id/notice_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\">\r\n\r\n            </FrameLayout>\r\n\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n           android:paddingLeft=\"10dp\"\r\n            android:paddingRight=\"10dp\"\r\n            android:paddingTop=\"3dp\"\r\n            android:orientation=\"horizontal\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"177dp\">\r\n            <FrameLayout\r\n                android:id=\"@+id/kq_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\">\r\n\r\n            </FrameLayout>\r\n\r\n\r\n        </LinearLayout>\r\n        <LinearLayout\r\n            android:paddingLeft=\"10dp\"\r\n            android:paddingRight=\"10dp\"\r\n            android:paddingTop=\"10dp\"\r\n            android:orientation=\"horizontal\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"177dp\">\r\n            <FrameLayout\r\n                android:id=\"@+id/banner_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\">\r\n\r\n            </FrameLayout>\r\n\r\n\r\n        </LinearLayout>\r\n        <LinearLayout\r\n            android:paddingLeft=\"10dp\"\r\n            android:paddingRight=\"10dp\"\r\n            android:paddingTop=\"10dp\"\r\n            android:orientation=\"horizontal\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"177dp\">\r\n            <FrameLayout\r\n                android:id=\"@+id/work_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\">\r\n\r\n            </FrameLayout>\r\n\r\n\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            android:paddingLeft=\"10dp\"\r\n            android:paddingRight=\"10dp\"\r\n            android:paddingTop=\"10dp\"\r\n            android:orientation=\"horizontal\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"177dp\">\r\n            <FrameLayout\r\n                android:id=\"@+id/class_honor_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\">\r\n\r\n            </FrameLayout>\r\n\r\n\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n           android:padding=\"10dp\"\r\n            android:orientation=\"horizontal\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"293dp\">\r\n            <FrameLayout\r\n                android:id=\"@+id/student_honor_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"match_parent\">\r\n\r\n            </FrameLayout>\r\n\r\n\r\n        </LinearLayout>\r\n    </LinearLayout>\r\n\r\n\r\n    </ScrollView>\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/home_fragmnet.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/res/layout/home_fragmnet.xml	(date 1616504739679)
+@@ -7,8 +7,7 @@
+     <include
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        layout="@layout/home_title_layout"
+-        ></include>
++        layout="@layout/home_title_layout" />
+     <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+@@ -37,15 +36,13 @@
+             </FrameLayout>
+ 
+             <FrameLayout
+-
+-                android:layout_marginRight="10dp"
++                android:layout_marginEnd="10dp"
+                 android:layout_marginTop="8dp"
+                 android:layout_marginBottom="7dp"
+                 android:id="@+id/notice_content"
+                 android:layout_weight="1"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent">
+-
+             </FrameLayout>
+ 
+         </LinearLayout>
+Index: app/src/main/res/layout/fragment_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_item.xml	(date 1616566295912)
++++ app/src/main/res/layout/fragment_item.xml	(date 1616566295912)
+@@ -0,0 +1,29 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_marginStart="@dimen/dp_20"
++    android:layout_marginTop="@dimen/dp_10"
++    android:layout_marginBottom="@dimen/dp_10"
++    android:orientation="horizontal">
++
++    <ImageView
++        android:id="@+id/iv_pic"
++        android:layout_width="@dimen/dp_30"
++        android:layout_height="@dimen/dp_30"
++        app:layout_constraintTop_toTopOf="parent"
++        app:layout_constraintStart_toStartOf="parent" />
++
++    <TextView
++        android:id="@+id/tv_notice_name"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:textColor="#212121"
++        android:textSize="@dimen/text_15"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintLeft_toRightOf="@+id/iv_pic"
++        app:layout_constraintTop_toTopOf="@+id/iv_pic"
++        android:layout_marginStart="@dimen/dp_14"/>
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_item_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_item_list.xml	(date 1616567234328)
++++ app/src/main/res/layout/fragment_item_list.xml	(date 1616567234328)
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.recyclerview.widget.RecyclerView
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/list"
++    android:name="com.yyide.chatim.notice.ItemFragment"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    app:layoutManager="LinearLayoutManager"
++    tools:context=".notice.NoticeItemFragment"
++    tools:listitem="@layout/fragment_item" />
+\ No newline at end of file
+Index: app/src/main/res/values/dimens.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/dimens.xml	(date 1616566190696)
++++ app/src/main/res/values/dimens.xml	(date 1616566190696)
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <dimen name="text_margin">16dp</dimen>
++    <dimen name="dp_2">2dp</dimen>
++    <dimen name="dp_10">10dp</dimen>
++    <dimen name="dp_14">14dp</dimen>
++    <dimen name="dp_20">20dp</dimen>
++    <dimen name="dp_30">30dp</dimen>
++
++    <dimen name="text_10">10sp</dimen>
++    <dimen name="text_15">15sp</dimen>
++    <dimen name="text_16">16sp</dimen>
++    <dimen name="text_18">18sp</dimen>
++    <dimen name="text_20">20sp</dimen>
++
++</resources>
+\ No newline at end of file
+Index: app/src/main/java/com/yyide/chatim/base/BaseView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.yyide.chatim.base;\r\n\r\n/**\r\n * 作者：Rance on 2016/10/25 15:19\r\n * 邮箱：rance935@163.com\r\n */\r\npublic interface BaseView {\r\n    void showLoading();\r\n\r\n    void hideLoading();\r\n\r\n    void showError();\r\n\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/yyide/chatim/base/BaseView.java	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/java/com/yyide/chatim/base/BaseView.java	(date 1616554786299)
+@@ -10,8 +10,4 @@
+     void hideLoading();
+ 
+     void showError();
+-
+-
+-
+-
+ }
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Built application 文件\r\n*.apk\r\n*.ap_\r\n\r\n# ART/Dalvik VM 文件\r\n*.dex\r\n\r\n# Java class 文件\r\n*.class\r\n\r\n# Generated 文件夹\r\nbin/\r\ngen/\r\nout/\r\n\r\n# Gradle files\r\n.gradle/\r\nbuild/\r\n\r\n# 本地配置文件 (sdk path, etc)\r\nlocal.properties\r\n\r\n# Eclipse生成的Proguard文件夹\r\nproguard/\r\n\r\n# 日志文件\r\n*.log\r\n\r\n# Android Studio导航编辑器临时文件\r\n.navigation/\r\n\r\n# Android Studio captures folder\r\ncaptures/\r\n\r\n# IntelliJ (IDE配置文件)\r\n*.iml\r\n.idea/workspace.xml\r\n.idea/tasks.xml\r\n.idea/gradle.xml\r\n.idea/assetWizardSettings.xml\r\n.idea/dictionaries\r\n.idea/libraries\r\n.idea/caches\r\n\r\n# 密钥储存库文件\r\n# 如果您不想检查密钥库文件，请取消注释以下行\r\n#*.jks\r\n\r\n# 在Android Studio 2.2及更高版本中生成的外部原生构建文件夹\r\n.externalNativeBuild\r\n\r\n# Google服务 (e.g. APIs or Firebase)\r\ngoogle-services.json\r\n\r\n# Freeline (Android 平台上的秒级编译方案)\r\nfreeline.py\r\nfreeline/\r\nfreeline_project_description.json\r\n\r\n# fastlane (自动化打包框架)\r\nfastlane/report.xml\r\nfastlane/Preview.html\r\nfastlane/screenshots\r\nfastlane/test_output\r\nfastlane/readme.md
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .gitignore	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ .gitignore	(date 1616504739650)
+@@ -47,19 +47,4 @@
+ #*.jks
+ 
+ # 在Android Studio 2.2及更高版本中生成的外部原生构建文件夹
+-.externalNativeBuild
+-
+-# Google服务 (e.g. APIs or Firebase)
+-google-services.json
+-
+-# Freeline (Android 平台上的秒级编译方案)
+-freeline.py
+-freeline/
+-freeline_project_description.json
+-
+-# fastlane (自动化打包框架)
+-fastlane/report.xml
+-fastlane/Preview.html
+-fastlane/screenshots
+-fastlane/test_output
+-fastlane/readme.md
+\ No newline at end of file
++.externalNativeBuild
+\ No newline at end of file
+Index: app/src/main/java/com/yyide/chatim/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.yyide.chatim;\r\n\r\n\r\nimport android.Manifest;\r\nimport android.app.Dialog;\r\nimport android.content.BroadcastReceiver;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.IntentFilter;\r\nimport android.database.Cursor;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.BitmapFactory;\r\nimport android.net.Uri;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.text.TextUtils;\r\nimport android.util.Log;\r\nimport android.view.KeyEvent;\r\nimport android.view.View;\r\nimport android.widget.CheckedTextView;\r\nimport android.widget.FrameLayout;\r\nimport android.widget.ImageView;\r\nimport android.widget.Toast;\r\n\r\nimport com.alibaba.fastjson.JSON;\r\nimport com.blankj.utilcode.util.ActivityUtils;\r\nimport com.blankj.utilcode.util.SPUtils;\r\n\r\nimport com.tencent.qcloud.tim.uikit.TUIKit;\r\nimport com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;\r\nimport com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;\r\nimport com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;\r\nimport com.tencent.qcloud.tim.uikit.utils.ToastUtil;\r\nimport com.yyide.chatim.activity.ResetPassWordActivity;\r\nimport com.yyide.chatim.base.BaseConstant;\r\nimport com.yyide.chatim.base.BaseMvpActivity;\r\nimport com.yyide.chatim.chat.info.UserInfo;\r\nimport com.yyide.chatim.home.AppFragment;\r\nimport com.yyide.chatim.home.HelpFragment;\r\nimport com.yyide.chatim.home.HomeFragment;\r\nimport com.yyide.chatim.home.HomeFragmentXZ;\r\nimport com.yyide.chatim.home.MessageFragment;\r\nimport com.yyide.chatim.jiguang.ExampleUtil;\r\nimport com.yyide.chatim.jiguang.LocalBroadcastManager;\r\nimport com.yyide.chatim.model.GetUserSchoolRsp;\r\nimport com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;\r\nimport com.yyide.chatim.model.ScheduleRsp;\r\nimport com.yyide.chatim.model.SelectSchByTeaidRsp;\r\nimport com.yyide.chatim.model.SelectUserRsp;\r\nimport com.yyide.chatim.model.UserLogoutRsp;\r\nimport com.yyide.chatim.model.getUserSigRsp;\r\nimport com.yyide.chatim.model.listTimeDataRsp;\r\nimport com.yyide.chatim.presenter.EventType;\r\nimport com.yyide.chatim.presenter.MainPresenter;\r\nimport com.yyide.chatim.utils.DemoLog;\r\nimport com.yyide.chatim.view.MainView;\r\n\r\nimport org.greenrobot.eventbus.EventBus;\r\nimport org.greenrobot.eventbus.Subscribe;\r\nimport org.greenrobot.eventbus.ThreadMode;\r\n\r\nimport java.io.IOException;\r\n\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.fragment.app.FragmentManager;\r\nimport androidx.fragment.app.FragmentTransaction;\r\nimport butterknife.BindView;\r\nimport butterknife.ButterKnife;\r\nimport butterknife.OnClick;\r\n\r\nimport okhttp3.Call;\r\nimport okhttp3.Callback;\r\nimport okhttp3.OkHttpClient;\r\nimport okhttp3.Request;\r\nimport okhttp3.RequestBody;\r\nimport okhttp3.Response;\r\n\r\npublic class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView {\r\n\r\n\r\n    @BindView(R.id.content)\r\n    FrameLayout content;\r\n\r\n\r\n    //for receive customer msg from jpush server\r\n    public static boolean isForeground = false;\r\n\r\n    @BindView(R.id.tab1)\r\n    CheckedTextView tab1;\r\n    @BindView(R.id.tab1_layout)\r\n    FrameLayout tab1Layout;\r\n    @BindView(R.id.tab2)\r\n    CheckedTextView tab2;\r\n    @BindView(R.id.tab2_layout)\r\n    FrameLayout tab2Layout;\r\n    @BindView(R.id.tab3)\r\n    CheckedTextView tab3;\r\n    @BindView(R.id.tab3_layout)\r\n    FrameLayout tab3Layout;\r\n    @BindView(R.id.tab4)\r\n    CheckedTextView tab4;\r\n    @BindView(R.id.tab4_layout)\r\n    FrameLayout tab4Layout;\r\n    @BindView(R.id.msg_total_unread)\r\n    UnreadCountTextView msgTotalUnread;\r\n\r\n\r\n\r\n    private MessageReceiver mMessageReceiver;\r\n    public static final String MESSAGE_RECEIVED_ACTION = \"cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION\";\r\n    public static final String KEY_TITLE = \"title\";\r\n    public static final String KEY_MESSAGE = \"message\";\r\n    public static final String KEY_EXTRAS = \"extras\";\r\n    public int IdType = 1;\r\n    public String TAG = \"MainActivity\";\r\n\r\n    private Dialog mDialog;\r\n    /**\r\n     * request Code 从相册选择照片不裁切\r\n     **/\r\n    private final static int SELECT_ORIGINAL_PIC = 126;\r\n    /**\r\n     * request Code 拍取照片不裁切\r\n     **/\r\n    private final static int REQ_CODE = 127;\r\n    private Uri imageUri;\r\n    private long firstTime = 0;\r\n    private UserInfo mUserInfo;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n        ButterKnife.bind(this);\r\n        registerMessageReceiver();  // used for receive msg\r\n        permission();\r\n\r\n        // 未读消息监视器\r\n        ConversationManagerKit.getInstance().addUnreadWatcher(this);\r\n        mUserInfo = UserInfo.getInstance();\r\n        EventBus.getDefault().register(this);\r\n        setTab(0);\r\n//        startActivity(new Intent(this, ResetPassWordActivity.class));\r\n//        new Handler().postDelayed(new Runnable() {\r\n//                @Override\r\n//            public void run() {\r\n    //                mvpPresenter.Login(\"13659896596\",\"896596\");\r\n//            }\r\n//        },5000);\r\n\r\n\r\n//        mvpPresenter.getselectUser();\r\n\r\n//        mvpPresenter.ToUserLogout();\r\n\r\n        mvpPresenter.getUserSchool();\r\n//        mvpPresenter.SelectSchByTeaid();\r\n\r\n\r\n//        mvpPresenter.listAllScheduleByTeacherId();\r\n\r\n//        CheacklistSchedule(\"99\",\"1\",\"10\");\r\n\r\n//        Log.e(TAG, \"getNativePhoneNumber==》: \"+new PhoneInfoUtils(this).getPhoneInfo());\r\n//        selectFromGallery();\r\n\r\n        //初始化imageUri\r\n//        selectFromTake();\r\n\r\n\r\n    }\r\n\r\n//    /**\r\n//     * 拍取照片不裁切\r\n//     */\r\n//    private void selectFromTake() {\r\n//        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//用来打开相机的Intent\r\n//        if (takePhotoIntent.resolveActivity(getPackageManager()) != null) {//这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退\r\n//            startActivityForResult(takePhotoIntent, REQ_CODE);//启动相机\r\n//        }\r\n//    }\r\n\r\n\r\n    //    private void selectFromGallery() {\r\n//        // TODO Auto-generatedmethod stub\r\n//        Intent intent = new Intent();\r\n//        intent.setAction(Intent.ACTION_PICK);//Pick an item fromthe data\r\n//        intent.setType(\"image/*\");//从所有图片中进行选择\r\n//        startActivityForResult(intent, SELECT_ORIGINAL_PIC);\r\n//    }\r\n//\r\n//    @Override\r\n//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\r\n//        // TODO Auto-generated method stub\r\n//        switch (requestCode) {\r\n//\r\n//            case SELECT_ORIGINAL_PIC:\r\n//                if (resultCode == RESULT_OK) {//从相册选择照片不裁切\r\n//                    try {\r\n//                        Uri selectedImage = data.getData(); //获取系统返回的照片的Uri\r\n//                        String[] filePathColumn = {MediaStore.Images.Media.DATA};\r\n//                        Cursor cursor = getContentResolver().query(selectedImage,\r\n//                                filePathColumn, null, null, null);//从系统表中查询指定Uri对应的照片\r\n//                        cursor.moveToFirst();\r\n//                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);\r\n//                        String picturePath = cursor.getString(columnIndex);  //获取照片路径\r\n//                        cursor.close();\r\n//\r\n//                        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);\r\n//                        Log.e(TAG, \"onActivityResult: \" + JSON.toJSONString(bitmap));\r\n////                        img.setImageBitmap(bitmap);\r\n//\r\n//                    } catch (Exception e) {\r\n//                        // TODO Auto-generated catch block\r\n//                        e.printStackTrace();\r\n//                    }\r\n//                }\r\n//                break;\r\n//\r\n//\r\n//        }\r\n//        if (requestCode == REQ_CODE && resultCode == RESULT_OK) {\r\n//            /*缩略图信息是储存在返回的intent中的Bundle中的，\r\n//            * 对应Bundle中的键为data，因此从Intent中取出\r\n//            * Bundle再根据data取出来Bitmap即可*/\r\n//            Bundle extras = data.getExtras();\r\n//            Bitmap bitmap = (Bitmap) extras.get(\"data\");\r\n//            img.setImageBitmap(bitmap);\r\n////            Log.e(TAG, \"img==》: \" + JSON.toJSONString(extras));\r\n//        }\r\n//\r\n//        super.onActivityResult(requestCode, resultCode, data);\r\n//    }\r\n\r\n\r\n    @Override\r\n    protected MainPresenter createPresenter() {\r\n        return new MainPresenter(this);\r\n    }\r\n\r\n\r\n    @Override\r\n    protected void onStop() {\r\n        DemoLog.i(\"TAG\", \"onStop\");\r\n        ConversationManagerKit.getInstance().destroyConversation();\r\n        super.onStop();\r\n    }\r\n\r\n    @Override\r\n    public boolean onKeyDown(int keyCode, KeyEvent event) {\r\n        long secondTime = System.currentTimeMillis();\r\n\r\n        if (keyCode == KeyEvent.KEYCODE_BACK) {\r\n\r\n                if (secondTime - firstTime < 2000) {\r\n                    ActivityUtils.finishAllActivities();\r\n                } else {\r\n                    Toast.makeText(getApplicationContext(), \"再按一次返回键退出\", Toast.LENGTH_SHORT).show();\r\n                    firstTime = System.currentTimeMillis();\r\n                }\r\n            return true;\r\n        }\r\n\r\n        return super.onKeyDown(keyCode, event);\r\n    }\r\n\r\n\r\n\r\n    @Subscribe(threadMode = ThreadMode.MAIN)\r\n    public void Event(EventType messageEvent) {\r\n        if (messageEvent.i == BaseConstant.CheakId) {\r\n            IdType = 2;\r\n            ActivityUtils.finishAllActivities();\r\n            startActivity(new Intent(this, MainActivity.class));\r\n            Log.e(\"TAG\", \"messageEvent: \" + IdType);\r\n            setTab(0);\r\n        }\r\n    }\r\n\r\n\r\n    /**\r\n     * @Author: Berlin\r\n     * @Date: 2018/12/19 14:37\r\n     * @Description:动态授权\r\n     */\r\n    String[] mPermissionList;\r\n\r\n    private void permission() {//https://blog.csdn.net/android_code/article/details/82027500\r\n        if (Build.VERSION.SDK_INT >= 23) {\r\n            mPermissionList = new String[]{\r\n                    Manifest.permission.WRITE_EXTERNAL_STORAGE,\r\n                    Manifest.permission.ACCESS_FINE_LOCATION,\r\n                    Manifest.permission.CALL_PHONE,\r\n                    Manifest.permission.READ_LOGS,\r\n                    Manifest.permission.READ_PHONE_STATE,\r\n                    Manifest.permission.READ_EXTERNAL_STORAGE,\r\n                    Manifest.permission.SET_DEBUG_APP,\r\n                    Manifest.permission.SYSTEM_ALERT_WINDOW,\r\n                    Manifest.permission.GET_ACCOUNTS,\r\n                    Manifest.permission.WRITE_SETTINGS,\r\n                    Manifest.permission.WRITE_APN_SETTINGS,\r\n                    Manifest.permission.CAMERA,\r\n                    Manifest.permission.RECORD_AUDIO//音频\r\n            };\r\n            requestPermissions(mPermissionList, 1);\r\n            //ActivityCompat.requestPermissions(getActivity(), mPermissionList, 123);\r\n        }\r\n    }\r\n\r\n    public void registerMessageReceiver() {\r\n        mMessageReceiver = new MessageReceiver();\r\n        IntentFilter filter = new IntentFilter();\r\n        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);\r\n        filter.addAction(MESSAGE_RECEIVED_ACTION);\r\n        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);\r\n    }\r\n\r\n    @Override\r\n    public void updateUnread(int count) {\r\n        Log.e(\"Chatim\", \"updateUnread==>: \" + count);\r\n\r\n        if (count > 0) {\r\n            msgTotalUnread.setVisibility(View.VISIBLE);\r\n        } else {\r\n            msgTotalUnread.setVisibility(View.GONE);\r\n        }\r\n        String unreadStr = \"\" + count;\r\n        if (count > 100) {\r\n            unreadStr = \"99+\";\r\n        }\r\n        msgTotalUnread.setText(unreadStr);\r\n        // 华为离线推送角标\r\n//        HUAWEIHmsMessageService.updateBadge(this, count);\r\n    }\r\n\r\n    @Override\r\n    public void showLoading() {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void hideLoading() {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void showError() {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void getData(SelectUserRsp rsp) {\r\n        Log.e(\"TAG\", \"getData==》: \" + JSON.toJSONString(rsp));\r\n\r\n    }\r\n\r\n    @Override\r\n    public void getDataFail(String msg) {\r\n        Log.e(\"TAG\", \"getDataFail==》: \" + JSON.toJSONString(msg));\r\n    }\r\n\r\n    @Override\r\n    public void UserLogoutData(UserLogoutRsp rsp) {\r\n        Log.e(\"TAG\", \"UserLogoutData==》: \" + JSON.toJSONString(rsp));\r\n    }\r\n\r\n    @Override\r\n    public void UserLogoutDataFail(String msg) {\r\n        Log.e(\"TAG\", \"UserLogoutDataFail==》: \" + JSON.toJSONString(msg));\r\n    }\r\n\r\n    @Override\r\n    public void getUserSchool(GetUserSchoolRsp rsp) {\r\n        Log.e(\"TAG\", \"GetUserSchoolRsp==》: \" + JSON.toJSONString(rsp));\r\n        SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));\r\n        if (rsp.data.size() > 0 && TextUtils.isEmpty(SpData.SchoolId())) {\r\n            SPUtils.getInstance().put(SpData.SCHOOLID, rsp.data.get(0).schoolId + \"\");\r\n\r\n\r\n//            handleData(rsp.data.get(0).userId,SpData.UserSig());\r\n        }\r\n\r\n\r\n    }\r\n    private void handleData(int userId,String UserSig) {\r\n        if (mUserInfo != null && mUserInfo.isAutoLogin()) {\r\n//            login();\r\n//            initIm(userId,UserSig);\r\n            Log.e(TAG, \"handleData: Im已经激活，无需激活\" );\r\n        } else {\r\n            initIm(userId,UserSig);\r\n        }\r\n    }\r\n    @Override\r\n    public void getUserSchoolDataFail(String rsp) {\r\n        Log.e(\"TAG\", \"getUserSchoolDataFail==》: \" + JSON.toJSONString(rsp));\r\n    }\r\n\r\n    @Override\r\n    public void selectSchByTeaid(SelectSchByTeaidRsp rsp) {\r\n        Log.e(\"TAG\", \"selectSchByTeaid==》: \" + JSON.toJSONString(rsp));\r\n    }\r\n\r\n    @Override\r\n    public void selectSchByTeaidDataFail(String rsp) {\r\n        Log.e(\"TAG\", \"selectSchByTeaidDataFail==》: \" + JSON.toJSONString(rsp));\r\n    }\r\n\r\n    @Override\r\n    public void listAllScheduleByTeacherId(ListAllScheduleByTeacherIdRsp rsp) {\r\n        Log.e(\"TAG\", \"listAllScheduleByTeacherId==》: \" + JSON.toJSONString(rsp));\r\n    }\r\n\r\n    @Override\r\n    public void listAllScheduleByTeacherIdDataFail(String rsp) {\r\n        Log.e(\"TAG\", \"listAllScheduleByTeacherIdDataFail==》: \" + JSON.toJSONString(rsp));\r\n    }\r\n\r\n\r\n\r\n\r\n    OkHttpClient mOkHttpClient = new OkHttpClient();\r\n\r\n    void CheacklistSchedule(String teacherId, String current, String size) {\r\n        ScheduleRsp rsp = new ScheduleRsp();\r\n        rsp.teacherId = teacherId;\r\n        rsp.current = current;\r\n        rsp.size = size;\r\n        RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));\r\n\r\n        //请求组合创建\r\n        Request request = new Request.Builder()\r\n                .url(BaseConstant.URL_IP + \"/timetable/cloud-timetable/schedule/listSchedule\")\r\n                .addHeader(\"Authorization\", SpData.User().token)\r\n                .post(requestBody)\r\n                .build();\r\n        //发起请求\r\n\r\n        mOkHttpClient.newCall(request).enqueue(new Callback() {\r\n            @Override\r\n            public void onFailure(Call call, IOException e) {\r\n                Log.e(\"TAG\", \"onFailure: \" + e.toString());\r\n            }\r\n\r\n            @Override\r\n            public void onResponse(Call call, Response response) throws IOException {\r\n                String data = response.body().string();\r\n                Log.e(\"TAG\", \"mOkHttpClientlistSchedule==>: \" + data);\r\n//                SelectUserSchoolRsp bean = JSON.parseObject(data, SelectUserSchoolRsp.class);\r\n//                if (bean.code==BaseConstant.REQUEST_SUCCES2){\r\n//                    Tologin(bean.data.username,bean.data.password, String.valueOf(schoolId));\r\n//                }\r\n            }\r\n        });\r\n    }\r\n\r\n    public class MessageReceiver extends BroadcastReceiver {\r\n\r\n        @Override\r\n        public void onReceive(Context context, Intent intent) {\r\n            try {\r\n                if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {\r\n                    String messge = intent.getStringExtra(KEY_MESSAGE);\r\n                    String extras = intent.getStringExtra(KEY_EXTRAS);\r\n                    StringBuilder showMsg = new StringBuilder();\r\n                    showMsg.append(KEY_MESSAGE + \" : \" + messge + \"\\n\");\r\n                    if (!ExampleUtil.isEmpty(extras)) {\r\n                        showMsg.append(KEY_EXTRAS + \" : \" + extras + \"\\n\");\r\n                    }\r\n                    setCostomMsg(showMsg.toString());\r\n                }\r\n            } catch (Exception e) {\r\n            }\r\n        }\r\n    }\r\n\r\n    private void setCostomMsg(String msg) {\r\n        Log.e(\"TAG\", \"setCostomMsg: \" + msg);\r\n    }\r\n\r\n    @Override\r\n    protected void onPause() {\r\n        isForeground = false;\r\n        super.onPause();\r\n    }\r\n\r\n    @Override\r\n    protected void onResume() {\r\n        isForeground = true;\r\n        super.onResume();\r\n    }\r\n\r\n    void setTab(int position) {\r\n\r\n        tab1.setChecked(false);\r\n        tab2.setChecked(false);\r\n        tab3.setChecked(false);\r\n        tab4.setChecked(false);\r\n\r\n        FragmentManager fm = getSupportFragmentManager();\r\n        FragmentTransaction ft = fm.beginTransaction();\r\n        Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));\r\n        Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));\r\n        Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));\r\n        Fragment fg4 = fm.findFragmentByTag(String.valueOf(tab4.getId()));\r\n        if (fg1 != null) ft.hide(fg1);\r\n        if (fg2 != null) ft.hide(fg2);\r\n        if (fg3 != null) ft.hide(fg3);\r\n        if (fg4 != null) ft.hide(fg4);\r\n\r\n        switch (position) {\r\n            case 0:\r\n                if (fg1 == null) {\r\n                    //身份切换\r\n                    if (IdType == 1) {\r\n                        fg1 = new HomeFragment();\r\n//                        fg1 = new HomeFragment2();\r\n                    } else {\r\n                        fg1 = new HomeFragmentXZ();\r\n                    }\r\n                    ft.add(R.id.content, fg1, String.valueOf(tab1.getId()));\r\n                } else\r\n                    ft.show(fg1);\r\n                tab1.setChecked(true);\r\n                break;\r\n            case 1:\r\n                if (fg2 == null) {\r\n                    fg2 = new MessageFragment();\r\n                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));\r\n                } else\r\n                    ft.show(fg2);\r\n                tab2.setChecked(true);\r\n                break;\r\n            case 2:\r\n                if (fg3 == null) {\r\n                    fg3 = new AppFragment();\r\n                    ft.add(R.id.content, fg3, String.valueOf(tab3.getId()));\r\n                } else\r\n                    ft.show(fg3);\r\n                tab3.setChecked(true);\r\n                break;\r\n            case 3:\r\n                if (fg4 == null) {\r\n                    fg4 = new HelpFragment();\r\n                    ft.add(R.id.content, fg4, String.valueOf(tab4.getId()));\r\n                } else\r\n                    ft.show(fg4);\r\n                tab4.setChecked(true);\r\n                break;\r\n\r\n        }\r\n        ft.commitAllowingStateLoss();\r\n    }\r\n\r\n    @Override\r\n    protected void onDestroy() {\r\n\r\n        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);\r\n        EventBus.getDefault().unregister(this);\r\n        super.onDestroy();\r\n\r\n    }\r\n\r\n    @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout})\r\n    public void onViewClicked(View view) {\r\n        switch (view.getId()) {\r\n            case R.id.tab1_layout:\r\n                setTab(0);\r\n                break;\r\n            case R.id.tab2_layout:\r\n                setTab(1);\r\n                break;\r\n            case R.id.tab3_layout:\r\n                setTab(2);\r\n                break;\r\n            case R.id.tab4_layout:\r\n                setTab(3);\r\n                break;\r\n        }\r\n    }\r\n    void initIm(int userid,String userSig) {\r\n        TUIKit.login(String.valueOf(userid), userSig, new IUIKitCallBack() {\r\n            @Override\r\n            public void onError(String module, final int code, final String desc) {\r\n                runOnUiThread(new Runnable() {\r\n                    public void run() {\r\n                        ToastUtil.toastLongMessage(\"登录失败, errCode = \" + code + \", errInfo = \" + desc);\r\n                    }\r\n                });\r\n                DemoLog.i(TAG, \"imLogin errorCode = \" + code + \", errorInfo = \" + desc);\r\n            }\r\n\r\n            @Override\r\n            public void onSuccess(Object data) {\r\n                UserInfo.getInstance().setAutoLogin(true);\r\n                UserInfo.getInstance().setUserSig(userSig);\r\n                UserInfo.getInstance().setUserId(String.valueOf(userid));\r\n\r\n                Log.e(TAG, \"initIm==>onSuccess: 腾讯IM激活成功\" );\r\n            }\r\n        });\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/yyide/chatim/MainActivity.java	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/java/com/yyide/chatim/MainActivity.java	(date 1616551634960)
+@@ -166,8 +166,6 @@
+ 
+         //初始化imageUri
+ //        selectFromTake();
+-
+-
+     }
+ 
+ //    /**
+@@ -264,8 +262,6 @@
+         return super.onKeyDown(keyCode, event);
+     }
+ 
+-
+-
+     @Subscribe(threadMode = ThreadMode.MAIN)
+     public void Event(EventType messageEvent) {
+         if (messageEvent.i == BaseConstant.CheakId) {
+Index: app/src/main/java/com/yyide/chatim/presenter/notice/NoticeConfirmDetailPresenter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/yyide/chatim/presenter/notice/NoticeConfirmDetailPresenter.java	(date 1616555028282)
++++ app/src/main/java/com/yyide/chatim/presenter/notice/NoticeConfirmDetailPresenter.java	(date 1616555028282)
+@@ -0,0 +1,10 @@
++package com.yyide.chatim.presenter.notice;
++
++import com.yyide.chatim.base.BasePresenter;
++import com.yyide.chatim.view.notice.NoticeConfirmDetailView;
++
++public class NoticeConfirmDetailPresenter extends BasePresenter<NoticeConfirmDetailView> {
++    public NoticeConfirmDetailPresenter(NoticeConfirmDetailView view) {
++        attachView(view);
++    }
++}
+Index: app/src/main/res/layout/login_for_dev_activity.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"#fff\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_centerInParent=\"true\"\r\n        android:layout_margin=\"20dp\"\r\n        android:orientation=\"vertical\">\r\n\r\n        <ImageView\r\n            android:id=\"@+id/logo\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"center_horizontal\"\r\n            android:src=\"@drawable/ic_logo\" />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"60dp\"\r\n            android:layout_marginTop=\"60dp\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <TextView\r\n                android:layout_width=\"80dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:textSize=\"18sp\"\r\n                android:gravity=\"center_vertical\"\r\n                android:text=\"@string/account\"\r\n                android:textColor=\"#000\" />\r\n\r\n            <EditText\r\n                android:id=\"@+id/login_user\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:textSize=\"18sp\"\r\n                android:background=\"@null\"\r\n                android:gravity=\"center_vertical\"\r\n                android:hint=\"@string/account_hint\"\r\n                android:textCursorDrawable=\"@drawable/my_cursor\"\r\n                android:singleLine=\"true\" />\r\n\r\n        </LinearLayout>\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"60dp\"\r\n            android:layout_marginTop=\"60dp\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <TextView\r\n                android:layout_width=\"80dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:textSize=\"18sp\"\r\n                android:gravity=\"center_vertical\"\r\n                android:text=\"账号\"\r\n                android:textColor=\"#000\" />\r\n\r\n            <EditText\r\n                android:id=\"@+id/user_edit\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:textSize=\"18sp\"\r\n                android:background=\"@null\"\r\n                android:gravity=\"center_vertical\"\r\n                android:hint=\"@string/account_hint\"\r\n                android:textCursorDrawable=\"@drawable/my_cursor\"\r\n                android:singleLine=\"true\" />\r\n\r\n        </LinearLayout>\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"60dp\"\r\n            android:layout_marginTop=\"60dp\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <TextView\r\n                android:layout_width=\"80dp\"\r\n                android:layout_height=\"match_parent\"\r\n                android:textSize=\"18sp\"\r\n                android:gravity=\"center_vertical\"\r\n                android:text=\"密码\"\r\n                android:textColor=\"#000\" />\r\n\r\n            <EditText\r\n                android:id=\"@+id/password_edit\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:textSize=\"18sp\"\r\n                android:background=\"@null\"\r\n                android:gravity=\"center_vertical\"\r\n                android:hint=\"@string/account_hint\"\r\n                android:textCursorDrawable=\"@drawable/my_cursor\"\r\n                android:singleLine=\"true\" />\r\n\r\n        </LinearLayout>\r\n\r\n\r\n\r\n        <View\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1px\"\r\n            android:background=\"@color/item_split_color\" />\r\n\r\n\r\n        <View\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"1px\"\r\n            android:background=\"@color/item_split_color\" />\r\n        <CheckedTextView\r\n            android:layout_marginTop=\"5dp\"\r\n            android:text=\"验证码登录\"\r\n            android:textColor=\"@color/tab_color\"\r\n            android:id=\"@+id/type\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\" />\r\n        <Button\r\n            android:id=\"@+id/login_btn\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"50dp\"\r\n            android:layout_marginTop=\"60dp\"\r\n            android:layout_weight=\"1\"\r\n            android:background=\"#00a4ff\"\r\n            android:text=\"@string/button_login\"\r\n            android:textColor=\"#fff\" />\r\n\r\n\r\n    </LinearLayout>\r\n\r\n\r\n\r\n</RelativeLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/login_for_dev_activity.xml	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/res/layout/login_for_dev_activity.xml	(date 1616547984558)
+@@ -29,23 +29,24 @@
+             <TextView
+                 android:layout_width="80dp"
+                 android:layout_height="match_parent"
+-                android:textSize="18sp"
+                 android:gravity="center_vertical"
+                 android:text="@string/account"
+-                android:textColor="#000" />
++                android:textColor="#000"
++                android:textSize="18sp" />
+ 
+             <EditText
+                 android:id="@+id/login_user"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+-                android:textSize="18sp"
+                 android:background="@null"
+                 android:gravity="center_vertical"
+                 android:hint="@string/account_hint"
++                android:singleLine="true"
+                 android:textCursorDrawable="@drawable/my_cursor"
+-                android:singleLine="true" />
++                android:textSize="18sp" />
+ 
+         </LinearLayout>
++
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="60dp"
+@@ -55,23 +56,24 @@
+             <TextView
+                 android:layout_width="80dp"
+                 android:layout_height="match_parent"
+-                android:textSize="18sp"
+                 android:gravity="center_vertical"
+                 android:text="账号"
+-                android:textColor="#000" />
++                android:textColor="#000"
++                android:textSize="18sp" />
+ 
+             <EditText
+                 android:id="@+id/user_edit"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+-                android:textSize="18sp"
+                 android:background="@null"
+                 android:gravity="center_vertical"
+                 android:hint="@string/account_hint"
++                android:singleLine="true"
+                 android:textCursorDrawable="@drawable/my_cursor"
+-                android:singleLine="true" />
++                android:textSize="18sp" />
+ 
+         </LinearLayout>
++
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="60dp"
+@@ -81,26 +83,25 @@
+             <TextView
+                 android:layout_width="80dp"
+                 android:layout_height="match_parent"
+-                android:textSize="18sp"
+                 android:gravity="center_vertical"
+                 android:text="密码"
+-                android:textColor="#000" />
++                android:textColor="#000"
++                android:textSize="18sp" />
+ 
+             <EditText
+                 android:id="@+id/password_edit"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+-                android:textSize="18sp"
+                 android:background="@null"
+                 android:gravity="center_vertical"
+                 android:hint="@string/account_hint"
++                android:singleLine="true"
+                 android:textCursorDrawable="@drawable/my_cursor"
+-                android:singleLine="true" />
++                android:textSize="18sp" />
+ 
+         </LinearLayout>
+ 
+ 
+-
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1px"
+@@ -111,13 +112,15 @@
+             android:layout_width="match_parent"
+             android:layout_height="1px"
+             android:background="@color/item_split_color" />
++
+         <CheckedTextView
+-            android:layout_marginTop="5dp"
+-            android:text="验证码登录"
+-            android:textColor="@color/tab_color"
+             android:id="@+id/type"
+             android:layout_width="wrap_content"
+-            android:layout_height="wrap_content" />
++            android:layout_height="wrap_content"
++            android:layout_marginTop="5dp"
++            android:text="验证码登录"
++            android:textColor="@color/tab_color" />
++
+         <Button
+             android:id="@+id/login_btn"
+             android:layout_width="match_parent"
+@@ -127,10 +130,5 @@
+             android:background="#00a4ff"
+             android:text="@string/button_login"
+             android:textColor="#fff" />
+-
+-
+     </LinearLayout>
+-
+-
+-
+-</RelativeLayout>
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_confirm_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_confirm_detail.xml	(date 1616565296089)
++++ app/src/main/res/layout/activity_confirm_detail.xml	(date 1616565296089)
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/white"
++    tools:context=".notice.NoticeConfirmDetailActivity">
++
++    <include
++        android:id="@+id/top"
++        layout="@layout/title_layout2" />
++
++    <com.google.android.material.tabs.TabLayout
++        android:id="@+id/tabalyout"
++        android:layout_width="match_parent"
++        android:layout_height="49dp"
++        app:tabTextColor="#909399"
++        app:tabSelectedTextColor="#303133"
++        app:layout_constraintTop_toBottomOf="@+id/top" />
++
++    <View
++        android:id="@+id/view_line"
++        android:layout_width="match_parent"
++        android:layout_height="10dp"
++        android:background="#F5F8FC"
++        app:layout_constraintTop_toBottomOf="@+id/tabalyout" />
++
++    <androidx.viewpager2.widget.ViewPager2
++        android:id="@+id/viewpager"
++        android:layout_width="match_parent"
++        android:layout_height="0dp"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/view_line" />
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/yyide/chatim/notice/NoticeConfirmDetailActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/yyide/chatim/notice/NoticeConfirmDetailActivity.java	(date 1616567303307)
++++ app/src/main/java/com/yyide/chatim/notice/NoticeConfirmDetailActivity.java	(date 1616567303307)
+@@ -0,0 +1,73 @@
++package com.yyide.chatim.notice;
++
++import android.os.Bundle;
++
++import androidx.annotation.NonNull;
++import androidx.fragment.app.Fragment;
++import androidx.viewpager2.adapter.FragmentStateAdapter;
++import androidx.viewpager2.widget.ViewPager2;
++
++import com.google.android.material.tabs.TabLayout;
++import com.google.android.material.tabs.TabLayoutMediator;
++import com.yyide.chatim.R;
++import com.yyide.chatim.base.BaseMvpActivity;
++import com.yyide.chatim.presenter.notice.NoticeConfirmDetailPresenter;
++import com.yyide.chatim.view.notice.NoticeConfirmDetailView;
++
++import butterknife.BindView;
++
++public class NoticeConfirmDetailActivity extends BaseMvpActivity<NoticeConfirmDetailPresenter> implements NoticeConfirmDetailView {
++
++    @BindView(R.id.tablelayout)
++    TabLayout mTablayout;
++    @BindView(R.id.viewpager)
++    ViewPager2 mViewpager;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_confirm_detail);
++        initViewPager();
++    }
++
++    private void initViewPager() {
++        mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
++        mViewpager.setAdapter(new FragmentStateAdapter(this) {
++            @NonNull
++            @Override
++            public Fragment createFragment(int position) {
++                if(position == 0){
++                    return NoticeItemFragment.newInstance();
++                } else {
++                    return NoticeItemFragment.newInstance();
++                }
++            }
++
++            @Override
++            public int getItemCount() {
++                return 2;
++            }
++        });
++        new TabLayoutMediator(mTablayout, mViewpager, true, new TabLayoutMediator.TabConfigurationStrategy() {
++            @Override
++            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
++                //这里需要根据position修改tab的样式和文字等
++                if(position == 0){
++                    tab.setText("未确认(10)");
++                } else {
++                    tab.setText("已确认(20)");
++                }
++            }
++        }).attach();
++    }
++
++    @Override
++    protected NoticeConfirmDetailPresenter createPresenter() {
++        return new NoticeConfirmDetailPresenter(this);
++    }
++
++    @Override
++    public void showError() {
++
++    }
++}
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\nandroid {\r\n    compileSdkVersion 28\r\n    defaultConfig {\r\n        applicationId \"com.yyide.chatim\"\r\n        minSdkVersion 21\r\n        targetSdkVersion 28\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        testInstrumentationRunner \"android.support.test.runner.AndroidJUnitRunner\"\r\n        multiDexEnabled true\r\n\r\n        ndk {\r\n            //选择要添加的对应 cpu 类型的 .so 库。\r\n            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'\r\n            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'\r\n        }\r\n\r\n        manifestPlaceholders = [\r\n                JPUSH_PKGNAME : \"com.yyide.chatim\",\r\n                JPUSH_APPKEY  : \"143ab02bc474008f39f26f97\", //极光开发平台上注册的包名对应的appkey.\r\n                JPUSH_CHANNEL : \"developer-default\", //暂时填写默认值即可.\r\n                //meizu_config_start\r\n                MEIZU_APPKEY  : \"MZ-魅族的APPKEY\",\r\n                MEIZU_APPID   : \"MZ-魅族的APPID\",\r\n                //meizu_config_end\r\n                //xiaomi_config_start\r\n                XIAOMI_APPID  : \"MI-小米的APPID\",\r\n                XIAOMI_APPKEY : \"MI-小米的APPKEY\",\r\n                //xiaomi_config_end\r\n                //oppo_config_start\r\n                OPPO_APPKEY   : \"OP-oppo的APPKEY\",\r\n                OPPO_APPID    : \"OP-oppo的APPID\",\r\n                OPPO_APPSECRET: \"OP-oppo的APPSECRET\",\r\n                //oppo_config_end\r\n                //vivo_config_start\r\n                VIVO_APPKEY   : \"vivo的APPKEY\",\r\n                VIVO_APPID    : \"vivo的APPID\",\r\n                //vivo_config_end\r\n\r\n        ]\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    sourceSets {\r\n        main {\r\n            assets.srcDirs = ['assets']\r\n        }\r\n    }\r\n    repositories {\r\n        flatDir {\r\n            dirs 'libs', '../tuikit-live/libs'\r\n        }\r\n        maven { url \"https://mirrors.tencent.com/repository/maven/tencent_public\" }\r\n    }\r\n\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n//    // 在MobSDK的扩展中注册SMSSDK的相关信息\r\n//    MobSDK {\r\n//        appKey \"19aa2f667f410\"\r\n//        appSecret \"c73e7cd6726d6853309ba4f4baaa2c1b\"\r\n//        SMSSDK {}\r\n//    }\r\n//    MobSDK {\r\n//        fp true //严格模式\r\n//    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    implementation 'com.android.support:appcompat-v7:28.0.0'\r\n    implementation 'com.android.support:support-v4:28.0.0'\r\n    implementation 'com.android.support.constraint:constraint-layout:1.1.3'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'com.android.support.test:runner:1.0.2'\r\n    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'\r\n    implementation 'com.github.f0ris.sweetalert:library:1.5.1'\r\n\r\n//    implementation 'com.tencent.imsdk:tuikit-live:5.1.2'\r\n    implementation 'com.tencent.imsdk:tuikit:5.1.2'\r\n\r\n    implementation 'com.alibaba:fastjson:1.1.70.android'\r\n    implementation 'com.alibaba:fastjson:1.2.54'\r\n    implementation 'com.jakewharton:butterknife:8.8.1'\r\n    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'\r\n\r\n    // Optional, if you use support library fragments:\r\n    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'\r\n    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'\r\n    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'\r\n\r\n    // 腾讯bugly--sdk\r\n    implementation 'com.tencent.bugly:crashreport:latest.release'\r\n//    implementation 'com.tencent.bugly:nativecrashreport:latest.release'\r\n    //blankj\r\n    implementation 'com.blankj:utilcode:1.9.6'\r\n    //极光推送\r\n//    implementation 'cn.jiguang.sdk:jpush:3.2.0'  // 此处以JPush 3.8.5 版本为例。\r\n//    implementation 'cn.jiguang.sdk:jcore:2.5.5'  // 此处以JCore 2.5.5 版本为例。\r\n    //Rxjava系列\r\n    implementation 'com.jakewharton:butterknife:10.0.0'\r\n    implementation 'com.squareup.retrofit2:retrofit:2.0.2'\r\n    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'\r\n    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'\r\n    implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.2'\r\n    implementation 'io.reactivex:rxandroid:1.1.0'\r\n    implementation 'io.reactivex:rxjava:1.1.0'\r\n//  volley自定义请求系列\r\n    implementation 'com.alibaba:fastjson:1.1.70.android'\r\n    implementation 'com.mcxiaoke.volley:library:1.0.19'\r\n    implementation 'com.alibaba:fastjson:1.2.54'\r\n\r\n    // 基础依赖包，必须要依赖\r\n    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'\r\n//    implementation 'me.jessyan:autosize:1.0.5'\r\n    implementation project(':jiguang')\r\n    implementation 'cn.bingoogolapple:bga-qrcode-zbar:1.3.6'\r\n\r\n    implementation 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'\r\n    implementation 'org.greenrobot:eventbus:3.0.0'\r\n    implementation 'com.jude:rollviewpager:1.3.2'\r\n    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.1'\r\n    implementation 'org.raphets:roundimageview:1.2.0'\r\n//    implementation 'com.github.0xZhangKe:QRCodeView:1.3'\r\n//    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'\r\n//    implementation 'com.squareup.okhttp3:okhttp:3.12.1'\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/build.gradle	(date 1616565570074)
+@@ -80,10 +80,16 @@
+     implementation 'com.android.support:appcompat-v7:28.0.0'
+     implementation 'com.android.support:support-v4:28.0.0'
+     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
++    implementation 'androidx.appcompat:appcompat:1.1.0'
++    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
++    implementation 'com.google.android.material:material:1.1.0'
++    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
++    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'com.android.support.test:runner:1.0.2'
+     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
++    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+ 
+ //    implementation 'com.tencent.imsdk:tuikit-live:5.1.2'
+     implementation 'com.tencent.imsdk:tuikit:5.1.2'
+@@ -116,7 +122,6 @@
+     implementation 'io.reactivex:rxjava:1.1.0'
+ //  volley自定义请求系列
+     implementation 'com.alibaba:fastjson:1.1.70.android'
+-    implementation 'com.mcxiaoke.volley:library:1.0.19'
+     implementation 'com.alibaba:fastjson:1.2.54'
+ 
+     // 基础依赖包，必须要依赖
+Index: app/src/main/java/com/yyide/chatim/SplashActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.yyide.chatim;\r\n\r\nimport android.app.Activity;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.view.WindowManager;\r\n\r\nimport com.alibaba.fastjson.JSON;\r\n\r\nimport com.blankj.utilcode.util.SPUtils;\r\nimport com.tencent.qcloud.tim.uikit.TUIKit;\r\nimport com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;\r\nimport com.tencent.qcloud.tim.uikit.utils.ToastUtil;\r\nimport com.yyide.chatim.base.BaseConstant;\r\nimport com.yyide.chatim.chat.info.UserInfo;\r\nimport com.yyide.chatim.model.LoginRsp;\r\nimport com.yyide.chatim.utils.DemoLog;\r\n\r\nimport java.io.IOException;\r\n\r\nimport cn.jpush.android.cache.Sp;\r\nimport okhttp3.Call;\r\nimport okhttp3.Callback;\r\nimport okhttp3.FormBody;\r\nimport okhttp3.OkHttpClient;\r\nimport okhttp3.Request;\r\nimport okhttp3.RequestBody;\r\nimport okhttp3.Response;\r\n\r\npublic class SplashActivity extends Activity {\r\n\r\n    private static final String TAG = SplashActivity.class.getSimpleName();\r\n    private static final int SPLASH_TIME = 1500;\r\n    private View mFlashView;\r\n    private UserInfo mUserInfo;\r\n    public String loginName;\r\n    public String passWord;\r\n    OkHttpClient mOkHttpClient = new OkHttpClient();\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_splash);\r\n\r\n        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);\r\n        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);\r\n\r\n        mFlashView = findViewById(R.id.flash_view);\r\n        mUserInfo = UserInfo.getInstance();\r\n        Log.e(TAG, \"mUserInfo: \"+JSON.toJSONString(mUserInfo) );\r\n        initData();\r\n        Log.e(TAG, \"loginName: \"+JSON.toJSONString(loginName) );\r\n        Log.e(TAG, \"passWord: \"+JSON.toJSONString(passWord) );\r\n        if (!TextUtils.isEmpty(loginName)&&!TextUtils.isEmpty((passWord))){\r\n                Tologin(loginName,passWord);\r\n        }else {\r\n            startLogin();\r\n        }\r\n//        handleData();\r\n    }\r\n    void initData(){\r\n        loginName = SPUtils.getInstance().getString(BaseConstant.LOGINNAME, null);\r\n        passWord = SPUtils.getInstance().getString(BaseConstant.PASSWORD, null);\r\n    }\r\n    void Tologin(String username, String password) {\r\n        RequestBody body = null;\r\n        if (!TextUtils.isEmpty(SpData.SchoolId())){\r\n            int ids= Integer.parseInt(SpData.SchoolId());\r\n            String schoolid= String.valueOf(ids);\r\n            if (!TextUtils.isEmpty(schoolid)){\r\n                body = new FormBody.Builder()\r\n                        .add(\"username\", username)\r\n                        .add(\"password\", password)\r\n                        .add(\"schoolId\", schoolid)\r\n                        .build();\r\n            }else {\r\n                body = new FormBody.Builder()\r\n                        .add(\"username\", username)\r\n                        .add(\"password\", password)\r\n                        .build();\r\n            }\r\n        }\r\n\r\n\r\n        //请求组合创建\r\n        Request request = new Request.Builder()\r\n                .url(BaseConstant.URL_IP + \"/management/cloud-system/login\")\r\n                .post(body)\r\n                .build();\r\n        //发起请求\r\n        mOkHttpClient.newCall(request).enqueue(new Callback() {\r\n            @Override\r\n            public void onFailure(Call call, IOException e) {\r\n                if (!TextUtils.isEmpty(loginName)&&!TextUtils.isEmpty((passWord))){\r\n                    startMain();\r\n                }else {\r\n                    startLogin();\r\n                }\r\n            }\r\n            @Override\r\n            public void onResponse(Call call, Response response) throws IOException {\r\n                String data = response.body().string();\r\n                Log.e(TAG, \"mOkHttpClient==>: \" + data);\r\n                LoginRsp bean = JSON.parseObject(data, LoginRsp.class);\r\n                if (bean.code==BaseConstant.REQUEST_SUCCES2){\r\n                    //存储登录信息\r\n                    SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));\r\n                    handleData();\r\n                }\r\n            }\r\n        });\r\n    }\r\n    private void handleData() {\r\n        if (mUserInfo != null && mUserInfo.isAutoLogin()) {\r\n            login();\r\n        } else {\r\n            mFlashView.postDelayed(new Runnable() {\r\n                @Override\r\n                public void run() {\r\n                    startLogin();\r\n                }\r\n            }, SPLASH_TIME);\r\n        }\r\n    }\r\n\r\n    private void login() {\r\n        TUIKit.login(mUserInfo.getUserId(), mUserInfo.getUserSig(), new IUIKitCallBack() {\r\n            @Override\r\n            public void onError(String module, final int code, final String desc) {\r\n                runOnUiThread(new Runnable() {\r\n                    public void run() {\r\n                        ToastUtil.toastLongMessage(\"登录失败, errCode = \" + code + \", errInfo = \" + desc);\r\n\r\n                        Log.e(TAG, \"UserInfo: \"+JSON.toJSONString(UserInfo.getInstance()) );\r\n\r\n//                        startMain();\r\n                        startLogin();\r\n\r\n                    }\r\n                });\r\n                DemoLog.i(TAG, \"imLogin errorCode = \" + code + \", errorInfo = \" + desc);\r\n            }\r\n\r\n            @Override\r\n            public void onSuccess(Object data) {\r\n                Log.e(TAG, \"UserInfo==》: \"+JSON.toJSONString(UserInfo.getInstance()) );\r\n\r\n                startMain();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void startLogin() {\r\n        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);\r\n        startActivity(intent);\r\n        finish();\r\n    }\r\n\r\n    private void startMain() {\r\n//        OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());\r\n//        if (bean != null) {\r\n//            OfflineMessageDispatcher.redirect(bean);\r\n//            finish();\r\n//            return;\r\n//        }\r\n\r\n        Intent intent = new Intent(SplashActivity.this, MainActivity.class);\r\n        startActivity(intent);\r\n        finish();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/yyide/chatim/SplashActivity.java	(revision 76d0569c26824c66494c60e9928d979fe82a8955)
++++ app/src/main/java/com/yyide/chatim/SplashActivity.java	(date 1616504739613)
+@@ -83,7 +83,6 @@
+             }
+         }
+ 
+-
+         //请求组合创建
+         Request request = new Request.Builder()
+                 .url(BaseConstant.URL_IP + "/management/cloud-system/login")
+Index: app/src/main/java/com/yyide/chatim/view/notice/NoticeConfirmDetailView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/yyide/chatim/view/notice/NoticeConfirmDetailView.java	(date 1616554800777)
++++ app/src/main/java/com/yyide/chatim/view/notice/NoticeConfirmDetailView.java	(date 1616554800777)
+@@ -0,0 +1,7 @@
++package com.yyide.chatim.view.notice;
++
++import com.yyide.chatim.base.BaseView;
++
++public interface NoticeConfirmDetailView extends BaseView {
++
++}

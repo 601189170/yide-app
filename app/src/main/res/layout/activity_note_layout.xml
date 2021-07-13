@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/title_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="@dimen/dp_12"
+                    android:layout_marginEnd="@dimen/dp_12"
+                    android:background="@drawable/bg_corners18_gray"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_marginLeft="15dp"
+                        android:src="@drawable/search" />
+
+                    <TextView
+                        android:id="@+id/edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@null"
+                        android:gravity="center_vertical"
+                        android:hint="请输入搜索内容"
+                        android:textColor="#BCC1CB"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#F5F8FC" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="62dp">
+
+                <com.yyide.chatim.widget.RadiusImageView
+                    android:id="@+id/img"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_leave"
+                    app:left_bottom_radius="6dp"
+                    app:right_bottom_radius="6dp"
+                    app:right_top_radius="6dp"
+                    app:left_top_radius="6dp" />
+
+                <TextView
+                    android:id="@+id/pName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="62dp"
+                    android:textColor="#222222"
+                    android:textSize="@dimen/text_18" />
+
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="62dp"
+                android:background="@color/line_11" />
+
+            <FrameLayout
+                android:id="@+id/original"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:background="@drawable/icon_zzjg" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="62dp"
+                    android:text="组织架构"
+                    android:textColor="@color/text_212121"
+                    android:textSize="@dimen/text_16" />
+
+            </FrameLayout>
+
+            <com.yyide.chatim.widget.MyListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/transparent"
+                android:dividerHeight="0dp">
+
+            </com.yyide.chatim.widget.MyListView>
+
+            <FrameLayout
+                android:id="@+id/student"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <TextView
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_18"
+                    android:background="@drawable/icon_zzjg" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="62dp"
+                    android:text="学生"
+                    android:textColor="@color/text_212121"
+                    android:textSize="@dimen/text_16" />
+
+            </FrameLayout>
+
+            <com.yyide.chatim.widget.MyListView
+                android:id="@+id/listview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/transparent"
+                android:dividerHeight="0dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

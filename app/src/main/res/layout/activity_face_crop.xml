@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F8FC"
+    tools:context=".activity.FaceCaptureActivity">
+
+    <include
+        android:id="@+id/layout_head"
+        layout="@layout/title_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_tip_icon"
+        android:layout_width="@dimen/dp_14"
+        android:layout_height="@dimen/dp_14"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_16"
+        android:src="@drawable/icon_tips"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_head" />
+
+    <TextView
+        android:id="@+id/tv_tip_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_4"
+        android:text="人脸信息用于学校考勤,在校门闸机、宿舍、教室等场所使用"
+        android:textColor="#ff999999"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_tip_icon"
+        app:layout_constraintLeft_toRightOf="@id/iv_tip_icon"
+        app:layout_constraintTop_toTopOf="@id/iv_tip_icon" />
+
+    <com.kevin.crop.view.UCropView
+        android:id="@+id/iv_show_cut_photo"
+        android:layout_width="335dp"
+        android:layout_height="335dp"
+        android:src="@drawable/icon_face_capture_box"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_tip_content"
+        android:layout_marginTop="@dimen/dp_16"/>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="148dp"
+        android:layout_height="44dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_show_cut_photo"
+        android:text="重新上传"
+        android:layout_marginStart="@dimen/dp_20"
+        android:background="@drawable/face_capture_white_btn_shape"
+        android:textColor="#212121"
+        android:textSize="@dimen/text_16"
+        android:layout_marginTop="52dp"
+        />
+
+    <Button
+        android:id="@+id/btn_commit"
+        android:layout_width="148dp"
+        android:layout_height="44dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btn_cancel"
+        android:text="提交"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/face_capture_blue_btn_shape"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/tv_bottom_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="人脸照片要求："
+            android:textColor="#ff999999"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"/>
+        <TextView
+            android:id="@+id/tv_tip1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1、脸部占画面约1/4，正脸无遮挡，露眉露耳不露齿。"
+            android:textColor="#ff333333"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_bottom_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_bottom_title"
+            android:layout_marginTop="@dimen/dp_14"/>
+        <TextView
+            android:id="@+id/tv_tip2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2、正常光照，亮度均匀，无阴阳脸，无浓妆。"
+            android:textColor="#ff333333"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_tip1"
+            app:layout_constraintTop_toBottomOf="@id/tv_tip1"
+            android:layout_marginTop="@dimen/dp_14"/>
+        <TextView
+            android:id="@+id/tv_sample_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="示例照片"
+            android:textColor="#ff2c8aff"
+            android:textSize="14sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="21dp"
+            android:layout_marginEnd="@dimen/dp_20"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

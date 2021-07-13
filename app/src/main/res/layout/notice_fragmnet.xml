@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:clickable="true"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:id="@+id/ll_notice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_white"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_green_top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="11dp"
+                android:text="通知公告"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/notice_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/dp_10"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+        </FrameLayout>
+        <!--        <com.jude.rollviewpager.RollPagerView-->
+        <!--           android:layout_margin="@dimen/dp_12"-->
+
+        <!--            android:id="@+id/announRoll"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="0dp"-->
+
+        <!--            android:layout_weight="1" />-->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginEnd="21dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="#ff232629"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_null_notice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="今日暂无新公告"
+            android:textSize="@dimen/sp_14"
+            android:textColor="#232629"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/notice_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_marginBottom="@dimen/dp_12"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="3"
+            android:textColor="#8C97A7"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

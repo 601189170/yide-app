@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="72dp">
+
+    <TextView
+        android:id="@+id/tv_realName"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="@dimen/text_14"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:background="@drawable/bg_corners_blue100"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_12"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_classname"
+        app:layout_constraintLeft_toRightOf="@id/tv_realName"
+        app:layout_constraintTop_toTopOf="@id/tv_realName" />
+
+    <TextView
+        android:id="@+id/tv_classname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff999999"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_realName"
+        app:layout_constraintLeft_toLeftOf="@id/tv_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_name" />
+
+    <ImageView
+        android:id="@+id/iv_call"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:src="@drawable/icon_call"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_user_detail"
+        app:layout_constraintEnd_toStartOf="@+id/iv_user_detail"
+        app:layout_constraintRight_toLeftOf="@id/iv_call"
+        app:layout_constraintTop_toTopOf="@+id/iv_user_detail" />
+
+    <ImageView
+        android:id="@+id/iv_user_detail"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:src="@drawable/icon_user_detail"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/tv_realName"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_realName" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="62dp"
+        android:background="#DCDFE6"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

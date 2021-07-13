@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.notice.NoticeDetailActivity">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout2" />
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#F5F8FC"
+        app:layout_constraintTop_toBottomOf="@+id/top" />
+
+    <TextView
+        android:id="@+id/tv_notice_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:textColor="#303133"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        android:text=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_line" />
+
+    <TextView
+        android:id="@+id/tv_notice_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_14"
+        android:textColor="#909399"
+        android:textSize="@dimen/text_12"
+        app:layout_constraintStart_toStartOf="@+id/tv_notice_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notice_title" />
+
+    <TextView
+        android:id="@+id/tv_notice_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:textColor="#909399"
+        android:textSize="@dimen/text_12"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_notice_author"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="#E4E7ED"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notice_time" />
+
+    <TextView
+        android:id="@+id/tv_notice_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:scrollbars="vertical"
+        android:textColor="@color/black9"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintBottom_toTopOf="@+id/view_bottom"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="view_bottom,ll_bottom"
+        android:visibility="visible"/>
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:background="#F5F8FC"
+        app:layout_constraintBottom_toTopOf="@+id/ll_bottom" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:background="@drawable/bg_blue"
+            android:gravity="center"
+            android:text="去确认"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_16"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_confirm_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:textColor="#ff999999"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_notice_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@drawable/bg_6dp"
+            android:gravity="center"
+            android:paddingStart="12.5dp"
+            android:paddingEnd="12.5dp"
+            android:text="通知确认统计"
+            android:textColor="#2C8AFF"
+            android:textSize="@dimen/text_14"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

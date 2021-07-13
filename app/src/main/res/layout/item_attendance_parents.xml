@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_attendance_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/home_attendance_bg"
+        android:padding="@dimen/dp_5"
+        android:textColor="#ff1e1e1e"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_15"
+        android:src="@mipmap/icon_home_attendance_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attendance_type" />
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_4"
+        android:textColor="@color/text_1E1E1E"
+        android:textSize="@dimen/text_18"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:lines="1"
+        android:ellipsize="end"
+        app:layout_constraintEnd_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img" />
+
+    <View
+        android:id="@+id/guideline"
+        android:layout_width="1dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="@dimen/dp_30"
+        android:background="#EEF2F8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img" />
+
+    <TextView
+        android:id="@+id/tv_attendance_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_30"
+        android:textColor="#2C8AFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_attendance_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="#ff909399"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_attendance_status"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attendance_status" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

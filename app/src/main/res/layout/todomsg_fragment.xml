@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_bg"
+    android:orientation="vertical"
+    android:paddingLeft="12dp"
+    android:paddingTop="10dp"
+    android:paddingRight="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:background="@drawable/bg_corners14">
+
+        <CheckedTextView
+            android:id="@+id/tab1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/to_do_msg_tab"
+            android:gravity="center"
+            android:text="全部"
+            android:textAlignment="center"
+            android:textColor="@color/blue_white_color" />
+
+        <CheckedTextView
+            android:id="@+id/tab2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/to_do_msg_tab"
+            android:gravity="center"
+            android:text="待办"
+            android:textAlignment="center"
+            android:textColor="@color/blue_white_color" />
+
+        <CheckedTextView
+            android:id="@+id/tab3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/to_do_msg_tab"
+            android:gravity="center"
+            android:text="已办"
+            android:textAlignment="center"
+            android:textColor="@color/blue_white_color" />
+    </LinearLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

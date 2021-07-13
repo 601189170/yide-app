@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F8FC">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_20"
+        app:cardCornerRadius="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <CheckedTextView
+                android:id="@+id/ct_brand"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/to_do_msg_tab"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/notice_brand"
+                android:textAlignment="center"
+                android:textColor="@color/blue_white_color"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toStartOf="@+id/ct_site"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <CheckedTextView
+                android:id="@+id/ct_site"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/to_do_msg_tab"
+                android:gravity="center_vertical"
+                android:text="@string/notice_site"
+                android:textAlignment="center"
+                android:textColor="@color/blue_white_color"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ct_brand"
+                tools:ignore="RtlCompat"
+                tools:layout_editor_absoluteY="0dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        android:name="com.yyide.chatim.activity.newnotice.fragment.NoticeMyReceviedFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        tools:listitem="@layout/item_notice_personnel" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#122C8AFF"
+        android:padding="@dimen/dp_5"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <CheckBox
+            android:id="@+id/cb_select_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_all"
+            android:textColor="@color/text_333333"
+            android:textSize="15sp"
+            android:theme="@style/CheckBoxTheme"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_checked_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:text="@string/notice_brand_class_number"
+            app:layout_constraintEnd_toStartOf="@+id/btn_confirm"
+            app:layout_constraintStart_toEndOf="@+id/cb_select_number"
+            app:layout_constraintTop_toTopOf="@+id/btn_confirm" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="74dp"
+            android:layout_height="@dimen/dp_35"
+            android:layout_margin="@dimen/dp_5"
+            android:background="@drawable/drawable_material_button_radius_22"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_15"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

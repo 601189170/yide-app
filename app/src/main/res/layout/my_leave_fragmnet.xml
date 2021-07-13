@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <FrameLayout
+        android:background="#F5F8FC"
+        android:layout_width="match_parent"
+        android:layout_height="43dp">
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"
+            android:textColor="#2C8AFF"
+            android:text="请假时间"
+            android:layout_marginLeft="20dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_height="wrap_content">
+                <CheckedTextView
+                    android:id="@+id/check"
+                    android:background="@drawable/att_check"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp" />
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:textSize="14sp"
+                    android:textColor="#212121"
+                    android:text="全选"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="168dp">
+    <GridView
+        android:id="@+id/grid"
+        android:numColumns="4"
+
+
+        android:horizontalSpacing="@dimen/dp_8"
+        android:verticalSpacing="16dp"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </GridView>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:background="#F5F8FC"
+        android:layout_width="match_parent"
+        android:layout_height="43dp">
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"
+            android:textColor="#2C8AFF"
+            android:text="请假事由"
+            android:layout_marginLeft="20dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="20dp"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingRight="20dp"
+        android:layout_height="146dp">
+
+        <EditText
+            android:id="@+id/edit"
+            android:textSize="13sp"
+            android:textColor="#BCC1CB"
+            android:hint="请输入请假事由"
+            android:gravity="top"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_10"
+
+            android:background="@drawable/bg_corners_gray"
+            android:layout_width="match_parent"
+            android:layout_height="80dp">
+
+        </EditText>
+
+        <GridView
+
+            android:layout_width="match_parent"
+            android:layout_height="24dp">
+
+        </GridView>
+
+    </LinearLayout>
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:textSize="15sp"
+
+            android:layout_gravity="center_vertical"
+            android:textColor="#212121"
+            android:text="请假事由"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:id="@+id/s1"
+            android:layout_gravity="right|center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:text="班級"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginLeft="12dp"
+                android:background="@drawable/icon_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout
+        android:background="#F5F8FC"
+        android:layout_width="match_parent"
+        android:layout_height="43dp">
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"
+            android:textColor="#2C8AFF"
+            android:text="流程"
+            android:layout_marginLeft="20dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content">
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+    </LinearLayout>
+    <TextView
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:text="提交"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:layout_marginBottom="78dp"
+        android:background="@drawable/bg_blue"
+        android:layout_width="match_parent"
+        android:layout_height="44dp" />
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,29 @@
+<changelist name="Uncommitted_changes_before_Update_at_2021_3_27_18_33_[Default_Changelist]" date="1616841248300" recycled="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021_3_27_18_33_[Default_Changelist]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2021/3/27 18:33 [Default Changelist]" />
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_announcement.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021_3_27_18_33_[Default_Changelist]/ic_announcement.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".idea/caches/build_file_checksums.ser" />
+    <option name="AFTER_PATH" value=".idea/caches/build_file_checksums.ser" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021_3_27_18_33_[Default_Changelist]/build_file_checksums.ser" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_unannouncement.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021_3_27_18_33_[Default_Changelist]/ic_unannouncement.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_template_add.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021_3_27_18_33_[Default_Changelist]/ic_template_add.png" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" />
+    <option name="AFTER_PATH" value="app/src/main/res/drawable-xxhdpi/ic_notice_add.png" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2021_3_27_18_33_[Default_Changelist]/ic_notice_add.png" />
+  </binary>
+</changelist>
