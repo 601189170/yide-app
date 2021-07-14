@@ -16,7 +16,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -32,15 +32,15 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- 8.0应用安装权限 -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+<!--    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />-->
 
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 腾讯IM推送配置 -->
     <!-- ********OPPO 推送 start******** -->
     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
     <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" /> <!-- ********OPPO 推送 end******** -->
-    <uses-feature android:name="android.hardware.Camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- ********华为推送权限设置******** -->
+<!--    <uses-feature android:name="android.hardware.Camera" />-->
+<!--    <uses-feature android:name="android.hardware.camera.autofocus" /> &lt;!&ndash; ********华为推送权限设置******** &ndash;&gt;-->
     <permission
         android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG"
         android:protectionLevel="signatureOrSystem" />
@@ -68,16 +68,23 @@
 
     <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.C2D_MESSAGE" />
 
+    <!-- 阿里云推送相关权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+
+
     <application
         android:name=".BaseApplication"
-        android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:icon="@mipmap/ic_launcher_logo"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
-        tools:replace="android:icon">
+        android:allowBackup="false"
+        tools:replace="android:allowBackup">
         <activity android:name=".activity.RegisterActivity"></activity>
         <activity android:name=".activity.AgreementActivity" />
         <activity android:name=".activity.PrivacyActivity" />
@@ -226,13 +233,13 @@
         <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
         <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
         <!-- since 3.3.0 接收JPush相关事件 -->
-        <receiver android:name=".jiguang.PushMessageReceiver">
+       <!-- <receiver android:name=".jiguang.PushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
 
                 <category android:name="com.yyide.chatim" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <activity
             android:name=".LoginActivity"
@@ -542,6 +549,24 @@
                 <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
         </service>
+        <!--阿里云推送-->
+        <meta-data android:name="com.alibaba.app.appkey" android:value="333472407"/>
+        <meta-data android:name="com.alibaba.app.appsecret" android:value="df808fe4266141bdb471e9b5519c101c"/>
+        <!-- 消息接收监听器 （用户可自主扩展） -->
+        <receiver
+            android:name=".alipush.MyMessageReceiver"
+            android:exported="false"> <!-- 为保证receiver安全，建议设置不可导出，如需对其他应用开放可通过android：permission进行限制 -->
+            <intent-filter>
+                <action android:name="com.alibaba.push2.action.NOTIFICATION_OPENED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.alibaba.push2.action.NOTIFICATION_REMOVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.alibaba.sdk.android.push.RECEIVE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

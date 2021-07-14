@@ -8,12 +8,13 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import cn.jpush.android.helper.Logger;
+
 
 /**
  * Created by efan on 2017/4/14.
@@ -124,13 +125,13 @@ public final class LocalBroadcastManager {
             Set categories = intent.getCategories();
             @SuppressLint("WrongConstant") boolean debug = (intent.getFlags() & 8) != 0;
             if (debug) {
-                Logger.v("LocalBroadcastManager", "Resolving type " + type + " scheme " + scheme + " of intent " + intent);
+                Log.v("LocalBroadcastManager", "Resolving type " + type + " scheme " + scheme + " of intent " + intent);
             }
 
             ArrayList entries = (ArrayList) this.mActions.get(intent.getAction());
             if (entries != null) {
                 if (debug) {
-                    Logger.v("LocalBroadcastManager", "Action list: " + entries);
+                    Log.v("LocalBroadcastManager", "Action list: " + entries);
                 }
 
                 ArrayList receivers = null;
@@ -139,18 +140,18 @@ public final class LocalBroadcastManager {
                 for (i = 0; i < entries.size(); ++i) {
                     ReceiverRecord receiver = (ReceiverRecord) entries.get(i);
                     if (debug) {
-                        Logger.v("LocalBroadcastManager", "Matching against filter " + receiver.filter);
+                        Log.v("LocalBroadcastManager", "Matching against filter " + receiver.filter);
                     }
 
                     if (receiver.broadcasting) {
                         if (debug) {
-                            Logger.v("LocalBroadcastManager", "  Filter\'s target already added");
+                            Log.v("LocalBroadcastManager", "  Filter\'s target already added");
                         }
                     } else {
                         int match = receiver.filter.match(action, type, scheme, data, categories, "LocalBroadcastManager");
                         if (match >= 0) {
                             if (debug) {
-                                Logger.v("LocalBroadcastManager", "  Filter matched!  match=0x" + Integer.toHexString(match));
+                                Log.v("LocalBroadcastManager", "  Filter matched!  match=0x" + Integer.toHexString(match));
                             }
 
                             if (receivers == null) {
@@ -178,7 +179,7 @@ public final class LocalBroadcastManager {
                                     reason = "unknown reason";
                             }
 
-                            Logger.v("LocalBroadcastManager", "  Filter did not match: " + reason);
+                            Log.v("LocalBroadcastManager", "  Filter did not match: " + reason);
                         }
                     }
                 }

@@ -30,18 +30,20 @@ import org.json.JSONObject;
 
 import androidx.core.app.NotificationCompat;
 
-import cn.jpush.android.api.CmdMessage;
-import cn.jpush.android.api.CustomMessage;
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.JPushMessage;
-import cn.jpush.android.api.NotificationMessage;
-import cn.jpush.android.service.JPushMessageReceiver;
+//import cn.jpush.android.api.CmdMessage;
+//import cn.jpush.android.api.CustomMessage;
+//import cn.jpush.android.api.JPushInterface;
+//import cn.jpush.android.api.JPushMessage;
+//import cn.jpush.android.api.NotificationMessage;
+//import cn.jpush.android.service.JPushMessageReceiver;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
-public class PushMessageReceiver extends JPushMessageReceiver {
+//public class PushMessageReceiver extends JPushMessageReceiver {
+public class PushMessageReceiver {
     private static final String TAG = "PushMessageReceiver";
-
+    // 极光推送释放代码
+/*
     // ######################【自定义消息】推送处理######################
     @Override
     public void onMessage(Context context, CustomMessage customMessage) {
@@ -212,5 +214,6 @@ public class PushMessageReceiver extends JPushMessageReceiver {
         super.onNotificationSettingsCheck(context, isOn, source);
         Log.e(TAG, "[onNotificationSettingsCheck] isOn:" + isOn + ",source:" + source);
     }
+ */
 
 }

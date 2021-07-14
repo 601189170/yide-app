@@ -17,8 +17,8 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.helper.Logger;
+//import cn.jpush.android.api.JPushInterface;
+//import cn.jpush.android.helper.Logger;
 
 public class ExampleUtil {
     public static final String PREFS_NAME = "JPUSH_EXAMPLE";
@@ -111,7 +111,7 @@ public class ExampleUtil {
 			TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             ret = telephonyManager.getDeviceId();
 		} catch (Exception e) {
-			Logger.e(ExampleUtil.class.getSimpleName(), e.getMessage());
+//			Logger.e(ExampleUtil.class.getSimpleName(), e.getMessage());
 		}
 		if (isReadableASCII(ret)){
             return ret;
@@ -129,8 +129,8 @@ public class ExampleUtil {
             return true;
         }
     }
-
-    public static String getDeviceId(Context context) {
-        return JPushInterface.getUdid(context);
-    }
+// 极光推送释放代码
+//    public static String getDeviceId(Context context) {
+//        return JPushInterface.getUdid(context);
+//    }
 }

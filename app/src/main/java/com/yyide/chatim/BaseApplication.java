@@ -2,16 +2,23 @@ package com.yyide.chatim;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.blankj.utilcode.util.Utils;
-import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.v2.V2TIMCallback;
@@ -21,15 +28,11 @@ import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
-import com.tencent.rtmp.TXLiveBase;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.MessageNotification;
 import com.yyide.chatim.chat.helper.ConfigHelper;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.PrivateConstants;
-
-import cn.jpush.android.api.JPushInterface;
-
 
 /**
  * Created by Administrator on 2020/12/14.
@@ -56,6 +59,50 @@ public class BaseApplication extends Application {
         if (MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
             initSdk();
         }
+        initCloudChannel(this);
+    }
+    /**
+     * 初始化云推送通道 阿里云推送
+     * @param applicationContext
+     */
+    private void initCloudChannel(Context applicationContext) {
+        this.createNotificationChannel();
+        PushServiceFactory.init(applicationContext);
+        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+        pushService.register(applicationContext, new CommonCallback() {
+            @Override
+            public void onSuccess(String response) {
+                Log.d(TAG, "init cloudchannel success");
+            }
+            @Override
+            public void onFailed(String errorCode, String errorMessage) {
+                Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
+            }
+        });
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            // 通知渠道的id
+            String id = "1";
+            // 用户可以看到的通知渠道的名字.
+            CharSequence name = "notification channel";
+            // 用户可以看到的通知渠道的描述
+            String description = "notification description";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(id, name, importance);
+            // 配置通知渠道的属性
+            mChannel.setDescription(description);
+            // 设置通知出现时的闪灯（如果 android 设备支持的话）
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);
+            // 设置通知出现时的震动（如果 android 设备支持的话）
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            //最后在notificationmanager中创建该通知渠道
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
     }
 
     public void initSdk(){
@@ -80,8 +127,9 @@ public class BaseApplication extends Application {
          * @param configs  TUIKit的相关配置项，一般使用默认即可，需特殊配置参考API文档
          */
         TUIKit.init(this, BaseConstant.SDKAPPID, new ConfigHelper().getConfigs());
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
+// 极光推送释放代码
+//        JPushInterface.setDebugMode(true);
+//        JPushInterface.init(this);
 
         registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
     }

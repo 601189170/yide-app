@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.huawei.agconnect'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.aliyun.ams.emas-services'
 
 android {
 
@@ -183,7 +184,7 @@ dependencies {
 
     // 基础依赖包，必须要依赖
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
-    implementation project(':jiguang')
+//    implementation project(':jiguang')
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.google.android:flexbox:1.0.0'
 //    implementation 'com.tencent.imsdk:tuikit-live:5.1.56'
@@ -214,5 +215,19 @@ dependencies {
 
     implementation(name: 'weekcalendar-release', ext: 'aar')
     implementation 'joda-time:joda-time:2.9.1'
+    /*阿里推送*/
+    implementation 'com.aliyun.ams:alicloud-android-push:3.4.0'
+    //华为依赖
+    implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.4.0'
+    //小米依赖
+    implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.4.0'
+    //OPPO依赖
+    implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:3.4.0'
+    //vivo依赖
+    implementation 'com.aliyun.ams:alicloud-android-third-push-vivo:3.4.0'
+    //魅族依赖
+    implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.4.0'
+    //谷歌依赖
+    implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.4.0'
 }
 
