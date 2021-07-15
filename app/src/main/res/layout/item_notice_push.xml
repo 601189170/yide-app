@@ -8,6 +8,19 @@
         android:id="@+id/iv_notice_img"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:left_bottom_radius="2dp"
+        app:left_top_radius="2dp"
+        app:right_bottom_radius="2dp"
+        app:right_top_radius="2dp" />
+
+    <com.yyide.chatim.widget.RadiusImageView
+        android:id="@+id/iv_notice_blank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

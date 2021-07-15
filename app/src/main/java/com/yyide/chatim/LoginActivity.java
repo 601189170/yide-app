@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.RegexUtils;
@@ -86,7 +87,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     TextView forgot;
     private TimeCount time;
     private boolean isPwd;
-    OkHttpClient mOkHttpClient = new OkHttpClient();
     public String phone = "";
 
     private AlphaAnimation alphaAniShow, alphaAniHide;

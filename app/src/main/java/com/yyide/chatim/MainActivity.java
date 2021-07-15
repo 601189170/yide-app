@@ -132,7 +132,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registerMessageReceiver();  // used for receive msg
-        permission();
+        //permission();
         //登录IM
         getUserSig();
         // 未读消息监视器
@@ -221,18 +221,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
     }
 
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
     /**
      * @Author: Berlin
      * @Date: 2018/12/19 14:37
      * @Description:动态授权
      */
     String[] mPermissionList;
-
     private void permission() {//https://blog.csdn.net/android_code/article/details/82027500
         if (Build.VERSION.SDK_INT >= 23) {
             mPermissionList = new String[]{
@@ -246,9 +240,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     Manifest.permission.GET_ACCOUNTS,
                     Manifest.permission.WRITE_SETTINGS,
                     Manifest.permission.WRITE_APN_SETTINGS,
-                    Manifest.permission.CAMERA
-//                    Manifest.permission.ACCESS_FINE_LOCATION,
-//                    Manifest.permission.RECORD_AUDIO//音频
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.RECORD_AUDIO//音频
             };
             requestPermissions(mPermissionList, 1);
             //ActivityCompat.requestPermissions(getActivity(), mPermissionList, 123);

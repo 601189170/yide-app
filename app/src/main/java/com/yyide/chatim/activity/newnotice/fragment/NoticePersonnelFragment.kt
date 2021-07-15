@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.newnotice.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -99,11 +100,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
             checkPeopleCount = 0
             recursionChecked(mAdapter.data as ArrayList<NoticePersonnelBean.ListBean>, isChecked)
             checkTotalNumber = getCheckedNumber(mAdapter.data as ArrayList<NoticePersonnelBean.ListBean>)
-            if (isChecked) {
-                showNoticeScopeNumber(checkTotalNumber)
-            } else {
-                showNoticeScopeNumber(checkTotalNumber)
-            }
+            showNoticeScopeNumber(checkTotalNumber)
             mAdapter.notifyDataSetChanged()
         }
     }
@@ -120,14 +117,15 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
 
     inner class PersonnelAdapter : BaseQuickAdapter<NoticePersonnelBean.ListBean, BaseViewHolder>(R.layout.item_notice_personnel) {
 
-        override fun convert(holder: BaseViewHolder, itemBean: NoticePersonnelBean.ListBean) {
+        @SuppressLint("UseCompatLoadingForDrawables")
+        override fun convert(holder: BaseViewHolder, item: NoticePersonnelBean.ListBean) {
             val view = ItemNoticePersonnelBinding.bind(holder.itemView)
-            view.cbCheck.text = itemBean.name
+            view.cbCheck.text = item.name
 
-            if (itemBean.list != null && itemBean.list.isNotEmpty()) {
+            if (item.list != null && item.list.isNotEmpty()) {
                 view.ivUnfold.visibility = View.VISIBLE
-                Log.e(TAG, "onBindViewHolder isUnfold: " + itemBean.unfold)
-                if (itemBean.unfold) {
+                Log.e(TAG, "onBindViewHolder isUnfold: " + item.unfold)
+                if (item.unfold) {
                     view.ivUnfold.setImageDrawable(context.resources.getDrawable(R.drawable.icon_up))
                     view.recyclerview.visibility = View.VISIBLE
                 } else {
@@ -138,21 +136,15 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                 view.recyclerview.layoutManager = LinearLayoutManager(context)
                 val adapter = PersonnelAdapter()
                 view.recyclerview.adapter = adapter
-                adapter.setList(itemBean.list)
+                adapter.setList(item.list)
 
                 view.root.setOnClickListener { v: View? ->
                     Log.e(TAG, "onBindViewHolder: onclick is unfold:" + view.ivUnfold)
-                    itemBean.unfold = !itemBean.unfold
-                    notifyDataSetChanged()
+                    item.unfold = !item.unfold
+                    mAdapter.notifyDataSetChanged()
                 }
             }
 
-            if (viewBinding!!.list.isComputingLayout) {
-                viewBinding!!.list.post {
-                    view.cbCheck.isChecked = itemBean.check;
-                }
-            }
-            //选中层级
             view.cbCheck.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
                 if (buttonView != null) {
                     if (!buttonView.isPressed) {
@@ -161,12 +153,15 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                 }
                 checkTotalNumber = 0
                 checkPeopleCount = 0
-                itemBean.unfold = isChecked
-                itemBean.check = isChecked
-                recursionChecked(itemBean.list, isChecked)
+                checked(item, isChecked)
                 showNoticeScopeNumber(getCheckedNumber(mAdapter.data as ArrayList<NoticePersonnelBean.ListBean>))
-//                notifyDataSetChanged()
                 mAdapter.notifyDataSetChanged()
+            }
+
+            if (viewBinding!!.list.isComputingLayout) {
+                viewBinding!!.list.post {
+                    view.cbCheck.isChecked = item.check
+                }
             }
         }
     }
@@ -205,30 +200,65 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                             listBean.unfold = true
                         }
                     }
-                    getAllCount(listBean.list)
+                    if (listBean.list != null) {
+                        //设置父节点数据
+                        listBean.list.forEach { it.parentBean = listBean }
+                        getAllCount(listBean.list)
+                    }
                 }
             }
         }
         return total
     }
 
+    private fun checked(node: NoticePersonnelBean.ListBean, isChecked: Boolean) {
+        node.check = isChecked
+        node.unfold = true
+        if (node.list != null)
+            recursionChecked(node.list, isChecked)
+        setParentCheck(node, isChecked)
+    }
+
+    /**
+     * 选中父节点
+     */
+    private fun setParentCheck(node: NoticePersonnelBean.ListBean, isChecked: Boolean) {
+//		有一个子节点选中，则父节点选中
+        if (node.parentBean != null && isChecked) {
+            node.parentBean.check = isChecked
+            setParentCheck(node.parentBean, isChecked)
+        }
+
+        //全部子节点取消选中，则父节点取消选中
+        if (node.parentBean != null && node.parentBean.list != null && !isChecked) {
+            if (node.parentBean.list != null) {
+                node.parentBean.list.forEachIndexed { i, listBean ->
+                    if (listBean.parentBean.list[i].check) {
+                        setParentCheck(listBean.parentBean, !isChecked)
+                        return
+                    }
+                }
+            }
+            node.parentBean.check = isChecked
+            setParentCheck(node.parentBean, isChecked)
+        }
+    }
+
     /**
      * 获取当前选中的部门
-     *
-     * @param noticeScopeBean
      */
     private var checkList: MutableList<NoticeBlankReleaseBean.RecordListBean.ListBean> = mutableListOf()
-    private fun getParams(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>): NoticeBlankReleaseBean? {
+    private fun getParams(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>): NoticeBlankReleaseBean {
         checkList.clear()
-        var recordList: MutableList<NoticeBlankReleaseBean.RecordListBean> = mutableListOf()
-        var resultBean = NoticeBlankReleaseBean()
-        var recordListBean = NoticeBlankReleaseBean.RecordListBean()
+        val recordList: MutableList<NoticeBlankReleaseBean.RecordListBean> = mutableListOf()
+        val resultBean = NoticeBlankReleaseBean()
+        val recordListBean = NoticeBlankReleaseBean.RecordListBean()
         resultBean.isConfirm = viewBinding!!.switchPush.isChecked
         recordListBean.specifieType = type
         recordListBean.nums = checkPeopleCount
         getCheckList(noticeScopeBean)
         recordList.add(recordListBean)
-        if (checkList != null && checkList.size > 0) {
+        if (checkList.size > 0) {
             recordListBean.list = checkList
             resultBean.recordList = recordList
         } else {
@@ -248,7 +278,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                 item.nums = listBean.nums
                 checkList.add(item)
             }
-            getCheckList(listBean.list);
+            getCheckList(listBean.list)
         }
     }
 

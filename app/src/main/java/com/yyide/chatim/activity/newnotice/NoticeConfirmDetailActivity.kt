@@ -60,7 +60,6 @@ class NoticeConfirmDetailActivity : BaseActivity() {
     }
 
     private var imgPath = ""
-
     private fun getDetail(publishId: Long) {
         showLoading()
         addSubscription(mDingApiStores.confirmNoticeDetail(publishId), object : ApiCallback<NoticeMyReleaseDetailBean?>() {
@@ -102,7 +101,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                         } else {
                             confirmDetailBinding?.detail?.btnConfirm?.visibility = View.GONE
                             //阅读五秒后确认已读
-                            Handler().postDelayed({ confirm() }, 5000)
+                            Handler().postDelayed({ confirm() }, 3000)
                         }
                     }
                 }

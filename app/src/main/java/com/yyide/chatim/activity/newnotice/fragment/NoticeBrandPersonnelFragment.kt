@@ -107,9 +107,9 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
             checkLists = ArrayList()
             viewBinding!!.list.adapter = mAdapter
             total = 0
+            //recursionChecked(siteList as ArrayList<NoticeBrandBean.DataBean>, false)
             total = getAllCount(brandList as ArrayList<NoticeBrandBean.DataBean>)
             mAdapter.setList(brandList)
-            recursionChecked(siteList as ArrayList<NoticeBrandBean.DataBean>, false)
         }
 
         viewBinding!!.ctSite.setOnClickListener {
@@ -125,7 +125,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
             showNoticeScopeNumber(getCheckedNumber(siteList as ArrayList<NoticeBrandBean.DataBean>))
             checkLists = ArrayList()
             viewBinding!!.list.adapter = mAdapter
-            recursionChecked(brandList as ArrayList<NoticeBrandBean.DataBean>, false)
+            //recursionChecked(brandList as ArrayList<NoticeBrandBean.DataBean>, false)
             mAdapter.setList(siteList)
         }
     }
@@ -135,7 +135,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
 
     private fun showNoticeScopeNumber(totalCount: Int) {
         viewBinding!!.tvCheckedNumber.text = getString(R.string.notice_brand_class_number, teacherNumber, patriarchNumber, checkTotalNumber)
-        if (totalCount != 0 && totalCount == total) {
+        if (totalCount != 0) {
             viewBinding!!.cbSelectNumber.isChecked = totalCount == total
         } else {
             viewBinding!!.cbSelectNumber.isChecked = false
@@ -147,7 +147,6 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
         override fun convert(holder: BaseViewHolder, item: NoticeBrandBean.DataBean) {
             val view = ItemNoticePersonnelBinding.bind(holder.itemView)
             view.cbCheck.text = item.name
-
             if (item.list != null && item.list.isNotEmpty()) {
                 view.ivUnfold.visibility = View.VISIBLE
                 Log.e(TAG, "onBindViewHolder isUnfold: " + item.unfold)
@@ -171,11 +170,6 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
                 }
             }
 
-            if (viewBinding!!.list.isComputingLayout) {
-                viewBinding!!.list.post {
-                    view.cbCheck.isChecked = item.check
-                }
-            }
             //选中层级
             view.cbCheck.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
                 if (buttonView != null) {
@@ -185,55 +179,62 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
                 }
                 checkTotalNumber = 0
                 checkCountAll = 0
-                item.unfold = isChecked
-                item.check = isChecked
-                if (item.list != null) {
-                    recursionChecked(item.list, isChecked);
-                }
-                //reverseElection(mAdapter.data as ArrayList<NoticeBrandBean.DataBean>)
+                checked(item, isChecked);
                 showNoticeScopeNumber(getCheckedNumber(mAdapter.data as ArrayList<NoticeBrandBean.DataBean>))
                 mAdapter.notifyDataSetChanged()
             }
+
+//            if (viewBinding!!.list.isComputingLayout) {
+//                viewBinding!!.list.post {
+            view.cbCheck.isChecked = item.check
+//                }
+//            }
         }
     }
 
     /**
      * 递归实现下级是否选中
-     *
      * @param noticeScopeBean
      */
     private fun recursionChecked(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>, isChecked: Boolean) {
         noticeScopeBean.forEachIndexed { index, listBean ->
             listBean.check = isChecked
-            noticeScopeBean[index] = listBean
             if (listBean.list != null) {
                 recursionChecked(listBean.list, isChecked)
             }
         }
     }
 
+    private fun checked(node: NoticeBrandBean.DataBean, isChecked: Boolean) {
+        node.check = isChecked
+        node.unfold = true
+        if (node.list != null)
+            recursionChecked(node.list, isChecked)
+        setParentCheck(node, isChecked)
+    }
+
     /**
-     * 递归实现反选
-     *
-     * @param noticeScopeBean
+     * 选中父节点
      */
-    private var childCheckCount = 0
-    private fun reverseElection(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>) {
-        noticeScopeBean.forEachIndexed { _, listBean ->
-            if (listBean.list != null) {
-                listBean.list.forEach() { childItem ->
-                    if (childItem.check) {
-                        childCheckCount++
+    private fun setParentCheck(node: NoticeBrandBean.DataBean, isChecked: Boolean) {
+//		有一个子节点选中，则父节点选中
+        if (node.parentBean != null && isChecked) {
+            node.parentBean.check = isChecked
+            setParentCheck(node.parentBean, isChecked)
+        }
+
+        //全部子节点取消选中，则父节点取消选中
+        if (node.parentBean != null && node.parentBean.list != null && !isChecked) {
+            if (node.parentBean.list != null) {
+                node.parentBean.list.forEachIndexed { i, listBean ->
+                    if (listBean.parentBean.list[i].check) {
+                        setParentCheck(listBean.parentBean, !isChecked)
+                        return
                     }
                 }
             }
-            if (listBean.list != null) {
-                listBean.check = childCheckCount == listBean.list.size
-            }
-            if (listBean.list != null) {
-                reverseElection(listBean.list)
-            }
-            childCheckCount = 0
+            node.parentBean.check = isChecked
+            setParentCheck(node.parentBean, isChecked)
         }
     }
 
@@ -251,15 +252,15 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
                 if (checkType == type) {
                     checkLists.forEach {
                         if (type == "3" && listBean.id == it.specifieId) {
-                            listBean.check = true
-                            listBean.unfold = true
+                            checked(listBean, true)
                         } else if (type == "2" && listBean.siteId == it.specifieId) {
-                            listBean.check = true
-                            listBean.unfold = true
+                            checked(listBean, true)
                         }
                     }
                 }
                 if (listBean.list != null) {
+                    //设置父节点数据
+                    listBean.list.forEach { it.parentBean = listBean }
                     getAllCount(listBean.list)
                 }
             }

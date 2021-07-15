@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckedTextView
+import android.widget.ImageView
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -164,9 +165,13 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
             val pushBinding = ItemNoticePushBinding.bind(holder.itemView)
             pushBinding.tvNoticeTitle.text = itemBean.name
             if (holder.adapterPosition == 0) {//空白模板
-                pushBinding.ivNoticeImg.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, SizeUtils.dp2px(140f))
-                pushBinding.ivNoticeImg.setImageResource(R.mipmap.icon_notice_add)
+                pushBinding.ivNoticeBlank.visibility = View.VISIBLE
+                pushBinding.ivNoticeImg.visibility = View.GONE
+                pushBinding.ivNoticeBlank.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, SizeUtils.dp2px(140f))
+                pushBinding.ivNoticeBlank.setImageResource(R.mipmap.icon_notice_add)
             } else {//1非空白模板
+                pushBinding.ivNoticeBlank.visibility = View.GONE
+                pushBinding.ivNoticeImg.visibility = View.VISIBLE
                 val height: Double = (ScreenUtils.getScreenHeight() * 0.4)
                 pushBinding.ivNoticeImg.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, height.toInt())
                 GlideUtil.loadImageRadius(context, itemBean.imgpath, pushBinding.ivNoticeImg, SizeUtils.dp2px(2f))
@@ -205,7 +210,7 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
                 if (model.data != null && model.data.records != null) {
                     if (model.data.records.size < pageSize) {
                         //如果不够一页,显示没有更多数据布局
-                        //mAdapter.loadMoreModule.loadMoreEnd()
+                        mAdapter.loadMoreModule.loadMoreEnd()
                     } else {
                         mAdapter.loadMoreModule.loadMoreComplete()
                     }

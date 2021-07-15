@@ -20,6 +20,7 @@ public class NoticePersonnelBean {
         public boolean unfold;//是否展开
         public long parentId;
         public String type;
+        public NoticePersonnelBean.ListBean parentBean;
         public ArrayList<ListBean> list = new ArrayList<>();
     }
 }
