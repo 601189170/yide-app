@@ -123,6 +123,14 @@
                     android:background="#E4E7ED"
                     app:layout_constraintTop_toBottomOf="@+id/tv_push_way" />
 
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
                 <TextView
                     android:id="@+id/textView15"
                     android:layout_width="wrap_content"
@@ -133,9 +141,9 @@
                     android:text="通知范围"
                     android:textColor="#ff333333"
                     android:textSize="15sp"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_line" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_notification_range"

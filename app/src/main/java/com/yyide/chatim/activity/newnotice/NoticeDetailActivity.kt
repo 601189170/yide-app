@@ -1,16 +1,20 @@
 package com.yyide.chatim.activity.newnotice
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticeDetail2Binding
 import com.yyide.chatim.model.EventMessage
+import com.yyide.chatim.model.NoticeBlankReleaseBean
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeDetailPresenter
@@ -27,6 +31,7 @@ import org.greenrobot.eventbus.EventBus
 class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDetailView {
     private var detailBinding: ActivityNoticeDetail2Binding? = null
     private var itemBean: NoticeMyReleaseDetailBean.DataBean? = null
+    private val rangeList = ArrayList<NoticeBlankReleaseBean.RecordListBean>()
 
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_detail2
@@ -50,12 +55,18 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         }
 
         detailBinding?.ivBg?.setOnClickListener { itemBean?.imgpath?.let { it1 -> NoticeImageDialog.showPreView(this, it1) } }
-
+        detailBinding?.clRange?.setOnClickListener {
+            val intent = Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            intent.putParcelableArrayListExtra("list", rangeList)
+            intent.putExtra("noticeDetail", true)
+            startActivity(intent)
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun setDate(item: NoticeMyReleaseDetailBean.DataBean) {
         itemBean = item
+        setRangeList()
         detailBinding!!.tvNoticeTitle.text = item.title
         detailBinding!!.tvNoticeContent.text = item.content
         val timeDate = when {
@@ -132,8 +143,7 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         } else {
             detailBinding!!.tvReadDesc.text = getString(R.string.notice_read)
         }
-        detailBinding!!.tvRead.text = getString(R.string.dividing_line, item.confirmOrReadNum, item.totalNum)
-
+        detailBinding!!.tvRead.text = getString(R.string.dividing_line, item.confirmOrReadNum, (item.totalNum - item.confirmOrReadNum))
 
 //            detailBinding!!.tvRead.text = item.
         detailBinding!!.btnCommit.isClickable = false
@@ -146,8 +156,43 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             detailBinding!!.btnCommit.visibility = View.GONE
         }
         detailBinding!!.btnToWithdraw.setOnClickListener {
-            mvpPresenter.retract(item.id)
+            showMessage(item.id)
         }
+    }
+
+    private fun setRangeList() {
+        if (itemBean?.notifies != null) {
+            itemBean?.notifies?.forEach { item ->
+                var paramsItem = NoticeBlankReleaseBean.RecordListBean()
+                paramsItem.specifieType = item.specifieType.toString()
+                var listBean = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
+                if (item.list != null) {
+                    item.list.forEach { childItem ->
+                        val item = NoticeBlankReleaseBean.RecordListBean.ListBean()
+                        item.specifieId = childItem.specifieId
+                        item.specifieParentId = childItem.specifieParentId
+                        item.type = childItem.type.toString()
+                        item.nums = childItem.nums
+                        listBean.add(item)
+                    }
+                }
+                paramsItem.list = listBean
+                rangeList.add(paramsItem)
+            }
+        }
+    }
+
+    private fun showMessage(id: Long) {
+        val builder = AlertDialog.Builder(this)
+                .setTitle("提示")//设置对话框 标题
+                .setMessage("通知撤回后，接收方将不展示通知内容，请确定撤回？")
+                .setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which ->
+                    mvpPresenter.retract(id)
+                    dialog.dismiss()
+                })
+                .setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+                .create()
+                .show()
     }
 
     override fun createPresenter(): NoticeDetailPresenter {

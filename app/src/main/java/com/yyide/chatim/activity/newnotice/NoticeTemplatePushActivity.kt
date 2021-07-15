@@ -2,7 +2,6 @@ package com.yyide.chatim.activity.newnotice
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -11,7 +10,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SizeUtils
@@ -115,6 +113,8 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
             ToastUtils.showShort(R.string.notice_timing_push_input)
         } else if (list.isEmpty() || list.size == 0) {
             ToastUtils.showShort("请选择通知范围")
+        } else if (teacherNumber <= 0 && patriarchNumber <= 0 && brandNumber <= 0) {
+            ToastUtils.showShort("请选择通知人员")
         } else {
             if (webModel.params != null) {
                 val itemBean = NoticeBlankReleaseBean()

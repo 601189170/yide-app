@@ -151,7 +151,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
 
     private fun pushNotice() {
         val etTitle = releaseBinding!!.etInputTitle.text.toString().trim()
-        val etContent = releaseBinding!!.etInputContent?.text.toString().trim()
+        val etContent = releaseBinding!!.etInputContent.text.toString().trim()
         when {
             TextUtils.isEmpty(etTitle) -> {
                 releaseBinding!!.etInputTitle.error = getString(R.string.notice_input_title)
@@ -170,6 +170,9 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
             }
             (list.isEmpty() || list.size == 0) -> {
                 ToastUtils.showShort("请选择通知范围")
+            }
+            teacherNumber <= 0 && patriarchNumber <= 0 && brandNumber <= 0 -> {
+                ToastUtils.showShort("请选择通知人员")
             }
             else -> {
                 val itemBean = NoticeBlankReleaseBean()

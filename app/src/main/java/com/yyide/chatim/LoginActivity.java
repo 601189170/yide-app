@@ -24,12 +24,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
@@ -51,7 +51,6 @@ import com.yyide.chatim.view.LoginView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 
 /**
@@ -419,14 +418,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Utils.REQ_PERMISSION_CODE:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    ToastUtil.toastLongMessage("未全部授权，部分功能可能无法使用！");
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Utils.REQ_PERMISSION_CODE) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                ToastUtil.toastLongMessage("未全部授权，部分功能可能无法使用！");
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 

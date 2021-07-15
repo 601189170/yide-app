@@ -35,6 +35,7 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
         personnelBinding!!.top.backLayout.setOnClickListener { finish() }
         val listsBean: ArrayList<NoticeBlankReleaseBean.RecordListBean> = intent.getParcelableArrayListExtra("list")
         val isCheck = intent.getBooleanExtra("isCheck", false)
+        val noticeDetail = intent.getBooleanExtra("noticeDetail", false)
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add(getString(R.string.notice_tab_teacher))
         mTitles.add(getString(R.string.notice_tab_patriarch))
@@ -62,17 +63,16 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
         personnelBinding!!.viewpager.offscreenPageLimit = 3
         personnelBinding!!.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                var fragment: Fragment = NoticePersonnelFragment.newInstance(position.toString(), teacherList, isCheck)
+                var fragment: Fragment = NoticePersonnelFragment.newInstance(position.toString(), teacherList, isCheck, noticeDetail)
                 when (position) {
                     0 -> {
-                        fragment = NoticePersonnelFragment.newInstance(position.toString(), teacherList, isCheck)
-
+                        fragment = NoticePersonnelFragment.newInstance(position.toString(), teacherList, isCheck, noticeDetail)
                     }
                     1 -> {
-                        fragment = NoticePersonnelFragment.newInstance(position.toString(), patriarchList, isCheck)
+                        fragment = NoticePersonnelFragment.newInstance(position.toString(), patriarchList, isCheck, noticeDetail)
                     }
                     2 -> {
-                        fragment = NoticeBrandPersonnelFragment.newInstance(type, brandList, isCheck)
+                        fragment = NoticeBrandPersonnelFragment.newInstance(type, brandList, isCheck, noticeDetail)
                     }
                 }
                 return fragment

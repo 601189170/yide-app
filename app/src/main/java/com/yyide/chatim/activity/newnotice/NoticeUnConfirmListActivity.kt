@@ -111,7 +111,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
     override fun pushNotice(model: ResultBean?) {
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                //ToastUtils.showShort(model.msg)
+                ToastUtils.showShort("已提醒未确认人员")
                 finish()
             }
         }

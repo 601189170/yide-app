@@ -1,5 +1,7 @@
 package com.yyide.chatim.adapter;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,18 +13,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.PersonInfoActivity;
-import com.yyide.chatim.model.StudentHonorBean;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.utils.StringUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -45,7 +46,6 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
     public ItemBookSearchAdapter(Context context, List<UserInfoRsp.DataBean> data) {
         this.context = context;
         this.data = data;
-
     }
 
     @NonNull
@@ -65,13 +65,13 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
         } else {
             holder.tv_classname.setText(bean.getClassesName());
         }
-        if(!TextUtils.isEmpty(bean.getPhone())){
+        if (!TextUtils.isEmpty(bean.getPhone())) {
             holder.iv_call.setVisibility(View.VISIBLE);
         } else {
             holder.iv_call.setVisibility(View.GONE);
         }
         holder.iv_call.setOnClickListener(v -> {
-            //打电话
+            // 已经获取权限打电话
             if (!TextUtils.isEmpty(bean.getPhone())) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 Uri data = Uri.parse("tel:" + bean.getPhone());

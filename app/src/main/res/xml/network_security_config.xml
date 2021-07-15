@@ -15,4 +15,5 @@
             <certificates src="@raw/charles_proxy_ssl_proxying_certificate" /> <!--这里是证书名-->
         </trust-anchors>
     </debug-overrides>
+    <base-config cleartextTrafficPermitted="true" />
 </network-security-config>

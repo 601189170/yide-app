@@ -37,6 +37,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
     private var checkType: String = ""
     private var isConfirm: Boolean = false
     private var isCheck: Boolean = false
+    private var noticeDetail: Boolean = false
     private var checkLists = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
     private var mAdapter: PersonnelAdapter = PersonnelAdapter()
     private var siteList = mutableListOf<NoticeBrandBean.DataBean>()
@@ -54,6 +55,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
         if (arguments != null) {
             checkType = arguments?.getString("type").toString()
             isCheck = arguments?.getBoolean("isCheck", false) == true
+            noticeDetail = arguments?.getBoolean("noticeDetail", false) == true
             checkLists = arguments?.getParcelableArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>("list") as ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>
         }
 
@@ -67,6 +69,9 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
     }
 
     private fun initView() {
+        if (noticeDetail) {
+            viewBinding!!.constraintLayout.visibility = View.GONE
+        }
         showNoticeScopeNumber(0)
         type = "2"
         //默认选中第一个
@@ -400,12 +405,13 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
     }
 
     companion object {
-        fun newInstance(type: String, brandList: ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>, isCheck: Boolean): NoticeBrandPersonnelFragment {
+        fun newInstance(type: String, brandList: ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>, isCheck: Boolean, noticeDetail: Boolean): NoticeBrandPersonnelFragment {
             val fragment = NoticeBrandPersonnelFragment()
             val args = Bundle()
             args.putString("type", type)
             args.putParcelableArrayList("list", brandList)
             args.putBoolean("isCheck", isCheck)
+            args.putBoolean("noticeDetail", noticeDetail)
             fragment.arguments = args
             return fragment
         }

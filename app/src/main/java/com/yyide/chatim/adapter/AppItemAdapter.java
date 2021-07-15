@@ -58,5 +58,4 @@ public class AppItemAdapter extends BaseAdapter {
         this.list = list;
         notifyDataSetChanged();
     }
-
 }

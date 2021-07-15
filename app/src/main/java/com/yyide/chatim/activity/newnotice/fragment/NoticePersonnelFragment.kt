@@ -40,6 +40,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     private var checkPeopleCount: Int = 0
     private var type: String? = null
     private var isCheck: Boolean = false
+    private var noticeDetail: Boolean = false
     private var checkLists = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
     private var list: ArrayList<NoticePersonnelBean.ListBean>? = null
     private val mAdapter: PersonnelAdapter = PersonnelAdapter()
@@ -56,6 +57,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
         if (arguments != null) {
             type = arguments?.getString("type")
             isCheck = arguments?.getBoolean("isCheck", false) == true
+            noticeDetail = arguments?.getBoolean("noticeDetail", false) == true
             checkLists = arguments?.getParcelableArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>("list") as ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>
         }
         mvpPresenter?.specifieTypeList(type)
@@ -67,6 +69,9 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     }
 
     private fun initView() {
+        if (noticeDetail) {
+            viewBinding!!.constraintLayout.visibility = View.GONE
+        }
         showNoticeScopeNumber(0)
         //默认选中第一个
         viewBinding!!.list.layoutManager = LinearLayoutManager(activity)
@@ -198,6 +203,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                             reverseCheckNumber++
                             listBean.check = true
                             listBean.unfold = true
+                            checked(listBean, true)
                         }
                     }
                     if (listBean.list != null) {
@@ -336,12 +342,13 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     }
 
     companion object {
-        fun newInstance(type: String, listsBean: ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>, isCheck: Boolean): NoticePersonnelFragment {
+        fun newInstance(type: String, listsBean: ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>, isCheck: Boolean, noticeDetail: Boolean): NoticePersonnelFragment {
             val fragment = NoticePersonnelFragment()
             val args = Bundle()
             args.putString("type", type)
             args.putParcelableArrayList("list", listsBean)
             args.putBoolean("isCheck", isCheck)
+            args.putBoolean("noticeDetail", noticeDetail)
             fragment.arguments = args
             return fragment
         }

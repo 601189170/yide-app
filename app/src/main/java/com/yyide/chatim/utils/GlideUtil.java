@@ -14,6 +14,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -51,9 +52,12 @@ public class GlideUtil {
 
     //圆图
     public static void loadCircleImage(Context context, String url, ImageView imageView) {
-        RequestOptions myOptions = new RequestOptions()
-                .circleCrop().placeholder(R.drawable.bg_corners_blue100).error(R.drawable.bg_corners_blue100);
-        Glide.with(context).load(GlideUtil.DataUrl(url)).apply(myOptions).into(imageView);
+        Glide.with(context).load(url)
+                .circleCrop()
+                .placeholder(R.drawable.bg_corners_blue100)
+                .error(R.drawable.bg_corners_blue100)
+                .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+                .into(imageView);
     }
 
     //圆图

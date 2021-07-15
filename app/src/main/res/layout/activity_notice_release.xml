@@ -234,27 +234,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view5" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@drawable/table_line_h"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_notice_time"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_notice_time" />
-
                 <TextView
                     android:id="@+id/tv_show_timed_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="80dp"
                     android:layout_marginEnd="@dimen/dp_20"
-                    android:text=""
+                    android:drawablePadding="@dimen/dp_4"
                     android:textColor="#ff666666"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_notice_time"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_notice_time" />
+                    app:layout_constraintTop_toTopOf="@id/tv_notice_time"
+                    app:drawableEndCompat="@drawable/icon_right" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

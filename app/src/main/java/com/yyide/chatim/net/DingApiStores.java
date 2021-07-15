@@ -35,6 +35,7 @@ import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.model.NoticeItemBean;
 import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
+import com.yyide.chatim.model.NoticePermissionBean;
 import com.yyide.chatim.model.NoticePersonnelBean;
 import com.yyide.chatim.model.NoticeReleaseTemplateBean;
 import com.yyide.chatim.model.NoticeUnreadPeopleBean;
@@ -607,8 +608,12 @@ public interface DingApiStores {
 
     //未读通知提醒
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("    /message-server/cloud-message/app/message/publish/unconfirm/users/notify")
+    @POST("/message-server/cloud-message/app/message/publish/unconfirm/users/notify")
     Observable<ResultBean> unNoticeNotify(@Body RequestBody requestBody);
+
+    //通知权限
+    @GET("/message-server/cloud-message/app/message/publish/permission")
+    Observable<NoticePermissionBean> noticePermission();
 
     //获取登录页面开关
     @GET("/management/cloud-system/app/sys/switch/{key}")
