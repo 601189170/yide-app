@@ -9,7 +9,7 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F5F8FC"
+        android:background="@color/white"
          />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
