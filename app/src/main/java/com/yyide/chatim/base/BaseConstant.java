@@ -35,6 +35,9 @@ public class BaseConstant {
     /*密码*/
     public static String PASSWORD = "PASSWORD";
 
+    //第一次打开app
+    public static String FIRST_OPEN_APP = "firstOpenApp";
+
     /**
      * 请求ip==>baseUrl
      */
