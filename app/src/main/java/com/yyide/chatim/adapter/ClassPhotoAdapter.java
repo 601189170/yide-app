@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;

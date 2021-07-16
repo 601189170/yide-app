@@ -18,6 +18,7 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityNoticeBinding
 import com.yyide.chatim.model.*
 import com.yyide.chatim.net.ApiCallback
+import io.reactivex.rxjava3.disposables.Disposable
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -98,6 +99,10 @@ class NewNoticeAnnouncementActivity : BaseActivity() {
 
             override fun onFinish() {
                 hideLoading()
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                addSubscription(d)
             }
 
         })

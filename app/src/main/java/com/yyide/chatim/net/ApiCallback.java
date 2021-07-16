@@ -1,20 +1,19 @@
 package com.yyide.chatim.net;
 
-
 import android.text.TextUtils;
-
-
 import com.yyide.chatim.BaseApplication;
+import com.yyide.chatim.base.BaseCompositeDisposable;
 import com.yyide.chatim.utils.LogUtil;
-
-import retrofit2.adapter.rxjava.HttpException;
-import rx.Subscriber;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import retrofit2.adapter.rxjava3.HttpException;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
  * 邮箱：rance935@163.com
  */
-public abstract class ApiCallback<M> extends Subscriber<M> {
+public abstract class ApiCallback<M> implements Observer<M> {
 
     public abstract void onSuccess(M model);
 
@@ -44,7 +43,7 @@ public abstract class ApiCallback<M> extends Subscriber<M> {
         if (!BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
             msg = "请检查网络连接";
         }
-        if (!TextUtils.isEmpty(msg)){
+        if (!TextUtils.isEmpty(msg)) {
             onFailure(msg);
         }
         onFinish();
@@ -56,7 +55,13 @@ public abstract class ApiCallback<M> extends Subscriber<M> {
     }
 
     @Override
-    public void onCompleted() {
+    public void onComplete() {
         onFinish();
+    }
+
+    @Override
+    public void onSubscribe(@NonNull Disposable d) {
+        //new BasePresenter().addSubscription(d);
+        BaseCompositeDisposable.instance().addSubscription(d);
     }
 }

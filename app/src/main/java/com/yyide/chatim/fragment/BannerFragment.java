@@ -83,10 +83,6 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
 
             }
         });
-//        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-//            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
-//        }
-        //initAdapter();
     }
 
     @Override

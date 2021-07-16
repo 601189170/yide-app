@@ -35,7 +35,6 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     private val TAG = NoticePersonnelFragment::class.java.simpleName
     private var viewBinding: FragmentNoticePersonnelListBinding? = null
     private var total: Int = 0
-    private var reverseCheckNumber = 0
     private var checkTotalNumber: Int = 0
     private var checkPeopleCount: Int = 0
     private var type: String? = null
@@ -193,19 +192,11 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
      */
     private fun getAllCount(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>): Int {
         if (noticeScopeBean != null) {
-            noticeScopeBean.forEachIndexed { index, listBean ->
+            noticeScopeBean.forEach { listBean ->
                 if (TextUtils.isEmpty(listBean.name)) {//处理没有名称的部门
                     noticeScopeBean.remove(listBean)
                 } else {
                     total++
-                    checkLists.forEach {
-                        if (listBean.id == it.specifieId) {
-                            reverseCheckNumber++
-                            listBean.check = true
-                            listBean.unfold = true
-                            checked(listBean, true)
-                        }
-                    }
                     if (listBean.list != null) {
                         //设置父节点数据
                         listBean.list.forEach { it.parentBean = listBean }
@@ -215,6 +206,25 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
             }
         }
         return total
+    }
+
+    //反选
+    private fun reverseElection(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>) {
+        checkLists.forEach {
+            checkedRE(noticeScopeBean, it)
+        }
+    }
+
+    private fun checkedRE(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>, it: NoticeBlankReleaseBean.RecordListBean.ListBean) {
+        noticeScopeBean.forEach { listBean ->
+            if (listBean.id == it.specifieId) {
+                listBean.check = true
+                listBean.unfold = true
+            }
+            if (listBean.list != null) {
+                checkedRE(listBean.list, it)
+            }
+        }
     }
 
     private fun checked(node: NoticePersonnelBean.ListBean, isChecked: Boolean) {
@@ -295,10 +305,25 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
      */
     private fun getCheckedNumber(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>): Int {
         if (noticeScopeBean != null) {
-            noticeScopeBean.forEachIndexed { index, listBean ->
-                if (listBean.check) {
-                    checkTotalNumber++
+            noticeScopeBean.forEach { listBean ->
+                var isAllChecked = false
+                if (listBean.list != null) {
+                    listBean.list.forEach {
+                        if (!it.check) {
+                            isAllChecked = true
+                        }
+                        if (it.list != null) {
+                            it.list.forEach {
+                                if (!it.check) {
+                                    isAllChecked = true
+                                }
+                            }
+                        }
+                    }
+                }
+                if (listBean.check && !isAllChecked) {
                     checkPeopleCount += listBean.nums
+                    checkTotalNumber++
                 }
                 getCheckedNumber(listBean.list)
             }
@@ -324,8 +349,8 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                 list = model.data
                 total = 0
                 total = getAllCount(model.data)
-                getCheckedNumber(model.data)
-                showNoticeScopeNumber(reverseCheckNumber)
+                reverseElection(model.data)
+                showNoticeScopeNumber(getCheckedNumber(model.data))
                 mAdapter.setList(model.data)
             }
         }

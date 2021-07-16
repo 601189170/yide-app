@@ -150,8 +150,6 @@ dependencies {
     //——TimePickerView 时间选择器，支持年月日时分，年月日，年月，时分等格式。
     //——OptionsPickerView 选项选择器，支持一，二，三级选项选择，并且可以设置是否联动
     implementation 'com.contrarywind:wheelview:4.1.0'
-    implementation 'com.alibaba:fastjson:1.2.54'
-    implementation 'com.alibaba:fastjson:1.2.54'
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
     //添加此行
@@ -178,9 +176,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    implementation 'io.reactivex:rxandroid:1.2.1'
-    implementation 'io.reactivex:rxjava:1.2.1'
+    implementation "com.squareup.retrofit2:adapter-rxjava3:2.9.0"
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
 
     // 基础依赖包，必须要依赖
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'

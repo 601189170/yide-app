@@ -127,10 +127,10 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
             mAdapter = PersonnelAdapter()
             total = 0
             total = getAllCount(siteList as ArrayList<NoticeBrandBean.DataBean>)
+            reverseElection(siteList as ArrayList<NoticeBrandBean.DataBean>)
             showNoticeScopeNumber(getCheckedNumber(siteList as ArrayList<NoticeBrandBean.DataBean>))
             checkLists = ArrayList()
             viewBinding!!.list.adapter = mAdapter
-            //recursionChecked(brandList as ArrayList<NoticeBrandBean.DataBean>, false)
             mAdapter.setList(siteList)
         }
     }
@@ -225,6 +225,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
 //		有一个子节点选中，则父节点选中
         if (node.parentBean != null && isChecked) {
             node.parentBean.check = isChecked
+            node.parentBean.unfold = isChecked
             setParentCheck(node.parentBean, isChecked)
         }
 
@@ -254,15 +255,6 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
                 noticeScopeBean.remove(listBean)
             } else {
                 total++
-                if (checkType == type) {
-                    checkLists.forEach {
-                        if (type == "3" && listBean.id == it.specifieId) {
-                            checked(listBean, true)
-                        } else if (type == "2" && listBean.siteId == it.specifieId) {
-                            checked(listBean, true)
-                        }
-                    }
-                }
                 if (listBean.list != null) {
                     //设置父节点数据
                     listBean.list.forEach { it.parentBean = listBean }
@@ -271,6 +263,32 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
             }
         }
         return total
+    }
+
+    //反选
+    private fun reverseElection(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>) {
+        if (checkType == type) {
+            checkLists.forEach {
+                checkedRE(noticeScopeBean, it)
+            }
+        }
+    }
+
+    private fun checkedRE(noticeScopeBean: ArrayList<NoticeBrandBean.DataBean>, it: NoticeBlankReleaseBean.RecordListBean.ListBean) {
+        noticeScopeBean.forEach { listBean ->
+            if (type == "3" && listBean.id == it.specifieId) {
+                listBean.check = true
+                listBean.unfold = true
+                setParentCheck(listBean, true)
+            } else if (type == "2" && listBean.siteId == it.specifieId) {
+                listBean.check = true
+                listBean.unfold = true
+                setParentCheck(listBean, true)
+            }
+            if (listBean.list != null) {
+                checkedRE(listBean.list, it)
+            }
+        }
     }
 
     /**
@@ -368,6 +386,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
                 brandList = model.data
                 total = getAllCount(model.data as ArrayList<NoticeBrandBean.DataBean>)
+                reverseElection(model.data as ArrayList<NoticeBrandBean.DataBean>)
                 showNoticeScopeNumber(getCheckedNumber(model.data as ArrayList<NoticeBrandBean.DataBean>))
                 mAdapter.setList(model.data)
             }
@@ -376,7 +395,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
 
     override fun getSitePersonnelList(model: NoticeBrandBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
                 getData(model.data as ArrayList<NoticeBrandBean.DataBean>)
                 siteList = model.data
             }

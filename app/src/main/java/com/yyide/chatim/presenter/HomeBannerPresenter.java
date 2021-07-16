@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
+import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.HomeBannerView;
 

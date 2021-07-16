@@ -31,7 +31,7 @@ class NoticeDesignatedPersonnelActivity : BaseActivity() {
     }
 
     private fun initView() {
-        personnelBinding!!.top.title.setText(R.string.notice_designated_personnel_title)
+        personnelBinding!!.top.title.setText(R.string.notice_scope_title)
         personnelBinding!!.top.backLayout.setOnClickListener { finish() }
         val listsBean: ArrayList<NoticeBlankReleaseBean.RecordListBean> = intent.getParcelableArrayListExtra("list")
         val isCheck = intent.getBooleanExtra("isCheck", false)

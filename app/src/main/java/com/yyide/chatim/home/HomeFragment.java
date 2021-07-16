@@ -2,8 +2,10 @@ package com.yyide.chatim.home;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,6 +58,7 @@ import com.yyide.chatim.view.VerticalTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.objectweb.asm.Handle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,9 +155,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     private Dialog dialog;
+    private Boolean isClose = false;
 
     private void showNotice(NoticeMyReleaseDetailBean.DataBean model) {
-        if (model != null && model.isConfirm && !model.confirmOrRead) {
+        if (model != null && !model.confirmOrRead) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
             DialogHomeShowNoticeBinding previewBinding = DialogHomeShowNoticeBinding.inflate(getLayoutInflater());
             alertDialog.setView(previewBinding.getRoot());
@@ -173,6 +177,12 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             layoutParams.bottomMargin = SizeUtils.dp2px(20);
             previewBinding.cardView.setLayoutParams(layoutParams);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            if (!model.isConfirm) {
+                Runnable runnable = () -> mvpPresenter.confirmNotice(model.id);
+                handler.postDelayed(runnable, 5000);
+                dialog.setOnDismissListener(dialog -> handler.removeCallbacks(runnable));
+            }
 
             if (model.type == 0) {
                 previewBinding.ivImg.setVisibility(View.GONE);
@@ -194,11 +204,16 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             } else {
                 previewBinding.btnConfirm.setVisibility(View.INVISIBLE);
             }
+
             previewBinding.btnConfirm.setOnClickListener(v -> {
+                isClose = true;
                 mvpPresenter.confirmNotice(model.id);
             });
+
         }
     }
+
+    private Handler handler = new Handler();
 
     @Override
     protected HomeFragmentPresenter createPresenter() {
@@ -249,7 +264,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         fragmentTransaction = childFragmentManager.beginTransaction();
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
             //校长身份
-            bannerContent.setVisibility(View.GONE);
             workContent.setVisibility(View.GONE);
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);
@@ -263,7 +277,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             //家长身份
             tableContent.setVisibility(View.VISIBLE);
-            bannerContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             workContent.setVisibility(View.VISIBLE);
             kqContent.setVisibility(View.VISIBLE);
@@ -275,27 +288,23 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, new AttendancePatriarchFragment());
-            //班级相册轮播
-//            fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
             //班级作业
             fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级学生荣誉
 //            fragmentTransaction.replace(R.id.student_honor_content, new StudentHonorFragment());
         } else {
             tableContent.setVisibility(View.VISIBLE);
-            tableContent.setVisibility(View.VISIBLE);
-            bannerContent.setVisibility(View.VISIBLE);
             workContent.setVisibility(View.VISIBLE);
             studentHonorContent.setVisibility(View.VISIBLE);
             classHonorContent.setVisibility(View.VISIBLE);
+            kqContent.setVisibility(View.VISIBLE);
+            noticeContent.setVisibility(View.VISIBLE);
             //班级课表
             fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //通知
             fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, new AttendanceTeacherFragment());
-            //班级相册轮播
-            fragmentTransaction.replace(R.id.banner_content, new BannerFragment());
             //班级作业
             fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级相册
@@ -306,20 +315,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         fragmentTransaction.commit();
     }
 
-    private void initFragment() {
-        tableContent.setVisibility(View.GONE);
-        tableContent.setVisibility(View.GONE);
-        bannerContent.setVisibility(View.GONE);
-        workContent.setVisibility(View.GONE);
-        studentHonorContent.setVisibility(View.GONE);
-        classHonorContent.setVisibility(View.GONE);
-    }
-
     @Override
     public void confirmNotice(ResultBean model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             //ToastUtils.showShort(model.getMsg());
-            if (dialog != null && dialog.isShowing()) {
+            if (dialog != null && dialog.isShowing() && isClose) {
                 dialog.dismiss();
             }
         }

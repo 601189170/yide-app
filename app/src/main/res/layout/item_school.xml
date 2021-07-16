@@ -46,10 +46,10 @@
             app:layout_constraintLeft_toRightOf="@id/tv_attendance_rate" />
 
         <TextView
+            android:id="@+id/tv_sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="出勤率"
             android:textColor="#ff909399"
             android:textSize="13sp"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_attendance_rate"

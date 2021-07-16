@@ -50,8 +50,10 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         detailBinding!!.include.title.setText(R.string.notice_my_push_title)
         detailBinding!!.include.backLayout.setOnClickListener { finish() }
         detailBinding!!.clReadUnread.setOnClickListener {
-            NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0, itemBean?.confirmOrReadNum
-                    ?: 0)
+            itemBean?.isConfirm?.let { it1 ->
+                NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0, itemBean?.confirmOrReadNum
+                        ?: 0, it1)
+            }
         }
 
         detailBinding?.ivBg?.setOnClickListener { itemBean?.imgpath?.let { it1 -> NoticeImageDialog.showPreView(this, it1) } }
@@ -186,11 +188,11 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         val builder = AlertDialog.Builder(this)
                 .setTitle("提示")//设置对话框 标题
                 .setMessage("通知撤回后，接收方将不展示通知内容，请确定撤回？")
-                .setPositiveButton("确定", DialogInterface.OnClickListener { dialog, which ->
+                .setPositiveButton("确定") { dialog, which ->
                     mvpPresenter.retract(id)
                     dialog.dismiss()
-                })
-                .setNegativeButton("取消", DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() })
+                }
+                .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
                 .create()
                 .show()
     }

@@ -155,7 +155,8 @@
     <string name="notice_announcement_title">通知公告</string>
     <string name="notice_release_title">发布通知</string>
     <string name="notice_un_confirm_title">未确认人员</string>
-    <string name="notice_designated_personnel_title">选择指定人员/设备</string>
+    <string name="notice_un_read_title">未读人员</string>
+
     <string name="notice_template_title">通知模板</string>
     <string name="notice_scope_title">通知范围</string>
     <string name="notice_confirm_detail_title">确认详情</string>
@@ -192,6 +193,7 @@
     <string name="notice_parents_selected_number">已选择家长%d人</string>
 
     <string name="notice_un_confirm_number">未确认%d人</string>
+    <string name="notice_un_read_number">未读%d人</string>
     <string name="notice_remind_everyone">提醒全部人员</string>
     <string name="notice_time_release">%d分钟后发布 </string>
     <string name="notice_time_hours_release">%d小时后发布 </string>

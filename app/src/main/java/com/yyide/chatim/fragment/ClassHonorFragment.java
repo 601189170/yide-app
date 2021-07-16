@@ -21,6 +21,7 @@ import com.yyide.chatim.adapter.ClassPhotoAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.ClassPhotoPresenter;

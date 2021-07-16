@@ -41,7 +41,8 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
         if (itemParent.getLevel() == 1) {
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
             if (!TextUtils.isEmpty(item.getStatus())) {
-                holder.setText(R.id.tv_student_name, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "MM-dd") + "\t 第" + TimeUtil.numberToChinese(item.getSection()) + "节\t " + item.getSubjectName());
+                String node = item.getSection() != 0 ? "\t 第" + TimeUtil.numberToChinese(item.getSection()) + "节\t " + item.getSubjectName() : "\t 早读\t " + item.getSubjectName();
+                holder.setText(R.id.tv_student_name, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "MM-dd") + node);
                 switch (item.getStatus()) {
                     case "0"://正常
 //                        tvStatus.setText(item.getStatusType());

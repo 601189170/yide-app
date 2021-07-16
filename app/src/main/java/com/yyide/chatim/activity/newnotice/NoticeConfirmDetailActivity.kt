@@ -26,6 +26,7 @@ import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.net.ApiCallback
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.GlideUtil
+import io.reactivex.rxjava3.disposables.Disposable
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -101,7 +102,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                         } else {
                             confirmDetailBinding?.detail?.btnConfirm?.visibility = View.GONE
                             //阅读五秒后确认已读
-                            Handler().postDelayed({ confirm() }, 3000)
+                            confirm()
                         }
                     }
                 }
@@ -113,6 +114,10 @@ class NoticeConfirmDetailActivity : BaseActivity() {
 
             override fun onFinish() {
                 hideLoading()
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                addSubscription(d)
             }
 
         })
@@ -137,6 +142,10 @@ class NoticeConfirmDetailActivity : BaseActivity() {
 
             override fun onFinish() {
                 hideLoading()
+            }
+
+            override fun onSubscribe(d: Disposable?) {
+                addSubscription(d)
             }
 
         })
