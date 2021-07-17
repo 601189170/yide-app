@@ -17,7 +17,12 @@ import androidx.multidex.MultiDex;
 
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.huawei.HuaWeiRegister;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
+import com.alibaba.sdk.android.push.register.MeizuRegister;
+import com.alibaba.sdk.android.push.register.MiPushRegister;
+import com.alibaba.sdk.android.push.register.OppoRegister;
+import com.alibaba.sdk.android.push.register.VivoRegister;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.TIMManager;
@@ -79,6 +84,24 @@ public class BaseApplication extends Application {
                 Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
             }
         });
+
+        // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
+        final String XIAOMI_APPID = "MI-2882303761519922795";
+        final String XIAOMI_APPKEY = "MI-5201992213795";
+        MiPushRegister.register(applicationContext, XIAOMI_APPID, XIAOMI_APPKEY);
+        // 注册方法会自动判断是否支持华为系统推送，如不支持会跳过注册。
+        HuaWeiRegister.register(this);
+        // vivo通道注册
+        VivoRegister.register(applicationContext);
+        // OPPO通道注册
+        // appKey/appSecret在OPPO开发者平台获取
+        final String OPPO_APPKEY = "OP-b73f1a5b44af4e2d9a7200b15a521808";
+        final String OPPO_APPSECRET = "OP-13ee3e7c24cd43af91242879d555c747";
+        OppoRegister.register(applicationContext, OPPO_APPKEY, OPPO_APPSECRET);
+
+        // 魅族通道注册
+        // appId/appkey在魅族开发者平台获取
+        MeizuRegister.register(applicationContext, "appId", "appkey");
     }
 
     private void createNotificationChannel() {
