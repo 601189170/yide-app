@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginBottom="14dp">
 
                 <FrameLayout
@@ -88,7 +88,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
@@ -100,8 +100,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="切换班级"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -125,7 +125,7 @@
                         android:id="@+id/user_class"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="11dp"
+                        android:layout_marginEnd="11dp"
                         android:textColor="#666666"
                         android:textSize="12sp" />
 
@@ -138,7 +138,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
                     android:background="@color/line_11" />
 
                 <LinearLayout
@@ -149,8 +149,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -160,7 +160,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="切换身份"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -174,7 +174,7 @@
                         android:id="@+id/user_sf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="11dp"
+                        android:layout_marginEnd="11dp"
                         android:textColor="#666666"
                         android:textSize="12sp" />
 
@@ -193,8 +193,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -205,8 +205,8 @@
                         android:id="@+id/my_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="我的信息"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/my_info"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
 
@@ -235,8 +235,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -246,7 +246,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="修改密码"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -265,7 +265,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
                     android:background="@color/line_11" />
 
                 <LinearLayout
@@ -276,8 +276,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -287,7 +287,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="帮助中心"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -306,7 +306,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
                     android:background="@color/line_11"
                     android:visibility="gone" />
 
@@ -317,8 +317,8 @@
                     android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp"
                     android:visibility="gone">
 
                     <TextView
@@ -329,7 +329,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="权限设置"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -354,8 +354,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -365,7 +365,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="清理缓存"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -386,7 +386,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
                     android:background="@color/line_11" />
 
                 <LinearLayout
@@ -397,8 +397,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp">
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -408,7 +408,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="版本更新"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -427,7 +427,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
                     android:background="@color/line_11"
                     android:visibility="gone" />
 
@@ -439,8 +439,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp"
                     android:visibility="gone">
 
                     <ImageView
@@ -451,7 +451,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="关于"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />
@@ -470,7 +470,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="18dp"
+                    android:layout_marginStart="18dp"
                     android:background="@color/line_11" />
 
                 <LinearLayout
@@ -481,8 +481,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="18dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp"
                     android:visibility="visible">
 
                     <ImageView
@@ -493,7 +493,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:text="隐私政策"
                         android:textColor="#1E232A"
                         android:textSize="15sp" />

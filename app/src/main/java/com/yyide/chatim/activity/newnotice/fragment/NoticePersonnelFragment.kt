@@ -136,7 +136,6 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                     view.ivUnfold.setImageDrawable(context.resources.getDrawable(R.drawable.icon_down))
                     view.recyclerview.visibility = View.GONE
                 }
-
                 view.recyclerview.layoutManager = LinearLayoutManager(context)
                 val adapter = PersonnelAdapter()
                 view.recyclerview.adapter = adapter
@@ -218,8 +217,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     private fun checkedRE(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>, it: NoticeBlankReleaseBean.RecordListBean.ListBean) {
         noticeScopeBean.forEach { listBean ->
             if (listBean.id == it.specifieId) {
-                listBean.check = true
-                listBean.unfold = true
+                checked(listBean, true)
             }
             if (listBean.list != null) {
                 checkedRE(listBean.list, it)
@@ -242,6 +240,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
 //		有一个子节点选中，则父节点选中
         if (node.parentBean != null && isChecked) {
             node.parentBean.check = isChecked
+            node.parentBean.unfold = isChecked
             setParentCheck(node.parentBean, isChecked)
         }
 
@@ -286,13 +285,28 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
     //获取已选中的部门
     private fun getCheckList(noticeScopeBean: ArrayList<NoticePersonnelBean.ListBean>) {
         noticeScopeBean.forEachIndexed { index, listBean ->
+            var isAllChecked = false
             if (listBean.check) {
-                var item = NoticeBlankReleaseBean.RecordListBean.ListBean()
-                item.specifieId = listBean.id
-                item.specifieParentId = listBean.parentId
-                item.type = listBean.type
-                item.nums = listBean.nums
-                checkList.add(item)
+                listBean.list.forEach {
+                    if (!it.check) {
+                        isAllChecked = true
+                    }
+                    if (it.list != null) {
+                        it.list.forEach {
+                            if (!it.check) {
+                                isAllChecked = true
+                            }
+                        }
+                    }
+                }
+                if (!isAllChecked) {
+                    val item = NoticeBlankReleaseBean.RecordListBean.ListBean()
+                    item.specifieId = listBean.id
+                    item.specifieParentId = listBean.parentId
+                    item.type = listBean.type
+                    item.nums = listBean.nums
+                    checkList.add(item)
+                }
             }
             getCheckList(listBean.list)
         }

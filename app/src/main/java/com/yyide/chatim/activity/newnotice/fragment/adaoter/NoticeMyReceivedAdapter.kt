@@ -32,7 +32,7 @@ class NoticeMyReceivedAdapter(layoutResId: Int) : BaseQuickAdapter<NoticeItemBea
         } else {
             view.ivIconImg.setImageResource(R.mipmap.icon_notice_unread)
         }
-        
+
         view.tvNoticeTitle.text = item.title
         when {
             DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天
@@ -42,7 +42,7 @@ class NoticeMyReceivedAdapter(layoutResId: Int) : BaseQuickAdapter<NoticeItemBea
                 view.tvNoticeTime.text = context.getString(R.string.notice_yesterday, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
             }
             else -> {
-                view.tvNoticeTime.text = item.timerDate
+                view.tvNoticeTime.text = DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")
             }
         }
         view.tvNoticeAuthor.text = item.publisher

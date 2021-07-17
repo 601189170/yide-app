@@ -86,6 +86,7 @@
         android:usesCleartextTraffic="true"
         android:allowBackup="false"
         tools:replace="android:allowBackup">
+
         <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait" />

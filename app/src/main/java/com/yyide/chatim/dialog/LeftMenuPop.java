@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -33,9 +32,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.utils.FileCacheUtils;
 import com.yyide.chatim.utils.GlideUtil;
-
 import org.greenrobot.eventbus.EventBus;
-
 
 /**
  * Created by Administrator on 2019/5/15.

@@ -29,7 +29,6 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
@@ -161,9 +160,18 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         alphaAniHide.setDuration(500);
     }
 
-    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code, R.id.del})
+    private int debugOrRelease = 0;
+
+    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code, R.id.del, R.id.logo})
     void click(View view) {
         switch (view.getId()) {
+            case R.id.logo:
+                if (debugOrRelease == 5) {
+                    debugOrRelease = 0;
+                    BaseConstant.API_SERVER_URL = BaseConstant.API_SERVER_URL.equals(BaseConstant.API_SERVER_URL_RELEASE) ? BaseConstant.API_SERVER_URL_UAT : BaseConstant.API_SERVER_URL_RELEASE;
+                }
+                debugOrRelease++;
+                break;
             case R.id.forgot:
                 if (!isForget) {
                     String userName = userEdit.getText().toString().trim();

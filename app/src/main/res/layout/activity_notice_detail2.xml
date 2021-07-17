@@ -80,6 +80,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:background="@color/white">
 
                 <TextView
@@ -130,6 +131,7 @@
                 android:id="@+id/cl_range"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:background="@color/white">
                 <TextView
                     android:id="@+id/textView15"
@@ -163,6 +165,7 @@
                 android:id="@+id/cl_read_unread"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
                 android:paddingStart="@dimen/dp_20"

@@ -44,8 +44,9 @@ public class BaseConstant {
 //    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
-    //线上环境
-    public static final String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
+
+    //Http访问地址
+    public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
     //通知模板地址
     public static final String API_SERVER_HTML_RELEASE = "https://cloud.edu.1d1j.cn";
@@ -85,7 +86,7 @@ public class BaseConstant {
     public final static String JG_ALIAS_NAME = "aliasName";
     public final static String JG_SEQUENCE = "sequence";
 
-    public static final  String SP_PRIVACY = "sp_privacy";
+    public static final String SP_PRIVACY = "sp_privacy";
 
     /**
      * EventBus 常量
