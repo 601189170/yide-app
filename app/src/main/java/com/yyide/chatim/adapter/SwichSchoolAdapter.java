@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class SwichSchoolAdapter extends BaseAdapter {
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
         View view_line = VHUtil.ViewHolder.get(view, R.id.view_line);
         ImageView img = VHUtil.ViewHolder.get(view, R.id.img);
-
+        GlideUtil.loadImageHead(viewGroup.getContext(), getItem(position).img, img);
         school_name.setText(getItem(position).schoolName);
         school_info.setText(getItem(position).realname);
         if (list.get(position).userId == SpData.getIdentityInfo().userId) {
@@ -59,7 +60,7 @@ public class SwichSchoolAdapter extends BaseAdapter {
             select.setVisibility(View.GONE);
         }
         Log.d("position", position + "");
-        if (getCount() -1 == position) {
+        if (getCount() - 1 == position) {
             view_line.setVisibility(View.GONE);
         } else {
             view_line.setVisibility(View.VISIBLE);

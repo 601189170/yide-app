@@ -227,6 +227,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
      * @Description:动态授权
      */
     String[] mPermissionList;
+
     private void permission() {//https://blog.csdn.net/android_code/article/details/82027500
         if (Build.VERSION.SDK_INT >= 23) {
             mPermissionList = new String[]{
@@ -266,8 +267,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
                 // 极光推送释放代码
                 //JPushInterface.setAlias(this, ++sequence, SpData.getIdentityInfo().userId);
-                if (TextUtils.isEmpty(alias)){
-                    SPUtils.getInstance().put(BaseConstant.JG_ALIAS_NAME,String.valueOf(SpData.getIdentityInfo().userId));
+                if (TextUtils.isEmpty(alias)) {
+                    SPUtils.getInstance().put(BaseConstant.JG_ALIAS_NAME, String.valueOf(SpData.getIdentityInfo().userId));
                     alias = String.valueOf(SpData.getIdentityInfo().userId);
                 }
                 //阿里云消息推送
@@ -276,7 +277,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 mPushService.addAlias(alias, new CommonCallback() {
                     @Override
                     public void onSuccess(String s) {
-                        Log.e(TAG, "onSuccess: add alias " + finalAlias + " success. "+s );
+                        Log.e(TAG, "onSuccess: add alias " + finalAlias + " success. " + s);
                     }
 
                     @Override
@@ -400,13 +401,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     String messge = intent.getStringExtra(KEY_MESSAGE);
                     String extras = intent.getStringExtra(KEY_EXTRAS);
                     StringBuilder showMsg = new StringBuilder();
-                    showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
+                    showMsg.append(KEY_MESSAGE + " : ").append(messge).append("\n");
                     if (!ExampleUtil.isEmpty(extras)) {
-                        showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                        showMsg.append(KEY_EXTRAS + " : ").append(extras).append("\n");
                     }
                     setCostomMsg(showMsg.toString());
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -444,7 +446,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     void setTab(int position, int type) {
-
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
@@ -471,6 +472,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 tab1.setChecked(true);
                 break;
             case 1:
+
                 if (fg2 == null) {
                     fg2 = new MessageFragment();
                     Bundle bundle = new Bundle();

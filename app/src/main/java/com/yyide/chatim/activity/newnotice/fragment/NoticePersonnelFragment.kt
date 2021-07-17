@@ -331,7 +331,6 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
         return checkTotalNumber
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun event(messageEvent: EventMessage) {
         if (BaseConstant.TYPE_NOTICE_IS_CONFIRM == messageEvent.code) {
@@ -345,7 +344,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
 
     override fun getDesignatedPersonnelList(model: NoticePersonnelBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
                 list = model.data
                 total = 0
                 total = getAllCount(model.data)

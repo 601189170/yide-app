@@ -102,6 +102,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_5"
+            android:lines="1"
+            android:ellipsize="end"
             android:textColor="#ff333333"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/iv_icon_img"

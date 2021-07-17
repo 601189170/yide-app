@@ -26,12 +26,16 @@ public class TodoFragmentPresenter extends BasePresenter<TodoFragmentView> {
         addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
             @Override
             public void onSuccess(TodoRsp model) {
-                mvpView.getMyNoticePageSuccess(model);
+                if (mvpView != null) {
+                    mvpView.getMyNoticePageSuccess(model);
+                }
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getMyNoticePageFail(msg);
+                if (mvpView != null) {
+                    mvpView.getMyNoticePageFail(msg);
+                }
             }
 
             @Override

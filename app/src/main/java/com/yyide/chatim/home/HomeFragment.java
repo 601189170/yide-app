@@ -166,9 +166,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             dialog.show();
             WindowManager m = getActivity().getWindowManager();
             m.getDefaultDisplay(); //为获取屏幕宽、高
-            WindowManager.LayoutParams p = dialog.getWindow().getAttributes(); //获取对话框当前的参数值
-            p.height = (int) (ScreenUtils.getScreenHeight() * 0.8); //高度设置为屏幕的0.3
-            p.width = (int) (ScreenUtils.getScreenWidth() * 0.8); //宽度设置为屏幕的0.5
+            WindowManager.LayoutParams p = dialog.getWindow().getAttributes();
+            p.height = (int) (ScreenUtils.getScreenHeight() * 0.8);
+            p.width = (int) (ScreenUtils.getScreenWidth() * 0.8);
             //设置主窗体背景颜色为黑色
             previewBinding.icClose.setOnClickListener(v -> dialog.dismiss());
 //        dialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
