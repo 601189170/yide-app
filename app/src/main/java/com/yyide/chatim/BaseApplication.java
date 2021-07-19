@@ -86,8 +86,8 @@ public class BaseApplication extends Application {
         });
 
         // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
-        final String XIAOMI_APPID = "MI-2882303761519922795";
-        final String XIAOMI_APPKEY = "MI-5201992213795";
+        final String XIAOMI_APPID = "2882303761519922795";
+        final String XIAOMI_APPKEY = "5201992213795";
         MiPushRegister.register(applicationContext, XIAOMI_APPID, XIAOMI_APPKEY);
         // 注册方法会自动判断是否支持华为系统推送，如不支持会跳过注册。
         HuaWeiRegister.register(this);
@@ -95,8 +95,8 @@ public class BaseApplication extends Application {
         VivoRegister.register(applicationContext);
         // OPPO通道注册
         // appKey/appSecret在OPPO开发者平台获取
-        final String OPPO_APPKEY = "OP-b73f1a5b44af4e2d9a7200b15a521808";
-        final String OPPO_APPSECRET = "OP-13ee3e7c24cd43af91242879d555c747";
+        final String OPPO_APPKEY = "b73f1a5b44af4e2d9a7200b15a521808";
+        final String OPPO_APPSECRET = "13ee3e7c24cd43af91242879d555c747";
         OppoRegister.register(applicationContext, OPPO_APPKEY, OPPO_APPSECRET);
 
         // 魅族通道注册
