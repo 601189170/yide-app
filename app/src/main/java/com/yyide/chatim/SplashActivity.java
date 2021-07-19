@@ -324,6 +324,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e(TAG, "onActivityResult requestCode "+requestCode+",resultCode "+resultCode );
         if (RESULT_OK == resultCode && 100 == requestCode){
+            if (data != null){
+                final boolean interrupt = data.getBooleanExtra("interrupt", false);
+                if (interrupt){
+                    //引导没有看完直接退出。
+                    finish();
+                    return;
+                }
+            }
             if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
                 Tologin(loginName, passWord);
             } else {

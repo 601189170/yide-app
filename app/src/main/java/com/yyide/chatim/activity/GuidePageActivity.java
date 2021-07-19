@@ -1,5 +1,7 @@
 package com.yyide.chatim.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,8 +9,10 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.databinding.ActivityGuidePageBinding;
 import com.yyide.chatim.fragment.GuidePageFragment;
 
@@ -50,5 +54,18 @@ public class GuidePageActivity extends BaseActivity {
                 return fragments.isEmpty() ? 0 : fragments.size();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        boolean firstOpenApp = SPUtils.getInstance().getBoolean(BaseConstant.FIRST_OPEN_APP,true);
+        if (firstOpenApp){
+            final Intent intent = getIntent();
+            intent.putExtra("interrupt",true);
+            setResult(Activity.RESULT_OK,intent);
+            finish();
+        }else {
+            super.onBackPressed();
+        }
     }
 }
