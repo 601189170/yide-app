@@ -194,43 +194,43 @@ public interface DingApiStores {
 
     //获取首页代办
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @GET("/message-server/cloud-message/user/notice/getIndexMyNotice")
+    @GET("/message/cloud-message/user/notice/getIndexMyNotice")
     Observable<NoticeHomeRsp> getIndexMyNotice();
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNotice
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/announcement/getMyAnnouncement
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyAnnouncement
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/announcement/getMyAnnouncement
     //通知公告列表
     //type 1 我收到的 2 我发布的
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/announcement/getMyAnnouncement")
+    @GET("/message/cloud-message/user/announcement/getMyAnnouncement")
     Observable<NoticeListRsp> getMyNotice(@Query("type") int type, @Query("current") int page, @Query("size") int size);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/user/notice/getMyNoticeDetails
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/notice/getMyNoticeDetails
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/notice/getMyNoticeDetails
     //获取我的公告详情
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/notice/getMyNoticeDetails")
+    @GET("/message/cloud-message/user/notice/getMyNoticeDetails")
     Observable<NoticeDetailRsp> getMyNoticeDetails(@Query("id") long id);
 
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyReleaseNotice
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/announcement/getMyReleaseNotice
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/announcement/getMyReleaseNotice")
+    @GET("/message/cloud-message/user/announcement/getMyReleaseNotice")
     Observable<NoticeDetailRsp> getMyReleaseNotice(@Query("id") long id);
 
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getMyNoticeBySignId
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/announcement/getMyNoticeBySignId
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/announcement/getMyNoticeBySignId")
+    @GET("/message/cloud-message/user/announcement/getMyNoticeBySignId")
     Observable<NoticeDetailRsp> getMyNoticeBySignId(@Query("signId") long id);
 
     //消息模板分类类型
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/announcement/type/getAnnouncementTypePage")
+    @POST("/message/cloud-message/announcement/type/getAnnouncementTypePage")
     Observable<TemplateTypeRsp> getTemplateTypePage(@Body RequestBody requestBody);
 
     //获取消息模板
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/message/temp/selectMessagePage")
+    @POST("/message/cloud-message/message/temp/selectMessagePage")
     Observable<TemplateListRsp> selectMessagePage(@Body RequestBody requestBody);
 
     //我的应用
@@ -254,29 +254,29 @@ public interface DingApiStores {
     Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/announcement/getMyNoticeBacklog")
+    @GET("/message/cloud-message/user/announcement/getMyNoticeBacklog")
     Observable<HomeNoticeRsp> getMyNoticeBacklog();
 
     //添加公告
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/addUserAnnouncement
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/announcement/addUserAnnouncement
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/user/announcement/addUserAnnouncement")
+    @POST("/message/cloud-message/user/announcement/addUserAnnouncement")
     Observable<AddUserAnnouncementResponse> addUserAnnouncement(@Body RequestBody requestBody);
 
     //删除我发布的通告
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/delAnnouncement
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/announcement/delAnnouncement
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/announcement/delAnnouncement")
+    @GET("/message/cloud-message/user/announcement/delAnnouncement")
     Observable<BaseRsp> delAnnouncement(@Query("id") long id);
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/notice/updateMyNoticeDetails")
+    @GET("/message/cloud-message/user/notice/updateMyNoticeDetails")
     Observable<BaseRsp> updateMyNoticeDetails(@Query("id") long id);
 
     //确认详情（多少人未确认）
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/announcement/getConfirmDetails
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/announcement/getConfirmDetails
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/announcement/getConfirmDetails")
+    @GET("/message/cloud-message/user/announcement/getConfirmDetails")
     Observable<ConfirmDetailRsp> getConfirmDetails(@Query("confirmType") int confirmType, @Query("signId") long signId, @Query("current") int current, @Query("size") int size);
 
     //查询学段
@@ -303,7 +303,7 @@ public interface DingApiStores {
     ////https://api.uat.edu.1d1j.net/school-server/cloud-school/notice/scope/app/v1/queryOrganizationStructure
     //获取部门列表-无权限校验
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/school-server/cloud-school/notice/scope/app/v1/queryOrganizationStructure")
+    @POST("/management/cloud-system/notice/scope/app/v1/queryOrganizationStructure")
     Observable<DepartmentScopeRsp2> queryOrganizationStructure(@Body RequestBody requestBody);
 
     //查询是否有备课
@@ -396,7 +396,7 @@ public interface DingApiStores {
 
     //获取消息代办列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/notice/getMessage/android")
+    @GET("/message/cloud-message/user/notice/getMessage/android")
     Observable<TodoRsp> getMessageTransaction(@QueryMap HashMap<String, Object> map);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
@@ -430,13 +430,13 @@ public interface DingApiStores {
     //https://api.edu.1d1j.cn/management/cloud-system/user/notice/getUserNoticePage
     //获取通知消息列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/user/notice/queryUserMessageNotice")
+    @POST("/message/cloud-message/user/notice/queryUserMessageNotice")
     Observable<UserNoticeRsp> getUserNoticePage(@Body RequestBody requestBody);
 
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/notice/queryUserMessageNotice
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/notice/queryUserMessageNotice
     //获取消息分页
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/notice/queryUserMessageNotice")
+    @GET("/message/cloud-message/user/notice/queryUserMessageNotice")
     Observable<UserMsgNoticeRsp> queryUserMessageNotice(@QueryMap HashMap<String, Object> map);
 
 
@@ -490,7 +490,7 @@ public interface DingApiStores {
 
     //获取代办数量
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/notice/queryBocklogNuberByStatus")
+    @GET("/message/cloud-message/user/notice/queryBocklogNuberByStatus")
     Observable<MessageNumberRsp> queryBocklogNuberByStatus(@QueryMap HashMap<String, Object> map);
 
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/phrase/queryLeavePhraseList
@@ -500,9 +500,9 @@ public interface DingApiStores {
     Observable<LeavePhraseRsp> queryLeavePhraseList(@QueryMap HashMap<String, Object> map);
 
     //更新我收到的公告
-    //https://api.uat.edu.1d1j.net/message-server/cloud-message/user/notice/updateMyNoticeDetails
+    //https://api.uat.edu.1d1j.net/message/cloud-message/user/notice/updateMyNoticeDetails
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/user/notice/updateMyNoticeDetails")
+    @GET("/message/cloud-message/user/notice/updateMyNoticeDetails")
     Observable<ResultBean> updateMyNoticeDetails(@QueryMap HashMap<String, Object> map);
 
     //首页考勤 老师视角的课堂考勤
@@ -540,61 +540,61 @@ public interface DingApiStores {
 
     //查询我发布的通知公告列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/app/message/publish/list")
+    @POST("/message/cloud-message/app/message/publish/list")
     Observable<NoticeItemBean> myNoticeList(@Body RequestBody requestBody);
 
     //发布通知公告详情
-    @GET("/message-server/cloud-message/app/message/publish/{id}")
+    @GET("/message/cloud-message/app/message/publish/{id}")
     Observable<NoticeMyReleaseDetailBean> publishDetail(@Path("id") long id);
 
     //发布通知公告详情
-    @GET("/message-server/cloud-message/app/message/publish/retract/{id}")
+    @GET("/message/cloud-message/app/message/publish/retract/{id}")
     Observable<ResultBean> retract(@Path("id") long id);
 
     //发布通知未读未确认人员列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/app/message/publish/unconfirm/users")
+    @POST("/message/cloud-message/app/message/publish/unconfirm/users")
     Observable<NoticeUnreadPeopleBean> noticeUnreadList(@Body RequestBody requestBody);
 
     //我收到的通知列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/app/message/receive/list")
+    @POST("/message/cloud-message/app/message/receive/list")
     Observable<NoticeItemBean> myReceiverNoticeList(@Body RequestBody requestBody);
 
     //我收到的-确认通知
-    @GET("/message-server/cloud-message/app/message/receive/confirm/{id}")
+    @GET("/message/cloud-message/app/message/receive/confirm/{id}")
     Observable<ResultBean> confirmNotice(@Path("id") long id);
 
     //我收到的确认詳情
-    @GET("/message-server/cloud-message/app/message/receive/{id}")
+    @GET("/message/cloud-message/app/message/receive/{id}")
     Observable<NoticeMyReleaseDetailBean> confirmNoticeDetail(@Path("id") long id);
 
     //首页通知弹窗
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message-server/cloud-message/app/message/publish/indexShow")
+    @GET("/message/cloud-message/app/message/publish/indexShow")
     Observable<NoticeMyReleaseDetailBean> noticeShow();
 
     //通知模板列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/app/message/template/list")
+    @POST("/message/cloud-message/app/message/template/list")
     Observable<NoticeReleaseTemplateBean> templateNoticeList(@Body RequestBody requestBody);
 
     //通知模板分类列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/app/message/template/type/list")
+    @POST("/message/cloud-message/app/message/template/type/list")
     Observable<NoticeReleaseTemplateBean> templateNoticeClassifyList(@Body RequestBody requestBody);
 
     //发布空白模板通知
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/app/message/publish/do")
+    @POST("/message/cloud-message/app/message/publish/do")
     Observable<ResultBean> releaseNotice(@Body RequestBody requestBody);
 
     //我收到的确认詳情
-    @GET("/message-server/cloud-message/app/message/template/{id}")
+    @GET("/message/cloud-message/app/message/template/{id}")
     Observable<NoticeReleaseTemplateBean> templateDetail(@Path("id") long id);
 
     //通知范围学籍部门树形结构
-    @GET("/message-server/cloud-message/app/message/publish/specifieType/{specifieType}")
+    @GET("/message/cloud-message/app/message/publish/specifieType/{specifieType}")
     Observable<NoticePersonnelBean> specifieType(@Path("specifieType") String specifieType);
 
     //班牌班级
@@ -609,11 +609,11 @@ public interface DingApiStores {
 
     //未读通知提醒
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/message-server/cloud-message/app/message/publish/unconfirm/users/notify")
+    @POST("/message/cloud-message/app/message/publish/unconfirm/users/notify")
     Observable<ResultBean> unNoticeNotify(@Body RequestBody requestBody);
 
     //通知权限
-    @GET("/message-server/cloud-message/app/message/publish/permission")
+    @GET("/message/cloud-message/app/message/publish/permission")
     Observable<NoticePermissionBean> noticePermission();
 
     //获取登录页面开关
