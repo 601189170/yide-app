@@ -13,7 +13,6 @@ public class ResultBean {
     private String msg;
     private String message;
 
-
     public int getCode() {
         return code;
     }
@@ -45,4 +44,5 @@ public class ResultBean {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }

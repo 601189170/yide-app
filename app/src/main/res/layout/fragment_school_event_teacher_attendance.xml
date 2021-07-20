@@ -121,6 +121,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/progress" />
 
                     <TextView
+                        android:id="@+id/tv_absenteeism_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_5"

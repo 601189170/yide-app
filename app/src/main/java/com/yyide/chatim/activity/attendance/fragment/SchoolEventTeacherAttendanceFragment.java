@@ -99,7 +99,8 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
             mViewBinding.tvLateName.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
             mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
             mViewBinding.tvAbsenteeism.setText("1".equals(teachers.getGoOutStatus()) ? "未签退" : "缺勤");
-            
+            mViewBinding.tvAbsenteeismTitle.setText("1".equals(teachers.getGoOutStatus()) ? "未签退" : "缺勤");
+
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             adapter.setList(teachers.getPeople());

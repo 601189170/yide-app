@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
-
 import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.SpData;
@@ -26,7 +25,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -34,8 +33,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * 邮箱：rance935@163.com
  */
 public class AppClient {
-    public static Retrofit mVideoRetrofit;
-    public static Retrofit mZhiHuRetrofit;
     public static Retrofit mDingRetrofit;
     private static OkHttpClient okHttpClient;
 
@@ -44,7 +41,7 @@ public class AppClient {
             mDingRetrofit = new Retrofit.Builder()
                     .baseUrl(BaseConstant.API_SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                     .client(getOkHttpClient())
                     .build();
         }

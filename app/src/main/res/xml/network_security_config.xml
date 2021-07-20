@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--在debug包中配置Charles拦截https请求-->
+    <!--参考：https://developer.android.google.cn/training/articles/security-config.html#network-security-config-->
+
+    <!--<domain-config>-->
+    <!--<domain includeSubdomains="true">api.cardniu.com</domain>-->
+    <!--<trust-anchors>-->
+    <!--<certificates src="@raw/charles_proxy_ssl_proxying_certificate"/>-->
+    <!--</trust-anchors>-->
+    <!--</domain-config>-->
+
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="@raw/charles_proxy_ssl_proxying_certificate" /> <!--这里是证书名-->
+        </trust-anchors>
+    </debug-overrides>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

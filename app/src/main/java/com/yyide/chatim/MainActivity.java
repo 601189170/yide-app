@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +28,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.sdk.android.push.CloudPushService;
+import com.alibaba.sdk.android.push.CommonCallback;
+import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
@@ -78,7 +82,6 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.jpush.android.api.JPushInterface;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -129,7 +132,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registerMessageReceiver();  // used for receive msg
-        permission();
+        //permission();
         //登录IM
         getUserSig();
         // 未读消息监视器
@@ -218,11 +221,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
     }
 
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
     /**
      * @Author: Berlin
      * @Date: 2018/12/19 14:37
@@ -243,9 +241,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     Manifest.permission.GET_ACCOUNTS,
                     Manifest.permission.WRITE_SETTINGS,
                     Manifest.permission.WRITE_APN_SETTINGS,
-                    Manifest.permission.CAMERA
-//                    Manifest.permission.ACCESS_FINE_LOCATION,
-//                    Manifest.permission.RECORD_AUDIO//音频
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.RECORD_AUDIO//音频
             };
             requestPermissions(mPermissionList, 1);
             //ActivityCompat.requestPermissions(getActivity(), mPermissionList, 123);
@@ -262,12 +260,32 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     //这是来自 JPush Example 的设置别名的 Activity 里的代码，更详细的示例请参考 JPush Example。一般 App 的设置的调用入口，在任何方便的地方调用都可以。
     private void registerAlias() {
-        int sequence = SPUtils.getInstance().getInt(BaseConstant.JG_SEQUENCE, 1);
+        //int sequence = SPUtils.getInstance().getInt(BaseConstant.JG_SEQUENCE, 1);
         String alias = SPUtils.getInstance().getString(BaseConstant.JG_ALIAS_NAME);
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
         if (identityInfo != null) {
             if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
-                JPushInterface.setAlias(this, ++sequence, SpData.getIdentityInfo().userId);
+                // 极光推送释放代码
+                //JPushInterface.setAlias(this, ++sequence, SpData.getIdentityInfo().userId);
+                if (TextUtils.isEmpty(alias)) {
+                    SPUtils.getInstance().put(BaseConstant.JG_ALIAS_NAME, String.valueOf(SpData.getIdentityInfo().userId));
+                    alias = String.valueOf(SpData.getIdentityInfo().userId);
+                }
+                //阿里云消息推送
+                CloudPushService mPushService = PushServiceFactory.getCloudPushService();
+                String finalAlias = alias;
+                mPushService.addAlias(alias, new CommonCallback() {
+                    @Override
+                    public void onSuccess(String s) {
+                        Log.e(TAG, "onSuccess: add alias " + finalAlias + " success. " + s);
+                    }
+
+                    @Override
+                    public void onFailed(String errorCode, String errorMsg) {
+                        Log.e(TAG, "onFailed :add alias " + finalAlias + " failed." +
+                                "errorCode: " + errorCode + ", errorMsg:" + errorMsg + "\n");
+                    }
+                });
             }
         }
     }
@@ -383,13 +401,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     String messge = intent.getStringExtra(KEY_MESSAGE);
                     String extras = intent.getStringExtra(KEY_EXTRAS);
                     StringBuilder showMsg = new StringBuilder();
-                    showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
+                    showMsg.append(KEY_MESSAGE + " : ").append(messge).append("\n");
                     if (!ExampleUtil.isEmpty(extras)) {
-                        showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                        showMsg.append(KEY_EXTRAS + " : ").append(extras).append("\n");
                     }
                     setCostomMsg(showMsg.toString());
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -427,7 +446,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     void setTab(int position, int type) {
-
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
@@ -454,6 +472,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 tab1.setChecked(true);
                 break;
             case 1:
+
                 if (fg2 == null) {
                     fg2 = new MessageFragment();
                     Bundle bundle = new Bundle();

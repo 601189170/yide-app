@@ -1,5 +1,6 @@
 package com.yyide.chatim.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -23,9 +23,7 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.PowerActivity;
-import com.yyide.chatim.activity.PrivacyActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -36,7 +34,6 @@ import com.yyide.chatim.utils.FileCacheUtils;
 import com.yyide.chatim.utils.GlideUtil;
 
 import org.greenrobot.eventbus.EventBus;
-
 
 /**
  * Created by Administrator on 2019/5/15.
@@ -67,7 +64,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         popupWindow = new PopupWindow(mView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         popupWindow.setAnimationStyle(R.style.popwin_anim_style);
 
-        LinearLayout layout = (LinearLayout) mView.findViewById(R.id.layout);
+        LinearLayout layout = mView.findViewById(R.id.layout);
 
         FrameLayout bg = mView.findViewById(R.id.bg);
         head_name = mView.findViewById(R.id.head_name);
@@ -128,7 +125,6 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 if (popupWindow != null && popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
-
                 return true;
             }
             return false;
@@ -165,7 +161,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 my_info.setText("我的信息");
             }
             user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
-            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
+            setIdentity();
             head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
             GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
         });
@@ -198,14 +194,11 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         }
     }
 
-    public boolean isshow() {
-        if (popupWindow != null && popupWindow.isShowing()) {
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isShow() {
+        return popupWindow != null && popupWindow.isShowing();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         //hide();
@@ -213,19 +206,13 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             case R.id.layout1://切换班级
                 if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0) {
                     new SwitchClassPop(context).setOnCheckCallBack(() -> {
-                        if (SpData.getClassInfo() != null && "N".equals(SpData.getClassInfo().teacherInd)) {
-                            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "老师" : "");
-                        } else {
-                            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
-                        }
+                        setIdentity();
                         user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
                     });
                 }
                 break;
             case R.id.layout2://切换身份（学校）
-                new SwitchSchoolPop(context).setOnCheckCallBack(() -> {
-                    setData();
-                });
+                new SwitchSchoolPop(context).setOnCheckCallBack(this::setData);
                 break;
             case R.id.layout3://我的信息
                 hide();
@@ -281,5 +268,17 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         }
     }
 
+    private void setIdentity() {
+        //切换班级判断老师或班主任
+        if (SpData.getIdentityInfo() != null
+                && (GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)
+                || GetUserSchoolRsp.DataBean.TYPE_TEACHER.equals(SpData.getIdentityInfo().status))
+                && SpData.getClassInfo() != null
+                && "N".equals(SpData.getClassInfo().teacherInd)) {
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "老师" : "");
+        } else {
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
+        }
+    }
 
 }

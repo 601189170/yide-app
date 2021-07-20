@@ -12,6 +12,7 @@
     <style name="splashActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@mipmap/ic_launcher</item>
+        <item name="statusBarBackground">@color/white</item>
         <item name="android:windowNoTitle">true</item>
 <!--        <item name="android:windowFullscreen">true</item>-->
     </style>

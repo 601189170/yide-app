@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/tv_push_way">
 
                 <View

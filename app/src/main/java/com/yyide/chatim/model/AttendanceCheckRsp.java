@@ -232,6 +232,7 @@ public class AttendanceCheckRsp implements Serializable {
                 public String rate;
                 public int applyNum;
                 public int late;
+                public String goOutStatus;
                 public int leaveEarly;
                 public int absence;
                 public int leave;
@@ -252,6 +253,7 @@ public class AttendanceCheckRsp implements Serializable {
                     public String rate;
                     public int applyNum;
                     public int late;
+                    public String goOutStatus;
                     public int leaveEarly;
                     public int absence;
                     public int leave;

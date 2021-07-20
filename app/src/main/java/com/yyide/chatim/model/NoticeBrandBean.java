@@ -27,6 +27,7 @@ public class NoticeBrandBean implements Serializable {
         public long learningSectionId;
         public boolean check;
         public boolean unfold;
+        public DataBean parentBean;
         public ArrayList<DataBean> list;
         public ArrayList<DataBean> siteEntityFormList;
     }

@@ -142,7 +142,7 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (adapter != null) {
+        if (adapter != null && hidden) {
             adapter.stop();
         }
     }

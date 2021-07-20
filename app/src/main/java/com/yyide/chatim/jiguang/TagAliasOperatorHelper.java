@@ -18,9 +18,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.JPushMessage;
-import cn.jpush.android.helper.Logger;
+//import cn.jpush.android.api.JPushInterface;
+//import cn.jpush.android.api.JPushMessage;
+//import cn.jpush.android.helper.Logger;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -67,6 +67,8 @@ public class TagAliasOperatorHelper {
 
     private TagAliasOperatorHelper() {
     }
+// 极光推送释放代码
+/*
 
     public static TagAliasOperatorHelper getInstance() {
         if (mInstance == null) {
@@ -144,9 +146,11 @@ public class TagAliasOperatorHelper {
         JPushInterface.setMobileNumber(context, sequence, mobileNumber);
     }
 
-    /**
+    */
+/**
      * 处理设置tag
-     */
+     *//*
+
     public void handleAction(Context context, int sequence, TagAliasBean tagAliasBean) {
         init(context);
         if (tagAliasBean == null) {
@@ -393,6 +397,7 @@ public class TagAliasOperatorHelper {
             }
         }
     }
+*/
 
     public static class TagAliasBean {
         int action;

@@ -89,7 +89,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         entries.add(new PieEntry(item.getLeave(), "请假"));
         entries.add(new PieEntry(item.getLate(), "迟到"));
         entries.add(new PieEntry(item.getApplyNum(), "实到"));
-        String desc = !TextUtils.isEmpty(item.getGoOutStatus()) ? ("1".equals(item.getGoOutStatus()) ? "签退率" : "签到率") : "考勤率";
+        String desc = "1".equals(item.getGoOutStatus()) ? "签退率" : "签到率";
         piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + desc);
         piechart.setCenterTextSize(12);
         PieDataSet dataSet = new PieDataSet(entries, "");

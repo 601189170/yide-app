@@ -38,12 +38,14 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
     private lateinit var mViewBinding: ActivityNoticeUnConfirmListBinding
     private var id: Long = 0
     private var readCount: Int = 0
+    private var isRead: Boolean = false
 
     companion object {
-        fun start(context: Context, id: Long, readCount: Int) {
+        fun start(context: Context, id: Long, readCount: Int, isRead: Boolean) {
             val intent = Intent(context, NoticeUnConfirmListActivity::class.java)
             intent.putExtra("id", id)
             intent.putExtra("readCount", readCount)
+            intent.putExtra("isRead", isRead)
             context.startActivity(intent)
         }
     }
@@ -53,9 +55,10 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
         mViewBinding = ActivityNoticeUnConfirmListBinding.inflate(layoutInflater);
         setContentView(mViewBinding.root)
         EventBus.getDefault().register(this)
-        initView()
         id = intent.getLongExtra("id", 0)
         readCount = intent.getIntExtra("readCount", 0)
+        isRead = intent.getBooleanExtra("isRead", false)
+        initView()
     }
 
     override fun getContentViewID(): Int {
@@ -63,7 +66,11 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
     }
 
     private fun initView() {
-        mViewBinding.top.title.setText(R.string.notice_un_confirm_title)
+        if (isRead) {
+            mViewBinding.top.title.setText(R.string.notice_un_confirm_title)
+        } else {
+            mViewBinding.top.title.setText(R.string.notice_un_read_title)
+        }
         mViewBinding.top.backLayout.setOnClickListener { finish() }
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add(getString(R.string.notice_tab_teacher))
@@ -97,7 +104,11 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
     fun event(messageEvent: EventMessage) {
         if (BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER == messageEvent.code) {
             unCheckNumber += messageEvent.count
-            mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, unCheckNumber)
+            if (isRead) {
+                mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, unCheckNumber)
+            } else {
+                mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_read_number, unCheckNumber)
+            }
         }
     }
 
@@ -111,7 +122,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
     override fun pushNotice(model: ResultBean?) {
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                //ToastUtils.showShort(model.msg)
+                ToastUtils.showShort("已提醒未确认人员")
                 finish()
             }
         }

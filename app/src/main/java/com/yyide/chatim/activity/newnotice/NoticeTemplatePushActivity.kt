@@ -2,7 +2,6 @@ package com.yyide.chatim.activity.newnotice
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -11,7 +10,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SizeUtils
@@ -67,7 +65,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         pushDetailBinding!!.switchPush.isChecked = true
         pushDetailBinding!!.switchPush.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
-                pushDetailBinding!!.clThing.visibility = View.INVISIBLE
+                pushDetailBinding!!.clThing.visibility = View.GONE
             } else {
                 pushDetailBinding!!.clThing.visibility = View.VISIBLE
             }
@@ -115,8 +113,11 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
             ToastUtils.showShort(R.string.notice_timing_push_input)
         } else if (list.isEmpty() || list.size == 0) {
             ToastUtils.showShort("请选择通知范围")
+        } else if (teacherNumber <= 0 && patriarchNumber <= 0 && brandNumber <= 0) {
+            ToastUtils.showShort("请选择通知人员")
         } else {
             if (webModel.params != null) {
+                pushDetailBinding!!.btnConfirm.isClickable = false
                 val itemBean = NoticeBlankReleaseBean()
                 itemBean.messageTemplateId = webModel.params.tempId
                 itemBean.title = webModel.params.tempTitle
@@ -245,6 +246,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
     }
 
     override fun pushTemplateSuccess(model: ResultBean?) {
+        pushDetailBinding!!.btnConfirm.isClickable = true
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
             Handler().postDelayed({
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
@@ -257,6 +259,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
 
     @SuppressLint("LongLogTag")
     override fun getTemplateDetailFail(msg: String?) {
+        pushDetailBinding!!.btnConfirm.isClickable = true
         Log.d("NoticeTemplateDetailActivity", "getTemplateDetailFail$msg");
     }
 

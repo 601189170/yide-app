@@ -4,37 +4,40 @@ package com.yyide.chatim.net;
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.AppAddRsp;
+import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
-import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.DepartmentScopeRsp2;
-import com.yyide.chatim.model.LeaveDeptRsp;
-import com.yyide.chatim.model.LeaveDetailRsp;
-import com.yyide.chatim.model.LeaveListRsp;
-import com.yyide.chatim.model.LeavePhraseRsp;
-import com.yyide.chatim.model.LoginAccountBean;
-import com.yyide.chatim.model.MessageNumberRsp;
-import com.yyide.chatim.model.MyAppListRsp;
+import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
+import com.yyide.chatim.model.DepartmentScopeRsp2;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.FaceOssBean;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.HelpItemRep;
 import com.yyide.chatim.model.HomeNoticeRsp;
+import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.LeaveDetailRsp;
+import com.yyide.chatim.model.LeaveListRsp;
+import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
+import com.yyide.chatim.model.ListByAppRsp;
+import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.LoginRsp;
+import com.yyide.chatim.model.MessageNumberRsp;
+import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.model.NoticeBrandBean;
 import com.yyide.chatim.model.NoticeDetailRsp;
 import com.yyide.chatim.model.NoticeHomeRsp;
 import com.yyide.chatim.model.NoticeItemBean;
 import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
+import com.yyide.chatim.model.NoticePermissionBean;
 import com.yyide.chatim.model.NoticePersonnelBean;
 import com.yyide.chatim.model.NoticeReleaseTemplateBean;
 import com.yyide.chatim.model.NoticeUnreadPeopleBean;
@@ -59,12 +62,12 @@ import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
-import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
@@ -77,7 +80,6 @@ import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
-import rx.Observable;
 
 public interface DingApiStores {
 
@@ -607,8 +609,12 @@ public interface DingApiStores {
 
     //未读通知提醒
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("    /message-server/cloud-message/app/message/publish/unconfirm/users/notify")
+    @POST("/message-server/cloud-message/app/message/publish/unconfirm/users/notify")
     Observable<ResultBean> unNoticeNotify(@Body RequestBody requestBody);
+
+    //通知权限
+    @GET("/message-server/cloud-message/app/message/publish/permission")
+    Observable<NoticePermissionBean> noticePermission();
 
     //获取登录页面开关
     @GET("/management/cloud-system/app/sys/switch/{key}")

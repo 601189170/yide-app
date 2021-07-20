@@ -17,7 +17,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.view.WheelView;
-import com.google.common.collect.EvictingQueue;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;

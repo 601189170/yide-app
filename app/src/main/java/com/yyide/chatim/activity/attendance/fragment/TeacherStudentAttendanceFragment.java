@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.blankj.utilcode.util.MetaDataUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -39,7 +40,7 @@ import java.util.List;
  * time 2021年5月31日15:52:14
  * other lrz
  */
-public class TeacherStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener {
+public class TeacherStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private AttendanceCheckRsp.DataBean.AttendancesFormBean.Students itemStudents;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentAttendanceBinding mViewBinding;
@@ -85,6 +86,11 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     }
 
     private void initView() {
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener(this);
+        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            mViewBinding.swipeRefreshLayout.setEnabled(verticalOffset >= 0);//页面滑动到顶部，才可以下拉刷新
+        });
         mViewBinding.constraintLayout.setVisibility(View.GONE);
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewBinding.recyclerview.setAdapter(adapter);
@@ -204,6 +210,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             attendancePop.setCurrentItem(mViewBinding.tvAttendanceTitle.getText().toString().trim());
             attendancePop.setOnSelectListener(index -> {
                 itemStudents = item.getAttendancesForm().get(index).getStudents();
+                this.index = index;
                 setData();
             });
         });
@@ -234,7 +241,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
             mViewBinding.tvAttendanceTitle.setText(itemStudents.getName());
             mViewBinding.tvDesc.setText(TextUtils.isEmpty(itemStudents.getSubjectName()) ? itemStudents.getThingName() : itemStudents.getSubjectName());
-            mViewBinding.tvAttendanceTime.setText("考勤时间 " + (!TextUtils.isEmpty(itemStudents.getRequiredTime()) ? itemStudents.getRequiredTime() : itemStudents.getStartTime()));
+            mViewBinding.tvAttendanceTime.setText(!TextUtils.isEmpty(itemStudents.getRequiredTime()) ? itemStudents.getRequiredTime() : itemStudents.getStartTime());
 
             mViewBinding.tvSign.setText("1".equals(itemStudents.getGoOutStatus()) ? "签退率" : "签到率");
             mViewBinding.tvLateName.setText("1".equals(itemStudents.getGoOutStatus()) ? "早退" : "迟到");
@@ -272,6 +279,11 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         adapter.setList(itemStudents != null ? itemStudents.getPeople() : null);
     }
 
+    @Override
+    public void onRefresh() {
+        getAttendance();
+    }
+
     private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean, BaseViewHolder>(R.layout.item_attendance_student) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item) {
@@ -307,9 +319,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         holder.setText(R.id.tv_status, item.getStatusType());
                         String startTime = DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         String endTime = DateUtils.formatTime(item.getEndDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-//                        holder.setText(R.id.tv_student_event, "请假时间");
-//                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
-//                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
+                        holder.setText(R.id.tv_student_event, "请假时间");
+                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
+                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
                         break;
                 }
             }
@@ -318,6 +330,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     @Override
     public void getAttendanceSuccess(AttendanceCheckRsp model) {
+        mViewBinding.swipeRefreshLayout.setRefreshing(false);
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             AttendanceCheckRsp.DataBean data = model.getData();
             if (data != null) {
@@ -328,6 +341,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     @Override
     public void getAttendanceFail(String msg) {
+        mViewBinding.swipeRefreshLayout.setRefreshing(false);
         Log.d(TAG, "getHomeAttendanceFail-->>" + msg);
     }
 
@@ -341,4 +355,5 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         super.onDestroy();
         mViewBinding = null;
     }
+
 }

@@ -78,6 +78,8 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                 }
+                mViewBinding.tvSign.setText("1".equals(itemStudents.getGoOutStatus()) ? "签退率" : "签到率");
+                mViewBinding.tvAbsenceTitle.setText("1".equals(itemStudents.getGoOutStatus()) ? "未签退" : "缺勤");
                 mViewBinding.tvLateNum.setText(("1".equals(itemStudents.getGoOutStatus()) ? itemStudents.getLeaveEarly() : itemStudents.getLate()) + "");
                 mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
                 mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsence() + "");
@@ -95,6 +97,9 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
             if (item.getNumber() == 0) {
                 sListIterator.remove();
             }
+            if (itemStudents != null) {
+                item.setGoOutStatus(itemStudents.goOutStatus);
+            }
         }
         return list;
     }
@@ -106,6 +111,8 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
             holder.setText(R.id.tv_event_name, item.getName())
                     .setText(R.id.tv_attendance_rate, item.getRate())
                     .setText(R.id.tv_normal_num, item.getApplyNum() + "")
+                    .setText(R.id.tv_absence, "1".equals(item.getGoOutStatus()) ? "未签退" : "缺勤")
+                    .setText(R.id.tv_sign, "1".equals(item.goOutStatus) ? "签退率" : "签到率")
                     .setText(R.id.tv_absence_num, item.getAbsence() + "")
                     .setText(R.id.tv_ask_for_leave_num, item.getLeave() + "");
         }

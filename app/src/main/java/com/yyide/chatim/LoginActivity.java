@@ -50,7 +50,6 @@ import com.yyide.chatim.view.LoginView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 
 /**
@@ -86,7 +85,6 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     TextView forgot;
     private TimeCount time;
     private boolean isPwd;
-    OkHttpClient mOkHttpClient = new OkHttpClient();
     public String phone = "";
 
     private AlphaAnimation alphaAniShow, alphaAniHide;
@@ -162,9 +160,18 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         alphaAniHide.setDuration(500);
     }
 
-    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code, R.id.del})
+    private int debugOrRelease = 0;
+
+    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code, R.id.del, R.id.logo})
     void click(View view) {
         switch (view.getId()) {
+            case R.id.logo:
+                if (debugOrRelease == 5) {
+                    debugOrRelease = 0;
+                    BaseConstant.API_SERVER_URL = BaseConstant.API_SERVER_URL.equals(BaseConstant.API_SERVER_URL_RELEASE) ? BaseConstant.API_SERVER_URL_UAT : BaseConstant.API_SERVER_URL_RELEASE;
+                }
+                debugOrRelease++;
+                break;
             case R.id.forgot:
                 if (!isForget) {
                     String userName = userEdit.getText().toString().trim();
@@ -419,14 +426,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Utils.REQ_PERMISSION_CODE:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    ToastUtil.toastLongMessage("未全部授权，部分功能可能无法使用！");
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Utils.REQ_PERMISSION_CODE) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                ToastUtil.toastLongMessage("未全部授权，部分功能可能无法使用！");
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 

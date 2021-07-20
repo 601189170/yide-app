@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
-import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.UserInfo;
@@ -34,20 +32,20 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * 登录状态的Activity都要集成该类，来完成被踢下线等监听处理。
  */
 public abstract class BaseActivity extends AppCompatActivity {
     public Activity mActivity;
-    private CompositeSubscription mCompositeSubscription;
+    private CompositeDisposable mCompositeDisposable;
     private List<Call> calls;
     private static final String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
@@ -78,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     //无参跳转
     protected void jupm(Context context, Class activity) {
-        if (!ButtonUtils.isFastDoubleClick(activity.hashCode(),1500)){
+        if (!ButtonUtils.isFastDoubleClick(activity.hashCode(), 1500)) {
             startActivity(new Intent(context, activity));
         }
     }
@@ -192,28 +190,30 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void addSubscription(Observable observable, Subscriber subscriber) {
-        if (mCompositeSubscription == null) {
-            mCompositeSubscription = new CompositeSubscription();
+    public void addSubscription(Observable observable, Observer subscriber) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = new CompositeDisposable();
         }
-        mCompositeSubscription.add(observable
+        observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber));
+                .subscribe(subscriber);
     }
 
-    public void addSubscription(Subscription subscription) {
-        if (mCompositeSubscription == null) {
-            mCompositeSubscription = new CompositeSubscription();
+    public void addSubscription(Disposable mDisposable) {
+        if (mCompositeDisposable == null && mCompositeDisposable.isDisposed()) {
+            mCompositeDisposable = new CompositeDisposable();
         }
-        mCompositeSubscription.add(subscription);
+        mCompositeDisposable.add(mDisposable);
     }
 
     public void onUnsubscribe() {
         LogUtil.d("onUnsubscribe");
         //取消注册，以避免内存泄露
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
-            mCompositeSubscription.unsubscribe();
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.clear();
+            mCompositeDisposable = null;
+        }
     }
 
     @Override

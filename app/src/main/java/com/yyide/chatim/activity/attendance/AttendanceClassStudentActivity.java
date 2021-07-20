@@ -25,6 +25,7 @@ public class AttendanceClassStudentActivity extends BaseActivity {
 
     private ActivityAttendanceClassStudentBinding viewBinding;
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean;
+    private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeListBean;
 
     @Override
     public int getContentViewID() {
@@ -54,28 +55,12 @@ public class AttendanceClassStudentActivity extends BaseActivity {
         schoolPeopleAllFormBean = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean) getIntent().getSerializableExtra("students");
         int index = getIntent().getIntExtra("index", 0);
         if (schoolPeopleAllFormBean != null && schoolPeopleAllFormBean.getGradeList().size() > 0) {
-            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeListBean;
             if (index < schoolPeopleAllFormBean.getGradeList().size()) {
                 gradeListBean = schoolPeopleAllFormBean.getGradeList().get(index);
             } else {
                 gradeListBean = schoolPeopleAllFormBean.getGradeList().get(0);
             }
-            viewBinding.tvAttendanceTitle.setText(gradeListBean.getName());
-            viewBinding.tvEventName.setText(gradeListBean.getName());
-            viewBinding.tvAttendanceRate.setText(gradeListBean.getRate());
-            if (!TextUtils.isEmpty(gradeListBean.getRate())) {
-                try {
-                    viewBinding.progress.setProgress(Double.valueOf(gradeListBean.getRate()).intValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-//            viewBinding.tvNumber.setText("(" + gradeListBean.getNumber() + "人)");
-            viewBinding.tvLateNum.setText(gradeListBean.getLate() + "");
-            viewBinding.tvLeaveNum.setText(gradeListBean.getLeave() + "");
-            viewBinding.tvAbsenteeismNum.setText(gradeListBean.getAbsence() + "");
-            adapter.setList(remove(gradeListBean.getClassForm()));
-
+            setData();
             if (schoolPeopleAllFormBean.getGradeList() != null && schoolPeopleAllFormBean.getGradeList().size() > 1) {
                 viewBinding.tvAttendanceTitle.setClickable(true);
                 viewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
@@ -103,12 +88,33 @@ public class AttendanceClassStudentActivity extends BaseActivity {
                 }, "");
 
                 attendancePop.setOnSelectListener(position -> {
-                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean bean = schoolPeopleAllFormBean.getGradeList().get(position);
-                    viewBinding.tvAttendanceTitle.setText(bean.getName());
-                    adapter.setList(schoolPeopleAllFormBean.getGradeList().get(position).getClassForm());
+                    gradeListBean = schoolPeopleAllFormBean.getGradeList().get(position);
+                    gradeListBean.classForm = schoolPeopleAllFormBean.getGradeList().get(position).getClassForm();
+                    setData();
                 });
             });
         }
+    }
+
+    private void setData() {
+        viewBinding.tvAttendanceTitle.setText(gradeListBean.getName());
+        viewBinding.tvEventName.setText(gradeListBean.getName());
+        viewBinding.tvAttendanceRate.setText(gradeListBean.getRate());
+        if (!TextUtils.isEmpty(gradeListBean.getRate())) {
+            try {
+                viewBinding.progress.setProgress(Double.valueOf(gradeListBean.getRate()).intValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//            viewBinding.tvNumber.setText("(" + gradeListBean.getNumber() + "人)");
+        viewBinding.tvLateNum.setText(gradeListBean.getLate() + "");
+        viewBinding.tvLeaveNum.setText(gradeListBean.getLeave() + "");
+        viewBinding.tvAbsenteeismNum.setText(gradeListBean.getAbsence() + "");
+        viewBinding.tvLeaveTitle.setText("1".equals(gradeListBean.goOutStatus) ? "早退" : "迟到");
+        viewBinding.tvSign.setText("1".equals(gradeListBean.goOutStatus) ? "签退率" : "签到率");
+        viewBinding.tvAbsenceDesc.setText("1".equals(gradeListBean.goOutStatus) ? "未签退" : "缺勤");
+        adapter.setList(remove(gradeListBean.getClassForm()));
     }
 
     //使用iterator，这个是java和Android源码中经常使用到的一种方法，所以最为推荐
@@ -119,19 +125,22 @@ public class AttendanceClassStudentActivity extends BaseActivity {
             if (item.getNumber() == 0) {
                 sListIterator.remove();
             }
+            if (gradeListBean != null) {
+                item.setGoOutStatus(gradeListBean.goOutStatus);
+            }
         }
         return list;
     }
 
-
-
-    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean, BaseViewHolder>(R.layout.item_school) {
+    private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean, BaseViewHolder> adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean, BaseViewHolder>(R.layout.item_school) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean item) {
             holder.setText(R.id.tv_event_name, item.getName())
                     .setText(R.id.tv_attendance_rate, item.getRate())
+                    .setText(R.id.tv_sign, "1".equals(item.goOutStatus) ? "签退率" : "签到率")
                     .setText(R.id.tv_normal_num, item.getApplyNum() + "")
                     .setText(R.id.tv_absence_num, item.getAbsence() + "")
+                    .setText(R.id.tv_absence, "1".equals(item.goOutStatus) ? "未签退" : "缺勤")
                     .setText(R.id.tv_ask_for_leave_num, item.getLeave() + "");
         }
     };

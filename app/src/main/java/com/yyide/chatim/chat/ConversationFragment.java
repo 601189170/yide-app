@@ -2,7 +2,6 @@ package com.yyide.chatim.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,64 +11,47 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alibaba.fastjson.JSON;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.module.LoadMoreModule;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.google.common.reflect.TypeToken;
 import com.tencent.imsdk.v2.V2TIMConversation;
+import com.tencent.imsdk.v2.V2TIMConversationListener;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
-import com.tencent.imsdk.v2.V2TIMFriendInfo;
-import com.tencent.imsdk.v2.V2TIMFriendshipListener;
-import com.tencent.imsdk.v2.V2TIMFriendshipManager;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
 import com.tencent.imsdk.v2.V2TIMValueCallback;
-import com.tencent.qcloud.tim.uikit.component.CustomLinearLayoutManager;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.component.action.PopDialogAdapter;
 import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
+import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
 import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.BookSearchActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
-import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.chat.helper.ConversationLayoutHelper;
 import com.yyide.chatim.chat.menu.Menu;
-import com.yyide.chatim.fragment.TodoMsgPageFragment;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.ResultBean;
-import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.presenter.UserNoticePresenter;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.view.UserNoticeView;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -81,17 +63,16 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     private PopDialogAdapter mConversationPopAdapter;
     private PopupWindow mConversationPopWindow;
     private List<PopMenuAction> mConversationPopActions = new ArrayList<>();
+    private ConversationListLayout conversationList;
     private Menu mMenu;
+    private List<V2TIMConversation> uiConvList = new ArrayList<>();
 
     @BindView(R.id.cl_message)
     ConstraintLayout cl_message;
     @BindView(R.id.tv_user_notice_content)
     TextView tv_user_notice_content;
-    @BindView(R.id.textView3)
-    TextView textView3;
     @BindView(R.id.tv_unNum)
     TextView tv_unNum;
-    private int nextSeq = 0;
 
     @Nullable
     @Override
@@ -100,42 +81,20 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         return mBaseView;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
+//        initView();
+    }
+
     private void initView() {
-        V2TIMManager.getFriendshipManager().getFriendList(new V2TIMValueCallback<List<V2TIMFriendInfo>>() {
-            @Override
-            public void onError(int code, String desc) {
-
-            }
-
-            @Override
-            public void onSuccess(List<V2TIMFriendInfo> v2TIMFriendInfos) {
-                Log.d("", "");
-            }
-        });
-
-        V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
-            @Override
-            public void onProgress(int progress) {
-
-            }
-
-            @Override
-            public void onError(int code, String desc) {
-                ToastUtil.toastShortMessage("onError==>" + desc);
-            }
-
-            @Override
-            public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-                nextSeq++;
-                v2TIMConversationResult.getConversationList();
-            }
-        });
-
+        getMessageList();
         // 从布局文件中获取会话列表面板
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
         // 会话列表面板的默认UI和交互初始化
         mConversationLayout.initDefault();
-        mMenu = new Menu(getActivity(), (TitleBarLayout) mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
+        mMenu = new Menu(getActivity(), mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
         ConstraintLayout constraintLayout = mBaseView.findViewById(R.id.cl_message);
         LinearLayout ll_search = mBaseView.findViewById(R.id.ll_search);
         constraintLayout.setOnClickListener(view -> {
@@ -145,14 +104,40 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             startActivity(new Intent(getActivity(), BookSearchActivity.class));
         });
 
-        ConversationListLayout listLayout = mConversationLayout.getConversationList();
-        listLayout.setItemTopTextSize(16); // 设置 item 中 top 文字大小
-        listLayout.setItemBottomTextSize(12);// 设置 item 中 bottom 文字大小
-        listLayout.setItemDateTextSize(10);// 设置 item 中 timeline 文字大小
-        listLayout.setItemAvatarRadius(150); // 设置 adapter item 头像圆角大小
-        listLayout.disableItemUnreadDot(false);// 设置 item 是否不显示未读红点，默认显示
-        // 通过API设置ConversataonLayout各种属性的样例，开发者可以打开注释，体验效果
+        conversationList = mConversationLayout.getConversationList();
+        conversationList.setItemTopTextSize(16); // 设置 item 中 top 文字大小
+        conversationList.setItemBottomTextSize(12);// 设置 item 中 bottom 文字大小
+        conversationList.setItemDateTextSize(10);// 设置 item 中 timeline 文字大小
+        conversationList.setItemAvatarRadius(150); // 设置 adapter item 头像圆角大小
+        conversationList.disableItemUnreadDot(false);// 设置 item 是否不显示未读红点，默认显示
+        // 通过API设置ConversataonLayout各种属性的样例，开发者可以打开注释，体验效果\
 //        ConversationLayoutHelper.customizeConversation(mConversationLayout);
+
+        conversationList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)) {
+                    getMessageList();
+                }
+            }
+        });
+
+        // 1. 设置会话监听
+        V2TIMManager.getConversationManager().setConversationListener(new V2TIMConversationListener() {
+            // 3.1 收到会话新增的回调
+            @Override
+            public void onNewConversation(List<V2TIMConversation> conversationList) {
+                ConversationManagerKit.getInstance().onRefreshConversation(conversationList);
+            }
+
+            // 3.2 收到会话更新的回调
+            @Override
+            public void onConversationChanged(List<V2TIMConversation> conversationList) {
+                ConversationManagerKit.getInstance().onRefreshConversation(conversationList);
+            }
+        });
+
         mConversationLayout.getConversationList().setOnItemClickListener(new ConversationListLayout.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, ConversationInfo conversationInfo) {
@@ -160,6 +145,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
                 startChatActivity(conversationInfo);
             }
         });
+
         mConversationLayout.getConversationList().setOnItemLongClickListener(new ConversationListLayout.OnItemLongClickListener() {
             @Override
             public void OnItemLongClick(View view, int position, ConversationInfo conversationInfo) {
@@ -186,11 +172,42 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         mvpPresenter.getUserNoticePage(1, 1);
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
-        //initView();
+    private long nextSeq = 0;
+
+    private void getMessageList() {
+        V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
+            @Override
+            public void onProgress(int progress) {
+
+            }
+
+            @Override
+            public void onError(int code, String desc) {
+                ToastUtil.toastShortMessage("onError==>" + desc);
+            }
+
+            @Override
+            public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
+                nextSeq = v2TIMConversationResult.getNextSeq();
+                // 拉取成功，更新 UI 会话列表
+                ConversationManagerKit.getInstance().onRefreshConversation(v2TIMConversationResult.getConversationList());
+                if (!v2TIMConversationResult.isFinished()) {
+                    V2TIMManager.getConversationManager().getConversationList(
+                            v2TIMConversationResult.getNextSeq(), 100,
+                            new V2TIMValueCallback<V2TIMConversationResult>() {
+                                @Override
+                                public void onError(int code, String desc) {
+                                }
+
+                                @Override
+                                public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
+                                    // 拉取成功，更新 UI 会话列表
+                                    ConversationManagerKit.getInstance().onRefreshConversation(v2TIMConversationResult.getConversationList());
+                                }
+                            });
+                }
+            }
+        });
     }
 
     private void initTitleAction() {
@@ -232,7 +249,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
      * @param locationX        长按时X坐标
      * @param locationY        长按时Y坐标
      */
-    private void showItemPopMenu(final int index, final ConversationInfo conversationInfo, float locationX, float locationY) {
+    private void showItemPopMenu(final int index, final ConversationInfo conversationInfo,
+                                 float locationX, float locationY) {
         if (mConversationPopActions == null || mConversationPopActions.size() == 0)
             return;
         View itemPop = LayoutInflater.from(getActivity()).inflate(R.layout.pop_menu_layout, null);

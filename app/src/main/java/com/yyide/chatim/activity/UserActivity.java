@@ -43,16 +43,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Function;
-import rx.schedulers.Schedulers;
-import top.zibin.luban.CompressionPredicate;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
@@ -89,6 +82,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     private long classesId;
     private String realname;
     private long depId;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_user_layout;
@@ -130,7 +124,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname, classesId,depId);
+        mvpPresenter.getFaceData(realname, classesId, depId);
     }
 
     @Override
@@ -148,13 +142,13 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 //startActivity(new Intent(this, CheckPhoneActivity.class));
                 break;
             case R.id.layout3://性别
-                Intent intent1 = new Intent(this, SexActivity.class);
-                String sexStr = sex.getText().toString().trim();
-                intent1.putExtra("sex", !"未设置".equals(sexStr) ? sexStr : "");
-                startActivity(intent1);
+//                Intent intent1 = new Intent(this, SexActivity.class);
+//                String sexStr = sex.getText().toString().trim();
+//                intent1.putExtra("sex", !"未设置".equals(sexStr) ? sexStr : "");
+//                startActivity(intent1);
                 break;
             case R.id.layout4://生日
-                showTime();
+//                showTime();
                 break;
             case R.id.layout5://邮箱Email
                 Intent intent = new Intent(this, EmailActivity.class);

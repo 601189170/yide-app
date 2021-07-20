@@ -1,16 +1,20 @@
 package com.yyide.chatim.activity.newnotice
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticeDetail2Binding
 import com.yyide.chatim.model.EventMessage
+import com.yyide.chatim.model.NoticeBlankReleaseBean
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeDetailPresenter
@@ -27,6 +31,7 @@ import org.greenrobot.eventbus.EventBus
 class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDetailView {
     private var detailBinding: ActivityNoticeDetail2Binding? = null
     private var itemBean: NoticeMyReleaseDetailBean.DataBean? = null
+    private val rangeList = ArrayList<NoticeBlankReleaseBean.RecordListBean>()
 
     override fun getContentViewID(): Int {
         return R.layout.activity_notice_detail2
@@ -45,111 +50,155 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         detailBinding!!.include.title.setText(R.string.notice_my_push_title)
         detailBinding!!.include.backLayout.setOnClickListener { finish() }
         detailBinding!!.clReadUnread.setOnClickListener {
-            NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0, itemBean?.confirmOrReadNum
-                    ?: 0)
+            itemBean?.isConfirm?.let { it1 ->
+                NoticeUnConfirmListActivity.start(this, itemBean?.id
+                        ?: 0, itemBean?.confirmOrReadNum
+                        ?: 0, it1)
+            }
         }
 
         detailBinding?.ivBg?.setOnClickListener { itemBean?.imgpath?.let { it1 -> NoticeImageDialog.showPreView(this, it1) } }
-
+        detailBinding?.clRange?.setOnClickListener {
+            val intent = Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            intent.putParcelableArrayListExtra("list", rangeList)
+            intent.putExtra("noticeDetail", true)
+            startActivity(intent)
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun setDate(item: NoticeMyReleaseDetailBean.DataBean) {
         itemBean = item
-        if (item != null) {
-            detailBinding!!.tvNoticeTitle.text = item.title
-            detailBinding!!.tvNoticeContent.text = item.content
-            var timeDate = when {
-                DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天
-                    getString(R.string.notice_toDay, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
-                }
-                DateUtils.isYesterday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//昨天
-                    getString(R.string.notice_yesterday, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
-                }
-                else -> {
-                    item.timerDate
-                }
+        setRangeList()
+        detailBinding!!.tvNoticeTitle.text = item.title
+        detailBinding!!.tvNoticeContent.text = item.content
+        val timeDate = when {
+            DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天
+                getString(R.string.notice_toDay, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
             }
-            if (item.isTimer) {
-                detailBinding!!.tvPushDesc.text = getString(R.string.notice_timing_push) + "\t\t" + timeDate
-            } else {
-                detailBinding!!.tvPushDesc.text = getString(R.string.notice_immediately_push) + "\t\t" + timeDate //通知公告类型 0空白模板 1非空白模板
+            DateUtils.isYesterday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//昨天
+                getString(R.string.notice_yesterday, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
             }
-            if (item.type == 0) {
-                detailBinding!!.constraintLayout.visibility = View.VISIBLE
-            } else {
-                detailBinding!!.constraintLayout.visibility = View.GONE
-                if (!TextUtils.isEmpty(item.imgpath)) {
-                    GlideUtil.loadImageRadius(baseContext, item.imgpath, detailBinding!!.ivBg, 8)
-                }
-            }
-            var teacherNumber: Int = 0
-            var patriarchNumber: Int = 0
-            var brandClassNumber: Int = 0
-            //通知范围
-            if (item.notifyRange == 1) {//指定 部门发布
-                var stringBuffer = StringBuffer()
-                item.notifies.forEachIndexed { index, notifiesBean ->
-                    when (notifiesBean.specifieType) {
-                        0 -> {
-                            notifiesBean.list.forEachIndexed { index, listBean ->
-                                teacherNumber += listBean.nums
-                            }
-                        }
-                        1 -> {
-                            notifiesBean.list.forEachIndexed { index, listBean ->
-                                patriarchNumber += listBean.nums
-                            }
-                        }
-                        2, 3 -> {
-                            if (notifiesBean.list != null) {
-                                brandClassNumber = notifiesBean.list.size
-                            }
-                        }
-                    }
-
-                }
-                if (teacherNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
-                }
-                if (patriarchNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
-                }
-                if (brandClassNumber > 0) {
-                    stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber))
-                }
-                if (!TextUtils.isEmpty(stringBuffer.toString()) && stringBuffer.toString().endsWith("、")) {
-                    detailBinding!!.tvNotificationRange.text = stringBuffer.toString().removeSuffix("、")
-                } else {
-                    detailBinding!!.tvNotificationRange.text = stringBuffer.toString()
-                }
-            } else {
-                detailBinding!!.tvNotificationRange.text = "全校"
-            }
-
-            //已读/未读 确认
-            if (item.isConfirm) {
-                detailBinding!!.tvReadDesc.text = getString(R.string.notice_confirm_result)
-            } else {
-                detailBinding!!.tvReadDesc.text = getString(R.string.notice_read)
-            }
-            detailBinding!!.tvRead.text = getString(R.string.dividing_line, item.confirmOrReadNum, item.totalNum)
-
-
-//            detailBinding!!.tvRead.text = item.
-            detailBinding!!.btnCommit.isClickable = false
-            if (item.isRetract) {//是否已撤回
-                detailBinding!!.btnToWithdraw.visibility = View.GONE
-                detailBinding!!.btnCommit.visibility = View.VISIBLE
-                detailBinding!!.clReadUnread.visibility = View.GONE
-            } else {
-                detailBinding!!.btnToWithdraw.visibility = View.VISIBLE
-                detailBinding!!.btnCommit.visibility = View.GONE
-            }
-            detailBinding!!.btnToWithdraw.setOnClickListener {
-                mvpPresenter.retract(item.id)
+            else -> {
+                item.timerDate
             }
         }
+        if (item.isTimer) {
+            detailBinding!!.tvPushDesc.text = getString(R.string.notice_timing_push) + "\t\t" + timeDate
+        } else {
+            detailBinding!!.tvPushDesc.text = getString(R.string.notice_immediately_push) + "\t\t" + timeDate //通知公告类型 0空白模板 1非空白模板
+        }
+        if (item.type == 0) {
+            detailBinding!!.constraintLayout.visibility = View.VISIBLE
+        } else {
+            detailBinding!!.constraintLayout.visibility = View.GONE
+            if (!TextUtils.isEmpty(item.imgpath)) {
+                GlideUtil.loadImageRadius(baseContext, item.imgpath, detailBinding!!.ivBg, 8)
+            }
+        }
+        var teacherNumber: Int = 0
+        var patriarchNumber: Int = 0
+        var brandClassNumber: Int = 0
+        //通知范围
+        if (item.notifyRange == 1) {//指定 部门发布
+            val stringBuffer = StringBuffer()
+            item.notifies.forEachIndexed { _, notifiesBean ->
+                when (notifiesBean.specifieType) {
+                    0 -> {
+                        notifiesBean.list.forEachIndexed { _, listBean ->
+                            teacherNumber += listBean.nums
+                        }
+                    }
+                    1 -> {
+                        notifiesBean.list.forEachIndexed { _, listBean ->
+                            patriarchNumber += listBean.nums
+                        }
+                    }
+                    2, 3 -> {
+                        if (notifiesBean.list != null) {
+                            brandClassNumber = notifiesBean.list.size
+                        }
+                    }
+                }
+
+            }
+            if (teacherNumber > 0) {
+                stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
+            }
+            if (patriarchNumber > 0) {
+                stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+            }
+            if (brandClassNumber > 0) {
+                stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber))
+            }
+            if (!TextUtils.isEmpty(stringBuffer.toString()) && stringBuffer.toString().endsWith("、")) {
+                detailBinding!!.tvNotificationRange.text = stringBuffer.toString().removeSuffix("、")
+            } else {
+                detailBinding!!.tvNotificationRange.text = stringBuffer.toString()
+            }
+        } else {
+            detailBinding!!.tvNotificationRange.text = "全校"
+        }
+
+        //已读/未读 确认
+        if (item.isConfirm) {
+            detailBinding!!.tvReadDesc.text = getString(R.string.notice_confirm_result)
+        } else {
+            detailBinding!!.tvReadDesc.text = getString(R.string.notice_read)
+        }
+        detailBinding!!.tvRead.text = getString(R.string.dividing_line, item.confirmOrReadNum, (item.totalNum - item.confirmOrReadNum))
+
+//            detailBinding!!.tvRead.text = item.
+        detailBinding!!.btnCommit.isClickable = false
+        if (item.isRetract) {//是否已撤回
+            detailBinding!!.btnToWithdraw.visibility = View.GONE
+            detailBinding!!.btnCommit.visibility = View.VISIBLE
+            detailBinding!!.clReadUnread.visibility = View.GONE
+        } else {
+            if (item.totalNum <= 0) {
+                detailBinding!!.clReadUnread.visibility = View.GONE
+            }
+            detailBinding!!.btnToWithdraw.visibility = View.VISIBLE
+            detailBinding!!.btnCommit.visibility = View.GONE
+        }
+        detailBinding!!.btnToWithdraw.setOnClickListener {
+            showMessage(item.id)
+        }
+    }
+
+    private fun setRangeList() {
+        if (itemBean?.notifies != null) {
+            itemBean?.notifies?.forEach { item ->
+                var paramsItem = NoticeBlankReleaseBean.RecordListBean()
+                paramsItem.specifieType = item.specifieType.toString()
+                var listBean = ArrayList<NoticeBlankReleaseBean.RecordListBean.ListBean>()
+                if (item.list != null) {
+                    item.list.forEach { childItem ->
+                        val item = NoticeBlankReleaseBean.RecordListBean.ListBean()
+                        item.specifieId = childItem.specifieId
+                        item.specifieParentId = childItem.specifieParentId
+                        item.type = childItem.type.toString()
+                        item.nums = childItem.nums
+                        listBean.add(item)
+                    }
+                }
+                paramsItem.list = listBean
+                rangeList.add(paramsItem)
+            }
+        }
+    }
+
+    private fun showMessage(id: Long) {
+        val builder = AlertDialog.Builder(this)
+                .setTitle("提示")//设置对话框 标题
+                .setMessage("通知撤回后，接收方将不展示通知内容，请确定撤回？")
+                .setPositiveButton("确定") { dialog, which ->
+                    mvpPresenter.retract(id)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
+                .create()
+                .show()
     }
 
     override fun createPresenter(): NoticeDetailPresenter {

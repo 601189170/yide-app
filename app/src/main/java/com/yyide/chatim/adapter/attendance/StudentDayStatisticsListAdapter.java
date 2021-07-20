@@ -65,7 +65,9 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
         if (!TextUtils.isEmpty(thingName)) {
             holder.mViewBanding.tvEventName.setText(dayStatisticsBean.getThingName());
         }else {
-            holder.mViewBanding.tvEventName.setText(dayStatisticsBean.getSubjectName());
+            final int section = dayStatisticsBean.getSection();
+            String sectionUppercase = DateUtils.sectionDesc(context,section);
+            holder.mViewBanding.tvEventName.setText(sectionUppercase+" "+dayStatisticsBean.getSubjectName());
         }
         final String time = dayStatisticsBean.getTime();
         final String formatTime = DateUtils.formatTime(time, "", "HH:mm");
