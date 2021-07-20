@@ -47,10 +47,10 @@ public class MyMessageReceiver extends MessageReceiver {
         // TODO 处理推送通知
         Log.e("MyMessageReceiver", "Receive notification, title: " + title + ", summary: " + summary + ", extraMap: " + extraMap);
         processCustomMessage(context, title, summary, JSON.toJSONString(extraMap));
-        final Intent intent = new Intent(context, MyMessageReceiver.class);
-        intent.setAction("notification_clicked");
-        intent.putExtra("extras",JSON.toJSONString(extraMap));
-        showNotice(context,title,summary,intent);
+        // final Intent intent = new Intent(context, MyMessageReceiver.class);
+        //intent.setAction("notification_clicked");
+        //intent.putExtra("extras",JSON.toJSONString(extraMap));
+        //showNotice(context,title,summary,intent);
     }
 
     @Override
@@ -104,6 +104,7 @@ public class MyMessageReceiver extends MessageReceiver {
     @Override
     protected void onNotificationClickedWithNoAction(Context context, String title, String summary, String extraMap) {
         Log.e("MyMessageReceiver", "onNotificationClickedWithNoAction, title: " + title + ", summary: " + summary + ", extraMap:" + extraMap);
+        onNotificationOpened(context, title, summary, extraMap);
     }
 
     @Override

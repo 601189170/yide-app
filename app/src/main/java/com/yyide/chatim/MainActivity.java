@@ -260,8 +260,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     //这是来自 JPush Example 的设置别名的 Activity 里的代码，更详细的示例请参考 JPush Example。一般 App 的设置的调用入口，在任何方便的地方调用都可以。
     private void registerAlias() {
-        //int sequence = SPUtils.getInstance().getInt(BaseConstant.JG_SEQUENCE, 1);
+        //获取当前设备注册的别名 去重
+        CloudPushService mPushService = PushServiceFactory.getCloudPushService();
+        delOtherAliases(mPushService);
         String alias = SPUtils.getInstance().getString(BaseConstant.JG_ALIAS_NAME);
+        //int sequence = SPUtils.getInstance().getInt(BaseConstant.JG_SEQUENCE, 1);
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
         if (identityInfo != null) {
             if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
@@ -272,7 +275,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     alias = String.valueOf(SpData.getIdentityInfo().userId);
                 }
                 //阿里云消息推送
-                CloudPushService mPushService = PushServiceFactory.getCloudPushService();
+
                 String finalAlias = alias;
                 mPushService.addAlias(alias, new CommonCallback() {
                     @Override
@@ -288,6 +291,39 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 });
             }
         }
+    }
+
+    private void delOtherAliases(CloudPushService mPushService) {
+        mPushService.listAliases(new CommonCallback() {
+            @Override
+            public void onSuccess(String response) {
+                Log.e(TAG,"aliases:" + response + " \n");
+                if (!TextUtils.isEmpty(response)){
+                    final String[] aliases = response.split(",");
+                    for (String alias : aliases) {
+                        if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)){
+                            mPushService.removeAlias(alias, new CommonCallback() {
+                                @Override
+                                public void onSuccess(String s) {
+                                    Log.e(TAG,"remove alias " + alias + " success\n");
+                                }
+
+                                @Override
+                                public void onFailed(String errorCode, String errorMsg) {
+                                    Log.e(TAG,"remove alias " + alias + " failed." +
+                                            "errorCode: " + errorCode + ", errorMsg:" + errorMsg + "\n");
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(String errorCode, String errorMsg) {
+                Log.e(TAG,"list aliases failed. errorCode:" + errorCode + " errorMsg:" + errorMsg);
+            }
+        });
     }
 
     @Override

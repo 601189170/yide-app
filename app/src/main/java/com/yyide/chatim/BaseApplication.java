@@ -22,6 +22,7 @@ import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.alibaba.sdk.android.push.register.MeizuRegister;
 import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.alibaba.sdk.android.push.register.OppoRegister;
+import com.alibaba.sdk.android.push.register.ThirdPushManager;
 import com.alibaba.sdk.android.push.register.VivoRegister;
 import com.blankj.utilcode.util.Utils;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -74,6 +75,8 @@ public class BaseApplication extends Application {
         this.createNotificationChannel();
         PushServiceFactory.init(applicationContext);
         CloudPushService pushService = PushServiceFactory.getCloudPushService();
+        // logLevel 支持设置：CloudPushService.ERROR | CloudPushService.INFO | CloudPushService.DEBUG | CloudPushService.OFF（关闭Log）
+        pushService.setLogLevel(CloudPushService.LOG_DEBUG);
         pushService.register(applicationContext, new CommonCallback() {
             @Override
             public void onSuccess(String response) {
@@ -84,13 +87,12 @@ public class BaseApplication extends Application {
                 Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
             }
         });
-
+        // 注册方法会自动判断是否支持华为系统推送，如不支持会跳过注册。
+        HuaWeiRegister.register(this);
         // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
         final String XIAOMI_APPID = "2882303761519922795";
         final String XIAOMI_APPKEY = "5201992213795";
         MiPushRegister.register(applicationContext, XIAOMI_APPID, XIAOMI_APPKEY);
-        // 注册方法会自动判断是否支持华为系统推送，如不支持会跳过注册。
-        HuaWeiRegister.register(this);
         // vivo通道注册
         VivoRegister.register(applicationContext);
         // OPPO通道注册
@@ -101,7 +103,9 @@ public class BaseApplication extends Application {
 
         // 魅族通道注册
         // appId/appkey在魅族开发者平台获取
-        MeizuRegister.register(applicationContext, "appId", "appkey");
+        //MeizuRegister.register(applicationContext, "appId", "appkey");
+
+        //ThirdPushManager.reportToken(applicationContext, ThirdPushManager.ThirdPushReportKeyword.HUAWEI.thirdTokenKeyword, "104330887");
     }
 
     private void createNotificationChannel() {

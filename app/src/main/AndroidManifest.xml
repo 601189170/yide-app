@@ -479,10 +479,16 @@
             </intent-filter>
         </service>
 
+<!--        <meta-data-->
+<!--            android:name="com.huawei.hms.client.appid"-->
+<!--            android:value="104330887"-->
+<!--            tools:replace="android:value" />-->
         <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="104330887"
-            tools:replace="android:value" /> <!-- ********华为推送设置end******** -->
+            android:value="appid=104330887" />
+
+
+        <!-- ********华为推送设置end******** -->
         <!-- ********魅族推送设置start******** -->
         <receiver android:name="com.tencent.qcloud.tim.demo.thirdpush.MEIZUPushReceiver">
             <intent-filter>
@@ -570,6 +576,15 @@
 
         <activity android:name=".activity.GuidePageActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.PopupPushActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
