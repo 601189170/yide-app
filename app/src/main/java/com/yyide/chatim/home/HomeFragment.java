@@ -177,12 +177,14 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             layoutParams.bottomMargin = SizeUtils.dp2px(20);
             previewBinding.cardView.setLayoutParams(layoutParams);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-            if (!model.isConfirm) {
-                Runnable runnable = () -> mvpPresenter.confirmNotice(model.id);
-                handler.postDelayed(runnable, 5000);
-                dialog.setOnDismissListener(dialog -> handler.removeCallbacks(runnable));
-            }
+            dialog.setOnDismissListener(dialog -> {
+                if (!model.isConfirm) {//treu 需要确认的通知 false 阅读类通知
+                    //Runnable runnable = () -> mvpPresenter.confirmNotice(model.id);
+                    //handler.postDelayed(runnable, 5000);
+                    //dialog.setOnDismissListener(dialog -> handler.removeCallbacks(runnable));
+                    mvpPresenter.confirmNotice(model.id);
+                }
+            });
 
             if (model.type == 0) {
                 previewBinding.ivImg.setVisibility(View.GONE);

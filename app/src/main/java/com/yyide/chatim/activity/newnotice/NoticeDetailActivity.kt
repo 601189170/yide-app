@@ -51,7 +51,8 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         detailBinding!!.include.backLayout.setOnClickListener { finish() }
         detailBinding!!.clReadUnread.setOnClickListener {
             itemBean?.isConfirm?.let { it1 ->
-                NoticeUnConfirmListActivity.start(this, itemBean?.id ?: 0, itemBean?.confirmOrReadNum
+                NoticeUnConfirmListActivity.start(this, itemBean?.id
+                        ?: 0, itemBean?.confirmOrReadNum
                         ?: 0, it1)
             }
         }
@@ -154,6 +155,9 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             detailBinding!!.btnCommit.visibility = View.VISIBLE
             detailBinding!!.clReadUnread.visibility = View.GONE
         } else {
+            if (item.totalNum <= 0) {
+                detailBinding!!.clReadUnread.visibility = View.GONE
+            }
             detailBinding!!.btnToWithdraw.visibility = View.VISIBLE
             detailBinding!!.btnCommit.visibility = View.GONE
         }

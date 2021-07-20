@@ -115,7 +115,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     @SuppressLint("ClickableViewAccessibility")
     private fun initListener() {
         releaseBinding!!.switch1.setOnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
-            if (isChecked) releaseBinding!!.clTimingTime.visibility = View.INVISIBLE else releaseBinding!!.clTimingTime.visibility = View.VISIBLE
+            if (isChecked) releaseBinding!!.clTimingTime.visibility = View.GONE else releaseBinding!!.clTimingTime.visibility = View.VISIBLE
             if (!isChecked) {
                 timeData = ""
                 releaseBinding!!.tvShowTimedTime.text = ""
@@ -175,6 +175,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 ToastUtils.showShort("请选择通知人员")
             }
             else -> {
+                releaseBinding!!.btnPush.isEnabled = false
                 val itemBean = NoticeBlankReleaseBean()
                 //空白模板为固定ID
                 itemBean.messageTemplateId = "1405486010163490820"
@@ -315,10 +316,13 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 ToastUtils.showLong(model.msg)
                 finish()
             }, 500)
+        } else {
+            releaseBinding!!.btnPush.isEnabled = true
         }
     }
 
     override fun getBlankReleaseFail(msg: String?) {
+        releaseBinding!!.btnPush.isEnabled = true
         Log.d("NoticeReleaseActivity", "getBlankReleaseFail$msg")
     }
 
