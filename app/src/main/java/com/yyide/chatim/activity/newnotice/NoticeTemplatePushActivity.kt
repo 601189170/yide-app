@@ -39,7 +39,6 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
     private lateinit var webModel: WebModel
     private var subIds = mutableListOf<String>()
     private var pushDate: String = ""
-    private val REQUEST_CODE = 100
     private val paramsMap = mutableMapOf<String, NoticeBlankReleaseBean>()
     private val list = ArrayList<NoticeBlankReleaseBean.RecordListBean>()
 
@@ -117,7 +116,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
             ToastUtils.showShort("请选择通知人员")
         } else {
             if (webModel.params != null) {
-                pushDetailBinding!!.btnConfirm.isClickable = false
+                pushDetailBinding!!.btnConfirm.isEnabled = false
                 val itemBean = NoticeBlankReleaseBean()
                 itemBean.messageTemplateId = webModel.params.tempId
                 itemBean.title = webModel.params.tempTitle
@@ -246,7 +245,6 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
     }
 
     override fun pushTemplateSuccess(model: ResultBean?) {
-        pushDetailBinding!!.btnConfirm.isClickable = true
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
             Handler().postDelayed({
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
@@ -254,12 +252,14 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
                 ToastUtils.showLong(model.msg)
                 finish()
             }, 500)
+        } else {
+            pushDetailBinding!!.btnConfirm.isEnabled = true
         }
     }
 
     @SuppressLint("LongLogTag")
     override fun getTemplateDetailFail(msg: String?) {
-        pushDetailBinding!!.btnConfirm.isClickable = true
+        pushDetailBinding!!.btnConfirm.isEnabled = true
         Log.d("NoticeTemplateDetailActivity", "getTemplateDetailFail$msg");
     }
 

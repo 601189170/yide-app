@@ -175,7 +175,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 ToastUtils.showShort("请选择通知人员")
             }
             else -> {
-                releaseBinding!!.btnPush.isClickable = false
+                releaseBinding!!.btnPush.isEnabled = false
                 val itemBean = NoticeBlankReleaseBean()
                 //空白模板为固定ID
                 itemBean.messageTemplateId = "1405486010163490820"
@@ -309,7 +309,6 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     }
 
     override fun getBlankReleaseSuccess(model: ResultBean?) {
-        releaseBinding!!.btnPush.isClickable = true
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
             Handler().postDelayed({
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
@@ -317,11 +316,13 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 ToastUtils.showLong(model.msg)
                 finish()
             }, 500)
+        } else {
+            releaseBinding!!.btnPush.isEnabled = true
         }
     }
 
     override fun getBlankReleaseFail(msg: String?) {
-        releaseBinding!!.btnPush.isClickable = true
+        releaseBinding!!.btnPush.isEnabled = true
         Log.d("NoticeReleaseActivity", "getBlankReleaseFail$msg")
     }
 
