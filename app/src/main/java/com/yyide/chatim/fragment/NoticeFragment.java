@@ -104,7 +104,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
                 } else if (DateUtils.isYesterday(DateUtils.parseTimestamp(data.timerDate, ""))) {
                     notice_time.setText(getString(R.string.notice_yesterday, DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")));
                 } else {
-                    notice_time.setText(DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                    notice_time.setText(DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm"));
                 }
                 tv_notice_author.setText(data.publisher);
                 if (!TextUtils.isEmpty(data.title)) {
