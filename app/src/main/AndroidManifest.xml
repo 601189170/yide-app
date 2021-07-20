@@ -43,7 +43,7 @@
 <!--    <uses-feature android:name="android.hardware.camera.autofocus" /> &lt;!&ndash; ********华为推送权限设置******** &ndash;&gt;-->
     <permission
         android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG"
-        android:protectionLevel="signatureOrSystem" />
+        android:protectionLevel="signature" />
 
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
     <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG" /> <!-- ********小米推送权限设置******** -->
@@ -85,7 +85,8 @@
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
         android:allowBackup="false"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup"
+        tools:targetApi="p">
 
         <activity
             android:name=".activity.RegisterActivity"

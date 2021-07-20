@@ -31,7 +31,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-
 /**
  * DESC 普通通知发布
  * AUTHOR LRZ
@@ -66,7 +65,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         releaseBinding!!.top.backLayout.setOnClickListener { finish() }
         releaseBinding!!.btnPush.setOnClickListener { pushNotice() }
         releaseBinding!!.clRange.setOnClickListener {
-            val intent = Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            val intent = Intent(this, NoticeDesignatedPersonnelActivity::class.java)
             intent.putParcelableArrayListExtra("list", list)
             intent.putExtra("isCheck", isConfirm)
             startActivity(intent)
@@ -155,15 +154,15 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         when {
             TextUtils.isEmpty(etTitle) -> {
                 releaseBinding!!.etInputTitle.error = getString(R.string.notice_input_title)
-                releaseBinding!!.etInputTitle.isFocusable = true;
-                releaseBinding!!.etInputTitle.isFocusableInTouchMode = true;
-                releaseBinding!!.etInputTitle.requestFocus();
+                releaseBinding!!.etInputTitle.isFocusable = true
+                releaseBinding!!.etInputTitle.isFocusableInTouchMode = true
+                releaseBinding!!.etInputTitle.requestFocus()
             }
             TextUtils.isEmpty(etContent) -> {
                 releaseBinding!!.etInputContent.error = getString(R.string.notice_input_content)
-                releaseBinding!!.etInputContent.isFocusable = true;
-                releaseBinding!!.etInputContent.isFocusableInTouchMode = true;
-                releaseBinding!!.etInputContent.requestFocus();
+                releaseBinding!!.etInputContent.isFocusable = true
+                releaseBinding!!.etInputContent.isFocusableInTouchMode = true
+                releaseBinding!!.etInputContent.requestFocus()
             }
             (!releaseBinding!!.switch1.isChecked && TextUtils.isEmpty(timeData)) -> {
                 ToastUtils.showShort(R.string.notice_input_push_time)
@@ -244,16 +243,16 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 }
             }
 
-            item.recordList?.forEach { item ->
-                when (item.specifieType) {
+            item.recordList?.forEach { childItem ->
+                when (childItem.specifieType) {
                     "0" -> {//0教师 1家长 2班牌
-                        teacherNumber += item.nums
+                        teacherNumber += childItem.nums
                     }
                     "1" -> {
-                        patriarchNumber += item.nums
+                        patriarchNumber += childItem.nums
                     }
                     "2", "3" -> {
-                        brandNumber = item.nums
+                        brandNumber = childItem.nums
                     }
                 }
             }
@@ -266,7 +265,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         }
         Log.d("NoticePersonnelFragment", "paramsMap：" + JSON.toJSONString(paramsMap))
 
-        var descNumber = StringBuffer()
+        val descNumber = StringBuffer()
         if (teacherNumber > 0) {
             descNumber.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
         }
