@@ -40,12 +40,16 @@ captures/
 .idea/gradle.xml
 .idea/assetWizardSettings.xml
 .idea/dictionaries
-.idea/libraries
 .idea/caches
+.idea/libraries
+.gradle
+.DS_Store
+/build
+/captures
+.externalNativeBuild
 
 # 密钥储存库文件
 # 如果您不想检查密钥库文件，请取消注释以下行
 #*.jks
 
 # 在Android Studio 2.2及更高版本中生成的外部原生构建文件夹
-.externalNativeBuild

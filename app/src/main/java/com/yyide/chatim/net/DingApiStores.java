@@ -133,7 +133,7 @@ public interface DingApiStores {
     Observable<ListAllScheduleByTeacherIdRsp> listAllScheduleByTeacherId();
 
     //班级列表接口
-    @POST("/school/cloud-school/classes/listAllBySchoolId")
+    @POST("/management/cloud-system/classes/listAllBySchoolId")
     Observable<listAllBySchoolIdRsp> listAllBySchoolId();
 
     //通过班级查询班级课表
@@ -147,15 +147,15 @@ public interface DingApiStores {
     Observable<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
 
     //查询组织架构列表信息 大学组织结构
-    @POST("/school/cloud-school/department/listByApp")
+    @POST("/management/cloud-system/department/listByApp")
     Observable<ListByAppRsp> listByApp();
 
     //查询组织架构列表信息 小初高组织结构
-    @POST("/school/cloud-school/section/selectListByApp")
+    @POST("/management/cloud-system/section/selectListByApp")
     Observable<ListByAppRsp> selectListByApp();
 
     //通讯录-学生/家长（大学）
-    @POST("/school/cloud-school/departmentClass/selectListByApp")
+    @POST("/management/cloud-system/departmentClass/selectListByApp")
     Observable<ListByAppRsp> universitySelectListByApp();
 
     //查询应用
@@ -179,7 +179,7 @@ public interface DingApiStores {
 
     //教职工列表接口
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @POST("/school/cloud-school/app/teacher/list")
+    @POST("/management/cloud-system/app/teacher/list")
     Observable<TeacherlistRsp> teacherlist(@Body RequestBody info);
 
     //用户头像上传
@@ -348,17 +348,17 @@ public interface DingApiStores {
 
     //获取班级相册
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/school/cloud-school/app/teacher/selectAllList")
+    @POST("/management/cloud-system/app/teacher/selectAllList")
     Observable<ResultBean> searchBook(@Body RequestBody requestBody);
 
     //学校所有班级-大学
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/school/cloud-school/departmentClass/selectClassByAllSchool")
+    @POST("/management/cloud-system/departmentClass/selectClassByAllSchool")
     Observable<SelectTableClassesRsp> selectClassByAllSchool();
 
     //学校所有班级-小初高
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/school/cloud-school/section/selectListBySchoolAll")
+    @POST("/management/cloud-system/section/selectListBySchoolAll")
     Observable<SelectTableClassesRsp> selectListBySchoolAll();
 
     //获取应用列表
@@ -378,15 +378,15 @@ public interface DingApiStores {
     @GET("/timetable/cloud-timetable/schedule/selectSchByClassId?")
     Observable<SelectSchByTeaidRsp> getClassesHomeworkInfo(@Query("classId") String id);
 
-    //https://api.uat.edu.1d1j.net/school/cloud-school/app/teacher/selectAllList
+    //https://api.uat.edu.1d1j.net/management/cloud-system/app/teacher/selectAllList
     //通讯录搜索-所有
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/school/cloud-school/app/user/list")
+    @POST("/management/cloud-system/app/user/list")
     Observable<UserInfoRsp> selectAllList(@Body RequestBody requestBody);
 
     //通讯录搜索-小初高
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/teacher/cloud-teacher/app/student/list")
+    @POST("/management/cloud-system//app/student/list")
     Observable<TeacherlistRsp> getStudentList(@Body RequestBody requestBody);
 
     //获取首页学生作品
@@ -510,10 +510,10 @@ public interface DingApiStores {
     @POST("/face/cloud-face/attendance/viewAttendance")
     Observable<AttendanceCheckRsp> viewAttendance(@Body RequestBody requestBody);
 
-    //https://api.uat.edu.1d1j.net/school/cloud-school/notice/scope/app/v1/queryDeptMemberByDeptId
+    //https://api.uat.edu.1d1j.net/management/cloud-system/notice/scope/app/v1/queryDeptMemberByDeptId
     //查询部门所属成员
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/school/cloud-school/notice/scope/app/v1/queryDeptMemberByDeptId")
+    @GET("/management/cloud-system/notice/scope/app/v1/queryDeptMemberByDeptId")
     Observable<AddressBookRsp> queryDeptMemberByDeptId(@QueryMap HashMap<String, Object> map);
 
     /**
