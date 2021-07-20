@@ -42,7 +42,7 @@ class NoticeMyReceivedAdapter(layoutResId: Int) : BaseQuickAdapter<NoticeItemBea
                 view.tvNoticeTime.text = context.getString(R.string.notice_yesterday, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
             }
             else -> {
-                view.tvNoticeTime.text = DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")
+                view.tvNoticeTime.text = DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm")
             }
         }
         view.tvNoticeAuthor.text = item.publisher

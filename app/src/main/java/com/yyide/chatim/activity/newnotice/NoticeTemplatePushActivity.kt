@@ -65,7 +65,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         pushDetailBinding!!.switchPush.isChecked = true
         pushDetailBinding!!.switchPush.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
-                pushDetailBinding!!.clThing.visibility = View.INVISIBLE
+                pushDetailBinding!!.clThing.visibility = View.GONE
             } else {
                 pushDetailBinding!!.clThing.visibility = View.VISIBLE
             }
@@ -117,6 +117,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
             ToastUtils.showShort("请选择通知人员")
         } else {
             if (webModel.params != null) {
+                pushDetailBinding!!.btnConfirm.isClickable = false
                 val itemBean = NoticeBlankReleaseBean()
                 itemBean.messageTemplateId = webModel.params.tempId
                 itemBean.title = webModel.params.tempTitle
@@ -245,6 +246,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
     }
 
     override fun pushTemplateSuccess(model: ResultBean?) {
+        pushDetailBinding!!.btnConfirm.isClickable = true
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
             Handler().postDelayed({
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
@@ -257,6 +259,7 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
 
     @SuppressLint("LongLogTag")
     override fun getTemplateDetailFail(msg: String?) {
+        pushDetailBinding!!.btnConfirm.isClickable = true
         Log.d("NoticeTemplateDetailActivity", "getTemplateDetailFail$msg");
     }
 

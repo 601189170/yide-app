@@ -32,6 +32,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.utils.FileCacheUtils;
 import com.yyide.chatim.utils.GlideUtil;
+
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -268,12 +269,16 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     }
 
     private void setIdentity() {
-        if (SpData.getClassInfo() != null && "N".equals(SpData.getClassInfo().teacherInd)) {
+        //切换班级判断老师或班主任
+        if (SpData.getIdentityInfo() != null
+                && (GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)
+                || GetUserSchoolRsp.DataBean.TYPE_TEACHER.equals(SpData.getIdentityInfo().status))
+                && SpData.getClassInfo() != null
+                && "N".equals(SpData.getClassInfo().teacherInd)) {
             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "老师" : "");
         } else {
             user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
         }
     }
-
 
 }
