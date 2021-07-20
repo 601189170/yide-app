@@ -48,6 +48,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.yyide.chatim.alipush.MyMessageReceiver;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.home.AppFragment;
@@ -144,6 +145,17 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         //登录IM
         //处理失败时点击切换重新登录IM
         prepareThirdPushToken();
+
+        //离线消息推送处理
+        final String extras = getIntent().getStringExtra("extras");
+        if (!TextUtils.isEmpty(extras)) {
+            content.postDelayed(() -> {
+                final Intent intent = new Intent(this, MyMessageReceiver.class);
+                intent.setAction("notification_clicked");
+                intent.putExtra("extras", extras);
+                sendBroadcast(intent);
+            }, 3000);
+        }
     }
 
     private void prepareThirdPushToken() {
