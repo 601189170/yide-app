@@ -169,6 +169,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 if (debugOrRelease == 5) {
                     debugOrRelease = 0;
                     BaseConstant.API_SERVER_URL = BaseConstant.API_SERVER_URL.equals(BaseConstant.API_SERVER_URL_RELEASE) ? BaseConstant.API_SERVER_URL_UAT : BaseConstant.API_SERVER_URL_RELEASE;
+                    ToastUtils.showShort("切换地址为：" + BaseConstant.API_SERVER_URL);
                 }
                 debugOrRelease++;
                 break;
