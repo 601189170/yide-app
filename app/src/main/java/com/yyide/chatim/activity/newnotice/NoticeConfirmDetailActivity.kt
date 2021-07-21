@@ -55,7 +55,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
         }
 
         confirmDetailBinding?.detail?.ivNoticeImg?.setOnClickListener { NoticeImageDialog.showPreView(this, imgPath) }
-
+        confirmDetailBinding?.detail?.tvNoticeContent?.movementMethod = ScrollingMovementMethod.getInstance()
         detailId = intent.getLongExtra("id", -1);
         getDetail(detailId)
     }

@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -72,6 +73,8 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         setRangeList()
         detailBinding!!.tvNoticeTitle.text = item.title
         detailBinding!!.tvNoticeContent.text = item.content
+        detailBinding!!.tvNoticeContent.movementMethod = ScrollingMovementMethod.getInstance()
+
         val timeDate = when {
             DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天
                 getString(R.string.notice_toDay, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
@@ -120,7 +123,6 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
                         }
                     }
                 }
-
             }
             if (teacherNumber > 0) {
                 stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")

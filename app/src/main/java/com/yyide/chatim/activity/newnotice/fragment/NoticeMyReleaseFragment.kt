@@ -127,12 +127,17 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
                 }
                 val typeString = if (item.isConfirm) getString(R.string.notice_confirm_count) else getString(R.string.notice_have_read)
                 val html = typeString + "：<b><font color=\"#2C8AFF\">" + item.confirmOrReadNum + "</font><font color=\"#999999\">/" + item.totalNum + "</font></b>";
-                if (item.isConfirm) {//已确认
-                    view.tvNoticeConfirm.text = Html.fromHtml(html, Html.FROM_HTML_OPTION_USE_CSS_COLORS)
-                    view.tvNoticeConfirm.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.mipmap.icon_notice_confirm), null, null, null)
-                } else {//已读
-                    view.tvNoticeConfirm.text = Html.fromHtml(html, Html.FROM_HTML_OPTION_USE_CSS_COLORS)
-                    view.tvNoticeConfirm.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.mipmap.icon_notice_read), null, null, null)
+                if (item.totalNum == 0) {
+                    view.tvNoticeConfirm.visibility = View.INVISIBLE
+                } else {
+                    view.tvNoticeConfirm.visibility = View.VISIBLE
+                    if (item.isConfirm) {//已确认
+                        view.tvNoticeConfirm.text = Html.fromHtml(html, Html.FROM_HTML_OPTION_USE_CSS_COLORS)
+                        view.tvNoticeConfirm.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.mipmap.icon_notice_confirm), null, null, null)
+                    } else {//已读
+                        view.tvNoticeConfirm.text = Html.fromHtml(html, Html.FROM_HTML_OPTION_USE_CSS_COLORS)
+                        view.tvNoticeConfirm.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.mipmap.icon_notice_read), null, null, null)
+                    }
                 }
 
                 if (time > System.currentTimeMillis()) {//必须大于当前时间才处理
