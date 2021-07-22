@@ -27,6 +27,7 @@ import com.yyide.chatim.activity.PowerActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.alipush.AliasUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -261,6 +262,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                         //Log.d();
                     }
                 });
+                //清空消息推送别名
+                AliasUtil.clearAlias();
                 hide();
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();

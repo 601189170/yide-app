@@ -48,6 +48,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.yyide.chatim.alipush.AliasUtil;
 import com.yyide.chatim.alipush.MyMessageReceiver;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
@@ -141,7 +142,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         setTab(1, 0);
         setTab(0, 0);
         //注册极光别名
-        registerAlias();
+        //registerAlias();
+        AliasUtil.syncAliases();
         //登录IM
         //处理失败时点击切换重新登录IM
         prepareThirdPushToken();
@@ -212,7 +214,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
             setTab(1, 1);
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            registerAlias();
+            //registerAlias();
+            AliasUtil.syncAliases();
             ConversationManagerKit.getInstance().addUnreadWatcher(this);
         } else if (BaseConstant.TYPE_MAIN.equals(messageEvent.getCode())) {
             ActivityUtils.finishToActivity(MainActivity.class, false);
