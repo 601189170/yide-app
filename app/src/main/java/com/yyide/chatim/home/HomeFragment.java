@@ -273,7 +273,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             kqContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             //通知
-            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
+            NoticeFragment noticeFragment = new NoticeFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "school");
+            noticeFragment.setArguments(bundle);
+            fragmentTransaction.replace(R.id.notice_content, noticeFragment);
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, AttendanceSchoolFragment.newInstance());
         } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {

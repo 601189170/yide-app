@@ -54,7 +54,7 @@ public class SwichSchoolAdapter extends BaseAdapter {
         GlideUtil.loadImageHead(viewGroup.getContext(), getItem(position).img, img);
         school_name.setText(getItem(position).schoolName);
         school_info.setText(getItem(position).realname);
-        if (list.get(position).userId == SpData.getIdentityInfo().userId) {
+        if (list.get(position).userId.equals(SpData.getIdentityInfo().userId)) {
             select.setVisibility(View.VISIBLE);
         } else {
             select.setVisibility(View.GONE);

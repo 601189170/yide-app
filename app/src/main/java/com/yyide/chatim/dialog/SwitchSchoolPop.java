@@ -88,8 +88,10 @@ public class SwitchSchoolPop extends PopupWindow {
             }
         });
         listview.setOnItemClickListener((parent, view, position, id) -> {
-            adapter.setIndex(position);
-            selectUserSchool(adapter.getItem(position));
+            if (!adapter.getItem(position).userId.equals(SpData.getIdentityInfo().userId)) {
+                adapter.setIndex(position);
+                selectUserSchool(adapter.getItem(position));
+            }
         });
 
 //        adapter.setIndex(1);

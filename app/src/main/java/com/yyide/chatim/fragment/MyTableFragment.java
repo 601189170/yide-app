@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
@@ -52,6 +53,8 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     TextView className;
     @BindView(R.id.tv_week)
     TextView tv_week;
+//    @BindView(R.id.swipeRefreshLayout)
+//    SwipeRefreshLayout mSwipeRefreshLayout;
     private View mBaseView;
 
     MyTableAdapter adapter;
@@ -61,6 +64,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         mBaseView = inflater.inflate(R.layout.layout_mytable_fragmnet, container, false);
         return mBaseView;
     }
@@ -68,7 +72,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
+
         adapter = new MyTableAdapter();
         listview.setAdapter(adapter);
 //        List<SelectSchByTeaidRsp.DataBean> list=new ArrayList<>();
@@ -148,7 +152,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         Log.e("TAG", "SelectSchByTeaid: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2 && rsp.data != null) {
             list = rsp.data;
-            adapter.notifyData(getTableList(rsp.data, weekDay));
+            adapter.notifyData(getTableList(list, weekDay));
         }
     }
 

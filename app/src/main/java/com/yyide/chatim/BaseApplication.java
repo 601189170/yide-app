@@ -25,6 +25,13 @@ import com.alibaba.sdk.android.push.register.OppoRegister;
 import com.alibaba.sdk.android.push.register.ThirdPushManager;
 import com.alibaba.sdk.android.push.register.VivoRegister;
 import com.blankj.utilcode.util.Utils;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.heytap.msp.push.HeytapPushManager;
+import com.huawei.hms.push.HmsMessaging;
+import com.meizu.cloud.pushsdk.PushManager;
+import com.meizu.cloud.pushsdk.util.MzSystemUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.v2.V2TIMCallback;
@@ -34,9 +41,15 @@ import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.vivo.push.PushClient;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.MessageNotification;
 import com.yyide.chatim.chat.helper.ConfigHelper;
+import com.yyide.chatim.chat.signature.GenerateTestUserSig;
+import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
+import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
+import com.yyide.chatim.utils.BrandUtil;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.PrivateConstants;
 
@@ -67,8 +80,10 @@ public class BaseApplication extends Application {
         }
         initCloudChannel(this);
     }
+
     /**
      * 初始化云推送通道 阿里云推送
+     *
      * @param applicationContext
      */
     private void initCloudChannel(Context applicationContext) {
@@ -82,6 +97,7 @@ public class BaseApplication extends Application {
             public void onSuccess(String response) {
                 Log.d(TAG, "init cloudchannel success");
             }
+
             @Override
             public void onFailed(String errorCode, String errorMessage) {
                 Log.d(TAG, "init cloudchannel failed -- errorcode:" + errorCode + " -- errorMessage:" + errorMessage);
@@ -132,7 +148,7 @@ public class BaseApplication extends Application {
         }
     }
 
-    public void initSdk(){
+    public void initSdk() {
         /**
          * TUIKit的初始化函数
          *
@@ -157,7 +173,59 @@ public class BaseApplication extends Application {
 // 极光推送释放代码
 //        JPushInterface.setDebugMode(true);
 //        JPushInterface.init(this);
+        /**
+         * TUIKit的初始化函数
+         *
+         * @param context  应用的上下文，一般为对应应用的ApplicationContext
+         * @param sdkAppID 您在腾讯云注册应用时分配的sdkAppID
+         * @param configs  TUIKit的相关配置项，一般使用默认即可，需特殊配置参考API文档
+         */
+        TUIKit.init(this, BaseConstant.SDKAPPID, new ConfigHelper().getConfigs());
+        HeytapPushManager.init(this, true);
+        if (BrandUtil.isBrandXiaoMi()) {
+            // 小米离线推送
+            MiPushClient.registerPush(this, PrivateConstants.XM_PUSH_APPID, PrivateConstants.XM_PUSH_APPKEY);
+        } else if (BrandUtil.isBrandHuawei()) {
+            // 华为离线推送，设置是否接收Push通知栏消息调用示例
+            HmsMessaging.getInstance(this).turnOnPush().addOnCompleteListener(new com.huawei.hmf.tasks.OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(com.huawei.hmf.tasks.Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        DemoLog.i(TAG, "huawei turnOnPush Complete");
+                    } else {
+                        DemoLog.e(TAG, "huawei turnOnPush failed: ret=" + task.getException().getMessage());
+                    }
+                }
+            });
+        } else if (MzSystemUtils.isBrandMeizu(this)) {
+            // 魅族离线推送
+            PushManager.register(this, PrivateConstants.MZ_PUSH_APPID, PrivateConstants.MZ_PUSH_APPKEY);
+        } else if (BrandUtil.isBrandVivo()) {
+            // vivo离线推送
+            PushClient.getInstance(getApplicationContext()).initialize();
+        } else if (HeytapPushManager.isSupportPush()) {
+            // oppo离线推送，因为需要登录成功后向我们后台设置token，所以注册放在MainActivity中做
+        } else if (BrandUtil.isGoogleServiceSupport()) {
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                DemoLog.w(TAG, "getInstanceId failed exception = " + task.getException());
+                                return;
+                            }
 
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+                            DemoLog.i(TAG, "google fcm getToken = " + token);
+
+                            ThirdPushTokenMgr.getInstance().setThirdPushToken(token);
+                        }
+                    });
+        }
+        ;
+
+        registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
         registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
     }
 
@@ -187,9 +255,12 @@ public class BaseApplication extends Application {
             }
         };
 
-        private ConversationManagerKit.MessageUnreadWatcher mUnreadWatcher = count -> {
-            // 华为离线推送角标
-            //HUAWEIHmsMessageService.updateBadge(BaseApplication.this, count);
+        private ConversationManagerKit.MessageUnreadWatcher mUnreadWatcher = new ConversationManagerKit.MessageUnreadWatcher() {
+            @Override
+            public void updateUnread(int count) {
+                // 华为离线推送角标
+                HUAWEIHmsMessageService.updateBadge(BaseApplication.this, count);
+            }
         };
 
         @Override

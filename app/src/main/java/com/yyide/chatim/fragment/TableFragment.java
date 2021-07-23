@@ -69,12 +69,9 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         super.onViewCreated(view, savedInstanceState);
 //        mvpPresenter.getMyData();
         EventBus.getDefault().register(this);
-        tablelayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, TableActivity.class);
-                startActivity(intent);
-            }
+        tablelayout.setOnClickListener(v -> {
+            Intent intent = new Intent(mActivity, TableActivity.class);
+            startActivity(intent);
         });
         getData();
     }
@@ -135,7 +132,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())
+                || BaseConstant.TYPE_PREPARES_SAVE.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", TableFragment.class.getSimpleName());
             getData();
         }

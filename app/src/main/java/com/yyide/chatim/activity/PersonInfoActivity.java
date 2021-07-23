@@ -1,7 +1,11 @@
 package com.yyide.chatim.activity;
 
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,8 +14,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.ToastUtils;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.TeacherlistRsp;
@@ -19,6 +29,7 @@ import com.yyide.chatim.utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.rxjava3.functions.Consumer;
 
 public class PersonInfoActivity extends BaseActivity {
 
@@ -212,29 +223,44 @@ public class PersonInfoActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_phone:
-                if (!TextUtils.isEmpty(bean.phone)) {
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    Uri data = Uri.parse("tel:" + bean.phone);
-                    intent.setData(data);
-                    startActivity(intent);
-                }
+                rxPermission(bean.phone);
                 break;
             case R.id.iv_phone_master:
-                if (!TextUtils.isEmpty(bean.primaryGuardianPhone)) {
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    Uri data = Uri.parse("tel:" + bean.primaryGuardianPhone);
-                    intent.setData(data);
-                    startActivity(intent);
-                }
+                rxPermission(bean.primaryGuardianPhone);
                 break;
             case R.id.iv_phone_vice:
-                if (!TextUtils.isEmpty(bean.deputyGuardianPhone)) {
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    Uri data = Uri.parse("tel:" + bean.deputyGuardianPhone);
-                    intent.setData(data);
-                    startActivity(intent);
-                }
+                rxPermission(bean.deputyGuardianPhone);
                 break;
         }
+    }
+
+    private void rxPermission(String phone) {
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(granted -> {
+            if (granted) {
+                if (!TextUtils.isEmpty(phone)) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    Uri data = Uri.parse("tel:" + phone);
+                    intent.setData(data);
+                    startActivity(intent);
+                } else {
+                    ToastUtils.showShort("空手机号，无法拨打电话");
+                }
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(PersonInfoActivity.this)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_call_phone)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                            startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
+        });
     }
 }

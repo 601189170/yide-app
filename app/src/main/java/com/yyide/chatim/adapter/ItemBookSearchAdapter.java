@@ -2,6 +2,7 @@ package com.yyide.chatim.adapter;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -72,14 +73,7 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
         }
         holder.iv_call.setOnClickListener(v -> {
             // 已经获取权限打电话
-            if (!TextUtils.isEmpty(bean.getPhone())) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                Uri data = Uri.parse("tel:" + bean.getPhone());
-                intent.setData(data);
-                context.startActivity(intent);
-            } else {
-                ToastUtils.showShort("手机号为空，无法波打电话");
-            }
+            rxPermission(bean.getPhone());
         });
         holder.iv_user_detail.setOnClickListener(v -> {
             TeacherlistRsp.DataBean.RecordsBean recordsBean = new TeacherlistRsp.DataBean.RecordsBean();
@@ -98,6 +92,36 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
             intent.putExtra("data", JSON.toJSONString(recordsBean));
             intent.setClass(context, PersonInfoActivity.class);
             context.startActivity(intent);
+        });
+    }
+
+    private void rxPermission(String phone) {
+        RxPermissions rxPermissions = new RxPermissions((FragmentActivity) context);
+        rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(granted -> {
+            if (granted) {
+                if (!TextUtils.isEmpty(phone)) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    Uri data = Uri.parse("tel:" + phone);
+                    intent.setData(data);
+                    context.startActivity(intent);
+                } else {
+                    ToastUtils.showShort("空手机号，无法拨打电话");
+                }
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(context)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_call_phone)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+                            context.startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
         });
     }
 

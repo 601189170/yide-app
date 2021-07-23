@@ -272,5 +272,18 @@ dependencies {
     implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.4.0'
     //谷歌依赖
     implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.4.0'
+
+    //腾讯IM 离线推送配置
+    //小米
+//    implementation 'com.tencent.tpns:xiaomi:1.2.1.2-release'
+//    //华为
+//    implementation 'com.tencent.tpns:huawei:1.2.1.2-release'
+//    implementation 'com.huawei.hms:push:5.0.2.300'
+//    //魅族
+//    implementation 'com.tencent.tpns:meizu:1.2.1.2-release'
+//    //oppo
+//    implementation 'com.tencent.tpns:oppo:1.2.1.2-release'
+//    //vivo
+//    implementation 'com.tencent.tpns:vivo:1.2.1.2-release'
 }
 

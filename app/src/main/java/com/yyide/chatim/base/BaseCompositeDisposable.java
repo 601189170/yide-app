@@ -31,13 +31,13 @@ public class BaseCompositeDisposable {
     }
 
     public void addSubscription(Disposable mDisposable) {
-        if (mCompositeDisposable == null && mCompositeDisposable.isDisposed()) {
+        if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }
         mCompositeDisposable.add(mDisposable);
     }
 
-    public void addSubscription(Observable observable, Observer subscriber) {
+    public void addSubscription(Observable<Object> observable, Observer<Object> subscriber) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
         }

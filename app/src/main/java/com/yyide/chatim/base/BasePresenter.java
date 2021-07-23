@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Observer;
  * 邮箱：rance935@163.com
  */
 public class BasePresenter<V> {
-    public V mvpView;
+    protected V mvpView;
     protected DingApiStores dingApiStores;
 
     public void attachView(V mvpView) {
@@ -20,8 +20,8 @@ public class BasePresenter<V> {
     }
 
     public void detachView() {
-        this.mvpView = null;
         BaseCompositeDisposable.instance().onUnsubscribe();
+        this.mvpView = null;
     }
 
     public void addSubscription(Observable observable, Observer subscriber) {

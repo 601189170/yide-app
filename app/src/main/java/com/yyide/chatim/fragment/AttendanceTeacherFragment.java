@@ -155,7 +155,7 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
             }
         }
         announRoll.setAdapter(announAdapter);
-        constraintLayout.setVisibility((schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) ? View.GONE : View.VISIBLE);
+        constraintLayout.setVisibility(schoolPeopleAllFormBeanList.size() > 0 ? View.GONE : View.VISIBLE);
         announAdapter.notifyData(dataBean.getAttendancesForm());
         indexAdapter.setList(schoolPeopleAllFormBeanList);
     }

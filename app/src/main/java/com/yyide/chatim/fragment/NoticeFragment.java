@@ -64,6 +64,9 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
             Intent intent = new Intent(getActivity(), NewNoticeAnnouncementActivity.class);
             startActivity(intent);
         });
+        if(getArguments() != null && "school".equals(getArguments().getString("type"))) {
+            ll_notice.setBackgroundResource(R.mipmap.icon_notice_home_long_bg);
+        }
     }
 
     @Override

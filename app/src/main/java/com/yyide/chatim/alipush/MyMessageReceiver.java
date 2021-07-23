@@ -42,6 +42,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class MyMessageReceiver extends MessageReceiver {
     private int requestCode = 1;
     private int messageId = 1;
+
     @Override
     public void onNotification(Context context, String title, String summary, Map<String, String> extraMap) {
         // TODO 处理推送通知
@@ -61,43 +62,41 @@ public class MyMessageReceiver extends MessageReceiver {
     @Override
     public void onNotificationOpened(Context context, String title, String summary, String extraMap) {
         Log.e("MyMessageReceiver", "onNotificationOpened, title: " + title + ", summary: " + summary + ", extraMap:" + extraMap);
-        if (MainActivity.isForeground) {
-            try {
-                if (!Utils.isAppAlive(BaseApplication.getInstance(), BaseApplication.getInstance().getPackageName())) {
-                    Intent intent = new Intent(context, SplashActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    context.startActivity(intent);
-                } else {
-                    //发送消息类型 1 消息通知 2 代办 3系统通知 4 作业 5课表
-                    PushModel pushModel = JSON.parseObject(extraMap, PushModel.class);
-                    if ("1".equals(pushModel.getPushType())) {//通知公告消息
-                        if (!TextUtils.isEmpty(pushModel.getSignId())) {
-                            Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
-                            intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            context.startActivity(intent);
-                        } else {
-                            ToastUtils.showShort("消息已被撤回");
-                        }
-                    } else if ("2".equals(pushModel.getPushType())) {
-                        //待办
-                        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
-                    } else if ("3".equals(pushModel.getPushType()) || "6".equals(pushModel.getPushType())) {
-                        //系统通知
-                        Intent intent = new Intent(context, MessageNoticeActivity.class);
-                        //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            if (!Utils.isAppAlive(BaseApplication.getInstance(), BaseApplication.getInstance().getPackageName())) {
+                Intent intent = new Intent(context, SplashActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+            } else {
+                //发送消息类型 1 消息通知 2 代办 3系统通知 4 作业 5课表
+                PushModel pushModel = JSON.parseObject(extraMap, PushModel.class);
+                if ("1".equals(pushModel.getPushType())) {//通知公告消息
+                    if (!TextUtils.isEmpty(pushModel.getSignId())) {
+                        Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
+                        intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         context.startActivity(intent);
-//                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
-                    } else if ("4".equals(pushModel.getPushType())) {
-                        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
-                    } else if ("5".equals(pushModel.getPushType())) {
-                        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                    } else {
+                        ToastUtils.showShort("消息已被撤回");
                     }
+                } else if ("2".equals(pushModel.getPushType())) {
+                    //待办
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
+                } else if ("3".equals(pushModel.getPushType()) || "6".equals(pushModel.getPushType())) {
+                    //系统通知
+                    Intent intent = new Intent(context, MessageNoticeActivity.class);
+                    //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(intent);
+//                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                } else if ("4".equals(pushModel.getPushType())) {
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                } else if ("5".equals(pushModel.getPushType())) {
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 }
-            } catch (Throwable throwable) {
-                //throwable.fillInStackTrace();
             }
+        } catch (Throwable throwable) {
+            //throwable.fillInStackTrace();
         }
     }
 
@@ -136,10 +135,10 @@ public class MyMessageReceiver extends MessageReceiver {
         }
     }
 
-    private void showNotice(Context context, String title,String msg,Intent intent) {
+    private void showNotice(Context context, String title, String msg, Intent intent) {
         requestCode++;
         //PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,requestCode,intent,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -166,10 +165,10 @@ public class MyMessageReceiver extends MessageReceiver {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         final String action = intent.getAction();
-        if (!TextUtils.isEmpty(action) && "notification_clicked".equals(action)){
+        if (!TextUtils.isEmpty(action) && "notification_clicked".equals(action)) {
             //处理点击事件
             final String extras = intent.getStringExtra("extras");
-            onNotificationOpened(context,"","",extras);
+            onNotificationOpened(context, "", "", extras);
         }
     }
 }

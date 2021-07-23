@@ -30,7 +30,6 @@ public class NoteBookByListPresenter extends BasePresenter<NoteByListBookView> {
         map.put("size", pageSize);
         map.put("current", current);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
-
         addSubscription(dingApiStores.teacherlist(body), new ApiCallback<TeacherlistRsp>() {
             @Override
             public void onSuccess(TeacherlistRsp model) {

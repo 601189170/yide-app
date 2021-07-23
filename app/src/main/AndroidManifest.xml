@@ -16,7 +16,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -32,15 +32,15 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- 8.0应用安装权限 -->
-<!--    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />-->
+    <!--    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />-->
 
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 腾讯IM推送配置 -->
     <!-- ********OPPO 推送 start******** -->
     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
     <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" /> <!-- ********OPPO 推送 end******** -->
-<!--    <uses-feature android:name="android.hardware.Camera" />-->
-<!--    <uses-feature android:name="android.hardware.camera.autofocus" /> &lt;!&ndash; ********华为推送权限设置******** &ndash;&gt;-->
+    <!--    <uses-feature android:name="android.hardware.Camera" />-->
+    <!--    <uses-feature android:name="android.hardware.camera.autofocus" /> &lt;!&ndash; ********华为推送权限设置******** &ndash;&gt;-->
     <permission
         android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG"
         android:protectionLevel="signatureOrSystem" />
@@ -71,12 +71,13 @@
     <!-- 阿里云推送相关权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.REORDER_TASKS"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
 
     <application
         android:name=".BaseApplication"
+        android:allowBackup="false"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:icon="@mipmap/ic_launcher_logo"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -84,7 +85,6 @@
         android:supportsRtl="true"
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
-        android:allowBackup="false"
         tools:replace="android:allowBackup">
 
         <activity
@@ -241,13 +241,13 @@
         <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
         <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
         <!-- since 3.3.0 接收JPush相关事件 -->
-       <!-- <receiver android:name=".jiguang.PushMessageReceiver">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+        <!-- <receiver android:name=".jiguang.PushMessageReceiver">
+             <intent-filter>
+                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
 
-                <category android:name="com.yyide.chatim" />
-            </intent-filter>
-        </receiver>-->
+                 <category android:name="com.yyide.chatim" />
+             </intent-filter>
+         </receiver>-->
 
         <activity
             android:name=".LoginActivity"
@@ -399,27 +399,27 @@
             android:name=".activity.PhotoViewActivity"
             android:screenOrientation="portrait" />
 
-<!--        <receiver-->
-<!--            android:name="cn.jpush.android.service.PushReceiver"-->
-<!--            android:enabled="true"-->
-<!--            tools:node="replace">-->
-<!--            <intent-filter android:priority="1000">-->
-<!--                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />-->
-<!--                &lt;!&ndash; Required  显示通知栏 &ndash;&gt;-->
-<!--                <category android:name="${applicationId}" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.USER_PRESENT" />-->
-<!--                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-<!--            </intent-filter>-->
-<!--            &lt;!&ndash; Optional &ndash;&gt;-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.PACKAGE_ADDED" />-->
-<!--                <action android:name="android.intent.action.PACKAGE_REMOVED" />-->
+        <!--        <receiver-->
+        <!--            android:name="cn.jpush.android.service.PushReceiver"-->
+        <!--            android:enabled="true"-->
+        <!--            tools:node="replace">-->
+        <!--            <intent-filter android:priority="1000">-->
+        <!--                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />-->
+        <!--                &lt;!&ndash; Required  显示通知栏 &ndash;&gt;-->
+        <!--                <category android:name="${applicationId}" />-->
+        <!--            </intent-filter>-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.USER_PRESENT" />-->
+        <!--                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
+        <!--            </intent-filter>-->
+        <!--            &lt;!&ndash; Optional &ndash;&gt;-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.PACKAGE_ADDED" />-->
+        <!--                <action android:name="android.intent.action.PACKAGE_REMOVED" />-->
 
-<!--                <data android:scheme="package" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; *********极光推送 end********* &ndash;&gt;-->
+        <!--                <data android:scheme="package" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver> &lt;!&ndash; *********极光推送 end********* &ndash;&gt;-->
         <!-- 腾讯IM 配置 -->
         <!-- ********小米推送service和receiver设置start******** -->
         <service
@@ -457,55 +457,53 @@
                 <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
         </receiver> <!-- 自实现小米推送的接收广播 -->
-<!--        <receiver-->
-<!--            android:name="com.tencent.qcloud.tim.demo.thirdpush.XiaomiMsgReceiver"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.xiaomi.mipush.ERROR" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; ********小米推送service和receiver设置end******** &ndash;&gt;-->
-        <!-- ********华为推送设置start******** -->
-<!--        <service-->
-<!--            android:name="com.tencent.qcloud.tim.demo.thirdpush.HUAWEIHmsMessageService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <!--        <receiver-->
+        <!--            android:name="com.tencent.qcloud.tim.demo.thirdpush.XiaomiMsgReceiver"-->
+        <!--            android:exported="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />-->
+        <!--            </intent-filter>-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />-->
+        <!--            </intent-filter>-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.xiaomi.mipush.ERROR" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver> &lt;!&ndash; ********小米推送service和receiver设置end******** &ndash;&gt;-->
 
-<!--        <meta-data-->
-<!--            android:name="com.huawei.hms.client.appid"-->
-<!--            android:value="104330887"-->
-<!--            tools:replace="android:value" />-->
+        <!-- ********华为推送设置start******** -->
+        <service
+            android:name=".thirdpush.HUAWEIHmsMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.huawei.hms.client.appid"
             android:value="appid=104330887" />
-
-
         <!-- ********华为推送设置end******** -->
+
         <!-- ********魅族推送设置start******** -->
-<!--        <receiver android:name="com.tencent.qcloud.tim.demo.thirdpush.MEIZUPushReceiver">-->
-<!--            <intent-filter>-->
+        <receiver android:name=".thirdpush.MEIZUPushReceiver">
+            <intent-filter>
 
-<!--                &lt;!&ndash; 接收push消息 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.flyme.push.intent.MESSAGE" />-->
-<!--                &lt;!&ndash; 接收register消息 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />-->
-<!--                &lt;!&ndash; 接收unregister消息 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />-->
-<!--                &lt;!&ndash; 兼容低版本Flyme3推送服务配置 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.c2dm.intent.REGISTRATION" />-->
-<!--                <action android:name="com.meizu.c2dm.intent.RECEIVE" />-->
+                <!-- 接收push消息 -->
+                <action android:name="com.meizu.flyme.push.intent.MESSAGE" />
+                <!-- 接收register消息 -->
+                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />
+                <!-- 接收unregister消息 -->
+                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />
+                <!-- 兼容低版本Flyme3推送服务配置 -->
+                <action android:name="com.meizu.c2dm.intent.REGISTRATION" />
+                <action android:name="com.meizu.c2dm.intent.RECEIVE" />
 
-<!--                <category android:name="com.tencent.qcloud.tim.demo.thirdpush" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; ********魅族推送设置end******** &ndash;&gt;-->
+                <category android:name="com.tencent.qcloud.tim.demo.thirdpush" />
+            </intent-filter>
+        </receiver>
+        <!-- ********魅族推送设置end******** -->
+
         <!-- ********vivo推送设置start******** -->
         <service
             android:name="com.vivo.push.sdk.service.CommandClientService"
@@ -516,13 +514,13 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- push应用定义消息receiver声明 -->
-<!--        <receiver android:name="com.tencent.qcloud.tim.demo.thirdpush.VIVOPushMessageReceiverImpl">-->
-<!--            <intent-filter>-->
+        <receiver android:name=".thirdpush.VIVOPushMessageReceiverImpl">
+            <intent-filter>
 
-<!--                &lt;!&ndash; 接收push消息 &ndash;&gt;-->
-<!--                <action android:name="com.vivo.pushclient.action.RECEIVE" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
+                <!-- 接收push消息 -->
+                <action android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.vivo.push.api_key"
@@ -531,7 +529,9 @@
         <meta-data
             android:name="com.vivo.push.app_id"
             android:value="105495198"
-            tools:replace="android:value" /> <!-- ********vivo推送设置end******** -->
+            tools:replace="android:value" />
+        <!-- ********vivo推送设置end******** -->
+
         <!-- ********OPPO 推送 start******** -->
         <service
             android:name="com.heytap.msp.push.service.CompatibleDataMessageCallbackService"
@@ -550,8 +550,12 @@
         </service>
 
         <!--阿里云推送-->
-        <meta-data android:name="com.alibaba.app.appkey" android:value="333472407"/>
-        <meta-data android:name="com.alibaba.app.appsecret" android:value="df808fe4266141bdb471e9b5519c101c"/>
+        <meta-data
+            android:name="com.alibaba.app.appkey"
+            android:value="333472407" />
+        <meta-data
+            android:name="com.alibaba.app.appsecret"
+            android:value="df808fe4266141bdb471e9b5519c101c" />
         <!-- 消息接收监听器 （用户可自主扩展） -->
         <receiver
             android:name=".alipush.MyMessageReceiver"
@@ -567,8 +571,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.GuidePageActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.GuidePageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PopupPushActivity"
             android:exported="true"
