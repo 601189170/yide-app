@@ -2,6 +2,7 @@ package com.yyide.chatim.dialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
@@ -85,6 +86,13 @@ public class DeptSelectPop extends PopupWindow {
                 break;
             case 3:
                 tvPopTitle.setText("选择考勤事件");
+                break;
+            case 4:
+                tvPopTitle.setText("切换学生");
+                Drawable drawable = context.getResources().getDrawable(R.drawable.swich_person);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tvPopTitle.setCompoundDrawables(drawable, null, null, null);
                 break;
             default:
                 break;

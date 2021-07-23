@@ -35,6 +35,19 @@
         app:layout_constraintBottom_toBottomOf="@id/iv_tip_icon"
         app:layout_constraintLeft_toRightOf="@id/iv_tip_icon"
         app:layout_constraintTop_toTopOf="@id/iv_tip_icon" />
+    <TextView
+        android:id="@+id/tv_student_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#212121"
+        app:layout_constraintTop_toBottomOf="@id/tv_tip_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="49dp"
+        android:drawablePadding="@dimen/dp_10"
+        android:visibility="gone"
+        />
 
     <ImageView
         android:id="@+id/iv_face"

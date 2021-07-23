@@ -43,6 +43,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -82,6 +83,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     private long classesId;
     private String realname;
     private long depId;
+    private long studentId;
 
     @Override
     public int getContentViewID() {
@@ -99,6 +101,13 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         }
         initData();
         classesId = SpData.getIdentityInfo().classesId;
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+            if (!form.isEmpty()){
+                final GetUserSchoolRsp.DataBean.FormBean formBean = form.get(0);
+                studentId = Long.parseLong(formBean.studentId);
+            }
+        }
         realname = SpData.getIdentityInfo().realname;
         depId = SpData.getIdentityInfo().teacherDepId;
         Log.e(TAG, "getFaceData: name=" + realname + ",classId=" + classesId);
@@ -124,7 +133,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname, classesId, depId);
+        mvpPresenter.getFaceData(realname, classesId, depId,studentId);
     }
 
     @Override

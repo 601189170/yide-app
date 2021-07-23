@@ -3,7 +3,9 @@ package com.yyide.chatim.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -26,8 +29,11 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.FaceOssBean;
+import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.presenter.FaceUploadPresenter;
 import com.yyide.chatim.utils.DisplayUtils;
 import com.yyide.chatim.utils.GlideUtil;
@@ -37,7 +43,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,8 +66,12 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     @BindView(R.id.btn_start_capture)
     Button btn_start_capture;//已经上传过人脸的，显示重新采集，默认开始采集
 
+    @BindView(R.id.tv_student_name)
+    TextView tvStudentName;//现在学生名字
+    private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
     private static final int REQUEST_TAKE_PHOTO = 1;
     private long classesId;
+    private long studentId;
     private long depId;
     private String realname;
 
@@ -66,6 +80,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         return R.layout.activity_face_capture;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,26 +94,25 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         parmsNull();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void parmsNull() {
-        if (TextUtils.isEmpty(realname)) {
-            warnTip("当前账号姓名为空不能采集人脸");
-        } else {
             if (!SpData.getIdentityInfo().staffIdentity()) {
-                final long userId = Long.parseLong(SpData.getIdentityInfo().userId);
-                if (classesId == 0 && userId == 0) {
+                tvStudentName.setVisibility(View.VISIBLE);
+                initClassData();
+                if (studentId == 0) {
                     warnTip("当前账号学生Id为空不能采集人脸");
                 } else {
-                    classesId = classesId == 0 ? userId : classesId;
-                    mvpPresenter.getFaceData(realname,classesId , depId);
+                    initClassView();
+                    mvpPresenter.getFaceData(realname,classesId , depId,studentId);
                 }
             } else {
-//                if (depId == 0) {
-//                    warnTip("当前账号部门Id为空不能采集人脸");
-//                } else {
-                    mvpPresenter.getFaceData(realname, classesId, depId);
-//                }
+                tvStudentName.setVisibility(View.GONE);
+                if (TextUtils.isEmpty(realname)) {
+                    warnTip("当前账号姓名为空不能采集人脸");
+                } else {
+                    mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+                }
             }
-        }
     }
 
     private void warnTip(String msg) {
@@ -219,9 +233,10 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 //去上传人脸图片
             } catch (FileNotFoundException e) {
             } catch (IOException e) {
+
             }
             //图片上传
-            mvpPresenter.updateFaceData(realname,classesId,depId,imagePath);
+            mvpPresenter.updateFaceData(realname,classesId,depId,studentId,imagePath);
 
             File file = new File(currentPhotoPath);
             if (file.exists()) {
@@ -286,7 +301,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         }else {
             tv_face_capture_tip.setText("人脸上传失败");
         }
-        mvpPresenter.getFaceData(realname,classesId,depId);
+        mvpPresenter.getFaceData(realname,classesId,depId,studentId);
     }
 
     @Override
@@ -294,7 +309,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         Log.e(TAG, "faceUploadFail: " + msg);
         ToastUtils.showShort("提交失败："+msg);
         tv_face_capture_tip.setText("人脸上传失败");
-        mvpPresenter.getFaceData(realname,classesId,depId);
+        mvpPresenter.getFaceData(realname,classesId,depId,studentId);
     }
 
     @Override
@@ -303,13 +318,13 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         if (faceOssBean.getCode() == 200) {
             if (faceOssBean.getData() != null) {
                 FaceOssBean.DataBean data = faceOssBean.getData();
+                final String status = data.getStatus();
+                tv_face_capture_tip.setVisibility(View.VISIBLE);
+                if (!TextUtils.isEmpty(status)) {
+                    tv_face_capture_tip.setText(status);
+                }
                 String path = data.getPath();
                 if (!TextUtils.isEmpty(path)) {
-                    final String status = data.getStatus();
-                    tv_face_capture_tip.setVisibility(View.VISIBLE);
-                    if (!TextUtils.isEmpty(status)){
-                        tv_face_capture_tip.setText(status);
-                    }
                     btn_start_capture.setText("重新采集");
                     //加载图片
                     Glide.with(this)
@@ -317,6 +332,8 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                             .skipMemoryCache(true)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(iv_face);
+                } else {
+                    iv_face.setImageResource(R.drawable.icon_face_capture_box);
                 }
             }
         }
@@ -338,5 +355,56 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     @Override
     public void showError() {
 
+    }
+
+    private void initClassData() {
+        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+        classList.clear();
+        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
+            final String studentName = formBean.studentName;
+            final String studentId = formBean.studentId;
+            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+            dataBean.setDeptId(Long.parseLong(studentId));
+            dataBean.setDeptName(studentName);
+            dataBean.setIsDefault(0);
+            classList.add(dataBean);
+        }
+        if (!classList.isEmpty()) {
+            final LeaveDeptRsp.DataBean dataBean = classList.get(0);
+            dataBean.setIsDefault(1);
+            studentId = dataBean.getDeptId();
+        } else {
+            warnTip("当前账号学生Id为空不能采集人脸");
+            tvStudentName.setVisibility(View.GONE);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initClassView() {
+        final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+        if (classOptional.isPresent()){
+            final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
+            tvStudentName.setText(clazzBean.getDeptName());
+            studentId = clazzBean.getDeptId();
+            if (classList.size() <= 1) {
+                tvStudentName.setCompoundDrawables(null, null, null, null);
+            } else {
+                Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tvStudentName.setCompoundDrawables(null, null, drawable, null);
+                tvStudentName.setOnClickListener(v -> {
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(this, 2, classList);
+                            deptSelectPop.setOnCheckedListener((id, dept) -> {
+                                Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
+                                tvStudentName.setText(dept);
+                                studentId = id;
+                                mvpPresenter.getFaceData(realname,classesId , depId,studentId);
+                            });
+                        }
+                );
+            }
+        }
     }
 }

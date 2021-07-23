@@ -141,6 +141,12 @@ public class GetUserSchoolRsp {
             public String classesTeacher;
             public String teacherId;
 
+            public String classesStudentName;
+            public String studentName;
+            public String studentId;
+            public String studentUserId;
+            public String userId;
+
         }
     }
 

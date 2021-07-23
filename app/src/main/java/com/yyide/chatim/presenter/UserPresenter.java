@@ -98,15 +98,15 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void getFaceData(String name, long classId,long depId){
+    public void getFaceData(String name, long classId,long depId,long studentId){
         Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("name",name);
-            params.put("classId",classId);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
-            addSubscription(dingApiStores.getStudentOss(body), new ApiCallback<FaceOssBean>() {
+           // Map<String, Object> params = new HashMap<>();
+            //params.put("name",name);
+            //params.put("classId",classId);
+            //RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
+            addSubscription(dingApiStores.getStudentOss(studentId), new ApiCallback<FaceOssBean>() {
                 @Override
                 public void onSuccess(FaceOssBean model) {
                     mvpView.getFaceDataSuccess(model);

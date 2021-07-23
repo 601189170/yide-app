@@ -402,8 +402,8 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
     //上传学生face
     @Multipart
-    @POST("/face/cloud-face/face/toStudentOss")
-    Observable<BaseRsp> toStudentOss(@PartMap Map<String, RequestBody> map, @Part MultipartBody.Part file);
+    @POST("/face/cloud-face/face/toStudentOss/{studentId}")
+    Observable<BaseRsp> toStudentOss(@Path("studentId") long studentId,@Part MultipartBody.Part file);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/toTeacherOss
     //上传教师face
@@ -414,8 +414,8 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/getStudentOss
     //查询学生头像
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/face/cloud-face/face/getStudentOss")
-    Observable<FaceOssBean> getStudentOss(@Body RequestBody requestBody);
+    @POST("/face/cloud-face/face/getStudentOss/{studentId}")
+    Observable<FaceOssBean> getStudentOss(@Path("studentId") long studentId);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/getTeacherOss
     //查询老师头像
