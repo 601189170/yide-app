@@ -81,8 +81,6 @@ public class AliasUtil {
                         if (!contains) {
                             addAlias(mPushService, userid);
                         }
-                    } else {
-                        addAlias(mPushService, userid);
                     }
 
                     for (String alias : aliases) {
@@ -90,6 +88,8 @@ public class AliasUtil {
                             delAlias(mPushService, alias);
                         }
                     }
+                } else {
+                    addAlias(mPushService, userid);
                 }
             }
 
