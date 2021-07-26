@@ -26,6 +26,25 @@ public class MainPresenter extends BasePresenter<MainView> {
         attachView(view);
     }
 
+    public void updateVersion(){
+        addSubscription(dingApiStores.updateVersion(), new ApiCallback<SelectUserRsp>() {
+            @Override
+            public void onSuccess(SelectUserRsp model) {
+                mvpView.getData(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.fail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
     public void getselectUser() {
         mvpView.showLoading();
         addSubscription(dingApiStores.getSelectUser(), new ApiCallback<SelectUserRsp>() {
@@ -36,7 +55,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getDataFail(msg);
+                mvpView.fail(msg);
             }
 
             @Override
@@ -57,7 +76,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.UserLogoutDataFail(msg);
+                mvpView.fail(msg);
             }
 
             @Override
@@ -98,7 +117,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.listAllScheduleByTeacherIdDataFail(msg);
+                mvpView.fail(msg);
             }
 
             @Override
@@ -123,7 +142,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.addUserEquipmentInfoFail(msg);
+                mvpView.fail(msg);
             }
 
             @Override

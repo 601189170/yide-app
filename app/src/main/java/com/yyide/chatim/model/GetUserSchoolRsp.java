@@ -115,17 +115,6 @@ public class GetUserSchoolRsp {
         public List<FormBean> form;
         public boolean isCurrentUser;
         public String studentName;
-        public List<Student> stuForm;
-
-        public static class Student {
-            public String classesId;
-            public String classesStudentName;
-            public String classesName;
-            public String studentName;
-            public String studentId;
-            public String studentUserId;
-            public String userId;
-        }
 
         public static class FormBean {
             /**

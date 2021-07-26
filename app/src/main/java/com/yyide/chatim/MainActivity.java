@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -70,6 +71,7 @@ import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.presenter.MainPresenter;
+import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
@@ -158,6 +160,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 sendBroadcast(intent);
             }, 3000);
         }
+
+        //应用更新检测
+        new Handler().postDelayed(() -> mvpPresenter.updateVersion(), 5000);
     }
 
     private void prepareThirdPushToken() {
@@ -312,20 +317,20 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         mPushService.listAliases(new CommonCallback() {
             @Override
             public void onSuccess(String response) {
-                Log.e(TAG,"aliases:" + response + " \n");
-                if (!TextUtils.isEmpty(response)){
+                Log.e(TAG, "aliases:" + response + " \n");
+                if (!TextUtils.isEmpty(response)) {
                     final String[] aliases = response.split(",");
                     for (String alias : aliases) {
-                        if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)){
+                        if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
                             mPushService.removeAlias(alias, new CommonCallback() {
                                 @Override
                                 public void onSuccess(String s) {
-                                    Log.e(TAG,"remove alias " + alias + " success\n");
+                                    Log.e(TAG, "remove alias " + alias + " success\n");
                                 }
 
                                 @Override
                                 public void onFailed(String errorCode, String errorMsg) {
-                                    Log.e(TAG,"remove alias " + alias + " failed." +
+                                    Log.e(TAG, "remove alias " + alias + " failed." +
                                             "errorCode: " + errorCode + ", errorMsg:" + errorMsg + "\n");
                                 }
                             });
@@ -336,7 +341,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
             @Override
             public void onFailed(String errorCode, String errorMsg) {
-                Log.e(TAG,"list aliases failed. errorCode:" + errorCode + " errorMsg:" + errorMsg);
+                Log.e(TAG, "list aliases failed. errorCode:" + errorCode + " errorMsg:" + errorMsg);
             }
         });
     }
@@ -346,7 +351,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         messageCount = count;
         setMessageCount(todoCount + messageCount + noticeCount);
         // 华为离线推送角标
-//        HUAWEIHmsMessageService.updateBadge(this, count);
+        HUAWEIHmsMessageService.updateBadge(this, count);
     }
 
     private int messageCount = 0;//消息数量
@@ -389,23 +394,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    public void getDataFail(String msg) {
-        Log.e("TAG", "getDataFail==》: " + JSON.toJSONString(msg));
-    }
-
-    @Override
     public void UserLogoutData(UserLogoutRsp rsp) {
         Log.e("TAG", "UserLogoutData==》: " + JSON.toJSONString(rsp));
     }
 
     @Override
-    public void UserLogoutDataFail(String msg) {
-        Log.e("TAG", "UserLogoutDataFail==》: " + JSON.toJSONString(msg));
-    }
-
-    @Override
-    public void getUserSchoolDataFail(String rsp) {
-        Log.e("TAG", "getUserSchoolDataFail==》: " + JSON.toJSONString(rsp));
+    public void fail(String msg) {
+        Log.e("TAG", "fail==》: " + JSON.toJSONString(msg));
     }
 
     @Override
@@ -414,8 +409,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    public void selectSchByTeaidDataFail(String rsp) {
-        Log.e("TAG", "selectSchByTeaidDataFail==》: " + JSON.toJSONString(rsp));
+    public void updateVersion(SelectUserRsp rsp) {
+
     }
 
     @Override
@@ -424,18 +419,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    public void listAllScheduleByTeacherIdDataFail(String rsp) {
-        Log.e("TAG", "listAllScheduleByTeacherIdDataFail==》: " + JSON.toJSONString(rsp));
-    }
-
-    @Override
     public void addUserEquipmentInfo(ResultBean rsp) {
         Log.e("TAG", "addUserEquipmentInfo==》: " + JSON.toJSONString(rsp));
-    }
-
-    @Override
-    public void addUserEquipmentInfoFail(String rsp) {
-        Log.e("TAG", "addUserEquipmentInfoFail==》: " + JSON.toJSONString(rsp));
     }
 
     @Override

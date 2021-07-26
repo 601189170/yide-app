@@ -95,7 +95,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             mViewBinding.tvLateNum.setText(teachers.getLate() + "");
 //            mViewBinding.tvLateName.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
 //            mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
-
+//            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "签到率");
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");

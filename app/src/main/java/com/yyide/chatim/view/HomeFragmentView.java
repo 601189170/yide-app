@@ -26,5 +26,7 @@ public interface HomeFragmentView extends BaseView {
 
     void getFail(String rsp);
 
+    void getIndexMyNoticeFail(String rsp);
+
     void getIndexMyNotice(TodoRsp rsp);
 }

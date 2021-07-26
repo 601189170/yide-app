@@ -83,6 +83,9 @@ import retrofit2.http.QueryMap;
 
 public interface DingApiStores {
 
+    @POST("/backstage/cloud-backstage/app/version/updateVersionInfo")
+    Observable<GetStuasRsp> updateVersion();
+
     @GET("/java-painted-screen/api/wechatPaintedScreenManage/selectDeviceOperation")
     Observable<GetStuasRsp> getData();
 
@@ -184,7 +187,7 @@ public interface DingApiStores {
 
     //用户头像上传
     @Multipart
-    @POST("/management/cloud-system/user/androidToOss")
+    @POST("/management/cloud-system/user/uploadPic")
     Observable<UploadRep> uploadImg(@Part MultipartBody.Part info);
 
     //扫码登录
@@ -403,7 +406,7 @@ public interface DingApiStores {
     //上传学生face
     @Multipart
     @POST("/face/cloud-face/face/toStudentOss/{studentId}")
-    Observable<BaseRsp> toStudentOss(@Path("studentId") long studentId,@Part MultipartBody.Part file);
+    Observable<BaseRsp> toStudentOss(@Path("studentId") long studentId, @Part MultipartBody.Part file);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/toTeacherOss
     //上传教师face

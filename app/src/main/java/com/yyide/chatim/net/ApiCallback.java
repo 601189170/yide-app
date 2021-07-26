@@ -1,9 +1,10 @@
 package com.yyide.chatim.net;
 
 import android.text.TextUtils;
+
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.base.BaseCompositeDisposable;
 import com.yyide.chatim.utils.LogUtil;
+
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -20,6 +21,8 @@ public abstract class ApiCallback<M> implements Observer<M> {
     public abstract void onFailure(String msg);
 
     public abstract void onFinish();
+
+//    public abstract void onDisposable(Disposable d);
 
 
     @Override
@@ -61,7 +64,6 @@ public abstract class ApiCallback<M> implements Observer<M> {
 
     @Override
     public void onSubscribe(@NonNull Disposable d) {
-        //new BasePresenter().addSubscription(d);
-        BaseCompositeDisposable.instance().addSubscription(d);
+//        onDisposable(d);
     }
 }

@@ -138,7 +138,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     void initVerticalTextview() {
-        setData();
         mVerticalTextView.setResources(list);
         mVerticalTextView.setTextStillTime(4000);
         mVerticalTextView.setOnItemClickListener(i -> {
@@ -390,6 +389,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     @Override
+    public void getIndexMyNoticeFail(String rsp) {
+        setData();
+    }
+
+    @Override
     public void getIndexMyNotice(TodoRsp rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
@@ -420,6 +424,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
             list.add(item.getFirstData());
         }
+        mVerticalTextView.setResources(list);
     }
 
     public interface FragmentListener {

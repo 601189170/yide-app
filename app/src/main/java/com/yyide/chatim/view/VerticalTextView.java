@@ -79,7 +79,8 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
     private class MyTask extends TimerTask {
         @Override
         public void run() {
-            mHandler.sendEmptyMessage(1);
+            if (textList != null && textList.size() > 0)
+                mHandler.sendEmptyMessage(1);
         }
     }
 

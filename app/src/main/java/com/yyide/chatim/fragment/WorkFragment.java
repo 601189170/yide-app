@@ -104,9 +104,7 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
         if (model.code == BaseConstant.REQUEST_SUCCES2 && model != null && model.data != null) {
             if (model.data.size() > 0) {
                 List<SelectSchByTeaidRsp.DataBean> dataBeanList = new ArrayList<>();
-                for (SelectSchByTeaidRsp.DataBean item : model.data) {
-                    dataBeanList.add(item);
-                }
+                dataBeanList.addAll(model.data);
                 announAdapter.notifyData(dataBeanList);
                 indexAdapter.setList(dataBeanList);
             } else {

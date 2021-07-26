@@ -51,7 +51,6 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
     AttendanceAdapter announAdapter;
     IndexAdapter indexAdapter;
     public String TAG = AttendanceTeacherFragment.class.getSimpleName();
-    private boolean isSchool = false;
 
     @Nullable
     @Override
@@ -70,10 +69,8 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
 
     private void getHomeAttendance() {
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
-            isSchool = true;
             mvpPresenter.homeAttendance("");
         } else {
-            isSchool = true;
             mvpPresenter.homeAttendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "");
         }
     }
@@ -138,6 +135,9 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
+            } else {
+                announAdapter.notifyData(new ArrayList<>());
+                indexAdapter.setList(new ArrayList<>());
             }
         }
     }
@@ -162,6 +162,8 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
 
     @Override
     public void getAttendanceFail(String msg) {
+        announAdapter.notifyData(new ArrayList<>());
+        indexAdapter.setList(new ArrayList<>());
         Log.e("TAG", "getAttendanceFail==>: " + msg);
     }
 }

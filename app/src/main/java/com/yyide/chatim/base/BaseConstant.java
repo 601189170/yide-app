@@ -30,22 +30,23 @@ public class BaseConstant {
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
     /*账号*/
-    public static String LOGINNAME = "LOGINNAME";
+    public static final String LOGINNAME = "LOGINNAME";
 
     /*密码*/
-    public static String PASSWORD = "PASSWORD";
+    public static final String PASSWORD = "PASSWORD";
 
     //第一次打开app
-    public static String FIRST_OPEN_APP = "firstOpenApp";
+    public static final String FIRST_OPEN_APP = "firstOpenApp";
 
     public static final String CHAT_INFO = "chatInfo";
 
     /**
      * 请求ip==>baseUrl
      */
-    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.108:8888";//Dev 环境
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.147:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-//    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
+    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
 
     //Http访问地址
     public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
@@ -76,17 +77,8 @@ public class BaseConstant {
     public static final String PRIVACY_URL = "https://file.1d1j.cn/privacyPolicy.html";
 
     public static final String AGREEMENT_URL = "https://file.1d1j.cn/serviceAgreement.html";
-    /**
-     * request Code 从相册选择照片不裁切
-     **/
-    public final static int SELECT_ORIGINAL_PIC = 126;
-    /**
-     * request Code 拍取照片不裁切
-     **/
-    public final static int REQ_CODE = 127;
 
     public final static String JG_ALIAS_NAME = "aliasName";
-    public final static String JG_SEQUENCE = "sequence";
 
     public static final String SP_PRIVACY = "sp_privacy";
 

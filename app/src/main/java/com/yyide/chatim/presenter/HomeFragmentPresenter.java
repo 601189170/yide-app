@@ -55,7 +55,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getFail(msg);
+                mvpView.getIndexMyNoticeFail(msg);
             }
 
             @Override

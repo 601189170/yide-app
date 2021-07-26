@@ -70,15 +70,12 @@ public class NoteByListActivity extends BaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         recyclerview.setAdapter(tabRecyAdapter);
-        tabRecyAdapter.setOnItemClickListener(new TabRecyAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (position == 0) {//点击回到一级部门,清除所有回退栈
-                    finish();
-                } else {
-                    listTab = tabRecyAdapter.remove(position + 1);
-                    fragments = remove(position + 1);
-                }
+        tabRecyAdapter.setOnItemClickListener((view, position) -> {
+            if (position == 0) {//点击回到一级部门,清除所有回退栈
+                finish();
+            } else {
+                listTab = tabRecyAdapter.remove(position + 1);
+                fragments = remove(position + 1);
             }
         });
 

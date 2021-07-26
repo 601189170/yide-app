@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -51,7 +52,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private TextView user_name;
     private TextView tv_cache;
     private ImageView head_img;
+    private ImageView ivClass, ivIdentity;
     private TextView my_info;
+    private LinearLayout layout1, layout2;
 
     public LeftMenuPop(Activity context) {
         this.context = context;
@@ -75,13 +78,15 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         head_img = mView.findViewById(R.id.head_img);
         tv_cache = mView.findViewById(R.id.tv_cache);
         my_info = mView.findViewById(R.id.my_info);
+        ivClass = mView.findViewById(R.id.iv_class);
+        ivIdentity = mView.findViewById(R.id.iv_identity);
         mView.findViewById(R.id.iv_close).setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }
         });
-        LinearLayout layout1 = mView.findViewById(R.id.layout1);
-        LinearLayout layout2 = mView.findViewById(R.id.layout2);
+        layout1 = mView.findViewById(R.id.layout1);
+        layout2 = mView.findViewById(R.id.layout2);
         LinearLayout layout3 = mView.findViewById(R.id.layout3);
         LinearLayout layout4 = mView.findViewById(R.id.layout4);
         LinearLayout layout5 = mView.findViewById(R.id.layout5);
@@ -156,12 +161,34 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private void setData() {
         context.runOnUiThread(() -> {
             setCache();
+            if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
+                ivClass.setVisibility(View.VISIBLE);
+                layout1.setEnabled(true);
+            } else {
+                layout1.setEnabled(false);
+                ivClass.setVisibility(View.INVISIBLE);
+            }
+            if (SpData.Schoolinfo() != null && SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 1) {
+                ivIdentity.setVisibility(View.VISIBLE);
+                layout2.setEnabled(true);
+            } else {
+                layout2.setEnabled(false);
+                ivIdentity.setVisibility(View.INVISIBLE);
+            }
+
             if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
                 my_info.setText("学生信息");
             } else {
                 my_info.setText("我的信息");
             }
-            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
+            //判断是否为舰长
+            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+                if (SpData.getClassInfo() != null) {
+                    user_class.setText(!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName) ? SpData.getClassInfo().classesStudentName : "无");
+                }
+            } else {
+                user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
+            }
             setIdentity();
             head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
             GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
@@ -205,10 +232,14 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         //hide();
         switch (v.getId()) {
             case R.id.layout1://切换班级
-                if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0) {
-                    new SwitchClassPop(context).setOnCheckCallBack(() -> {
+                if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0) {
+                    new SwitchClassesStudentPop(context).setOnCheckCallBack(() -> {
                         setIdentity();
-                        user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+                        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+                            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesStudentName : "");
+                        } else {
+                            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+                        }
                     });
                 }
                 break;

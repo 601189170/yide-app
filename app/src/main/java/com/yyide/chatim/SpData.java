@@ -26,13 +26,13 @@ import java.util.List;
 public class SpData {
 
     /*用户信息，登录返回，登录信息版本号*/
-    public static String LOGINDATA = "LOGINDATA";
-    public static String USERPHONE = "USERPHONE";
-    public static String SCHOOLINFO = "SCHOOLINFO";
-    public static String IDENTIY_INFO = "IDENTIY_INFO";
-    public static String USERSIG = "USERSIG";
-    public static String USERNAME = "USERNAME";
-    public static String CLASS_INFO = "CLASS_INFO";
+    public static final String LOGINDATA = "LOGINDATA";
+    public static final String USERPHONE = "USERPHONE";
+    public static final String SCHOOLINFO = "SCHOOLINFO";
+    public static final String IDENTIY_INFO = "IDENTIY_INFO";
+    public static final String USERSIG = "USERSIG";
+    public static final String USERNAME = "USERNAME";
+    public static final String CLASS_INFO = "CLASS_INFO";
 
     public static LoginRsp User() {
         return JSON.parseObject(SPUtils.getInstance().getString(LOGINDATA, ""), LoginRsp.class);
