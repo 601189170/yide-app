@@ -67,7 +67,8 @@ public class AliasUtil {
         CloudPushService mPushService = PushServiceFactory.getCloudPushService();
         //保证当前账号的当前身份
         final String userid = String.valueOf(SpData.getIdentityInfo().userId);
-        Log.e(TAG, "userid: " + userid);
+        final String deviceId = mPushService.getDeviceId();
+        Log.e(TAG, "userid: " + userid+",deviceId："+deviceId);
         mPushService.listAliases(new CommonCallback() {
             @Override
             public void onSuccess(String response) {

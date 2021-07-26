@@ -105,7 +105,11 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
             if (!form.isEmpty()){
                 final GetUserSchoolRsp.DataBean.FormBean formBean = form.get(0);
-                studentId = Long.parseLong(formBean.studentId);
+                try {
+                    studentId = Long.parseLong(formBean.studentId);
+                } catch (NumberFormatException exception) {
+                    Log.e(TAG, "studentId="+formBean.studentId );
+                }
             }
         }
         realname = SpData.getIdentityInfo().realname;
