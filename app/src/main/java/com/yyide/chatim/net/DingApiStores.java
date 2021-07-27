@@ -187,7 +187,7 @@ public interface DingApiStores {
 
     //用户头像上传
     @Multipart
-    @POST("/management/cloud-system/user/uploadPic")
+    @POST("/management/cloud-system/user/androidToOss")
     Observable<UploadRep> uploadImg(@Part MultipartBody.Part info);
 
     //扫码登录

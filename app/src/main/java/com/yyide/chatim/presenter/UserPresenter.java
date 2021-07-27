@@ -80,7 +80,7 @@ public class UserPresenter extends BasePresenter<UserView> {
             @Override
             public void onSuccess(UploadRep model) {
                 if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
-                    mvpView.uploadFileSuccess(model.getData());
+                    mvpView.uploadFileSuccess(model.getUrl());
                 } else {
                     mvpView.uploadFileFail(model.getMessage());
                 }
