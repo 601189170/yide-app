@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tbruyelle.rxpermissions3.Permission;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
@@ -29,6 +30,7 @@ import com.yyide.chatim.utils.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.functions.Consumer;
 
 public class PersonInfoActivity extends BaseActivity {

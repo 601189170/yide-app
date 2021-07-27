@@ -51,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Unbinder unbinder;
     private LoadingTools loading;
     protected DingApiStores mDingApiStores;
+    protected Disposable mDisposable;
     // 监听做成静态可以让每个子类重写时都注册相同的一份。
     private static IMEventListener mIMEventListener = new IMEventListener() {
         @Override
@@ -164,6 +165,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         hideLoading();
         loading = null;
         mActivity = null;
+        if(mDisposable != null && !mDisposable.isDisposed()){
+            mDisposable.dispose();
+        }
         super.onDestroy();
     }
 

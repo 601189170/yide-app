@@ -223,6 +223,7 @@
 
     //权限提示语
     <string name="permission_call_phone">需要开启对您手机的拨打电话权限，是否现在开启</string>
+    <string name="permission_camera">需要开启对您手机的相机权限，是否现在开启</string>
 
 
     //隐私政策

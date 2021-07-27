@@ -143,6 +143,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             if (SpData.getClassInfo() != null) {
                 mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
+            } else {
+                setDefaultView("今日无课");
             }
         } else {
             mvpPresenter.SelectSchByTeaid();

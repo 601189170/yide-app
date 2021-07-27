@@ -94,21 +94,21 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)) {
-            title.setText("我的信息");
-        } else {
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             title.setText("学生信息");
+        } else {
+            title.setText("我的信息");
         }
         initData();
         classesId = SpData.getIdentityInfo().classesId;
         if (!SpData.getIdentityInfo().staffIdentity()) {
             final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
-            if (!form.isEmpty()){
+            if (!form.isEmpty()) {
                 final GetUserSchoolRsp.DataBean.FormBean formBean = form.get(0);
                 try {
                     studentId = Long.parseLong(formBean.studentId);
                 } catch (NumberFormatException exception) {
-                    Log.e(TAG, "studentId="+formBean.studentId );
+                    Log.e(TAG, "studentId=" + formBean.studentId);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname, classesId, depId,studentId);
+        mvpPresenter.getFaceData(realname, classesId, depId, studentId);
     }
 
     @Override

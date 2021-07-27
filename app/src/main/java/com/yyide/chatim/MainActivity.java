@@ -162,7 +162,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
 
         //应用更新检测
-        new Handler().postDelayed(() -> mvpPresenter.updateVersion(), 5000);
+        new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 5000);
     }
 
     private void prepareThirdPushToken() {

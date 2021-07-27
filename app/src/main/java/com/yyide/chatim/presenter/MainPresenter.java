@@ -26,8 +26,11 @@ public class MainPresenter extends BasePresenter<MainView> {
         attachView(view);
     }
 
-    public void updateVersion(){
-        addSubscription(dingApiStores.updateVersion(), new ApiCallback<SelectUserRsp>() {
+    public void getVersionInfo() {
+        Map<String, String> map = new HashMap<>();
+        map.put("terminal", "Android");
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        addSubscription(dingApiStores.updateVersion(body), new ApiCallback<SelectUserRsp>() {
             @Override
             public void onSuccess(SelectUserRsp model) {
                 mvpView.getData(model);

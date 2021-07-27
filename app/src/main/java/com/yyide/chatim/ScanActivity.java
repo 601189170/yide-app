@@ -1,9 +1,12 @@
 package com.yyide.chatim;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -17,6 +20,9 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tbruyelle.rxpermissions3.Permission;
+import com.tbruyelle.rxpermissions3.RxPermissions;
+import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.activity.ScanLoginActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.base.BaseActivity;
@@ -37,6 +43,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -52,6 +61,7 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     @BindView(R.id.zbarview)
     ZBarView zbarview;
     int i;
+    private String TAG = ScanActivity.class.getSimpleName();
 
     @Override
     public int getContentViewID() {
@@ -117,7 +127,45 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
             //开始识别
             i = 1;
         }
+    }
 
+    private void rxPermission() {
+        RxPermissions rxPermissions = new RxPermissions(this);
+
+        mDisposable = rxPermissions
+                .requestEach(Manifest.permission.CAMERA)
+                .subscribe(permission -> {
+                            if (permission.granted) {
+                                setSM();
+                            } else if (permission.shouldShowRequestPermissionRationale) {
+                                // Denied permission without ask never again
+//                                Toast.makeText(ScanActivity.this,
+//                                        "Denied permission without ask never again",
+//                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                // 权限被拒绝
+                                new AlertDialog.Builder(ScanActivity.this)
+                                        .setTitle("提示")
+                                        .setMessage(R.string.permission_camera)
+                                        .setPositiveButton("开启", (dialog, which) -> {
+                                            Intent localIntent = new Intent();
+                                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                                            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                                            startActivity(localIntent);
+                                        })
+                                        .setNegativeButton("取消", null)
+                                        .create().show();
+                            }
+                        },
+                        t -> Log.e(TAG, "onError", t),
+                        () -> Log.i(TAG, "OnComplete"));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        rxPermission();
     }
 
     @Override

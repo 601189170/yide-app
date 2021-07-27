@@ -185,6 +185,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
                 if (SpData.getClassInfo() != null) {
                     user_class.setText(!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName) ? SpData.getClassInfo().classesStudentName : "无");
+                } else {
+                    user_class.setText("无");
                 }
             } else {
                 user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
