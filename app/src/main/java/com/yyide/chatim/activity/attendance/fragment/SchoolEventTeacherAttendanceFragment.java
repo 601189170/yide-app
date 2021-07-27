@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -57,6 +58,16 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
         return mViewBinding.getRoot();
     }
 
+    public interface OnRefreshListener {
+        void onRefreshListener(boolean isRefresh);
+    }
+
+    private OnRefreshListener mOnRefreshListener;
+
+    public void setOnRefreshListener(OnRefreshListener mOnRefreshListener) {
+        this.mOnRefreshListener = mOnRefreshListener;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -64,6 +75,12 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
     }
 
     private void initView() {
+        mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (mOnRefreshListener != null) {
+                mOnRefreshListener.onRefreshListener(verticalOffset >= 0);
+            }
+        });
+
         mViewBinding.constraintLayout.setVisibility(View.GONE);
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewBinding.recyclerview.setAdapter(adapter);

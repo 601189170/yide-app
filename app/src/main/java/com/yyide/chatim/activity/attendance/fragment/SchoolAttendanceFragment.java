@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -61,6 +63,11 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
     }
 
     private void initView(AttendanceCheckRsp.DataBean item) {
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            mvpPresenter.attendance("");
+        });
+        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+
         AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
         if (item.schoolPeopleAllForm != null) {
             if (item.schoolPeopleAllForm.size() > index) {
@@ -111,6 +118,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
             }, "");
             attendancePop.setCurrentItem(mViewBinding.tvAttendanceTitle.getText().toString().trim());
             attendancePop.setOnSelectListener(index -> {
+                this.index = index;
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
                 mViewBinding.tvAttendanceTitle.setText(bean.attName);
                 if ("N".equals(bean.getPeopleType())) {
@@ -123,10 +131,19 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
     }
 
     private void startFragment(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean) {
+        SchoolTeacherAttendanceFragment teacherAttendanceFragment = SchoolTeacherAttendanceFragment.newInstance(bean);
+        SchoolEventTeacherAttendanceFragment eventTeacherAttendanceFragment = SchoolEventTeacherAttendanceFragment.newInstance(bean);
+        teacherAttendanceFragment.setOnRefreshListener(isRefresh -> {
+            mViewBinding.swipeRefreshLayout.setEnabled(isRefresh);
+        });
+
+        eventTeacherAttendanceFragment.setOnRefreshListener(isRefresh -> {
+            mViewBinding.swipeRefreshLayout.setEnabled(isRefresh);
+        });
         if ("Y".equals(bean.getIdentityType())) {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolTeacherAttendanceFragment.newInstance(bean)).commit();
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), teacherAttendanceFragment).commit();
         } else {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolEventTeacherAttendanceFragment.newInstance(bean)).commit();
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), eventTeacherAttendanceFragment).commit();
         }
     }
 
@@ -137,6 +154,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
 
     @Override
     public void getAttendanceSuccess(AttendanceCheckRsp model) {
+        mViewBinding.swipeRefreshLayout.setRefreshing(false);
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             AttendanceCheckRsp.DataBean data = model.getData();
             if (data != null) {
@@ -177,6 +195,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
 
     @Override
     public void getAttendanceFail(String msg) {
+        mViewBinding.swipeRefreshLayout.setRefreshing(false);
         Log.d(TAG, "getHomeAttendanceFail-->>" + msg);
     }
 

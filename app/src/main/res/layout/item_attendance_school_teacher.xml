@@ -22,7 +22,7 @@
         android:id="@+id/tv_student_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_6"
+        android:layout_marginEnd="@dimen/dp_10"
         android:textSize="13sp"
         app:layout_constraintEnd_toStartOf="@+id/tv_student_time"
         app:layout_constraintTop_toTopOf="@+id/tv_student_time" />
@@ -31,10 +31,10 @@
         android:id="@+id/tv_student_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_20"
         android:textColor="#F6BD16"
+        android:layout_marginEnd="@dimen/dp_10"
         android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_status"
         app:layout_constraintTop_toTopOf="@+id/tv_status" />
 
     <TextView

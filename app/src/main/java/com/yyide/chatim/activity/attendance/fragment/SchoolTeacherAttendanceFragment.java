@@ -44,6 +44,17 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         return fragment;
     }
 
+    public interface OnRefreshListener {
+        void onRefreshListener(boolean isRefresh);
+    }
+
+    private SchoolEventTeacherAttendanceFragment.OnRefreshListener mOnRefreshListener;
+
+    public void setOnRefreshListener(SchoolEventTeacherAttendanceFragment.OnRefreshListener mOnRefreshListener) {
+        this.mOnRefreshListener = mOnRefreshListener;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +78,11 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
 
     private void initView() {
         mViewBinding.constraintLayout.setVisibility(View.GONE);
-
+        mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (mOnRefreshListener != null) {
+                mOnRefreshListener.onRefreshListener(verticalOffset >= 0);
+            }
+        });
         mViewBinding.tvAbsenteeism.setOnClickListener(this);
         mViewBinding.tvLeave.setOnClickListener(this);
         mViewBinding.tvLate.setOnClickListener(this);
