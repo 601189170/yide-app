@@ -87,6 +87,7 @@ public class BaseApplication extends Application {
      * @param applicationContext
      */
     private void initCloudChannel(Context applicationContext) {
+        Log.e(TAG, "initCloudChannel: --------start---------");
         this.createNotificationChannel();
         PushServiceFactory.init(applicationContext);
         CloudPushService pushService = PushServiceFactory.getCloudPushService();
@@ -120,8 +121,7 @@ public class BaseApplication extends Application {
         // 魅族通道注册
         // appId/appkey在魅族开发者平台获取
         //MeizuRegister.register(applicationContext, "appId", "appkey");
-
-        //ThirdPushManager.reportToken(applicationContext, ThirdPushManager.ThirdPushReportKeyword.HUAWEI.thirdTokenKeyword, "104330887");
+        Log.e(TAG, "initCloudChannel: --------end---------");
     }
 
     private void createNotificationChannel() {
