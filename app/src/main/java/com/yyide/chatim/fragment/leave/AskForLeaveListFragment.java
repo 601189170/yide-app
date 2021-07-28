@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.leave.AskForLeaveListAdapter;
@@ -175,16 +176,25 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
     @Override
     public void leaveList(LeaveListRsp leaveListRsp) {
         Log.d(TAG, "leaveList: " + leaveListRsp.toString());
-        final List<LeaveListRsp.DataBean.RecordsBean> records = leaveListRsp.getData().getRecords();
-        pages = leaveListRsp.getData().getPages();
-        adapter.setIsLastPage(curIndex == pages);
-        adapter.setOnlyOnePage(pages <= 1);
-        adapter.setIsLoadMore(!records.isEmpty());
         if (refresh) {
             list.clear();
             refresh = false;
             swipeRefreshLayout.setRefreshing(false);
         }
+
+        // data is null
+        if (leaveListRsp.getData() == null){
+            ToastUtils.showShort(leaveListRsp.getMsg());
+            showBlankPage();
+            return;
+        }
+
+        final List<LeaveListRsp.DataBean.RecordsBean> records = leaveListRsp.getData().getRecords();
+        pages = leaveListRsp.getData().getPages();
+        adapter.setIsLastPage(curIndex == pages);
+        adapter.setOnlyOnePage(pages <= 1);
+        adapter.setIsLoadMore(!records.isEmpty());
+
         list.addAll(records);
         adapter.notifyDataSetChanged();
         showBlankPage();
