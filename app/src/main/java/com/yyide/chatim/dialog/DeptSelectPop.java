@@ -45,12 +45,19 @@ public class DeptSelectPop extends PopupWindow {
     Window mWindow;
     private List<LeaveDeptRsp.DataBean> dataBeansList;
     private OnCheckedListener onCheckedListener;
+    private OnCheckedListener2 onCheckedListener2;
     public void setOnCheckedListener(OnCheckedListener onCheckedListener) {
         this.onCheckedListener = onCheckedListener;
     }
+    public void setOnCheckedListener(OnCheckedListener2 onCheckedListener2) {
+        this.onCheckedListener2 = onCheckedListener2;
+    }
 
     public interface OnCheckedListener {
-        void onOnCheckedListener(long id, String dept);
+        void onOnCheckedListener(String id, String dept);
+    }
+    public interface OnCheckedListener2{
+        void onOnCheckedListener(LeaveDeptRsp.DataBean dataBean);
     }
 
     /**
@@ -126,7 +133,13 @@ public class DeptSelectPop extends PopupWindow {
                 final Optional<LeaveDeptRsp.DataBean> optionalDataBean = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
                 if (optionalDataBean.isPresent()){
                     final LeaveDeptRsp.DataBean dataBean2 = optionalDataBean.get();
-                    onCheckedListener.onOnCheckedListener(dataBean2.getDeptId(),dataBean2.getDeptName());
+                    if (onCheckedListener != null){
+                        onCheckedListener.onOnCheckedListener(dataBean2.getDeptId(),dataBean2.getDeptName());
+                    }
+
+                    if (onCheckedListener2 != null){
+                        onCheckedListener2.onOnCheckedListener(dataBean2);
+                    }
                 }
             }
         });

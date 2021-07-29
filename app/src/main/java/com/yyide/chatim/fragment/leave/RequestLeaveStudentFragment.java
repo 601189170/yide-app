@@ -1,6 +1,7 @@
 package com.yyide.chatim.fragment.leave;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,6 +44,7 @@ import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.leave.LeaveCourseSectionAdapter;
 import com.yyide.chatim.adapter.leave.LeaveReasonTagAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.CourseSectionBean;
@@ -63,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -111,12 +114,14 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     private String endTime;
     private String leaveReason = "2";
     private String reason="";
-    private long classesId;
+    private String classesId;
     private List<Long> carbonCopyPeopleId;
     private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList;
     private String classesName;
     private TimePickerDialog mDialogAll;
     private LeaveCourseSectionAdapter leaveCourseSectionAdapter;
+    private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
+    private String studentId;
 
     public RequestLeaveStudentFragment() {
         // Required empty public constructor
@@ -213,12 +218,10 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             }
             setCheckAll(isChecked);
         });
-        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-        if (classInfo !=null){
-            classesId = Long.parseLong(classInfo.classesId);
-            classesName = classInfo.classesName;
-        }
-        tv_department.setText(classesName);
+        //初始化班级列表
+        initClassData();
+        initClassView();
+        //tv_department.setText(classesName);
         btn_commit.setAlpha(0.5f);
         btn_commit.setClickable(false);
         //请求审批流程
@@ -332,7 +335,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             return;
         }
 
-        mvpPresenter.addStudentLeave(startTime,endTime,leaveReason,reason,classesId,classesName,carbonCopyPeopleId);
+        mvpPresenter.addStudentLeave(startTime,endTime,leaveReason,reason,classesId,studentId,classesName,carbonCopyPeopleId);
     }
 
 
@@ -415,6 +418,8 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             return;
         }
         if (data != null){
+            ll_approver_list.removeAllViews();
+            ll_copyer_list.removeAllViews();
             //审批人
             final ApproverRsp.DataBean.PeopleFormBean peopleForm = data.getPeopleForm();
             if (peopleForm == null){
@@ -533,5 +538,63 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         lp.width = nWidth;
         lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
         view.setLayoutParams(lp);
+    }
+
+    /**
+     * 初始化学生所在班级列表，供当前账号用户选择
+     */
+    private void initClassData() {
+        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+        //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+        classList.clear();
+        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
+            final String studentName = formBean.classesStudentName;
+            final String studentId = formBean.studentId;
+            final String classesId = formBean.classesId;
+            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+            dataBean.setDeptId(studentId);
+            dataBean.setClassId(classesId);
+            dataBean.setDeptName(studentName);
+            dataBean.setIsDefault(0);
+            classList.add(dataBean);
+        }
+        if (!classList.isEmpty()) {
+            final LeaveDeptRsp.DataBean dataBean = classList.get(0);
+            dataBean.setIsDefault(1);
+            studentId = dataBean.getDeptId();
+        } else {
+            Log.e(TAG, "initClassData: 当前账号没有学生" );
+            tv_department.setVisibility(View.GONE);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initClassView() {
+        final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+        if (classOptional.isPresent()) {
+            final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
+            tv_department.setText(clazzBean.getDeptName());
+            studentId = clazzBean.getDeptId();
+            classesId = clazzBean.getClassId();
+            if (classList.size() <= 1) {
+                tv_department.setCompoundDrawables(null, null, null, null);
+            } else {
+                Drawable drawable = getResources().getDrawable(R.drawable.icon_right);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tv_department.setCompoundDrawables(null, null, drawable, null);
+                tv_department.setOnClickListener(v -> {
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 4, classList);
+                            deptSelectPop.setOnCheckedListener((dataBean) -> {
+                                Log.e(TAG, "班级选择: " + dataBean.toString());
+                                tv_department.setText(dataBean.getDeptName());
+                                studentId = dataBean.getDeptId();
+                                classesId = dataBean.getClassId();
+                                mvpPresenter.getApprover(classesId);
+                            });
+                        }
+                );
+            }
+        }
     }
 }

@@ -98,7 +98,7 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void getFaceData(String name, long classId,long depId,long studentId){
+    public void getFaceData(String name, String classId,long depId,String studentId){
         Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {

@@ -80,10 +80,10 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     TextView title;
 
     private GetUserSchoolRsp.DataBean userInfo;
-    private long classesId;
+    private String classesId;
     private String realname;
     private long depId;
-    private long studentId;
+    private String studentId;
 
     @Override
     public int getContentViewID() {
@@ -100,13 +100,14 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             title.setText("我的信息");
         }
         initData();
-        classesId = SpData.getIdentityInfo().classesId;
+//        classesId = SpData.getIdentityInfo().classesId;
         if (!SpData.getIdentityInfo().staffIdentity()) {
             final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
             if (!form.isEmpty()) {
                 final GetUserSchoolRsp.DataBean.FormBean formBean = form.get(0);
                 try {
-                    studentId = Long.parseLong(formBean.studentId);
+                    studentId = formBean.studentId;
+                    classesId = formBean.classesId;
                 } catch (NumberFormatException exception) {
                     Log.e(TAG, "studentId=" + formBean.studentId);
                 }

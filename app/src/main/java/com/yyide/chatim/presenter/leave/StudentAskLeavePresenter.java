@@ -23,7 +23,7 @@ public class StudentAskLeavePresenter extends BasePresenter<StudentAskLeaveView>
         attachView(view);
     }
 
-    public void getApprover(long classIdOrdeptId) {
+    public void getApprover(String classIdOrdeptId) {
         final HashMap<String, Object> map = new HashMap<>(1);
         map.put("classIdOrdeptId", classIdOrdeptId);
         mvpView.showLoading();
@@ -70,13 +70,14 @@ public class StudentAskLeavePresenter extends BasePresenter<StudentAskLeaveView>
     }
 
     public void addStudentLeave(String startTime, String endTime, String leaveReason, String reason,
-                                long classId, String className, List<Long> carbonCopyPeopleIds) {
-        final HashMap<String, Object> map = new HashMap<>(7);
+                                String classId, String studentId,String className, List<Long> carbonCopyPeopleIds) {
+        final HashMap<String, Object> map = new HashMap<>(8);
         map.put("startTime", startTime);
         map.put("endTime", endTime);
         map.put("leaveReason", leaveReason);
         map.put("reason", reason);
         map.put("classId", classId);
+        map.put("studentId", studentId);
         map.put("className", className);
         map.put("carbonCopyPeopleId", carbonCopyPeopleIds);
         mvpView.showLoading();

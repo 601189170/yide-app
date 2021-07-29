@@ -70,9 +70,9 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     TextView tvStudentName;//现在学生名字
     private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
     private static final int REQUEST_TAKE_PHOTO = 1;
-    private long classesId;
-    private long studentId;
-    private long depId;
+    private String classesId;
+    private String studentId;
+    private String depId;
     private String realname;
 
     @Override
@@ -86,7 +86,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         super.onCreate(savedInstanceState);
         title.setText("人脸采集");
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.png"));
-        classesId = SpData.getIdentityInfo().classesId;
+        //classesId = SpData.getIdentityInfo().classesId;
         //depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
         Log.e("FaceUploadPresenter", "getFaceData: name="+realname +",classId="+classesId+",depId="+depId);
@@ -99,7 +99,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             if (!SpData.getIdentityInfo().staffIdentity()) {
                 tvStudentName.setVisibility(View.VISIBLE);
                 initClassData();
-                if (studentId == 0) {
+                if (TextUtils.isEmpty(studentId) || "0".equals(studentId)) {
                     warnTip("当前账号学生Id为空不能采集人脸");
                 } else {
                     initClassView();
@@ -365,12 +365,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             final String studentName = formBean.studentName;
             final String studentId = formBean.studentId;
             final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            try {
-                dataBean.setDeptId(Long.parseLong(studentId));
-            } catch (NumberFormatException exception) {
-                Log.e(TAG, "studentId="+formBean.studentId );
-                dataBean.setDeptId(0);
-            }
+            dataBean.setDeptId(studentId);
             dataBean.setDeptName(studentName);
             dataBean.setIsDefault(0);
             classList.add(dataBean);
@@ -404,7 +399,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                             deptSelectPop.setOnCheckedListener((id, dept) -> {
                                 Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
                                 tvStudentName.setText(dept);
-                                if (id == 0){
+                                if (TextUtils.isEmpty(id) || "0".equals(id)){
                                     warnTip("当前账号学生Id为空不能采集人脸");
                                 }
                                 studentId = id;

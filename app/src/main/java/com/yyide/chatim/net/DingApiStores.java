@@ -429,7 +429,7 @@ public interface DingApiStores {
     //上传学生face
     @Multipart
     @POST("/face/cloud-face/face/toStudentOss/{studentId}")
-    Observable<BaseRsp> toStudentOss(@Path("studentId") long studentId, @Part MultipartBody.Part file);
+    Observable<BaseRsp> toStudentOss(@Path("studentId") String studentId, @Part MultipartBody.Part file);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/toTeacherOss
     //上传教师face
@@ -441,7 +441,7 @@ public interface DingApiStores {
     //查询学生头像
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/face/cloud-face/face/getStudentOss/{studentId}")
-    Observable<FaceOssBean> getStudentOss(@Path("studentId") long studentId);
+    Observable<FaceOssBean> getStudentOss(@Path("studentId") String studentId);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/getTeacherOss
     //查询老师头像

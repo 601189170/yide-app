@@ -103,7 +103,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String endTime;
     private String leaveReason = "2";
     private String reason="";
-    private long deptId;
+    private String deptId;
     private List<Long> carbonCopyPeopleId = new ArrayList<>();
     private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList = new ArrayList<>();
     private String deptName;
