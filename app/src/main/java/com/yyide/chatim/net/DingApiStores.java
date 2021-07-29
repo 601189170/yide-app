@@ -70,7 +70,9 @@ import java.util.Map;
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -148,7 +150,27 @@ public interface DingApiStores {
     //添加用户设备基本信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-system/user/equipment/addUserEquipmentInfo")
-    Observable<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
+    Call<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
+
+    /**
+     * https://api.uat.edu.1d1j.net/management/cloud-system/user/equipment/delUserEquipmentInfo
+     * 删除用户设备
+     * @param id 删除的id
+     * @return call
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/equipment/addUserEquipmentInfo")
+    Call<ResultBean> delUserEquipmentInfo(@Query("id") String id);
+
+    /**
+     * https://api.uat.edu.1d1j.net/management/cloud-system/user/equipment/getUserEquipmentInfoPage
+     * 用户设备列表分页
+     * @param info
+     * @return call
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/user/equipment/getUserEquipmentInfoPage")
+    Call<ResultBean> getUserEquipmentInfoPage(@Body RequestBody info);
 
     //查询组织架构列表信息 大学组织结构
     @POST("/management/cloud-system/department/listByApp")

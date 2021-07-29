@@ -278,10 +278,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 //                context.startActivity(new Intent(context, PrivacyActivity.class));
                 break;
             case R.id.exit://退出登录
-//                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);
-                SPUtils.getInstance().remove(BaseConstant.PASSWORD);
-                SPUtils.getInstance().remove(BaseConstant.JG_ALIAS_NAME);
-                SPUtils.getInstance().remove(SpData.LOGINDATA);
+                //清空消息推送别名
+                AliasUtil.clearAlias();
+
                 //退出登录IM
                 TUIKit.logout(new IUIKitCallBack() {
 
@@ -295,8 +294,10 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                         //Log.d();
                     }
                 });
-                //清空消息推送别名
-                AliasUtil.clearAlias();
+//                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);
+                SPUtils.getInstance().remove(BaseConstant.PASSWORD);
+                SPUtils.getInstance().remove(BaseConstant.JG_ALIAS_NAME);
+                SPUtils.getInstance().remove(SpData.LOGINDATA);
                 hide();
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();

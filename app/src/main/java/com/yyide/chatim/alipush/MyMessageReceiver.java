@@ -70,7 +70,8 @@ public class MyMessageReceiver extends MessageReceiver {
             } else {
                 //发送消息类型 1 消息通知 2 代办 3系统通知 4 作业 5课表
                 PushModel pushModel = JSON.parseObject(extraMap, PushModel.class);
-                if ("1".equals(pushModel.getPushType())) {//通知公告消息
+                if ("1".equals(pushModel.getPushType())) {
+                    //通知公告消息
                     if (!TextUtils.isEmpty(pushModel.getSignId())) {
                         Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
                         intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
@@ -92,6 +93,9 @@ public class MyMessageReceiver extends MessageReceiver {
                 } else if ("4".equals(pushModel.getPushType())) {
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 } else if ("5".equals(pushModel.getPushType())) {
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                } else {
+                    //其他统一跳到首页
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 }
             }

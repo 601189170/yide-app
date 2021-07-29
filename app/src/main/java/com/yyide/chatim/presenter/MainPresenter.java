@@ -137,22 +137,22 @@ public class MainPresenter extends BasePresenter<MainView> {
         map.put("alias", alias);
         map.put("equipmentType", equipmentType);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
-        addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<ResultBean>() {
-            @Override
-            public void onSuccess(ResultBean model) {
-                mvpView.addUserEquipmentInfo(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.fail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
+//        addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<ResultBean>() {
+//            @Override
+//            public void onSuccess(ResultBean model) {
+//                mvpView.addUserEquipmentInfo(model);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                mvpView.fail(msg);
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                mvpView.hideLoading();
+//            }
+//        });
     }
 
 
