@@ -225,8 +225,8 @@
     //权限提示语
     <string name="permission_call_phone">需要开启对您手机的拨打电话权限，是否现在开启</string>
     <string name="permission_camera">需要开启对您手机的相机权限，是否现在开启</string>
-
-
+    <string name="permission_file">需要开启对您手机的文件读写权限，是否现在开启</string>
+    <string name="update_versionName">更新版本：%s</string>
     //隐私政策
     <string name="privacy_tips">\t\t\t\t一加壹App重视用户的个人信息和隐私保护，我们依据最新的法律法规要求，更新制定了隐私政策，请您务必仔细阅读，充分理解 "用户协议" 和 "隐私政策" 各条件，包括但不限于:为了向您提供即时资讯、内容分享等服务，我们需要收集您的设备信息、操作日志等个人信息，您可以在“设置”中查看、变更、删除个人信息并管理你的授权。你可点击阅读《用户协议》和《隐私政策》了解详细信息。如您对协议内容有任何疑问、意见或建议，可通过客服与我们联系，如你同意并接受全部条款后，请点击“同意”开始接受我们的服务。</string>
     <string name="privacy_tips_key1">《用户协议》</string>

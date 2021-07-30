@@ -4,6 +4,7 @@ package com.yyide.chatim.presenter;
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.GetAppVersionResponse;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectUserRsp;
@@ -30,9 +31,9 @@ public class MainPresenter extends BasePresenter<MainView> {
         Map<String, String> map = new HashMap<>();
         map.put("terminal", "Android");
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
-        addSubscription(dingApiStores.updateVersion(body), new ApiCallback<SelectUserRsp>() {
+        addSubscription(dingApiStores.updateVersion(body), new ApiCallback<GetAppVersionResponse>() {
             @Override
-            public void onSuccess(SelectUserRsp model) {
+            public void onSuccess(GetAppVersionResponse model) {
                 mvpView.getData(model);
             }
 
@@ -47,27 +48,6 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
-
-    public void getselectUser() {
-        mvpView.showLoading();
-        addSubscription(dingApiStores.getSelectUser(), new ApiCallback<SelectUserRsp>() {
-            @Override
-            public void onSuccess(SelectUserRsp model) {
-                mvpView.getData(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.fail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
-
 
     public void ToUserLogout() {
         mvpView.showLoading();

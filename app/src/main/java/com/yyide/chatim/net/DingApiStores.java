@@ -17,6 +17,7 @@ import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp2;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.FaceOssBean;
+import com.yyide.chatim.model.GetAppVersionResponse;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.HelpItemRep;
@@ -85,9 +86,10 @@ import retrofit2.http.QueryMap;
 
 public interface DingApiStores {
 
+    //获取应用更新接口
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/backstage/cloud-backstage/app/version/selectVersionByTerminal")
-    Observable<SelectUserRsp> updateVersion(@Body RequestBody info);
+    Observable<GetAppVersionResponse> updateVersion(@Body RequestBody info);
 
     @GET("/java-painted-screen/api/wechatPaintedScreenManage/selectDeviceOperation")
     Observable<GetStuasRsp> getData();
@@ -155,6 +157,7 @@ public interface DingApiStores {
     /**
      * https://api.uat.edu.1d1j.net/management/cloud-system/user/equipment/delUserEquipmentInfo
      * 删除用户设备
+     *
      * @param id 删除的id
      * @return call
      */
@@ -165,6 +168,7 @@ public interface DingApiStores {
     /**
      * https://api.uat.edu.1d1j.net/management/cloud-system/user/equipment/getUserEquipmentInfoPage
      * 用户设备列表分页
+     *
      * @param info
      * @return call
      */
@@ -211,7 +215,7 @@ public interface DingApiStores {
     //用户头像上传
     @Multipart
     @POST("/management/cloud-system/user/uploadPic")
-    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info);
+    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info, @Part("studentId") long studentId);
 
     //扫码登录
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头

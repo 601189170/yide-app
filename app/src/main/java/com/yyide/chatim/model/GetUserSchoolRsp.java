@@ -129,7 +129,7 @@ public class GetUserSchoolRsp {
             public String teacherInd;
             public String classesTeacher;
             public String teacherId;
-
+            public String studentImagePath;
             public String classesStudentName;
             public String studentName;
             public String studentId;

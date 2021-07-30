@@ -1,9 +1,9 @@
 package com.yyide.chatim.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -18,12 +18,9 @@ import androidx.annotation.NonNull;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
-import com.tencent.mmkv.MMKV;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
@@ -150,7 +147,8 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1://头像
-                new BottomHeadMenuPop(this);
+                rxPermission();
+//                new BottomHeadMenuPop(this);
                 break;
             case R.id.layout2://手机号
                 //startActivity(new Intent(this, CheckPhoneActivity.class));
@@ -182,30 +180,27 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         }
     }
 
-    private TimePickerDialog mDialogAll;
-
-    private void showTime() {
-        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
-        long tenYears2 = 50L * 365 * 1000 * 60 * 60 * 24L;
-        mDialogAll = new TimePickerDialog.Builder()
-                .setCallBack(this)
-                .setCancelStringId("取消")
-                .setSureStringId("确定")
-                .setTitleStringId("选择日期")
-                .setYearText("年")
-                .setMonthText("月")
-                .setDayText("日")
-                .setCyclic(false)
-                .setMinMillseconds(System.currentTimeMillis() - tenYears2)
-                .setMaxMillseconds(System.currentTimeMillis() + tenYears)
-                .setCurrentMillseconds(System.currentTimeMillis())
-                .setThemeColor(getResources().getColor(R.color.colorPrimary))
-                .setType(Type.YEAR_MONTH_DAY)
-                .setWheelItemTextNormalColor(getResources().getColor(R.color.text_212121))
-                .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorPrimary))
-                .setWheelItemTextSize(12)
-                .build();
-        mDialogAll.show(getSupportFragmentManager(), "all");
+    private void rxPermission() {
+        RxPermissions rxPermissions = new RxPermissions(this);
+        mDisposable = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) {
+                new BottomHeadMenuPop(this);
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(UserActivity.this)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_file)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                            startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -3,6 +3,7 @@ package com.yyide.chatim.view;
 
 
 import com.yyide.chatim.base.BaseView;
+import com.yyide.chatim.model.GetAppVersionResponse;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
@@ -15,7 +16,7 @@ import com.yyide.chatim.model.UserLogoutRsp;
  */
 public interface MainView extends BaseView {
 
-    void getData(SelectUserRsp rsp);
+    void getData(GetAppVersionResponse rsp);
 
     void UserLogoutData(UserLogoutRsp rsp);
 

@@ -114,10 +114,10 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
                 holder.setText(R.id.tv_desc, item.getThingName());
                 setPieChart(item, piechart);
                 constraintLayout1.setOnClickListener(v -> {
-                    AttendanceActivity.start(getContext(), item.getPeopleType(), holder.getAdapterPosition());
+                    AttendanceActivity.start(getContext(), holder.getAdapterPosition());
                 });
                 piechart.setTouchEnabled(false);
-                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item.getPeopleType(), holder.getAdapterPosition()));
+                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), holder.getAdapterPosition()));
             }
         }
 
@@ -171,8 +171,9 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
                     schoolBean.setRate(teachers.getRate());
                     schoolBean.setPeopleType(teachers.getPeopleType());
                     schoolBean.setThingName(teachers.getThingName());
+                    schoolBean.setGoOutStatus(teachers.getGoOutStatus());
+                    schoolPeopleAllFormBeanList.add(schoolBean);
                 }
-                schoolPeopleAllFormBeanList.add(schoolBean);
             }
         }
 

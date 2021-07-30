@@ -4,7 +4,7 @@ import java.util.List;
 
 public class NoticeMyReleaseDetailBean {
     public Integer code;
-    public Boolean success;
+    public boolean success;
     public String msg;
     public DataBean data;
 
@@ -12,9 +12,9 @@ public class NoticeMyReleaseDetailBean {
         public long id;
         public String title;
         public String content;
-        public Boolean isConfirm;
-        public Boolean isRetract;
-        public Boolean isTimer;
+        public boolean isConfirm;
+        public boolean isRetract;
+        public boolean isTimer;
         public String timerDate;
         public int type;//通知公告类型 0空白模板 1非空白模板
         public String coverImgpath;

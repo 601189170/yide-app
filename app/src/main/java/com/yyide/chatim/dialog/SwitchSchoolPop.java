@@ -205,7 +205,7 @@ public class SwitchSchoolPop extends PopupWindow {
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                     getUserSchool();
                 } else {
-                    ToastUtils.showShort(bean.message);
+                    ToastUtils.showShort(bean.msg);
                     loadingTools.closeLoading();
                 }
             }

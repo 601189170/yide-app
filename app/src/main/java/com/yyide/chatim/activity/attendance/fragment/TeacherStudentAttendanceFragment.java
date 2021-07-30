@@ -10,13 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.blankj.utilcode.util.MetaDataUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
@@ -32,7 +31,6 @@ import com.yyide.chatim.view.AttendanceCheckView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -91,7 +89,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
             mViewBinding.swipeRefreshLayout.setEnabled(verticalOffset >= 0);//页面滑动到顶部，才可以下拉刷新
         });
-        mViewBinding.constraintLayout.setVisibility(View.GONE);
+//        mViewBinding.constraintLayout.setVisibility(View.GONE);
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewBinding.recyclerview.setAdapter(adapter);
         adapter.setEmptyView(R.layout.empty_top);
@@ -167,23 +165,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         }
         mViewBinding.tvClassName.setOnClickListener(v -> {
             List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
-            AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
-                @Override
-                public int getItemsCount() {
-                    return classList.size();
-                }
-
-                @Override
-                public Object getItem(int index) {
-                    return classList.get(index).classesName;
-                }
-
-                @Override
-                public int indexOf(Object o) {
-                    return classList.indexOf(o);
-                }
-            }, "");
-            attendancePop.setCurrentItem(mViewBinding.tvClassName.getText().toString().trim());
+            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterClass, "请选择班级");
+            name = mViewBinding.tvClassName.getText().toString().trim();
+            adapterClass.setList(classList);
             attendancePop.setOnSelectListener(index -> {
                 mViewBinding.tvClassName.setText(classList.get(index).classesName);
                 mvpPresenter.attendance(classList.get(index).classesId);
@@ -191,23 +175,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         });
 
         mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-            AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
-                @Override
-                public int getItemsCount() {
-                    return item.getAttendancesForm().size();
-                }
-
-                @Override
-                public Object getItem(int index) {
-                    return item.getAttendancesForm().get(index).getStudents().getName();
-                }
-
-                @Override
-                public int indexOf(Object o) {
-                    return item.getAttendancesForm().indexOf(o);
-                }
-            }, "");
-            attendancePop.setCurrentItem(mViewBinding.tvAttendanceTitle.getText().toString().trim());
+            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤时间");
+            eventName = mViewBinding.tvAttendanceTitle.getText().toString().trim();
+            adapterEvent.setList(item.getAttendancesForm());
             attendancePop.setOnSelectListener(index -> {
                 itemStudents = item.getAttendancesForm().get(index).getStudents();
                 this.index = index;
@@ -234,6 +204,39 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         }
         setData();
     }
+
+    private String name;
+    private final BaseQuickAdapter<GetUserSchoolRsp.DataBean.FormBean, BaseViewHolder> adapterClass = new BaseQuickAdapter<GetUserSchoolRsp.DataBean.FormBean, BaseViewHolder>(R.layout.swich_class_item) {
+
+        @Override
+        protected void convert(@NonNull BaseViewHolder baseViewHolder, GetUserSchoolRsp.DataBean.FormBean item) {
+            baseViewHolder.setText(R.id.className, item.classesName);
+            if (adapterClass.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
+            } else {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);
+            }
+            baseViewHolder.getView(R.id.select).setVisibility(name.equals(item.classesName) ? View.VISIBLE : View.GONE);
+        }
+    };
+
+    private String eventName;
+    private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean, BaseViewHolder>(R.layout.swich_class_item) {
+
+        @Override
+        protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceCheckRsp.DataBean.AttendancesFormBean item) {
+            if (item.getStudents() != null) {
+                baseViewHolder.setText(R.id.className, item.getStudents().getName());
+                baseViewHolder.getView(R.id.select).setVisibility(eventName.equals(item.getStudents().getName()) ? View.VISIBLE : View.GONE);
+            }
+            if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
+            } else {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
 
     @SuppressLint("SetTextI18n")
     private void setData() {
@@ -265,7 +268,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.progress.setProgress(0);
             mViewBinding.tvAttendanceTitle.setText("");
             mViewBinding.tvDesc.setText("");
-            mViewBinding.tvAttendanceTime.setText("考勤时间 ");
+            mViewBinding.tvAttendanceTime.setText("");
             mViewBinding.tvAttendanceRate.setText("0");
             mViewBinding.tvBeTo.setText("0");
             mViewBinding.tvLateNum.setText("0");

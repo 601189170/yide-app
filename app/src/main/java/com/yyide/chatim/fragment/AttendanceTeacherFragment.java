@@ -112,6 +112,7 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
 
     @OnClick({R.id.constraintLayout})
     public void click(View v) {
+//        AttendanceActivity.start(getActivity(), 0);
         startActivity(new Intent(getContext(), StatisticsActivity.class));
     }
 

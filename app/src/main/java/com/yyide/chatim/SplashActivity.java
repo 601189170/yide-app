@@ -31,6 +31,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.yyide.chatim.activity.AgreementActivity;
 import com.yyide.chatim.activity.GuidePageActivity;
 import com.yyide.chatim.activity.PrivacyActivity;
@@ -41,6 +42,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.UserInfo;
+import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 import com.yyide.chatim.utils.DemoLog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -139,8 +141,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    String data = response.body().string();
-                    Log.e(TAG, "mOkHttpClient==>: " + data);
+                    String data = response.body().string();Log.e(TAG, "mOkHttpClient==>: " + data);
                     if (response.code() == BaseConstant.REQUEST_SUCCES2) {
                         LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
                         if (bean.code == BaseConstant.REQUEST_SUCCES2) {

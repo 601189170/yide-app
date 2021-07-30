@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -70,23 +72,9 @@ public class AttendanceClassStudentActivity extends BaseActivity {
             }
 
             viewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-                AttendancePop attendancePop = new AttendancePop(this, new WheelAdapter() {
-                    @Override
-                    public int getItemsCount() {
-                        return schoolPeopleAllFormBean.getGradeList().size();
-                    }
-
-                    @Override
-                    public Object getItem(int index) {
-                        return schoolPeopleAllFormBean.getGradeList().get(index).getName();
-                    }
-
-                    @Override
-                    public int indexOf(Object o) {
-                        return schoolPeopleAllFormBean.getGradeList().indexOf(o);
-                    }
-                }, "");
-
+                eventName = gradeListBean.getName();
+                AttendancePop attendancePop = new AttendancePop(this, adapterEvent, "请选择年级");
+                adapterEvent.setList(schoolPeopleAllFormBean.getGradeList());
                 attendancePop.setOnSelectListener(position -> {
                     gradeListBean = schoolPeopleAllFormBean.getGradeList().get(position);
                     gradeListBean.classForm = schoolPeopleAllFormBean.getGradeList().get(position).getClassForm();
@@ -95,6 +83,21 @@ public class AttendanceClassStudentActivity extends BaseActivity {
             });
         }
     }
+
+    private String eventName;
+    private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean, BaseViewHolder>(R.layout.swich_class_item) {
+
+        @Override
+        protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean item) {
+            baseViewHolder.setText(R.id.className, item.getName());
+            baseViewHolder.getView(R.id.select).setVisibility(eventName.equals(item.getName()) ? View.VISIBLE : View.GONE);
+            if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
+            } else {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);
+            }
+        }
+    };
 
     private void setData() {
         viewBinding.tvAttendanceTitle.setText(gradeListBean.getName());
