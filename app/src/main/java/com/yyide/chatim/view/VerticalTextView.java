@@ -64,6 +64,10 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
 
     public void setResources(List<String> res) {
         textList = res;
+        if(textList != null && textList.size() > 0){
+            index = 0;
+            updateText();
+        }
     }
 
     //这个是自定义View的启动点，从外面传进来的间隔时间，并以此来开启这个定时任务器

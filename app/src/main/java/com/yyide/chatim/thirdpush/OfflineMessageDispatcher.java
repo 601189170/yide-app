@@ -21,6 +21,7 @@ import com.xiaomi.mipush.sdk.PushMessageHelper;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.ChatActivity;
 import com.yyide.chatim.utils.BrandUtil;
@@ -174,7 +175,7 @@ public class OfflineMessageDispatcher {
                 }
             }
         }
-        Intent intent = new Intent(BaseApplication.getInstance(), MainActivity.class);
+        Intent intent = new Intent(BaseApplication.getInstance(), SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         BaseApplication.getInstance().startActivity(intent);
         return true;

@@ -64,7 +64,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
             Intent intent = new Intent(getActivity(), NewNoticeAnnouncementActivity.class);
             startActivity(intent);
         });
-        if(getArguments() != null && "school".equals(getArguments().getString("type"))) {
+        if (getArguments() != null && "school".equals(getArguments().getString("type"))) {
             ll_notice.setBackgroundResource(R.mipmap.icon_notice_home_long_bg);
         }
     }
@@ -99,25 +99,27 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     @Override
     public void noticeHome(NoticeMyReleaseDetailBean homeNoticeRsp) {
         Log.e(TAG, "noticeHome: " + homeNoticeRsp);
-        if (homeNoticeRsp.code == BaseConstant.REQUEST_SUCCES2) {
-            data = homeNoticeRsp.data;
-            if (data != null) {
-                if (DateUtils.isToday(DateUtils.parseTimestamp(data.timerDate, ""))) {
-                    notice_time.setText(getString(R.string.notice_toDay, DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")));
-                } else if (DateUtils.isYesterday(DateUtils.parseTimestamp(data.timerDate, ""))) {
-                    notice_time.setText(getString(R.string.notice_yesterday, DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")));
+        if (isAdded()) {
+            if (homeNoticeRsp.code == BaseConstant.REQUEST_SUCCES2) {
+                data = homeNoticeRsp.data;
+                if (data != null) {
+                    if (DateUtils.isToday(DateUtils.parseTimestamp(data.timerDate, ""))) {
+                        notice_time.setText(getString(R.string.notice_toDay, DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")));
+                    } else if (DateUtils.isYesterday(DateUtils.parseTimestamp(data.timerDate, ""))) {
+                        notice_time.setText(getString(R.string.notice_yesterday, DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")));
+                    } else {
+                        notice_time.setText(DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm"));
+                    }
+                    tv_notice_author.setText(data.publisher);
+                    if (!TextUtils.isEmpty(data.title)) {
+                        tv_title.setText(data.title);
+                    }
                 } else {
-                    notice_time.setText(DateUtils.formatTime(data.timerDate, "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm"));
-                }
-                tv_notice_author.setText(data.publisher);
-                if (!TextUtils.isEmpty(data.title)) {
-                    tv_title.setText(data.title);
+                    tv_title.setText("暂无公告");
                 }
             } else {
                 tv_title.setText("暂无公告");
             }
-        } else {
-            tv_title.setText("暂无公告");
         }
     }
 

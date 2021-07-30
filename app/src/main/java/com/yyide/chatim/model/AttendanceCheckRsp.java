@@ -70,6 +70,7 @@ public class AttendanceCheckRsp implements Serializable {
                 public String requiredTime;
                 public String endTime;
                 public String peopleType;//N 老师 Y 学生
+                public String studentId;
                 public String type;
                 public String time;
                 public String deviceName;

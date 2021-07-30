@@ -223,9 +223,6 @@ public class BaseApplication extends Application {
                         }
                     });
         }
-        ;
-
-        registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
         registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
     }
 

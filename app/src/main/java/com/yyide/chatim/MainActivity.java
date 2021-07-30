@@ -2,6 +2,7 @@ package com.yyide.chatim;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,22 +38,32 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
+import com.heytap.msp.push.HeytapPushManager;
+import com.huawei.agconnect.config.AGConnectServicesConfig;
+import com.huawei.hms.aaid.HmsInstanceId;
+import com.huawei.hms.common.ApiException;
 import com.shehuan.nicedialog.BaseNiceDialog;
 import com.shehuan.nicedialog.NiceDialog;
 import com.shehuan.nicedialog.ViewConvertListener;
 import com.shehuan.nicedialog.ViewHolder;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.tencent.imsdk.v2.V2TIMSignalingInfo;
 import com.tencent.liteav.model.CallModel;
 import com.tencent.liteav.model.TRTCAVCallImpl;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.vivo.push.IPushActionListener;
+import com.vivo.push.PushClient;
+import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.alipush.AliasUtil;
 import com.yyide.chatim.alipush.MyMessageReceiver;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.databinding.DialogUpdateBinding;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
 import com.yyide.chatim.home.HomeFragment;
@@ -72,9 +83,14 @@ import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
+import com.yyide.chatim.thirdpush.OPPOPushImpl;
+import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
+import com.yyide.chatim.utils.BrandUtil;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
+import com.yyide.chatim.utils.LogUtil;
+import com.yyide.chatim.utils.PrivateConstants;
 import com.yyide.chatim.view.MainView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -135,12 +151,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         registerMessageReceiver();  // used for receive msg
-        //permission();
+//        permission();
+        // 未读消息监视器
         //登录IM
         getUserSig();
-        // 未读消息监视器
-        EventBus.getDefault().register(this);
         setTab(1, 0);
         setTab(0, 0);
         //注册极光别名
@@ -167,8 +183,51 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     private void prepareThirdPushToken() {
         ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
+        if (BrandUtil.isBrandHuawei()) {
+            // 华为离线推送
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        // read from agconnect-services.json
+                        String appId = AGConnectServicesConfig.fromContext(MainActivity.this).getString("client/app_id");
+                        String token = HmsInstanceId.getInstance(MainActivity.this).getToken(appId, "HCM");
+                        DemoLog.i(TAG, "huawei get token:" + token);
+                        if(!TextUtils.isEmpty(token)) {
+                            ThirdPushTokenMgr.getInstance().setThirdPushToken(token);
+                            ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
+                        }
+                    } catch (ApiException e) {
+                        DemoLog.e(TAG, "huawei get token failed, " + e);
+                    }
+                }
+            }.start();
+        } else if (BrandUtil.isBrandVivo()) {
+            // vivo离线推送
+            DemoLog.i(TAG, "vivo support push: " + PushClient.getInstance(getApplicationContext()).isSupport());
+            PushClient.getInstance(getApplicationContext()).turnOnPush(new IPushActionListener() {
+                @Override
+                public void onStateChanged(int state) {
+                    if (state == 0) {
+                        String regId = PushClient.getInstance(getApplicationContext()).getRegId();
+                        DemoLog.i(TAG, "vivopush open vivo push success regId = " + regId);
+                        ThirdPushTokenMgr.getInstance().setThirdPushToken(regId);
+                        ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
+                    } else {
+                        // 根据vivo推送文档说明，state = 101 表示该vivo机型或者版本不支持vivo推送，链接：https://dev.vivo.com.cn/documentCenter/doc/156
+                        DemoLog.i(TAG, "vivopush open vivo push fail state = " + state);
+                    }
+                }
+            });
+        } else if (HeytapPushManager.isSupportPush()) {
+            // oppo离线推送
+            OPPOPushImpl oppo = new OPPOPushImpl();
+            oppo.createNotificationChannel(this);
+            HeytapPushManager.register(this, PrivateConstants.OPPO_PUSH_APPKEY, PrivateConstants.OPPO_PUSH_APPSECRET, oppo);
+        } else if (BrandUtil.isGoogleServiceSupport()) {
+            // 谷歌推送
+        }
     }
-
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -227,11 +286,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             setTab(0, 0);
         } else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
             //模拟数据测试应用更新
-            GetAppVersionResponse versionResponse = new GetAppVersionResponse();
-            versionResponse.setVersion("1.0.1");
-            versionResponse.setUpdateAddress("https://3550d97d52.eachqr.com/aaa4e3fce9f117f73e433ba180dca3f0bab26438.apk?auth_key=1620374642-0-0-d1a8b5e8c43704c29455ab8c077319aa");
-            versionResponse.setUpdateContent("1、更新内容\n2、更新内容\n3、更新内容");
-            download(versionResponse);
+            mvpPresenter.getVersionInfo();
         } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
             todoCount = messageEvent.getCount();
             setMessageCount(todoCount + messageCount + noticeCount);
@@ -373,24 +428,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
     public void showError() {
 
     }
 
     @Override
-    public void getData(SelectUserRsp rsp) {
+    public void getData(GetAppVersionResponse rsp) {
         Log.e("TAG", "getData==》: " + JSON.toJSONString(rsp));
-
+        if (rsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            download(rsp.getData());
+        }
     }
 
     @Override
@@ -627,6 +674,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
             @Override
             public void onSuccess(Object data) {
+                //腾讯IM离线调度
+                OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());
+                if (bean != null) {
+                    OfflineMessageDispatcher.redirect(bean);
+                }
                 SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
                 SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
                 UserInfo.getInstance().setAutoLogin(true);
@@ -638,20 +690,24 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         });
     }
 
-    private void download(GetAppVersionResponse data) {
-        if (!AppUtils.getAppVersionName().equals(data.getVersion())) {
+    private void download(GetAppVersionResponse.DataBean data) {
+        LogUtil.d("download", "device:" + AppUtils.getAppVersionCode() + "  data:" + data.versionCode);
+//        if (AppUtils.getAppVersionName() != data.versionCode) {
+        if (AppUtils.getAppVersionCode() < data.versionCode) {
             NiceDialog.init().setLayoutId(R.layout.dialog_update).setConvertListener(new ViewConvertListener() {
                 @Override
                 protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
                     TextView tv = holder.getView(R.id.tv);
-                    tv.setText(data.getUpdateContent());
+                    TextView tvVersionName = holder.getView(R.id.tv_versionName);
+                    tvVersionName.setText(getString(R.string.update_versionName, data.versionName));
+                    tv.setText(data.versionDesc);
                     ((TextView) holder.getView(R.id.tv)).setMovementMethod(new ScrollingMovementMethod());
                     TextView tvUpdate = holder.getView(R.id.tvUpdate);
                     FrameLayout flUpgrade = holder.getView(R.id.flUpgrade);
-
                     downloadOrInstall(tvUpdate, flUpgrade, data);
+
                 }
-            }).setDimAmount(0.5f).setOutCancel(true).show(getSupportFragmentManager());
+            }).setDimAmount(0.5f).setOutCancel(data.isCompulsory == 0).show(getSupportFragmentManager());
         } else {
             ToastUtils.showShort(R.string.newestVersion);
         }
@@ -659,59 +715,79 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     private long max1;
 
-    private void downloadOrInstall(TextView tvUpdate, FrameLayout flUpgrade, GetAppVersionResponse data) {
+    private void downloadOrInstall(TextView tvUpdate, FrameLayout flUpgrade, GetAppVersionResponse.DataBean data) {
         flUpgrade.setOnClickListener(v -> {
-            //后台下载APK并更新
-            flUpgrade.setClickable(false);
-            AppClient.downloadFile(data.getVersion(), data.getUpdateAddress(), new AppClient.DownloadListener() {
-                @Override
-                public void onStart(long max) {
-                    max1 = max;
-                    ToastUtils.showShort("开始下载");
-                }
-
-                @Override
-                public void onProgress(long progress) {
-                    runOnUiThread(() -> tvUpdate.setText((int) ((float) progress / max1 * 100) + "%"));
-                }
-
-                @Override
-                public void onSuccess() {
-                    runOnUiThread(() -> {
-                        flUpgrade.setClickable(true);
-                        tvUpdate.setText("点击安装");
-                        flUpgrade.setOnClickListener(v1 -> {
-                            File file = new File(Utils.getApp().getCacheDir(), data.getVersion() + ".apk");// 设置路径
-                            String[] command = {"chmod", "777", file.getPath()};
-                            ProcessBuilder builder = new ProcessBuilder(command);
-                            try {
-                                builder.start();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            Intent intent = installIntent(file.getPath());
-                            if (intent != null) {
-                                startActivity(intent);
-                            }
-                        });
-                        flUpgrade.performClick();
-                    });
-                }
-
-                @Override
-                public void onFailure() {
-                    runOnUiThread(() -> {
-                        File file = new File(Utils.getApp().getCacheDir(), data.getVersion() + ".apk");
-                        if (file.exists()) {
-                            file.delete();
+            RxPermissions rxPermissions = new RxPermissions(this);
+            mDisposable = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+                if (granted) {
+                    //后台下载APK并更新
+                    flUpgrade.setClickable(false);
+                    AppClient.downloadFile("yide_" + data.versionCode, data.filePath, new AppClient.DownloadListener() {
+                        @Override
+                        public void onStart(long max) {
+                            max1 = max;
+                            ToastUtils.showShort("开始下载");
                         }
-                        downloadOrInstall(tvUpdate, flUpgrade, data);
-                        flUpgrade.setClickable(true);
-                        tvUpdate.setText("点击重试");
+
+                        @Override
+                        public void onProgress(long progress) {
+                            runOnUiThread(() -> tvUpdate.setText((int) ((float) progress / max1 * 100) + "%"));
+                        }
+
+                        @Override
+                        public void onSuccess() {
+                            runOnUiThread(() -> {
+                                flUpgrade.setClickable(true);
+                                tvUpdate.setText("点击安装");
+                                flUpgrade.setOnClickListener(v1 -> {
+                                    File file = new File(Utils.getApp().getCacheDir(), data.versionCode + ".apk");// 设置路径
+                                    String[] command = {"chmod", "777", file.getPath()};
+                                    ProcessBuilder builder = new ProcessBuilder(command);
+                                    try {
+                                        builder.start();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Intent intent = installIntent(file.getPath());
+                                    if (intent != null) {
+                                        startActivity(intent);
+                                    }
+                                });
+                                flUpgrade.performClick();
+                            });
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            runOnUiThread(() -> {
+                                File file = new File(Utils.getApp().getCacheDir(), data.versionCode + ".apk");
+                                if (file.exists()) {
+                                    file.delete();
+                                }
+                                downloadOrInstall(tvUpdate, flUpgrade, data);
+                                flUpgrade.setClickable(true);
+                                tvUpdate.setText("点击重试");
+                            });
+                            ToastUtils.showShort("更新失败");
+                        }
                     });
-                    ToastUtils.showShort("更新失败");
+                } else {
+                    // 权限被拒绝
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("提示")
+                            .setMessage(R.string.permission_file)
+                            .setPositiveButton("开启", (dialog, which) -> {
+                                Intent localIntent = new Intent();
+                                localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                                localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                                startActivity(localIntent);
+                            })
+                            .setNegativeButton("取消", null)
+                            .create().show();
                 }
             });
+
         });
     }
 

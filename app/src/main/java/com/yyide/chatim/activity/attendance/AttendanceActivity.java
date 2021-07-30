@@ -22,9 +22,8 @@ public class AttendanceActivity extends BaseActivity {
     private ActivityAttendanceBinding mViewBinding;
     private String TAG = AttendanceActivity.class.getSimpleName();
 
-    public static void start(Context context, String type, int index) {
+    public static void start(Context context, int index) {
         Intent intent = new Intent(context, AttendanceActivity.class);
-        intent.putExtra("type", type);
         intent.putExtra("index", index);
         context.startActivity(intent);
     }
@@ -51,6 +50,7 @@ public class AttendanceActivity extends BaseActivity {
         } else {
             mViewBinding.top.tvRight.setVisibility(View.VISIBLE);
         }
+
         mViewBinding.top.tvRight.setText(R.string.statistics_title);
         mViewBinding.top.tvRight.setTextColor(getResources().getColor(R.color.colorPrimary));
         mViewBinding.top.tvRight.setOnClickListener(v -> jupm(AttendanceActivity.this, StatisticsActivity.class));

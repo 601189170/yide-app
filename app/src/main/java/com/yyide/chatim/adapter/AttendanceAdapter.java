@@ -100,9 +100,9 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         piechart.setData(pieData);
         piechart.invalidate();
         view.setOnClickListener(v -> {
-            AttendanceActivity.start(view.getContext(), item.getPeopleType(), position);
+            AttendanceActivity.start(view.getContext(), position);
         });
-        piechart.setOnClickListener(v -> AttendanceActivity.start(view.getContext(), item.getPeopleType(), position));
+        piechart.setOnClickListener(v -> AttendanceActivity.start(view.getContext(), position));
         return view;
     }
 

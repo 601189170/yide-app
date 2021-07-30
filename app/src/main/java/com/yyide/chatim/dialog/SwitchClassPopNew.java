@@ -1,6 +1,7 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
+import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -24,6 +25,17 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 
 /**
@@ -72,7 +84,7 @@ public class SwitchClassPopNew extends PopupWindow {
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
-            adapter.notifyData(SpData.getIdentityInfo().form);
+            adapter.notifyData(removeList(SpData.getIdentityInfo().form));
             for (int i = 0; i < SpData.getIdentityInfo().form.size(); i++) {
                 if (classBean != null
                         && classBean.classesId != null
@@ -141,7 +153,12 @@ public class SwitchClassPopNew extends PopupWindow {
             }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
-
     }
 
+    //去重
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> removeList(List<GetUserSchoolRsp.DataBean.FormBean> persons) {
+        Set<GetUserSchoolRsp.DataBean.FormBean> personSet = new TreeSet<>((o1, o2) -> o1.classesId.compareTo(o2.classesId));
+        personSet.addAll(persons);
+        return new ArrayList<>(personSet);
+    }
 }

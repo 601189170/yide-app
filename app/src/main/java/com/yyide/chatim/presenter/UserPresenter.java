@@ -1,6 +1,7 @@
 package com.yyide.chatim.presenter;
 
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -75,8 +76,11 @@ public class UserPresenter extends BasePresenter<UserView> {
         // 创建MultipartBody.Part，用于封装文件数据
         MultipartBody.Part requestImgPart =
                 MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody);
-
-        addSubscription(dingApiStores.uploadImg(requestImgPart), new ApiCallback<UploadRep>() {
+        long studentId = 0;
+        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentId)) {
+            studentId = Long.parseLong(SpData.getClassInfo().studentId);
+        }
+        addSubscription(dingApiStores.uploadImg(requestImgPart, studentId), new ApiCallback<UploadRep>() {
             @Override
             public void onSuccess(UploadRep model) {
                 if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
@@ -102,7 +106,7 @@ public class UserPresenter extends BasePresenter<UserView> {
         Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
-           // Map<String, Object> params = new HashMap<>();
+            // Map<String, Object> params = new HashMap<>();
             //params.put("name",name);
             //params.put("classId",classId);
             //RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
@@ -122,10 +126,10 @@ public class UserPresenter extends BasePresenter<UserView> {
                     mvpView.hideLoading();
                 }
             });
-        }else {
+        } else {
             Map<String, Object> params = new HashMap<>();
-            params.put("name",name);
-            params.put("depId",depId);
+            params.put("name", name);
+            params.put("depId", depId);
             RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
             addSubscription(dingApiStores.getTeacherOss(body), new ApiCallback<FaceOssBean>() {
                 @Override

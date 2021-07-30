@@ -398,7 +398,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            if (rsp != null && rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
+            if (rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
                 tv_todo.setVisibility(View.VISIBLE);
                 tv_todo.setText(rsp.getData().getTotal() + "");
                 if (rsp.getData().getRecords() != null) {

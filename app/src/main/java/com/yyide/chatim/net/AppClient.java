@@ -151,19 +151,17 @@ public class AppClient {
                     is = response.body().byteStream();//获取输入流
                     long total = response.body().contentLength();//获取文件大小
                     downloadListener.onStart(total);
-                    if (is != null) {
-                        File file = new File(Utils.getApp().getCacheDir(), version + ".apk");
-                        fos = new FileOutputStream(file);
-                        byte[] buf = new byte[1024];
-                        int ch;
-                        int process = 0;
-                        while ((ch = is.read(buf)) != -1) {
-                            fos.write(buf, 0, ch);
-                            process += ch;
-                            downloadListener.onProgress(process);
-                        }
-                        fos.flush();
+                    File file = new File(Utils.getApp().getCacheDir(), version + ".apk");
+                    fos = new FileOutputStream(file);
+                    byte[] buf = new byte[1024];
+                    int ch;
+                    int process = 0;
+                    while ((ch = is.read(buf)) != -1) {
+                        fos.write(buf, 0, ch);
+                        process += ch;
+                        downloadListener.onProgress(process);
                     }
+                    fos.flush();
                     downloadListener.onSuccess();
                 } catch (Exception e) {
                     downloadListener.onFailure();
