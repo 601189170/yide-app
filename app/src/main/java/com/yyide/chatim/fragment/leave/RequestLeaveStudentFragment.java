@@ -226,7 +226,12 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         btn_commit.setAlpha(0.5f);
         btn_commit.setClickable(false);
         //请求审批流程
-        mvpPresenter.getApprover(classesId);
+        if (!TextUtils.isEmpty(classesId)){
+            mvpPresenter.getApprover(classesId);
+        }else {
+            ToastUtils.showShort("当前账号没有指定班级，不能使用请假功能，请联系管理员！");
+        }
+
         mvpPresenter.queryLeavePhraseList(1);
 
         editLeaveReason.addTextChangedListener(new TextWatcher() {
@@ -414,13 +419,15 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     public void approver(ApproverRsp approverRsp) {
         Log.e(TAG, "approver: " + approverRsp.toString());
         final ApproverRsp.DataBean data = approverRsp.getData();
+        ll_approver_list.removeAllViews();
+        ll_copyer_list.removeAllViews();
         if (approverRsp.getCode() != 200){
+            btn_commit.setAlpha(0.5f);
+            btn_commit.setClickable(false);
             ToastUtils.showShort(approverRsp.getMsg());
             return;
         }
         if (data != null){
-            ll_approver_list.removeAllViews();
-            ll_copyer_list.removeAllViews();
             //审批人
             final ApproverRsp.DataBean.PeopleFormBean peopleForm = data.getPeopleForm();
             if (peopleForm == null){
@@ -596,7 +603,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                                 studentId = dataBean.getDeptId();
                                 classesId = dataBean.getClassId();
                                 studentUserId = dataBean.getStudentUserId();
-                                mvpPresenter.getApprover(classesId);
+                                mvpPresenter.getApprover(TextUtils.isEmpty(classesId)?"0":classesId);
                             });
                         }
                 );
