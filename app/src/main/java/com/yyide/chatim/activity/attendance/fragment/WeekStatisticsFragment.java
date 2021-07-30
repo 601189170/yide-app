@@ -301,8 +301,6 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         Log.e(TAG, "onViewCreated: "+type );
         if ("周统计".equals(type)) {
             isWeekStatistics = true;
-        } else {
-            first = false;
         }
         //确定当前用户身份
         identity = !SpData.getIdentityInfo().staffIdentity();
@@ -568,7 +566,8 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         } else {
             ToastUtils.showShort("服务器异常："+attendanceWeekStatsRsp.getCode()+","+attendanceWeekStatsRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
-            showData(null);
+            //showData(null);
+            showBlank(true);
         }
 
     }

@@ -395,7 +395,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tvStudentName.setCompoundDrawables(null, null, drawable, null);
                 tvStudentName.setOnClickListener(v -> {
-                            final DeptSelectPop deptSelectPop = new DeptSelectPop(this, 2, classList);
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(this, 4, classList);
                             deptSelectPop.setOnCheckedListener((id, dept) -> {
                                 Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
                                 tvStudentName.setText(dept);

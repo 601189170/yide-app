@@ -24,6 +24,7 @@ import com.alibaba.fastjson.JSON;
 import com.beiing.weekcalendar.WeekCalendar;
 import com.beiing.weekcalendar.listener.GetViewHelper;
 import com.beiing.weekcalendar.utils.CalendarUtil;
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.StatisticsDetailActivity;
@@ -347,6 +348,11 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
                 studentDayStatisticsListAdapter.notifyDataSetChanged();
             }
             initEventData();
+        } else {
+            ToastUtils.showShort("服务器异常："+attendanceWeekStatsRsp.getCode()+","+attendanceWeekStatsRsp.getMsg());
+            mViewBinding.tvAttendanceType.setVisibility(View.GONE);
+            //showData(null);
+            showBlank(true);
         }
     }
 
