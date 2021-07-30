@@ -33,5 +33,6 @@ public class LeaveDeptRsp {
         private String type;
         private int isDefault;
         private String classId;
+        private String studentUserId;
     }
 }

@@ -122,6 +122,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     private LeaveCourseSectionAdapter leaveCourseSectionAdapter;
     private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
     private String studentId;
+    private String studentUserId;
 
     public RequestLeaveStudentFragment() {
         // Required empty public constructor
@@ -335,7 +336,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             return;
         }
 
-        mvpPresenter.addStudentLeave(startTime,endTime,leaveReason,reason,classesId,studentId,classesName,carbonCopyPeopleId);
+        mvpPresenter.addStudentLeave(startTime,endTime,leaveReason,reason,classesId,studentId,studentUserId,classesName,carbonCopyPeopleId);
     }
 
 
@@ -551,10 +552,12 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             final String studentName = formBean.classesStudentName;
             final String studentId = formBean.studentId;
             final String classesId = formBean.classesId;
+            final String studentUserId = formBean.studentUserId;
             final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
             dataBean.setDeptId(studentId);
             dataBean.setClassId(classesId);
             dataBean.setDeptName(studentName);
+            dataBean.setStudentUserId(studentUserId);
             dataBean.setIsDefault(0);
             classList.add(dataBean);
         }
@@ -562,6 +565,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             final LeaveDeptRsp.DataBean dataBean = classList.get(0);
             dataBean.setIsDefault(1);
             studentId = dataBean.getDeptId();
+            studentUserId = dataBean.getStudentUserId();
         } else {
             Log.e(TAG, "initClassData: 当前账号没有学生" );
             tv_department.setVisibility(View.GONE);
@@ -576,6 +580,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             tv_department.setText(clazzBean.getDeptName());
             studentId = clazzBean.getDeptId();
             classesId = clazzBean.getClassId();
+            studentUserId = clazzBean.getStudentUserId();
             if (classList.size() <= 1) {
                 tv_department.setCompoundDrawables(null, null, null, null);
             } else {
@@ -590,6 +595,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                                 tv_department.setText(dataBean.getDeptName());
                                 studentId = dataBean.getDeptId();
                                 classesId = dataBean.getClassId();
+                                studentUserId = dataBean.getStudentUserId();
                                 mvpPresenter.getApprover(classesId);
                             });
                         }

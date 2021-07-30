@@ -70,7 +70,7 @@ public class StudentAskLeavePresenter extends BasePresenter<StudentAskLeaveView>
     }
 
     public void addStudentLeave(String startTime, String endTime, String leaveReason, String reason,
-                                String classId, String studentId,String className, List<Long> carbonCopyPeopleIds) {
+                                String classId, String studentId,String studentUserId,String className, List<Long> carbonCopyPeopleIds) {
         final HashMap<String, Object> map = new HashMap<>(8);
         map.put("startTime", startTime);
         map.put("endTime", endTime);
@@ -78,6 +78,7 @@ public class StudentAskLeavePresenter extends BasePresenter<StudentAskLeaveView>
         map.put("reason", reason);
         map.put("classId", classId);
         map.put("studentId", studentId);
+        map.put("studentUserId", studentUserId);
         map.put("className", className);
         map.put("carbonCopyPeopleId", carbonCopyPeopleIds);
         mvpView.showLoading();
