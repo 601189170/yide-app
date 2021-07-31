@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.solver.widgets.analyzer.VerticalWidgetRun;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
@@ -75,6 +76,8 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     FrameLayout layout6;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.email_line)
+    View email_line;
 
     private GetUserSchoolRsp.DataBean userInfo;
     private String classesId;
@@ -93,10 +96,11 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         EventBus.getDefault().register(this);
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             title.setText("学生信息");
+            setStudentInfo();
         } else {
             title.setText("我的信息");
+            setUserInfo();
         }
-        initData();
 //        classesId = SpData.getIdentityInfo().classesId;
         if (!SpData.getIdentityInfo().staffIdentity()) {
             final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
@@ -120,7 +124,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         return new UserPresenter(this);
     }
 
-    private void initData() {
+    private void setUserInfo() {
         userInfo = SpData.getIdentityInfo();
         if (userInfo != null) {
             GlideUtil.loadImageHead(this, userInfo.img, img);
@@ -128,6 +132,19 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
             date.setText(!TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "未设置");
             email.setText(!TextUtils.isEmpty(userInfo.email) ? userInfo.email : "未设置");
+            face.setText("未设置");
+        }
+    }
+
+    private void setStudentInfo() {
+        GetUserSchoolRsp.DataBean.FormBean studentInfo = SpData.getClassInfo();
+        if (studentInfo != null) {
+            GlideUtil.loadImageHead(this, studentInfo.studentPic, img);
+            sex.setText(!TextUtils.isEmpty(studentInfo.studentSex) ? ("1".equals(studentInfo.studentSex) ? "男" : "女") : "未设置");
+            phone.setText(!TextUtils.isEmpty(studentInfo.studentName) ? studentInfo.studentName : "未设置");
+            date.setText(!TextUtils.isEmpty(studentInfo.studentBirthdayDate) ? studentInfo.studentBirthdayDate : "未设置");
+            email.setVisibility(View.GONE);
+            email_line.setVisibility(View.GONE);
             face.setText("未设置");
         }
     }
@@ -305,11 +322,20 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     @Override
     public void uploadFileSuccess(String imgUrl) {
-        if (userInfo != null) {
-            userInfo.img = imgUrl;
-            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
-            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
+        if (SpData.getClassInfo() != null
+                && SpData.getIdentityInfo() != null
+                && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+            classInfo.studentPic = imgUrl;
+            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classInfo));
+            SpData.setClassesInfo(classInfo);
+        } else {
+            if (userInfo != null) {
+                userInfo.img = imgUrl;
+                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+            }
         }
+        //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
         GlideUtil.loadImageHead(this, imgUrl, img);
     }
 

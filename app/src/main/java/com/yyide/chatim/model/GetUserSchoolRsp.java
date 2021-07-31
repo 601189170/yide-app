@@ -107,8 +107,8 @@ public class GetUserSchoolRsp {
         public List<String> imgList;
         public String birthdayDate;
         public String sex;//1 男 0女
-        public int teacherDepId;
         public String email;
+        public int teacherDepId;
         public Object schedule;
         public Object introduce;
         public String img;
@@ -123,13 +123,15 @@ public class GetUserSchoolRsp {
              * classesTeacher : 胡老师
              * teacherId : 574
              */
-
+            public String studentBirthdayDate;
+            public String studentSex;//1 男 0女
             public String classesId;
             public String classesName;
             public String teacherInd;
+            public String studentEmail;
             public String classesTeacher;
             public String teacherId;
-            public String studentImagePath;
+            public String studentPic;
             public String classesStudentName;
             public String studentName;
             public String studentId;

@@ -181,7 +181,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             } else {
                 my_info.setText("我的信息");
             }
-            //判断是否为舰长
+            //判断是否为家长
             if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
                 if (SpData.getClassInfo() != null) {
                     user_class.setText(!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName) ? SpData.getClassInfo().classesStudentName : "无");

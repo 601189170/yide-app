@@ -107,6 +107,7 @@ public class SwitchClassesStudentPop extends PopupWindow {
                 popupWindow.dismiss();
             }
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_HOME_CHECK_IDENTITY, ""));
             if (mOnCheckCallBack != null) {
                 mOnCheckCallBack.onCheckCallBack();
             }

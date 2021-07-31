@@ -27,6 +27,7 @@ public class LeaveDetailRsp {
     @Data
     public static class DataBean {
         private String name;
+        private String initName;
         private String deptOrClassName;
         private String type;
         private String startTime;
@@ -43,14 +44,15 @@ public class LeaveDetailRsp {
         private Object leaveCourseFormList;
         private Object ccbid;
         /**
-         *请假类型: 1 家长请假， 2 教职工请假
-         * */
+         * 请假类型: 1 家长请假， 2 教职工请假
+         */
         private String leaveType;
 
         /**
          * 撤销时间
-         * */
+         */
         private String undoTime;
+
         @NoArgsConstructor
         @Data
         public static class ListBean {

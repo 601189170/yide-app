@@ -20,7 +20,8 @@
             android:id="@+id/tv_event_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:ellipsize="end"
+            android:lines="1"
             android:textColor="#ff1e1e1e"
             android:textSize="18sp"
             app:layout_constraintLeft_toLeftOf="parent"

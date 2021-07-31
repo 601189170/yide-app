@@ -43,6 +43,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentAttendanceBinding mViewBinding;
     private int index;
+    private String classesId;
 
     public static TeacherStudentAttendanceFragment newInstance(int index) {
         TeacherStudentAttendanceFragment fragment = new TeacherStudentAttendanceFragment();
@@ -80,7 +81,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     }
 
     private void getAttendance() {
-        mvpPresenter.attendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "");
+        mvpPresenter.attendance(classesId);
     }
 
     private void initView() {
@@ -102,6 +103,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
 
         if (SpData.getClassInfo() != null) {
+            classesId = SpData.getClassInfo().classesId;
             mViewBinding.tvClassName.setText(SpData.getClassInfo().classesName);
         }
     }
@@ -170,7 +172,8 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             adapterClass.setList(classList);
             attendancePop.setOnSelectListener(index -> {
                 mViewBinding.tvClassName.setText(classList.get(index).classesName);
-                mvpPresenter.attendance(classList.get(index).classesId);
+                classesId = classList.get(index).classesId;
+                getAttendance();
             });
         });
 

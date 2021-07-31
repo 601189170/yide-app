@@ -109,8 +109,20 @@ public class SpData {
             if (SpData.getClassInfo() != null) {//处理切换班级
                 GetUserSchoolRsp.DataBean.FormBean classBean = null;
                 for (GetUserSchoolRsp.DataBean.FormBean item : dataBean.form) {
-                    if (item.classesId.equals(SpData.getClassInfo().classesId)) {
-                        classBean = item;
+                    if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(dataBean.status)) {
+                        //家长默认选择班级
+                        if (!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName)
+                                && SpData.getClassInfo().classesStudentName.equals(item.classesStudentName)) {
+                            classBean = item;
+                            break;
+                        }
+                    } else {
+                        //教师默认选择班级
+                        if (!TextUtils.isEmpty(SpData.getClassInfo().classesId)
+                                && SpData.getClassInfo().classesId.equals(item.classesId)) {
+                            classBean = item;
+                            break;
+                        }
                     }
                 }
                 SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classBean == null ? dataBean.form.get(0) : classBean));
@@ -119,6 +131,27 @@ public class SpData {
             }
         } else {//处理切换后没有班级的情况
             SPUtils.getInstance().remove(SpData.CLASS_INFO);
+        }
+    }
+
+    /**
+     * 更新本地缓存班级数据
+     *
+     * @param classesInfo
+     */
+    public static void setClassesInfo(GetUserSchoolRsp.DataBean.FormBean classesInfo) {
+        GetUserSchoolRsp.DataBean identityInfo = getIdentityInfo();
+        if (classesInfo != null && identityInfo != null && identityInfo.form != null) {
+            List<GetUserSchoolRsp.DataBean.FormBean> lists = new ArrayList<>();
+            for (GetUserSchoolRsp.DataBean.FormBean classesBean : identityInfo.form) {
+                if (!TextUtils.isEmpty(classesBean.classesStudentName) && classesBean.classesStudentName.equals(classesInfo.classesStudentName)) {
+                    classesBean = classesInfo;
+                }
+                lists.add(classesBean);
+            }
+            identityInfo.form.clear();
+            identityInfo.form.addAll(lists);
+            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(identityInfo));
         }
     }
 }
