@@ -555,6 +555,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
         //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
+        final String classesStudentName = SpData.getClassInfo().classesStudentName;
         for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
             final String studentName = formBean.classesStudentName;
             final String studentId = formBean.studentId;
@@ -566,13 +567,18 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             dataBean.setDeptName(studentName);
             dataBean.setStudentUserId(studentUserId);
             dataBean.setIsDefault(0);
+            if (studentName.equals(classesStudentName)){
+                dataBean.setIsDefault(1);
+                this.studentId = dataBean.getDeptId();
+                this.studentUserId = dataBean.getStudentUserId();
+            }
             classList.add(dataBean);
         }
         if (!classList.isEmpty()) {
-            final LeaveDeptRsp.DataBean dataBean = classList.get(0);
-            dataBean.setIsDefault(1);
-            studentId = dataBean.getDeptId();
-            studentUserId = dataBean.getStudentUserId();
+//            final LeaveDeptRsp.DataBean dataBean = classList.get(0);
+//            dataBean.setIsDefault(1);
+//            studentId = dataBean.getDeptId();
+//            studentUserId = dataBean.getStudentUserId();
         } else {
             Log.e(TAG, "initClassData: 当前账号没有学生" );
             tv_department.setVisibility(View.GONE);

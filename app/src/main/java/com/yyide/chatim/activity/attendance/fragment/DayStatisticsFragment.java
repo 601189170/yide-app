@@ -267,7 +267,8 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         if (classOptional.isPresent()) {
             final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
             mViewBinding.tvClassName.setText(clazzBean.getDeptName());
-            currentClass = ""+clazzBean.getDeptId();
+            currentClass = clazzBean.getClassId();
+            currentStudentId = clazzBean.getDeptId();
             currentClassName = clazzBean.getDeptName();
             if (classList.size() <= 1) {
                 mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
@@ -295,7 +296,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     }
 
     private void queryAttStatsData(String classId,String searchTime){
-        mvpPresenter.getAttendanceStatsData(classId,searchTime,"1");
+        mvpPresenter.getAttendanceStatsData(currentStudentId,classId,searchTime,"1");
     }
 
     @Override

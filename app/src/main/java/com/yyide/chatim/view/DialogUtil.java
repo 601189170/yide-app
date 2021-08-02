@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.R;
@@ -40,6 +43,48 @@ public class DialogUtil {
                 })
                 .show();
     }
+
+    /**
+     * 提示打开消息推送权限
+     * @param context
+     * @param onClickListener
+     */
+    public static void notificationHintDialog(Context context,OnClickListener onClickListener){
+        FullScreenDialog tipDialog = new FullScreenDialog(context, R.style.MyDialogStyle);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_open_notification, null);
+        // final ConstraintLayout clNotification = view.findViewById(R.id.cl_notification);
+        final Button btnOpen = view.findViewById(R.id.btn_open);
+        final TextView tvSkip = view.findViewById(R.id.tv_skip);
+        btnOpen.setOnClickListener(v -> {
+            tipDialog.dismiss();
+            onClickListener.onEnsure(v);
+        });
+
+        tvSkip.setOnClickListener(v -> {
+            tipDialog.dismiss();
+            onClickListener.onCancel(v);
+        });
+
+        tipDialog.setContentView(view);
+        tipDialog.setCancelable(false);
+        tipDialog.show();
+        //获取屏幕宽高
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display defaultDisplay = wm.getDefaultDisplay();
+        int screenWidth = defaultDisplay.getWidth();
+        int screenHeight = defaultDisplay.getHeight();
+        //重新设置布局高度，可以理解为设置dialog高度
+//        ViewGroup.LayoutParams params = clNotification.getLayoutParams();
+//        params.height = (int) (screenHeight * 0.3);
+//        clNotification.setLayoutParams(params);
+        //设置dialog宽度
+        Window window = tipDialog.getWindow();
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        window.setLayout((int) (screenWidth * 0.8), attributes.height);
+        //设置dialog背景为透明色
+        window.setBackgroundDrawableResource(R.color.transparent);
+    }
+
     public static Dialog hintDialog(Context context, String title, String hintText, String leftText, String rightText, OnClickListener onClickListener) {
         FullScreenDialog tipDialog = new FullScreenDialog(context, R.style.MyDialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_hint4, null);
