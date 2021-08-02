@@ -399,7 +399,7 @@ public class DateUtils {
      * @param week  当月周数(1-5)
      * @return 该周第一天（周日）
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     public static String[] getFirstDayAndLastDayByMonthWeek(int year, int month, int week) {
         Log.e(TAG, "year=" + year + ",month=" + month + ",week=" + week);
         final Calendar calendar = Calendar.getInstance();
@@ -408,14 +408,26 @@ public class DateUtils {
         calendar.set(Calendar.WEEK_OF_YEAR, week);
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String[] dates = {"", ""};
-        LocalDate inputDate = LocalDate.parse(simpleDateFormat.format(calendar.getTime()));
-        // 所在周开始时间
-        LocalDate beginDayOfWeek = inputDate.with(DayOfWeek.MONDAY);
-        // 所在周结束时间
-        LocalDate endDayOfWeek = inputDate.with(DayOfWeek.SUNDAY);
-        Log.e(TAG, "beginDayOfWeek: " + beginDayOfWeek.toString() + ",endDayOfWeek：" + endDayOfWeek.toString());
-        dates[0] = beginDayOfWeek.getMonthValue() + "." + beginDayOfWeek.getDayOfMonth();
-        dates[1] = endDayOfWeek.getMonthValue() + "." + endDayOfWeek.getDayOfMonth();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate inputDate = LocalDate.parse(simpleDateFormat.format(calendar.getTime()));
+            // 所在周开始时间
+            LocalDate beginDayOfWeek = inputDate.with(DayOfWeek.MONDAY);
+            // 所在周结束时间
+            LocalDate endDayOfWeek = inputDate.with(DayOfWeek.SUNDAY);
+            Log.e(TAG, "beginDayOfWeek: " + beginDayOfWeek.toString() + ",endDayOfWeek：" + endDayOfWeek.toString());
+            dates[0] = beginDayOfWeek.getMonthValue() + "." + beginDayOfWeek.getDayOfMonth();
+            dates[1] = endDayOfWeek.getMonthValue() + "." + endDayOfWeek.getDayOfMonth();
+        } else {
+            final SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MM.dd");
+            calendar.setFirstDayOfWeek(Calendar.MONDAY);
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek()); // Monday
+            final String date1 = simpleDateFormat2.format(calendar.getTime());
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + 6); // Sunday
+            final String date2 = simpleDateFormat2.format(calendar.getTime());
+            Log.e(TAG, "getFirstDayAndLastDayByMonthWeek: date1 "+date1+", date2 "+date2 );
+            dates[0] = date1;
+            dates[1] = date2;
+        }
         return dates;
     }
 

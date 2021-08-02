@@ -181,7 +181,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     private void setWeek(boolean init) {
         Log.e(TAG, "currentWeek"+currentWeek+"week："+week );
         if (!init){
@@ -293,7 +293,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -483,7 +483,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initEventView() {
         final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         final LeaveDeptRsp.DataBean dataBean = eventOptional.get();
@@ -573,7 +573,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void showData(String eventName) {
         //每次更新数据默认选择缺勤rb
         mViewBinding.rgAttendanceType.check(R.id.rb_absence);

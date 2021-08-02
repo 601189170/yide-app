@@ -148,7 +148,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         return R.layout.activity_main;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -529,10 +529,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     /**
      * 打开应用通知设置
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     private void showNotificationPermission() {
         final boolean enabled = NotifyUtil.checkNotificationsEnabled(this);
-        final boolean channelEnabled = NotifyUtil.checkNotificationsChannelEnabled(this, "1");
+        boolean channelEnabled = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            channelEnabled = NotifyUtil.checkNotificationsChannelEnabled(this, "1");
+        }
         Log.e(TAG, "showNotificationPermission: enabled " + enabled + ",channelEnabled " + channelEnabled);
         if (!enabled || !channelEnabled) {
             DialogUtil.notificationHintDialog(this, new DialogUtil.OnClickListener() {
