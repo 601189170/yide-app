@@ -29,6 +29,7 @@ public class LeaveDetailRsp {
         private String name;
         private String initName;
         private String deptOrClassName;
+        private String studentName;
         private String type;
         private String startTime;
         private String endTime;

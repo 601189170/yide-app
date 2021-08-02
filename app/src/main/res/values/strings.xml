@@ -248,4 +248,8 @@
     <string name="people_number">%d人</string>
     <string name="look_big_image">查看大图</string>
     <string name="my_info">我的信息</string>
+    <string name="open_push_notification_permission">开启推送通知</string>
+    <string name="open_push_notification_tip">实时获取最新信息，不再错过\n重要通知。</string>
+    <string name="open_immediately">立即开启</string>
+    <string name="skip">跳过</string>
 </resources>

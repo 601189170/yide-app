@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,8 +21,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -58,12 +58,11 @@ import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.vivo.push.IPushActionListener;
 import com.vivo.push.PushClient;
-import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.alipush.AliasUtil;
 import com.yyide.chatim.alipush.MyMessageReceiver;
+import com.yyide.chatim.alipush.NotifyUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.databinding.DialogUpdateBinding;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
 import com.yyide.chatim.home.HomeFragment;
@@ -91,6 +90,7 @@ import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.LogUtil;
 import com.yyide.chatim.utils.PrivateConstants;
+import com.yyide.chatim.view.DialogUtil;
 import com.yyide.chatim.view.MainView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -148,6 +148,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         return R.layout.activity_main;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +180,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         //应用更新检测
         new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 5000);
+        //检查是否开启消息通知
+        showNotificationPermission();
     }
 
     private void prepareThirdPushToken() {
@@ -500,6 +503,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         Log.e("TAG", "setCostomMsg: " + msg);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onResume() {
         Log.i(TAG, "onResume");
@@ -519,6 +523,33 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             mCallModel = null;
         }
         GSYVideoManager.onResume();
+
+    }
+
+    /**
+     * 打开应用通知设置
+     */
+    //@RequiresApi(api = Build.VERSION_CODES.O)
+    private void showNotificationPermission() {
+        final boolean enabled = NotifyUtil.checkNotificationsEnabled(this);
+        boolean channelEnabled = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            channelEnabled = NotifyUtil.checkNotificationsChannelEnabled(this, "1");
+        }
+        Log.e(TAG, "showNotificationPermission: enabled " + enabled + ",channelEnabled " + channelEnabled);
+        if (!enabled || !channelEnabled) {
+            DialogUtil.notificationHintDialog(this, new DialogUtil.OnClickListener() {
+                @Override
+                public void onCancel(View view) {
+
+                }
+
+                @Override
+                public void onEnsure(View view) {
+                    NotifyUtil.openNotificationSettings(MainActivity.this);
+                }
+            });
+        }
     }
 
     @Override

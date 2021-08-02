@@ -3,6 +3,7 @@ package com.yyide.chatim.presenter.attendance;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
@@ -25,10 +26,13 @@ public class WeekStatisticsPresenter extends BasePresenter<WeekMonthStatisticsVi
      * @param seacherTime 日期
      * @param dateType 日期类型
      */
-    public void getAttendanceStatsData(String classId,String seacherTime,String dateType,int page) {
+    public void getAttendanceStatsData(String studentId,String classId,String seacherTime,String dateType,int page) {
         mvpView.showLoading();
         HashMap<String, Object> map = new HashMap<>();
         map.put("classId", classId);
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            map.put("studentId", studentId);
+        }
         map.put("seacherTime", seacherTime);
         map.put("dateType", dateType);
         map.put("page",page);
