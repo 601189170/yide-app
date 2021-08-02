@@ -148,6 +148,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         return R.layout.activity_main;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +180,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         //应用更新检测
         new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 5000);
+        //检查是否开启消息通知
+        showNotificationPermission();
     }
 
     private void prepareThirdPushToken() {
@@ -520,8 +523,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             mCallModel = null;
         }
         GSYVideoManager.onResume();
-        //检查是否开启消息通知
-        showNotificationPermission();
+
     }
 
     /**
