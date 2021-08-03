@@ -334,7 +334,7 @@ public interface DingApiStores {
     ////https://api.uat.edu.1d1j.net/school-server/cloud-school/notice/scope/app/v1/queryOrganizationStructure
     //获取部门列表-无权限校验
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/school-server/cloud-school/notice/scope/app/v1/queryOrganizationStructure")
+    @POST("/management/cloud-system/notice/scope/app/v1/queryOrganizationStructure")
     Observable<DepartmentScopeRsp2> queryOrganizationStructure(@Body RequestBody requestBody);
 
     //查询是否有备课
