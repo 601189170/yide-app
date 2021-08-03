@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.alibaba.sdk.android.push.register.ThirdPushManager;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -66,6 +67,8 @@ public class XiaomiMsgReceiver extends PushMessageReceiver {
         DemoLog.d(TAG, "regId: " + mRegId);
         ThirdPushTokenMgr.getInstance().setThirdPushToken(mRegId);
         ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
+        //上传厂商设备ID
+        ThirdPushManager.reportToken(context, ThirdPushManager.ThirdPushReportKeyword.XIAOMI.thirdTokenKeyword, mRegId);
     }
 
     @Override

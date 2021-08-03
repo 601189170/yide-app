@@ -18,6 +18,10 @@ import androidx.multidex.MultiDex;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.huawei.HuaWeiRegister;
+import com.alibaba.sdk.android.push.impl.HuaweiMsgParseImpl;
+import com.alibaba.sdk.android.push.impl.OppoMsgParseImpl;
+import com.alibaba.sdk.android.push.impl.VivoMsgParseImpl;
+import com.alibaba.sdk.android.push.impl.XiaoMiMsgParseImpl;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
 import com.alibaba.sdk.android.push.register.MeizuRegister;
 import com.alibaba.sdk.android.push.register.MiPushRegister;
@@ -185,6 +189,7 @@ public class BaseApplication extends Application {
         if (BrandUtil.isBrandXiaoMi()) {
             // 小米离线推送
             MiPushClient.registerPush(this, PrivateConstants.XM_PUSH_APPID, PrivateConstants.XM_PUSH_APPKEY);
+            ThirdPushManager.registerImpl(new XiaoMiMsgParseImpl());
         } else if (BrandUtil.isBrandHuawei()) {
             // 华为离线推送，设置是否接收Push通知栏消息调用示例
             HmsMessaging.getInstance(this).turnOnPush().addOnCompleteListener(new com.huawei.hmf.tasks.OnCompleteListener<Void>() {
@@ -197,14 +202,17 @@ public class BaseApplication extends Application {
                     }
                 }
             });
+            ThirdPushManager.registerImpl(new HuaweiMsgParseImpl());
         } else if (MzSystemUtils.isBrandMeizu(this)) {
             // 魅族离线推送
             PushManager.register(this, PrivateConstants.MZ_PUSH_APPID, PrivateConstants.MZ_PUSH_APPKEY);
         } else if (BrandUtil.isBrandVivo()) {
             // vivo离线推送
             PushClient.getInstance(getApplicationContext()).initialize();
-        } else if (HeytapPushManager.isSupportPush()) {
+            ThirdPushManager.registerImpl(new VivoMsgParseImpl());
+        } else if (BrandUtil.isBrandOppo() || HeytapPushManager.isSupportPush()) {
             // oppo离线推送，因为需要登录成功后向我们后台设置token，所以注册放在MainActivity中做
+            ThirdPushManager.registerImpl(new OppoMsgParseImpl());
         } else if (BrandUtil.isGoogleServiceSupport()) {
             FirebaseInstanceId.getInstance().getInstanceId()
                     .addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<InstanceIdResult>() {
