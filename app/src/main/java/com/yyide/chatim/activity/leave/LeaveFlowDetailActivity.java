@@ -264,11 +264,11 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             undoTime = DateUtils.formatTime(undoTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
             undoTimes = undoTime.split(" ");
         }
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+//        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+//            leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getInitName(), true, false, null));
+//        } else {
             leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getInitName(), true, false, null));
-        } else {
-            leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getName(), true, false, null));
-        }
+//        }
         switch (approvalResult) {
             case "0":
                 leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人（已拒绝）", "" + approverName, true, true, data.getApproverImage()));
