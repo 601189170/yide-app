@@ -155,11 +155,11 @@ public class ChatLayoutHelper {
 //
 //        // TODO 可以disable更多面板上的各个功能，可以打开下面代码测试
 //        inputLayout.disableCaptureAction(true);
-//        inputLayout.disableSendFileAction(true);
+        inputLayout.disableSendFileAction(true);
 //        inputLayout.disableSendPhotoAction(true);
 //        inputLayout.disableVideoRecordAction(true);
-        inputLayout.enableAudioCall();
-        inputLayout.enableVideoCall();
+//        inputLayout.enableAudioCall();
+//        inputLayout.enableVideoCall();
 
         // TODO 可以自己增加一些功能，可以打开下面代码测试
         // 增加一个欢迎提示富文本

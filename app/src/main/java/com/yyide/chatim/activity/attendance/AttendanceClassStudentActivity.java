@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -11,23 +12,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
-import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.databinding.ActivityAttendanceClassStudentBinding;
 import com.yyide.chatim.dialog.AttendancePop;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
+import com.yyide.chatim.presenter.SchoolGradePresenter;
+import com.yyide.chatim.view.SchoolGradeView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
 
-public class AttendanceClassStudentActivity extends BaseActivity {
+public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradePresenter> implements SchoolGradeView {
 
     private ActivityAttendanceClassStudentBinding viewBinding;
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean;
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeListBean;
+    private String TAG = AttendanceClassStudentActivity.class.getSimpleName();
 
     @Override
     public int getContentViewID() {
@@ -50,7 +55,17 @@ public class AttendanceClassStudentActivity extends BaseActivity {
         viewBinding.top.backLayout.setOnClickListener(v -> finish());
         viewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         viewBinding.recyclerview.setAdapter(adapter);
+
+        viewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            mvpPresenter.getMyAppList(gradeListBean.gradeId);
+        });
+        viewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         setDataView();
+    }
+
+    @Override
+    protected SchoolGradePresenter createPresenter() {
+        return new SchoolGradePresenter(this);
     }
 
     private void setDataView() {
@@ -62,7 +77,8 @@ public class AttendanceClassStudentActivity extends BaseActivity {
             } else {
                 gradeListBean = schoolPeopleAllFormBean.getGradeList().get(0);
             }
-            setData();
+            mvpPresenter.getMyAppList(gradeListBean.gradeId);
+//            setData();
             if (schoolPeopleAllFormBean.getGradeList() != null && schoolPeopleAllFormBean.getGradeList().size() > 1) {
                 viewBinding.tvAttendanceTitle.setClickable(true);
                 viewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
@@ -78,7 +94,8 @@ public class AttendanceClassStudentActivity extends BaseActivity {
                 attendancePop.setOnSelectListener(position -> {
                     gradeListBean = schoolPeopleAllFormBean.getGradeList().get(position);
                     gradeListBean.classForm = schoolPeopleAllFormBean.getGradeList().get(position).getClassForm();
-                    setData();
+                    mvpPresenter.getMyAppList(gradeListBean.gradeId);
+                    //setData();
                 });
             });
         }
@@ -147,4 +164,35 @@ public class AttendanceClassStudentActivity extends BaseActivity {
                     .setText(R.id.tv_ask_for_leave_num, item.getLeave() + "");
         }
     };
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void getGradeListSuccess(AttendanceCheckRsp model) {
+        viewBinding.swipeRefreshLayout.setRefreshing(false);
+        if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.data != null) {
+                for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem : model.data.schoolPeopleAllForm) {
+                    if (schoolItem.getGradeList() != null) {
+                        for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
+                            if (gradeItem.gradeId == gradeListBean.gradeId) {
+                                gradeListBean = gradeItem;
+                                break;
+                            }
+                        }
+                    }
+                }
+                setData();
+            }
+        }
+    }
+
+    @Override
+    public void getFail(String msg) {
+        viewBinding.swipeRefreshLayout.setRefreshing(false);
+        Log.d(TAG, msg);
+    }
 }

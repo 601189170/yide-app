@@ -138,12 +138,15 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
 
     private void setStudentInfo() {
         GetUserSchoolRsp.DataBean.FormBean studentInfo = SpData.getClassInfo();
+        userInfo = SpData.getIdentityInfo();
         if (studentInfo != null) {
             GlideUtil.loadImageHead(this, studentInfo.studentPic, img);
             sex.setText(!TextUtils.isEmpty(studentInfo.studentSex) ? ("1".equals(studentInfo.studentSex) ? "男" : "女") : "未设置");
-            phone.setText(!TextUtils.isEmpty(studentInfo.studentName) ? studentInfo.studentName : "未设置");
+            if (userInfo != null) {
+                phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
+            }
             date.setText(!TextUtils.isEmpty(studentInfo.studentBirthdayDate) ? studentInfo.studentBirthdayDate : "未设置");
-            email.setVisibility(View.GONE);
+            layout5.setVisibility(View.GONE);
             email_line.setVisibility(View.GONE);
             face.setText("未设置");
         }
@@ -334,8 +337,8 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 userInfo.img = imgUrl;
                 SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             }
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
         }
-        //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
         GlideUtil.loadImageHead(this, imgUrl, img);
     }
 

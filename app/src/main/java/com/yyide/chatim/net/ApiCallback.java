@@ -54,7 +54,12 @@ public abstract class ApiCallback<M> implements Observer<M> {
 
     @Override
     public void onNext(M model) {
-        onSuccess(model);
+        try {
+            onSuccess(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            onFailure(e.getMessage());
+        }
     }
 
     @Override

@@ -73,12 +73,7 @@ public class ChatFragment extends BaseFragment {
         title = mBaseView.findViewById(R.id.text);
         back = mBaseView.findViewById(R.id.back);
         title.setText(mChatInfo.getChatName());
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
+        back.setOnClickListener(v -> getActivity().finish());
         /*
          * 需要聊天的基本信息
          */
@@ -89,24 +84,16 @@ public class ChatFragment extends BaseFragment {
         mTitleBar = mChatLayout.getTitleBar();
 
         //单聊面板标记栏返回按钮点击事件，这里需要开发者自行控制
-        mTitleBar.setOnLeftClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
+        mTitleBar.setOnLeftClickListener(view -> getActivity().finish());
         mTitleBar.setVisibility(GONE);
 //        mTitleBar.getRightIcon().setImageDrawable(getResources().getDrawable(R.drawable.create_c2c));
 
         if (mChatInfo.getType() == V2TIMConversation.V2TIM_C2C) {
-            mTitleBar.setOnRightClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(BaseApplication.getInstance(), FriendProfileActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(TUIKitConstants.ProfileType.CONTENT, mChatInfo);
-                    BaseApplication.getInstance().startActivity(intent);
-                }
+            mTitleBar.setOnRightClickListener(v -> {
+                Intent intent = new Intent(BaseApplication.getInstance(), FriendProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(TUIKitConstants.ProfileType.CONTENT, mChatInfo);
+                BaseApplication.getInstance().startActivity(intent);
             });
         }
 
@@ -170,33 +157,30 @@ public class ChatFragment extends BaseFragment {
                     final V2TIMMessage lastMessage = v2TIMConversation.getLastMessage();
 
                     updateAtInfoLayout();
-                    mChatLayout.getAtInfoLayout().setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final List<V2TIMGroupAtInfo> atInfoList = mChatInfo.getAtInfoList();
-                            if (atInfoList == null || atInfoList.isEmpty()) {
-                                mChatLayout.getAtInfoLayout().setVisibility(GONE);
-                                return;
-                            } else {
-                                mChatLayout.getChatManager().getAtInfoChatMessages(atInfoList.get(atInfoList.size() - 1).getSeq(), lastMessage, new IUIKitCallBack() {
-                                    @Override
-                                    public void onSuccess(Object data) {
-                                        mChatLayout.getMessageLayout().scrollToPosition((int) atInfoList.get(atInfoList.size() - 1).getSeq());
-                                        LinearLayoutManager mLayoutManager = (LinearLayoutManager) mChatLayout.getMessageLayout().getLayoutManager();
-                                        mLayoutManager.scrollToPositionWithOffset((int) atInfoList.get(atInfoList.size() - 1).getSeq(), 0);
+                    mChatLayout.getAtInfoLayout().setOnClickListener(v -> {
+                        final List<V2TIMGroupAtInfo> atInfoList = mChatInfo.getAtInfoList();
+                        if (atInfoList == null || atInfoList.isEmpty()) {
+                            mChatLayout.getAtInfoLayout().setVisibility(GONE);
+                            return;
+                        } else {
+                            mChatLayout.getChatManager().getAtInfoChatMessages(atInfoList.get(atInfoList.size() - 1).getSeq(), lastMessage, new IUIKitCallBack() {
+                                @Override
+                                public void onSuccess(Object data) {
+                                    mChatLayout.getMessageLayout().scrollToPosition((int) atInfoList.get(atInfoList.size() - 1).getSeq());
+                                    LinearLayoutManager mLayoutManager = (LinearLayoutManager) mChatLayout.getMessageLayout().getLayoutManager();
+                                    mLayoutManager.scrollToPositionWithOffset((int) atInfoList.get(atInfoList.size() - 1).getSeq(), 0);
 
-                                        atInfoList.remove(atInfoList.size() - 1);
-                                        mChatInfo.setAtInfoList(atInfoList);
+                                    atInfoList.remove(atInfoList.size() - 1);
+                                    mChatInfo.setAtInfoList(atInfoList);
 
-                                        updateAtInfoLayout();
-                                    }
+                                    updateAtInfoLayout();
+                                }
 
-                                    @Override
-                                    public void onError(String module, int errCode, String errMsg) {
-                                        DemoLog.d(TAG, "getAtInfoChatMessages failed");
-                                    }
-                                });
-                            }
+                                @Override
+                                public void onError(String module, int errCode, String errMsg) {
+                                    DemoLog.d(TAG, "getAtInfoChatMessages failed");
+                                }
+                            });
                         }
                     });
                 }
@@ -279,6 +263,7 @@ public class ChatFragment extends BaseFragment {
         super.onResume();
 
         Bundle bundle = getArguments();
+        assert bundle != null;
         mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
         if (mChatInfo == null) {
             return;
@@ -286,8 +271,8 @@ public class ChatFragment extends BaseFragment {
         initView();
 
         // TODO 通过api设置ChatLayout各种属性的样例 语音通话  视频通话
-//        ChatLayoutHelper helper = new ChatLayoutHelper(getActivity());
-//        helper.customizeChatLayout(mChatLayout);
+        ChatLayoutHelper helper = new ChatLayoutHelper(getActivity());
+        helper.customizeChatLayout(mChatLayout);
     }
 
     @Override

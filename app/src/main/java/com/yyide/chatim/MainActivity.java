@@ -2,6 +2,7 @@ package com.yyide.chatim;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -724,14 +725,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private void download(GetAppVersionResponse.DataBean data) {
         LogUtil.d("download", "device:" + AppUtils.getAppVersionCode() + "  data:" + data.versionCode);
 //        if (AppUtils.getAppVersionName() != data.versionCode) {
-        if (AppUtils.getAppVersionCode() < data.versionCode) {
+        if (!AppUtils.getAppPackageName().equals(data.versionCode)) {
             NiceDialog.init().setLayoutId(R.layout.dialog_update).setConvertListener(new ViewConvertListener() {
                 @Override
                 protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
                     TextView tv = holder.getView(R.id.tv);
                     TextView tvVersionName = holder.getView(R.id.tv_versionName);
-                    tvVersionName.setText(getString(R.string.update_versionName, data.versionName));
-                    tv.setText(data.versionDesc);
+                    tvVersionName.setText(getString(R.string.update_versionName, data.versionCode));
+                    tv.setText(data.versionDesc + "更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本");
                     ((TextView) holder.getView(R.id.tv)).setMovementMethod(new ScrollingMovementMethod());
                     TextView tvUpdate = holder.getView(R.id.tvUpdate);
                     FrameLayout flUpgrade = holder.getView(R.id.flUpgrade);

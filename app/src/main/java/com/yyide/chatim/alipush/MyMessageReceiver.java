@@ -75,7 +75,7 @@ public class MyMessageReceiver extends MessageReceiver {
                     if (!TextUtils.isEmpty(pushModel.getSignId())) {
                         Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
                         intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     } else {
                         ToastUtils.showShort("消息已被撤回");
@@ -87,7 +87,7 @@ public class MyMessageReceiver extends MessageReceiver {
                     //系统通知
                     Intent intent = new Intent(context, MessageNoticeActivity.class);
                     //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
 //                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 } else if ("4".equals(pushModel.getPushType())) {
@@ -100,7 +100,7 @@ public class MyMessageReceiver extends MessageReceiver {
                 }
             }
         } catch (Throwable throwable) {
-            //throwable.fillInStackTrace();
+            throwable.printStackTrace();
         }
     }
 

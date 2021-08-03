@@ -50,7 +50,7 @@ public class GetAppVersionResponse {
         public int total;
         public int size;
         public int current;
-        public int versionCode;
+        public String versionCode;
         public String versionName;
         public String versionDesc;
         public String filePath;

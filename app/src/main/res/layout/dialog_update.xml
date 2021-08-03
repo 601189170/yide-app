@@ -29,9 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="更新说明"
+            android:text="版本更新说明"
             android:textColor="@color/text_212121"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_versionName"
@@ -41,7 +41,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="@dimen/dp_16"
             android:textColor="@color/text_212121"
-            android:textSize="17sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv"
@@ -53,7 +53,8 @@
             android:lineSpacingExtra="6dp"
             android:lines="8"
             android:scrollbars="vertical"
-            android:textColor="@color/text_212121" />
+            android:textColor="@color/text_212121"
+            android:textSize="@dimen/text_16" />
 
         <FrameLayout
             android:id="@+id/flUpgrade"
@@ -68,14 +69,11 @@
             <TextView
                 android:id="@+id/tvUpdate"
                 android:layout_width="match_parent"
-                android:layout_height="34dp"
+                android:layout_height="36dp"
                 android:gravity="center"
                 android:text="立即更新"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
-
+                android:textSize="16sp" />
         </FrameLayout>
-
     </LinearLayout>
-
 </RelativeLayout>
