@@ -291,7 +291,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 break;
             case "3":
                 gp_copyer_list.setVisibility(View.GONE);
-                leaveFlowBeanList.add(new LeaveFlowBean("" + undoTimes[1], "" + undoTimes[0], "我（已撤销）", "" + data.getName(), true, true, null));
+                leaveFlowBeanList.add(new LeaveFlowBean("" + undoTimes[1], "" + undoTimes[0], "我", "" + data.getName(), true, true, null));
                 break;
             default:
                 break;
