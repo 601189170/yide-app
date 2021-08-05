@@ -252,4 +252,12 @@
     <string name="open_push_notification_tip">实时获取最新信息，不再错过\n重要通知。</string>
     <string name="open_immediately">立即开启</string>
     <string name="skip">跳过</string>
+    <string name="app_scan_code">APP扫码</string>
+    <string name="click_right_button_get_register_code">点击右侧按钮获取注册码</string>
+    <string name="get_register_code">获取注册码</string>
+    <string name="click_right_button_get_active_code">点击右侧按钮获取激活码</string>
+    <string name="get_active_code">获取激活码</string>
+    <string name="enter_login">进入</string>
+    <string name="back_homepage">返回首页</string>
+    <string name="login_success">登陆成功</string>
 </resources>

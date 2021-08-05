@@ -28,6 +28,7 @@ public class LeaveDetailRsp {
     public static class DataBean {
         private String name;
         private String initName;
+        private String initImage;
         private String deptOrClassName;
         private String studentName;
         private String type;

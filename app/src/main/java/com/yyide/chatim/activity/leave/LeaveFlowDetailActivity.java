@@ -267,7 +267,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 //        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
 //            leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getInitName(), true, false, null));
 //        } else {
-            leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getInitName(), true, false, null));
+            leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getInitName(), true, false, data.getInitImage()));
 //        }
         switch (approvalResult) {
             case "0":

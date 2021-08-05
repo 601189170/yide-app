@@ -596,6 +596,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.scancode.BindingEquipmentActivity"/>
+        <activity android:name=".activity.scancode.ConfirmLoginActivity"/>
+        <activity android:name=".activity.scancode.ConfirmSuccessActivity"/>
     </application>
 
 </manifest>
