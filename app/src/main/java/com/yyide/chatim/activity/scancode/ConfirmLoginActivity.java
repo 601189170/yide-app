@@ -32,6 +32,11 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
         binding.top.title.setText(R.string.app_scan_code);
         binding.top.backLayout.setOnClickListener(v -> finish());
         binding.btnLogin.setOnClickListener(v -> jupm(this,ConfirmSuccessActivity.class));
+
+        //获取班牌列表
+        //https://api.uat.edu.1d1j.net/brand/class-brand-management/app/loginCheck/getClassBrand
+        //登录
+        //https://api.uat.edu.1d1j.net/brand/class-brand-management/app/loginCheck/scan/3c954c6c-ee86-4fc8-b018-936fb85defc7?userName=admin
     }
 
     @Override

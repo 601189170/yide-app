@@ -271,7 +271,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
 //        }
         switch (approvalResult) {
             case "0":
-                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人（已拒绝）", "" + approverName, true, true, data.getApproverImage()));
+                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, true, true, data.getApproverImage()));
                 break;
             case "1":
             case "2":

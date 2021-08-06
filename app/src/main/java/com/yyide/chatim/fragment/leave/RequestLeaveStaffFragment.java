@@ -57,10 +57,12 @@ import com.yyide.chatim.view.leave.StaffAskLeaveView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -380,6 +382,8 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             iv_add_staff.setVisibility(View.VISIBLE);
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
             final TextView tv_approver_name = view.findViewById(R.id.tv_approver_name);
+            final ImageView approverUserHead = view.findViewById(R.id.iv_user_head);
+            showImage(peopleForm.getImage(),approverUserHead);
             tv_approver_name.setText(peopleForm.getName());
             ll_approver_list.addView(view);
             //超送人
@@ -492,6 +496,9 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     }
 
     private List<AddressBookRsp.DataBean> filterCopyerList(List<AddressBookRsp.DataBean> list) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            list = list.stream().distinct().collect(Collectors.toList());
+        }
         final Iterator<AddressBookRsp.DataBean> iterator = list.iterator();
         while (iterator.hasNext()) {
             final AddressBookRsp.DataBean dataBean = iterator.next();
@@ -517,7 +524,12 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                 final List<AddressBookRsp.DataBean> dataBeans = filterCopyerList(dataBeans1);
                 for (int i = 0; i < dataBeans.size(); i++) {
                     final AddressBookRsp.DataBean dataBean = dataBeans.get(i);
-                    carbonCopyPeopleId.add(dataBean.getTeacherId());
+                    if (carbonCopyPeopleId.contains(dataBean.getTeacherId())) {
+                        Log.e(TAG, "onActivityResult: 去重"+dataBean.getTeacherId());
+                        continue;
+                    } else {
+                        carbonCopyPeopleId.add(dataBean.getTeacherId());
+                    }
                     final ApproverRsp.DataBean.ListBean listBean = new ApproverRsp.DataBean.ListBean();
                     listBean.setImage(dataBean.getImage());
                     listBean.setName(dataBean.getTeacherName());

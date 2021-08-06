@@ -441,6 +441,8 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             btn_commit.setClickable(true);
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
             final TextView tv_approver_name = view.findViewById(R.id.tv_approver_name);
+            final ImageView approverUserHead = view.findViewById(R.id.iv_user_head);
+            showImage(peopleForm.getImage(),approverUserHead);
             tv_approver_name.setText(peopleForm.getName());
             ll_approver_list.addView(view);
             //超送人

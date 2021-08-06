@@ -30,6 +30,15 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
         binding.top.title.setText(R.string.app_scan_code);
         binding.top.backLayout.setOnClickListener(v -> finish());
         binding.btnEnter.setOnClickListener(v -> jupm(this,ConfirmLoginActivity.class));
+
+        //app注册码验证
+        //http://192.168.3.133:8888/brand/class-brand-management/android/appRegistraCode/findRegistrationCodeByOffice
+
+        //app注册码验证
+        //http://192.168.3.133:8888/brand/class-brand-management/android/appRegistraCode/findRegistrationCodeByOffice
+
+        //app注册码绑定
+        //http://192.168.3.133:8888/brand/class-brand-management/android/appRegistraCode/updateRegistrationCodeByCode
     }
 
     @Override

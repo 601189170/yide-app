@@ -134,9 +134,9 @@ public class BaseApplication extends Application {
             // 通知渠道的id
             String id = "1";
             // 用户可以看到的通知渠道的名字.
-            CharSequence name = "notification channel";
+            CharSequence name = "一加壹消息通知";
             // 用户可以看到的通知渠道的描述
-            String description = "notification description";
+            String description = "一加壹消息推送";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(id, name, importance);
             // 配置通知渠道的属性
