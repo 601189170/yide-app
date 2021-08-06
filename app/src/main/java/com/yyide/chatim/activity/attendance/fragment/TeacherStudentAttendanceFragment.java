@@ -158,7 +158,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     @SuppressLint("SetTextI18n")
     private void setDataView(AttendanceCheckRsp.DataBean item) {
         if (item.getAttendancesForm() != null && item.getAttendancesForm().size() > 0) {
-            if (item.getAttendancesForm().size() < index) {
+            if (item.getAttendancesForm().size() <= index) {
                 index = 0;
             }
             itemStudents = item.getAttendancesForm().get(index).getStudents();
@@ -178,7 +178,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         });
 
         mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤时间");
+            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
             eventName = mViewBinding.tvAttendanceTitle.getText().toString().trim();
             adapterEvent.setList(item.getAttendancesForm());
             attendancePop.setOnSelectListener(index -> {
@@ -230,7 +230,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceCheckRsp.DataBean.AttendancesFormBean item) {
             if (item.getStudents() != null) {
                 baseViewHolder.setText(R.id.className, item.getStudents().getName());
-                baseViewHolder.getView(R.id.select).setVisibility(eventName.equals(item.getStudents().getName()) ? View.VISIBLE : View.GONE);
+                baseViewHolder.getView(R.id.select).setVisibility(index == baseViewHolder.getAdapterPosition() ? View.VISIBLE : View.GONE);
             }
             if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);

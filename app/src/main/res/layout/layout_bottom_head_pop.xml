@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bg"
-
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#66000000">
+
     <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
         android:layout_gravity="bottom"
         android:background="@drawable/bg_white_top"
-        android:id="@+id/layout"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="160dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/s1"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="49dp"
+            android:gravity="center"
             android:text="拍摄"
             android:textColor="#ff212121"
-            android:textSize="15sp"
-            />
+            android:textSize="15sp" />
+
         <TextView
-            android:background="#DCDFE6"
             android:layout_width="match_parent"
-            android:layout_height="1dp" />
+            android:layout_height="1dp"
+            android:background="#DCDFE6" />
+
         <TextView
             android:id="@+id/s2"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="49dp"
+            android:gravity="center"
             android:text="从手机相册选择"
             android:textColor="#ff212121"
-            android:textSize="15sp"
-            />
+            android:textSize="15sp" />
+
         <TextView
-            android:background="#F5F8FC"
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="10dp"
+            android:background="#F5F8FC" />
 
         <TextView
             android:id="@+id/s3"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="49dp"
+            android:gravity="center"
             android:text="取消"
             android:textColor="#ff212121"
-            android:textSize="15sp"
-            />
+            android:textSize="15sp" />
 
     </LinearLayout>
 </FrameLayout>

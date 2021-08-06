@@ -20,10 +20,11 @@ public class AttendancePresenter extends BasePresenter<AttendanceCheckView> {
         attachView(view);
     }
 
-    public void homeAttendance(String classId) {
+    public void homeAttendance(String classId, String studentId) {
 //        mvpView.showLoading();
         HashMap<String, Object> map = new HashMap<>();
         map.put("classId", classId);//班级ID
+        map.put("studentId", studentId);//学生ID
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         addSubscription(dingApiStores.viewAttendance(body), new ApiCallback<AttendanceCheckRsp>() {
             @Override

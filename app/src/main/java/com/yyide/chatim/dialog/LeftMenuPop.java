@@ -1,9 +1,12 @@
 package com.yyide.chatim.dialog;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -17,8 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.yyide.chatim.LoginActivity;
@@ -36,6 +42,8 @@ import com.yyide.chatim.utils.FileCacheUtils;
 import com.yyide.chatim.utils.GlideUtil;
 
 import org.greenrobot.eventbus.EventBus;
+
+import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * Created by Administrator on 2019/5/15.
@@ -107,6 +115,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         layout8.setOnClickListener(this);
         layout9.setOnClickListener(this);
         layout10.setOnClickListener(this);
+        head_img.setOnClickListener(this);
         setData();
 //        new BottomMenuPop(context);
         layout.setOnTouchListener((v, event) -> true);
@@ -197,6 +206,12 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         });
     }
 
+    public void setHeadImg(String path) {
+        if (head_img != null) {
+            GlideUtil.loadImageHead(context, path, head_img);
+        }
+    }
+
     private void setCache() {
         try {
             tv_cache.setText(FileCacheUtils.getTotalCacheSize(context));
@@ -221,6 +236,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     public void hide() {
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
+        }
+        if (mDisposable != null) {
+            mDisposable.dispose();
         }
     }
 
@@ -269,8 +287,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 setCache();
                 break;
             case R.id.layout8://版本更新
-//                ToastUtils.showShort("已是最新版本");
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
+                ToastUtils.showShort("已是最新版本");
+                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
                 break;
             case R.id.layout9:
                 break;
@@ -278,10 +296,17 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 WebViewActivity.startTitle(context, BaseConstant.PRIVACY_URL, context.getString(R.string.privacy_title));
 //                context.startActivity(new Intent(context, PrivacyActivity.class));
                 break;
+            case R.id.head_img:
+                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+                    //rxPermission();
+                }
+                break;
             case R.id.exit://退出登录
+                SPUtils.getInstance().remove(BaseConstant.PASSWORD);
+                SPUtils.getInstance().remove(BaseConstant.JG_ALIAS_NAME);
+                SPUtils.getInstance().remove(SpData.LOGINDATA);
                 //清空消息推送别名
                 AliasUtil.clearAlias();
-
                 //退出登录IM
                 TUIKit.logout(new IUIKitCallBack() {
 
@@ -296,14 +321,36 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                     }
                 });
 //                SPUtils.getInstance().remove(BaseConstant.LOGINNAME);
-                SPUtils.getInstance().remove(BaseConstant.PASSWORD);
-                SPUtils.getInstance().remove(BaseConstant.JG_ALIAS_NAME);
-                SPUtils.getInstance().remove(SpData.LOGINDATA);
                 hide();
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();
                 break;
         }
+    }
+
+    Disposable mDisposable;
+
+    private void rxPermission() {
+        RxPermissions rxPermissions = new RxPermissions((FragmentActivity) context);
+        mDisposable = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) {
+                new BottomHeadMenuPop(context);
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(context)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_file)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+                            context.startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
+        });
     }
 
     private void setIdentity() {

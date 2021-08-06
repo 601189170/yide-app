@@ -118,7 +118,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
 
     private void setData() {
         viewBinding.tvAttendanceTitle.setText(gradeListBean.getName());
-        viewBinding.tvEventName.setText(gradeListBean.getName());
+        viewBinding.tvEventName.setText(gradeListBean.getName() + "(人)");
         viewBinding.tvAttendanceRate.setText(gradeListBean.getRate());
         if (!TextUtils.isEmpty(gradeListBean.getRate())) {
             try {
@@ -178,9 +178,9 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
                 for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem : model.data.schoolPeopleAllForm) {
                     if (schoolItem.getGradeList() != null) {
                         for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
+                            gradeItem.goOutStatus = schoolItem.goOutStatus;
                             if (gradeItem.gradeId == gradeListBean.gradeId) {
                                 gradeListBean = gradeItem;
-                                break;
                             }
                         }
                     }

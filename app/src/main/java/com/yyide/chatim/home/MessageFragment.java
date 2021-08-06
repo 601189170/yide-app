@@ -91,10 +91,10 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
-        if (!hidden) {
+        if (!hidden && getArguments() != null) {
             type = getArguments().getInt("type", 0);
             Log.e(TAG, "onHiddenChanged: " + type);
-            if (type != 0 && mSlidingTabLayout != null) {
+            if (mSlidingTabLayout != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", type);
                 fragment.setArguments(bundle);

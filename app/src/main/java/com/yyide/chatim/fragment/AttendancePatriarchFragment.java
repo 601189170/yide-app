@@ -72,10 +72,12 @@ public class AttendancePatriarchFragment extends BaseMvpFragment<AttendancePrese
     private void getHomeAttendance() {
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
             isSchool = true;
-            mvpPresenter.homeAttendance("");
+            mvpPresenter.homeAttendance("", "");
         } else {
             isSchool = true;
-            mvpPresenter.homeAttendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "");
+            if (SpData.getClassInfo() != null) {
+                mvpPresenter.homeAttendance(SpData.getClassInfo().classesId, SpData.getClassInfo().studentId);
+            }
         }
     }
 
@@ -149,8 +151,6 @@ public class AttendancePatriarchFragment extends BaseMvpFragment<AttendancePrese
             constraintLayout.setVisibility((attendancesForm != null && attendancesForm.size() > 0) ? View.GONE : View.VISIBLE);
             announAdapter.notifyData(attendancesForm);
             indexAdapter.setList(attendancesForm);
-        } else {
-
         }
     }
 

@@ -52,15 +52,25 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         detailBinding!!.include.backLayout.setOnClickListener { finish() }
         detailBinding!!.clReadUnread.setOnClickListener {
             itemBean?.isConfirm?.let { it1 ->
-                NoticeUnConfirmListActivity.start(this, itemBean?.id
+                NoticeUnConfirmListActivity.start(
+                    this, itemBean?.id
                         ?: 0, itemBean?.confirmOrReadNum
-                        ?: 0, it1)
+                        ?: 0, it1
+                )
             }
         }
 
-        detailBinding?.ivBg?.setOnClickListener { itemBean?.imgpath?.let { it1 -> NoticeImageDialog.showPreView(this, it1) } }
+        detailBinding?.ivBg?.setOnClickListener {
+            itemBean?.imgpath?.let { it1 ->
+                NoticeImageDialog.showPreView(
+                    this,
+                    it1
+                )
+            }
+        }
         detailBinding?.clRange?.setOnClickListener {
-            val intent = Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            val intent =
+                Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
             intent.putParcelableArrayListExtra("list", rangeList)
             intent.putExtra("noticeDetail", true)
             startActivity(intent)
@@ -77,19 +87,27 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
         val timeDate = when {
             DateUtils.isToday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//今天
-                getString(R.string.notice_toDay, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+                getString(
+                    R.string.notice_toDay,
+                    DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")
+                )
             }
             DateUtils.isYesterday(DateUtils.parseTimestamp(item.timerDate, "")) -> {//昨天
-                getString(R.string.notice_yesterday, DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm"))
+                getString(
+                    R.string.notice_yesterday,
+                    DateUtils.formatTime(item.timerDate, "yyyy-MM-dd HH:mm:ss", "HH:mm")
+                )
             }
             else -> {
                 item.timerDate
             }
         }
         if (item.isTimer) {
-            detailBinding!!.tvPushDesc.text = getString(R.string.notice_timing_push) + "\t\t" + timeDate
+            detailBinding!!.tvPushDesc.text =
+                getString(R.string.notice_timing_push) + "\t\t" + timeDate
         } else {
-            detailBinding!!.tvPushDesc.text = getString(R.string.notice_immediately_push) + "\t\t" + timeDate //通知公告类型 0空白模板 1非空白模板
+            detailBinding!!.tvPushDesc.text =
+                getString(R.string.notice_immediately_push) + "\t\t" + timeDate //通知公告类型 0空白模板 1非空白模板
         }
         if (item.type == 0) {
             detailBinding!!.constraintLayout.visibility = View.VISIBLE
@@ -125,15 +143,24 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
                 }
             }
             if (teacherNumber > 0) {
-                stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
+                stringBuffer.append(getString(R.string.notice_teacher_number, teacherNumber))
+                    .append("、")
             }
             if (patriarchNumber > 0) {
-                stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+                stringBuffer.append(getString(R.string.notice_patriarch_number, patriarchNumber))
+                    .append("、")
             }
             if (brandClassNumber > 0) {
-                stringBuffer.append(getString(R.string.notice_brand_check_class_number, brandClassNumber))
+                stringBuffer.append(
+                    getString(
+                        R.string.notice_brand_check_class_number,
+                        brandClassNumber
+                    )
+                )
             }
-            if (!TextUtils.isEmpty(stringBuffer.toString()) && stringBuffer.toString().endsWith("、")) {
+            if (!TextUtils.isEmpty(stringBuffer.toString()) && stringBuffer.toString()
+                    .endsWith("、")
+            ) {
                 detailBinding!!.tvNotificationRange.text = stringBuffer.toString().removeSuffix("、")
             } else {
                 detailBinding!!.tvNotificationRange.text = stringBuffer.toString()
@@ -148,7 +175,11 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         } else {
             detailBinding!!.tvReadDesc.text = getString(R.string.notice_read)
         }
-        detailBinding!!.tvRead.text = getString(R.string.dividing_line, item.confirmOrReadNum, (item.totalNum - item.confirmOrReadNum))
+        detailBinding!!.tvRead.text = getString(
+            R.string.dividing_line,
+            (item.totalNum - item.confirmOrReadNum),
+            item.confirmOrReadNum
+        )
 
 //            detailBinding!!.tvRead.text = item.
         detailBinding!!.btnCommit.isClickable = false
@@ -192,15 +223,15 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
     private fun showMessage(id: Long) {
         val builder = AlertDialog.Builder(this)
-                .setTitle("提示")//设置对话框 标题
-                .setMessage("通知撤回后，接收方将不展示通知内容，请确定撤回？")
-                .setPositiveButton("确定") { dialog, which ->
-                    mvpPresenter.retract(id)
-                    dialog.dismiss()
-                }
-                .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
-                .create()
-                .show()
+            .setTitle("提示")//设置对话框 标题
+            .setMessage("通知撤回后，接收方将不展示通知内容，请确定撤回？")
+            .setPositiveButton("确定") { dialog, which ->
+                mvpPresenter.retract(id)
+                dialog.dismiss()
+            }
+            .setNegativeButton("取消") { dialog, which -> dialog.dismiss() }
+            .create()
+            .show()
     }
 
     override fun createPresenter(): NoticeDetailPresenter {
@@ -217,7 +248,8 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
                 detailBinding!!.btnToWithdraw.visibility = View.GONE
                 detailBinding!!.btnCommit.visibility = View.VISIBLE
                 detailBinding!!.btnCommit.isClickable = false
-                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
+                EventBus.getDefault()
+                    .post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
             }
         }
     }

@@ -89,6 +89,8 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_USER_EMAIL = "type_update_user_email";
     public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
     public static final String TYPE_SELECT_MESSAGE_TODO = "type_select_message_todo";
+    public static final String TYPE_UPDATE_MESSAGE_TODO = "type_update_message_todo";
+
     public static final String TYPE_MAIN = "type_main";
     public static final String TYPE_IM_LOGIN = "type_im_login";
     public static final String TYPE_MESSAGE_UPDATE = "type_message_update";

@@ -7,9 +7,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -57,6 +59,12 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     TextView className;
     @BindView(R.id.tv_week)
     TextView tv_week;
+    @BindView(R.id.classlayout)
+    FrameLayout classlayout;
+    @BindView(R.id.empty)
+    View empty;
+    @BindView(R.id.svContent)
+    ScrollView mScrollView;
     private View mBaseView;
     TableTimeAdapter timeAdapter;
     TableItemAdapter tableItemAdapter;
@@ -64,6 +72,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     int index = -1;
     private List<SelectTableClassesRsp.DataBean> data;
     private GetUserSchoolRsp.DataBean.FormBean classInfo;
+    private SwitchTableClassPop swichTableClassPop;
 
     @Nullable
     @Override
@@ -77,10 +86,10 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         super.onViewCreated(view, savedInstanceState);
         tableItemAdapter = new TableItemAdapter();
         tablegrid.setAdapter(tableItemAdapter);
-        Bundle arguments = getArguments();
         tableSectionAdapter = new TableSectionAdapter();
         listsection.setAdapter(tableSectionAdapter);
-
+        TextView tvDesc = empty.findViewById(R.id.tv_desc);
+        tvDesc.setText("本周暂无课表数据");
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
         tv_week.setText(TimeUtil.getWeek() + "周");
@@ -109,6 +118,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         if (classInfo != null) {
             className.setText(classInfo.classesName);
             mvpPresenter.listTimeDataByApp(classInfo.classesId);
+        } else {
+            className.setText("暂无班级");
         }
 
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
@@ -127,19 +138,22 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status) ||
                         GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status) ||
                         GetUserSchoolRsp.DataBean.TYPE_TEACHER.equals(SpData.getIdentityInfo().status))) {
-            SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
-            classPopNew.setOnCheckCallBack(classBean -> {
-                this.classInfo = classBean;
-                className.setText(classBean.classesName);
-                mvpPresenter.listTimeDataByApp(classBean.classesId);
-            });
-
+            if (classInfo != null) {
+                SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
+                classPopNew.setOnCheckCallBack(classBean -> {
+                    this.classInfo = classBean;
+                    className.setText(classBean.classesName);
+                    mvpPresenter.listTimeDataByApp(classBean.classesId);
+                });
+            } else {
+                ToastUtils.showShort("您没有其他班级");
+            }
         } else {
             if (data != null && data.size() > 0) {
                 swichTableClassPop = new SwitchTableClassPop(getActivity(), data);
                 swichTableClassPop.setSelectClasses(this);
             } else {
-                ToastUtils.showShort("暂无切换班级");
+                ToastUtils.showShort("您没有其他班级");
             }
         }
     }
@@ -274,12 +288,14 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         Log.d("selectTableClassListSuccess", msg);
     }
 
-    private SwitchTableClassPop swichTableClassPop;
-
     @Override
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             data = model.getData();
+            if (data == null || data.size() <= 0) {
+                mScrollView.setVisibility(View.GONE);
+                empty.setVisibility(View.VISIBLE);
+            }
         }
     }
 

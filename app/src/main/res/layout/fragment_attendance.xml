@@ -69,11 +69,9 @@
 
                         <TextView
                             android:id="@+id/tv_attendance_time"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/dp_4"
-                            android:ellipsize="end"
-                            android:lines="1"
                             android:textColor="#ffffffff"
                             android:textSize="13sp"
                             app:layout_constraintStart_toEndOf="@+id/textView13"

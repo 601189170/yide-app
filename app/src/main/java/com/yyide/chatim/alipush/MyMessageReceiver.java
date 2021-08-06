@@ -52,6 +52,13 @@ public class MyMessageReceiver extends MessageReceiver {
         //intent.setAction("notification_clicked");
         //intent.putExtra("extras",JSON.toJSONString(extraMap));
         //showNotice(context,title,summary,intent);
+        PushModel pushModel = JSON.parseObject(JSON.toJSONString(extraMap), PushModel.class);
+        if (pushModel != null) {
+            if ("2".equals(pushModel.getPushType())) {
+                //更新首页消息待办
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_MESSAGE_TODO, ""));
+            }
+        }
     }
 
     @Override
@@ -75,19 +82,19 @@ public class MyMessageReceiver extends MessageReceiver {
                     if (!TextUtils.isEmpty(pushModel.getSignId())) {
                         Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
                         intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         context.startActivity(intent);
                     } else {
                         ToastUtils.showShort("消息已被撤回");
                     }
                 } else if ("2".equals(pushModel.getPushType())) {
-                    //待办
+                    //跳转至待办
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 } else if ("3".equals(pushModel.getPushType()) || "6".equals(pushModel.getPushType())) {
                     //系统通知
                     Intent intent = new Intent(context, MessageNoticeActivity.class);
                     //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     context.startActivity(intent);
 //                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 } else if ("4".equals(pushModel.getPushType())) {

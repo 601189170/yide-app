@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
@@ -69,19 +70,18 @@ public class SplashActivity extends AppCompatActivity {
     private boolean firstOpenApp;
     OkHttpClient mOkHttpClient = new OkHttpClient();
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.white));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
-            int vis = getWindow().getDecorView().getSystemUiVisibility();
-            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-            getWindow().getDecorView().setSystemUiVisibility(vis);
-        }
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+        int vis = getWindow().getDecorView().getSystemUiVisibility();
+        vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        getWindow().getDecorView().setSystemUiVisibility(vis);
 
         //设置固定字体大小
         Resources res = getResources();

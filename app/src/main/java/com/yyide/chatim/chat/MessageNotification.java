@@ -175,6 +175,8 @@ public class MessageNotification {
         Notification notification = builder.build();
         if (isDialing) {
             notification.flags = Notification.FLAG_INSISTENT;
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            builder.setAutoCancel(true);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                 notification.vibrate = new long[]{0, 1000, 1000, 1000, 1000};

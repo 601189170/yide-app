@@ -216,7 +216,7 @@ public interface DingApiStores {
     //用户头像上传
     @Multipart
     @POST("/management/cloud-system/user/uploadPic")
-    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info, @Part("studentId") long studentId);
+    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info, @Part("studentId") Long studentId);
 
     //扫码登录
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头

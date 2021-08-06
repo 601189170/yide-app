@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,10 +26,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.BuildConfig;
+import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
@@ -52,6 +56,7 @@ import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.utils.TakePicUtil;
 import com.yyide.chatim.view.HomeFragmentView;
 import com.yyide.chatim.view.VerticalTextView;
 
@@ -60,11 +65,14 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.objectweb.asm.Handle;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 
 public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> implements HomeFragmentView, SwipeRefreshLayout.OnRefreshListener {
@@ -149,7 +157,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public void onRefresh() {
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
-        //mvpPresenter.getUserSchool();
+//        mvpPresenter.getUserSchool();
         mvpPresenter.getHomeTodo();
     }
 
@@ -214,7 +222,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         }
     }
 
-    private Handler handler = new Handler();
+    private LeftMenuPop mLeftMenuPop;
 
     @Override
     protected HomeFragmentPresenter createPresenter() {
@@ -225,7 +233,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
-                new LeftMenuPop(mActivity);
+                mLeftMenuPop = null;
+                mLeftMenuPop = new LeftMenuPop(mActivity);
                 break;
             case R.id.scan:
                 startActivity(new Intent(getActivity(), ScanActivity.class));
@@ -321,9 +330,59 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        File corpFile = TakePicUtil.onActivityResult(getActivity(), requestCode, resultCode, data);
+        if (corpFile != null) {
+            showPicFileByLuban(corpFile);
+        }
+    }
+
+    private void showPicFileByLuban(@NonNull File file) {
+        Luban.with(getContext())
+                .load(file)
+                .ignoreBy(100)
+                //.putGear(Luban.THIRD_GEAR)//压缩等级
+                .setTargetDir(Environment.getExternalStorageDirectory().getAbsolutePath())
+                .filter(path -> !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif")))
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                        showLoading();
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        mvpPresenter.uploadFile(file);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // TODO 当压缩过程出现问题时调用
+                        hideLoading();
+                        ToastUtils.showShort("图片压缩失败请重试");
+                    }
+                }).launch();
+    }
+
+    @Override
+    public void uploadFileSuccess(String imgUrl) {
+        GetUserSchoolRsp.DataBean userInfo = SpData.getIdentityInfo();
+        if (userInfo != null) {
+            userInfo.img = imgUrl;
+            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+            GlideUtil.loadImageHead(getActivity(), imgUrl, head_img);
+        }
+        if (mLeftMenuPop != null) {
+            mLeftMenuPop.setHeadImg(imgUrl);
+        }
+    }
+
+    @Override
     public void confirmNotice(ResultBean model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
-            //ToastUtils.showShort(model.getMsg());
             if (dialog != null && dialog.isShowing() && isClose) {
                 dialog.dismiss();
             }
@@ -369,6 +428,14 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
             }
         } else if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
+            mvpPresenter.getHomeTodo();
+        } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
+            //关闭所有的Activity  MainActivity除外
+            if (mLeftMenuPop != null && mLeftMenuPop.isShow()) {
+                mLeftMenuPop.hide();
+            }
+            mvpPresenter.getHomeTodo();
+        } else if (BaseConstant.TYPE_UPDATE_MESSAGE_TODO.equals(messageEvent.getCode())) {
             mvpPresenter.getHomeTodo();
         } else if (BaseConstant.TYPE_HOME_CHECK_IDENTITY.equals(messageEvent.getCode())) {
             setSchoolInfo();

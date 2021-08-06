@@ -69,9 +69,9 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
 
     private void getHomeAttendance() {
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
-            mvpPresenter.homeAttendance("");
+            mvpPresenter.homeAttendance("", "");
         } else {
-            mvpPresenter.homeAttendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "");
+            mvpPresenter.homeAttendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "", "");
         }
     }
 

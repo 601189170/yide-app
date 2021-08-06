@@ -66,7 +66,13 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void uploadFile(File file) {
+    /**
+     * 图片上传
+     *
+     * @param file
+     * @param isStudent
+     */
+    public void uploadFile(File file, boolean isStudent) {
         if (file == null) {
             return;
         }
@@ -76,8 +82,8 @@ public class UserPresenter extends BasePresenter<UserView> {
         // 创建MultipartBody.Part，用于封装文件数据
         MultipartBody.Part requestImgPart =
                 MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody);
-        long studentId = 0;
-        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentId)) {
+        Long studentId = null;
+        if (isStudent && SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentId)) {
             studentId = Long.parseLong(SpData.getClassInfo().studentId);
         }
         addSubscription(dingApiStores.uploadImg(requestImgPart, studentId), new ApiCallback<UploadRep>() {
@@ -102,8 +108,8 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void getFaceData(String name, String classId,long depId,String studentId){
-        Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId);
+    public void getFaceData(String name, String classId, long depId, String studentId) {
+        Log.e("FaceUploadPresenter", "getFaceData: name=" + name + ",classId=" + classId);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
             // Map<String, Object> params = new HashMap<>();

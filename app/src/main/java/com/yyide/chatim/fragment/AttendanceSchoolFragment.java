@@ -77,14 +77,14 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        mvpPresenter.homeAttendance("");
+        mvpPresenter.homeAttendance("", "");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             adapter.setList(null);
-            mvpPresenter.homeAttendance("");
+            mvpPresenter.homeAttendance("", "");
         }
     }
 

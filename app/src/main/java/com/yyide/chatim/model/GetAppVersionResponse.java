@@ -55,7 +55,7 @@ public class GetAppVersionResponse {
         public String versionDesc;
         public String filePath;
         public String appName;
-        public int isCompulsory;
+        public int isCompulsory;//1 强制更新 不关闭弹窗
         public String terminal;
     }
 }

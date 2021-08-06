@@ -77,7 +77,8 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
         mTitles.add(getString(R.string.notice_tab_patriarch))
         mViewBinding.tvUnConfirmNumber.text = getString(R.string.notice_un_confirm_number, 0)
         mViewBinding.viewpager.offscreenPageLimit = 0
-        mViewBinding.viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        mViewBinding.viewpager.adapter = object :
+            FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
                 return NoticeUnreadPersonnelFragment.newInstance(id, position)
             }
@@ -105,9 +106,14 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
         if (BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER == messageEvent.code) {
             unCheckNumber += messageEvent.count
             if (isRead) {
-                mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_confirm_number, unCheckNumber)
+                mViewBinding.tvUnConfirmNumber.text =
+                    getString(R.string.notice_un_confirm_number, unCheckNumber)
             } else {
-                mViewBinding?.tvUnConfirmNumber?.text = getString(R.string.notice_un_read_number, unCheckNumber)
+                mViewBinding.tvUnConfirmNumber.text =
+                    getString(R.string.notice_un_read_number, unCheckNumber)
+            }
+            if (unCheckNumber > 0) {
+                mViewBinding.btnRemind.visibility = View.VISIBLE
             }
         }
     }

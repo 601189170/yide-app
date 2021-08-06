@@ -11,17 +11,21 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationManagerCompat;
@@ -89,10 +93,13 @@ import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.BrandUtil;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.LogUtil;
 import com.yyide.chatim.utils.PrivateConstants;
+import com.yyide.chatim.utils.TakePicUtil;
 import com.yyide.chatim.view.DialogUtil;
 import com.yyide.chatim.view.MainView;
+import com.yyide.chatim.widget.LoadingButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -109,6 +116,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView, HomeFragment.FragmentListener {
 
@@ -180,7 +189,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
 
         //应用更新检测
-        new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 5000);
+        //new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 3000);
         //检查是否开启消息通知
         showNotificationPermission();
     }
@@ -197,7 +206,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                         String appId = AGConnectServicesConfig.fromContext(MainActivity.this).getString("client/app_id");
                         String token = HmsInstanceId.getInstance(MainActivity.this).getToken(appId, "HCM");
                         DemoLog.i(TAG, "huawei get token:" + token);
-                        if(!TextUtils.isEmpty(token)) {
+                        if (!TextUtils.isEmpty(token)) {
                             ThirdPushTokenMgr.getInstance().setThirdPushToken(token);
                             ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
                         }
@@ -232,6 +241,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             // 谷歌推送
         }
     }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -280,17 +290,18 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         if (BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())) {
             setTab(3, 0);
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
+            ActivityUtils.finishToActivity(MainActivity.class, false);
             setTab(1, 1);
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             //registerAlias();
             AliasUtil.syncAliases();
-            ConversationManagerKit.getInstance().addUnreadWatcher(this);
+            //ConversationManagerKit.getInstance().addUnreadWatcher(this);
         } else if (BaseConstant.TYPE_MAIN.equals(messageEvent.getCode())) {
             ActivityUtils.finishToActivity(MainActivity.class, false);
             setTab(0, 0);
         } else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
             //模拟数据测试应用更新
-            mvpPresenter.getVersionInfo();
+            // mvpPresenter.getVersionInfo();
         } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
             todoCount = messageEvent.getCount();
             setMessageCount(todoCount + messageCount + noticeCount);
@@ -407,6 +418,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Override
     public void updateUnread(int count) {
+        Log.e("Chatim", "updateUnread==>: " + count);
         messageCount = count;
         setMessageCount(todoCount + messageCount + noticeCount);
         // 华为离线推送角标
@@ -418,7 +430,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private int todoCount = 0;//代办数量
 
     private void setMessageCount(int count) {
-        Log.e("Chatim", "updateUnread==>: " + count);
+        Log.e("Chatim", "setMessageCount==>: " + count);
         if (count > 0) {
             msgTotalUnread.setVisibility(View.VISIBLE);
         } else {
@@ -437,7 +449,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    public void getData(GetAppVersionResponse rsp) {
+    public void getVersionInfo(GetAppVersionResponse rsp) {
         Log.e("TAG", "getData==》: " + JSON.toJSONString(rsp));
         if (rsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
             download(rsp.getData());
@@ -524,7 +536,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             mCallModel = null;
         }
         GSYVideoManager.onResume();
-
     }
 
     /**
@@ -534,7 +545,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private void showNotificationPermission() {
         final boolean enabled = NotifyUtil.checkNotificationsEnabled(this);
         boolean channelEnabled = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             channelEnabled = NotifyUtil.checkNotificationsChannelEnabled(this, "1");
         }
         Log.e(TAG, "showNotificationPermission: enabled " + enabled + ",channelEnabled " + channelEnabled);
@@ -560,18 +571,21 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         GSYVideoManager.onPause();
     }
 
+    private Fragment fg1;
+    private Fragment fg2;
+
     void setTab(int position, int type) {
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
         tab4.setChecked(false);
-
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
-        Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
+        fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
+        fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
         Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
         Fragment fg4 = fm.findFragmentByTag(String.valueOf(tab4.getId()));
+
         if (fg1 != null) ft.hide(fg1);
         if (fg2 != null) ft.hide(fg2);
         if (fg3 != null) ft.hide(fg3);
@@ -587,12 +601,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 tab1.setChecked(true);
                 break;
             case 1:
-
                 if (fg2 == null) {
                     fg2 = new MessageFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", type);
-                    fg2.setArguments(bundle);
                     ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
                 } else {
                     Bundle bundle = new Bundle();
@@ -613,7 +623,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             case 3:
                 if (fg4 == null) {
                     fg4 = new HelpFragment();
-                    ft.add(R.id.content, fg4, String.valueOf(tab4.getId()));
+                    ft.add(R.id.content, fg4, String.valueOf(tab3.getId()));
                 } else
                     ft.show(fg4);
                 tab4.setChecked(true);
@@ -621,6 +631,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
         }
         ft.commitAllowingStateLoss();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (fg1 != null) {
+            fg1.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -642,7 +660,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 if (!UserInfo.getInstance().isAutoLogin()) {
                     getUserSig();
                 }
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
+                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
                 setTab(1, 0);
                 break;
             case R.id.tab3_layout:
@@ -654,7 +672,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
     }
 
-    OkHttpClient mOkHttpClient = new OkHttpClient();
+    private OkHttpClient mOkHttpClient = new OkHttpClient();
 
     private void getUserSig() {
         RequestBody body = RequestBody.create(BaseConstant.JSON, "");
@@ -725,19 +743,21 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private void download(GetAppVersionResponse.DataBean data) {
         LogUtil.d("download", "device:" + AppUtils.getAppVersionCode() + "  data:" + data.versionCode);
 //        if (AppUtils.getAppVersionName() != data.versionCode) {
-        if (!AppUtils.getAppPackageName().equals(data.versionCode)) {
+        if (AppUtils.getAppVersionName().compareTo(data.versionCode) < 0) {
             NiceDialog.init().setLayoutId(R.layout.dialog_update).setConvertListener(new ViewConvertListener() {
                 @Override
                 protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
                     TextView tv = holder.getView(R.id.tv);
-                    TextView tvVersionName = holder.getView(R.id.tv_versionName);
-                    tvVersionName.setText(getString(R.string.update_versionName, data.versionCode));
-                    tv.setText(data.versionDesc + "更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本更新版本");
+                    holder.getView(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    tv.setText(data.versionDesc);
                     ((TextView) holder.getView(R.id.tv)).setMovementMethod(new ScrollingMovementMethod());
-                    TextView tvUpdate = holder.getView(R.id.tvUpdate);
-                    FrameLayout flUpgrade = holder.getView(R.id.flUpgrade);
-                    downloadOrInstall(tvUpdate, flUpgrade, data);
-
+                    LoadingButton btnUpdate = holder.getView(R.id.btn_update);
+                    downloadOrInstall(btnUpdate, data);
                 }
             }).setDimAmount(0.5f).setOutCancel(data.isCompulsory == 0).show(getSupportFragmentManager());
         } else {
@@ -747,32 +767,34 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     private long max1;
 
-    private void downloadOrInstall(TextView tvUpdate, FrameLayout flUpgrade, GetAppVersionResponse.DataBean data) {
-        flUpgrade.setOnClickListener(v -> {
+    private void downloadOrInstall(LoadingButton btnUpdate, GetAppVersionResponse.DataBean data) {
+        btnUpdate.setOnClickListener(v -> {
             RxPermissions rxPermissions = new RxPermissions(this);
             mDisposable = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
                 if (granted) {
                     //后台下载APK并更新
-                    flUpgrade.setClickable(false);
-                    AppClient.downloadFile("yide_" + data.versionCode, data.filePath, new AppClient.DownloadListener() {
+                    btnUpdate.startLoading("");
+                    btnUpdate.setClickable(false);
+                    AppClient.downloadFile("yide_app", data.filePath, new AppClient.DownloadListener() {
                         @Override
                         public void onStart(long max) {
                             max1 = max;
-                            ToastUtils.showShort("开始下载");
+                            //ToastUtils.showShort("开始下载");
+                            btnUpdate.stopLoading("start");
                         }
 
                         @Override
                         public void onProgress(long progress) {
-                            runOnUiThread(() -> tvUpdate.setText((int) ((float) progress / max1 * 100) + "%"));
+                            runOnUiThread(() -> btnUpdate.setText("已下载 " + (int) ((float) progress / max1 * 100) + "%"));
                         }
 
                         @Override
                         public void onSuccess() {
                             runOnUiThread(() -> {
-                                flUpgrade.setClickable(true);
-                                tvUpdate.setText("点击安装");
-                                flUpgrade.setOnClickListener(v1 -> {
-                                    File file = new File(Utils.getApp().getCacheDir(), data.versionCode + ".apk");// 设置路径
+                                btnUpdate.stopLoading("点击安装");
+                                btnUpdate.setClickable(true);
+                                btnUpdate.setOnClickListener(v1 -> {
+                                    File file = new File(Utils.getApp().getCacheDir(), "yide_app.apk");// 设置路径
                                     String[] command = {"chmod", "777", file.getPath()};
                                     ProcessBuilder builder = new ProcessBuilder(command);
                                     try {
@@ -785,21 +807,21 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                                         startActivity(intent);
                                     }
                                 });
-                                flUpgrade.performClick();
+                                btnUpdate.performClick();
                             });
                         }
 
                         @Override
                         public void onFailure() {
                             runOnUiThread(() -> {
-                                File file = new File(Utils.getApp().getCacheDir(), data.versionCode + ".apk");
+                                File file = new File(Utils.getApp().getCacheDir(), "yide_app.apk");
                                 if (file.exists()) {
                                     file.delete();
                                 }
-                                downloadOrInstall(tvUpdate, flUpgrade, data);
-                                flUpgrade.setClickable(true);
-                                tvUpdate.setText("点击重试");
+                                downloadOrInstall(btnUpdate, data);
                             });
+                            btnUpdate.setClickable(true);
+                            btnUpdate.stopLoading("点击重试");
                             ToastUtils.showShort("更新失败");
                         }
                     });

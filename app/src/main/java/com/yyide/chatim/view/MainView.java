@@ -16,7 +16,7 @@ import com.yyide.chatim.model.UserLogoutRsp;
  */
 public interface MainView extends BaseView {
 
-    void getData(GetAppVersionResponse rsp);
+    void getVersionInfo(GetAppVersionResponse rsp);
 
     void UserLogoutData(UserLogoutRsp rsp);
 
