@@ -76,6 +76,9 @@ public class NotifyUtil {
             return false;
         }
         NotificationChannel channel = manager.getNotificationChannel(channelID);
+        if (channel == null){
+            return false;
+        }
         return !(channel.getImportance() == NotificationManager.IMPORTANCE_NONE);
     }
 }

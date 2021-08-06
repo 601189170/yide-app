@@ -220,19 +220,16 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         if ("2".equals(data.getLeaveType())) {
             //教职工
             tv_department.setText(R.string.in_department);
+            tv_department_name.setText(data.getDeptOrClassName());
         } else {
             //监护人
             tv_department.setText(getString(R.string.choose_student));
+            tv_department_name.setText(data.getStudentName());
         }
 
         tv_leave_title.setText(data.getName());
         String initiateTime = data.getInitiateTime();
         tv_leave_time.setText(DateUtils.formatTime(initiateTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd"));
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            tv_department_name.setText(data.getDeptOrClassName());
-        } else {
-            tv_department_name.setText(data.getStudentName());
-        }
         final String starttime = DateUtils.formatTime(data.getStartTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
         tv_start_time.setText(starttime);
         final String endtime = DateUtils.formatTime(data.getEndTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
