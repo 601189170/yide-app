@@ -11,6 +11,8 @@ import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
+import com.yyide.chatim.model.BrandSearchRsp;
+import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
@@ -660,4 +662,36 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-system/app/user/reg")
     Observable<ResultBean> register(@Body RequestBody info);
+
+    /**
+     * app获取码验证
+     * https://api.uat.edu.1d1j.net/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByOffice
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByOffice")
+    Observable<ClassBrandInfoRsp> getRegistrationCodeByOffice();
+
+    /**
+     * app注册码绑定
+     * /brand/class-brand-management/android/appRegistraCode/updateRegistrationCodeByCode
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/android/appRegistraCode/updateRegistrationCodeByCode")
+    Observable<BaseRsp> updateRegistrationCodeByCode(@Body RequestBody requestBody);
+
+    /**
+     * 获取班牌列表
+     * https://api.uat.edu.1d1j.net/brand/class-brand-management/app/loginCheck/getClassBrand
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/app/loginCheck/getClassBrand")
+    Observable<BrandSearchRsp> getClassBrand(@Body RequestBody requestBody);
+
+    /**
+     * 二维码扫码接口
+     * https://api.uat.edu.1d1j.net/brand/class-brand-management/app/loginCheck/scan/3c954c?userName=admin
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/brand/class-brand-management/app/loginCheck/scan/{code}")
+    Observable<BaseRsp> qrcodeLoginVerify(@Path("code") String code, @Query("userName") String userName);
 }

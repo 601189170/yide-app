@@ -260,4 +260,5 @@
     <string name="enter_login">进入</string>
     <string name="back_homepage">返回首页</string>
     <string name="login_success">登陆成功</string>
+    <string name="search_class_brand_name">请输入横屏/竖屏班牌名称</string>
 </resources>

@@ -31,5 +31,6 @@ public class ConfirmSuccessActivity extends BaseActivity {
         setContentView(binding.getRoot());
         binding.top.title.setText(R.string.app_scan_code);
         binding.top.backLayout.setVisibility(View.GONE);
+        binding.btnEnter.setOnClickListener(v -> finish());
     }
 }

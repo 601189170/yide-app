@@ -12,37 +12,56 @@
         layout="@layout/title_layout2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_register_code"
+        android:id="@+id/cl_brand_search"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_44"
         android:layout_marginTop="@dimen/dp_10"
         android:background="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/top">
 
-        <TextView
-            android:id="@+id/tv_register_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/et_register_code"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dp_16"
-            android:text="@string/click_right_button_get_register_code"
+            android:layout_marginEnd="@dimen/dp_50"
+            android:background="@null"
+            android:hint="@string/search_class_brand_name"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
             android:textColor="#ffbcc1cb"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-     <ImageView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintBottom_toBottomOf="parent"
-         app:layout_constraintRight_toRightOf="parent"
-         android:src="@drawable/icon_arrow_down"
-         android:paddingEnd="@dimen/dp_16"
-         android:paddingStart="@dimen/dp_16"
-         android:paddingTop="@dimen/dp_10"
-         android:paddingBottom="@dimen/dp_10"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_10"
+            android:src="@drawable/icon_arrow_down"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_brand_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/cl_brand_search">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_class_brand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_brand_info"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
@@ -50,8 +69,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40"
         android:layout_marginStart="@dimen/dp_16"
-        android:layout_marginBottom="@dimen/dp_5"
         android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_5"
         android:background="@drawable/flow_pass_bg_shape"
         android:text="@string/button_login"
         android:textColor="#ffffffff"
