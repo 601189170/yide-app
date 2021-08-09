@@ -694,4 +694,12 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/brand/class-brand-management/app/loginCheck/scan/{code}")
     Observable<BaseRsp> qrcodeLoginVerify(@Path("code") String code, @Query("userName") String userName);
+
+    /**
+     * app验证接口
+     * /brand/class-brand-management/Android/Authority/verify
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/Android/Authority/verify")
+    Call<BaseRsp> brandVerify(@Body RequestBody requestBody);
 }

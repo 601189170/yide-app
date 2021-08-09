@@ -147,6 +147,7 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
         ToastUtils.showShort(baseRsp.getMsg());
         if (baseRsp.getCode() == 200){
             jupm(this, ConfirmSuccessActivity.class);
+            finish();
         }
     }
 
@@ -154,5 +155,6 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
     public void loginFail(String msg) {
         Log.e(TAG, "loginFail: "+msg );
         ToastUtils.showShort(msg);
+        finish();
     }
 }
