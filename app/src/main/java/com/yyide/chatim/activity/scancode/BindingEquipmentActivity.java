@@ -53,7 +53,10 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
         });
         binding.btnEnter.setOnClickListener(v -> {
             if ("0".equals(bindStatus)) {
-                jupm(this, ConfirmLoginActivity.class, "brandStatus", brandStatus);
+                Intent intent1 = new Intent(this, ConfirmLoginActivity.class);
+                intent1.putExtra("brandStatus", brandStatus);
+                intent1.putExtra("code", code);
+                startActivity(intent1);
                 finish();
                 return;
             }
