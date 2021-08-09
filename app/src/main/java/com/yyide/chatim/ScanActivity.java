@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tbruyelle.rxpermissions3.Permission;
@@ -25,18 +26,23 @@ import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.activity.ScanLoginActivity;
 import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.activity.scancode.BindingEquipmentActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.net.DingApiStores;
 import com.yyide.chatim.view.ScanLoginView;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,11 +52,12 @@ import cn.bingoogolapple.qrcode.zbar.ZBarView;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.functions.Consumer;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
 
@@ -86,6 +93,36 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     @Override
     public void onScanQRCodeSuccess(String result) {
         vibrate();
+        Log.e(TAG, "onScanQRCodeSuccess: " + result);
+//        final JSONObject jsonObject = JSON.parseObject(result);
+//        final String scanUrl = jsonObject.getString("scanUrl");
+//        if (!TextUtils.isEmpty(scanUrl)) {
+//            if (scanUrl.contains("/brand/class-brand-management/Android/verify")) {
+//                //app验证接口
+//                final String classesId = jsonObject.getString("classesId");
+//                final String siteId = jsonObject.getString("siteId");
+//                final String checkId = jsonObject.getString("checkId");
+//                verify(checkId,classesId,siteId);
+//            } else if (scanUrl.contains("/brand/class-brand-management/app/loginCheck/scan/")) {
+//                final String code = scanUrl.substring(scanUrl.lastIndexOf("/")+1);
+//                Log.e(TAG, "code: "+code );
+//                //扫码登录 0:已绑定 1 未绑定
+//                final String equipmentSerialNumber = jsonObject.getString("equipmentSerialNumber");
+//                final String brandStatus = jsonObject.getString("brandStatus");
+//                final String bindStatus = jsonObject.getString("bindStatus");
+//                Intent intent = new Intent(this, BindingEquipmentActivity.class);
+//                intent.putExtra("equipmentSerialNumber", equipmentSerialNumber);
+//                intent.putExtra("brandStatus", brandStatus);
+//                intent.putExtra("code", code);
+//                intent.putExtra("brandStatus", brandStatus);
+//                intent.putExtra("bindStatus", bindStatus);
+//                startActivity(intent);
+//            } else if (result.startsWith("http") || result.equals("https")) {
+//                jupm(this, WebViewActivity.class, "url", result);
+//            }
+//        }
+
+
         if (!TextUtils.isEmpty(result) && (result.contains("equipmentSerialNumber") && result.contains("brandStatus"))) {
             //{"scanUrl":"/management/cloud-system/app/user/scan/loginId","equipmentSerialNumber":"equipmentSerialNumber","brandStatus":"brandStatus"}
             WebViewActivity.start(this, BaseConstant.SCAN_URL, result);
@@ -193,6 +230,34 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     private void vibrate() {
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         vibrator.vibrate(200);
+    }
+
+    private void verify(String checkId,String classesId,String siteId) {
+        HashMap<String, Object> map = new HashMap<>(3);
+        map.put("checkId", checkId);
+        map.put("classesId", classesId);
+        map.put("siteId", siteId);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        DingApiStores dingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
+        dingApiStores.brandVerify(body).enqueue(new Callback<BaseRsp>() {
+            @Override
+            public void onResponse(@NonNull Call<BaseRsp> call, @NonNull Response<BaseRsp> response) {
+                Log.e(TAG, "onResponse: "+response.body());
+                final BaseRsp baseRsp = response.body();
+                if (baseRsp != null){
+                    ToastUtils.showShort(baseRsp.getMsg());
+                }else {
+                    ToastUtils.showShort("验证失败!");
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<BaseRsp> call, @NonNull Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getLocalizedMessage() );
+                ToastUtils.showShort("验证失败!");
+            }
+        });
     }
 
 }
