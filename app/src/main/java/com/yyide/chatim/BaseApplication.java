@@ -89,7 +89,7 @@ public class BaseApplication extends Application {
         if (MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
             initSdk();
         }
-        //initCloudChannel(this);
+        initCloudChannel(this);
     }
 
     /**

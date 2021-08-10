@@ -573,10 +573,10 @@
         <!--阿里云推送-->
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="333472407" />
+            android:value="${alibaba_appkey}" />
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="df808fe4266141bdb471e9b5519c101c" />
+            android:value="${alibaba_appsecret}"/>
         <!-- 消息接收监听器 （用户可自主扩展） -->
         <receiver
             android:name=".alipush.MyMessageReceiver"
