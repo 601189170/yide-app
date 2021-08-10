@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -24,8 +25,13 @@ import com.tencent.qcloud.tim.uikit.utils.TUIKitUtils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SplashActivity;
+import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class MessageNotification {
 
@@ -152,9 +158,8 @@ public class MessageNotification {
         Intent launch;
         // 小米手机需要在设置里面把【云通信IM】的"后台弹出权限"打开才能点击Notification跳转。
         if (isDialing) {
-            launch = new Intent(mContext, MainActivity.class);
+            launch = new Intent(mContext, SplashActivity.class);
             launch.putExtra(Constants.CHAT_INFO, callModel);
-            launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         } else {
             ChatInfo chatInfo = new ChatInfo();
             if (!TextUtils.isEmpty(msg.getGroupID())) {
@@ -167,16 +172,17 @@ public class MessageNotification {
             chatInfo.setChatName(title);
             launch = new Intent(mContext, ChatActivity.class);
             launch.putExtra(Constants.CHAT_INFO, chatInfo);
-            launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        builder.setContentIntent(PendingIntent.getActivity(mContext,
-                (int) SystemClock.uptimeMillis(), launch, PendingIntent.FLAG_UPDATE_CURRENT));
+        launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
+                (int) SystemClock.uptimeMillis(), launch, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
 
         Notification notification = builder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        builder.setAutoCancel(true);
         if (isDialing) {
             notification.flags = Notification.FLAG_INSISTENT;
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            builder.setAutoCancel(true);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                 notification.vibrate = new long[]{0, 1000, 1000, 1000, 1000};
@@ -195,7 +201,7 @@ public class MessageNotification {
             }
         } else {
             mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
-            notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+            //notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 notification.defaults = Notification.DEFAULT_ALL;
             }

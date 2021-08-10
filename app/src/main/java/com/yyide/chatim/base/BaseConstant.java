@@ -44,7 +44,7 @@ public class BaseConstant {
      * 请求ip==>baseUrl
      */
 //    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.147:8888";//Dev 环境
+    //    public static final String API_SERVER_URL_UAT = "http://192.168.3.147:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
 
@@ -82,6 +82,8 @@ public class BaseConstant {
 
     public static final String SP_PRIVACY = "sp_privacy";
 
+    public static final String LOGIN_VERSION_CODE = "login_version_code";
+
     /**
      * EventBus 常量
      */
@@ -92,9 +94,11 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_MESSAGE_TODO = "type_update_message_todo";
 
     public static final String TYPE_MAIN = "type_main";
+    public static final String TYPE_MESSAGE = "type_message";
     public static final String TYPE_IM_LOGIN = "type_im_login";
     public static final String TYPE_MESSAGE_UPDATE = "type_message_update";
     public static final String TYPE_UPDATE_HOME = "type_update_home";
+    public static final String TYPE_REGISTER_UNREAD = "type_register_unread";
     public static final String TYPE_HOME_CHECK_IDENTITY = "type_home_check_identity";
     public static final String TYPE_UPDATE_NOTICE_TAB = "type_update_notice_tab";
     public static final String TYPE_UPDATE_REMOTE_NOTICE = "type_update_remote_notice";

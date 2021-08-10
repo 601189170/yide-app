@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.multidex.MultiDex;
@@ -39,21 +40,25 @@ import com.meizu.cloud.pushsdk.util.MzSystemUtils;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.v2.V2TIMCallback;
+import com.tencent.imsdk.v2.V2TIMConversation;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.vivo.push.PushClient;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.chat.ChatActivity;
 import com.yyide.chatim.chat.MessageNotification;
 import com.yyide.chatim.chat.helper.ConfigHelper;
 import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.BrandUtil;
+import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.PrivateConstants;
 
@@ -71,9 +76,6 @@ import me.jessyan.autosize.utils.AutoSizeLog;
 public class BaseApplication extends Application {
     private static BaseApplication instance;
     private static final String TAG = BaseApplication.class.getSimpleName();
-
-    private final String licenceUrl = "";
-    private final String licenseKey = "";
 
     @Override
     public void onCreate() {
@@ -116,7 +118,7 @@ public class BaseApplication extends Application {
             }
         });
         // 注册方法会自动判断是否支持华为系统推送，如不支持会跳过注册。
-        HuaWeiRegister.register(this);
+        //HuaWeiRegister.register(this);
         // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
         final String XIAOMI_APPID = "2882303761519922795";
         final String XIAOMI_APPKEY = "5201992213795";
@@ -160,7 +162,7 @@ public class BaseApplication extends Application {
     }
 
     public void initSdk() {
-        initAutoSize();
+        //initAutoSize();
         /**
          * TUIKit的初始化函数
          *
@@ -200,14 +202,11 @@ public class BaseApplication extends Application {
             ThirdPushManager.registerImpl(new XiaoMiMsgParseImpl());
         } else if (BrandUtil.isBrandHuawei()) {
             // 华为离线推送，设置是否接收Push通知栏消息调用示例
-            HmsMessaging.getInstance(this).turnOnPush().addOnCompleteListener(new com.huawei.hmf.tasks.OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(com.huawei.hmf.tasks.Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        DemoLog.i(TAG, "huawei turnOnPush Complete");
-                    } else {
-                        DemoLog.e(TAG, "huawei turnOnPush failed: ret=" + task.getException().getMessage());
-                    }
+            HmsMessaging.getInstance(this).turnOnPush().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DemoLog.i(TAG, "huawei turnOnPush Complete");
+                } else {
+                    DemoLog.e(TAG, "huawei turnOnPush failed: ret=" + task.getException().getMessage());
                 }
             });
             ThirdPushManager.registerImpl(new HuaweiMsgParseImpl());
@@ -260,11 +259,16 @@ public class BaseApplication extends Application {
     class StatisticActivityLifecycleCallback implements ActivityLifecycleCallbacks {
         private int foregroundActivities = 0;
         private boolean isChangingConfiguration;
+
         private IMEventListener mIMEventListener = new IMEventListener() {
             @Override
             public void onNewMessage(V2TIMMessage msg) {
-                MessageNotification notification = MessageNotification.getInstance();
-                notification.notify(msg);
+                //处理华为推送两条消息问题
+                if (!BrandUtil.isBrandHuawei()) {
+                    DemoLog.i(TAG, "onNewMessage: " + msg.getMsgID());
+                    MessageNotification notification = MessageNotification.getInstance();
+                    notification.notify(msg);
+                }
             }
         };
 

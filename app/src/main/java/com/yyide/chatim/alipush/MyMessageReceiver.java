@@ -10,6 +10,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.alibaba.fastjson.JSON;
@@ -62,7 +63,7 @@ public class MyMessageReceiver extends MessageReceiver {
     }
 
     @Override
-    public void onMessage(Context context, CPushMessage cPushMessage) {
+    public void onMessage(Context context, @NonNull CPushMessage cPushMessage) {
         Log.e("MyMessageReceiver", "onMessage, messageId: " + cPushMessage.getMessageId() + ", title: " + cPushMessage.getTitle() + ", content:" + cPushMessage.getContent());
     }
 
@@ -176,6 +177,7 @@ public class MyMessageReceiver extends MessageReceiver {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         final String action = intent.getAction();
+        Log.e("MyMessageReceiver", "onNotificationRemoved");
         if (!TextUtils.isEmpty(action) && "notification_clicked".equals(action)) {
             //处理点击事件
             final String extras = intent.getStringExtra("extras");

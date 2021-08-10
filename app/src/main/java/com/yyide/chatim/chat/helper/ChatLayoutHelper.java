@@ -50,9 +50,9 @@ public class ChatLayoutHelper {
 //        // 设置默认头像，默认与朋友与自己的头像相同
 //        messageLayout.setAvatar(R.drawable.ic_more_file);
 //        // 设置头像圆角
-//        messageLayout.setAvatarRadius(50);
+        messageLayout.setAvatarRadius(50);
 //        // 设置头像大小
-//        messageLayout.setAvatarSize(new int[]{48, 48});
+        messageLayout.setAvatarSize(new int[]{48, 48});
 //
 //        ////// 设置昵称样式（对方与自己的样式保持一致）//////
 //        messageLayout.setNameFontSize(12);

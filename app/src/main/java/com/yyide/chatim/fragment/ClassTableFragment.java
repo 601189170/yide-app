@@ -148,7 +148,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             } else {
                 ToastUtils.showShort("您没有其他班级");
             }
-        } else {
+        } else {//校长取全校班级列表
             if (data != null && data.size() > 0) {
                 swichTableClassPop = new SwitchTableClassPop(getActivity(), data);
                 swichTableClassPop.setSelectClasses(this);
@@ -241,6 +241,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     }
                 }
                 tableSectionAdapter.notifyData(sectionlist);
+            } else {
+                //mScrollView.setVisibility(View.GONE);
+                //empty.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -248,7 +251,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //创建"第上下午"视图
     private void createLeftTypeView(int selection, int type, int length) {
 
-        int CouseHeight = SizeUtils.dp2px(75) + 1;
+        int CouseHeight = SizeUtils.dp2px(82) + 1;
         int CouseWith = SizeUtils.dp2px(30);
 
         View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card_type2, null);
@@ -292,10 +295,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             data = model.getData();
-            if (data == null || data.size() <= 0) {
-                mScrollView.setVisibility(View.GONE);
-                empty.setVisibility(View.VISIBLE);
-            }
         }
     }
 

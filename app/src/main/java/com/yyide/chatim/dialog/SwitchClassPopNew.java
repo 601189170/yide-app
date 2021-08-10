@@ -84,13 +84,16 @@ public class SwitchClassPopNew extends PopupWindow {
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
-            adapter.notifyData(removeList(SpData.getIdentityInfo().form));
-            for (int i = 0; i < SpData.getIdentityInfo().form.size(); i++) {
-                if (classBean != null
-                        && classBean.classesId != null
-                        && classBean.classesId.equals(SpData.getIdentityInfo().form.get(i).classesId)) {
-                    index = i;
-                    break;
+            ArrayList<GetUserSchoolRsp.DataBean.FormBean> formBeans = removeList(SpData.getIdentityInfo().form);
+            if (formBeans.size() > 0) {
+                adapter.notifyData(formBeans);
+                for (int i = 0; i < formBeans.size(); i++) {
+                    if (classBean != null
+                            && classBean.classesId != null
+                            && classBean.classesId.equals(formBeans.get(i).classesId)) {
+                        index = i;
+                        break;
+                    }
                 }
             }
         }

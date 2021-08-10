@@ -26,9 +26,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
@@ -379,12 +381,16 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     @Override
     public void getAccountSwitch(LoginAccountBean model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {//1开启 0关闭
-            if (model.getData() != null && "1".equals(model.getData().getValue())) {
-                forgot.setText(model.getData().getName());
-                isForget = true;
-            } else {
-                isForget = false;
-                forgot.setText(R.string.forget);
+            int versionCode = MMKV.defaultMMKV().decodeInt(BaseConstant.LOGIN_VERSION_CODE);
+            if (AppUtils.getAppVersionCode() > versionCode) {
+                MMKV.defaultMMKV().encode(BaseConstant.LOGIN_VERSION_CODE, AppUtils.getAppVersionCode());
+                if (model.getData() != null && "1".equals(model.getData().getValue())) {
+                    forgot.setText(model.getData().getName());
+                    isForget = true;
+                } else {
+                    isForget = false;
+                    forgot.setText(R.string.forget);
+                }
             }
         }
     }

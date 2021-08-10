@@ -114,13 +114,13 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         conversationList.disableItemUnreadDot(false);// 设置 item 是否不显示未读红点，默认显示
         // 通过API设置ConversataonLayout各种属性的样例，开发者可以打开注释，体验效果\
 //        ConversationLayoutHelper.customizeConversation(mConversationLayout);
-
+        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_REGISTER_UNREAD, ""));
         conversationList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
-                    getMessageList();
+                   //getMessageList();
                 }
             }
         });
@@ -132,7 +132,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             public void onNewConversation(List<V2TIMConversation> conversationList) {
                 ConversationManagerKit.getInstance().onRefreshConversation(conversationList);
                 //updateConversation(conversationList, false);
-
             }
 
             // 3.2 收到会话更新的回调
@@ -180,7 +179,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     private long nextSeq = 0;
 
     private void getMessageList() {
-        V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
+        V2TIMManager.getConversationManager().getConversationList(nextSeq, 1000, new V2TIMSendCallback<V2TIMConversationResult>() {
             @Override
             public void onProgress(int progress) {
 
@@ -193,24 +192,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
             @Override
             public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-                nextSeq = v2TIMConversationResult.getNextSeq();
                 // 拉取成功，更新 UI 会话列表
                 ConversationManagerKit.getInstance().onRefreshConversation(v2TIMConversationResult.getConversationList());
-                if (!v2TIMConversationResult.isFinished()) {
-                    V2TIMManager.getConversationManager().getConversationList(
-                            v2TIMConversationResult.getNextSeq(), 100,
-                            new V2TIMValueCallback<V2TIMConversationResult>() {
-                                @Override
-                                public void onError(int code, String desc) {
-                                }
-
-                                @Override
-                                public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-                                    // 拉取成功，更新 UI 会话列表
-                                    ConversationManagerKit.getInstance().onRefreshConversation(v2TIMConversationResult.getConversationList());
-                                }
-                            });
-                }
             }
         });
     }

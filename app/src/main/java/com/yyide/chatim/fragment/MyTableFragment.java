@@ -75,7 +75,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @OnClick(R.id.tv_week)
     public void send() {
-        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
+        //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
     }
 
     @Override
@@ -104,17 +104,14 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             adapter.setList(getTableList(list, position + 1));
         });
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                //处理学生无法点击查看备课
-                if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-                    SelectSchByTeaidRsp.DataBean item = (SelectSchByTeaidRsp.DataBean) adapter.getItem(position);
-                    Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
-                    intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
-                    intent.putExtra("dataBean", item);
-                    startActivity(intent);
-                }
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            //处理学生无法点击查看备课
+            if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+                SelectSchByTeaidRsp.DataBean item = (SelectSchByTeaidRsp.DataBean) adapter.getItem(position);
+                Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
+                intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
+                intent.putExtra("dataBean", item);
+                startActivity(intent);
             }
         });
         classlayout.setVisibility(View.GONE);

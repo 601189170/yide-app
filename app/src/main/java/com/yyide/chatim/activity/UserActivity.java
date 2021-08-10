@@ -91,7 +91,6 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     private String realname;
     private long depId;
     private String studentId;
-    private boolean isStudent;
 
     @Override
     public int getContentViewID() {
@@ -133,7 +132,6 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     }
 
     private void setUserInfo() {
-        isStudent = false;
         userInfo = SpData.getIdentityInfo();
         if (userInfo != null) {
             GlideUtil.loadImageHead(this, userInfo.img, img);
@@ -146,13 +144,12 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     }
 
     private void setStudentInfo() {
-        isStudent = true;
         tvHeadDesc.setText("学生头像");
         studentInfo = SpData.getClassInfo();
         userInfo = SpData.getIdentityInfo();
         fl_patriarch.setVisibility(View.VISIBLE);
         fl_patriarch.setOnClickListener(v -> {
-            isStudent = false;
+            isStudent = true;
             rxPermission();
         });
         if (studentInfo != null) {
@@ -189,6 +186,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                         && studentInfo == null) {
                     ToastUtils.showShort("未绑定学生信息");
                 } else {
+                    isStudent = false;
                     rxPermission();
                 }
                 break;
@@ -299,7 +297,15 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                     @Override
                     public void onSuccess(File file) {
                         // TODO 压缩成功后调用，返回压缩后的图片文件
-                        mvpPresenter.uploadFile(file, isStudent);
+                        Long studentId = null;
+                        if (!isStudent) {
+                            if (SpData.getIdentityInfo() != null
+                                    && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)
+                                    && studentInfo != null && !TextUtils.isEmpty(studentInfo.studentId)) {
+                                studentId = Long.parseLong(SpData.getClassInfo().studentId);
+                            }
+                        }
+                        mvpPresenter.uploadFile(file, studentId);
                     }
 
                     @Override
@@ -308,9 +314,9 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                         hideLoading();
                         ToastUtils.showShort("图片压缩失败请重试");
                     }
-                }).launch();
+                }).
+                launch();
     }
-
 
     @Override
     public void showError() {
@@ -343,28 +349,33 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         ToastUtils.showShort(msg);
     }
 
+    private boolean isStudent = false;
+
     @Override
     public void uploadFileSuccess(String imgUrl) {
-        if (isStudent
-                && SpData.getClassInfo() != null
+        if (SpData.getClassInfo() != null
                 && SpData.getIdentityInfo() != null
                 && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-            GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-            classInfo.studentPic = imgUrl;
-            SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classInfo));
-            SpData.setClassesInfo(classInfo);
-        } else {
+            if (isStudent) {//家长身份头像
+                if (userInfo != null) {//设置身份头像
+                    userInfo.img = imgUrl;
+                    SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+                }
+                GlideUtil.loadImageHead(this, imgUrl, patriarchImg);
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
+            } else {//学生头像
+                GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+                classInfo.studentPic = imgUrl;
+                SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classInfo));
+                SpData.setClassesInfo(classInfo);
+                GlideUtil.loadImageHead(this, imgUrl, img);
+            }
+        } else {//除家长身份外其他身份头像
             if (userInfo != null) {
                 userInfo.img = imgUrl;
                 SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             }
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
-        }
-        if (!isStudent
-                && SpData.getIdentityInfo() != null
-                && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-            GlideUtil.loadImageHead(this, imgUrl, patriarchImg);
-        } else {
             GlideUtil.loadImageHead(this, imgUrl, img);
         }
     }

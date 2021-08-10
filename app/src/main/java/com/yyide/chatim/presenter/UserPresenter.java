@@ -72,7 +72,7 @@ public class UserPresenter extends BasePresenter<UserView> {
      * @param file
      * @param isStudent
      */
-    public void uploadFile(File file, boolean isStudent) {
+    public void uploadFile(File file, Long studentId) {
         if (file == null) {
             return;
         }
@@ -82,10 +82,6 @@ public class UserPresenter extends BasePresenter<UserView> {
         // 创建MultipartBody.Part，用于封装文件数据
         MultipartBody.Part requestImgPart =
                 MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody);
-        Long studentId = null;
-        if (isStudent && SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentId)) {
-            studentId = Long.parseLong(SpData.getClassInfo().studentId);
-        }
         addSubscription(dingApiStores.uploadImg(requestImgPart, studentId), new ApiCallback<UploadRep>() {
             @Override
             public void onSuccess(UploadRep model) {

@@ -109,17 +109,14 @@ public class SwitchTableClassPop extends PopupWindow {
         popupWindow.setBackgroundDrawable(null);
         popupWindow.getContentView().setFocusable(true);
         popupWindow.getContentView().setFocusableInTouchMode(true);
-        popupWindow.getContentView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (popupWindow != null && popupWindow.isShowing()) {
-                        popupWindow.dismiss();
-                    }
-                    return true;
+        popupWindow.getContentView().setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    popupWindow.dismiss();
                 }
-                return false;
+                return true;
             }
+            return false;
         });
 
         // 获取当前Activity的window

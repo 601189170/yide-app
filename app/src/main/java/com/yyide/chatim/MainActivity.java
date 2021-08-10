@@ -2,7 +2,6 @@ package com.yyide.chatim;
 
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,24 +10,19 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -93,10 +87,8 @@ import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.BrandUtil;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
-import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.LogUtil;
 import com.yyide.chatim.utils.PrivateConstants;
-import com.yyide.chatim.utils.TakePicUtil;
 import com.yyide.chatim.view.DialogUtil;
 import com.yyide.chatim.view.MainView;
 import com.yyide.chatim.widget.LoadingButton;
@@ -116,8 +108,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 
 public class MainActivity extends BaseMvpActivity<MainPresenter> implements ConversationManagerKit.MessageUnreadWatcher, MainView, HomeFragment.FragmentListener {
 
@@ -176,7 +166,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         //登录IM
         //处理失败时点击切换重新登录IM
         prepareThirdPushToken();
-
+        //ConversationManagerKit.getInstance().addUnreadWatcher(this);
         //离线消息推送处理
         final String extras = getIntent().getStringExtra("extras");
         if (!TextUtils.isEmpty(extras)) {
@@ -295,10 +285,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             //registerAlias();
             AliasUtil.syncAliases();
+        } else if (BaseConstant.TYPE_REGISTER_UNREAD.equals(messageEvent.getCode())) {
             //ConversationManagerKit.getInstance().addUnreadWatcher(this);
         } else if (BaseConstant.TYPE_MAIN.equals(messageEvent.getCode())) {
             ActivityUtils.finishToActivity(MainActivity.class, false);
             setTab(0, 0);
+        } else if(BaseConstant.TYPE_MESSAGE.equals(messageEvent.getCode())){
+            setTab(1, 0);
         } else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
             //模拟数据测试应用更新
             // mvpPresenter.getVersionInfo();
@@ -430,7 +423,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private int todoCount = 0;//代办数量
 
     private void setMessageCount(int count) {
-        Log.e("Chatim", "setMessageCount==>: " + count);
+        //Log.e("Chatim", "setMessageCount==>: " + count);
         if (count > 0) {
             msgTotalUnread.setVisibility(View.VISIBLE);
         } else {
@@ -579,6 +572,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         tab2.setChecked(false);
         tab3.setChecked(false);
         tab4.setChecked(false);
+        tab1Layout.setEnabled(true);
+        tab2Layout.setEnabled(true);
+        tab3Layout.setEnabled(true);
+        tab4Layout.setEnabled(true);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
@@ -599,17 +596,22 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 } else
                     ft.show(fg1);
                 tab1.setChecked(true);
+                tab1Layout.setEnabled(false);
                 break;
             case 1:
-                if (fg2 == null) {
-                    fg2 = new MessageFragment();
-                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
-                } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", type);
-                    fg2.setArguments(bundle);
-                    ft.show(fg2);
-                }
+//                if (fg2 == null) {
+//                    fg2 = new MessageFragment();
+//                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
+//                } else {
+                //Fragment already added and state has been saved
+                fg2 = new MessageFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", type);
+                fg2.setArguments(bundle);
+                ft.replace(R.id.content, fg2, String.valueOf(tab2.getId()));
+                ft.show(fg2);
+//                }
+                tab2Layout.setEnabled(false);
                 tab2.setChecked(true);
                 break;
             case 2:
@@ -618,19 +620,35 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     ft.add(R.id.content, fg3, String.valueOf(tab3.getId()));
                 } else
                     ft.show(fg3);
+                tab3Layout.setEnabled(false);
                 tab3.setChecked(true);
                 break;
             case 3:
                 if (fg4 == null) {
                     fg4 = new HelpFragment();
-                    ft.add(R.id.content, fg4, String.valueOf(tab3.getId()));
+                    ft.add(R.id.content, fg4, String.valueOf(tab4.getId()));
                 } else
                     ft.show(fg4);
+
                 tab4.setChecked(true);
+                tab4Layout.setEnabled(false);
                 break;
 
         }
         ft.commitAllowingStateLoss();
+    }
+
+    private void setTabCheck(int position) {
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
     }
 
     @Override

@@ -180,8 +180,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             previewBinding.icClose.setOnClickListener(v -> dialog.dismiss());
 //        dialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
             dialog.getWindow().setAttributes(p);//设置生效
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (ScreenUtils.getScreenHeight() * 0.6));
-            layoutParams.bottomMargin = SizeUtils.dp2px(20);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) (ScreenUtils.getScreenHeight() * 0.65));
+            layoutParams.bottomMargin = SizeUtils.dp2px(10);
             previewBinding.cardView.setLayoutParams(layoutParams);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setOnDismissListener(dialog -> {
@@ -404,8 +404,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
             SpData.setIdentityInfo(rsp);
         }
-        setSchoolInfo();
-        replaceFragment();
+        //setSchoolInfo();
+        //replaceFragment();
     }
 
     void setSchoolInfo() {

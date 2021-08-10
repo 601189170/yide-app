@@ -19,7 +19,6 @@ import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageHelper;
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.base.BaseConstant;

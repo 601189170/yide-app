@@ -95,13 +95,13 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
 //                videoView1.setAutoFullWithSize(true);
                 //增加封面
-                ImageView imageView = new ImageView(holder.itemView.getContext());
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Glide.with(imageView)
-                        .load(itemBean.getVideo())
-                        .into(imageView);
-
-                videoView1.setThumbImageView(imageView);
+//                ImageView imageView = new ImageView(holder.itemView.getContext());
+//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                Glide.with(imageView)
+//                        .load(itemBean.getVideo())
+//                        .into(imageView);
+//
+//                videoView1.setThumbImageView(imageView);
                 videoView1.setUp(itemBean.getVideo(), true, "");
                 break;
         }

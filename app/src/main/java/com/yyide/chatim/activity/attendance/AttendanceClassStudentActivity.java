@@ -68,9 +68,11 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         return new SchoolGradePresenter(this);
     }
 
+    private int index;
+
     private void setDataView() {
         schoolPeopleAllFormBean = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean) getIntent().getSerializableExtra("students");
-        int index = getIntent().getIntExtra("index", 0);
+        index = getIntent().getIntExtra("index", 0);
         if (schoolPeopleAllFormBean != null && schoolPeopleAllFormBean.getGradeList().size() > 0) {
             if (index < schoolPeopleAllFormBean.getGradeList().size()) {
                 gradeListBean = schoolPeopleAllFormBean.getGradeList().get(index);
@@ -175,8 +177,14 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         viewBinding.swipeRefreshLayout.setRefreshing(false);
         if (model.code == BaseConstant.REQUEST_SUCCES2) {
             if (model.data != null) {
-                for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem : model.data.schoolPeopleAllForm) {
-                    if (schoolItem.getGradeList() != null) {
+                if (model.data.schoolPeopleAllForm != null && model.data.schoolPeopleAllForm.size() > 0) {
+                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem;
+                    if (model.data.schoolPeopleAllForm.size() < index) {
+                        schoolItem = model.data.schoolPeopleAllForm.get(index);
+                    } else {
+                        schoolItem = model.data.schoolPeopleAllForm.get(0);
+                    }
+                    if (schoolItem != null && schoolItem.getGradeList() != null) {
                         for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
                             gradeItem.goOutStatus = schoolItem.goOutStatus;
                             if (gradeItem.gradeId == gradeListBean.gradeId) {
@@ -184,8 +192,8 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
                             }
                         }
                     }
+                    setData();
                 }
-                setData();
             }
         }
     }
