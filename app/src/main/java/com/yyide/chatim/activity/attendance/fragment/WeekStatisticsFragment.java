@@ -527,7 +527,8 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         }
         if (attendanceWeekStatsRsp.getCode() == 200) {
             if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getAttendancesForm() == null) {
-                showBlank(true);
+                //showBlank(true);
+                showData(null);
                 return;
             }
             showBlank(false);
