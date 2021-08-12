@@ -251,7 +251,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //创建"第上下午"视图
     private void createLeftTypeView(int selection, int type, int length) {
 
-        int CouseHeight = SizeUtils.dp2px(82) + 1;
+        int CouseHeight = SizeUtils.dp2px(75) + 1;
         int CouseWith = SizeUtils.dp2px(30);
 
         View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card_type2, null);

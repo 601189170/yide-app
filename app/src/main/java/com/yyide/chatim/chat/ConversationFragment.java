@@ -1,6 +1,7 @@
 package com.yyide.chatim.chat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -120,7 +122,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
-                   //getMessageList();
+                    //getMessageList();
                 }
             }
         });
@@ -261,6 +263,12 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void onStart() {
         super.onStart();
         initView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MessageNotification.getInstance().cancelNotification();
     }
 
     /**

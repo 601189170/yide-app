@@ -88,10 +88,26 @@ public class BaseApplication extends Application {
         Utils.init(this);
         MultiDex.install(this);
         MMKV.initialize(this); //初始化mmkv
+
         if (MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
             initSdk();
         }
         initCloudChannel(this);
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        if (context != null) {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo info = cm.getActiveNetworkInfo();
+            if (info != null) {
+                return info.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    public static BaseApplication getInstance() {
+        return instance;
     }
 
     /**
@@ -118,7 +134,7 @@ public class BaseApplication extends Application {
             }
         });
         // 注册方法会自动判断是否支持华为系统推送，如不支持会跳过注册。
-        //HuaWeiRegister.register(this);
+        HuaWeiRegister.register(this);
         // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
         final String XIAOMI_APPID = "2882303761519922795";
         final String XIAOMI_APPKEY = "5201992213795";
@@ -222,38 +238,20 @@ public class BaseApplication extends Application {
             ThirdPushManager.registerImpl(new OppoMsgParseImpl());
         } else if (BrandUtil.isGoogleServiceSupport()) {
             FirebaseInstanceId.getInstance().getInstanceId()
-                    .addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<InstanceIdResult>() {
-                        @Override
-                        public void onComplete(Task<InstanceIdResult> task) {
-                            if (!task.isSuccessful()) {
-                                DemoLog.w(TAG, "getInstanceId failed exception = " + task.getException());
-                                return;
-                            }
-
-                            // Get new Instance ID token
-                            String token = task.getResult().getToken();
-                            DemoLog.i(TAG, "google fcm getToken = " + token);
-
-                            ThirdPushTokenMgr.getInstance().setThirdPushToken(token);
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            DemoLog.w(TAG, "getInstanceId failed exception = " + task.getException());
+                            return;
                         }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        DemoLog.i(TAG, "google fcm getToken = " + token);
+
+                        ThirdPushTokenMgr.getInstance().setThirdPushToken(token);
                     });
         }
         registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
-    }
-
-    public static boolean isNetworkAvailable(Context context) {
-        if (context != null) {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo info = cm.getActiveNetworkInfo();
-            if (info != null) {
-                return info.isAvailable();
-            }
-        }
-        return false;
-    }
-
-    public static BaseApplication getInstance() {
-        return instance;
     }
 
     class StatisticActivityLifecycleCallback implements ActivityLifecycleCallbacks {
@@ -264,11 +262,11 @@ public class BaseApplication extends Application {
             @Override
             public void onNewMessage(V2TIMMessage msg) {
                 //处理华为推送两条消息问题
-                if (!BrandUtil.isBrandHuawei()) {
-                    DemoLog.i(TAG, "onNewMessage: " + msg.getMsgID());
-                    MessageNotification notification = MessageNotification.getInstance();
-                    notification.notify(msg);
-                }
+                //if (!BrandUtil.isBrandHuawei()) {
+                DemoLog.i(TAG, "onNewMessage: " + msg.getMsgID());
+                MessageNotification notification = MessageNotification.getInstance();
+                notification.notify(msg);
+                //}
             }
         };
 

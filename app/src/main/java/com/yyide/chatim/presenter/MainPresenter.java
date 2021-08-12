@@ -36,7 +36,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public void getVersionInfo() {
         Map<String, String> map = new HashMap<>();
-        map.put("terminal", "Android");
+        map.put("terminal", "2");//terminal【0：全部，1：IOS，2：Android，3：WEB，4：班牌】
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
         addSubscription(dingApiStores.updateVersion(body), new ApiCallback<GetAppVersionResponse>() {
             @Override

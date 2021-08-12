@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -139,7 +140,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
     public String TAG = "MainActivity";
-
+    private boolean isShow = false;
     private long firstTime = 0;
     private CallModel mCallModel;
 
@@ -147,7 +148,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public int getContentViewID() {
         return R.layout.activity_main;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +161,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         setTab(1, 0);
         setTab(0, 0);
         //注册极光别名
-        //registerAlias();
+//        registerAlias();
         AliasUtil.syncAliases();
         //登录IM
         //处理失败时点击切换重新登录IM
@@ -179,7 +179,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
 
         //应用更新检测
-        //new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 3000);
+        new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 3000);
         //检查是否开启消息通知
         showNotificationPermission();
     }
@@ -290,11 +290,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         } else if (BaseConstant.TYPE_MAIN.equals(messageEvent.getCode())) {
             ActivityUtils.finishToActivity(MainActivity.class, false);
             setTab(0, 0);
-        } else if(BaseConstant.TYPE_MESSAGE.equals(messageEvent.getCode())){
+        } else if (BaseConstant.TYPE_MESSAGE.equals(messageEvent.getCode())) {
             setTab(1, 0);
         } else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
             //模拟数据测试应用更新
-            // mvpPresenter.getVersionInfo();
+            isShow = true;
+            mvpPresenter.getVersionInfo();
         } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
             todoCount = messageEvent.getCount();
             setMessageCount(todoCount + messageCount + noticeCount);
@@ -445,7 +446,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     public void getVersionInfo(GetAppVersionResponse rsp) {
         Log.e("TAG", "getData==》: " + JSON.toJSONString(rsp));
         if (rsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            download(rsp.getData());
+            if (rsp.getData() != null) {
+                download(rsp.getData());
+            } else if (isShow) {
+                ToastUtils.showShort(R.string.newestVersion);
+            }
         }
     }
 
@@ -761,36 +766,35 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private void download(GetAppVersionResponse.DataBean data) {
         LogUtil.d("download", "device:" + AppUtils.getAppVersionCode() + "  data:" + data.versionCode);
 //        if (AppUtils.getAppVersionName() != data.versionCode) {
-        if (AppUtils.getAppVersionName().compareTo(data.versionCode) < 0) {
+//        if (AppUtils.getAppVersionName().compareTo(data.versionCode) < 0) {
+        if (AppUtils.getAppVersionName().compareTo("1.0.5") < 0) {
             NiceDialog.init().setLayoutId(R.layout.dialog_update).setConvertListener(new ViewConvertListener() {
                 @Override
                 protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
                     TextView tv = holder.getView(R.id.tv);
-                    holder.getView(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
+                    TextView cancel = holder.getView(R.id.tv_cancel);
+                    cancel.setOnClickListener(v -> dialog.dismiss());
                     tv.setText(data.versionDesc);
                     ((TextView) holder.getView(R.id.tv)).setMovementMethod(new ScrollingMovementMethod());
                     LoadingButton btnUpdate = holder.getView(R.id.btn_update);
-                    downloadOrInstall(btnUpdate, data);
+                    downloadOrInstall(btnUpdate, cancel, data);
+                    cancel.setVisibility(data.isCompulsory == 0 ? View.VISIBLE : View.GONE);
                 }
             }).setDimAmount(0.5f).setOutCancel(data.isCompulsory == 0).show(getSupportFragmentManager());
-        } else {
+        } else if (isShow) {
             ToastUtils.showShort(R.string.newestVersion);
         }
     }
 
     private long max1;
 
-    private void downloadOrInstall(LoadingButton btnUpdate, GetAppVersionResponse.DataBean data) {
+    private void downloadOrInstall(LoadingButton btnUpdate, TextView cancel, GetAppVersionResponse.DataBean data) {
         btnUpdate.setOnClickListener(v -> {
             RxPermissions rxPermissions = new RxPermissions(this);
             mDisposable = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
                 if (granted) {
                     //后台下载APK并更新
+                    cancel.setVisibility(View.GONE);
                     btnUpdate.startLoading("");
                     btnUpdate.setClickable(false);
                     AppClient.downloadFile("yide_app", data.filePath, new AppClient.DownloadListener() {
@@ -798,7 +802,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                         public void onStart(long max) {
                             max1 = max;
                             //ToastUtils.showShort("开始下载");
-                            btnUpdate.stopLoading("start");
+                            runOnUiThread(() -> btnUpdate.stopLoading("start"));
                         }
 
                         @Override
@@ -836,10 +840,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                                 if (file.exists()) {
                                     file.delete();
                                 }
-                                downloadOrInstall(btnUpdate, data);
+                                downloadOrInstall(btnUpdate, cancel, data);
+                                btnUpdate.setClickable(true);
+                                btnUpdate.stopLoading("点击重试");
                             });
-                            btnUpdate.setClickable(true);
-                            btnUpdate.stopLoading("点击重试");
                             ToastUtils.showShort("更新失败");
                         }
                     });

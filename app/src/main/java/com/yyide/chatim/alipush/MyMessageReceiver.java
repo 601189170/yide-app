@@ -18,6 +18,7 @@ import com.alibaba.sdk.android.push.MessageReceiver;
 import com.alibaba.sdk.android.push.notification.BasicCustomPushNotification;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
 import com.alibaba.sdk.android.push.notification.CustomNotificationBuilder;
+import com.alibaba.sdk.android.push.notification.PushData;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.MainActivity;

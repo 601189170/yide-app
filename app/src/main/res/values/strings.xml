@@ -36,6 +36,7 @@
     <string name="allow_type_deny_any">拒绝任何人</string>
     <string name="allow_type_need_confirm">需要验证</string>
     <string name="exit">退出登录</string>
+
     <string name="about_im">关于即时通信IM</string>
 
     // 主页Tab相关
@@ -261,4 +262,7 @@
     <string name="back_homepage">返回首页</string>
     <string name="login_success">登陆成功</string>
     <string name="search_class_brand_name">请输入横屏/竖屏班牌名称</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

@@ -164,7 +164,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     private int debugOrRelease = 0;
 
-    @OnClick({R.id.forgot, R.id.tv_login, R.id.eye, R.id.type, R.id.post_code, R.id.del, R.id.logo})
+    @OnClick({R.id.forgot, R.id.btn_login, R.id.eye, R.id.type, R.id.post_code, R.id.del, R.id.logo})
     void click(View view) {
         switch (view.getId()) {
             case R.id.logo:
@@ -188,7 +188,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                     startActivity(new Intent(this, RegisterActivity.class));
                 }
                 break;
-            case R.id.tv_login:
+            case R.id.btn_login:
                 //startActivity(new Intent(this, StatisticsActivity.class));
                 login();
                 break;

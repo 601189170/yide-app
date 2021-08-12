@@ -125,7 +125,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                     R.string.notice_toDay,
                     DateUtils.formatTime(
                         model.data.timerDate,
-                        "yyyy-MM-dd HH:mm:ss",
+                        "yyyy-MM-dd HH:mm",
                         "HH:mm"
                     )
                 )
@@ -140,7 +140,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                     R.string.notice_yesterday,
                     DateUtils.formatTime(
                         model.data.timerDate,
-                        "yyyy-MM-dd HH:mm:ss",
+                        "yyyy-MM-dd HH:mm",
                         "HH:mm"
                     )
                 )

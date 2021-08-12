@@ -65,6 +65,13 @@ public class MessageNotification {
         return sNotification;
     }
 
+    public void cancelNotification() {
+        if (mManager != null) {
+            mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
+            mManager.cancel(NOTIFICATION_CHANNEL_COMMON, NOTIFICATION_ID_COMMON);
+        }
+    }
+
     private void createNotificationChannel(boolean isDialing) {
         if (mManager == null) {
             return;
@@ -120,7 +127,7 @@ public class MessageNotification {
             } else {
                 builder = new Notification.Builder(mContext, NOTIFICATION_CHANNEL_COMMON);
             }
-            builder.setTimeoutAfter(DIALING_DURATION);
+            //builder.setTimeoutAfter(DIALING_DURATION);
         } else {
             builder = new Notification.Builder(mContext);
         }
@@ -187,16 +194,13 @@ public class MessageNotification {
                 notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                 notification.vibrate = new long[]{0, 1000, 1000, 1000, 1000};
                 // 避免对端应用死掉导致本端一直响铃
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
-                        builder.setContentText(BaseApplication.getInstance().getString(R.string.call_nos));
-                        Notification lastNotification = builder.build();
-                        lastNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-                        lastNotification.defaults = Notification.DEFAULT_ALL;
-                        mManager.notify(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL, lastNotification);
-                    }
+                mHandler.postDelayed(() -> {
+                    mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
+                    builder.setContentText(BaseApplication.getInstance().getString(R.string.call_nos));
+                    Notification lastNotification = builder.build();
+                    lastNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+                    lastNotification.defaults = Notification.DEFAULT_ALL;
+                    mManager.notify(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL, lastNotification);
                 }, DIALING_DURATION);
             }
         } else {
@@ -206,7 +210,6 @@ public class MessageNotification {
                 notification.defaults = Notification.DEFAULT_ALL;
             }
         }
-
         mManager.notify(tag, id, notification);
     }
 

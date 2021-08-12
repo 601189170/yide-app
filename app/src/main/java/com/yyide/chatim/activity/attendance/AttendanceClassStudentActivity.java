@@ -144,7 +144,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         Iterator<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean> sListIterator = list.iterator();
         while (sListIterator.hasNext()) {
             AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean item = sListIterator.next();
-            if (item.getNumber() == 0) {
+            if (item.getNumber() <= 0) {
                 sListIterator.remove();
             }
             if (gradeListBean != null) {
@@ -179,16 +179,14 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
             if (model.data != null) {
                 if (model.data.schoolPeopleAllForm != null && model.data.schoolPeopleAllForm.size() > 0) {
                     AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem;
-                    if (model.data.schoolPeopleAllForm.size() < index) {
-                        schoolItem = model.data.schoolPeopleAllForm.get(index);
-                    } else {
-                        schoolItem = model.data.schoolPeopleAllForm.get(0);
-                    }
-                    if (schoolItem != null && schoolItem.getGradeList() != null) {
-                        for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
-                            gradeItem.goOutStatus = schoolItem.goOutStatus;
-                            if (gradeItem.gradeId == gradeListBean.gradeId) {
-                                gradeListBean = gradeItem;
+                    if (schoolPeopleAllFormBean != null) {
+                        for (int i = 0; i < model.data.schoolPeopleAllForm.size(); i++) {
+                            schoolItem = model.data.schoolPeopleAllForm.get(i);
+                            for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
+                                gradeItem.goOutStatus = schoolItem.goOutStatus;
+                                if (gradeItem.gradeId == gradeListBean.gradeId) {
+                                    gradeListBean = gradeItem;
+                                }
                             }
                         }
                     }

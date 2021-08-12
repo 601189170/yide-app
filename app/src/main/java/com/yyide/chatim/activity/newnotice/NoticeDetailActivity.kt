@@ -177,8 +177,8 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         }
         detailBinding!!.tvRead.text = getString(
             R.string.dividing_line,
-            (item.totalNum - item.confirmOrReadNum),
-            item.confirmOrReadNum
+            item.confirmOrReadNum,
+            item.totalNum
         )
 
 //            detailBinding!!.tvRead.text = item.
@@ -188,9 +188,14 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
             detailBinding!!.btnCommit.visibility = View.VISIBLE
             detailBinding!!.clReadUnread.visibility = View.GONE
         } else {
-            if (item.totalNum <= 0) {
-                detailBinding!!.clReadUnread.visibility = View.GONE
+            if (item.isTimer) {//定时发布处理 未发布的不展示确认人数
+                val times = DateUtils.parseTimestamp(item.timerDate, "yyyy-MM-dd HH:mm:ss")
+                if (times >= System.currentTimeMillis())
+                    detailBinding!!.clReadUnread.visibility = View.GONE
             }
+            if (item.totalNum <= 0)
+                detailBinding!!.clReadUnread.visibility = View.GONE
+
             detailBinding!!.btnToWithdraw.visibility = View.VISIBLE
             detailBinding!!.btnCommit.visibility = View.GONE
         }

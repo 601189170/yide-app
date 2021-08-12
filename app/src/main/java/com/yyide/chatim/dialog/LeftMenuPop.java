@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tbruyelle.rxpermissions3.RxPermissions;
@@ -59,6 +60,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private TextView user_identity;
     private TextView user_name;
     private TextView tv_cache;
+    private TextView tvVersion;
     private ImageView head_img;
     private ImageView ivClass, ivIdentity;
     private TextView my_info;
@@ -88,6 +90,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         my_info = mView.findViewById(R.id.my_info);
         ivClass = mView.findViewById(R.id.iv_class);
         ivIdentity = mView.findViewById(R.id.iv_identity);
+        tvVersion = mView.findViewById(R.id.tv_version);
         mView.findViewById(R.id.iv_close).setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
@@ -170,6 +173,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private void setData() {
         context.runOnUiThread(() -> {
             setCache();
+            tvVersion.setText("V" + AppUtils.getAppVersionName());
             if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
                 ivClass.setVisibility(View.VISIBLE);
                 layout1.setEnabled(true);
@@ -287,8 +291,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 setCache();
                 break;
             case R.id.layout8://版本更新
-                ToastUtils.showShort("已是最新版本");
-                //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
+//                ToastUtils.showShort("已是最新版本");
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP, ""));
                 break;
             case R.id.layout9:
                 break;
