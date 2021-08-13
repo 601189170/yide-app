@@ -462,7 +462,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                         showImage(listBean.getImage(),iv_user_head);
                         tv_copyer_name.setText(name);
                         ll_copyer_list.addView(view1);
-                        setViewLayoutParams(view1, StatusBarUtils.dip2px(getContext(),45),0);
+                        //setViewLayoutParams(view1, StatusBarUtils.dip2px(getContext(),45),0);
                     }
                 }
                 //更多

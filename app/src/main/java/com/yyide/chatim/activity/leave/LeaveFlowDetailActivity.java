@@ -331,7 +331,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                     tv_copyer_name.setText(listBean.getName());
                     showImage(listBean.getImage(), iv_user_head);
                     ll_copyer_list.addView(view1);
-                    setViewLayoutParams(view1, StatusBarUtils.dip2px(this, 45), 0);
+                    //setViewLayoutParams(view1, StatusBarUtils.dip2px(this, 45), 0);
                 }
             }
             if (leaveFlowCopyerList.size() > 3) {
