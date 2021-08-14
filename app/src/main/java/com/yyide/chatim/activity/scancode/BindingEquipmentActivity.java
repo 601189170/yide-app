@@ -10,6 +10,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.databinding.ActivityBindingEquipmentBinding;
+import com.yyide.chatim.model.ActivateRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.presenter.scan.BindingEquipmentPresenter;
@@ -28,6 +29,8 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
     private String registrationCode;
     private String code;
     private String brandStatus;
+    private String activateState;
+    private String activateCode;
 
     @Override
     public int getContentViewID() {
@@ -51,6 +54,10 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
         binding.btnGetRegisterCode.setOnClickListener(v -> {
             mvpPresenter.getRegistrationCodeByOffice();
         });
+        //获取激活码
+        binding.btnActiveCode.setOnClickListener(v -> {
+            mvpPresenter.findActivationCode(equipmentSerialNumber);
+        });
         binding.btnEnter.setOnClickListener(v -> {
             if ("0".equals(bindStatus)) {
                 Intent intent1 = new Intent(this, ConfirmLoginActivity.class);
@@ -63,6 +70,10 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
             //去绑定设备
             if (TextUtils.isEmpty(id) || TextUtils.isEmpty(registrationCode)) {
                 ToastUtils.showShort("您还没有获取注册码！");
+                return;
+            }
+            if (TextUtils.isEmpty(activateState) || ("1".equals(activateState) && TextUtils.isEmpty(activateCode))){
+                ToastUtils.showShort("您还没有获取激活码！");
                 return;
             }
             mvpPresenter.updateRegistrationCodeByCode(id, "1", equipmentSerialNumber, registrationCode);
@@ -117,5 +128,33 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
     @Override
     public void updateRegistrationCodeFail(String msg) {
         Log.e(TAG, "updateRegistrationCodeFail: " + msg);
+    }
+
+    @Override
+    public void findActivationCodeSuccess(ActivateRsp activateRsp) {
+        Log.e(TAG, "findActivationCodeSuccess: "+activateRsp.toString() );
+        if (activateRsp.getCode() == 200) {
+            final ActivateRsp.DataBean data = activateRsp.getData();
+            if (data == null){
+                return;
+            }
+            activateState = data.getActivateState();
+            activateCode = data.getActivateCode();
+            //激活状态（1：已启用，2：禁用）
+            if ("2".equals(activateState)){
+                binding.tvActiveCode.setText("当前账号人脸已禁用，请联系管理员！");
+                return;
+            }
+            binding.tvActiveCode.setText(activateCode);
+            binding.tvActiveCode.setTextColor(getResources().getColor(R.color.black));
+            return;
+        }
+        activateState = "2";
+        ToastUtils.showShort(activateRsp.getMsg());
+    }
+
+    @Override
+    public void findActivationCodeFail(String msg) {
+        Log.e(TAG, "findActivationCodeFail: "+msg );
     }
 }

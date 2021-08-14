@@ -270,7 +270,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         classList.clear();
         for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
             final String classesName = formBean.classesName;
-            final String studentName = formBean.studentName;
+            final String studentName = formBean.classesStudentName;
             final String classesId = formBean.classesId;
             final String studentId = formBean.studentId;
             final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();

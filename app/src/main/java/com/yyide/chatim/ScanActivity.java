@@ -94,45 +94,45 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     public void onScanQRCodeSuccess(String result) {
         vibrate();
         Log.e(TAG, "onScanQRCodeSuccess: " + result);
-//        final JSONObject jsonObject = JSON.parseObject(result);
-//        final String scanUrl = jsonObject.getString("scanUrl");
-//        if (!TextUtils.isEmpty(scanUrl)) {
-//            if (scanUrl.contains("/brand/class-brand-management/Android/verify")) {
-//                //app验证接口
-//                final String classesId = jsonObject.getString("classesId");
-//                final String siteId = jsonObject.getString("siteId");
-//                final String checkId = jsonObject.getString("checkId");
-//                verify(checkId,classesId,siteId);
-//            } else if (scanUrl.contains("/brand/class-brand-management/app/loginCheck/scan/")) {
-//                final String code = scanUrl.substring(scanUrl.lastIndexOf("/")+1);
-//                Log.e(TAG, "code: "+code );
-//                //扫码登录 0:已绑定 1 未绑定
-//                final String equipmentSerialNumber = jsonObject.getString("equipmentSerialNumber");
-//                final String brandStatus = jsonObject.getString("brandStatus");
-//                final String bindStatus = jsonObject.getString("bindStatus");
-//                Intent intent = new Intent(this, BindingEquipmentActivity.class);
-//                intent.putExtra("equipmentSerialNumber", equipmentSerialNumber);
-//                intent.putExtra("brandStatus", brandStatus);
-//                intent.putExtra("code", code);
-//                intent.putExtra("brandStatus", brandStatus);
-//                intent.putExtra("bindStatus", bindStatus);
-//                startActivity(intent);
-//            } else if (result.startsWith("http") || result.equals("https")) {
-//                jupm(this, WebViewActivity.class, "url", result);
-//            }
-//        }
-
-
-        if (!TextUtils.isEmpty(result) && (result.contains("equipmentSerialNumber") && result.contains("brandStatus"))) {
-            //{"scanUrl":"/management/cloud-system/app/user/scan/loginId","equipmentSerialNumber":"equipmentSerialNumber","brandStatus":"brandStatus"}
-            WebViewActivity.start(this, BaseConstant.SCAN_URL, result);
-        } else if (!TextUtils.isEmpty(result) && result.contains("/management/cloud-system/app/user/scan/")) {
-            jupm(this, ScanLoginActivity.class, "result", result);
-        } else if (!TextUtils.isEmpty(result) && (result.startsWith("http") || result.equals("https"))) {
-            jupm(this, WebViewActivity.class, "url", result);
-        } else {
-            ToastUtils.showShort(result);
+        final JSONObject jsonObject = JSON.parseObject(result);
+        final String scanUrl = jsonObject.getString("scanUrl");
+        if (!TextUtils.isEmpty(scanUrl)) {
+            if (scanUrl.contains("/brand/class-brand-management/Android/verify")) {
+                //app验证接口
+                final String classesId = jsonObject.getString("classesId");
+                final String siteId = jsonObject.getString("siteId");
+                final String checkId = jsonObject.getString("checkId");
+                verify(checkId,classesId,siteId);
+            } else if (scanUrl.contains("/brand/class-brand-management/app/loginCheck/scan/")) {
+                final String code = scanUrl.substring(scanUrl.lastIndexOf("/")+1);
+                Log.e(TAG, "code: "+code );
+                //扫码登录 0:已绑定 1 未绑定
+                final String equipmentSerialNumber = jsonObject.getString("equipmentSerialNumber");
+                final String brandStatus = jsonObject.getString("brandStatus");
+                final String bindStatus = jsonObject.getString("bindStatus");
+                Intent intent = new Intent(this, BindingEquipmentActivity.class);
+                intent.putExtra("equipmentSerialNumber", equipmentSerialNumber);
+                intent.putExtra("brandStatus", brandStatus);
+                intent.putExtra("code", code);
+                intent.putExtra("brandStatus", brandStatus);
+                intent.putExtra("bindStatus", bindStatus);
+                startActivity(intent);
+            } else if (result.startsWith("http") || result.equals("https")) {
+                jupm(this, WebViewActivity.class, "url", result);
+            }
         }
+
+
+//        if (!TextUtils.isEmpty(result) && (result.contains("equipmentSerialNumber") && result.contains("brandStatus"))) {
+//            //{"scanUrl":"/management/cloud-system/app/user/scan/loginId","equipmentSerialNumber":"equipmentSerialNumber","brandStatus":"brandStatus"}
+//            WebViewActivity.start(this, BaseConstant.SCAN_URL, result);
+//        } else if (!TextUtils.isEmpty(result) && result.contains("/management/cloud-system/app/user/scan/")) {
+//            jupm(this, ScanLoginActivity.class, "result", result);
+//        } else if (!TextUtils.isEmpty(result) && (result.startsWith("http") || result.equals("https"))) {
+//            jupm(this, WebViewActivity.class, "url", result);
+//        } else {
+//            ToastUtils.showShort(result);
+//        }
         finish();
     }
 

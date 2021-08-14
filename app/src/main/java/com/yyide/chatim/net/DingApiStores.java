@@ -1,6 +1,7 @@
 package com.yyide.chatim.net;
 
 
+import com.yyide.chatim.model.ActivateRsp;
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.AppAddRsp;
@@ -702,4 +703,12 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/brand/class-brand-management/Android/Authority/verify")
     Call<BaseRsp> brandVerify(@Body RequestBody requestBody);
+
+    /**
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/face/authorize/findActivationCode
+     * 查找激活码
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/face/authorize/findActivationCode")
+    Observable<ActivateRsp> findActivationCode(@Query("macId") String macId);
 }

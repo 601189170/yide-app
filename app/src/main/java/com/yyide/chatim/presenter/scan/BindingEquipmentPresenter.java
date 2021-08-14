@@ -3,6 +3,7 @@ package com.yyide.chatim.presenter.scan;
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.ActivateRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
@@ -64,6 +65,30 @@ public class BindingEquipmentPresenter extends BasePresenter<BindingEquipmentVie
             @Override
             public void onFailure(String msg) {
                 mvpView.updateRegistrationCodeFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    /**
+     * 查找旷视人脸激活码
+     * @param macid
+     */
+    public void findActivationCode(String macid){
+        mvpView.showLoading();
+        addSubscription(dingApiStores.findActivationCode(macid), new ApiCallback<ActivateRsp>() {
+            @Override
+            public void onSuccess(ActivateRsp activateRsp) {
+                mvpView.findActivationCodeSuccess(activateRsp);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.findActivationCodeFail(msg);
             }
 
             @Override
