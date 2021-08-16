@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     private int dialogType;
     private String currentClassName;//当前班级
     private String currentEvent;//当前事件
+    private String historyEvent;//上一次选择的事件
     private DayStatisticsListAdapter dayStatisticsListAdapter;
     private StudentDayStatisticsListAdapter studentDayStatisticsListAdapter;
     private boolean refresh;
@@ -340,14 +342,14 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
             }
             showBlank(false);
             attendancesFormBeanList.addAll(attendancesForm);
-            currentEvent = attendancesFormBeanList.get(0).getAttNameA();
-            data.addAll(attendancesFormBeanList.get(0).getStudentLists());
-            //更新布局
-            if (SpData.getIdentityInfo().staffIdentity()) {
-                dayStatisticsListAdapter.notifyDataSetChanged();
-            }else {
-                studentDayStatisticsListAdapter.notifyDataSetChanged();
-            }
+//            currentEvent = attendancesFormBeanList.get(0).getAttNameA();
+//            data.addAll(attendancesFormBeanList.get(0).getStudentLists());
+//            //更新布局
+//            if (SpData.getIdentityInfo().staffIdentity()) {
+//                dayStatisticsListAdapter.notifyDataSetChanged();
+//            }else {
+//                studentDayStatisticsListAdapter.notifyDataSetChanged();
+//            }
             initEventData();
         } else {
             ToastUtils.showShort("服务器异常："+attendanceWeekStatsRsp.getCode()+","+attendanceWeekStatsRsp.getMsg());
@@ -374,11 +376,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         data.clear();
         data.addAll(studentListsBean);
         //更新布局
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            dayStatisticsListAdapter.notifyDataSetChanged();
-        }else {
-            studentDayStatisticsListAdapter.notifyDataSetChanged();
-        }
+        notifyAdapter();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -387,10 +385,27 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         for (int i = 0; i < attendancesFormBeanList.size(); i++) {
             final AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = attendancesFormBeanList.get(i);
             final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            dataBean.setIsDefault(i == 0 ? 1 : 0);
+            if (attendancesFormBean.getAttNameA().equals(historyEvent) || (TextUtils.isEmpty(historyEvent) && i == 0)) {
+                dataBean.setIsDefault(1);
+                currentEvent = attendancesFormBeanList.get(i).getAttNameA();
+                data.addAll(attendancesFormBeanList.get(i).getStudentLists());
+                //更新布局
+                notifyAdapter();
+            } else {
+                dataBean.setIsDefault(0);
+            }
+            //dataBean.setIsDefault(i == 0 ? 1 : 0);
             dataBean.setDeptName(attendancesFormBean.getAttNameA());
             dataBean.setDeptId(i + "100");
             eventList.add(dataBean);
+        }
+        final Optional<LeaveDeptRsp.DataBean> optional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+        if (!optional.isPresent()){
+            eventList.get(0).setIsDefault(1);
+            currentEvent = attendancesFormBeanList.get(0).getAttNameA();
+            data.addAll(attendancesFormBeanList.get(0).getStudentLists());
+            //更新布局
+            notifyAdapter();
         }
 
         final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
@@ -410,9 +425,18 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
                     Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
                     mViewBinding.tvAttendanceType.setText(dept);
                     currentEvent = dept;
+                    historyEvent = dept;
                     showData(dept);
                 });
             });
+        }
+    }
+
+    private void notifyAdapter() {
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            dayStatisticsListAdapter.notifyDataSetChanged();
+        } else {
+            studentDayStatisticsListAdapter.notifyDataSetChanged();
         }
     }
 

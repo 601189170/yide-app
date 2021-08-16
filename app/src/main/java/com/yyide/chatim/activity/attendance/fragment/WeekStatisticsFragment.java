@@ -84,6 +84,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     private String beginDate;
     private boolean refresh;
     private boolean first = true;
+    private String historyEvent;//上一次选择的事件
     public WeekStatisticsFragment(String type) {
         // Required empty public constructor
         this.type = type;
@@ -501,6 +502,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
                 deptSelectPop.setOnCheckedListener((id, dept) -> {
                     Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
                     mViewBinding.tvAttendanceType.setText(dept);
+                    historyEvent = dept;
                     showData(dept);
                 });
             });
@@ -536,23 +538,45 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             final List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean> attendancesForm = attendanceWeekStatsRsp.getData().getAttendancesForm();
             eventList.clear();
             studentsBeanList.clear();
-            for (AttendanceWeekStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesForm) {
+            for (int i = 0; i < attendancesForm.size(); i++) {
+                final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = attendancesForm.get(i);
                 final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean students = attendancesFormBean.getStudents();
                 students.setIdentityType(attendancesFormBean.getIdentityType());
                 studentsBeanList.add(students);
                 //考勤时间类型
                 final String name = students.getName();
                 final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-                dataBean.setIsDefault(0);
+                if (name.equals(historyEvent) || (TextUtils.isEmpty(historyEvent) && i == 0)) {
+                    dataBean.setIsDefault(1);
+                } else {
+                    dataBean.setIsDefault(0);
+                }
                 dataBean.setDeptName(name);
                 dataBean.setDeptId("0");
                 eventList.add(dataBean);
             }
+//            for (AttendanceWeekStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesForm) {
+//                final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean students = attendancesFormBean.getStudents();
+//                students.setIdentityType(attendancesFormBean.getIdentityType());
+//                studentsBeanList.add(students);
+//                //考勤时间类型
+//                final String name = students.getName();
+//                final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+//                dataBean.setIsDefault(0);
+//                dataBean.setDeptName(name);
+//                dataBean.setDeptId("0");
+//                eventList.add(dataBean);
+//            }
             //设置事件
             if (eventList.size() != 0) {
+                final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+                if (!eventOptional.isPresent()){
+                    eventList.get(0).setIsDefault(1);
+                    historyEvent = eventList.get(0).getDeptName();
+                }
                 mViewBinding.tvAttendanceType.setVisibility(View.VISIBLE);
                 //默认选择第一个事件
-                eventList.get(0).setIsDefault(1);
+                //eventList.get(0).setIsDefault(1);
                 //初始化事件view
                 initEventView();
             } else {
@@ -561,7 +585,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
             //默认选择第一个事件的统计
             if (studentsBeanList.size() != 0) {
-                showData(studentsBeanList.get(0).getName());
+                showData(TextUtils.isEmpty(historyEvent)?studentsBeanList.get(0).getName():historyEvent);
             }else {
                 ToastUtils.showShort("未查询到数据");
                 showData(null);
