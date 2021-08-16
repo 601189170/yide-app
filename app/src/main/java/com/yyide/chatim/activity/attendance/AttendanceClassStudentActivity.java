@@ -33,6 +33,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean;
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeListBean;
     private String TAG = AttendanceClassStudentActivity.class.getSimpleName();
+    private int index;
 
     @Override
     public int getContentViewID() {
@@ -60,6 +61,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
             mvpPresenter.getMyAppList(gradeListBean.gradeId);
         });
         viewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        viewBinding.clContent.setVisibility(View.GONE);
         setDataView();
     }
 
@@ -67,8 +69,6 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     protected SchoolGradePresenter createPresenter() {
         return new SchoolGradePresenter(this);
     }
-
-    private int index;
 
     private void setDataView() {
         schoolPeopleAllFormBean = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean) getIntent().getSerializableExtra("students");
@@ -90,7 +90,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
             }
 
             viewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-                eventName = gradeListBean.getName();
+                gradeId = gradeListBean.getGradeId();
                 AttendancePop attendancePop = new AttendancePop(this, adapterEvent, "请选择年级");
                 adapterEvent.setList(schoolPeopleAllFormBean.getGradeList());
                 attendancePop.setOnSelectListener(position -> {
@@ -103,13 +103,13 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         }
     }
 
-    private String eventName;
+    private long gradeId;
     private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean, BaseViewHolder>(R.layout.swich_class_item) {
 
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean item) {
             baseViewHolder.setText(R.id.className, item.getName());
-            baseViewHolder.getView(R.id.select).setVisibility(eventName.equals(item.getName()) ? View.VISIBLE : View.GONE);
+            baseViewHolder.getView(R.id.select).setVisibility(gradeId == item.getGradeId() ? View.VISIBLE : View.GONE);
             if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {
@@ -119,6 +119,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     };
 
     private void setData() {
+        viewBinding.clContent.setVisibility(View.VISIBLE);
         viewBinding.tvAttendanceTitle.setText(gradeListBean.getName());
         viewBinding.tvEventName.setText(gradeListBean.getName() + "(人)");
         viewBinding.tvAttendanceRate.setText(gradeListBean.getRate());
@@ -181,11 +182,13 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
                     AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem;
                     if (schoolPeopleAllFormBean != null) {
                         for (int i = 0; i < model.data.schoolPeopleAllForm.size(); i++) {
-                            schoolItem = model.data.schoolPeopleAllForm.get(i);
-                            for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
-                                gradeItem.goOutStatus = schoolItem.goOutStatus;
-                                if (gradeItem.gradeId == gradeListBean.gradeId) {
-                                    gradeListBean = gradeItem;
+                            if (i == index) {
+                                schoolItem = model.data.schoolPeopleAllForm.get(i);
+                                for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
+                                    gradeItem.goOutStatus = schoolItem.goOutStatus;
+                                    if (gradeItem.gradeId == gradeListBean.gradeId) {
+                                        gradeListBean = gradeItem;
+                                    }
                                 }
                             }
                         }

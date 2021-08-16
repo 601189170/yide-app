@@ -113,7 +113,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
 //            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "签到率");
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
-            mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
+            //mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
             dataToBind.addAll(convertDataToTreeNode(teachers.getAbsencePeople()));
             adapter = new AttendanceSchoolTeacherAdapter(R.layout.item_attendance_school_teacher, dataToBind, teachers.goOutStatus);
             mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -170,19 +170,19 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
                 mViewBinding.tvAbsenteeism.setChecked(true);
                 mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
                 adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getAbsencePeople()) : null);
-                mViewBinding.tvNum.setText((teachers != null ? teachers.getAbsencePeople().size() : 0) + "人");
+                //mViewBinding.tvNum.setText((teachers != null ? teachers.getAbsencePeople().size() : 0) + "人");
                 break;
             case R.id.tv_leave:
                 mViewBinding.tvLeave.setChecked(true);
                 mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.white));
                 adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLeavePeople()) : null);
-                mViewBinding.tvNum.setText((teachers != null ? teachers.getLeavePeople().size() : 0) + "人");
+                //mViewBinding.tvNum.setText((teachers != null ? teachers.getLeavePeople().size() : 0) + "人");
                 break;
             case R.id.tv_late:
                 mViewBinding.tvLate.setChecked(true);
                 mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
                 adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLatePeople()) : null);
-                mViewBinding.tvNum.setText((teachers != null ? teachers.getLatePeople().size() : 0) + "人");
+                //mViewBinding.tvNum.setText((teachers != null ? teachers.getLatePeople().size() : 0) + "人");
                 break;
         }
     }

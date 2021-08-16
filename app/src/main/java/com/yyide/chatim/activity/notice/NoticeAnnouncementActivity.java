@@ -52,6 +52,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
     boolean other = false;
     boolean other2 = false;
     private boolean hasNoticePermission;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_notice_announcement;
@@ -64,7 +65,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
         super.onCreate(savedInstanceState);
         title.setText(R.string.notice_announcement_title);
         EventBus.getDefault().register(this);
-        hasNoticePermission = MMKV.defaultMMKV().decodeBool("hasNoticePermission",false);
+        hasNoticePermission = MMKV.defaultMMKV().decodeBool("hasNoticePermission", false);
         initViewPager();
     }
 
@@ -77,7 +78,7 @@ public class NoticeAnnouncementActivity extends BaseMvpActivity<NoticeAnnounceme
         //我的通知
         NoticeAnnouncementListFragment my_notice = NoticeAnnouncementListFragment.newInstance("my_notice");
         fragments.add(my_notice);
-        if (SpData.getIdentityInfo().staffIdentity() && hasNoticePermission){
+        if (SpData.getIdentityInfo().staffIdentity() && hasNoticePermission) {
             //我的发布
             PublishNoticAnnouncementListFragment my_release = PublishNoticAnnouncementListFragment.newInstance("my_release");
             fragments.add(my_release);

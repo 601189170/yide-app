@@ -277,9 +277,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             workContent.setVisibility(View.GONE);
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);
-            tableContent.setVisibility(View.GONE);
             kqContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
+            tableContent.setVisibility(View.GONE);
+            if(SpData.getClassInfo() != null){
+                tableContent.setVisibility(View.VISIBLE);
+                fragmentTransaction.replace(R.id.table_content, new TableFragment());
+            }
             //通知
             NoticeFragment noticeFragment = new NoticeFragment();
             Bundle bundle = new Bundle();

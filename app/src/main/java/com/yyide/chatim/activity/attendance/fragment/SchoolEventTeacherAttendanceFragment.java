@@ -100,7 +100,7 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
         if (itemTeachersBean != null && itemTeachersBean.getTeachers() != null) {
             teachers = itemTeachersBean.getTeachers();
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvEventName.setText(teachers.getThingName());
+            mViewBinding.tvEventName.setText(teachers.getThingName() + "(人)");
 
             mViewBinding.tvAttendanceRate.setText(teachers.getRate());
             if (!TextUtils.isEmpty(teachers.getRate())) {
@@ -174,7 +174,7 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
         }
     }
 
-    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean, BaseViewHolder>(R.layout.item_attendance_school_teacher) {
+    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean, BaseViewHolder>(R.layout.item_attendance_school_event_teacher) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item) {
             holder.setText(R.id.tv_student_name, item.getName());

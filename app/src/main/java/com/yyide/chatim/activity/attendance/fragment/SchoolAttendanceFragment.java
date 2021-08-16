@@ -103,7 +103,6 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
 
         mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
             AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
-            eventName = mViewBinding.tvAttendanceTitle.getText().toString().trim();
             adapterEvent.setList(item.schoolPeopleAllForm);
             attendancePop.setOnSelectListener(index -> {
                 this.index = index;
@@ -118,13 +117,12 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
         });
     }
 
-    private String eventName;
     private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder>(R.layout.swich_class_item) {
 
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item) {
             baseViewHolder.setText(R.id.className, item.getAttName());
-            baseViewHolder.getView(R.id.select).setVisibility(eventName.equals(item.getAttName()) ? View.VISIBLE : View.GONE);
+            baseViewHolder.getView(R.id.select).setVisibility(index == baseViewHolder.getAdapterPosition() ? View.VISIBLE : View.GONE);
             if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {

@@ -32,17 +32,16 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginEnd="16dp"
             android:lineSpacingExtra="6dp"
-            android:lines="4"
             android:scrollbars="vertical"
-            android:textColor="@color/text_212121"
-            android:textSize="@dimen/text_15" />
+            android:text="版本更新啦！优化使用体验后， 更多精彩等你发现"
+            android:textColor="@color/text_666666"
+            android:textSize="@dimen/text_16" />
 
         <com.yyide.chatim.widget.LoadingButton
             android:id="@+id/btn_update"
@@ -50,18 +49,17 @@
             android:layout_height="40dp"
             android:layout_margin="@dimen/dp_16"
             android:gravity="center"
-            app:textSize="16sp"
             app:background="@drawable/bg_corners_blue_20"
             app:progressColor="@android:color/white"
             app:text="立即升级"
-            app:textColor="@color/white" />
+            app:textColor="@color/white"
+            app:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_cancel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp_10"
             android:text="稍后再说"
             android:textColor="#ff666666"
             android:textSize="16sp" />

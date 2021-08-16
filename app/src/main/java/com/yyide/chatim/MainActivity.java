@@ -179,7 +179,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
 
         //应用更新检测
-        new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 3000);
+        new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 2000);
         //检查是否开启消息通知
         showNotificationPermission();
     }
@@ -766,16 +766,15 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private void download(GetAppVersionResponse.DataBean data) {
         LogUtil.d("download", "device:" + AppUtils.getAppVersionCode() + "  data:" + data.versionCode);
 //        if (AppUtils.getAppVersionName() != data.versionCode) {
-//        if (AppUtils.getAppVersionName().compareTo(data.versionCode) < 0) {
-        if (AppUtils.getAppVersionName().compareTo("1.0.5") < 0) {
+        if (AppUtils.getAppVersionName().compareTo(data.versionCode) < 0) {
             NiceDialog.init().setLayoutId(R.layout.dialog_update).setConvertListener(new ViewConvertListener() {
                 @Override
                 protected void convertView(ViewHolder holder, BaseNiceDialog dialog) {
-                    TextView tv = holder.getView(R.id.tv);
                     TextView cancel = holder.getView(R.id.tv_cancel);
                     cancel.setOnClickListener(v -> dialog.dismiss());
-                    tv.setText(data.versionDesc);
-                    ((TextView) holder.getView(R.id.tv)).setMovementMethod(new ScrollingMovementMethod());
+//                    TextView tv = holder.getView(R.id.tv);
+//                    tv.setText(data.versionDesc);
+//                    ((TextView) holder.getView(R.id.tv)).setMovementMethod(new ScrollingMovementMethod());
                     LoadingButton btnUpdate = holder.getView(R.id.btn_update);
                     downloadOrInstall(btnUpdate, cancel, data);
                     cancel.setVisibility(data.isCompulsory == 0 ? View.VISIBLE : View.GONE);

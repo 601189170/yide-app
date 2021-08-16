@@ -22,7 +22,7 @@ public class LoginRsp {
      * @return
      */
     public String getToken() {
-        return data == null ? "" : data;
+        return TextUtils.isEmpty(data) ? "android_token==null" : data;
     }
 
 }

@@ -49,6 +49,15 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="（人）"
+                        android:textColor="#ffffffff"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_event_name"
+                        app:layout_constraintStart_toEndOf="@+id/tv_event_name"
+                        app:layout_constraintTop_toTopOf="@+id/tv_event_name" />
+                    <TextView
                         android:id="@+id/tv_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -248,7 +257,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_10"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
