@@ -101,7 +101,12 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
                 holder.mViewBanding.tvEventTime.setText(eventTime);
                 break;
             case 1:
-                holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_absence));
+                final int goOutStatus = dayStatisticsBean.getGoOutStatus();
+                if (goOutStatus == 1) {
+                    holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_no_logout));
+                } else {
+                    holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_absence));
+                }
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_no_sign_in));
                 holder.mViewBanding.tvEventTime.setVisibility(View.GONE);
                 holder.mViewBanding.ivEventFaceRecognize.setVisibility(View.GONE);

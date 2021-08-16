@@ -85,7 +85,7 @@ public class AttendanceWeekStatsRsp {
                 private int dateType;
                 private String identityType;
                 private String beginDate;
-
+                private int goOutStatus;
 
                 @NoArgsConstructor
                 @Data

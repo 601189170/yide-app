@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.appbar.AppBarLayout;
@@ -599,7 +600,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         } else {
             setMonth(true);
         }
-
+        final int goOutStatus = studentsBean.getGoOutStatus();
         //通过identity eventType 判断显示布局
         if (identity && eventType) {
             //学生事件考勤
@@ -624,6 +625,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
 
             mViewBinding.layoutHeadStudentEvent.tvAttendanceRate.setText(rate);
+            setAttendanceRateTitle(goOutStatus,mViewBinding.layoutHeadStudentEvent.textview1);
             //缺勤人数
             mViewBinding.layoutHeadStudentEvent.tvAbsenceNum.setText(String.valueOf(studentsBean.getAbsence()));
             //请假人数
@@ -805,5 +807,18 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     public void onRefresh() {
         refresh = true;
         queryAttStatsData(currentClass, currentDate, currentPage);
+    }
+
+    /**
+     * 设置出勤rate的标题
+     * @param goOutStatus
+     * @param textView
+     */
+    private void setAttendanceRateTitle(int goOutStatus, TextView textView){
+        if (goOutStatus == 1){
+            textView.setText("签退率:");
+            return;
+        }
+        textView.setText("出勤率:");
     }
 }
