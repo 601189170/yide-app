@@ -166,7 +166,7 @@ public interface DingApiStores {
      * @return call
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/user/equipment/addUserEquipmentInfo")
+    @GET("/management/cloud-system/user/equipment/delUserEquipmentInfo")
     Call<ResultBean> delUserEquipmentInfo(@Query("id") String id);
 
     /**
