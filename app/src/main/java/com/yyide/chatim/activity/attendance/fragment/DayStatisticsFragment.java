@@ -125,6 +125,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
         //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
+        final String classesStudentName = SpData.getClassInfo().classesStudentName;
         for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
             final String classesName = formBean.classesName;
             final String studentName = formBean.classesStudentName;
@@ -139,12 +140,15 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
                 dataBean.setDeptName(studentName);
             }
             dataBean.setIsDefault(0);
+            if (studentName.equals(classesStudentName)){
+                dataBean.setIsDefault(1);
+            }
             classList.add(dataBean);
         }
 
         if (!classList.isEmpty()) {
-            final LeaveDeptRsp.DataBean dataBean = classList.get(0);
-            dataBean.setIsDefault(1);
+            //final LeaveDeptRsp.DataBean dataBean = classList.get(0);
+            //dataBean.setIsDefault(1);
         } else {
             Log.e(TAG, "initClassData: 当前账号没有学生" );
             mViewBinding.tvClassName.setVisibility(View.GONE);
