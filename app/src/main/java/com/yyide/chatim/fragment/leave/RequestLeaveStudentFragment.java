@@ -557,7 +557,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
         //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
-        final String classesStudentName = SpData.getClassInfo().classesStudentName;
+        final String classesStudentName = SpData.getClassesStudentName();
         for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
             final String studentName = formBean.classesStudentName;
             final String studentId = formBean.studentId;

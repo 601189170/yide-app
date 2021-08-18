@@ -54,6 +54,20 @@ public class SpData {
         return JSON.parseObject(SPUtils.getInstance().getString(CLASS_INFO, ""), GetUserSchoolRsp.DataBean.FormBean.class);
     }
 
+    /**
+     * 获取用户信息选择的班级名或者班级学生名
+     * @return
+     */
+    public static String getClassesStudentName() {
+        if (getClassInfo() == null) {
+            return null;
+        }
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            return getClassInfo().classesName;
+        }
+        return getClassInfo().classesStudentName;
+    }
+
     public static String UserSig() {
         return SPUtils.getInstance().getString(USERSIG, "");
     }

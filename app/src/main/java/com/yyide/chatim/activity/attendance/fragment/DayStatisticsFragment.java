@@ -125,7 +125,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
         //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
-        final String classesStudentName = SpData.getClassInfo().classesStudentName;
+        final String classesStudentName = SpData.getClassesStudentName();
         for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
             final String classesName = formBean.classesName;
             final String studentName = formBean.classesStudentName;
@@ -134,22 +134,22 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
             final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
             dataBean.setDeptId(studentId);
             dataBean.setClassId(classesId);
+            dataBean.setIsDefault(0);
             if (SpData.getIdentityInfo().staffIdentity()) {
                 dataBean.setDeptName(classesName);
+                if (classesName.equals(classesStudentName)){
+                    dataBean.setIsDefault(1);
+                }
             } else {
                 dataBean.setDeptName(studentName);
-            }
-            dataBean.setIsDefault(0);
-            if (studentName.equals(classesStudentName)){
-                dataBean.setIsDefault(1);
+                if (studentName.equals(classesStudentName)){
+                    dataBean.setIsDefault(1);
+                }
             }
             classList.add(dataBean);
         }
 
-        if (!classList.isEmpty()) {
-            //final LeaveDeptRsp.DataBean dataBean = classList.get(0);
-            //dataBean.setIsDefault(1);
-        } else {
+        if (classList.isEmpty()) {
             Log.e(TAG, "initClassData: 当前账号没有学生" );
             mViewBinding.tvClassName.setVisibility(View.GONE);
         }
@@ -331,6 +331,9 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         }
         if (attendanceWeekStatsRsp.getCode() == 200){
             if (attendanceWeekStatsRsp.getData() == null) {
+                mViewBinding.tvAttendanceType.setVisibility(View.GONE);
+                //showData(null);
+                showBlank(true);
                 return;
             }
             attendancesFormBeanList.clear();
