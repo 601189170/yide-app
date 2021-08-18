@@ -67,7 +67,7 @@ public class StatisticsActivity extends BaseActivity {
                 return listTab.isEmpty() ? 0 : listTab.size();
             }
         });
-        new TabLayoutMediator(mViewBinding.tablayout, mViewBinding.viewpager, true, (tab, position) -> {
+        new TabLayoutMediator(mViewBinding.tablayout, mViewBinding.viewpager, true, false,(tab, position) -> {
             //这里需要根据position修改tab的样式和文字等
             Log.e("TAG", "onConfigureTab: "+position );
             tab.setText(listTab.get(position));

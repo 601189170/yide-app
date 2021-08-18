@@ -120,7 +120,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         Log.e(TAG, "onResume: isWeekStatistics:"+isWeekStatistics +",first:"+first);
         if (first && !isWeekStatistics) {
             first = false;
-            queryAttStatsData(currentClass, currentDate, currentPage);
+            //queryAttStatsData(currentClass, currentDate, currentPage);
         }
     }
 
@@ -533,8 +533,12 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             mViewBinding.swipeRefreshLayout.setRefreshing(false);
         }
         if (attendanceWeekStatsRsp.getCode() == 200) {
+            if (attendanceWeekStatsRsp.getData() == null){
+                ToastUtils.showShort(""+attendanceWeekStatsRsp.getMsg());
+            }
+
             if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getAttendancesForm() == null) {
-                //showBlank(true);
+                showBlank(false);
                 showData(null);
                 return;
             }

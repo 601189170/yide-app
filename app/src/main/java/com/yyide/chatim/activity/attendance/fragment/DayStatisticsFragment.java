@@ -330,9 +330,12 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
             mViewBinding.swipeRefreshLayout.setRefreshing(false);
         }
         if (attendanceWeekStatsRsp.getCode() == 200){
-            if (attendanceWeekStatsRsp.getData() == null) {
+            if (attendanceWeekStatsRsp.getData() == null){
+                ToastUtils.showShort(""+attendanceWeekStatsRsp.getMsg());
+            }
+
+            if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getAttendancesForm() == null) {
                 mViewBinding.tvAttendanceType.setVisibility(View.GONE);
-                //showData(null);
                 showBlank(true);
                 return;
             }
