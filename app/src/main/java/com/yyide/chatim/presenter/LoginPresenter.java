@@ -111,7 +111,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             }
 
             @Override
-            public void onFinish() { }
+            public void onFinish() { mvpView.hideLoading(); }
         });
     }
 
@@ -135,7 +135,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     }
 
     public void accountSwitch(){
-//        mvpView.showLoading();
         addSubscription(dingApiStores.accountSwitch("reg"), new ApiCallback<LoginAccountBean>() {
             @Override
             public void onSuccess(LoginAccountBean model) {

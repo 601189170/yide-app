@@ -31,7 +31,6 @@ import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.presenter.ClassTablePresenter;
-import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.view.ClassTableView;
 
 import java.text.SimpleDateFormat;
@@ -92,7 +91,11 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         tvDesc.setText("本周暂无课表数据");
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-        tv_week.setText(TimeUtil.getWeek() + "周");
+        if (SpData.getIdentityInfo().weekNum <= 0) {
+            tv_week.setText("");
+        } else {
+            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
+        }
         grid.setOnItemClickListener((parent, view1, position, id) -> {
             timeAdapter.setPosition(position);
             index = position;
@@ -181,6 +184,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             if (rsp.data != null) {
+                empty.setVisibility(View.GONE);
+                mScrollView.setVisibility(View.VISIBLE);
                 String jc = rsp.data.timetableStructure;
                 String s = jc.replaceAll("节课", "");
                 int num = Integer.parseInt(s);
@@ -242,8 +247,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 }
                 tableSectionAdapter.notifyData(sectionlist);
             } else {
-                //mScrollView.setVisibility(View.GONE);
-                //empty.setVisibility(View.VISIBLE);
+                mScrollView.setVisibility(View.GONE);
+                empty.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -251,7 +256,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //创建"第上下午"视图
     private void createLeftTypeView(int selection, int type, int length) {
 
-        int CouseHeight = SizeUtils.dp2px(75) + 1;
+//        int CouseHeight = SizeUtils.dp2px(80) + 1;
+        int CouseHeight = getActivity().getResources().getDimensionPixelOffset(R.dimen.dp_75) + 1;
         int CouseWith = SizeUtils.dp2px(30);
 
         View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card_type2, null);

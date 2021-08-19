@@ -40,18 +40,18 @@
                     android:background="@drawable/bg_corners_blued_10"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|bottom"
-                        android:background="@drawable/help_rm" />
+                        android:src="@drawable/help_rm" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="13dp"
                         android:layout_marginTop="18dp"
-                        android:text="入门指南"
+                        android:text="功能指南"
                         android:textColor="#183764"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="13dp"
                         android:layout_marginTop="49dp"
-                        android:text="视频和文字教程，帮助你快速上手"
+                        android:text="入门产品功能教学，轻松操作快速上手"
                         android:textColor="#183764"
                         android:textSize="12sp" />
 
@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="13dp"
                         android:layout_marginTop="18dp"
-                        android:text="进阶使用"
+                        android:text="教学视频"
                         android:textColor="#7A3133"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -96,15 +96,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="13dp"
                         android:layout_marginTop="49dp"
-                        android:text="便捷省心的应用操作技巧"
+                        android:text="场景进阶解决方案，深度掌握产品应用"
                         android:textColor="#7A3133"
                         android:textSize="12sp" />
 
-                    <TextView
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|bottom"
-                        android:background="@drawable/help_jj" />
+                        android:src="@drawable/help_jj" />
 
                 </FrameLayout>
             </LinearLayout>

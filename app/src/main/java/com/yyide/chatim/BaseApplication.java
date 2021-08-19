@@ -81,7 +81,6 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-
         //内存泄露檢測
 //        LeakCanary.install(this);
         //blankj初始化

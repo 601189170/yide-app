@@ -88,7 +88,11 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         adapter.setEmptyView(R.layout.empty);
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-        tv_week.setText(TimeUtil.getWeek() + "周");
+        if(SpData.getIdentityInfo().weekNum <= 0){
+            tv_week.setText("");
+        } else {
+            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
         Date date = new Date(System.currentTimeMillis());
         for (int i = 0; i < timeAdapter.list.size(); i++) {

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.SizeUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.utils.VHUtil;
@@ -46,6 +47,8 @@ public class TableItemAdapter extends BaseAdapter {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_card, null, false);
         TextView text_view = VHUtil.ViewHolder.get(view, R.id.text_view);
         LinearLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
+//        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(80));
+//        layout.setLayoutParams(layoutParams);
         //text_view.setText(getItem(position).subjectName + "\n" + getItem(position).fromDateTime + "\n" + getItem(position).toDateTime);
         text_view.setText(getItem(position).subjectName);
 

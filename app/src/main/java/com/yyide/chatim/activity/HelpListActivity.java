@@ -81,7 +81,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         adapter.setEmptyView(R.layout.empty);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) adapter.getData().get(position);
-            if(itemBean.getItemType() == 1){
+            if (itemBean.getItemType() == 1) {
                 Intent intent = new Intent(mActivity, HelpInfoActivity.class);
                 intent.putExtra("itemBean", itemBean);
                 startActivity(intent);
@@ -89,10 +89,10 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         });
 
         if ("helpAdvanced".equals(type)) {
-            title.setText("进阶指南");
+            title.setText("教学视频");
             mvpPresenter.getHelpAdvancedList(pageSize, pageNum);
         } else {
-            title.setText("入门指南");
+            title.setText("功能指南");
             mvpPresenter.getHelpList(pageSize, pageNum);
         }
         initLoadMore();

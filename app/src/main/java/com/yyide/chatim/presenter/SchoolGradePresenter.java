@@ -17,7 +17,7 @@ public class SchoolGradePresenter extends BasePresenter<SchoolGradeView> {
         attachView(view);
     }
 
-    public void getMyAppList(long gradeId) {
+    public void getMyAppList() {
         mvpView.showLoading();
         HashMap<String, Object> map = new HashMap<>();
         map.put("classId", "");//班级ID

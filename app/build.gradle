@@ -75,12 +75,12 @@ android {
 
     buildTypes {
         debug {
-            manifestPlaceholders = [ alibaba_appkey:"333472407" ,alibaba_appsecret:"df808fe4266141bdb471e9b5519c101c"]
+            manifestPlaceholders = [alibaba_appkey: "333472407", alibaba_appsecret: "df808fe4266141bdb471e9b5519c101c"]
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [ alibaba_appkey:"333499175" ,alibaba_appsecret:"4f418b018eb4431d8ecebfc74f019fa0"]
+            manifestPlaceholders = [alibaba_appkey: "333499175", alibaba_appsecret: "4f418b018eb4431d8ecebfc74f019fa0"]
         }
     }
 

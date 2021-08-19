@@ -26,7 +26,7 @@ public class PrivateConstants {
     // 魅族开放平台分配的应用APPID及APPKEY
     public static final String MZ_PUSH_APPID = "";
     public static final String MZ_PUSH_APPKEY = "";
-    /****** 魅族离线推送参数end ******/
+    /****** 魅族离线推送参数end ******/ 
 
     /****** vivo离线推送参数start ******/
     // 在腾讯云控制台上传第三方推送证书后分配的证书ID

@@ -102,8 +102,10 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                             isTable = true;
                         } else if (mMillisecond < fromDataTime) {//课前
                             dataBean = item;
+                            table_next.setText("下一节");
                             break;
                         } else {//正在上课
+                            table_next.setText("本节课");
                             dataBean = item;
                             break;
                         }
@@ -160,7 +162,6 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
-        table_next.setText("下一节");
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
         tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
         table_next.setVisibility(View.VISIBLE);

@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="12dp"
@@ -100,8 +100,11 @@
 
             <TextView
                 android:id="@+id/tv_homework"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:lines="4"
+                android:ellipsize="end"
                 android:textColor="#333333"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -123,15 +126,15 @@
 
             <TextView
                 android:id="@+id/desc"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:lines="4"
+                android:ellipsize="end"
                 android:text="暂无提醒"
                 android:textColor="#999999"
                 android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>
-
-
 </LinearLayout>

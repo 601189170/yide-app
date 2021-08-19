@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -105,7 +107,8 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
             mViewBinding.tvAttendanceRate.setText(teachers.getRate());
             if (!TextUtils.isEmpty(teachers.getRate())) {
                 try {
-                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
+                    //mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
+                    setAnimation(mViewBinding.progress, Double.valueOf(teachers.getRate()).intValue());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -117,12 +120,18 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
             mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
             mViewBinding.tvAbsenteeism.setText("1".equals(teachers.getGoOutStatus()) ? "未签退" : "缺勤");
             mViewBinding.tvAbsenteeismTitle.setText("1".equals(teachers.getGoOutStatus()) ? "未签退" : "缺勤");
-            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "签到率");
+            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "出勤率");
 
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             adapter.setList(teachers.getPeople());
         }
+    }
+
+    private void setAnimation(final ProgressBar view, final int mProgressBar) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
+        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -102,7 +104,8 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             mViewBinding.tvAttendanceRate.setText(teachers.getRate());
             if (!TextUtils.isEmpty(teachers.getRate())) {
                 try {
-                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
+//                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
+                    setAnimation(mViewBinding.progress, Double.valueOf(teachers.getRate()).intValue());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -110,7 +113,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             mViewBinding.tvLateNum.setText(teachers.getLate() + "");
 //            mViewBinding.tvLateName.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
 //            mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
-//            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "签到率");
+//            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "出勤率");
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
             //mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
@@ -136,6 +139,12 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
                 }
             });
         }
+    }
+
+    private void setAnimation(final ProgressBar view, final int mProgressBar) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
+        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     private List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> convertDataToTreeNode(List<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean> datas) {

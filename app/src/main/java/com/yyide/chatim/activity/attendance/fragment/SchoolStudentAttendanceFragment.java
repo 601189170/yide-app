@@ -1,10 +1,12 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -31,11 +33,13 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
     private FragmentSchoolMasterAttendanceBinding mViewBinding;
     private String TAG = SchoolStudentAttendanceFragment.class.getSimpleName();
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemStudents;
+    private int index;
 
-    public static SchoolStudentAttendanceFragment newInstance(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean students) {
+    public static SchoolStudentAttendanceFragment newInstance(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean students, int index) {
         SchoolStudentAttendanceFragment fragment = new SchoolStudentAttendanceFragment();
         Bundle args = new Bundle();
         args.putSerializable("students", students);
+        args.putInt("index", index);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,6 +49,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             itemStudents = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean) getArguments().getSerializable("students");
+            index = getArguments().getInt("index");
         }
     }
 
@@ -61,7 +66,11 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         mViewBinding.clContent.setVisibility(View.GONE);
         mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mViewBinding.recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener((adapter, view1, position) -> AttendanceClassStudentActivity.start(getContext(), itemStudents, position));
+        adapter.setOnItemClickListener((adapter, view1, position) ->
+        {
+            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeListBean = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean) adapter.getItem(position);
+            AttendanceClassStudentActivity.start(getContext(), itemStudents, gradeListBean, index);
+        });
         setDataView(itemStudents);
     }
 
@@ -73,12 +82,13 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                 mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
                 if (!TextUtils.isEmpty(itemStudents.getRate())) {
                     try {
-                        mViewBinding.progress.setProgress(Double.valueOf(itemStudents.getRate()).intValue());
+//                        mViewBinding.progress.setProgress(Double.valueOf(itemStudents.getRate()).intValue());
+                        setAnimation(mViewBinding.progress, Double.valueOf(itemStudents.getRate()).intValue());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                mViewBinding.tvSign.setText("1".equals(itemStudents.getGoOutStatus()) ? "签退率" : "签到率");
+                mViewBinding.tvSign.setText("1".equals(itemStudents.getGoOutStatus()) ? "签退率" : "出勤率");
                 mViewBinding.tvAbsenceTitle.setText("1".equals(itemStudents.getGoOutStatus()) ? "未签退" : "缺勤");
                 mViewBinding.tvLateNum.setText(("1".equals(itemStudents.getGoOutStatus()) ? itemStudents.getLeaveEarly() : itemStudents.getLate()) + "");
                 mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
@@ -87,6 +97,12 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                 adapter.setList(remove(itemStudents.getGradeList()));
             }
         }
+    }
+
+    private void setAnimation(final ProgressBar view, final int mProgressBar) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
+        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     //使用iterator，这个是java和Android源码中经常使用到的一种方法，所以最为推荐
@@ -112,7 +128,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                     .setText(R.id.tv_attendance_rate, item.getRate())
                     .setText(R.id.tv_normal_num, item.getApplyNum() + "")
                     .setText(R.id.tv_absence, "1".equals(item.getGoOutStatus()) ? "未签退" : "缺勤")
-                    .setText(R.id.tv_sign, "1".equals(item.goOutStatus) ? "签退率" : "签到率")
+                    .setText(R.id.tv_sign, "1".equals(item.goOutStatus) ? "签退率" : "出勤率")
                     .setText(R.id.tv_absence_num, item.getAbsence() + "")
                     .setText(R.id.tv_ask_for_leave_num, item.getLeave() + "");
         }

@@ -107,7 +107,7 @@ public class StatisticsListDetailFragment extends Fragment {
         viewBinding.tvLeaveNum.setText(String.valueOf(data.getLeave()));
         //迟到人数tv_late_num
         //viewBinding.tvLateNum.setText(String.valueOf(data.getLate()));
-        //签到率tv_attendance_rate
+        //出勤率tv_attendance_rate
         viewBinding.tvAttendanceRate.setText(data.getRate());
         //tv_attendance_time考勤时间
         viewBinding.tvAttendanceTime.setText(data.getApplyDate());
@@ -121,7 +121,7 @@ public class StatisticsListDetailFragment extends Fragment {
             viewBinding.tvLateNum.setText(String.valueOf(data.getLeaveEarly()));
         }else {
             //签到
-            viewBinding.textview1.setText("签到率:");
+            viewBinding.textview1.setText("出勤率:");
             viewBinding.tvAbsence.setText("缺勤");
             viewBinding.rbLate.setText("迟到");
             viewBinding.rbAbsence.setText("缺勤");

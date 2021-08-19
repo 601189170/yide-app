@@ -76,7 +76,7 @@ public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatistics
         }else {
             holder.binding.tvLate.setText("迟到");
             holder.binding.tvAbsence.setText("缺勤");
-            holder.binding.tvAttendanceRateTitle.setText("签到率");
+            holder.binding.tvAttendanceRateTitle.setText("出勤率");
             holder.binding.tvLateNum.setText(String.valueOf(dayStatisticsBean.getLate()));
         }
 

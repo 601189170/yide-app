@@ -82,7 +82,11 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
         if ("N".equals(schoolPeopleAllFormBean.getPeopleType())) {
             startFragment(schoolPeopleAllFormBean);
         } else {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
+            int position = 0;
+            if (item.attendancesForm != null) {
+               position = index - item.attendancesForm.size();
+            }
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean, position)).commit();
         }
         mViewBinding.tvAttendanceTitle.setText(schoolPeopleAllFormBean.attName);
         if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
@@ -111,7 +115,11 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
                 if ("N".equals(bean.getPeopleType())) {
                     startFragment(bean);
                 } else {
-                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean)).commit();
+                    int position = 0;
+                    if (item.attendancesForm != null) {
+                        position = index - item.attendancesForm.size();
+                    }
+                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean, position)).commit();
                 }
             });
         });

@@ -1,11 +1,14 @@
 package com.yyide.chatim.activity.attendance;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradePresenter> implements SchoolGradeView {
 
@@ -34,15 +39,17 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeListBean;
     private String TAG = AttendanceClassStudentActivity.class.getSimpleName();
     private int index;
+    private long gradeId;
 
     @Override
     public int getContentViewID() {
         return R.layout.activity_attendance_class_student;
     }
 
-    public static void start(Context context, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item, int index) {
+    public static void start(Context context, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeListBean, int index) {
         Intent intent = new Intent(context, AttendanceClassStudentActivity.class);
         intent.putExtra("students", item);
+        intent.putExtra("gradeListBean", gradeListBean);
         intent.putExtra("index", index);
         context.startActivity(intent);
     }
@@ -58,7 +65,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         viewBinding.recyclerview.setAdapter(adapter);
 
         viewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            mvpPresenter.getMyAppList(gradeListBean.gradeId);
+            mvpPresenter.getMyAppList();
         });
         viewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         viewBinding.clContent.setVisibility(View.GONE);
@@ -72,15 +79,11 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
 
     private void setDataView() {
         schoolPeopleAllFormBean = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean) getIntent().getSerializableExtra("students");
+        gradeListBean = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean) getIntent().getSerializableExtra("gradeListBean");
+        gradeId = gradeListBean.getGradeId();
         index = getIntent().getIntExtra("index", 0);
         if (schoolPeopleAllFormBean != null && schoolPeopleAllFormBean.getGradeList().size() > 0) {
-            if (index < schoolPeopleAllFormBean.getGradeList().size()) {
-                gradeListBean = schoolPeopleAllFormBean.getGradeList().get(index);
-            } else {
-                gradeListBean = schoolPeopleAllFormBean.getGradeList().get(0);
-            }
-            mvpPresenter.getMyAppList(gradeListBean.gradeId);
-//            setData();
+            mvpPresenter.getMyAppList();
             if (schoolPeopleAllFormBean.getGradeList() != null && schoolPeopleAllFormBean.getGradeList().size() > 1) {
                 viewBinding.tvAttendanceTitle.setClickable(true);
                 viewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
@@ -96,14 +99,13 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
                 attendancePop.setOnSelectListener(position -> {
                     gradeListBean = schoolPeopleAllFormBean.getGradeList().get(position);
                     gradeListBean.classForm = schoolPeopleAllFormBean.getGradeList().get(position).getClassForm();
-                    mvpPresenter.getMyAppList(gradeListBean.gradeId);
-                    //setData();
+                    gradeId = gradeListBean.getGradeId();
+                    setData();
                 });
             });
         }
     }
 
-    private long gradeId;
     private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean, BaseViewHolder>(R.layout.swich_class_item) {
 
         @Override
@@ -125,19 +127,27 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         viewBinding.tvAttendanceRate.setText(gradeListBean.getRate());
         if (!TextUtils.isEmpty(gradeListBean.getRate())) {
             try {
-                viewBinding.progress.setProgress(Double.valueOf(gradeListBean.getRate()).intValue());
+                //viewBinding.progress.setProgress(Double.valueOf(gradeListBean.getRate()).intValue());
+                setAnimation(viewBinding.progress, Integer.parseInt(gradeListBean.getRate()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
 //            viewBinding.tvNumber.setText("(" + gradeListBean.getNumber() + "人)");
         viewBinding.tvLateNum.setText(gradeListBean.getLate() + "");
         viewBinding.tvLeaveNum.setText(gradeListBean.getLeave() + "");
         viewBinding.tvAbsenteeismNum.setText(gradeListBean.getAbsence() + "");
         viewBinding.tvLeaveTitle.setText("1".equals(gradeListBean.goOutStatus) ? "早退" : "迟到");
-        viewBinding.tvSign.setText("1".equals(gradeListBean.goOutStatus) ? "签退率" : "签到率");
+        viewBinding.tvSign.setText("1".equals(gradeListBean.goOutStatus) ? "签退率" : "出勤率");
         viewBinding.tvAbsenceDesc.setText("1".equals(gradeListBean.goOutStatus) ? "未签退" : "缺勤");
         adapter.setList(remove(gradeListBean.getClassForm()));
+    }
+
+    private void setAnimation(final ProgressBar view, final int mProgressBar) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
+        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     //使用iterator，这个是java和Android源码中经常使用到的一种方法，所以最为推荐
@@ -155,12 +165,28 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         return list;
     }
 
+    //使用iterator，这个是java和Android源码中经常使用到的一种方法，所以最为推荐
+    public List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean> removeGradeListBean(List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean> list) {
+        Iterator<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean> sListIterator = list.iterator();
+        while (sListIterator.hasNext()) {
+            AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean item = sListIterator.next();
+            if (item.getNumber() == 0) {
+                sListIterator.remove();
+            }
+            if (gradeListBean != null) {
+                item.setGoOutStatus(gradeListBean.goOutStatus);
+            }
+        }
+        return list;
+    }
+
+
     private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean, BaseViewHolder> adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean, BaseViewHolder>(R.layout.item_school) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean.ClassFormBean item) {
             holder.setText(R.id.tv_event_name, item.getName())
                     .setText(R.id.tv_attendance_rate, item.getRate())
-                    .setText(R.id.tv_sign, "1".equals(item.goOutStatus) ? "签退率" : "签到率")
+                    .setText(R.id.tv_sign, "1".equals(item.goOutStatus) ? "签退率" : "出勤率")
                     .setText(R.id.tv_normal_num, item.getApplyNum() + "")
                     .setText(R.id.tv_absence_num, item.getAbsence() + "")
                     .setText(R.id.tv_absence, "1".equals(item.goOutStatus) ? "未签退" : "缺勤")
@@ -179,16 +205,15 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         if (model.code == BaseConstant.REQUEST_SUCCES2) {
             if (model.data != null) {
                 if (model.data.schoolPeopleAllForm != null && model.data.schoolPeopleAllForm.size() > 0) {
-                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem;
-                    if (schoolPeopleAllFormBean != null) {
-                        for (int i = 0; i < model.data.schoolPeopleAllForm.size(); i++) {
-                            if (i == index) {
-                                schoolItem = model.data.schoolPeopleAllForm.get(i);
-                                for (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem : schoolItem.getGradeList()) {
-                                    gradeItem.goOutStatus = schoolItem.goOutStatus;
-                                    if (gradeItem.gradeId == gradeListBean.gradeId) {
-                                        gradeListBean = gradeItem;
-                                    }
+                    for (int i = 0; i < model.data.schoolPeopleAllForm.size(); i++) {
+                        AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolItem = model.data.schoolPeopleAllForm.get(i);
+                        List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean> gradeListBeans = removeGradeListBean(schoolItem.getGradeList());
+                        if (i == index && gradeListBeans != null) {
+                            for (int j = 0; j < gradeListBeans.size(); j++) {
+                                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean.GradeListBean gradeItem = gradeListBeans.get(j);
+                                gradeItem.goOutStatus = schoolItem.goOutStatus;
+                                if (gradeItem.gradeId == gradeId) {
+                                    this.gradeListBean = gradeItem;
                                 }
                             }
                         }

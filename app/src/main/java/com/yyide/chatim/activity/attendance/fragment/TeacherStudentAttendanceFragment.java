@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -249,7 +251,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.tvDesc.setText(TextUtils.isEmpty(itemStudents.getSubjectName()) ? itemStudents.getThingName() : itemStudents.getSubjectName());
             mViewBinding.tvAttendanceTime.setText(!TextUtils.isEmpty(itemStudents.getRequiredTime()) ? itemStudents.getRequiredTime() : itemStudents.getStartTime());
 
-            mViewBinding.tvSign.setText("1".equals(itemStudents.getGoOutStatus()) ? "签退率" : "签到率");
+            mViewBinding.tvSign.setText("1".equals(itemStudents.getGoOutStatus()) ? "签退率" : "出勤率");
             mViewBinding.tvLateName.setText("1".equals(itemStudents.getGoOutStatus()) ? "早退" : "迟到");
             mViewBinding.tvLate.setText("1".equals(itemStudents.getGoOutStatus()) ? "早退" : "迟到");
             mViewBinding.tvAbsenteeismName.setText("1".equals(itemStudents.getGoOutStatus()) ? "未签退" : "缺勤");
@@ -257,7 +259,8 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.tvAttendanceRate.setText(itemStudents.getRate());
             if (!TextUtils.isEmpty(itemStudents.getRate())) {
                 try {
-                    mViewBinding.progress.setProgress(Double.valueOf(itemStudents.getRate()).intValue());
+//                    mViewBinding.progress.setProgress(Double.valueOf(itemStudents.getRate()).intValue());
+                    setAnimation(mViewBinding.progress, Double.valueOf(itemStudents.getRate()).intValue());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -283,6 +286,12 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         mViewBinding.tvAll.setChecked(true);
         mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
         adapter.setList(itemStudents != null ? itemStudents.getPeople() : null);
+    }
+
+    private void setAnimation(final ProgressBar view, final int mProgressBar) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
+        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     @Override
