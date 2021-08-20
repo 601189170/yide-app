@@ -133,12 +133,14 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
                 dataBeanList.addAll(data);
                 adapter.setList(dataBeanList);
             }
+            return;
         }
+        ToastUtils.showShort(""+brandSearchRsp.getMsg());
     }
 
     @Override
     public void getClassBrandFail(String msg) {
-
+        ToastUtils.showShort(""+msg);
     }
 
     @Override
