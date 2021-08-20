@@ -20,9 +20,12 @@ public class BindingEquipmentPresenter extends BasePresenter<BindingEquipmentVie
         attachView(view);
     }
 
-    public void getRegistrationCodeByOffice() {
+    public void getRegistrationCodeByOffice(String equipmentSerialNumber) {
         mvpView.showLoading();
-        addSubscription(dingApiStores.getRegistrationCodeByOffice(), new ApiCallback<ClassBrandInfoRsp>() {
+        HashMap<String, Object> map = new HashMap<>(4);
+        map.put("equipmentSerialNumber", equipmentSerialNumber);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        addSubscription(dingApiStores.getRegistrationCodeByOffice(body), new ApiCallback<ClassBrandInfoRsp>() {
             @Override
             public void onSuccess(ClassBrandInfoRsp model) {
                 mvpView.findRegistrationCodeSuccess(model);

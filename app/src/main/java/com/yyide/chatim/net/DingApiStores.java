@@ -666,11 +666,11 @@ public interface DingApiStores {
 
     /**
      * app获取码验证
-     * https://api.uat.edu.1d1j.net/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByOffice
+     * https://api.uat.edu.1d1j.net/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByNumber
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByOffice")
-    Observable<ClassBrandInfoRsp> getRegistrationCodeByOffice();
+    @POST("/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByNumber")
+    Observable<ClassBrandInfoRsp> getRegistrationCodeByOffice(@Body RequestBody info);
 
     /**
      * app注册码绑定

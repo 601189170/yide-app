@@ -322,4 +322,5 @@
     <string name="tuesday">二</string>
     <string name="monday">一</string>
     <string name="daily_statistic">每日统计</string>
+    <string name="get_register_code_fail_tip">当前账号没有查询到注册码，请联系管理员！</string>
 </resources>
