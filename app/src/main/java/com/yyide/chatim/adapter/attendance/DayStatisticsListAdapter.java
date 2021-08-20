@@ -69,14 +69,14 @@ public class DayStatisticsListAdapter extends RecyclerView.Adapter<DayStatistics
         holder.binding.tvAskForLeaveNum.setText(String.valueOf(dayStatisticsBean.getLeave()));
         if (dayStatisticsBean.getGoOutStatus() == 1){
             //签退
-            holder.binding.tvLate.setText("早退");
-            holder.binding.tvAttendanceRateTitle.setText("签退率");
-            holder.binding.tvAbsence.setText("未签退");
+            holder.binding.tvLate.setText(context.getString(R.string.attendance_leave_early));
+            holder.binding.tvAttendanceRateTitle.setText(context.getString(R.string.attendance_sign_out_rate));
+            holder.binding.tvAbsence.setText(context.getString(R.string.attendance_no_logout));
             holder.binding.tvLateNum.setText(String.valueOf(dayStatisticsBean.getLeaveEarly()));
         }else {
-            holder.binding.tvLate.setText("迟到");
-            holder.binding.tvAbsence.setText("缺勤");
-            holder.binding.tvAttendanceRateTitle.setText("出勤率");
+            holder.binding.tvLate.setText(context.getString(R.string.attendance_late));
+            holder.binding.tvAbsence.setText(context.getString(R.string.attendance_absence));
+            holder.binding.tvAttendanceRateTitle.setText(context.getString(R.string.attendance_rate));
             holder.binding.tvLateNum.setText(String.valueOf(dayStatisticsBean.getLate()));
         }
 

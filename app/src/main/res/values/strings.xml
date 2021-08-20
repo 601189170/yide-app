@@ -140,6 +140,7 @@
     <string name="week">%s - %s</string>
     <!--//考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
     <string name="attendance_normal">正常</string>
+    <string name="attendance_due">应到</string>
     <string name="attendance_late">迟到</string>
     <string name="attendance_leave_early">早退</string>
     <string name="attendance_no_sign_in">未签到</string>
@@ -151,6 +152,9 @@
     <string name="attendance_absence">缺勤</string>
     <string name="attendance_no_logout">未签退</string>
     <string name="attendance_no_clock_in">未打卡</string>
+    <string name="attendance_sign_out_rate">签退率</string>
+    <string name="attendance_rate">出勤率</string>
+    <string name="attendance_sign_in_rate">签到率</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="student_honor_count">%d荣誉</string>
@@ -268,4 +272,54 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="already_refused">已拒绝</string>
+    <string name="already_undone">已撤销</string>
+    <string name="face_recongize_disable_tip">当前账号人脸已禁用，请联系管理员！</string>
+    <string name="get_register_code_tip">您还没有获取注册码！</string>
+    <string name="get_activate_code_tip">您还没有获取激活码！</string>
+    <string name="already_login">已登录</string>
+    <string name="not_login">未登录</string>
+    <string name="select_brand_of_login">请选择登录的班牌</string>
+    <string name="select_copyer_tip">请选择抄送人</string>
+    <string name="get_face_data">人脸采集</string>
+    <string name="face_classid_null_tip">当前账号学生Id为空不能采集人脸</string>
+    <string name="face_username_null_tip">当前账号姓名为空不能采集人脸</string>
+    <string name="no_install_camera_tip">您的手机没有安装相机，人脸采集功能暂时不能使用！</string>
+    <string name="face_uploading_tip">人脸上传中...</string>
+    <string name="again_collect_tip">重新采集</string>
+    <string name="unable_cut_select_pic_tip">无法剪切选择图片</string>
+    <string name="face_upload_success_tip">人脸上传成功</string>
+    <string name="face_upload_fail_tip">人脸上传失败</string>
+    <string name="daily_statistics">日统计</string>
+    <string name="weekly_statistics">周统计</string>
+    <string name="monthly_statistics">月统计</string>
+    <string name="weekly_course_count">周课程数量</string>
+    <string name="monthly_course_count">月课程数量</string>
+    <string name="attendance_rate_colon">出勤率:</string>
+    <string name="attendance_sign_out_rate_colon">签退率:</string>
+    <string name="look_over_all">查看全部</string>
+    <string name="select_begin_time">选择开始时间</string>
+    <string name="select_end_time">选择结束时间</string>
+    <string name="select_ask_for_leave_begin_time_tip">请选择请假开始时间</string>
+    <string name="select_ask_for_leave_end_time_tip">请选择请假结束时间</string>
+    <string name="begin_time_not_gt_end_time_tip">请假结束时间应该大于开始时间</string>
+    <string name="ask_for_leave_reason_null_tip">请假事由不能为空</string>
+    <string name="date_year">年</string>
+    <string name="date_month">月</string>
+    <string name="date_day">日</string>
+    <string name="time_hour">时</string>
+    <string name="time_minute">分</string>
+    <string name="not_approver_not_ask_for_leave_tip">没有指定审批人，不能使用请假功能！</string>
+    <string name="select_ask_for_leave_date_tip">选择请假日期</string>
+    <string name="current_user_not_class_not_use_ask_for_leave_tip">当前账号没有指定班级，不能使用请假功能，请联系管理员！</string>
+    <string name="percent">%</string>
+    <string name="launch_application">发起申请</string>
+    <string name="sunday">日</string>
+    <string name="saturday">六</string>
+    <string name="friday">五</string>
+    <string name="thursday">四</string>
+    <string name="wednesday">三</string>
+    <string name="tuesday">二</string>
+    <string name="monday">一</string>
+    <string name="daily_statistic">每日统计</string>
 </resources>

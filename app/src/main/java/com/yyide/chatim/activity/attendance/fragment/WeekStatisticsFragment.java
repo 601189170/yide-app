@@ -305,7 +305,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         super.onViewCreated(view, savedInstanceState);
         mViewBinding = FragmentWeekStatisticsBinding.bind(view);
         Log.e(TAG, "onViewCreated: "+type );
-        if ("周统计".equals(type)) {
+        if (getString(R.string.weekly_statistics).equals(type)) {
             isWeekStatistics = true;
         }
         //确定当前用户身份
@@ -340,11 +340,11 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     private void initPeopleListView() {
         mViewBinding.clAttendanceType.setVisibility(View.VISIBLE);
         List<String> listTab = new ArrayList<>();
-        listTab.add("缺勤");
-        listTab.add("迟到");
-        listTab.add("请假");
+        listTab.add(getString(R.string.attendance_absence));
+        listTab.add(getString(R.string.attendance_late));
+        listTab.add(getString(R.string.ask_for_leave));
         if (eventType){
-            listTab.add("早退");
+            listTab.add(getString(R.string.attendance_leave_early));
         }
         mViewBinding.rbLeaveEarly.setVisibility(eventType?View.VISIBLE:View.GONE);
 
@@ -746,10 +746,10 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             mViewBinding.layoutHeadTeacherEvent.getRoot().setVisibility(View.GONE);
             if (isWeekStatistics){
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatistical.setText(getString(R.string.weekly_statistical));
-                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText("周课程数量");
+                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText(R.string.weekly_course_count);
             }else {
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatistical.setText(getString(R.string.monthly_statistical));
-                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText("月课程数量");
+                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText(getString(R.string.monthly_course_count));
             }
             if (identity){
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatisticalSubhead.setText(getString(R.string.statistical_time));
@@ -848,9 +848,9 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
      */
     private void setAttendanceRateTitle(int goOutStatus, TextView textView){
         if (goOutStatus == 1){
-            textView.setText("签退率:");
+            textView.setText(R.string.attendance_sign_out_rate_colon);
             return;
         }
-        textView.setText("出勤率:");
+        textView.setText(R.string.attendance_rate_colon);
     }
 }

@@ -229,7 +229,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         if (!TextUtils.isEmpty(classesId)){
             mvpPresenter.getApprover(classesId);
         }else {
-            ToastUtils.showShort("当前账号没有指定班级，不能使用请假功能，请联系管理员！");
+            ToastUtils.showShort(R.string.current_user_not_class_not_use_ask_for_leave_tip);
         }
 
         mvpPresenter.queryLeavePhraseList(1);
@@ -288,17 +288,17 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     public void click(View view) {
         switch (view.getId()) {
             case R.id.cl_start_time:
-                showTime("选择开始时间", startTime,startTimeListener);
+                showTime(getString(R.string.select_begin_time),startTime,startTimeListener);
                 break;
             case R.id.cl_end_time:
                 if (TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(startTime)){
-                    showTime("选择结束时间", startTime,endTimeListener);
+                    showTime(getString(R.string.select_end_time), startTime,endTimeListener);
                     break;
                 }
-                showTime("选择结束时间", endTime,endTimeListener);
+                showTime(getString(R.string.select_end_time), startTime,endTimeListener);
                 break;
             case R.id.cl_ask_for_leave_date:
-                showTime("选择请假日期", "",dateTimeListener);
+                showTime(getString(R.string.select_ask_for_leave_date_tip), "",dateTimeListener);
                 break;
             case R.id.btn_commit:
                 if (!ButtonUtils.isFastDoubleClick(R.id.btn_commit)){
@@ -324,20 +324,20 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
          * }
          */
         if (TextUtils.isEmpty(startTime)){
-            ToastUtils.showShort("请选择请假开始时间");
+            ToastUtils.showShort(R.string.select_ask_for_leave_begin_time_tip);
             return;
         }
         if (TextUtils.isEmpty(endTime)){
-            ToastUtils.showShort("请选择请假结束时间");
+            ToastUtils.showShort(R.string.select_ask_for_leave_end_time_tip);
             return;
         }
         if (DateUtils.parseTimestamp(endTime,"")-DateUtils.parseTimestamp(startTime,"")<=0){
-            ToastUtils.showShort("请假结束时间应该大于开始时间");
+            ToastUtils.showShort(R.string.begin_time_not_gt_end_time_tip);
             return;
         }
         reason = editLeaveReason.getText().toString();
         if (TextUtils.isEmpty(reason)){
-            ToastUtils.showShort("请假事由不能为空");
+            ToastUtils.showShort(R.string.ask_for_leave_reason_null_tip);
             return;
         }
 
@@ -364,14 +364,14 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         }
         mDialogAll = new TimePickerDialog.Builder()
                 .setCallBack(onDateSetListener)
-                .setCancelStringId("取消")
-                .setSureStringId("确定")
+                .setCancelStringId(getString(R.string.cancel))
+                .setSureStringId(getString(R.string.confirm))
                 .setTitleStringId(title)
-                .setYearText("年")
-                .setMonthText("月")
-                .setDayText("日")
-                .setHourText("时")
-                .setMinuteText("分")
+                .setYearText(getString(R.string.date_year))
+                .setMonthText(getString(R.string.date_month))
+                .setDayText(getString(R.string.date_day))
+                .setHourText(getString(R.string.time_hour))
+                .setMinuteText(getString(R.string.time_minute))
                 .setCyclic(false)
                 .setMinMillseconds(System.currentTimeMillis()-oneYears)
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
@@ -433,7 +433,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             if (peopleForm == null){
                 btn_commit.setAlpha(0.5f);
                 btn_commit.setClickable(false);
-                ToastUtils.showLong("没有指定审批人，不能使用请假功能！");
+                ToastUtils.showLong(R.string.not_approver_not_ask_for_leave_tip);
                 return;
             }
 
@@ -470,7 +470,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                     final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
                     final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
                     final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
-                    tv_copyer_name.setText("查看全部");
+                    tv_copyer_name.setText(R.string.look_over_all);
                     userHeadImage.setImageResource(R.drawable.icon_read_more);
                     view1.setOnClickListener(new View.OnClickListener() {
                         @Override

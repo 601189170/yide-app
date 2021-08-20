@@ -46,9 +46,9 @@ public class StatisticsActivity extends BaseActivity {
 
     private void initViewPager() {
         List<String> listTab = new ArrayList<>();
-        listTab.add("日统计");
-        listTab.add("周统计");
-        listTab.add("月统计");
+        listTab.add(getString(R.string.daily_statistics));
+        listTab.add(getString(R.string.weekly_statistics));
+        listTab.add(getString(R.string.monthly_statistics));
         fragments.add(new DayStatisticsFragment());
         fragments.add(new WeekStatisticsFragment(listTab.get(1)));
         fragments.add(new WeekStatisticsFragment(listTab.get(2)));

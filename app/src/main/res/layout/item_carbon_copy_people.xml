@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_2"
         android:singleLine="true"
-        android:text="审批人批"
+        android:text=""
         android:textColor="#999999"
         android:textSize="@dimen/text_10" />
     <TextView

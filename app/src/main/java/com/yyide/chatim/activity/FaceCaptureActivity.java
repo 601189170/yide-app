@@ -84,7 +84,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title.setText("人脸采集");
+        title.setText(R.string.get_face_data);
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.png"));
         //classesId = SpData.getIdentityInfo().classesId;
         //depId = SpData.getIdentityInfo().teacherDepId;
@@ -100,7 +100,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 tvStudentName.setVisibility(View.VISIBLE);
                 initClassData();
                 if (TextUtils.isEmpty(studentId) || "0".equals(studentId)) {
-                    warnTip("当前账号学生Id为空不能采集人脸");
+                    warnTip(getString(R.string.face_classid_null_tip));
                 } else {
                     initClassView();
                     mvpPresenter.getFaceData(realname,classesId , depId,studentId);
@@ -108,7 +108,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             } else {
                 tvStudentName.setVisibility(View.GONE);
                 if (TextUtils.isEmpty(realname)) {
-                    warnTip("当前账号姓名为空不能采集人脸");
+                    warnTip(getString(R.string.face_username_null_tip));
                 } else {
                     mvpPresenter.getFaceData(realname, classesId, depId, studentId);
                 }
@@ -175,7 +175,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             }
             return;
         }
-        ToastUtils.showShort("您的手机没有安装相机，人脸采集功能暂时不能使用！");
+        ToastUtils.showShort(R.string.no_install_camera_tip);
     }
 
     @OnClick({R.id.back_layout, R.id.btn_start_capture})
@@ -226,8 +226,8 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
                 iv_face.setImageBitmap(bmp);
                 tv_face_capture_tip.setVisibility(View.VISIBLE);
-                tv_face_capture_tip.setText("人脸上传中...");
-                btn_start_capture.setText("重新采集");
+                tv_face_capture_tip.setText(R.string.face_uploading_tip);
+                btn_start_capture.setText(R.string.again_collect_tip);
                 btn_start_capture.setClickable(false);
                 btn_start_capture.setAlpha(0.5f);
                 //去上传人脸图片
@@ -243,7 +243,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 file.delete();
             }
         } else {
-            Toast.makeText(this, "无法剪切选择图片", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.unable_cut_select_pic_tip, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -297,9 +297,9 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         Log.e(TAG, "faceUploadSuccess: " + baseRsp.toString());
         ToastUtils.showShort(""+baseRsp.getMsg());
         if (baseRsp.getCode() == 200){
-            tv_face_capture_tip.setText("人脸上传成功");
+            tv_face_capture_tip.setText(R.string.face_upload_success_tip);
         }else {
-            tv_face_capture_tip.setText("人脸上传失败");
+            tv_face_capture_tip.setText(R.string.face_upload_fail_tip);
         }
         mvpPresenter.getFaceData(realname,classesId,depId,studentId);
     }
@@ -308,7 +308,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     public void faceUploadFail(String msg) {
         Log.e(TAG, "faceUploadFail: " + msg);
         ToastUtils.showShort("提交失败："+msg);
-        tv_face_capture_tip.setText("人脸上传失败");
+        tv_face_capture_tip.setText(R.string.face_upload_fail_tip);
         mvpPresenter.getFaceData(realname,classesId,depId,studentId);
     }
 
@@ -325,7 +325,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                 }
                 String path = data.getPath();
                 if (!TextUtils.isEmpty(path)) {
-                    btn_start_capture.setText("重新采集");
+                    btn_start_capture.setText(R.string.again_collect_tip);
                     //加载图片
                     Glide.with(this)
                             .load(path)
@@ -375,7 +375,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
             dataBean.setIsDefault(1);
             studentId = dataBean.getDeptId();
         } else {
-            warnTip("当前账号学生Id为空不能采集人脸");
+            warnTip(getString(R.string.face_classid_null_tip));
             tvStudentName.setVisibility(View.GONE);
         }
     }
@@ -400,7 +400,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                                 Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
                                 tvStudentName.setText(dept);
                                 if (TextUtils.isEmpty(id) || "0".equals(id)){
-                                    warnTip("当前账号学生Id为空不能采集人脸");
+                                    warnTip(getString(R.string.face_classid_null_tip));
                                 }
                                 studentId = id;
                                 mvpPresenter.getFaceData(realname,classesId , depId,studentId);

@@ -85,7 +85,7 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
             @Override
             protected void convert(@NonNull BaseViewHolder baseViewHolder, BrandSearchRsp.DataBean dataBean) {
                 baseViewHolder.setText(R.id.tv_brand_name, dataBean.getSignName())
-                        .setText(R.id.tv_login_status, "0".equals(dataBean.getStatus()) ? "已登录" : "未登录");
+                        .setText(R.id.tv_login_status, "0".equals(dataBean.getStatus()) ? getString(R.string.already_login) : getString(R.string.not_login));
                 baseViewHolder.setTextColor(R.id.tv_login_status, "0".equals(dataBean.getStatus()) ?
                         getResources().getColor(R.color.blue11) : getResources().getColor(R.color.text_909399));
                 baseViewHolder.itemView.setSelected(dataBean.isChecked());
@@ -107,7 +107,7 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
 
     private void login() {
         if (TextUtils.isEmpty(loginName)){
-            ToastUtils.showShort("请选择登录的班牌");
+            ToastUtils.showShort(R.string.select_brand_of_login);
             return;
         }
         mvpPresenter.qrcodeLoginVerify(code,loginName);

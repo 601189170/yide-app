@@ -29,7 +29,7 @@
         android:layout_height="49dp"
         android:layout_marginStart="13dp"
         android:gravity="center_vertical"
-        android:text="初二"
+        android:text=""
         android:textColor="#ff212121"
         android:textSize="15sp"
         app:layout_constraintLeft_toRightOf="@id/iv_head"

@@ -69,11 +69,11 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
             }
             //去绑定设备
             if (TextUtils.isEmpty(id) || TextUtils.isEmpty(registrationCode)) {
-                ToastUtils.showShort("您还没有获取注册码！");
+                ToastUtils.showShort(R.string.get_register_code_tip);
                 return;
             }
             if (TextUtils.isEmpty(activateState) || ("1".equals(activateState) && TextUtils.isEmpty(activateCode))){
-                ToastUtils.showShort("您还没有获取激活码！");
+                ToastUtils.showShort(R.string.get_activate_code_tip);
                 return;
             }
             mvpPresenter.updateRegistrationCodeByCode(id, "1", equipmentSerialNumber, registrationCode);
@@ -142,7 +142,7 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
             activateCode = data.getActivateCode();
             //激活状态（1：已启用，2：禁用）
             if ("2".equals(activateState)){
-                binding.tvActiveCode.setText("当前账号人脸已禁用，请联系管理员！");
+                binding.tvActiveCode.setText(R.string.face_recongize_disable_tip);
                 return;
             }
             binding.tvActiveCode.setText(activateCode);

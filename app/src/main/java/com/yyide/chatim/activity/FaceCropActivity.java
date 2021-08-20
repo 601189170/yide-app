@@ -62,7 +62,7 @@ public class FaceCropActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title.setText("人脸采集");
+        title.setText(R.string.get_face_data);
         //String currentPhotoPath = getIntent().getStringExtra("currentPhotoPath");
 
         initView();
