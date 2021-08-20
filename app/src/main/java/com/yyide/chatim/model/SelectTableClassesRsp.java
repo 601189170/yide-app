@@ -48,8 +48,8 @@ public class SelectTableClassesRsp {
         private String alias;
         private String showType;
         private long gradeId;
-        private long headmasterId;
-        private long secondHeadmasterId;
+        private String headmasterId;
+        private String secondHeadmasterId;
         private String type;
         private List<DataBean> list;
 
@@ -173,19 +173,19 @@ public class SelectTableClassesRsp {
             this.gradeId = gradeId;
         }
 
-        public long getHeadmasterId() {
+        public String getHeadmasterId() {
             return headmasterId;
         }
 
-        public void setHeadmasterId(int headmasterId) {
+        public void setHeadmasterId(String headmasterId) {
             this.headmasterId = headmasterId;
         }
 
-        public long getSecondHeadmasterId() {
+        public String getSecondHeadmasterId() {
             return secondHeadmasterId;
         }
 
-        public void setSecondHeadmasterId(long secondHeadmasterId) {
+        public void setSecondHeadmasterId(String secondHeadmasterId) {
             this.secondHeadmasterId = secondHeadmasterId;
         }
 

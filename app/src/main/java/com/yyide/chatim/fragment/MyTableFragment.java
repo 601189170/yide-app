@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -57,8 +58,8 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     TextView className;
     @BindView(R.id.tv_week)
     TextView tv_week;
-    //    @BindView(R.id.swipeRefreshLayout)
-//    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private View mBaseView;
 
     MyTableAdapter adapter;
@@ -118,6 +119,9 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
                 startActivity(intent);
             }
         });
+        mSwipeRefreshLayout.setOnRefreshListener(this::getData);
+        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+
         classlayout.setVisibility(View.GONE);
         getData();
     }
@@ -164,6 +168,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @Override
     public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaid: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2 && rsp.data != null) {
             list = rsp.data;
@@ -173,6 +178,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @Override
     public void SelectSchByTeaidFail(String msg) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaidFail: " + JSON.toJSONString(msg));
     }
 }

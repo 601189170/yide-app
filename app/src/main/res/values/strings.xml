@@ -27,6 +27,9 @@
     <string name="cancel">取消</string>
     <string name="weekNum">%s周</string>
 
+    <!--通讯录-->
+    <string name="please_input_search_content">请输入搜索内容</string>
+
     // "我"相关
     <string name="profile">我</string>
     <string name="id">账号：%1$s</string>
