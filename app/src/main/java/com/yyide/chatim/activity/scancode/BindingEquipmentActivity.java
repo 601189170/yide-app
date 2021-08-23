@@ -138,6 +138,8 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
         if (baseRsp.getCode() == 200) {
             //绑定成功，进入选择
             toConfirmLogin();
+        } else {
+            ToastUtils.showShort(baseRsp.getMsg());
         }
     }
 

@@ -307,11 +307,11 @@
     <string name="select_ask_for_leave_end_time_tip">请选择请假结束时间</string>
     <string name="begin_time_not_gt_end_time_tip">请假结束时间应该大于开始时间</string>
     <string name="ask_for_leave_reason_null_tip">请假事由不能为空</string>
-    <string name="date_year">年</string>
-    <string name="date_month">月</string>
-    <string name="date_day">日</string>
-    <string name="time_hour">时</string>
-    <string name="time_minute">分</string>
+    <string name="date_year_yd">年</string>
+    <string name="date_month_yd">月</string>
+    <string name="date_day_yd">日</string>
+    <string name="time_hour_yd">时</string>
+    <string name="time_minute_yd">分</string>
     <string name="not_approver_not_ask_for_leave_tip">没有指定审批人，不能使用请假功能！</string>
     <string name="select_ask_for_leave_date_tip">选择请假日期</string>
     <string name="current_user_not_class_not_use_ask_for_leave_tip">当前账号没有指定班级，不能使用请假功能，请联系管理员！</string>
