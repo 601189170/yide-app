@@ -25,6 +25,9 @@ public class ActivateRsp {
     @Data
     public static class DataBean {
         private String activateCode;
+        //激活状态（1：已启用，2：禁用）
         private String activateState;
+        //绑定状态（0：未绑定，1：已绑定）
+        private String bangingState;
     }
 }
