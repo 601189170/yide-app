@@ -326,4 +326,5 @@
     <string name="monday">一</string>
     <string name="daily_statistic">每日统计</string>
     <string name="get_register_code_fail_tip">当前账号没有查询到注册码，请联系管理员！</string>
+    <string name="current_school_no_face_activate_tip">当前学校没有人脸激活码！</string>
 </resources>

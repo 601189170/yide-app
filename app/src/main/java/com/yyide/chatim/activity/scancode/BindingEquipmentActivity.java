@@ -75,10 +75,10 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
                 binding.tvActiveCode.setText(activateCode);
                 binding.tvActiveCode.setTextColor(getResources().getColor(R.color.black));
             } else {
-                binding.tvActiveCode.setText("当前学校没有人脸激活码！");
-                binding.tvRegisterCode.setTextColor(getResources().getColor(R.color.black));
-                binding.btnGetRegisterCode.setEnabled(false);
-                binding.btnGetRegisterCode.setAlpha(0.5f);
+                binding.tvActiveCode.setText(R.string.current_school_no_face_activate_tip);
+                binding.tvActiveCode.setTextColor(getResources().getColor(R.color.black));
+                binding.btnActiveCode.setEnabled(false);
+                binding.btnActiveCode.setAlpha(0.5f);
             }
         });
         binding.btnEnter.setOnClickListener(v -> {
@@ -87,7 +87,7 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
                 ToastUtils.showShort(R.string.get_register_code_tip);
                 return;
             }
-            if (TextUtils.isEmpty(activateState) || ("1".equals(activateState) && TextUtils.isEmpty(activateCode))) {
+            if (TextUtils.isEmpty(registrationCode) && TextUtils.isEmpty(activateCode)) {
                 ToastUtils.showShort(R.string.get_activate_code_tip);
                 return;
             }
@@ -172,16 +172,21 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
             toConfirmLogin();
             return;
         }
-        binding.clActiveCode.setVisibility("1".equals(bindingState) ? View.GONE : View.VISIBLE);
-        binding.clRegisterCode.setVisibility("1".equals(bindStatus) ? View.GONE : View.VISIBLE);
+
         binding.gpLayout.setVisibility(View.VISIBLE);
+        if (TextUtils.isEmpty(activateCode)) {
+            binding.clActiveCode.setVisibility(View.GONE);
+        } else {
+            binding.clActiveCode.setVisibility("1".equals(bindingState) ? View.GONE : View.VISIBLE);
+        }
+        binding.clRegisterCode.setVisibility("1".equals(bindStatus) ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public void findActivationCodeFail(String msg) {
         Log.e(TAG, "findActivationCodeFail: " + msg);
-        binding.clActiveCode.setVisibility("1".equals(bindingState) ? View.GONE : View.VISIBLE);
-        binding.clRegisterCode.setVisibility("1".equals(bindStatus) ? View.GONE : View.VISIBLE);
         binding.gpLayout.setVisibility(View.VISIBLE);
+        binding.clActiveCode.setVisibility(View.GONE);
+        binding.clRegisterCode.setVisibility("1".equals(bindStatus) ? View.GONE : View.VISIBLE);
     }
 }
