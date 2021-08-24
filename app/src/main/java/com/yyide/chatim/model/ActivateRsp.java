@@ -29,5 +29,7 @@ public class ActivateRsp {
         private String activateState;
         //绑定状态（0：未绑定，1：已绑定）
         private String bangingState;
+        //开通验证方式【0：未開通，1：已開通】
+        private String openState;
     }
 }

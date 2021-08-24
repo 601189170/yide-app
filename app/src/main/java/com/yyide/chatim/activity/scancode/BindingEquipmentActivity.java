@@ -34,6 +34,7 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
     private String bindStatus;//注册码绑定状态
     private String equipmentSerialNumber;
     private String bindingState;//人脸绑定状态
+    private String openState;
 
     @Override
     public int getContentViewID() {
@@ -49,7 +50,14 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
         final Intent intent = getIntent();
         equipmentSerialNumber = intent.getStringExtra("equipmentSerialNumber");
         brandStatus = intent.getStringExtra("brandStatus");
+        bindStatus = intent.getStringExtra("bindStatus");
         code = intent.getStringExtra("code");
+        id = intent.getStringExtra("id");
+        registrationCode = intent.getStringExtra("registrationCode");
+        activateState = intent.getStringExtra("activateState");
+        activateCode = intent.getStringExtra("activateCode");
+        bindingState = intent.getStringExtra("bindingState");
+        openState = intent.getStringExtra("openState");
 
         binding.top.backLayout.setOnClickListener(v -> finish());
         binding.btnGetRegisterCode.setOnClickListener(v -> {
@@ -65,7 +73,7 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
             binding.tvRegisterCode.setText(registrationCode);
             binding.tvRegisterCode.setTextColor(getResources().getColor(R.color.black));
         });
-        mvpPresenter.getRegistrationCodeByOffice(equipmentSerialNumber);
+        //mvpPresenter.getRegistrationCodeByOffice(equipmentSerialNumber);
         //获取激活码
         binding.btnActiveCode.setOnClickListener(v -> {
             if ("2".equals(activateState)) {
@@ -99,6 +107,13 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
 
             mvpPresenter.updateRegistrationCodeByCode(id, "1", equipmentSerialNumber, registrationCode);
         });
+        // 根据条件判断是否隐藏激活码和注册码
+        if (TextUtils.isEmpty(activateCode) || "0".equals(openState) || "1".equals(bindingState) || "2".equals(activateState)) {
+            binding.clActiveCode.setVisibility(View.GONE);
+        } else {
+            binding.clActiveCode.setVisibility(View.VISIBLE);
+        }
+        binding.clRegisterCode.setVisibility("1".equals(bindStatus) ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -113,23 +128,10 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
 
     @Override
     public void findRegistrationCodeSuccess(ClassBrandInfoRsp classBrandInfoRsp) {
-        Log.e(TAG, "findRegistrationCodeSuccess: " + classBrandInfoRsp.toString());
-        if (classBrandInfoRsp.getCode() == 200) {
-            final ClassBrandInfoRsp.DataBean data = classBrandInfoRsp.getData();
-            if (data != null) {
-                registrationCode = data.getRegistrationCode();
-                bindStatus = data.getStatus();
-                id = data.getId();
-            }
-
-        }
-        mvpPresenter.findActivationCode(equipmentSerialNumber);
     }
 
     @Override
     public void findRegistrationCodeFail(String msg) {
-        Log.e(TAG, "findRegistrationCodeFail: " + msg);
-        mvpPresenter.findActivationCode(equipmentSerialNumber);
     }
 
     @Override
@@ -159,36 +161,9 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
 
     @Override
     public void findActivationCodeSuccess(ActivateRsp activateRsp) {
-        Log.e(TAG, "findActivationCodeSuccess: " + activateRsp.toString());
-        if (activateRsp.getCode() == 200) {
-            final ActivateRsp.DataBean data = activateRsp.getData();
-            if (data != null) {
-                activateState = data.getActivateState();
-                //激活状态（1：已启用，2：禁用）
-                activateCode = data.getActivateCode();
-                bindingState = data.getBangingState();
-            }
-        }
-
-        if ("1".equals(bindStatus) && "1".equals(bindingState)) {
-            toConfirmLogin();
-            return;
-        }
-
-        binding.gpLayout.setVisibility(View.VISIBLE);
-        if (TextUtils.isEmpty(activateCode)) {
-            binding.clActiveCode.setVisibility(View.GONE);
-        } else {
-            binding.clActiveCode.setVisibility("1".equals(bindingState) ? View.GONE : View.VISIBLE);
-        }
-        binding.clRegisterCode.setVisibility("1".equals(bindStatus) ? View.GONE : View.VISIBLE);
     }
 
     @Override
     public void findActivationCodeFail(String msg) {
-        Log.e(TAG, "findActivationCodeFail: " + msg);
-        binding.gpLayout.setVisibility(View.VISIBLE);
-        binding.clActiveCode.setVisibility(View.GONE);
-        binding.clRegisterCode.setVisibility("1".equals(bindStatus) ? View.GONE : View.VISIBLE);
     }
 }

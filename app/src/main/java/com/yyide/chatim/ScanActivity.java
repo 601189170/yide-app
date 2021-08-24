@@ -8,58 +8,42 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.tbruyelle.rxpermissions3.Permission;
 import com.tbruyelle.rxpermissions3.RxPermissions;
-import com.yyide.chatim.activity.PersonInfoActivity;
-import com.yyide.chatim.activity.ScanLoginActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.scancode.BindingEquipmentActivity;
-import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.activity.scancode.ConfirmLoginActivity;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.model.ActivateRsp;
 import com.yyide.chatim.model.BaseRsp;
-import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.net.DingApiStores;
-import com.yyide.chatim.view.ScanLoginView;
+import com.yyide.chatim.presenter.scan.BindingEquipmentPresenter;
+import com.yyide.chatim.view.scan.BindingEquipmentView;
 
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.HashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zbar.ZBarView;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.functions.Consumer;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
+public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> implements QRCodeView.Delegate, BindingEquipmentView {
 
     @BindView(R.id.title)
     TextView title;
@@ -69,7 +53,16 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
     ZBarView zbarview;
     int i;
     private String TAG = ScanActivity.class.getSimpleName();
-
+    private String id;
+    private String registrationCode;
+    private String code;
+    private String brandStatus;
+    private String activateState;
+    private String activateCode;
+    private String bindStatus;//注册码绑定状态
+    private String equipmentSerialNumber;
+    private String bindingState;//人脸绑定状态
+    private String openState;
     @Override
     public int getContentViewID() {
         return R.layout.activity_scan;
@@ -104,19 +97,11 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
                 final String checkId = jsonObject.getString("checkId");
                 verify(checkId,classesId,siteId);
             } else if (scanUrl.contains("/brand/class-brand-management/app/loginCheck/scan/")) {
-                final String code = scanUrl.substring(scanUrl.lastIndexOf("/")+1);
-                Log.e(TAG, "code: "+code );
-                //扫码登录 0:已绑定 1 未绑定
-                final String equipmentSerialNumber = jsonObject.getString("equipmentSerialNumber");
-                final String brandStatus = jsonObject.getString("brandStatus");
-                final String bindStatus = jsonObject.getString("bindStatus");
-                Intent intent = new Intent(this, BindingEquipmentActivity.class);
-                intent.putExtra("equipmentSerialNumber", equipmentSerialNumber);
-                intent.putExtra("brandStatus", brandStatus);
-                intent.putExtra("code", code);
-                intent.putExtra("brandStatus", brandStatus);
-                intent.putExtra("bindStatus", bindStatus);
-                startActivity(intent);
+                code = scanUrl.substring(scanUrl.lastIndexOf("/")+1);
+                equipmentSerialNumber = jsonObject.getString("equipmentSerialNumber");
+                brandStatus = jsonObject.getString("brandStatus");
+                mvpPresenter.getRegistrationCodeByOffice(equipmentSerialNumber);
+
             } else if (result.startsWith("http") || result.equals("https")) {
                 jupm(this, WebViewActivity.class, "url", result);
             }
@@ -259,5 +244,98 @@ public class ScanActivity extends BaseActivity implements QRCodeView.Delegate {
             }
         });
     }
+    @Override
+    protected BindingEquipmentPresenter createPresenter() {
+        return new BindingEquipmentPresenter(this);
+    }
 
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void findRegistrationCodeSuccess(ClassBrandInfoRsp classBrandInfoRsp) {
+        Log.e(TAG, "findRegistrationCodeSuccess: " + classBrandInfoRsp.toString());
+        if (classBrandInfoRsp.getCode() == 200) {
+            final ClassBrandInfoRsp.DataBean data = classBrandInfoRsp.getData();
+            if (data != null) {
+                registrationCode = data.getRegistrationCode();
+                bindStatus = data.getStatus();
+                id = data.getId();
+            }
+        }
+        mvpPresenter.findActivationCode(equipmentSerialNumber);
+    }
+
+    @Override
+    public void findRegistrationCodeFail(String msg) {
+        Log.e(TAG, "findRegistrationCodeFail: " + msg);
+        mvpPresenter.findActivationCode(equipmentSerialNumber);
+    }
+
+    @Override
+    public void updateRegistrationCodeSuccess(BaseRsp baseRsp) {
+
+    }
+
+    @Override
+    public void updateRegistrationCodeFail(String msg) {
+
+    }
+
+    @Override
+    public void findActivationCodeSuccess(ActivateRsp activateRsp) {
+        Log.e(TAG, "findActivationCodeSuccess: " + activateRsp.toString());
+        if (activateRsp.getCode() == 200) {
+            final ActivateRsp.DataBean data = activateRsp.getData();
+            if (data != null) {
+                activateState = data.getActivateState();
+                //激活状态（1：已启用，2：禁用）
+                activateCode = data.getActivateCode();
+                bindingState = data.getBangingState();
+                openState = data.getOpenState();
+            }
+        }
+        // 注册码已绑定，并且激活码已激活，或者没有激活码，或者没有打开人脸激活，则直接进入下一个界面
+        if ("1".equals(bindStatus) && ("1".equals(bindingState) || TextUtils.isEmpty(activateCode) || "0".equals(openState) || "2".equals(activateState))) {
+            toConfirmLogin();
+            return;
+        }
+        toBindingEquipment();
+    }
+
+    @Override
+    public void findActivationCodeFail(String msg) {
+        Log.e(TAG, "findActivationCodeFail: " + msg);
+        if ("1".equals(bindStatus)){
+            toConfirmLogin();
+            return;
+        }
+        toBindingEquipment();
+    }
+
+    private void toBindingEquipment(){
+        Intent intent = new Intent(this, BindingEquipmentActivity.class);
+        intent.putExtra("equipmentSerialNumber", equipmentSerialNumber);
+        intent.putExtra("brandStatus", brandStatus);
+        intent.putExtra("code", code);
+        intent.putExtra("bindStatus", bindStatus);
+        intent.putExtra("id",id);
+        intent.putExtra("registrationCode",registrationCode);
+        intent.putExtra("activateCode",activateCode);
+        intent.putExtra("activateState",activateState);
+        intent.putExtra("bindingState",bindingState);
+        intent.putExtra("openState",openState);
+        startActivity(intent);
+        finish();
+    }
+
+    private void toConfirmLogin() {
+        Intent intent = new Intent(this, ConfirmLoginActivity.class);
+        intent.putExtra("brandStatus", brandStatus);
+        intent.putExtra("code", code);
+        startActivity(intent);
+        finish();
+    }
 }
