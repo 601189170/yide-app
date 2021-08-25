@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -45,7 +46,8 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
     private BaseQuickAdapter<BrandSearchRsp.DataBean, BaseViewHolder> adapter;
     private List<BrandSearchRsp.DataBean> dataBeanList = new ArrayList<>();
     private String loginName;
-
+    //展开列表
+    private boolean unfold;
     @Override
     public int getContentViewID() {
         return R.layout.activity_confirm_login;
@@ -79,6 +81,10 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
             return false;
         });
 
+        binding.btnUnfold.setOnClickListener(v -> {
+            unfoldList(false);
+        });
+
         binding.rvClassBrand.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BaseQuickAdapter<BrandSearchRsp.DataBean, BaseViewHolder>(R.layout.item_brand_info) {
 
@@ -101,8 +107,24 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
             dataBean.setChecked(true);
             adapter.notifyDataSetChanged();
         });
+        binding.rvClassBrand.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         binding.rvClassBrand.setAdapter(adapter);
         mvpPresenter.getClassBrand(brandStatus, "");
+    }
+
+    /**
+     * 展开列表
+     */
+    private void unfoldList(boolean search) {
+        if (search) {
+            unfold = true;
+            binding.clBrandInfo.setVisibility(View.VISIBLE);
+            binding.btnUnfold.setImageResource(R.drawable.icon_arrow_down);
+            return;
+        }
+        binding.clBrandInfo.setVisibility(unfold?View.GONE:View.VISIBLE);
+        binding.btnUnfold.setImageResource(unfold?R.drawable.icon_arrow_up:R.drawable.icon_arrow_down);
+        unfold = !unfold;
     }
 
     private void login() {
@@ -132,6 +154,7 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
                 dataBeanList.clear();
                 dataBeanList.addAll(data);
                 adapter.setList(dataBeanList);
+                unfoldList(true);
             }
             return;
         }
