@@ -54,6 +54,16 @@ public class GlideUtil {
                 .into(imageView);
     }
 
+    public static void loadImageRadius2(Context context, String path, ImageView img, int radius) {
+        RequestOptions roundOptions = new RequestOptions()
+                .transform(new RoundedCorners(radius));
+        Glide.with(context).load(path)
+                .centerCrop()
+                .apply(roundOptions)
+                .placeholder(R.drawable.bg_corners_blue_2)
+                .error(R.drawable.bg_corners_blue_2)
+                .into(img);
+    }
     //圆图
     public static void loadCircleImage(Context context, Drawable drawable, ImageView imageView) {
         RequestOptions myOptions = new RequestOptions()
@@ -67,8 +77,8 @@ public class GlideUtil {
         Glide.with(context).load(path)
                 .centerCrop()
                 .apply(roundOptions)
-                .placeholder(R.drawable.bg_corners_white)
-                .error(R.drawable.bg_corners_white)
+                .placeholder(R.drawable.bg_corners_white_10)
+                .error(R.drawable.bg_corners_white_10)
                 .into(img);
     }
 

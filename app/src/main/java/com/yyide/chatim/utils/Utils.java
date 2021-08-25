@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.text.TextUtils;
 
 
 import com.yyide.chatim.BaseApplication;
@@ -71,6 +72,22 @@ public class Utils {
         }
 
         return false;
+    }
+
+    /**
+     * 隐藏手机号码
+     * @param mobile
+     * @return
+     */
+    public static String setHideMobile(String mobile) {
+        if (!TextUtils.isEmpty(mobile)) {
+            if (mobile.length() >= 11)
+                return mobile.substring(0, 3) + "****" + mobile.substring(7, mobile.length());
+        } else {
+            return "";
+        }
+        return mobile;
+
     }
 
 }

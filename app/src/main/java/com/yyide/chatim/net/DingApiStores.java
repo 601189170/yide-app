@@ -12,6 +12,7 @@ import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
+import com.yyide.chatim.model.BookRsp;
 import com.yyide.chatim.model.BrandSearchRsp;
 import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
@@ -711,4 +712,11 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/face/authorize/findActivationCode")
     Observable<ActivateRsp> findActivationCode(@Query("macId") String macId);
+
+    /**
+     * 通讯录
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/v1/app/addressBookApp/getAddressBook")
+    Observable<BookRsp> getAddressBook(@Body RequestBody requestBody);
 }

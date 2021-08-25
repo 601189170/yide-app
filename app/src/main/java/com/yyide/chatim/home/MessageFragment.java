@@ -17,14 +17,11 @@ import androidx.viewpager.widget.ViewPager;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.widget.MsgView;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.NewBookActivity;
-import com.yyide.chatim.activity.NoteBookActivity;
+import com.yyide.chatim.activity.book.NewBookActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.chat.ConversationFragment;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.MessagePresenter;
 import com.yyide.chatim.view.MessageView;
@@ -71,21 +68,12 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         fragment.setArguments(bundle);
         Log.e(TAG, "onViewCreated: " + type);
         setTab(type);
-        setBookView();
         mvpPresenter.getMessageNumber();
     }
 
     @Override
     protected MessagePresenter createPresenter() {
         return new MessagePresenter(this);
-    }
-
-    private void setBookView() {
-        if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-            note.setVisibility(View.GONE);
-        } else {
-            note.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -139,17 +127,15 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.note:
-                startActivity(new Intent(mActivity, NoteBookActivity.class));
-//                startActivity(new Intent(mActivity, NewBookActivity.class));
+//                startActivity(new Intent(mActivity, NoteBookActivity.class));
+                startActivity(new Intent(mActivity, NewBookActivity.class));
                 break;
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            setBookView();
-        } else if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
             setNumber(messageEvent.getCount());
         }
     }

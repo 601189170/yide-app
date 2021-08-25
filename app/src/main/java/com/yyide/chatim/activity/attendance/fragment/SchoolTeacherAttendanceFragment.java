@@ -56,7 +56,6 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         this.mOnRefreshListener = mOnRefreshListener;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +92,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         setData();
     }
 
-    private List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> dataToBind = new ArrayList<>();
+    private final List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> dataToBind = new ArrayList<>();
 
     @SuppressLint("SetTextI18n")
     private void setData() {

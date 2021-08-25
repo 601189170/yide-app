@@ -21,13 +21,13 @@ public class TreeNode<T extends NodeId> implements MultiItemEntity {
 
     private List<TreeNode<T>> children = new ArrayList<>();
 
-    private int maxViewType ;
+    private int maxViewType;
 
     public TreeNode(T data) {
-        this(data,-1);
+        this(data, -1);
     }
 
-    public TreeNode(T data,int maxViewType) {
+    public TreeNode(T data, int maxViewType) {
         this.data = data;
         this.maxViewType = maxViewType;
     }
@@ -109,10 +109,9 @@ public class TreeNode<T extends NodeId> implements MultiItemEntity {
     }
 
 
-
     @Override
     public int getItemType() {
-        if(isLeaf()){
+        if (isLeaf()) {
             return -1;
         }
         int level = getLevel();

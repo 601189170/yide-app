@@ -36,7 +36,7 @@ import org.greenrobot.eventbus.EventBus
  * DESC: 是否已确认
  */
 class NoticeConfirmDetailActivity : BaseActivity() {
-    private var confirmDetailBinding: ActivityNoticeConfirmDetailBinding? = null
+    private lateinit var confirmDetailBinding: ActivityNoticeConfirmDetailBinding
     private lateinit var mAdapter: BaseQuickAdapter<String, BaseViewHolder>
     private val mDataList = java.util.ArrayList<String>()
     private var detailId: Long = 0
@@ -48,20 +48,20 @@ class NoticeConfirmDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         confirmDetailBinding = ActivityNoticeConfirmDetailBinding.inflate(layoutInflater)
-        setContentView(confirmDetailBinding!!.root)
+        setContentView(confirmDetailBinding.root)
         initView()
-        confirmDetailBinding?.detail?.btnConfirm?.setOnClickListener {
+        confirmDetailBinding.btnConfirm.setOnClickListener {
             showLoading()
             confirm()
         }
 
-        confirmDetailBinding?.detail?.ivNoticeImg?.setOnClickListener {
+        confirmDetailBinding.ivNoticeImg.setOnClickListener {
             NoticeImageDialog.showPreView(
                 this,
                 imgPath
             )
         }
-        confirmDetailBinding?.detail?.tvNoticeContent?.movementMethod =
+        confirmDetailBinding.tvNoticeContent.movementMethod =
             ScrollingMovementMethod.getInstance()
         detailId = intent.getLongExtra("id", -1)
         getDetail(detailId)
@@ -100,17 +100,17 @@ class NoticeConfirmDetailActivity : BaseActivity() {
 
     private fun setDetailView(model: NoticeMyReleaseDetailBean) {
         if (model.data.type == 0) { //空白模板显示文本信息
-            confirmDetailBinding?.detail?.tvNoticeTitle?.text = model.data.title
-            confirmDetailBinding?.detail?.tvNoticeContent?.text =
+            confirmDetailBinding.tvNoticeTitle.text = model.data.title
+            confirmDetailBinding.tvNoticeContent.text =
                 model.data.content
         } else {
             imgPath = model.data.imgpath
-            confirmDetailBinding?.detail?.clBlank?.visibility = View.GONE
-            confirmDetailBinding?.detail?.clImg?.visibility = View.VISIBLE
+            confirmDetailBinding.clBlank.visibility = View.GONE
+            confirmDetailBinding.clImg.visibility = View.VISIBLE
             GlideUtil.loadImageRadius(
                 mActivity,
                 model.data.imgpath,
-                confirmDetailBinding!!.detail.ivNoticeImg,
+                confirmDetailBinding.ivNoticeImg,
                 SizeUtils.dp2px(4f)
             )
         }
@@ -121,7 +121,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                     ""
                 )
             ) -> {//今天
-                confirmDetailBinding?.detail?.tvPushTime?.text = getString(
+                confirmDetailBinding.tvPushTime.text = getString(
                     R.string.notice_toDay,
                     DateUtils.formatTime(
                         model.data.timerDate,
@@ -136,7 +136,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                     ""
                 )
             ) -> {//昨天
-                confirmDetailBinding?.detail?.tvPushTime?.text = getString(
+                confirmDetailBinding.tvPushTime.text = getString(
                     R.string.notice_yesterday,
                     DateUtils.formatTime(
                         model.data.timerDate,
@@ -146,30 +146,30 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                 )
             }
             else -> {
-                confirmDetailBinding?.detail?.tvPushTime?.text =
+                confirmDetailBinding.tvPushTime.text =
                     model.data.timerDate
             }
         }
-        confirmDetailBinding?.detail?.tvPushPeople?.text = model.data.publisher
-        confirmDetailBinding!!.detail.btnConfirm.visibility = View.VISIBLE
+        confirmDetailBinding.tvPushPeople.text = model.data.publisher
+        confirmDetailBinding.btnConfirm.visibility = View.VISIBLE
         if (model.data.isConfirm) {
             if (!model.data.confirmOrRead) {
-                confirmDetailBinding?.detail?.btnConfirm?.isClickable = true
-                confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(
+                confirmDetailBinding.btnConfirm.isClickable = true
+                confirmDetailBinding.btnConfirm.setBackgroundResource(
                     R.drawable.bg_corners_blue_20
                 )
-                confirmDetailBinding?.detail?.btnConfirm?.text =
+                confirmDetailBinding.btnConfirm.text =
                     getString(R.string.notice_confirm_roger_that)
             } else {
-                confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
-                confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(
+                confirmDetailBinding.btnConfirm.isClickable = false
+                confirmDetailBinding.btnConfirm.setBackgroundResource(
                     R.drawable.bg_corners_gray2_22
                 )
-                confirmDetailBinding?.detail?.btnConfirm?.text =
+                confirmDetailBinding.btnConfirm.text =
                     getString(R.string.notice_have_been_confirmed)
             }
         } else {
-            confirmDetailBinding?.detail?.btnConfirm?.visibility = View.GONE
+            confirmDetailBinding.btnConfirm.visibility = View.GONE
             confirm()
         }
     }
@@ -193,9 +193,9 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                 override fun onSuccess(model: ResultBean?) {
                     if (model != null) {
                         if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                            confirmDetailBinding?.detail?.btnConfirm?.isClickable = false
-                            confirmDetailBinding?.detail?.btnConfirm?.setBackgroundResource(R.drawable.bg_corners_gray2_22)
-                            confirmDetailBinding?.detail?.btnConfirm?.text =
+                            confirmDetailBinding.btnConfirm.isClickable = false
+                            confirmDetailBinding.btnConfirm.setBackgroundResource(R.drawable.bg_corners_gray2_22)
+                            confirmDetailBinding.btnConfirm.text =
                                 getString(R.string.notice_have_been_confirmed)
                             EventBus.getDefault().post(
                                 EventMessage(
@@ -223,9 +223,9 @@ class NoticeConfirmDetailActivity : BaseActivity() {
     }
 
     private fun initView() {
-        confirmDetailBinding!!.include.title.setText(R.string.notice_announcement_title)
-        confirmDetailBinding!!.include.backLayout.setOnClickListener { finish() }
-        confirmDetailBinding!!.detail.btnConfirm.visibility = View.INVISIBLE
+        confirmDetailBinding.include.title.setText(R.string.notice_announcement_title)
+        confirmDetailBinding.include.backLayout.setOnClickListener { finish() }
+        confirmDetailBinding.btnConfirm.visibility = View.INVISIBLE
 
         for (index in 0..20) {
             if (index % 2 == 0) {
@@ -271,17 +271,17 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                 return view
             }
         }
-        snapHelper.attachToRecyclerView(confirmDetailBinding?.recyclerView)
+        snapHelper.attachToRecyclerView(confirmDetailBinding.recyclerView)
         // ---布局管理器---
         val linearLayoutManager = LinearLayoutManager(this)
         // 默认是Vertical (HORIZONTAL则为横向列表)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        confirmDetailBinding?.recyclerView?.layoutManager = linearLayoutManager
+        confirmDetailBinding.recyclerView.layoutManager = linearLayoutManager
         // TODO 这么写是为了获取RecycleView的宽高
-        confirmDetailBinding?.recyclerView?.viewTreeObserver?.addOnGlobalLayoutListener(object :
+        confirmDetailBinding.recyclerView.viewTreeObserver?.addOnGlobalLayoutListener(object :
             OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                confirmDetailBinding?.recyclerView!!.viewTreeObserver.removeOnGlobalLayoutListener(
+                confirmDetailBinding.recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(
                     this
                 )
                 /**
@@ -305,7 +305,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
                 }
             }
         // 设置Adapter
-        confirmDetailBinding?.recyclerView?.adapter = mAdapter
+        confirmDetailBinding.recyclerView.adapter = mAdapter
         mAdapter.setList(mDataList)
     }
 }

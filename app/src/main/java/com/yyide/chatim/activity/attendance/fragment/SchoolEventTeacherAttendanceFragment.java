@@ -102,7 +102,7 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
         if (itemTeachersBean != null && itemTeachersBean.getTeachers() != null) {
             teachers = itemTeachersBean.getTeachers();
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvEventName.setText(teachers.getThingName() + "(人)");
+            mViewBinding.tvEventName.setText(teachers.getThingName());
 
             mViewBinding.tvAttendanceRate.setText(teachers.getRate());
             if (!TextUtils.isEmpty(teachers.getRate())) {

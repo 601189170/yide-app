@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.blankj.utilcode.util.SizeUtils
 import com.tencent.qcloud.tim.uikit.utils.ScreenUtil
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
@@ -115,7 +116,7 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
         } else {
             detailBinding.constraintLayout.visibility = View.GONE
             if (!TextUtils.isEmpty(item.imgpath)) {
-                GlideUtil.loadImageRadius(baseContext, item.imgpath, detailBinding!!.ivBg, 8)
+                GlideUtil.loadImageRadius(baseContext, item.imgpath, detailBinding!!.ivBg, SizeUtils.dp2px(4f))
             }
         }
         var teacherNumber: Int = 0

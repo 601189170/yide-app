@@ -280,7 +280,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             kqContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             tableContent.setVisibility(View.GONE);
-            if(SpData.getClassInfo() != null){
+            if (SpData.getClassInfo() != null) {
                 tableContent.setVisibility(View.VISIBLE);
                 fragmentTransaction.replace(R.id.table_content, new TableFragment());
             }
@@ -310,6 +310,17 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级学生荣誉
 //            fragmentTransaction.replace(R.id.student_honor_content, new StudentHonorFragment());
+        } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_ADMIN.equals(SpData.getIdentityInfo().status)) {
+            //校长身份
+            workContent.setVisibility(View.GONE);
+            studentHonorContent.setVisibility(View.GONE);
+            classHonorContent.setVisibility(View.GONE);
+            kqContent.setVisibility(View.GONE);
+            noticeContent.setVisibility(View.VISIBLE);
+            tableContent.setVisibility(View.GONE);
+            //通知
+            NoticeFragment noticeFragment = new NoticeFragment();
+            fragmentTransaction.replace(R.id.notice_content, noticeFragment);
         } else {
             tableContent.setVisibility(View.VISIBLE);
             workContent.setVisibility(View.VISIBLE);

@@ -29,6 +29,8 @@
 
     <!--通讯录-->
     <string name="please_input_search_content">请输入搜索内容</string>
+    <string name="book_title_yd">通讯录</string>
+    <string name="book_title_info_yd">个人信息</string>
 
     // "我"相关
     <string name="profile">我</string>
