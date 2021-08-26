@@ -272,8 +272,9 @@
     <string name="get_active_code">获取激活码</string>
     <string name="enter_login">进入</string>
     <string name="back_homepage">返回首页</string>
-    <string name="login_success">登陆成功</string>
-    <string name="search_class_brand_name">请输入横屏/竖屏班牌名称</string>
+    <string name="login_success">登录成功</string>
+    <string name="search_class_brand_name_landscape">请输入横屏班牌名称</string>
+    <string name="search_class_brand_name_portrait">请输入竖屏班牌名称</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>

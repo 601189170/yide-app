@@ -60,8 +60,10 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
         setContentView(binding.getRoot());
         binding.top.title.setText(R.string.app_scan_code);
         final Intent intent = getIntent();
+        //屏幕方式 0:横 1：竖
         brandStatus = intent.getStringExtra("brandStatus");
         code = intent.getStringExtra("code");
+        binding.etRegisterCode.setHint(getBrandNameTextBoxTip(brandStatus));
         binding.top.backLayout.setOnClickListener(v -> finish());
         binding.btnLogin.setOnClickListener(v -> login());
         binding.etRegisterCode.setOnEditorActionListener((v, actionId, event) -> {
@@ -72,7 +74,7 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
                         .hideSoftInputFromWindow(ConfirmLoginActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 String keyWord = binding.etRegisterCode.getText().toString();
                 if (TextUtils.isEmpty(keyWord)) {
-                    ToastUtils.showShort(getString(R.string.search_class_brand_name));
+                    ToastUtils.showShort(getBrandNameTextBoxTip(brandStatus));
                     return true;
                 }
                 mvpPresenter.getClassBrand(brandStatus, keyWord);
@@ -181,5 +183,14 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
         Log.e(TAG, "loginFail: "+msg );
         ToastUtils.showShort(msg);
         finish();
+    }
+
+    private String getBrandNameTextBoxTip(String brandStatus){
+        if ("0".equals(brandStatus)){
+            //横屏
+            return getString(R.string.search_class_brand_name_landscape);
+        }
+        //竖屏
+        return getString(R.string.search_class_brand_name_portrait);
     }
 }
