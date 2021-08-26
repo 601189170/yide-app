@@ -4,7 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
-import com.yyide.chatim.activity.BookSearchActivity
+import com.yyide.chatim.activity.book.fragment.BookPatriarchFragment
+import com.yyide.chatim.activity.book.fragment.BookTeacherFragment
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityNewBookBinding
 import com.yyide.chatim.model.GetUserSchoolRsp

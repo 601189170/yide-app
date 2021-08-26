@@ -172,7 +172,7 @@
             android:name=".activity.PreparesLessonActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.BookSearchActivity" />
+        <activity android:name=".activity.book.BookSearchActivity" />
         <activity
             android:name=".activity.ScanLoginActivity"
             android:screenOrientation="portrait"

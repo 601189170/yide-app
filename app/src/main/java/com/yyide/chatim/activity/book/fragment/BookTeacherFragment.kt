@@ -1,6 +1,5 @@
-package com.yyide.chatim.activity.book
+package com.yyide.chatim.activity.book.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -8,18 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.SizeUtils
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
-import com.yyide.chatim.activity.BookSearchActivity
 import com.yyide.chatim.activity.book.adapter.BookClassesAdapter
 import com.yyide.chatim.activity.book.adapter.BookStaffAdapter
 import com.yyide.chatim.base.BaseConstant
-import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentTeacherBookBinding
 import com.yyide.chatim.model.BookRsp
-import com.yyide.chatim.model.GetUserSchoolRsp
 import com.yyide.chatim.presenter.BookPresenter
 import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.view.BookView
@@ -77,11 +72,10 @@ class BookTeacherFragment : BaseMvpFragment<BookPresenter>(), BookView {
                 } else {
                     mViewBinding.tvSchoolName.text = model.data.schoolName_
                 }
-                GlideUtil.loadImageRadius2(
+                GlideUtil.loadImageHead(
                     context,
                     model.data.schoolBadgeImg,
-                    mViewBinding.img,
-                    SizeUtils.dp2px(2f)
+                    mViewBinding.img
                 )
                 staffAdapter.setList(model.data.departmentList)
                 classesAdapter.setList(model.data.classesList)

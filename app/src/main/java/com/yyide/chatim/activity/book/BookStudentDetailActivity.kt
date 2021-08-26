@@ -1,17 +1,10 @@
 package com.yyide.chatim.activity.book
 
-import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import com.blankj.utilcode.util.SizeUtils
-import com.blankj.utilcode.util.ToastUtils
-import com.tbruyelle.rxpermissions3.RxPermissions
 import com.tencent.imsdk.v2.V2TIMConversation
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo
 import com.yyide.chatim.BaseApplication
@@ -22,6 +15,7 @@ import com.yyide.chatim.databinding.ActivityBookStudentDetailBinding
 import com.yyide.chatim.model.BookStudentItem
 import com.yyide.chatim.utils.Constants
 import com.yyide.chatim.utils.GlideUtil
+import com.yyide.chatim.utils.RxPermissionUtils
 import com.yyide.chatim.utils.Utils
 
 class BookStudentDetailActivity : BaseActivity() {
@@ -32,9 +26,13 @@ class BookStudentDetailActivity : BaseActivity() {
     private var type3 = 1
 
     companion object {
-        fun start(context: Context, student: BookStudentItem) {
+        /**
+         * type 1 家长  0 老师
+         */
+        fun start(context: Context, student: BookStudentItem, type: Int) {
             val intent = Intent(context, BookStudentDetailActivity::class.java)
             intent.putExtra("student", student)
+            intent.putExtra("type", type)
             context.startActivity(intent)
         }
     }
@@ -52,14 +50,19 @@ class BookStudentDetailActivity : BaseActivity() {
 
     private fun initView() {
         val student: BookStudentItem = intent.getSerializableExtra("student") as BookStudentItem
-        GlideUtil.loadImageRadius2(
+        val status = intent.getIntExtra("type", -1)
+        if (status == 1) {
+            viewBinding.clMessage.visibility = View.VISIBLE
+        }
+        GlideUtil.loadImageHead(
             this,
             student.faceInformation,
-            viewBinding.ivHead,
-            SizeUtils.dp2px(2f)
+            viewBinding.ivHead
         )
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)
+        viewBinding.tvClasses.text =
+            if (TextUtils.isEmpty(student.className)) "暂无班级星系" else student.className
         viewBinding.tvName.text = student.name
         viewBinding.name.text = student.name
         viewBinding.sex.text = if (student.sex == "1") "男" else "女"
@@ -97,13 +100,13 @@ class BookStudentDetailActivity : BaseActivity() {
         }
 
         viewBinding.ivPhone.setOnClickListener {
-            rxPermission(student.phone)
+            RxPermissionUtils.callPhone(this, student.phone)
         }
         viewBinding.ivMainGuardian.setOnClickListener {
-            rxPermission(student.primaryGuardianPhone)
+            RxPermissionUtils.callPhone(this, student.primaryGuardianPhone)
         }
         viewBinding.ivPhoneDeputyGuardian.setOnClickListener {
-            rxPermission(student.deputyGuardianPhone)
+            RxPermissionUtils.callPhone(this, student.deputyGuardianPhone)
         }
 
         viewBinding.set.setOnClickListener { v: View? ->
@@ -142,42 +145,16 @@ class BookStudentDetailActivity : BaseActivity() {
             }
         }
 
-    }
-
-    private fun rxPermission(phone: String) {
-        if (TextUtils.isEmpty(phone)) return
-        val rxPermissions = RxPermissions(this)
-        rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe { granted: Boolean ->
-            if (granted) {
-                if (!TextUtils.isEmpty(phone)) {
-                    val intent = Intent(Intent.ACTION_CALL)
-                    val data = Uri.parse("tel:$phone")
-                    intent.data = data
-                    startActivity(intent)
-                } else {
-                    ToastUtils.showShort("空手机号，无法拨打电话")
-                }
-            } else {
-                // 权限被拒绝
-                AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage(R.string.permission_call_phone)
-                    .setPositiveButton(
-                        "开启"
-                    ) { dialog: DialogInterface?, which: Int ->
-                        val localIntent = Intent()
-                        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-                        localIntent.data = Uri.fromParts(
-                            "package",
-                            packageName,
-                            null
-                        )
-                        startActivity(localIntent)
-                    }
-                    .setNegativeButton("取消", null)
-                    .create().show()
-            }
+        viewBinding.clMessage.setOnClickListener {
+            val chatInfo = ChatInfo()
+            chatInfo.type = V2TIMConversation.V2TIM_C2C
+            chatInfo.id = student.userId
+            chatInfo.chatName = student.name
+            val intent = Intent(BaseApplication.getInstance(), ChatActivity::class.java)
+            intent.putExtra(Constants.CHAT_INFO, chatInfo)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            BaseApplication.getInstance().startActivity(intent)
         }
     }
+
 }

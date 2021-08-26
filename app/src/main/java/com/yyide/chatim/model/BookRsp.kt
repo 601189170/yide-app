@@ -56,6 +56,10 @@ data class BookStudentItem(
     var name: String,
     @JSONField(name = "phone")
     var phone: String,
+    @JSONField(name = "className")
+    var className: String,
+    @JSONField(name = "userId")
+    var userId: String,//监护人ID
     @JSONField(name = "primaryGuardianPhone")
     var primaryGuardianPhone: String,
     @JSONField(name = "deputyGuardianPhone")

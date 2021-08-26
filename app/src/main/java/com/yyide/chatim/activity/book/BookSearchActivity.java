@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity;
+package com.yyide.chatim.activity.book;
 
 import android.content.Context;
 import android.os.Bundle;

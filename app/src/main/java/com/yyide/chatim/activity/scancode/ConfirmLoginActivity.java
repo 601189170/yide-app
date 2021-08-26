@@ -15,18 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.BookSearchActivity;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.databinding.ActivityBindingEquipmentBinding;
 import com.yyide.chatim.databinding.ActivityConfirmLoginBinding;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.BrandSearchRsp;
-import com.yyide.chatim.presenter.scan.BindingEquipmentPresenter;
 import com.yyide.chatim.presenter.scan.ConfirmLoginPresenter;
-import com.yyide.chatim.view.scan.BindingEquipmentView;
 import com.yyide.chatim.view.scan.ConfirmLoginView;
 
 import java.util.ArrayList;

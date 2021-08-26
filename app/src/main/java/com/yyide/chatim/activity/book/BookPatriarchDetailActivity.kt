@@ -1,18 +1,10 @@
 package com.yyide.chatim.activity.book
 
-import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import com.blankj.utilcode.util.SizeUtils
-import com.blankj.utilcode.util.ToastUtils
-import com.tbruyelle.rxpermissions3.RxPermissions
 import com.tencent.imsdk.v2.V2TIMConversation
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo
 import com.yyide.chatim.BaseApplication
@@ -21,9 +13,9 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.chat.ChatActivity
 import com.yyide.chatim.databinding.ActivityBookPatriarchDetailBinding
 import com.yyide.chatim.model.BookGuardianItem
-import com.yyide.chatim.model.BookTeacherItem
 import com.yyide.chatim.utils.Constants
 import com.yyide.chatim.utils.GlideUtil
+import com.yyide.chatim.utils.RxPermissionUtils
 import com.yyide.chatim.utils.Utils
 
 class BookPatriarchDetailActivity : BaseActivity() {
@@ -53,11 +45,10 @@ class BookPatriarchDetailActivity : BaseActivity() {
     private fun initView() {
         val guardianItem: BookGuardianItem =
             intent.getSerializableExtra("guardianItem") as BookGuardianItem
-        GlideUtil.loadImageRadius2(
+        GlideUtil.loadImageHead(
             this,
             guardianItem.faceInformation,
-            viewBinding.ivHead,
-            SizeUtils.dp2px(2f)
+            viewBinding.ivHead
         )
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)
@@ -67,7 +58,7 @@ class BookPatriarchDetailActivity : BaseActivity() {
         viewBinding.tvSingleGuardianship.text = if (guardianItem.singleParent == "1") "是" else "否"
         viewBinding.tvEmployer.text = if(!TextUtils.isEmpty(guardianItem.workUnit)) guardianItem.workUnit else  "暂无"
         viewBinding.ivPhone.setOnClickListener {
-            rxPermission(guardianItem.phone)
+            RxPermissionUtils.callPhone(this, guardianItem.phone)
         }
 
         if (TextUtils.isEmpty(guardianItem.phone))
@@ -99,39 +90,4 @@ class BookPatriarchDetailActivity : BaseActivity() {
         }
     }
 
-    private fun rxPermission(phone: String) {
-        val rxPermissions = RxPermissions(this)
-        rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe { granted: Boolean ->
-            if (granted) {
-                if (!TextUtils.isEmpty(phone)) {
-                    val intent = Intent(Intent.ACTION_CALL)
-                    val data = Uri.parse("tel:$phone")
-                    intent.data = data
-                    startActivity(intent)
-                } else {
-                    ToastUtils.showShort("空手机号，无法拨打电话")
-                }
-            } else {
-                // 权限被拒绝
-                AlertDialog.Builder(this)
-                    .setTitle("提示")
-                    .setMessage(R.string.permission_call_phone)
-                    .setPositiveButton(
-                        "开启"
-                    ) { dialog: DialogInterface?, which: Int ->
-                        val localIntent = Intent()
-                        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-                        localIntent.data = Uri.fromParts(
-                            "package",
-                            packageName,
-                            null
-                        )
-                        startActivity(localIntent)
-                    }
-                    .setNegativeButton("取消", null)
-                    .create().show()
-            }
-        }
-    }
 }

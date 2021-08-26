@@ -24,6 +24,8 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.UserInfoRsp;
+import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.utils.RxPermissionUtils;
 import com.yyide.chatim.utils.StringUtils;
 
 import java.util.List;
@@ -59,7 +61,7 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserInfoRsp.DataBean bean = data.get(position);
-        holder.tv_realName.setText(StringUtils.subString(bean.getName(), 2));
+        GlideUtil.loadImageHead(context, "", holder.ivHead);
         holder.tv_name.setText(bean.getName());
         if ("1".equals(bean.getUserType())) {
             holder.tv_classname.setText(bean.getDepartmentName());
@@ -73,7 +75,7 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
         }
         holder.iv_call.setOnClickListener(v -> {
             // 已经获取权限打电话
-            rxPermission(bean.getPhone());
+            RxPermissionUtils.callPhone(context, bean.getPhone());
         });
         holder.iv_user_detail.setOnClickListener(v -> {
             TeacherlistRsp.DataBean.RecordsBean recordsBean = new TeacherlistRsp.DataBean.RecordsBean();
@@ -88,40 +90,9 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
             recordsBean.userType = bean.getUserType();
 
             //去详情页
-            Intent intent = new Intent();
+            Intent intent = new Intent(context, PersonInfoActivity.class);
             intent.putExtra("data", JSON.toJSONString(recordsBean));
-            intent.setClass(context, PersonInfoActivity.class);
             context.startActivity(intent);
-        });
-    }
-
-    private void rxPermission(String phone) {
-        RxPermissions rxPermissions = new RxPermissions((FragmentActivity) context);
-        rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(granted -> {
-            if (granted) {
-                if (!TextUtils.isEmpty(phone)) {
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    Uri data = Uri.parse("tel:" + phone);
-                    intent.setData(data);
-                    context.startActivity(intent);
-                } else {
-                    ToastUtils.showShort("空手机号，无法拨打电话");
-                }
-            } else {
-                // 权限被拒绝
-                new AlertDialog.Builder(context)
-                        .setTitle("提示")
-                        .setMessage(R.string.permission_call_phone)
-                        .setPositiveButton("开启", (dialog, which) -> {
-                            Intent localIntent = new Intent();
-                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
-                            context.startActivity(localIntent);
-                        })
-                        .setNegativeButton("取消", null)
-                        .create().show();
-            }
         });
     }
 
@@ -131,16 +102,14 @@ public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_realName)
-        TextView tv_realName;//显示图片
+        @BindView(R.id.ivHead)
+        ImageView ivHead;//显示图片
         @BindView(R.id.iv_user_detail)
         ImageView iv_user_detail;
         @BindView(R.id.iv_call)
         ImageView iv_call;
-
         @BindView(R.id.tv_name)
         TextView tv_name;
-
         @BindView(R.id.tv_classname)
         TextView tv_classname;
 

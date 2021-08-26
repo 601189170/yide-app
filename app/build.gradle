@@ -29,8 +29,8 @@ android {
         applicationId "com.yyide.chatim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 105
-        versionName "1.0.5"
+        versionCode 106
+        versionName "1.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -212,6 +212,9 @@ dependencies {
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.1.5-jitpack'
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.5-jitpack'
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86_64:v8.1.5-jitpack'
+
+    //日期时间选择
+    implementation 'com.github.loperSeven:DateTimePicker:0.2.0'
 
     //Utils
     implementation 'com.blankj:utilcode:1.30.6'

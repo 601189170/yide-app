@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity.book
+package com.yyide.chatim.activity.book.fragment
 
 import android.graphics.Color
 import android.os.Bundle
@@ -8,11 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.SizeUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.book.BookStudentDetailActivity
+import com.yyide.chatim.activity.book.BookTeacherDetailActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.*
@@ -64,16 +65,15 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
                 viewBinding.nestedScrollView.visibility = View.VISIBLE
-                if(TextUtils.isEmpty(model.data.schoolName_)){
+                if (TextUtils.isEmpty(model.data.schoolName_)) {
                     viewBinding.tvSchoolName.text = SpData.getIdentityInfo().schoolName
                 } else {
                     viewBinding.tvSchoolName.text = model.data.schoolName_
                 }
-                GlideUtil.loadImageRadius2(
+                GlideUtil.loadImageHead(
                     context,
                     model.data.schoolBadgeImg,
-                    viewBinding.img,
-                    SizeUtils.dp2px(2f)
+                    viewBinding.img
                 )
                 adapter.setList(model.data.classesList)
             }
@@ -107,20 +107,25 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
                         view.tvStudent.visibility = View.GONE
                         view.tvTeacher.visibility = View.GONE
                     }
+
+                    val teacherAdapter = TeacherAdapter()
                     view.teacherList.layoutManager = LinearLayoutManager(context)
                     view.teacherList.adapter = teacherAdapter
                     teacherAdapter.setList(item.teacherList)
                     teacherAdapter.setOnItemClickListener { adapter, view, position ->
                         BookTeacherDetailActivity.start(context, teacherAdapter.getItem(position))
                     }
+
+                    val studentAdapter = StudentAdapter()
                     view.studentList.layoutManager = LinearLayoutManager(context)
                     view.studentList.adapter = studentAdapter
                     studentAdapter.setList(item.studentList)
                     studentAdapter.setOnItemClickListener { adapter, view, position ->
-                        if (studentAdapter.getItem(position).isOwnChild == "0") {
+                        if (studentAdapter.getItem(position).isOwnChild == "1") {
                             BookStudentDetailActivity.start(
                                 context,
-                                studentAdapter.getItem(position)
+                                studentAdapter.getItem(position),
+                                1
                             )
                         }
                     }
@@ -135,42 +140,38 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
     /**
      * 学生适配器
      */
-    private val studentAdapter =
-        object :
-            BaseQuickAdapter<BookStudentItem, BaseViewHolder>(R.layout.item_new_book_prtriarch_student) {
-            override fun convert(holder: BaseViewHolder, item: BookStudentItem) {
-                val view = ItemNewBookPrtriarchStudentBinding.bind(holder.itemView)
-                view.tvName.text = item.name
-                if (item.isOwnChild == "1") {//0不是，1是 #999999
-                    view.tvName.setTextColor(Color.parseColor("#999999"))
-                } else {
-                    view.tvName.setTextColor(Color.parseColor("#333333"))
-                }
-                GlideUtil.loadImageRadius2(
-                    context,
-                    item.faceInformation,
-                    view.img,
-                    SizeUtils.dp2px(2f)
-                )
+    inner class StudentAdapter :
+        BaseQuickAdapter<BookStudentItem, BaseViewHolder>(R.layout.item_new_book_prtriarch_student) {
+        override fun convert(holder: BaseViewHolder, item: BookStudentItem) {
+            val view = ItemNewBookPrtriarchStudentBinding.bind(holder.itemView)
+            view.tvName.text = item.name
+            if (item.isOwnChild == "0") {//0不是，1是 #999999
+                view.tvName.setTextColor(Color.parseColor("#999999"))
+            } else {
+                view.tvName.setTextColor(Color.parseColor("#333333"))
             }
+            GlideUtil.loadImageHead(
+                context,
+                item.faceInformation,
+                view.img
+            )
         }
+    }
 
     /**
      * 教师适配器
      */
-    private val teacherAdapter =
-        object :
-            BaseQuickAdapter<BookTeacherItem, BaseViewHolder>(R.layout.item_new_book_prariarch_teacher) {
-            override fun convert(holder: BaseViewHolder, item: BookTeacherItem) {
-                val view = ItemNewBookPrariarchTeacherBinding.bind(holder.itemView)
-                view.tvName.text = item.name + " (${item.teachingSubjects})"
-                GlideUtil.loadImageRadius2(
-                    context,
-                    item.faceInformation,
-                    view.img,
-                    SizeUtils.dp2px(2f)
-                )
-            }
+    inner class TeacherAdapter :
+        BaseQuickAdapter<BookTeacherItem, BaseViewHolder>(R.layout.item_new_book_prariarch_teacher) {
+        override fun convert(holder: BaseViewHolder, item: BookTeacherItem) {
+            val view = ItemNewBookPrariarchTeacherBinding.bind(holder.itemView)
+            view.tvName.text = item.name + " (${item.teachingSubjects})"
+            GlideUtil.loadImageHead(
+                context,
+                item.faceInformation,
+                view.img
+            )
         }
+    }
 
 }

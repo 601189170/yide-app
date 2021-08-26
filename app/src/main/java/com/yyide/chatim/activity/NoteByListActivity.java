@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.adapter.TabRecyAdapter;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.NoteByListFragment;
