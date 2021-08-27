@@ -333,14 +333,15 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
             if (attendanceWeekStatsRsp.getData() == null){
                 ToastUtils.showShort(""+attendanceWeekStatsRsp.getMsg());
             }
-
+            attendancesFormBeanList.clear();
+            data.clear();
             if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getAttendancesForm() == null) {
                 mViewBinding.tvAttendanceType.setVisibility(View.GONE);
                 showBlank(true);
+                notifyAdapter();
                 return;
             }
-            attendancesFormBeanList.clear();
-            data.clear();
+
             final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean> attendancesForm = attendanceWeekStatsRsp.getData().getAttendancesForm();
             if (attendancesForm == null || attendancesForm.isEmpty()){
                 eventList.clear();
