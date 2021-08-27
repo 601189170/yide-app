@@ -159,7 +159,7 @@
     <string name="attendance_no_clock_in">未打卡</string>
     <string name="attendance_sign_out_rate">签退率</string>
     <string name="attendance_rate">出勤率</string>
-    <string name="attendance_sign_in_rate">签到率</string>
+    <string name="attendance_sign_in_rate">出勤率</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="student_honor_count">%d荣誉</string>

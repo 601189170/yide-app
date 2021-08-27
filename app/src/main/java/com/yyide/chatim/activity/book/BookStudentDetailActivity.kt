@@ -29,6 +29,7 @@ class BookStudentDetailActivity : BaseActivity() {
         /**
          * type 1 家长  0 老师
          */
+        @JvmStatic
         fun start(context: Context, student: BookStudentItem, type: Int) {
             val intent = Intent(context, BookStudentDetailActivity::class.java)
             intent.putExtra("student", student)
@@ -51,9 +52,9 @@ class BookStudentDetailActivity : BaseActivity() {
     private fun initView() {
         val student: BookStudentItem = intent.getSerializableExtra("student") as BookStudentItem
         val status = intent.getIntExtra("type", -1)
-        if (status == 1) {
-            viewBinding.clMessage.visibility = View.VISIBLE
-        }
+//        if (status == 1) {
+        viewBinding.clMessage.visibility = View.VISIBLE
+//        }
         GlideUtil.loadImageHead(
             this,
             student.faceInformation,

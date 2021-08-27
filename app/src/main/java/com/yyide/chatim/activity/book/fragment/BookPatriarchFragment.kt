@@ -16,7 +16,10 @@ import com.yyide.chatim.activity.book.BookStudentDetailActivity
 import com.yyide.chatim.activity.book.BookTeacherDetailActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
-import com.yyide.chatim.databinding.*
+import com.yyide.chatim.databinding.FragmentBookPartriachBinding
+import com.yyide.chatim.databinding.ItemNewBookPrariarchTeacherBinding
+import com.yyide.chatim.databinding.ItemNewBookPrtriarchBinding
+import com.yyide.chatim.databinding.ItemNewBookPrtriarchStudentBinding
 import com.yyide.chatim.model.BookClassesItem
 import com.yyide.chatim.model.BookRsp
 import com.yyide.chatim.model.BookStudentItem
@@ -25,6 +28,9 @@ import com.yyide.chatim.presenter.BookPresenter
 import com.yyide.chatim.utils.GlideUtil
 import com.yyide.chatim.view.BookView
 
+/**
+ * 家长视角通讯录列表
+ */
 class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
 
     private val TAG = BookPatriarchFragment::class.java.simpleName
@@ -121,13 +127,13 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
                     view.studentList.adapter = studentAdapter
                     studentAdapter.setList(item.studentList)
                     studentAdapter.setOnItemClickListener { adapter, view, position ->
-                        if (studentAdapter.getItem(position).isOwnChild == "1") {
-                            BookStudentDetailActivity.start(
-                                context,
-                                studentAdapter.getItem(position),
-                                1
-                            )
-                        }
+//                        if (studentAdapter.getItem(position).isOwnChild == "1") {
+                        BookStudentDetailActivity.start(
+                            context,
+                            studentAdapter.getItem(position),
+                            1
+                        )
+//                        }
                     }
                     view.root.setOnClickListener { v: View? ->
                         item.unfold = !item.unfold
@@ -145,11 +151,11 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
         override fun convert(holder: BaseViewHolder, item: BookStudentItem) {
             val view = ItemNewBookPrtriarchStudentBinding.bind(holder.itemView)
             view.tvName.text = item.name
-            if (item.isOwnChild == "0") {//0不是，1是 #999999
-                view.tvName.setTextColor(Color.parseColor("#999999"))
-            } else {
-                view.tvName.setTextColor(Color.parseColor("#333333"))
-            }
+//            if (item.isOwnChild == "0") {//0不是，1是 #999999
+//                view.tvName.setTextColor(Color.parseColor("#999999"))
+//            } else {
+//                view.tvName.setTextColor(Color.parseColor("#333333"))
+//            }
             GlideUtil.loadImageHead(
                 context,
                 item.faceInformation,

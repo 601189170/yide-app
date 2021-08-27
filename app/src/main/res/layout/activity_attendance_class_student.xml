@@ -73,7 +73,7 @@
                     android:layout_marginEnd="6dp"
                     android:drawableStart="@mipmap/icon_att_sign"
                     android:drawablePadding="@dimen/dp_4"
-                    android:text="签到率:"
+                    android:text="出勤率:"
                     android:textColor="#ffffffff"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toTopOf="@+id/progress"

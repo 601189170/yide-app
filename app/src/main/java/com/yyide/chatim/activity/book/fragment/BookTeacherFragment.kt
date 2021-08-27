@@ -57,7 +57,7 @@ class BookTeacherFragment : BaseMvpFragment<BookPresenter>(), BookView {
         mViewBinding.bookStaffList.adapter = staffAdapter
 //        staffAdapter.setEmptyView(R.layout.empty)
         mViewBinding.bookClassesList.layoutManager = LinearLayoutManager(context)
-        classesAdapter = BookClassesAdapter(R.layout.item_new_book)
+        classesAdapter = BookClassesAdapter()
         mViewBinding.bookClassesList.adapter = classesAdapter
         mvpPresenter.getAddressBook("2")
     }

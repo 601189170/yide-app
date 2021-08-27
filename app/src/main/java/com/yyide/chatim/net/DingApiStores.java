@@ -13,6 +13,7 @@ import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.BookRsp;
+import com.yyide.chatim.model.BookSearchRsp;
 import com.yyide.chatim.model.BrandSearchRsp;
 import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
@@ -416,8 +417,8 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/management/cloud-system/app/teacher/selectAllList
     //通讯录搜索-所有
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/user/list")
-    Observable<UserInfoRsp> selectAllList(@Body RequestBody requestBody);
+    @POST("/management/cloud-system/v1/app/addressBookApp/searchAddressBook")
+    Observable<BookSearchRsp> selectAllList(@Body RequestBody requestBody);
 
     //通讯录搜索-小初高
     @Headers({"Content-Type: application/json", "Accept: application/json"})

@@ -22,11 +22,11 @@ data class Data(
     @JSONField(name = "schoolBadgeImg")
     var schoolBadgeImg: String,
     @JSONField(name = "classesList")
-    var classesList: List<BookClassesItem>,//班级列表
+    var classesList: MutableList<BookClassesItem>,//班级列表
     @JSONField(name = "teacherList")
-    var teacherList: List<BookTeacherItem>,//老师列表
+    var teacherList: MutableList<BookTeacherItem>,//老师列表
     @JSONField(name = "departmentList")
-    var departmentList: List<BookDepartmentItem>//部门
+    var departmentList: MutableList<BookDepartmentItem>//部门
 )
 
 /**
@@ -38,9 +38,9 @@ data class BookClassesItem(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "studentList")
-    var studentList: List<BookStudentItem>,
+    var studentList: MutableList<BookStudentItem>,
     @JSONField(name = "teacherList")
-    var teacherList: List<BookTeacherItem>,
+    var teacherList: MutableList<BookTeacherItem>,
     var level: Int = 0,
     var unfold: Boolean = false,//是否展开
     var parentId: Long = 0
@@ -51,29 +51,29 @@ data class BookClassesItem(
  */
 data class BookStudentItem(
     @JSONField(name = "id")
-    var id: Long,
+    var id: Long?,
     @JSONField(name = "name")
-    var name: String,
+    var name: String?,
     @JSONField(name = "phone")
-    var phone: String,
+    var phone: String?,//监护人ID
     @JSONField(name = "className")
-    var className: String,
+    var className: String?,
     @JSONField(name = "userId")
-    var userId: String,//监护人ID
+    var userId: String?,
     @JSONField(name = "primaryGuardianPhone")
-    var primaryGuardianPhone: String,
+    var primaryGuardianPhone: String?,//	性别（1:男、0:女）
     @JSONField(name = "deputyGuardianPhone")
-    var deputyGuardianPhone: String,
+    var deputyGuardianPhone: String?,
     @JSONField(name = "sex")
-    var sex: String,//	性别（1:男、0:女）
+    var sex: String?,
     @JSONField(name = "address")
-    var address: String,
+    var address: String?,//家长：是否自己的孩子 0不是，1是
     @JSONField(name = "faceInformation")
-    var faceInformation: String,
+    var faceInformation: String?,
     @JSONField(name = "isOwnChild")
-    var isOwnChild: String,//家长：是否自己的孩子 0不是，1是
+    var isOwnChild: String?,
     @JSONField(name = "guardianList")
-    var guardianList: List<BookGuardianItem>//学生监护人信息
+    var guardianList: MutableList<BookGuardianItem>?//学生监护人信息){}){}){}
 ) : Serializable
 
 /**
@@ -81,24 +81,24 @@ data class BookStudentItem(
  */
 data class BookGuardianItem(
     @JSONField(name = "name")
-    var name: String,
+    var name: String?,
     @JSONField(name = "id")
-    var id: String,
+    var id: Long?,
     @JSONField(name = "phone")
-    var phone: String,
+    var phone: String?,
     @JSONField(name = "userId")
-    var userId: String,//监护人ID
+    var userId: String?,//监护人ID
     @JSONField(name = "relation")
-    var relation: String,//	与监护人关系（0:父亲，1:母亲，2:爷爷，3:奶奶，4:外公，5:外婆，6:其它）
+    var relation: String?,//	与监护人关系（0:父亲，1:母亲，2:爷爷，3:奶奶，4:外公，5:外婆，6:其它）
     @JSONField(name = "workUnit")
-    var workUnit: String,//工作单位
+    var workUnit: String?,//工作单位
     @JSONField(name = "faceInformation")
-    var faceInformation: String,//头像
+    var faceInformation: String?,//头像
     @JSONField(name = "singleParent")
-    var singleParent: String//是否单亲监护（0:否，1:是）
+    var singleParent: String?//是否单亲监护（0:否，1:是）
 ) : Serializable {
     @JvmName("getRelation1")
-    public fun getRelation(): String {
+    fun getRelation(): String {
         return when (relation) {//	与监护人关系（0:父亲，1:母亲，2:爷爷，3:奶奶，4:外公，5:外婆，6:其它）
             "0" ->
                 "父亲"
@@ -125,21 +125,21 @@ data class BookGuardianItem(
  */
 data class BookTeacherItem(
     @JSONField(name = "name")
-    var name: String,
+    var name: String?,
     @JSONField(name = "sex")
-    var sex: String,
+    var sex: String?,
     @JSONField(name = "phone")
-    var phone: String,
+    var phone: String?,
     @JSONField(name = "userId")
-    var userId: String,
+    var userId: String?,
     @JSONField(name = "email")
     var email: String,
     @JSONField(name = "subjectName")
-    var subjectName: String,
+    var subjectName: String?,
     @JSONField(name = "teachingSubjects")
-    var teachingSubjects: String,
+    var teachingSubjects: String?,
     @JSONField(name = "faceInformation")
-    var faceInformation: String
+    var faceInformation: String?
 ) : Serializable
 
 /**
@@ -151,9 +151,9 @@ data class BookDepartmentItem(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "list")
-    var list: List<BookDepartmentItem>,
+    var list: MutableList<BookDepartmentItem>,
     @JSONField(name = "teacheList")
-    var teacheList: List<BookTeacherItem>,
+    var teacheList: MutableList<BookTeacherItem>,
     var level: Int = 0,
     var unfold: Boolean = false,//是否展开
     var parentId: Long = 0

@@ -24,6 +24,7 @@ class BookPatriarchDetailActivity : BaseActivity() {
     private var type: Int = 1
 
     companion object {
+        @JvmStatic
         fun start(context: Context, guardianItem: BookGuardianItem) {
             val intent = Intent(context, BookPatriarchDetailActivity::class.java)
             intent.putExtra("guardianItem", guardianItem)

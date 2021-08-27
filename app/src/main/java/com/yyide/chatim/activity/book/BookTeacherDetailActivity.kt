@@ -24,6 +24,7 @@ class BookTeacherDetailActivity : BaseActivity() {
     private var type: Int = 1
 
     companion object {
+        @JvmStatic
         fun start(context: Context, teacher: BookTeacherItem) {
             val intent = Intent(context, BookTeacherDetailActivity::class.java)
             intent.putExtra("teacher", teacher)
