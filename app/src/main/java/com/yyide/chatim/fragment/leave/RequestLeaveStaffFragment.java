@@ -49,6 +49,7 @@ import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.utils.ButtonUtils;
+import com.yyide.chatim.utils.DatePickerDialogUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
@@ -202,14 +203,17 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     public void click(View view) {
         switch (view.getId()) {
             case R.id.cl_start_time:
-                showTime(getString(R.string.select_begin_time),startTime,startTimeListener);
+                //showTime(getString(R.string.select_begin_time),startTime,startTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_begin_time),startTime,startTimeListener);
                 break;
             case R.id.cl_end_time:
                 if (TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(startTime)){
-                    showTime(getString(R.string.select_end_time), startTime,endTimeListener);
+                    //showTime(getString(R.string.select_end_time), startTime,endTimeListener);
+                    DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_end_time), startTime,endTimeListener);
                     break;
                 }
-                showTime(getString(R.string.select_end_time), endTime,endTimeListener);
+                //showTime(getString(R.string.select_end_time), endTime,endTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_end_time), endTime,endTimeListener);
                 break;
             //请假提交
             case R.id.btn_commit:
