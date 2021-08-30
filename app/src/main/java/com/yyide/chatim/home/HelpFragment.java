@@ -98,7 +98,7 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
         adapter.setEmptyView(R.layout.empty);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             HelpItemRep.Records.HelpItemBean itemBean = (HelpItemRep.Records.HelpItemBean) adapter.getData().get(position);
-            if(itemBean.getItemType() == 1){
+            if (itemBean.getItemType() == 1) {
                 Intent intent = new Intent(mActivity, HelpInfoActivity.class);
                 intent.putExtra("itemBean", itemBean);
                 startActivity(intent);
@@ -139,10 +139,18 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
         }
     }
 
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (adapter != null && hidden) {
+//            adapter.stop();
+//        }
+//    }
+
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (adapter != null && hidden) {
+    public void onPause() {
+        super.onPause();
+        if (adapter != null) {
             adapter.stop();
         }
     }

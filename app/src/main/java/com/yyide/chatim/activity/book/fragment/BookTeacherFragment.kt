@@ -9,11 +9,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.book.BookPatriarchDetailActivity
+import com.yyide.chatim.activity.book.BookStudentDetailActivity
+import com.yyide.chatim.activity.book.BookTeacherDetailActivity
 import com.yyide.chatim.activity.book.adapter.BookClassesAdapter
 import com.yyide.chatim.activity.book.adapter.BookStaffAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentTeacherBookBinding
+import com.yyide.chatim.model.BookClassesItem
 import com.yyide.chatim.model.BookRsp
 import com.yyide.chatim.presenter.BookPresenter
 import com.yyide.chatim.utils.GlideUtil
@@ -48,24 +52,44 @@ class BookTeacherFragment : BaseMvpFragment<BookPresenter>(), BookView {
         return BookPresenter(this)
     }
 
-    private var staffAdapter = BookStaffAdapter()
     private lateinit var classesAdapter: BookClassesAdapter
     private fun initView() {
-        mViewBinding.nestedScrollView.visibility = View.INVISIBLE
-        //通讯录列表
-        mViewBinding.bookStaffList.layoutManager = LinearLayoutManager(context)
-        mViewBinding.bookStaffList.adapter = staffAdapter
-//        staffAdapter.setEmptyView(R.layout.empty)
+        mViewBinding.root.visibility = View.INVISIBLE
         mViewBinding.bookClassesList.layoutManager = LinearLayoutManager(context)
         classesAdapter = BookClassesAdapter()
         mViewBinding.bookClassesList.adapter = classesAdapter
+        classesAdapter.setEmptyView(R.layout.empty)
         mvpPresenter.getAddressBook("2")
+        classesAdapter.setOnItemClickListener { adapter, view, position ->
+            when {
+                adapter.getItemViewType(position) == BookClassesAdapter.ITEM_TYPE_STUDNET -> {
+                    context?.let {
+                        classesAdapter.getItem(position).student?.let { it1 ->
+                            BookStudentDetailActivity.start(
+                                it,
+                                it1
+                            )
+                        }
+                    }
+                }
+                adapter.getItemViewType(position) == BookClassesAdapter.ITEM_TYPE_GUARDIAN -> {
+                    context?.let {
+                        classesAdapter.getItem(position).guardian?.let { it1 ->
+                            BookPatriarchDetailActivity.start(
+                                it,
+                                it1
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun getBookList(model: BookRsp?) {
+        mViewBinding.root.visibility = View.VISIBLE
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                mViewBinding.nestedScrollView.visibility = View.VISIBLE
                 //处理没有学校名字
                 if (TextUtils.isEmpty(model.data.schoolName_)) {
                     mViewBinding.tvSchoolName.text = SpData.getIdentityInfo().schoolName
@@ -77,13 +101,19 @@ class BookTeacherFragment : BaseMvpFragment<BookPresenter>(), BookView {
                     model.data.schoolBadgeImg,
                     mViewBinding.img
                 )
-                staffAdapter.setList(model.data.departmentList)
-                classesAdapter.setList(model.data.classesList)
+                val classesList = model.data.classesList
+                val bookClassesItem = BookClassesItem()
+                bookClassesItem.departmentList = model.data.departmentList
+                bookClassesItem.itemType = BookClassesAdapter.ITEM_TYPE_DEPARTMENT
+                classesList.add(0, bookClassesItem)
+                classesAdapter.setList(classesList)
             }
         }
     }
 
     override fun getBookListFail(msg: String?) {
+        mViewBinding.root.visibility = View.VISIBLE
         Log.d(TAG, "getBookListFail：$msg")
     }
+
 }

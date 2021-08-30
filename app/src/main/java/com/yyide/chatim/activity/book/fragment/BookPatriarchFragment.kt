@@ -1,6 +1,5 @@
 package com.yyide.chatim.activity.book.fragment
 
-import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -98,7 +97,7 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
                 view.tvName.text = item.name
                 view.ivUnfold.setImageDrawable(context.resources.getDrawable(R.mipmap.icon_fold))
 
-                if (item.studentList != null && item.studentList.isNotEmpty()) {
+                if (item.studentList != null && item.studentList!!.isNotEmpty()) {
                     Log.e(TAG, "onBindViewHolder isUnfold: " + item.unfold)
                     if (item.unfold) {
                         view.ivUnfold.setImageDrawable(context.resources.getDrawable(R.mipmap.icon_unfold))
@@ -106,6 +105,29 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
                         view.studentList.visibility = View.VISIBLE
                         view.tvStudent.visibility = View.VISIBLE
                         view.tvTeacher.visibility = View.VISIBLE
+                        val teacherAdapter = TeacherAdapter()
+                        view.teacherList.layoutManager = LinearLayoutManager(context)
+                        view.teacherList.adapter = teacherAdapter
+                        teacherAdapter.setList(item.teacherList)
+                        teacherAdapter.setOnItemClickListener { adapter, view, position ->
+                            BookTeacherDetailActivity.start(
+                                context,
+                                teacherAdapter.getItem(position)
+                            )
+                        }
+
+                        val studentAdapter = StudentAdapter()
+                        view.studentList.layoutManager = LinearLayoutManager(context)
+                        view.studentList.adapter = studentAdapter
+                        studentAdapter.setList(item.studentList)
+                        studentAdapter.setOnItemClickListener { adapter, view, position ->
+//                        if (studentAdapter.getItem(position).isOwnChild == "1") {
+                            BookStudentDetailActivity.start(
+                                context,
+                                studentAdapter.getItem(position)
+                            )
+//                        }
+                        }
                     } else {
                         view.ivUnfold.setImageDrawable(context.resources.getDrawable(R.mipmap.icon_fold))
                         view.teacherList.visibility = View.GONE
@@ -113,31 +135,9 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
                         view.tvStudent.visibility = View.GONE
                         view.tvTeacher.visibility = View.GONE
                     }
-
-                    val teacherAdapter = TeacherAdapter()
-                    view.teacherList.layoutManager = LinearLayoutManager(context)
-                    view.teacherList.adapter = teacherAdapter
-                    teacherAdapter.setList(item.teacherList)
-                    teacherAdapter.setOnItemClickListener { adapter, view, position ->
-                        BookTeacherDetailActivity.start(context, teacherAdapter.getItem(position))
-                    }
-
-                    val studentAdapter = StudentAdapter()
-                    view.studentList.layoutManager = LinearLayoutManager(context)
-                    view.studentList.adapter = studentAdapter
-                    studentAdapter.setList(item.studentList)
-                    studentAdapter.setOnItemClickListener { adapter, view, position ->
-//                        if (studentAdapter.getItem(position).isOwnChild == "1") {
-                        BookStudentDetailActivity.start(
-                            context,
-                            studentAdapter.getItem(position),
-                            1
-                        )
-//                        }
-                    }
                     view.root.setOnClickListener { v: View? ->
                         item.unfold = !item.unfold
-                        notifyDataSetChanged()
+                        notifyItemChanged(holder.adapterPosition)
                     }
                 }
             }

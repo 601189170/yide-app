@@ -50,6 +50,13 @@ class BookTeacherDetailActivity : BaseActivity() {
             teacher.faceInformation,
             viewBinding.ivHead
         )
+        if ("1" == teacher.whitelist) {
+            viewBinding.ivPhone.visibility = View.GONE
+            viewBinding.set.visibility = View.GONE
+        } else {
+            viewBinding.ivPhone.visibility = View.VISIBLE
+            viewBinding.set.visibility = View.VISIBLE
+        }
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)
         viewBinding.tvName.text = teacher.name

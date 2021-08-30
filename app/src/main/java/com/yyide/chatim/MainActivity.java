@@ -569,7 +569,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         GSYVideoManager.onPause();
     }
 
-    private Fragment fg1;
     private Fragment fg2;
 
     void setTab(int position, int type) {
@@ -583,7 +582,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         tab4Layout.setEnabled(true);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
+        Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
         fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
         Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
         Fragment fg4 = fm.findFragmentByTag(String.valueOf(tab4.getId()));
@@ -604,18 +603,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 tab1Layout.setEnabled(false);
                 break;
             case 1:
-//                if (fg2 == null) {
-//                    fg2 = new MessageFragment();
-//                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
-//                } else {
-                //Fragment already added and state has been saved
                 fg2 = new MessageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", type);
                 fg2.setArguments(bundle);
                 ft.replace(R.id.content, fg2, String.valueOf(tab2.getId()));
                 ft.show(fg2);
-//                }
                 tab2Layout.setEnabled(false);
                 tab2.setChecked(true);
                 break;
@@ -643,25 +636,14 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         ft.commitAllowingStateLoss();
     }
 
-    private void setTabCheck(int position) {
-        switch (position) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-        }
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (fg1 != null) {
-            fg1.onActivityResult(requestCode, resultCode, data);
-        }
+//        if (fg1 != null) {
+//            fg1.onActivityResult(requestCode, resultCode, data);
+//        }
     }
 
     @Override

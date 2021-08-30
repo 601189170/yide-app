@@ -25,28 +25,27 @@ class BookStaffAdapter :
             bind.ivUnfold.setImageDrawable(context.resources.getDrawable(R.mipmap.icon_unfold))
             bind.recyclerview.visibility = View.VISIBLE
             bind.teacherList.visibility = View.VISIBLE
+            val adapter = BookStaffAdapter()
+            //部门
+            bind.recyclerview.layoutManager = LinearLayoutManager(context)
+            bind.recyclerview.adapter = adapter
+            adapter.setList(item.list)
+            //部门下教师
+            val teacherAdapter = TeacherAdapter()
+            bind.teacherList.layoutManager = LinearLayoutManager(context)
+            bind.teacherList.adapter = teacherAdapter
+            teacherAdapter.setList(item.teacheList)
+            teacherAdapter.setOnItemClickListener { adapter, view, position ->
+                BookTeacherDetailActivity.start(context, teacherAdapter.getItem(position))
+            }
         } else {
             bind.ivUnfold.setImageDrawable(context.resources.getDrawable(R.mipmap.icon_fold))
             bind.recyclerview.visibility = View.GONE
             bind.teacherList.visibility = View.GONE
         }
-        val adapter = BookStaffAdapter()
-        //部门
-        bind.recyclerview.layoutManager = LinearLayoutManager(context)
-        bind.recyclerview.adapter = adapter
-        adapter.setList(item.list)
-
-        //部门下教师
-        val teacherAdapter = TeacherAdapter()
-        bind.teacherList.layoutManager = LinearLayoutManager(context)
-        bind.teacherList.adapter = teacherAdapter
-        teacherAdapter.setList(item.teacheList)
-        teacherAdapter.setOnItemClickListener { adapter, view, position ->
-            BookTeacherDetailActivity.start(context, teacherAdapter.getItem(position))
-        }
         bind.root.setOnClickListener { v: View? ->
             item.unfold = !item.unfold
-            notifyDataSetChanged()
+            notifyItemChanged(holder.adapterPosition)
         }
     }
 
@@ -58,5 +57,4 @@ class BookStaffAdapter :
             GlideUtil.loadImageHead(context, item.faceInformation, bind.img)
         }
     }
-
 }

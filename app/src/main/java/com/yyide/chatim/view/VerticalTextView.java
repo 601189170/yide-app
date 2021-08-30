@@ -1,5 +1,6 @@
 package com.yyide.chatim.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -12,8 +13,11 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import androidx.annotation.NonNull;
+
 import com.yyide.chatim.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -26,18 +30,13 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
     private OnItemClickListener itemClickListener;
     private List<String> textList = new ArrayList<>();
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    index = next();
-                    updateText();
-                    break;
-            }
-            super.handleMessage(msg);
+    private final Handler mHandler = new Handler(msg -> {
+        if (msg.what == 1) {
+            index = next();
+            updateText();
         }
-    };
+        return false;
+    });
 
     //自定义View的构造方法
     public VerticalTextView(Context context) {
@@ -64,7 +63,7 @@ public class VerticalTextView extends TextSwitcher implements ViewSwitcher.ViewF
 
     public void setResources(List<String> res) {
         textList = res;
-        if(textList != null && textList.size() > 0){
+        if (textList != null && textList.size() > 0) {
             index = 0;
             updateText();
         }

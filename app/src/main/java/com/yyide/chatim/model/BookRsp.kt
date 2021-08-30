@@ -1,6 +1,7 @@
 package com.yyide.chatim.model
 
 import com.alibaba.fastjson.annotation.JSONField
+import com.chad.library.adapter.base.entity.MultiItemEntity
 import java.io.Serializable
 
 data class BookRsp(
@@ -26,7 +27,7 @@ data class Data(
     @JSONField(name = "teacherList")
     var teacherList: MutableList<BookTeacherItem>,//老师列表
     @JSONField(name = "departmentList")
-    var departmentList: MutableList<BookDepartmentItem>//部门
+    var departmentList: MutableList<BookDepartmentItem>,//部门
 )
 
 /**
@@ -34,17 +35,21 @@ data class Data(
  */
 data class BookClassesItem(
     @JSONField(name = "id")
-    var id: Long,
+    var id: Long = -1,
     @JSONField(name = "name")
-    var name: String,
+    var name: String = "",
     @JSONField(name = "studentList")
-    var studentList: MutableList<BookStudentItem>,
+    var studentList: List<BookStudentItem> = emptyList(),
     @JSONField(name = "teacherList")
-    var teacherList: MutableList<BookTeacherItem>,
-    var level: Int = 0,
+    var teacherList: List<BookTeacherItem> = emptyList(),
+    var guardianList: List<BookGuardianItem> = emptyList(),
+    var departmentList: List<BookDepartmentItem> = emptyList(),//部门
     var unfold: Boolean = false,//是否展开
-    var parentId: Long = 0
-)
+    var student: BookStudentItem? = null,
+    var guardian: BookGuardianItem? = null,
+    override var itemType: Int = 0
+) : MultiItemEntity {
+}
 
 /**
  * 学生实体
@@ -73,8 +78,11 @@ data class BookStudentItem(
     @JSONField(name = "isOwnChild")
     var isOwnChild: String?,
     @JSONField(name = "guardianList")
-    var guardianList: MutableList<BookGuardianItem>?//学生监护人信息){}){}){}
-) : Serializable
+    var guardianList: MutableList<BookGuardianItem>?
+    //学生监护人信息){}){}){}
+) : Serializable {
+
+}
 
 /**
  * 监护人实体
@@ -133,13 +141,15 @@ data class BookTeacherItem(
     @JSONField(name = "userId")
     var userId: String?,
     @JSONField(name = "email")
-    var email: String,
+    var email: String?,
     @JSONField(name = "subjectName")
     var subjectName: String?,
     @JSONField(name = "teachingSubjects")
     var teachingSubjects: String?,
     @JSONField(name = "faceInformation")
-    var faceInformation: String?
+    var faceInformation: String?,
+    @JSONField(name = "whitelist")
+    var whitelist: String?
 ) : Serializable
 
 /**

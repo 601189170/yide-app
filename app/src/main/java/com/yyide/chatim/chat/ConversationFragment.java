@@ -197,40 +197,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         });
     }
 
-    private void updateConversation(List<V2TIMConversation> convList, boolean needSort) {
-        for (int i = 0; i < convList.size(); i++) {
-            V2TIMConversation conv = convList.get(i);
-            boolean isExit = false;
-            for (int j = 0; j < uiConvList.size(); j++) {
-                V2TIMConversation uiConv = uiConvList.get(j);
-                // UI 会话列表存在该会话，则替换
-                if (uiConv.getConversationID().equals(conv.getConversationID())) {
-                    uiConvList.set(j, conv);
-                    mConversationLayout.getConversationList().getAdapter().notifyDataSourceChanged(uiConv.getConversationID());
-                    isExit = true;
-                    break;
-                }
-            }
-            // UI 会话列表没有该会话，则新增
-            if (!isExit) {
-                uiConvList.add(conv);
-            }
-        }
-        // 4. 按照会话 lastMessage 的 timestamp 对 UI 会话列表做排序并更新界面
-        if (needSort) {
-            Collections.sort(uiConvList, new Comparator<V2TIMConversation>() {
-                @Override
-                public int compare(V2TIMConversation o1, V2TIMConversation o2) {
-                    if (o1.getLastMessage().getTimestamp() > o2.getLastMessage().getTimestamp()) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                }
-            });
-        }
-    }
-
     private void initTitleAction() {
         mConversationLayout.getTitleBar().setOnRightClickListener(view -> {
             if (mMenu.isShowing()) {

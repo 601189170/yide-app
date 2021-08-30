@@ -1,6 +1,7 @@
 package com.yyide.chatim.model
 
 import com.alibaba.fastjson.annotation.JSONField
+import com.chad.library.adapter.base.entity.MultiItemEntity
 import java.io.Serializable
 
 
@@ -39,16 +40,20 @@ data class Student(
 
 data class Teacher(
     @JSONField(name = "faceInformation")
-    var faceInformation: String,
+    var faceInformation: String?,
     @JSONField(name = "list")
-    var list: BookTeacherItem,
+    var list: BookTeacherItem?,
     @JSONField(name = "name")
-    var name: String,
+    var name: String?,
     @JSONField(name = "type")
     var type: Int,
     @JSONField(name = "typeName")
-    var typeName: String
-)
+    var typeName: String?,
+    @JSONField(name = "whitelist")
+    var whitelist: String?,
+    var student: Student?,
+    override var itemType: Int
+) : MultiItemEntity
 
 data class BookSearchStudent(
     @JSONField(name = "address")
@@ -101,8 +106,7 @@ data class Parent(
     @JSONField(name = "workUnit")
     var workUnit: String
 ) {
-    @JvmName("getRelation1")
-    fun getRelation(): String {
+    fun getRelationType(): String {
         return when (relation) {//	与监护人关系（0:父亲，1:母亲，2:爷爷，3:奶奶，4:外公，5:外婆，6:其它）
             "0" ->
                 "父亲"

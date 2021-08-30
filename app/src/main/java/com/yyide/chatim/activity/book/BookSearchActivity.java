@@ -9,14 +9,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -24,16 +21,12 @@ import com.google.android.flexbox.JustifyContent;
 import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.book.adapter.BookSearchStudentAdapter;
-import com.yyide.chatim.activity.book.adapter.BookStudentAdapter;
 import com.yyide.chatim.adapter.ItemBookSearchAdapter;
 import com.yyide.chatim.adapter.ItemBookSearchHistoryAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.databinding.EmptyBinding;
 import com.yyide.chatim.model.BookSearchRsp;
-import com.yyide.chatim.model.BookSearchStudent;
-import com.yyide.chatim.model.BookStudentItem;
-import com.yyide.chatim.model.BookTeacherItem;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.Student;
 import com.yyide.chatim.model.Teacher;
@@ -66,19 +59,13 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     @BindView(R.id.recyclerview_search_history)
     RecyclerView recyclerviewHistory;
 
-    @BindView(R.id.studentList)
-    RecyclerView recyclerviewStudent;
-
     private ItemBookSearchAdapter adapter;
     private ItemBookSearchHistoryAdapter itemBookSearchHistoryAdapter;
-    private BookSearchStudentAdapter studentAdapter;
 
     @Override
     public int getContentViewID() {
         return R.layout.activity_book_search;
     }
-
-    private List<Teacher> dataBeanList = new ArrayList<>();
 
     private List<String> tags = new ArrayList<>();//存储历史
 
@@ -88,8 +75,11 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ItemBookSearchAdapter(this, dataBeanList);
+        adapter = new ItemBookSearchAdapter();
+        EmptyBinding emptyBinding = EmptyBinding.inflate(getLayoutInflater());
+        emptyBinding.tvDesc.setText("未搜索到人员");
         recyclerview.setAdapter(adapter);
+        adapter.setEmptyView(emptyBinding.getRoot());
 
         //初始化标签
         Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<String>());
@@ -112,26 +102,6 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
             String tag = tags.get(position);
             editText.setText(tag);
             search(tag);
-        });
-
-        recyclerviewStudent.setLayoutManager(new LinearLayoutManager(this));
-        studentAdapter = new BookSearchStudentAdapter();
-        recyclerviewStudent.setAdapter(studentAdapter);
-        studentAdapter.setOnItemClickListener((adapter, view, position) -> {
-            BookSearchStudent item = studentAdapter.getItem(position).getList();
-            BookStudentItem studentItem = new BookStudentItem(item.getId(),
-                    item.getName(),
-                    item.getPhone(),
-                    item.getClassName(),
-                    item.getUserId(),
-                    item.getPrimaryGuardianPhone(),
-                    item.getDeputyGuardianPhone(),
-                    item.getSex(),
-                    item.getAddress(),
-                    item.getFaceInformation(),
-                    item.isOwnChild(),
-                    null);
-            BookStudentDetailActivity.start(this, studentItem, 0);
         });
 
         editText.setOnEditorActionListener((v, actionId, event) -> {
@@ -178,18 +148,19 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     @Override
     public void selectUserListSuccess(BookSearchRsp model) {
         Log.e(TAG, "selectUserListSuccess: " + model.toString());
-        dataBeanList.clear();
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             hideHistory();
-            dataBeanList.addAll(model.getData().getTeacherList());
-            studentAdapter.setList(model.getData().getStudentList());
+            List<Teacher> teacherList = model.getData().getTeacherList();
+            recyclerview.scrollToPosition(0);
+            //将学生数据加入
+            if (!model.getData().getStudentList().isEmpty()) {
+                for (Student student : model.getData().getStudentList()) {
+                    Teacher teacher = new Teacher("", null, "", -1, "", "", student, 1);
+                    teacherList.add(teacher);
+                }
+            }
+            adapter.setList(teacherList);
         }
-
-        if (dataBeanList.isEmpty()) {
-            ToastUtils.showShort("没有搜索到内容...");
-            showHistory();
-        }
-        adapter.notifyDataSetChanged();
     }
 
     private void showHistory() {

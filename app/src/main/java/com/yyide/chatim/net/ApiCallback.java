@@ -21,10 +21,7 @@ public abstract class ApiCallback<M> implements Observer<M> {
     public abstract void onFailure(String msg);
 
     public abstract void onFinish();
-
-//    public abstract void onDisposable(Disposable d);
-
-
+    
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
@@ -37,7 +34,7 @@ public abstract class ApiCallback<M> implements Observer<M> {
             if (code == 504) {
                 msg = "网络不给力";
             }
-            if (code == 502 || code == 404) {
+            if (code == 502 || code == 500 || code == 404) {
                 msg = "服务器异常，请稍后再试";
             }
         } else {
