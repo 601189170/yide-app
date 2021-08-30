@@ -141,7 +141,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
         }
         imageView.setVisibility(View.VISIBLE);
         String facePath = path;
-        if (!path.contains("https//") && !path.contains("http://")){
+        if (!path.contains("https://") && !path.contains("http://")){
             facePath = "http://"+path;
         }
         Glide.with(context)
