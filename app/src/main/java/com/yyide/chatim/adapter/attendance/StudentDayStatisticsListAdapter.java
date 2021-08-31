@@ -147,7 +147,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
         Glide.with(context)
                 .load(facePath)
                 .placeholder(R.drawable.default_head)
-                .error(R.drawable.default_head)
+                //.error(R.drawable.default_head)
                // .skipMemoryCache(true)
                // .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView);
