@@ -51,6 +51,7 @@ import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.tencent.imsdk.v2.V2TIMSignalingInfo;
 import com.tencent.liteav.model.CallModel;
 import com.tencent.liteav.model.TRTCAVCallImpl;
+import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
@@ -63,6 +64,7 @@ import com.yyide.chatim.alipush.MyMessageReceiver;
 import com.yyide.chatim.alipush.NotifyUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.base.MMKVConstant;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
 import com.yyide.chatim.home.HomeFragment;
@@ -114,26 +116,18 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @BindView(R.id.content)
     FrameLayout content;
-    //for receive customer msg from jpush server
-    public static boolean isForeground = false;
     @BindView(R.id.tab1)
     CheckedTextView tab1;
-    @BindView(R.id.tab1_layout)
-    ConstraintLayout tab1Layout;
     @BindView(R.id.tab2)
     CheckedTextView tab2;
-    @BindView(R.id.tab2_layout)
-    ConstraintLayout tab2Layout;
     @BindView(R.id.tab3)
     CheckedTextView tab3;
-    @BindView(R.id.tab3_layout)
-    ConstraintLayout tab3Layout;
     @BindView(R.id.tab4)
     CheckedTextView tab4;
-    @BindView(R.id.tab4_layout)
-    ConstraintLayout tab4Layout;
     @BindView(R.id.msg_total_unread)
     UnreadCountTextView msgTotalUnread;
+    //for receive customer msg from jpush server
+    public static boolean isForeground = false;
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
@@ -158,7 +152,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         // 未读消息监视器
         //登录IM
         getUserSig();
-        setTab(1, 0);
         setTab(0, 0);
         //注册极光别名
 //        registerAlias();
@@ -305,109 +298,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         }
     }
 
-    /**
-     * @Author: Berlin
-     * @Date: 2018/12/19 14:37
-     * @Description:动态授权
-     */
-    String[] mPermissionList;
-
-    private void permission() {//https://blog.csdn.net/android_code/article/details/82027500
-        if (Build.VERSION.SDK_INT >= 23) {
-            mPermissionList = new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.CALL_PHONE,
-                    Manifest.permission.READ_LOGS,
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.SET_DEBUG_APP,
-                    Manifest.permission.SYSTEM_ALERT_WINDOW,
-                    Manifest.permission.GET_ACCOUNTS,
-                    Manifest.permission.WRITE_SETTINGS,
-                    Manifest.permission.WRITE_APN_SETTINGS,
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.RECORD_AUDIO//音频
-            };
-            requestPermissions(mPermissionList, 1);
-            //ActivityCompat.requestPermissions(getActivity(), mPermissionList, 123);
-        }
-    }
-
     public void registerMessageReceiver() {
         mMessageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter();
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         filter.addAction(MESSAGE_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);
-    }
-
-    //这是来自 JPush Example 的设置别名的 Activity 里的代码，更详细的示例请参考 JPush Example。一般 App 的设置的调用入口，在任何方便的地方调用都可以。
-    private void registerAlias() {
-        //获取当前设备注册的别名 去重
-        CloudPushService mPushService = PushServiceFactory.getCloudPushService();
-        delOtherAliases(mPushService);
-        String alias = SPUtils.getInstance().getString(BaseConstant.JG_ALIAS_NAME);
-        //int sequence = SPUtils.getInstance().getInt(BaseConstant.JG_SEQUENCE, 1);
-        GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-        if (identityInfo != null) {
-            if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
-                // 极光推送释放代码
-                //JPushInterface.setAlias(this, ++sequence, SpData.getIdentityInfo().userId);
-                if (TextUtils.isEmpty(alias)) {
-                    SPUtils.getInstance().put(BaseConstant.JG_ALIAS_NAME, String.valueOf(SpData.getIdentityInfo().userId));
-                    alias = String.valueOf(SpData.getIdentityInfo().userId);
-                }
-                //阿里云消息推送
-
-                String finalAlias = alias;
-                mPushService.addAlias(alias, new CommonCallback() {
-                    @Override
-                    public void onSuccess(String s) {
-                        Log.e(TAG, "onSuccess: add alias " + finalAlias + " success. " + s);
-                    }
-
-                    @Override
-                    public void onFailed(String errorCode, String errorMsg) {
-                        Log.e(TAG, "onFailed :add alias " + finalAlias + " failed." +
-                                "errorCode: " + errorCode + ", errorMsg:" + errorMsg + "\n");
-                    }
-                });
-            }
-        }
-    }
-
-    private void delOtherAliases(CloudPushService mPushService) {
-        mPushService.listAliases(new CommonCallback() {
-            @Override
-            public void onSuccess(String response) {
-                Log.e(TAG, "aliases:" + response + " \n");
-                if (!TextUtils.isEmpty(response)) {
-                    final String[] aliases = response.split(",");
-                    for (String alias : aliases) {
-                        if (!String.valueOf(SpData.getIdentityInfo().userId).equals(alias)) {
-                            mPushService.removeAlias(alias, new CommonCallback() {
-                                @Override
-                                public void onSuccess(String s) {
-                                    Log.e(TAG, "remove alias " + alias + " success\n");
-                                }
-
-                                @Override
-                                public void onFailed(String errorCode, String errorMsg) {
-                                    Log.e(TAG, "remove alias " + alias + " failed." +
-                                            "errorCode: " + errorCode + ", errorMsg:" + errorMsg + "\n");
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailed(String errorCode, String errorMsg) {
-                Log.e(TAG, "list aliases failed. errorCode:" + errorCode + " errorMsg:" + errorMsg);
-            }
-        });
     }
 
     @Override
@@ -511,7 +407,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     private void setCostomMsg(String msg) {
-        Log.e("TAG", "setCostomMsg: " + msg);
+        Log.e("TAG", "setCustomMsg: " + msg);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -569,21 +465,15 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         GSYVideoManager.onPause();
     }
 
-    private Fragment fg2;
-
     void setTab(int position, int type) {
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
         tab4.setChecked(false);
-        tab1Layout.setEnabled(true);
-        tab2Layout.setEnabled(true);
-        tab3Layout.setEnabled(true);
-        tab4Layout.setEnabled(true);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
-        fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
+        Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
         Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
         Fragment fg4 = fm.findFragmentByTag(String.valueOf(tab4.getId()));
 
@@ -600,16 +490,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 } else
                     ft.show(fg1);
                 tab1.setChecked(true);
-                tab1Layout.setEnabled(false);
                 break;
             case 1:
+                MMKV.defaultMMKV().encode(MMKVConstant.MMKV_MAIN_JUMP_TYPE, type);
                 fg2 = new MessageFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", type);
-                fg2.setArguments(bundle);
                 ft.replace(R.id.content, fg2, String.valueOf(tab2.getId()));
-                ft.show(fg2);
-                tab2Layout.setEnabled(false);
                 tab2.setChecked(true);
                 break;
             case 2:
@@ -618,7 +503,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     ft.add(R.id.content, fg3, String.valueOf(tab3.getId()));
                 } else
                     ft.show(fg3);
-                tab3Layout.setEnabled(false);
                 tab3.setChecked(true);
                 break;
             case 3:
@@ -629,14 +513,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     ft.show(fg4);
 
                 tab4.setChecked(true);
-                tab4Layout.setEnabled(false);
                 break;
 
         }
         ft.commitAllowingStateLoss();
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

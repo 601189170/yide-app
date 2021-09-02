@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -23,15 +22,10 @@ import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitUtils;
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class MessageNotification {
 

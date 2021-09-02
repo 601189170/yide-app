@@ -68,17 +68,16 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                             new Thread(() -> {
                                 mDrawable.addLevel(0, 0, getContext().getResources().getDrawable(R.mipmap.ic_launcher));
                                 mDrawable.setBounds(0, 0, 0, 0);
-
-                                Bitmap bitmap;
-                                try {
-                                    bitmap = BitmapFactory.decodeStream(new URL(source).openStream());
-                                    Message msg = handler.obtainMessage();
-                                    msg.what = 1123;
-                                    msg.obj = bitmap;
-                                    handler.sendMessage(msg);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+//                                Bitmap bitmap;
+//                                try {
+//                                    bitmap = BitmapFactory.decodeStream(new URL(source).openStream());
+//                                    Message msg = handler.obtainMessage();
+//                                    msg.what = 1123;
+//                                    msg.obj = bitmap;
+//                                    handler.sendMessage(msg);
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
                             }).start();
                             return mDrawable;
                         }, null));
@@ -93,34 +92,36 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 //全屏动画
                 videoView1.setShowFullAnimation(true);
                 //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
-//                videoView1.setAutoFullWithSize(true);
                 //增加封面
-//                ImageView imageView = new ImageView(holder.itemView.getContext());
-//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                Glide.with(imageView)
+                ImageView imageView = new ImageView(holder.itemView.getContext());
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                Glide.with(getContext())
+//                        .setDefaultRequestOptions(
+//                                new RequestOptions()
+//                                        .frame(0)
+//                                        .centerCrop()
+//                        )
 //                        .load(itemBean.getVideo())
 //                        .into(imageView);
-//
 //                videoView1.setThumbImageView(imageView);
                 videoView1.setUp(itemBean.getVideo(), true, "");
                 break;
         }
     }
 
-    private LevelListDrawable mDrawable = new LevelListDrawable();
+    private final LevelListDrawable mDrawable = new LevelListDrawable();
 
-    // 注意啦，这么写Handler是会造成内存泄漏的，实际项目中不要这么直接用。
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 1123) { // 使用1123仅仅是因为在11月23号写的
-//                Bitmap bitmap = (Bitmap)msg.obj;
-//                BitmapDrawable drawable = new BitmapDrawable(null, bitmap);
-//                mDrawable.addLevel(1, 1, drawable);
-//                mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
-//                mDrawable.setLevel(1);
-            }
-        }
-    };
+//    // 注意啦，这么写Handler是会造成内存泄漏的，实际项目中不要这么直接用。
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            if (msg.what == 1123) { // 使用1123仅仅是因为在11月23号写的
+////                Bitmap bitmap = (Bitmap)msg.obj;
+////                BitmapDrawable drawable = new BitmapDrawable(null, bitmap);
+////                mDrawable.addLevel(1, 1, drawable);
+////                mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+////                mDrawable.setLevel(1);
+//            }
+//        }
+//    };
 }

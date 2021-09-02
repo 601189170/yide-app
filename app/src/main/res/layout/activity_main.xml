@@ -33,22 +33,14 @@
                 android:id="@+id/tab1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab1"
+                android:drawableTop="@drawable/home_tab1"
+                android:text="@string/tab_home"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="首页"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab1"
-                app:layout_constraintRight_toRightOf="@id/tab1"
-                app:layout_constraintTop_toBottomOf="@id/tab1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,23 +53,14 @@
                 android:id="@+id/tab2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab2"
+                android:drawableTop="@drawable/home_tab2"
+                android:text="@string/tab_message"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:text="消息"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab2"
-                app:layout_constraintRight_toRightOf="@id/tab2"
-                app:layout_constraintTop_toBottomOf="@id/tab2" />
 
             <com.tencent.qcloud.tim.uikit.component.UnreadCountTextView
                 android:id="@+id/msg_total_unread"
@@ -90,7 +73,7 @@
                 android:minWidth="18dp"
                 android:minHeight="14dp"
                 android:textColor="#fff"
-                android:textSize="10sp"
+                android:textSize="@dimen/text_10"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="@id/tab2"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -107,23 +90,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab3"
+                android:drawableTop="@drawable/home_tab3"
+                android:text="@string/tab_workbench"
+                android:textSize="@dimen/text_10"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:text="工作台"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab3"
-                app:layout_constraintRight_toRightOf="@id/tab3"
-                app:layout_constraintTop_toBottomOf="@id/tab3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -136,22 +110,14 @@
                 android:id="@+id/tab4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab4"
+                android:drawableTop="@drawable/home_tab4"
+                android:text="@string/tab_help"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="帮助"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab4"
-                app:layout_constraintRight_toRightOf="@id/tab4"
-                app:layout_constraintTop_toBottomOf="@id/tab4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </LinearLayout>

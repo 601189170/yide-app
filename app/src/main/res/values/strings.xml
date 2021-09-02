@@ -13,6 +13,11 @@
     <string name="account">用户名</string>
     <string name="password">密码</string>
 
+    <string name="tab_home">首页</string>
+    <string name="tab_message">消息</string>
+    <string name="tab_workbench">工作台</string>
+    <string name="tab_help">帮助</string>
+
     <string name="login_title">登录·即时通信</string>
     <string name="login_sub_title">体验群组聊天，音视频对话等 IM 功能</string>
     <string name="input_number">请输入手机号</string>

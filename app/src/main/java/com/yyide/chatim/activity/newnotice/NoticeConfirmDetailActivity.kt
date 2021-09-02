@@ -1,7 +1,6 @@
 package com.yyide.chatim.activity.newnotice
 
 import android.os.Bundle
-import android.os.Handler
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.SizeUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -66,6 +64,14 @@ class NoticeConfirmDetailActivity : BaseActivity() {
         detailId = intent.getLongExtra("id", -1)
         getDetail(detailId)
     }
+
+//    override fun onNewIntent(intent: Intent?) {
+//        super.onNewIntent(intent)
+//        if (intent != null) {
+//            detailId = intent.getLongExtra("id", -1)
+//            getDetail(detailId)
+//        }
+//    }
 
     private var imgPath = ""
     private fun getDetail(publishId: Long) {

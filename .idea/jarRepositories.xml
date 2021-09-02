@@ -14,7 +14,12 @@
     <remote-repository>
       <option name="id" value="maven5" />
       <option name="name" value="maven5" />
-      <option name="url" value="http://developer.huawei.com/repo/" />
+      <option name="url" value="http://maven.aliyun.com/nexus/content/repositories/releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenRepo" />
+      <option name="name" value="MavenRepo" />
+      <option name="url" value="https://repo.maven.apache.org/maven2/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="maven2" />
@@ -34,7 +39,7 @@
     <remote-repository>
       <option name="id" value="maven4" />
       <option name="name" value="maven4" />
-      <option name="url" value="https://mirrors.tencent.com/nexus/repository/maven-public/" />
+      <option name="url" value="https://developer.huawei.com/repo/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="maven" />
@@ -45,76 +50,6 @@
       <option name="id" value="Google" />
       <option name="name" value="Google" />
       <option name="url" value="https://dl.google.com/dl/android/maven2/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="E:\SDK\extras\android\m2repository" />
-      <option name="name" value="E:\SDK\extras\android\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../SDK/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="E:\SDK\extras\m2repository" />
-      <option name="name" value="E:\SDK\extras\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../SDK/extras/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="E:\SDK\extras\google\m2repository" />
-      <option name="name" value="E:\SDK\extras\google\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../SDK/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="MavenRepo" />
-      <option name="name" value="MavenRepo" />
-      <option name="url" value="https://repo.maven.apache.org/maven2/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven5" />
-      <option name="name" value="maven5" />
-      <option name="url" value="https://maven.google.com" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="E:\SDK\extras\android\m2repository" />
-      <option name="name" value="E:\SDK\extras\android\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../SDK/extras/android/m2repository/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="E:\SDK\extras\m2repository" />
-      <option name="name" value="E:\SDK\extras\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../SDK/extras/m2repository/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="D:\Android\sdk\extras\android\m2repository" />
-      <option name="name" value="D:\Android\sdk\extras\android\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../Android/sdk/extras/android/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="D:\Android\sdk\extras\m2repository" />
-      <option name="name" value="D:\Android\sdk\extras\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../Android/sdk/extras/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="D:\Android\sdk\extras\google\m2repository" />
-      <option name="name" value="D:\Android\sdk\extras\google\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../Android/sdk/extras/google/m2repository" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="D:\Android\sdk\extras\android\m2repository" />
-      <option name="name" value="D:\Android\sdk\extras\android\m2repository" />
-      <option name="url" value="file:/$PROJECT_DIR$/../../Android/sdk/extras/android/m2repository/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven4" />
-      <option name="name" value="maven4" />
-      <option name="url" value="https://developer.huawei.com/repo/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven5" />
-      <option name="name" value="maven5" />
-      <option name="url" value="http://maven.aliyun.com/nexus/content/repositories/releases/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="maven4" />
-      <option name="name" value="maven4" />
-      <option name="url" value="http://maven.aliyun.com/nexus/content/groups/public/" />
     </remote-repository>
   </component>
 </project>

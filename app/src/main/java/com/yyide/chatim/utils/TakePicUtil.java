@@ -33,6 +33,7 @@ public class TakePicUtil {
     private static Config config;
 
     private static File output = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/chatim/portraits/" + "temp.png");
+
     public static void config(Config c) {
         config = c;
     }
@@ -79,7 +80,7 @@ public class TakePicUtil {
     }
 
     private static boolean corp(Activity activity, File file) {
-        if (!file.getParentFile().exists()) {
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
         Uri uri = getUriForFile(activity, file);

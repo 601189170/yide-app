@@ -241,7 +241,9 @@ public class BaseApplication extends Application {
                         ThirdPushTokenMgr.getInstance().setThirdPushToken(token);
                     });
         }
-        registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
+        if (!BrandUtil.isBrandHuawei()) {
+            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
+        }
     }
 
     class StatisticActivityLifecycleCallback implements ActivityLifecycleCallbacks {
@@ -252,11 +254,9 @@ public class BaseApplication extends Application {
             @Override
             public void onNewMessage(V2TIMMessage msg) {
                 //处理华为推送两条消息问题
-                //if (!BrandUtil.isBrandHuawei()) {
                 DemoLog.i(TAG, "onNewMessage: " + msg.getMsgID());
                 MessageNotification notification = MessageNotification.getInstance();
                 notification.notify(msg);
-                //}
             }
         };
 

@@ -29,8 +29,8 @@ android {
         applicationId "com.yyide.chatim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 106
-        versionName "1.0.6"
+        versionCode 107
+        versionName "1.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -39,30 +39,6 @@ android {
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
 
-//        manifestPlaceholders = [
-//                //              Master Secret    e2cfe288703428279f01ecb0
-//                JPUSH_PKGNAME : "com.yyide.chatim",
-//                JPUSH_APPKEY  : "143ab02bc474008f39f26f97", //极光开发平台上注册的包名对应的appkey.
-//                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
-//                //meizu_config_start
-//                MEIZU_APPKEY  : "MZ-魅族的APPKEY",
-//                MEIZU_APPID   : "MZ-魅族的APPID",
-//                //meizu_config_end
-//                //xiaomi_config_start
-//                XIAOMI_APPID  : "MI-2882303761519922795",
-//                XIAOMI_APPKEY : "MI-5201992213795",
-//                //xiaomi_config_end
-//                //oppo_config_start
-//                OPPO_APPKEY   : "OP-b73f1a5b44af4e2d9a7200b15a521808",
-//                OPPO_APPID    : "OP-30531663",
-//                OPPO_APPSECRET: "OP-13ee3e7c24cd43af91242879d555c747",
-//                //oppo_config_end
-//                //vivo_config_start
-//                VIVO_APPKEY   : "vivo的APPKEY",
-//                VIVO_APPID    : "vivo的APPID",
-//                //vivo_config_end
-//
-//        ]
         signingConfig signingConfigs.release
     }
 
@@ -101,16 +77,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    buildToolsVersion '30.0.3'
-//    // 在MobSDK的扩展中注册SMSSDK的相关信息
-//    MobSDK {
-//        appKey "19aa2f667f410"
-//        appSecret "c73e7cd6726d6853309ba4f4baaa2c1b"
-//        SMSSDK {}
-//    }
-//    MobSDK {
-//        fp true //严格模式
-//    }
 
     lintOptions {
         abortOnError false

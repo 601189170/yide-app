@@ -1,7 +1,10 @@
 package com.yyide.chatim.dialog;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,10 +19,15 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.utils.TakePicUtil;
 
+import io.reactivex.rxjava3.disposables.Disposable;
 import okhttp3.OkHttpClient;
 
 
@@ -132,14 +140,52 @@ public class BottomHeadMenuPop extends PopupWindow {
      * 拍取照片不裁切
      */
     private void selectFromTake() {
-        TakePicUtil.takePicture(context, true);
+        RxPermissions rxPermissions = new RxPermissions((FragmentActivity) context);
+        Disposable mDisposable = rxPermissions.request(Manifest.permission.CAMERA).subscribe(granted -> {
+            if (granted) {
+                TakePicUtil.takePicture(context, true);
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(context)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_camera)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+                            context.startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
+        });
     }
 
     /**
      * 打开手机相册
      */
     private void selectFromGallery() {
-        TakePicUtil.albumPhoto(context, true);
+        RxPermissions rxPermissions = new RxPermissions((FragmentActivity) context);
+        Disposable mDisposable = rxPermissions.request(Manifest.permission.CAMERA).subscribe(granted -> {
+            if (granted) {
+                TakePicUtil.albumPhoto(context, true);
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(context)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_file)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+                            context.startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
+        });
     }
 
 }

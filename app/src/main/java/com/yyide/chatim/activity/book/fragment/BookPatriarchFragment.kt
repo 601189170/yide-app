@@ -56,7 +56,7 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
     }
 
     fun initView() {
-        viewBinding.nestedScrollView.visibility = View.INVISIBLE
+        viewBinding.linearlayout.visibility = View.INVISIBLE
         viewBinding.recyclerView.layoutManager = LinearLayoutManager(context)
         viewBinding.recyclerView.adapter = adapter
         mvpPresenter.getAddressBook("1")
@@ -69,7 +69,7 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
     override fun getBookList(model: BookRsp?) {
         if (model != null) {
             if (model.code == BaseConstant.REQUEST_SUCCES2) {
-                viewBinding.nestedScrollView.visibility = View.VISIBLE
+                viewBinding.linearlayout.visibility = View.VISIBLE
                 if (TextUtils.isEmpty(model.data.schoolName_)) {
                     viewBinding.tvSchoolName.text = SpData.getIdentityInfo().schoolName
                 } else {
@@ -151,11 +151,6 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
         override fun convert(holder: BaseViewHolder, item: BookStudentItem) {
             val view = ItemNewBookPrtriarchStudentBinding.bind(holder.itemView)
             view.tvName.text = item.name
-//            if (item.isOwnChild == "0") {//0不是，1是 #999999
-//                view.tvName.setTextColor(Color.parseColor("#999999"))
-//            } else {
-//                view.tvName.setTextColor(Color.parseColor("#333333"))
-//            }
             GlideUtil.loadImageHead(
                 context,
                 item.faceInformation,

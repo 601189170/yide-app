@@ -16,10 +16,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.widget.MsgView;
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.book.NewBookActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.base.MMKVConstant;
 import com.yyide.chatim.chat.ConversationFragment;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.TodoRsp;
@@ -61,7 +63,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        type = getArguments() != null ? getArguments().getInt("type", 0) : 0;
+        type = MMKV.defaultMMKV().decodeInt(MMKVConstant.MMKV_MAIN_JUMP_TYPE);
         fragment = new TodoMsgFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
@@ -80,9 +82,8 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
-        if (!hidden && getArguments() != null) {
-            type = getArguments().getInt("type", 0);
-            Log.e(TAG, "onHiddenChanged: " + type);
+        type = MMKV.defaultMMKV().decodeInt(MMKVConstant.MMKV_MAIN_JUMP_TYPE);
+        if (!hidden && type > 0) {
             if (mSlidingTabLayout != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", type);

@@ -62,6 +62,8 @@
                         android:hint="@string/account_hint"
                         android:singleLine="true"
                         android:textColorHint="#C0C4CC"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:textSize="@dimen/text_14" />
 
                     <ImageView

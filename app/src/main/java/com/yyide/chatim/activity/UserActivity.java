@@ -220,26 +220,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     }
 
     private void rxPermission() {
-        RxPermissions rxPermissions = new RxPermissions(this);
-        mDisposable = rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
-            if (granted) {
-                new BottomHeadMenuPop(this);
-            } else {
-                // 权限被拒绝
-                new AlertDialog.Builder(UserActivity.this)
-                        .setTitle("提示")
-                        .setMessage(R.string.permission_file)
-                        .setPositiveButton("开启", (dialog, which) -> {
-                            Intent localIntent = new Intent();
-                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-                            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
-                            startActivity(localIntent);
-                        })
-                        .setNegativeButton("取消", null)
-                        .create().show();
-            }
-        });
+        new BottomHeadMenuPop(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

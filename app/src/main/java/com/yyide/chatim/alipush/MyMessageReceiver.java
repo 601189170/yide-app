@@ -84,7 +84,7 @@ public class MyMessageReceiver extends MessageReceiver {
                     if (!TextUtils.isEmpty(pushModel.getSignId())) {
                         Intent intent = new Intent(context, NoticeConfirmDetailActivity.class);
                         intent.putExtra("id", Long.parseLong(pushModel.getSignId()));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     } else {
                         ToastUtils.showShort("消息已被撤回");

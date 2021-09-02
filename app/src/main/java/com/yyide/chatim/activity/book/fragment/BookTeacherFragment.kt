@@ -11,9 +11,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.book.BookPatriarchDetailActivity
 import com.yyide.chatim.activity.book.BookStudentDetailActivity
-import com.yyide.chatim.activity.book.BookTeacherDetailActivity
 import com.yyide.chatim.activity.book.adapter.BookClassesAdapter
-import com.yyide.chatim.activity.book.adapter.BookStaffAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentTeacherBookBinding
