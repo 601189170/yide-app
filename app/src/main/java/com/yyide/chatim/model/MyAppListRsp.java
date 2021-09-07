@@ -35,6 +35,6 @@ public class MyAppListRsp implements Serializable, Cloneable{
         private int sort;
         private String img;//":"http://cloud-yide.oss-cn-shenzhen.aliyuncs.com/application/88d8ec52342e4567b49f7f9714bf62ea-1585.jpg",
         private String path;//:"111"
-        private String appType;
+        private String appType;//是否为 第三方
     }
 }

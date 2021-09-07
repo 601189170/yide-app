@@ -1,7 +1,6 @@
 package com.yyide.chatim.activity.newnotice
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,11 +8,9 @@ import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.blankj.utilcode.util.SizeUtils
-import com.tencent.qcloud.tim.uikit.utils.ScreenUtil
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
+import com.yyide.chatim.activity.PhotoViewActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticeDetail2Binding
@@ -65,10 +62,7 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
         detailBinding.ivBg.setOnClickListener {
             itemBean?.imgpath?.let { it1 ->
-                NoticeImageDialog.showPreView(
-                    this,
-                    it1
-                )
+                PhotoViewActivity.start(this, it1)
             }
         }
         detailBinding.clRange.setOnClickListener {

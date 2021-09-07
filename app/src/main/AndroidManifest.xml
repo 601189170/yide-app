@@ -81,19 +81,19 @@
         android:theme="@style/NoTitleFullscreen"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
         <activity
             android:name=".activity.book.BookPatriarchDetailActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.book.BookStudentDetailActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.book.BookTeacherDetailActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.book.NewBookActivity"
             android:screenOrientation="portrait" /> <!-- 如果您项目中的所有页面都只需要以高或宽中的一个作为基准进行适配的话, 那就只需要填写高或宽中的一个设计图尺寸即可 -->
@@ -415,7 +415,9 @@
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- *********极光推送 start********* -->
         <activity
             android:name=".activity.PhotoViewActivity"
-            android:screenOrientation="portrait" /> <!-- <receiver -->
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /> <!-- <receiver -->
         <!-- android:name="cn.jpush.android.service.PushReceiver" -->
         <!-- android:enabled="true" -->
         <!-- tools:node="replace"> -->

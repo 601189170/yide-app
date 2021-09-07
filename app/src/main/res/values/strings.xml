@@ -169,7 +169,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="student_honor_count">%d荣誉</string>
     <string name="retract">\u3000\u3000%s</string>
-
+    <string name="start_number_end_number">%d/%d</string>
     <!--通知模块-->
     <string name="notice_announcement_title">通知公告</string>
     <string name="notice_release_title">发布通知</string>
@@ -335,4 +335,7 @@
     <string name="daily_statistic">每日统计</string>
     <string name="get_register_code_fail_tip">当前账号没有查询到注册码，请联系管理员！</string>
     <string name="current_school_no_face_activate_tip">当前学校没有人脸激活码！</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

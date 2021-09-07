@@ -15,7 +15,7 @@ import com.blankj.utilcode.util.SizeUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
+import com.yyide.chatim.activity.PhotoViewActivity
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityNoticeConfirmDetailBinding
@@ -54,10 +54,11 @@ class NoticeConfirmDetailActivity : BaseActivity() {
         }
 
         confirmDetailBinding.ivNoticeImg.setOnClickListener {
-            NoticeImageDialog.showPreView(
-                this,
-                imgPath
-            )
+//            NoticeImageDialog.showPreView(
+//                this,
+//                imgPath
+//            )
+            PhotoViewActivity.start(this, imgPath)
         }
         confirmDetailBinding.tvNoticeContent.movementMethod =
             ScrollingMovementMethod.getInstance()
