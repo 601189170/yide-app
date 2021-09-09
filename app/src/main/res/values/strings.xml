@@ -14,6 +14,7 @@
     <string name="password">密码</string>
 
     <string name="tab_home">首页</string>
+    <string name="tab_schedule">日程</string>
     <string name="tab_message">消息</string>
     <string name="tab_workbench">工作台</string>
     <string name="tab_help">帮助</string>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F7FA"
+    tools:context=".fragment.schedule.ScheduleFragment">
+
+    <RadioGroup
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/schedule_tab_layout_bg_shape"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/tab_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/schedule_tab_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:checked="true"
+            android:textSize="@dimen/text_15"
+            android:textColor="@color/black_white_color"
+            android:text="列表" />
+
+        <RadioButton
+            android:id="@+id/tab_day"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/schedule_tab_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:textSize="@dimen/text_15"
+            android:textColor="@color/black_white_color"
+            android:text="日" />
+
+        <RadioButton
+            android:id="@+id/tab_month"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/schedule_tab_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:textSize="@dimen/text_15"
+            android:textColor="@color/black_white_color"
+            android:text="月" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_current_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2021年9月"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tab_layout"
+        app:layout_constraintBottom_toBottomOf="@id/tab_layout"
+        android:layout_marginStart="@dimen/dp_20"
+        android:textColor="#1E1E1E"
+        android:textSize="@dimen/text_15"
+        />
+
+    <Button
+        android:id="@+id/btn_setting"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        android:background="@drawable/schedule_setting_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tab_layout"
+        app:layout_constraintBottom_toBottomOf="@id/tab_layout"
+        android:layout_marginEnd="@dimen/dp_20"
+        />
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        android:background="@drawable/schedule_search_icon"
+        app:layout_constraintRight_toLeftOf="@id/btn_setting"
+        app:layout_constraintTop_toTopOf="@id/btn_setting"
+        app:layout_constraintBottom_toBottomOf="@id/btn_setting"
+        android:layout_marginEnd="@dimen/dp_18"
+        />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tab_layout" />
+</androidx.constraintlayout.widget.ConstraintLayout>
