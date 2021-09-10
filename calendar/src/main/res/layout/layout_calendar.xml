@@ -75,7 +75,7 @@
                 android:id="@+id/rlScheduleList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorBackground">
+                android:background="@drawable/schedule_content_list_bg_shape">
 
                 <com.yide.calendar.schedule.ScheduleRecyclerView
                     android:id="@+id/rvScheduleList"
@@ -92,7 +92,7 @@
                     android:id="@+id/rlNoTask"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/colorBackground">
+                    android:background="@drawable/schedule_content_list_bg_shape">
 
                     <ImageView
                         android:layout_width="wrap_content"

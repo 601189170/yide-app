@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import lombok.val;
+
 public class DateUtils {
     private static final String TAG = "DateUtils";
 
@@ -562,6 +564,19 @@ public class DateUtils {
             e.printStackTrace();
         }
 
+        return false;
+    }
+
+    public static boolean dateExpired(String date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            final Date parse = dateFormat.parse(date);
+            if (parse != null){
+                return new Date().getTime() - parse.getTime() >0;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 }
