@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.cache.CacheFactory;
 import com.shuyu.gsyvideoplayer.cache.ProxyCacheManager;
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager;
@@ -36,14 +37,14 @@ public class YDVideo extends StandardGSYVideoPlayer {
      * 恢复暂停状态
      */
     public void onResume() {
-        onVideoResume();
+        GSYVideoManager.onResume();
     }
 
     /**
      * 暂停状态
      */
     public void onPause() {
-        onVideoPause();
+        GSYVideoManager.onPause();
     }
 
     /**

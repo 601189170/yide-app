@@ -168,7 +168,7 @@ public class BaseApplication extends Application {
     }
 
     public void initSdk() {
-        //initAutoSize();
+        initAutoSize();
         /**
          * TUIKit的初始化函数
          *
