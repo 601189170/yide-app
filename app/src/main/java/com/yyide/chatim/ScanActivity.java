@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tbruyelle.rxpermissions3.RxPermissions;
+import com.yyide.chatim.activity.ScanLoginActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.scancode.BindingEquipmentActivity;
 import com.yyide.chatim.activity.scancode.ConfirmLoginActivity;
@@ -63,6 +64,7 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
     private String equipmentSerialNumber;
     private String bindingState;//人脸绑定状态
     private String openState;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_scan;
@@ -87,26 +89,32 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
     public void onScanQRCodeSuccess(String result) {
         vibrate();
         Log.e(TAG, "onScanQRCodeSuccess: " + result);
-        final JSONObject jsonObject = JSON.parseObject(result);
-        final String scanUrl = jsonObject.getString("scanUrl");
-        if (!TextUtils.isEmpty(scanUrl)) {
-            if (scanUrl.contains("/brand/class-brand-management/Android/verify")) {
-                //app验证接口
-                final String classesId = jsonObject.getString("classesId");
-                final String siteId = jsonObject.getString("siteId");
-                final String checkId = jsonObject.getString("checkId");
-                verify(checkId,classesId,siteId);
-            } else if (scanUrl.contains("/brand/class-brand-management/app/loginCheck/scan/")) {
-                code = scanUrl.substring(scanUrl.lastIndexOf("/")+1);
-                equipmentSerialNumber = jsonObject.getString("equipmentSerialNumber");
-                brandStatus = jsonObject.getString("brandStatus");
-                mvpPresenter.getRegistrationCodeByOffice(equipmentSerialNumber);
-
-            } else if (result.startsWith("http") || result.equals("https")) {
-                jupm(this, WebViewActivity.class, "url", result);
+        if(isJson(result)){
+            final JSONObject jsonObject = JSON.parseObject(result);
+            final String scanUrl = jsonObject.getString("scanUrl");
+            if (!TextUtils.isEmpty(scanUrl)) {
+                if (scanUrl.contains("/brand/class-brand-management/Android/verify")) {
+                    //app验证接口
+                    final String classesId = jsonObject.getString("classesId");
+                    final String siteId = jsonObject.getString("siteId");
+                    final String checkId = jsonObject.getString("checkId");
+                    verify(checkId, classesId, siteId);
+                } else if (scanUrl.contains("/brand/class-brand-management/app/loginCheck/scan/")) {
+                    code = scanUrl.substring(scanUrl.lastIndexOf("/") + 1);
+                    equipmentSerialNumber = jsonObject.getString("equipmentSerialNumber");
+                    brandStatus = jsonObject.getString("brandStatus");
+                    mvpPresenter.getRegistrationCodeByOffice(equipmentSerialNumber);
+                }
+            }
+        } else {
+            if (!TextUtils.isEmpty(result)) {
+                if (result.startsWith("http") || result.equals("https")) {
+                    jupm(this, WebViewActivity.class, "url", result);
+                } else if (!TextUtils.isEmpty(result) && result.contains("/management/cloud-system/app/user/scan/")) {
+                    jupm(this, ScanLoginActivity.class, "result", result);
+                }
             }
         }
-
 
 //        if (!TextUtils.isEmpty(result) && (result.contains("equipmentSerialNumber") && result.contains("brandStatus"))) {
 //            //{"scanUrl":"/management/cloud-system/app/user/scan/loginId","equipmentSerialNumber":"equipmentSerialNumber","brandStatus":"brandStatus"}
@@ -119,6 +127,25 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
 //            ToastUtils.showShort(result);
 //        }
         finish();
+    }
+
+
+    /**
+     * 判断string字符串是不是json格式
+     * @param content
+     * @return
+     */
+    private static boolean isJson(String content) {
+        try {
+            if (content.contains("[") && content.contains("]")) {
+                new org.json.JSONArray(content);
+            } else {
+                new org.json.JSONObject(content);
+            }
+            return true;
+        } catch (org.json.JSONException e) {
+            return false;
+        }
     }
 
     @Override
@@ -217,7 +244,7 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
         vibrator.vibrate(200);
     }
 
-    private void verify(String checkId,String classesId,String siteId) {
+    private void verify(String checkId, String classesId, String siteId) {
         HashMap<String, Object> map = new HashMap<>(3);
         map.put("checkId", checkId);
         map.put("classesId", classesId);
@@ -227,11 +254,11 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
         dingApiStores.brandVerify(body).enqueue(new Callback<BaseRsp>() {
             @Override
             public void onResponse(@NonNull Call<BaseRsp> call, @NonNull Response<BaseRsp> response) {
-                Log.e(TAG, "onResponse: "+response.body());
+                Log.e(TAG, "onResponse: " + response.body());
                 final BaseRsp baseRsp = response.body();
-                if (baseRsp != null){
+                if (baseRsp != null) {
                     ToastUtils.showShort(baseRsp.getMsg());
-                }else {
+                } else {
                     ToastUtils.showShort("验证失败!");
                 }
 
@@ -239,11 +266,12 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
 
             @Override
             public void onFailure(@NonNull Call<BaseRsp> call, @NonNull Throwable t) {
-                Log.e(TAG, "onFailure: "+t.getLocalizedMessage() );
+                Log.e(TAG, "onFailure: " + t.getLocalizedMessage());
                 ToastUtils.showShort("验证失败!");
             }
         });
     }
+
     @Override
     protected BindingEquipmentPresenter createPresenter() {
         return new BindingEquipmentPresenter(this);
@@ -308,25 +336,25 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
     @Override
     public void findActivationCodeFail(String msg) {
         Log.e(TAG, "findActivationCodeFail: " + msg);
-        if ("1".equals(bindStatus)){
+        if ("1".equals(bindStatus)) {
             toConfirmLogin();
             return;
         }
         toBindingEquipment();
     }
 
-    private void toBindingEquipment(){
+    private void toBindingEquipment() {
         Intent intent = new Intent(this, BindingEquipmentActivity.class);
         intent.putExtra("equipmentSerialNumber", equipmentSerialNumber);
         intent.putExtra("brandStatus", brandStatus);
         intent.putExtra("code", code);
         intent.putExtra("bindStatus", bindStatus);
-        intent.putExtra("id",id);
-        intent.putExtra("registrationCode",registrationCode);
-        intent.putExtra("activateCode",activateCode);
-        intent.putExtra("activateState",activateState);
-        intent.putExtra("bindingState",bindingState);
-        intent.putExtra("openState",openState);
+        intent.putExtra("id", id);
+        intent.putExtra("registrationCode", registrationCode);
+        intent.putExtra("activateCode", activateCode);
+        intent.putExtra("activateState", activateState);
+        intent.putExtra("bindingState", bindingState);
+        intent.putExtra("openState", openState);
         startActivity(intent);
         finish();
     }

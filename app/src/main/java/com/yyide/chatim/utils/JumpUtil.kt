@@ -15,20 +15,8 @@ import org.greenrobot.eventbus.EventBus
 
 object JumpUtil {
 
-    val CODE_10000 = 10000
-    val CODE_10001 = 10001
-    val CODE_10002 = 10002
-    val CODE_10003 = 10003
-    val CODE_10004 = 10004
-    val CODE_10005 = 10005
-    val CODE_10006 = 10006
-    val CODE_10007 = 10007
-    val CODE_10008 = 10008
-    val CODE_10009 = 10009
-    val CODE_10010 = 10010
-
     @JvmStatic
-    fun appOpen(mActivity: Context, type: String, url: String) {
+    fun appOpen(mActivity: Context, type: String, url: String?) {
         when (type) {
             "编辑" -> {
                 val intent = Intent(mActivity, AppManagerActivity::class.java)

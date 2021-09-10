@@ -31,6 +31,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.yyide.chatim.R;
@@ -86,6 +87,8 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 holder.setText(R.id.title, (holder.getAdapterPosition() + 1) + "." + itemBean.getName());
                 YDVideo videoView1 = holder.getView(R.id.videoView);
                 videoView = videoView1;
+                //音频焦点冲突时是否释放
+//                videoView.setReleaseWhenLossAudio(false);
                 videoView1.setOnFullscreenButtonClick(() -> {
                     videoView1.startWindowFullscreen(getContext(), false, true);
                 });

@@ -96,7 +96,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         recy.setLayoutManager(linearLayoutManager);
         recylAppAdapter.setOnItemClickListener((view12, position) -> {
             appBarLayout.setExpanded(false);
-            sc = false;
+                    sc = false;
             recylAppAdapter.setPosition(position);
 //            recyclerViewApp.smoothScrollToPosition(position);
             recy.smoothScrollToPosition(position);
