@@ -85,13 +85,13 @@
             android:text="0"
             android:textColor="#ff606266"
             android:textSize="18sp"
-            app:layout_constraintLeft_toLeftOf="@id/tv_date"
-            app:layout_constraintRight_toRightOf="@id/tv_date"
+            app:layout_constraintLeft_toLeftOf="@id/tv_date_start"
+            app:layout_constraintRight_toRightOf="@id/tv_date_start"
             app:layout_constraintTop_toBottomOf="@id/guideline"
-            app:layout_constraintBottom_toTopOf="@id/tv_date"/>
+            app:layout_constraintBottom_toTopOf="@id/tv_date_start"/>
 
         <TextView
-            android:id="@+id/tv_date"
+            android:id="@+id/tv_date_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
@@ -110,7 +110,7 @@
             android:layout_height="@dimen/dp_30"
             android:background="#EEF4FC"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/tv_date"
+            app:layout_constraintLeft_toRightOf="@id/tv_date_start"
             app:layout_constraintTop_toBottomOf="@id/guideline"
             app:layout_constraintRight_toLeftOf="@id/tv_normal"/>
 

@@ -102,10 +102,10 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_time)
+        @BindView(R.id.tv_time_start)
         TextView tv_time;
 
-        @BindView(R.id.tv_date)
+        @BindView(R.id.tv_date_start)
         TextView tv_date;
 
         @BindView(R.id.tv_flow_title)

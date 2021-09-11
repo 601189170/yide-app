@@ -2,7 +2,6 @@ package com.yyide.chatim.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -42,7 +41,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
     TextView tv_class_name;
     @BindView(R.id.tv_code)
     TextView tv_code;
-    @BindView(R.id.tv_time)
+    @BindView(R.id.tv_time_start)
     TextView tv_time;
     @BindView(R.id.tv_before_class_num)
     TextView tv_before_class_num;

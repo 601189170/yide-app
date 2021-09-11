@@ -319,6 +319,58 @@ public class DateUtils {
         return simpleDateFormat2.format(date);
     }
 
+
+    public static String formatTime(String time, String source, String target,boolean week){
+        if (TextUtils.isEmpty(time)) {
+            return "";
+        }
+        if (TextUtils.isEmpty(source)) {
+            source = "yyyy-MM-dd HH:mm:ss";
+        }
+        if (TextUtils.isEmpty(target)) {
+            target = "MM月dd日";
+        }
+        if (week){
+            SimpleDateFormat resourceFormat = new SimpleDateFormat(source);
+            Date date = null;
+            try {
+                date = resourceFormat.parse(time);
+                if (date != null){
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(new Date(date.getTime()));
+                    //1是星期日、2是星期一、3是星期二、4是星期三、5是星期四、6是星期五、7是星期六
+                    final int i = cal.get(Calendar.DAY_OF_WEEK);
+                    return formatTime(time, source, target)+" "+getWeek(i);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return formatTime(time, source, target);
+    }
+
+    public static String getWeek(int week){
+        switch (week){
+            case 1:
+                return "周日";
+            case 2:
+                return "周一";
+            case 3:
+                return "周二";
+            case 4:
+                return "周三";
+            case 5:
+                return "周四";
+            case 6:
+                return "周五";
+            case 7:
+                return "周六";
+            default:
+                break;
+        }
+        return "";
+    }
+
     /**
      * 将时间字符串解析成时间戳
      *

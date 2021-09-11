@@ -2,22 +2,46 @@ package com.yyide.chatim.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
+import com.yyide.chatim.databinding.DialogScheduleEditBinding;
+import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
+import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
+import com.yyide.chatim.model.schedule.Label;
+import com.yyide.chatim.model.schedule.Remind;
+import com.yyide.chatim.model.schedule.Repetition;
+import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.DisplayUtils;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import lombok.val;
 
 /**
  * @Description: java类作用描述
@@ -29,6 +53,8 @@ import com.yyide.chatim.R;
  * @Version: 1.0
  */
 public class DialogUtil {
+    private static final String TAG = "DialogUtil";
+
     public static void showAlertDialog(Context context, String title, String hintText, String leftText, String rightText, OnClickListener onClickListener) {
         new MaterialAlertDialogBuilder(
                 context,
@@ -46,10 +72,11 @@ public class DialogUtil {
 
     /**
      * 提示打开消息推送权限
+     *
      * @param context
      * @param onClickListener
      */
-    public static void notificationHintDialog(Context context,OnClickListener onClickListener){
+    public static void notificationHintDialog(Context context, OnClickListener onClickListener) {
         FullScreenDialog tipDialog = new FullScreenDialog(context, R.style.MyDialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_open_notification, null);
         // final ConstraintLayout clNotification = view.findViewById(R.id.cl_notification);
@@ -130,6 +157,302 @@ public class DialogUtil {
         //设置dialog背景为透明色
         window.setBackgroundDrawableResource(R.color.transparent);
         return tipDialog;
+    }
+
+    public static void showRepetitionScheduleDialog(Context context){
+        DialogScheduleRepetitionBinding binding = DialogScheduleRepetitionBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        final val list = Repetition.Companion.getList();
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Repetition,BaseViewHolder>(R.layout.item_dialog_schedule_remind_list){
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, Repetition repetition) {
+                baseViewHolder.setText(R.id.tv_title,repetition.getTitle());
+                ImageView ivRemind = baseViewHolder.getView(R.id.iv_remind);
+                ivRemind.setVisibility(repetition.getChecked()?View.VISIBLE:View.GONE);
+                baseViewHolder.itemView.setOnClickListener(v -> {
+                    for (Repetition repetition1 : list) {
+                        repetition1.setChecked(false);
+                    }
+                    repetition.setChecked(true);
+                    notifyDataSetChanged();
+                });
+            }
+        };
+        adapter.setList(list);
+        binding.rvRepetitionList.setLayoutManager(new LinearLayoutManager(context));
+        binding.rvRepetitionList.setAdapter(adapter);
+
+        binding.tvCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        binding.tvFinish.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        lp.height = DisplayUtils.dip2px(context, 623f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+    }
+
+
+    public static void showRemindScheduleDialog(Context context) {
+        DialogScheduleRemindBinding binding = DialogScheduleRemindBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        final val list = Remind.Companion.getList();
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Remind,BaseViewHolder>(R.layout.item_dialog_schedule_remind_list){
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, Remind remind) {
+                baseViewHolder.setText(R.id.tv_title,remind.getTitle());
+                ImageView ivRemind = baseViewHolder.getView(R.id.iv_remind);
+                ivRemind.setVisibility(remind.getChecked()?View.VISIBLE:View.GONE);
+                baseViewHolder.itemView.setOnClickListener(v -> {
+                    for (Remind remind1 : list) {
+                        remind1.setChecked(false);
+                    }
+                    binding.ivNotRemind.setVisibility(View.GONE);
+                    remind.setChecked(true);
+                    notifyDataSetChanged();
+                });
+            }
+        };
+        adapter.setList(list);
+        binding.rvRemindList.setLayoutManager(new LinearLayoutManager(context));
+        binding.rvRemindList.setAdapter(adapter);
+        binding.clWhetherRemind.setOnClickListener(v -> {
+            for (Remind remind : list) {
+                remind.setChecked(false);
+            }
+            binding.ivNotRemind.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
+        });
+        binding.tvCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        binding.tvFinish.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        lp.height = DisplayUtils.dip2px(context, 623f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+    }
+
+    public static void showEditScheduleDialog(Context context) {
+        DialogScheduleEditBinding binding = DialogScheduleEditBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        AtomicReference<String> dateStart = new AtomicReference<>("");
+        AtomicReference<String> dateEnd = new AtomicReference<>("");
+        binding.clRemind.setOnClickListener(v -> {
+            showRemindScheduleDialog(context);
+        });
+        binding.clRepetition.setOnClickListener(v -> {
+            showRepetitionScheduleDialog(context);
+        });
+        int[] ids = binding.groupDateStart.getReferencedIds();
+        for (int id : ids) {
+            rootView.findViewById(id).setOnClickListener(v -> {
+                if (binding.llVLine.getVisibility() == View.GONE) {
+                    binding.llVLine.setVisibility(View.VISIBLE);
+                    binding.dateTimePicker.setVisibility(View.VISIBLE);
+                }
+                binding.vDateTopMarkLeft.setVisibility(View.VISIBLE);
+                binding.vDateTopMarkRight.setVisibility(View.INVISIBLE);
+            });
+        }
+
+        int[] ids2 = binding.groupDateEnd.getReferencedIds();
+        for (int id : ids2) {
+            rootView.findViewById(id).setOnClickListener(v -> {
+                if (binding.llVLine.getVisibility() == View.GONE) {
+                    binding.llVLine.setVisibility(View.VISIBLE);
+                    binding.dateTimePicker.setVisibility(View.VISIBLE);
+                }
+                binding.vDateTopMarkLeft.setVisibility(View.INVISIBLE);
+                binding.vDateTopMarkRight.setVisibility(View.VISIBLE);
+            });
+        }
+        binding.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2);
+                binding.tvTimeStart.setVisibility(View.GONE);
+                binding.tvTimeEnd.setVisibility(View.GONE);
+            } else {
+                binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation);
+                binding.tvTimeStart.setVisibility(View.VISIBLE);
+                binding.tvTimeEnd.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.dateTimePicker.setOnDateTimeChangedListener(aLong -> {
+            final String date = DateUtils.getDate(aLong);
+            final String time = DateUtils.formatTime(date, "", "", true);
+            Log.e(TAG, "showEditScheduleDialog: " + aLong + ",date=" + date + ", time=" + time);
+            if (binding.vDateTopMarkLeft.getVisibility() == View.VISIBLE) {
+                //左边选中设置左边的时间数据
+                binding.tvDateStart.setText(time);
+                if (!binding.checkBox.isChecked()) {
+                    binding.tvTimeStart.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                }
+                dateStart.set(date);
+            } else if (binding.vDateTopMarkRight.getVisibility() == View.VISIBLE) {
+                //右边被选中设置右边的时间数据
+                binding.tvDateEnd.setText(time);
+                if (!binding.checkBox.isChecked()) {
+                    binding.tvTimeEnd.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                }
+                dateEnd.set(date);
+            } else {
+                //第一次设置两边的数据
+                binding.tvDateStart.setText(time);
+                if (!binding.checkBox.isChecked()) {
+                    binding.tvTimeStart.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                }
+                binding.tvDateEnd.setText(time);
+                if (!binding.checkBox.isChecked()) {
+                    binding.tvTimeEnd.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                }
+                dateStart.set(date);
+                dateEnd.set(date);
+            }
+
+            return null;
+        });
+
+        binding.tvFinish.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+
+        binding.tvCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        lp.height = DisplayUtils.dip2px(context, 623f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+    }
+
+    public static void showAddScheduleDialog(Context context, List<Label> labelList) {
+        ConstraintLayout rootView = (ConstraintLayout) LayoutInflater.from(context).inflate(R.layout.dialog_add_schedule_input, null);
+        final EditText editView = rootView.findViewById(R.id.edit);
+        //完成
+        final Button btnFinished = rootView.findViewById(R.id.btn_finish);
+        //标签
+        final TextView tvLabel = rootView.findViewById(R.id.tv_label);
+        final ImageView ivLabel = rootView.findViewById(R.id.iv_label);
+        //日期
+        final TextView tvDate = rootView.findViewById(R.id.tv_date);
+        final ImageView ivTime = rootView.findViewById(R.id.iv_time);
+        Dialog mDialog = new Dialog(context, R.style.inputDialog);
+        mDialog.setContentView(rootView);
+        btnFinished.setOnClickListener(v -> {
+        });
+        tvLabel.setOnClickListener(v -> {
+            showAddLabelDialog(context, labelList);
+        });
+        ivLabel.setOnClickListener(v -> {
+            showAddLabelDialog(context, labelList);
+        });
+        tvDate.setOnClickListener(v -> {
+            showEditScheduleDialog(context);
+        });
+        ivTime.setOnClickListener(v -> {
+            showEditScheduleDialog(context);
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        //dialogWindow.setWindowAnimations(R.style.DialogAnimStyle);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        //设置宽高
+        lp.width = (int) context.getResources().getDisplayMetrics().widthPixels;
+        rootView.measure(0, 0);
+        lp.height = rootView.getMeasuredHeight();
+        lp.dimAmount = 0.75f; //半透明背景的灰度 在0.0f和1.0f之间，0.0f完全不暗，1.0f全暗
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+        showKeyboard(context, editView);
+    }
+
+    public static void showAddLabelDialog(Context context, List<Label> labelList) {
+        DialogAddLabelLayoutBinding binding = DialogAddLabelLayoutBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        binding.btnClose.setOnClickListener(v -> {
+            Log.e(TAG, "showAddLabelDialog: " + labelList.toString());
+            mDialog.dismiss();
+        });
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_dialog_add_label) {
+            @Override
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, Label label) {
+                Log.e(TAG, "convert: " + label.toString());
+                baseViewHolder.setText(R.id.tv_label, label.getTitle());
+                baseViewHolder.setBackgroundColor(R.id.tv_label, Color.parseColor(label.getColor()));
+                baseViewHolder.itemView.setOnClickListener(v -> {
+                    label.setChecked(!label.getChecked());
+                    notifyDataSetChanged();
+                });
+                final CheckBox checkbox = baseViewHolder.getView(R.id.checkBox);
+                checkbox.setChecked(label.getChecked());
+                checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    label.setChecked(isChecked);
+                });
+            }
+        };
+        adapter.setList(labelList);
+        binding.rvLabelList.setLayoutManager(new LinearLayoutManager(context));
+        binding.rvLabelList.setAdapter(adapter);
+
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        lp.height = DisplayUtils.dip2px(context, 276f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+    }
+
+
+    private static void showKeyboard(Context mContext, EditText messageTextView) {
+        if (messageTextView != null) {
+            //设置可获得焦点
+            messageTextView.setFocusable(true);
+            messageTextView.setFocusableInTouchMode(true);
+            //请求获得焦点
+            messageTextView.requestFocus();
+            //调用系统输入法
+            InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(messageTextView, InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     public interface OnClickListener {

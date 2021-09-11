@@ -15,10 +15,12 @@ import com.yide.calendar.schedule.ScheduleRecyclerView
 import com.yyide.chatim.R
 import com.yyide.chatim.adapter.schedule.ScheduleListOuterAdapter
 import com.yyide.chatim.databinding.FragmentScheduleListBinding
+import com.yyide.chatim.model.schedule.Label
 import com.yyide.chatim.model.schedule.Schedule
 import com.yyide.chatim.model.schedule.ScheduleInner
 import com.yyide.chatim.model.schedule.ScheduleOuter
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.view.DialogUtil
 
 /**
  *
@@ -32,6 +34,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     private var rvScheduleList: ScheduleRecyclerView? = null
     private var rLNoTask: RelativeLayout? = null
     private var list = mutableListOf<ScheduleOuter>()
+    private var labelList = mutableListOf<Label>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,7 +51,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         slSchedule?.setOnCalendarClickListener(this)
         initScheduleList()
         fragmentScheduleListBinding.fab.setOnClickListener {
-
+            DialogUtil.showAddScheduleDialog(context,labelList)
+            //DialogUtil.showAddLabelDialog(context, labelList)
         }
     }
 
@@ -58,7 +62,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         rvScheduleList = slSchedule?.schedulerRecyclerView
         val manager = LinearLayoutManager(activity)
         manager.setOrientation(LinearLayoutManager.VERTICAL)
-        rvScheduleList?.setLayoutManager(manager)
+        rvScheduleList?.layoutManager = manager
         val itemAnimator = DefaultItemAnimator()
         itemAnimator.supportsChangeAnimations = false
         rvScheduleList?.setItemAnimator(itemAnimator)
@@ -134,5 +138,11 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         val scheduleOuter2 = ScheduleOuter("2021-09-11 00:00:00", scheduleInnerList1)
         list.add(scheduleOuter2)
         loge("initData: ${JSON.toJSON(list)}")
+
+        labelList.add(Label("工作", "#19ADF8", false))
+        labelList.add(Label("阅读", "#56D72C", false))
+        labelList.add(Label("睡觉", "#FD8208", false))
+        labelList.add(Label("吃饭", "#56D72C", false))
+        labelList.add(Label("嗨皮", "#FD8208", false))
     }
 }

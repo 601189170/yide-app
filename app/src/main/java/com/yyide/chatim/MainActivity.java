@@ -65,6 +65,7 @@ import com.yyide.chatim.alipush.NotifyUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.base.MMKVConstant;
+import com.yyide.chatim.fragment.schedule.ScheduleFragment;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
 import com.yyide.chatim.home.HomeFragment;
@@ -124,6 +125,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     CheckedTextView tab3;
     @BindView(R.id.tab4)
     CheckedTextView tab4;
+    @BindView(R.id.tab5)
+    CheckedTextView tab5;
     @BindView(R.id.msg_total_unread)
     UnreadCountTextView msgTotalUnread;
     //for receive customer msg from jpush server
@@ -470,17 +473,20 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         tab2.setChecked(false);
         tab3.setChecked(false);
         tab4.setChecked(false);
+        tab5.setChecked(false);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
         Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
         Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
         Fragment fg4 = fm.findFragmentByTag(String.valueOf(tab4.getId()));
+        Fragment fg5 = fm.findFragmentByTag(String.valueOf(tab5.getId()));
 
         if (fg1 != null) ft.hide(fg1);
         if (fg2 != null) ft.hide(fg2);
         if (fg3 != null) ft.hide(fg3);
         if (fg4 != null) ft.hide(fg4);
+        if (fg5 != null) ft.hide(fg5);
         switch (position) {
             case 0:
                 if (fg1 == null) {
@@ -514,7 +520,15 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
                 tab4.setChecked(true);
                 break;
-
+            case 4:
+                if (fg5 == null) {
+                    fg5 = new ScheduleFragment();
+                    ft.add(R.id.content, fg5, String.valueOf(tab5.getId()));
+                } else {
+                    ft.show(fg5);
+                }
+                tab5.setChecked(true);
+                break;
         }
         ft.commitAllowingStateLoss();
     }
@@ -535,7 +549,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         GSYVideoManager.releaseAllVideos();
     }
 
-    @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout})
+    @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout,R.id.tab5_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1_layout:
@@ -554,6 +568,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 break;
             case R.id.tab4_layout:
                 setTab(3, 0);
+                break;
+            case R.id.tab5_layout:
+                setTab(4,0);
+                break;
+            default:
                 break;
         }
     }
