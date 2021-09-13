@@ -54,7 +54,7 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:drawableStart="@drawable/schedule_add_lable_icon"
+        android:drawableStart="@drawable/schedule_add_label_icon"
         android:drawablePadding="@dimen/dp_10"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginBottom="22dp"

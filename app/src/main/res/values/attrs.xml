@@ -53,4 +53,9 @@
         <attr name="fullscreenBackgroundColor" format="color" />
         <attr name="fullscreenTextColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="CircleFrameLayout">
+        <attr name="circle_color" format="color"/>
+        <attr name="circle_radius" format="dimension"/>
+    </declare-styleable>
 </resources>

@@ -596,6 +596,15 @@
         <activity android:name=".activity.scancode.BindingEquipmentActivity" />
         <activity android:name=".activity.scancode.ConfirmLoginActivity" />
         <activity android:name=".activity.scancode.ConfirmSuccessActivity" />
+        <!-- 日程编辑 -->
+        <activity android:name=".activity.schedule.ScheduleEditActivity" />
+        <activity android:name=".activity.schedule.ScheduleRemindActivity" />
+        <activity android:name=".activity.schedule.ScheduleRepetitionActivity"/>
+        <activity android:name=".activity.schedule.ScheduleLabelCreateActivity" />
+        <activity android:name=".activity.schedule.ScheduleLabelManageActivity" />
+        <activity android:name=".activity.schedule.ScheduleAddressActivity"/>
+        <activity android:name=".activity.schedule.ScheduleDateIntervalActivity"/>
+
     </application>
 
 </manifest>
