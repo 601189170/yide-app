@@ -2,6 +2,7 @@ package com.yyide.chatim.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
 import com.yyide.chatim.databinding.DialogScheduleEditBinding;
+import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
 import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
 import com.yyide.chatim.model.schedule.Label;
@@ -157,6 +159,58 @@ public class DialogUtil {
         //设置dialog背景为透明色
         window.setBackgroundDrawableResource(R.color.transparent);
         return tipDialog;
+    }
+
+    public static void showScheduleMenuDialog(Context context, View view,OnMenuItemListener onMenuItemListener) {
+        DialogScheduleMenuBinding binding = DialogScheduleMenuBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        binding.clTodayList.setOnClickListener(v -> {
+            mDialog.dismiss();
+            onMenuItemListener.onMenuItem(0);
+        });
+        binding.clDayView.setOnClickListener(v -> {
+            mDialog.dismiss();
+            onMenuItemListener.onMenuItem(1);
+        });
+        binding.clMonthView.setOnClickListener(v -> {
+            mDialog.dismiss();
+            onMenuItemListener.onMenuItem(2);
+        });
+        binding.clListView.setOnClickListener(v -> {
+            mDialog.dismiss();
+            onMenuItemListener.onMenuItem(3);
+        });
+        binding.clLabel.setOnClickListener(v -> {
+            mDialog.dismiss();
+            onMenuItemListener.onMenuItem(4);
+        });
+        binding.clSetting.setOnClickListener(v -> {
+            mDialog.dismiss();
+            onMenuItemListener.onMenuItem(5);
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.TOP | Gravity.LEFT);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        //获取通知栏高度  重要的在这，获取到通知栏高度
+        int notificationBar = Resources.getSystem().getDimensionPixelSize(Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android"));
+        //location [0] 为x绝对坐标;location [1] 为y绝对坐标
+        int[] location = new int[2];
+        view.getLocationInWindow(location); //获取在当前窗体内的绝对坐标
+        view.getLocationOnScreen(location);//获取在整个屏幕内的绝对坐标
+        final int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
+        final int right = view.getRight();
+        lp.x = widthPixels - DisplayUtils.dip2px(context, 160f) - (widthPixels - right); //对 dialog 设置 x 轴坐标
+        lp.y = location[1] + view.getHeight()*2 - notificationBar; //对dialog设置y轴坐标
+
+        lp.width = DisplayUtils.dip2px(context, 160f);
+        lp.height = DisplayUtils.dip2px(context, 284f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.5f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
     }
 
     public static void showRepetitionScheduleDialog(Context context){
@@ -459,5 +513,9 @@ public class DialogUtil {
         void onCancel(View view);
 
         void onEnsure(View view);
+    }
+
+    public interface OnMenuItemListener{
+        void onMenuItem(int index);
     }
 }
