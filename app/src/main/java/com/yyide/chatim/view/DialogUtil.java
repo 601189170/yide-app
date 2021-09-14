@@ -2,6 +2,7 @@ package com.yyide.chatim.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -26,17 +27,21 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
 import com.yyide.chatim.databinding.DialogScheduleEditBinding;
 import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
+import com.yyide.chatim.databinding.DialogScheduleMonthListBinding;
 import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
 import com.yyide.chatim.model.schedule.Label;
 import com.yyide.chatim.model.schedule.Remind;
 import com.yyide.chatim.model.schedule.Repetition;
+import com.yyide.chatim.model.schedule.Schedule;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
 
@@ -159,6 +164,71 @@ public class DialogUtil {
         //设置dialog背景为透明色
         window.setBackgroundDrawableResource(R.color.transparent);
         return tipDialog;
+    }
+
+    public static void showMonthScheduleListDialog(Context context,String date,List<Schedule> scheduleList){
+        DialogScheduleMonthListBinding binding = DialogScheduleMonthListBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Schedule,BaseViewHolder>(R.layout.item_dialog_month_schedule){
+            @Override
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, Schedule schedule) {
+                baseViewHolder.setText(R.id.tv_title,schedule.getTitle());
+                final ImageView imageView = baseViewHolder.getView(R.id.iv_type);
+                switch (schedule.getType()) {
+                    case Schedule.SCHEDULE_TYPE_SCHEDULE:
+                        imageView.setImageResource(R.drawable.type_schedule_icon);
+                        break;
+                    case Schedule.SCHEDULE_TYPE_SCHOOL_SCHEDULE:
+                        imageView.setImageResource(R.drawable.type_school_schedule_icon);
+                        break;
+                    case Schedule.SCHEDULE_TYPE_CONFERENCE:
+                        imageView.setImageResource(R.drawable.type_conference_icon);
+                        break;
+                    case Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE:
+                        imageView.setImageResource(R.drawable.type_class_schedule_icon);
+                        break;
+                    default:
+                        break;
+                }
+                final String startDate = schedule.getStartDate();
+                final String endDate = schedule.getEndDate();
+                baseViewHolder.setText(
+                        R.id.tv_date,
+                        DateUtils.formatTime(
+                                startDate,
+                                "",
+                                "HH:mm"
+                        ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
+                );
+            }
+        };
+
+        adapter.setList(scheduleList);
+        binding.rvScheduleList.setLayoutManager(new LinearLayoutManager(context));
+        binding.rvScheduleList.setAdapter(adapter);
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            Log.e(TAG, "convert: "+scheduleList.get(position).toString());
+            context.startActivity(new Intent(context, ScheduleEditActivity.class));
+        });
+        binding.clAddSchedule.setOnClickListener(v -> {
+            mDialog.dismiss();
+            DialogUtil.showAddScheduleDialog(context, null);
+        });
+
+        binding.tvDate.setText(date);
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        dialogWindow.setWindowAnimations(R.style.popwin_anim_style2);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels);
+        lp.height = DisplayUtils.dip2px(context, 330f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
     }
 
     public static void showScheduleMenuDialog(Context context, View view,OnMenuItemListener onMenuItemListener) {
@@ -415,17 +485,20 @@ public class DialogUtil {
         ConstraintLayout rootView = (ConstraintLayout) LayoutInflater.from(context).inflate(R.layout.dialog_add_schedule_input, null);
         final EditText editView = rootView.findViewById(R.id.edit);
         //完成
-        final Button btnFinished = rootView.findViewById(R.id.btn_finish);
+        final ImageView finished = rootView.findViewById(R.id.btn_finish);
         //标签
         final TextView tvLabel = rootView.findViewById(R.id.tv_label);
         final ImageView ivLabel = rootView.findViewById(R.id.iv_label);
         //日期
         final TextView tvDate = rootView.findViewById(R.id.tv_date);
         final ImageView ivTime = rootView.findViewById(R.id.iv_time);
+
         Dialog mDialog = new Dialog(context, R.style.inputDialog);
         mDialog.setContentView(rootView);
-        btnFinished.setOnClickListener(v -> {
+        finished.setOnClickListener(v -> {
+            mDialog.dismiss();
         });
+
         tvLabel.setOnClickListener(v -> {
             showAddLabelDialog(context, labelList);
         });

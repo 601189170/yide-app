@@ -23,7 +23,7 @@ public class CalendarUtils {
     private static final String TAG = "CalendarUtils";
     private static CalendarUtils sUtils;
     private Map<String, int[]> sAllHolidays = new HashMap<>();
-    private Map<String, List<Integer>> sMonthTaskHint = new HashMap<>();
+    private Map<String, List<HintCircle>> sMonthTaskHint = new HashMap<>();
 
     public static synchronized CalendarUtils getInstance(Context context) {
         if (sUtils == null) {
@@ -48,9 +48,9 @@ public class CalendarUtils {
         }
     }
 
-    public List<Integer> addTaskHints(int year, int month, List<Integer> days) {
+    public List<HintCircle> addTaskHints(int year, int month, List<HintCircle> days) {
         String key = hashKey(year, month);
-        List<Integer> hints = sUtils.sMonthTaskHint.get(key);
+        List<HintCircle> hints = sUtils.sMonthTaskHint.get(key);
         if (hints == null) {
             hints = new ArrayList<>();
             hints.removeAll(days); // 避免重复
@@ -62,9 +62,9 @@ public class CalendarUtils {
         return hints;
     }
 
-    public List<Integer> removeTaskHints(int year, int month, List<Integer> days) {
+    public List<HintCircle> removeTaskHints(int year, int month, List<HintCircle> days) {
         String key = hashKey(year, month);
-        List<Integer> hints = sUtils.sMonthTaskHint.get(key);
+        List<HintCircle> hints = sUtils.sMonthTaskHint.get(key);
         if (hints == null) {
             hints = new ArrayList<>();
             sUtils.sMonthTaskHint.put(key, hints);
@@ -74,9 +74,9 @@ public class CalendarUtils {
         return hints;
     }
 
-    public boolean addTaskHint(int year, int month, int day) {
+    public boolean addTaskHint(int year, int month, HintCircle day) {
         String key = hashKey(year, month);
-        List<Integer> hints = sUtils.sMonthTaskHint.get(key);
+        List<HintCircle> hints = sUtils.sMonthTaskHint.get(key);
         if (hints == null) {
             hints = new ArrayList<>();
             hints.add(day);
@@ -92,17 +92,17 @@ public class CalendarUtils {
         }
     }
 
-    public boolean removeTaskHint(int year, int month, int day) {
+    public boolean removeTaskHint(int year, int month, HintCircle day) {
         String key = hashKey(year, month);
-        List<Integer> hints = sUtils.sMonthTaskHint.get(key);
+        List<HintCircle> hints = sUtils.sMonthTaskHint.get(key);
         if (hints == null) {
             hints = new ArrayList<>();
             sUtils.sMonthTaskHint.put(key, hints);
         } else {
             if (hints.contains(day)) {
-                Iterator<Integer> i = hints.iterator();
+                Iterator<HintCircle> i = hints.iterator();
                 while (i.hasNext()) {
-                    Integer next = i.next();
+                    HintCircle next = i.next();
                     if (next == day) {
                         i.remove();
                         break;
@@ -116,9 +116,9 @@ public class CalendarUtils {
         return false;
     }
 
-    public List<Integer> getTaskHints(int year, int month) {
+    public List<HintCircle> getTaskHints(int year, int month) {
         String key = hashKey(year, month);
-        List<Integer> hints = sUtils.sMonthTaskHint.get(key);
+        List<HintCircle> hints = sUtils.sMonthTaskHint.get(key);
         if (hints == null) {
             hints = new ArrayList<>();
             sUtils.sMonthTaskHint.put(key, hints);

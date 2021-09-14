@@ -631,4 +631,30 @@ public class DateUtils {
         }
         return false;
     }
+
+    /**
+     *
+     * @param eq true判断相等 false 判断大小
+     * @param nowDate
+     * @param compareDate
+     * @return
+     */
+    public static boolean compareDate(String nowDate, String compareDate,boolean eq) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        try {
+            Date now = df.parse(nowDate);
+            Date compare = df.parse(compareDate);
+            if (eq){
+                return now.getTime() == compare.getTime();
+            }
+            if (now.before(compare)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,12 +16,18 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.RequiresApi;
+
 import com.yide.calendar.CalendarUtils;
+import com.yide.calendar.HintCircle;
 import com.yide.calendar.LunarCalendarUtils;
 import com.yide.calendar.R;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jimmy on 2016/10/6 0006.
@@ -37,6 +44,7 @@ public class MonthView extends View {
     private int mSelectBGTodayColor;
     private int mCurrentDayColor;
     private int mHintCircleColor;
+    private List<Integer> mHintCircleColorList;
     private int mLunarTextColor;
     private int mHolidayTextColor;
     private int mLastOrNextMonthTextColor;
@@ -141,6 +149,11 @@ public class MonthView extends View {
         mRestBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_rest_day);
         mWorkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_work_day);
         mHolidays = CalendarUtils.getInstance(getContext()).getHolidays(mSelYear, mSelMonth + 1);
+        mHintCircleColorList = new ArrayList<>();
+        mHintCircleColorList.add(Color.parseColor("#FF8040"));
+        mHintCircleColorList.add(Color.parseColor("#2FB29C"));
+        mHintCircleColorList.add(Color.parseColor("#FF4140"));
+        mHintCircleColorList.add(Color.parseColor("#6C6CEA"));
     }
 
     private void initPaint() {
@@ -183,6 +196,7 @@ public class MonthView extends View {
         setMeasuredDimension(widthSize, heightSize);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onDraw(Canvas canvas) {
         initSize();
@@ -423,24 +437,58 @@ public class MonthView extends View {
      *
      * @param canvas
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void drawHintCircle(Canvas canvas) {
         if (mIsShowHint) {
-            List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mSelYear, mSelMonth);
-            if (hints.size() > 0) {
+            List<HintCircle> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mSelYear, mSelMonth);
+            final List<Integer> collect = hints.stream().map(it -> it.getDay()).collect(Collectors.toList());
+            final List<Integer> counts = hints.stream().map(it -> it.getCount()).collect(Collectors.toList());
+            if (collect.size() > 0) {
                 mPaint.setColor(mHintCircleColor);
                 int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
                 int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth,startWithSunday);
                 for (int day = 0; day < monthDays; day++) {
                     int col = (day + weekNumber - 1) % 7;
                     int row = (day + weekNumber - 1) / 7;
-                    if (!hints.contains(day + 1)) continue;
+                    if (!collect.contains(day + 1)) continue;
                     float circleX = (float) (mColumnSize * col + mColumnSize * 0.5);
                     float circleY = (float) (mRowSize * row + mRowSize * 0.75);
-                    canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
+                    int finalDay = day;
+                    final Optional<HintCircle> first = hints.stream().filter(it -> it.getDay() == (finalDay + 1)).findFirst();
+                    if (first.isPresent()) {
+                        circleY = circleY+mCircleRadius*4;
+                        if (first.get().getCount() == 1) {
+                            mPaint.setColor(mHintCircleColorList.get(0));
+                            canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
+                        } else if (first.get().getCount() == 2) {
+                            mPaint.setColor(mHintCircleColorList.get(0));
+                            canvas.drawCircle(circleX - mCircleRadius * 2, circleY, mCircleRadius, mPaint);
+                            mPaint.setColor(mHintCircleColorList.get(1));
+                            canvas.drawCircle(circleX + mCircleRadius * 2, circleY, mCircleRadius, mPaint);
+                        } else if (first.get().getCount() == 3) {
+                            mPaint.setColor(mHintCircleColorList.get(0));
+                            canvas.drawCircle(circleX - 2 * 2 * mCircleRadius, circleY, mCircleRadius, mPaint);
+                            mPaint.setColor(mHintCircleColorList.get(1));
+                            canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
+                            mPaint.setColor(mHintCircleColorList.get(2));
+                            canvas.drawCircle(circleX + 2 * 2 * mCircleRadius, circleY, mCircleRadius, mPaint);
+                        } else {
+                            mPaint.setColor(mHintCircleColorList.get(0));
+                            canvas.drawCircle(circleX - 3 * 2 * mCircleRadius, circleY, mCircleRadius, mPaint);
+                            mPaint.setColor(mHintCircleColorList.get(1));
+                            canvas.drawCircle(circleX - 2 * mCircleRadius, circleY, mCircleRadius, mPaint);
+                            mPaint.setColor(mHintCircleColorList.get(2));
+                            canvas.drawCircle(circleX + 2 * mCircleRadius, circleY, mCircleRadius, mPaint);
+                            mPaint.setColor(mHintCircleColorList.get(3));
+                            canvas.drawCircle(circleX + 3 * 2 * mCircleRadius, circleY, mCircleRadius, mPaint);
+                        }
+                    }
                 }
             }
         }
     }
+
+
 
     @Override
     public boolean performClick() {
@@ -556,7 +604,7 @@ public class MonthView extends View {
      *
      * @param hints
      */
-    public void addTaskHints(List<Integer> hints) {
+    public void addTaskHints(List<HintCircle> hints) {
         if (mIsShowHint) {
             CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, hints);
             invalidate();
@@ -568,7 +616,7 @@ public class MonthView extends View {
      *
      * @param hints
      */
-    public void removeTaskHints(List<Integer> hints) {
+    public void removeTaskHints(List<HintCircle> hints) {
         if (mIsShowHint) {
             CalendarUtils.getInstance(getContext()).removeTaskHints(mSelYear, mSelMonth, hints);
             invalidate();
@@ -580,7 +628,7 @@ public class MonthView extends View {
      *
      * @param day
      */
-    public boolean addTaskHint(Integer day) {
+    public boolean addTaskHint(HintCircle day) {
         if (mIsShowHint) {
             if (CalendarUtils.getInstance(getContext()).addTaskHint(mSelYear, mSelMonth, day)) {
                 invalidate();
@@ -595,7 +643,7 @@ public class MonthView extends View {
      *
      * @param day
      */
-    public boolean removeTaskHint(Integer day) {
+    public boolean removeTaskHint(HintCircle day) {
         if (mIsShowHint) {
             if (CalendarUtils.getInstance(getContext()).removeTaskHint(mSelYear, mSelMonth, day)) {
                 invalidate();

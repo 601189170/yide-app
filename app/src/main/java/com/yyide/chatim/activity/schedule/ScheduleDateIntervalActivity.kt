@@ -100,7 +100,7 @@ class ScheduleDateIntervalActivity : BaseActivity() {
     }
 
     private fun initView() {
-        binding.top.title.text = "选择日期"
+        binding.top.title.text = "自定义时间"
         binding.top.backLayout.setOnClickListener {
             finish()
         }

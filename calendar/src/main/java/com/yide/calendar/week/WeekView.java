@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.yide.calendar.CalendarUtils;
+import com.yide.calendar.HintCircle;
 import com.yide.calendar.LunarCalendarUtils;
 import com.yide.calendar.R;
 
@@ -342,14 +343,14 @@ public class WeekView extends View {
             int endMonth = mStartDate.plusDays(7).getMonthOfYear();
             int startDay = mStartDate.getDayOfMonth();
             if (startMonth == endMonth) {
-                List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
+                List<HintCircle> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
                 for (int i = 0; i < 7; i++) {
                     drawHintCircle(hints, startDay + i, i, canvas);
                 }
             } else {
                 for (int i = 0; i < 7; i++) {
-                    List<Integer> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
-                    List<Integer> nextHints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear());
+                    List<HintCircle> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
+                    List<HintCircle> nextHints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear());
                     DateTime date = mStartDate.plusDays(i);
                     int month = date.getMonthOfYear();
                     if (month == startMonth) {
@@ -362,7 +363,7 @@ public class WeekView extends View {
         }
     }
 
-    private void drawHintCircle(List<Integer> hints, int day, int col, Canvas canvas) {
+    private void drawHintCircle(List<HintCircle> hints, int day, int col, Canvas canvas) {
         if (!hints.contains(day)) return;
         float circleX = (float) (mColumnSize * col + mColumnSize * 0.5);
         float circleY = (float) (mRowSize * 0.75);
@@ -441,7 +442,7 @@ public class WeekView extends View {
      *
      * @param hints
      */
-    public void addTaskHints(List<Integer> hints) {
+    public void addTaskHints(List<HintCircle> hints) {
         if (mIsShowHint) {
             CalendarUtils.getInstance(getContext()).addTaskHints(mSelYear, mSelMonth, hints);
             invalidate();
@@ -453,7 +454,7 @@ public class WeekView extends View {
      *
      * @param hints
      */
-    public void removeTaskHints(List<Integer> hints) {
+    public void removeTaskHints(List<HintCircle> hints) {
         if (mIsShowHint) {
             CalendarUtils.getInstance(getContext()).removeTaskHints(mSelYear, mSelMonth, hints);
             invalidate();
@@ -465,7 +466,7 @@ public class WeekView extends View {
      *
      * @param day
      */
-    public void addTaskHint(Integer day) {
+    public void addTaskHint(HintCircle day) {
         if (mIsShowHint) {
             if (CalendarUtils.getInstance(getContext()).addTaskHint(mSelYear, mSelMonth, day)) {
                 invalidate();
@@ -478,7 +479,7 @@ public class WeekView extends View {
      *
      * @param day
      */
-    public void removeTaskHint(Integer day) {
+    public void removeTaskHint(HintCircle day) {
         if (mIsShowHint) {
             if (CalendarUtils.getInstance(getContext()).removeTaskHint(mSelYear, mSelMonth, day)) {
                 invalidate();

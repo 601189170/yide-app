@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.yide.calendar.CalendarUtils;
+import com.yide.calendar.HintCircle;
 import com.yide.calendar.OnCalendarClickListener;
 import com.yide.calendar.R;
 import com.yide.calendar.month.MonthCalendarView;
@@ -516,7 +518,7 @@ public class ScheduleLayout extends FrameLayout {
      *
      * @param hints
      */
-    public void addTaskHints(List<Integer> hints) {
+    public void addTaskHints(List<HintCircle> hints) {
         CalendarUtils.getInstance(getContext()).addTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
         if (mcvCalendar.getCurrentMonthView() != null) {
             mcvCalendar.getCurrentMonthView().invalidate();
@@ -531,7 +533,7 @@ public class ScheduleLayout extends FrameLayout {
      *
      * @param hints
      */
-    public void removeTaskHints(List<Integer> hints) {
+    public void removeTaskHints(List<HintCircle> hints) {
         CalendarUtils.getInstance(getContext()).removeTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints);
         if (mcvCalendar.getCurrentMonthView() != null) {
             mcvCalendar.getCurrentMonthView().invalidate();
@@ -546,7 +548,7 @@ public class ScheduleLayout extends FrameLayout {
      *
      * @param day
      */
-    public void addTaskHint(Integer day) {
+    public void addTaskHint(HintCircle day) {
         if (mcvCalendar.getCurrentMonthView() != null) {
             if (mcvCalendar.getCurrentMonthView().addTaskHint(day)) {
                 if (wcvCalendar.getCurrentWeekView() != null) {
@@ -561,7 +563,7 @@ public class ScheduleLayout extends FrameLayout {
      *
      * @param day
      */
-    public void removeTaskHint(Integer day) {
+    public void removeTaskHint(HintCircle day) {
         if (mcvCalendar.getCurrentMonthView() != null) {
             if (mcvCalendar.getCurrentMonthView().removeTaskHint(day)) {
                 if (wcvCalendar.getCurrentWeekView() != null) {
