@@ -98,9 +98,6 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
             Log.e(TAG, "initAdapter: " + recordsBean.toString());
             if ("0".equals(recordsBean.getStatus())) {
                 mvpPresenter.updateMyNoticeDetails(recordsBean.getSignId());
-            }
-            if (!TextUtils.isEmpty(recordsBean.getTitle()) && recordsBean.getTitle().contains("考勤")) {
-                startActivity(new Intent(this, StatisticsActivity.class));
             } else if ("2".equals(recordsBean.getIsText())) {
                 //不是纯文本，需要跳转详情
                 switch (recordsBean.getAttributeType()) {

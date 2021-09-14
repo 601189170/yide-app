@@ -65,6 +65,7 @@ import com.yyide.chatim.alipush.NotifyUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.base.MMKVConstant;
+import com.yyide.chatim.chat.signature.GenerateTestUserSig;
 import com.yyide.chatim.fragment.schedule.ScheduleFragment;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
@@ -549,7 +550,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         GSYVideoManager.releaseAllVideos();
     }
 
-    @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout,R.id.tab5_layout})
+    @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout, R.id.tab5_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tab1_layout:
@@ -570,7 +571,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 setTab(3, 0);
                 break;
             case R.id.tab5_layout:
-                setTab(4,0);
+                setTab(4, 0);
                 break;
             default:
                 break;
@@ -622,7 +623,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     UserInfo.getInstance().setAutoLogin(false);
                     UserInfo.getInstance().setUserSig(userSig);
                     UserInfo.getInstance().setUserId(String.valueOf(SpData.getIdentityInfo().userId));
-                    Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
+                    Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活失败code：" + code);
                 });
                 DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
             }

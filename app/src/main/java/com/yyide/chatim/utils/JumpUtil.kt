@@ -3,10 +3,12 @@ package com.yyide.chatim.utils
 import android.content.Context
 import android.content.Intent
 import com.blankj.utilcode.util.ToastUtils
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.AppManagerActivity
 import com.yyide.chatim.activity.TableActivity
 import com.yyide.chatim.activity.WebViewActivity
 import com.yyide.chatim.activity.attendance.AttendanceActivity
+import com.yyide.chatim.activity.attendance.StatisticsActivity
 import com.yyide.chatim.activity.leave.AskForLeaveActivity
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity
 import com.yyide.chatim.base.BaseConstant
@@ -35,8 +37,13 @@ object JumpUtil {
                 mActivity.startActivity(intent)
             }
             "考勤" -> {
-                val intent = Intent(mActivity, AttendanceActivity::class.java)
-                mActivity.startActivity(intent)
+                if(!SpData.getIdentityInfo().staffIdentity()){
+                    val intent = Intent(mActivity, StatisticsActivity::class.java)
+                    mActivity.startActivity(intent)
+                } else{
+                    val intent = Intent(mActivity, AttendanceActivity::class.java)
+                    mActivity.startActivity(intent)
+                }
             }
             "待办" -> {
                 EventBus.getDefault()

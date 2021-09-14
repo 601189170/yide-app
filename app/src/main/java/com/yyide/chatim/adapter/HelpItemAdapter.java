@@ -67,7 +67,7 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 holder.setText(R.id.title, (holder.getAdapterPosition() + 1) + "." + itemBean.getName())
                         .setText(R.id.info, Html.fromHtml(itemBean.getMessage(), Html.FROM_HTML_MODE_COMPACT, source -> {
                             new Thread(() -> {
-                                mDrawable.addLevel(0, 0, getContext().getResources().getDrawable(R.mipmap.ic_launcher));
+                                mDrawable.addLevel(0, 0, getContext().getResources().getDrawable(R.mipmap.ic_launcher_logo));
                                 mDrawable.setBounds(0, 0, 0, 0);
 //                                Bitmap bitmap;
 //                                try {

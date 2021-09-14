@@ -325,7 +325,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(),
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
                 EventBus.getDefault()
                     .post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
-                ToastUtils.showLong(model.msg)
+                //ToastUtils.showLong(model.msg)
                 finish()
             }, 500)
         } else {

@@ -27,7 +27,7 @@ public class VpSwipeRefreshLayout extends SwipeRefreshLayout {
                 // 记录手指按下的位置
                 startY = ev.getY();
                 startX = ev.getX();
-                // 初始化标记
+                    // 初始化标记
                 mIsVpDragger = false;
                 break;
             case MotionEvent.ACTION_MOVE:

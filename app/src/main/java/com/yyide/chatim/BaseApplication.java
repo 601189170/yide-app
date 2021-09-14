@@ -75,10 +75,10 @@ public class BaseApplication extends Application {
         //内存泄露檢測
 //        LeakCanary.install(this);
         //blankj初始化
+        MMKV.initialize(this); //初始化mmkv
         Utils.init(this);
         MultiDex.install(this);
-        MMKV.initialize(this); //初始化mmkv
-
+        initAutoSize();
         if (MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
             initSdk();
         }
@@ -168,7 +168,6 @@ public class BaseApplication extends Application {
     }
 
     public void initSdk() {
-        initAutoSize();
         /**
          * TUIKit的初始化函数
          *

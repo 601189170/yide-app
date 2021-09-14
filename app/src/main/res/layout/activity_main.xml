@@ -42,6 +42,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tab5_layout"
             android:layout_width="0dp"
@@ -53,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/home_tab1"
+                android:gravity="center"
                 android:text="@string/tab_schedule"
                 android:textSize="@dimen/text_10"
                 android:textStyle="bold"
@@ -131,6 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/home_tab4"
+                android:gravity="center"
                 android:text="@string/tab_help"
                 android:textSize="@dimen/text_10"
                 android:textStyle="bold"

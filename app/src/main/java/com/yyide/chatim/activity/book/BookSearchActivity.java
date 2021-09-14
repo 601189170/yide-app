@@ -42,6 +42,9 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 通讯录搜索
+ */
 public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> implements BookSearchView {
     private static final String TAG = "BookSearchActivity";
     @BindView(R.id.edit)

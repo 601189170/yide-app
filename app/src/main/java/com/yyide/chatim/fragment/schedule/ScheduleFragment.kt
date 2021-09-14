@@ -1,5 +1,6 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
 import com.yyide.chatim.databinding.FragmentScheduleBinding
 import com.yyide.chatim.view.DialogUtil
 
@@ -37,7 +39,7 @@ class ScheduleFragment : Fragment() {
         //initFragmentContainer()
         setFragment(3)
         fragmentScheduleBinding.btnSearch.setOnClickListener {
-
+            startActivity(Intent(activity, ScheduleSearchActivity::class.java))
         }
 
         fragmentScheduleBinding.btnSetting.setOnClickListener {

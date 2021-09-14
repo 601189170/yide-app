@@ -23,7 +23,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
@@ -59,18 +58,20 @@ public class SplashActivity extends AppCompatActivity {
     private boolean firstOpenApp;
     OkHttpClient mOkHttpClient = new OkHttpClient();
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getWindow().setStatusBarColor(getResources().getColor(R.color.white));
         getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
-        int vis = getWindow().getDecorView().getSystemUiVisibility();
-        vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-        getWindow().getDecorView().setSystemUiVisibility(vis);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            int vis = getWindow().getDecorView().getSystemUiVisibility();
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            getWindow().getDecorView().setSystemUiVisibility(vis);
+        }
 
         //设置固定字体大小
         Resources res = getResources();
@@ -86,11 +87,10 @@ public class SplashActivity extends AppCompatActivity {
         //Log.e(TAG, "passWord: " + JSON.toJSONString(passWord));
         if (!MMKV.defaultMMKV().decodeBool(BaseConstant.SP_PRIVACY, false)) {
             showPrivacy();
-        } else if (firstOpenApp){
+        } else if (firstOpenApp) {
             //第一次打开app
             new Handler().postDelayed(() -> startGuidePage(), 500);
-        }
-        else {
+        } else {
             if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
                 Tologin(loginName, passWord);
             } else {
@@ -102,7 +102,7 @@ public class SplashActivity extends AppCompatActivity {
     void initData() {
         loginName = SPUtils.getInstance().getString(BaseConstant.LOGINNAME, null);
         passWord = SPUtils.getInstance().getString(BaseConstant.PASSWORD, null);
-        firstOpenApp = SPUtils.getInstance().getBoolean(BaseConstant.FIRST_OPEN_APP,true);
+        firstOpenApp = SPUtils.getInstance().getBoolean(BaseConstant.FIRST_OPEN_APP, true);
     }
 
     void Tologin(String username, String password) {
@@ -130,7 +130,8 @@ public class SplashActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    String data = response.body().string();Log.e(TAG, "mOkHttpClient==>: " + data);
+                    String data = response.body().string();
+                    Log.e(TAG, "mOkHttpClient==>: " + data);
                     if (response.code() == BaseConstant.REQUEST_SUCCES2) {
                         LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
                         if (bean.code == BaseConstant.REQUEST_SUCCES2) {
@@ -199,9 +200,9 @@ public class SplashActivity extends AppCompatActivity {
     /**
      * 去引导页
      */
-    private void startGuidePage(){
+    private void startGuidePage() {
         Intent intent = new Intent(SplashActivity.this, GuidePageActivity.class);
-        startActivityForResult(intent,100);
+        startActivityForResult(intent, 100);
     }
 
     private void startMain() {
@@ -312,11 +313,11 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, "onActivityResult requestCode "+requestCode+",resultCode "+resultCode );
-        if (RESULT_OK == resultCode && 100 == requestCode){
-            if (data != null){
+        Log.e(TAG, "onActivityResult requestCode " + requestCode + ",resultCode " + resultCode);
+        if (RESULT_OK == resultCode && 100 == requestCode) {
+            if (data != null) {
                 final boolean interrupt = data.getBooleanExtra("interrupt", false);
-                if (interrupt){
+                if (interrupt) {
                     //引导没有看完直接退出。
                     finish();
                     return;

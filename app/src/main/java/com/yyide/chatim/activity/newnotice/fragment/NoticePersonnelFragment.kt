@@ -237,6 +237,8 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
             if (listBean != null) {
                 if (listBean.id == it.specifieId) {
                     checked(listBean, true)
+                } else {
+                    checked(listBean, false)
                 }
                 if (listBean.list != null) {
                     checkedRE(listBean.list, it)
@@ -314,14 +316,15 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
                         isAllChecked = true
                     }
                     if (it.list != null) {
-                        it.list.forEach {
-                            if (!it.check) {
+                        it.list.forEach { item ->
+                            if (!item.check) {
                                 isAllChecked = true
                             }
                         }
                     }
                 }
                 if (!isAllChecked) {
+                    Log.d("1429993190624690178", listBean.id.toString() +  ":" + listBean.name)
                     val item = NoticeBlankReleaseBean.RecordListBean.ListBean()
                     item.specifieId = listBean.id
                     item.specifieParentId = listBean.parentId
