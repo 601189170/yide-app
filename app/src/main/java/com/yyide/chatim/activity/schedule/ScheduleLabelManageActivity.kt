@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.schedule
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,6 +16,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleLabelManageBinding
 import com.yyide.chatim.model.schedule.Label
+import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 
@@ -46,7 +48,11 @@ class ScheduleLabelManageActivity : BaseActivity() {
             object : BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_label_manage_list) {
                 override fun convert(baseViewHolder: BaseViewHolder, label: Label) {
                     baseViewHolder.setText(R.id.tv_label, label.title)
-                    baseViewHolder.setBackgroundColor(R.id.tv_label, Color.parseColor(label.color))
+                    val drawable = GradientDrawable()
+                    drawable.cornerRadius = DisplayUtils.dip2px(this@ScheduleLabelManageActivity,2f).toFloat()
+                    drawable.setColor(Color.parseColor(label.color))
+                    baseViewHolder.getView<TextView>(R.id.tv_label).background = drawable
+
                     baseViewHolder.itemView.setOnClickListener { v: View? ->
 
                     }

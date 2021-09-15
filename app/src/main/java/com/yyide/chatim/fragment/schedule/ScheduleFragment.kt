@@ -12,6 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.schedule.ScheduleLabelManageActivity
 import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
 import com.yyide.chatim.databinding.FragmentScheduleBinding
 import com.yyide.chatim.view.DialogUtil
@@ -44,6 +45,10 @@ class ScheduleFragment : Fragment() {
 
         fragmentScheduleBinding.btnSetting.setOnClickListener {
             DialogUtil.showScheduleMenuDialog(requireContext(),fragmentScheduleBinding.btnSetting){
+                if (it == 4 ){
+                    startActivity(Intent(requireContext(),ScheduleLabelManageActivity::class.java))
+                    return@showScheduleMenuDialog
+                }
                 setFragment(it)
             }
         }

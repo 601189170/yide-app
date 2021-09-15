@@ -45,6 +45,8 @@
         android:background="@color/white"
         tools:listitem="@layout/item_label_color"
         android:paddingStart="@dimen/dp_20"
-        android:paddingEnd="@dimen/dp_20"/>
+        android:paddingEnd="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_14"
+        android:paddingBottom="@dimen/dp_14"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

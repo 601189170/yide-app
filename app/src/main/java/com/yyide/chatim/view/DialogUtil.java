@@ -28,18 +28,23 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
+import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
 import com.yyide.chatim.databinding.DialogScheduleCustomRepetitionBinding;
 import com.yyide.chatim.databinding.DialogScheduleEditBinding;
+import com.yyide.chatim.databinding.DialogScheduleLabelCreateBinding;
 import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
 import com.yyide.chatim.databinding.DialogScheduleMonthListBinding;
 import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
 import com.yyide.chatim.model.schedule.Label;
+import com.yyide.chatim.model.schedule.LabelColor;
 import com.yyide.chatim.model.schedule.MonthBean;
 import com.yyide.chatim.model.schedule.Remind;
 import com.yyide.chatim.model.schedule.Repetition;
@@ -47,6 +52,7 @@ import com.yyide.chatim.model.schedule.Schedule;
 import com.yyide.chatim.model.schedule.WeekBean;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
+import com.yyide.chatim.widget.CircleFrameLayout;
 import com.yyide.chatim.widget.SpaceItemDecoration;
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
 import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
@@ -56,6 +62,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import lombok.val;
+import lombok.var;
 
 /**
  * @Description: java类作用描述
@@ -173,6 +180,62 @@ public class DialogUtil {
         return tipDialog;
     }
 
+    public static void showLabelCreateScheduleDialog(Context context){
+        DialogScheduleLabelCreateBinding binding = DialogScheduleLabelCreateBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        final var labelColorList = LabelColor.Companion.getLabelColorList();
+        final var adapter = new BaseQuickAdapter<LabelColor, BaseViewHolder>(R.layout.item_label_color){
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder holder, LabelColor item) {
+                final var circleFrameLayout = (CircleFrameLayout)holder.getView(R.id.v_border_circle);
+                final ImageView imageView = (ImageView) holder.getView(R.id.iv_default_color);
+                circleFrameLayout.setRadius(DisplayUtils.dip2px(context, 24f));
+                circleFrameLayout.setBackgroundColor(Color.parseColor(item.getColor()));
+                final View view = holder.getView(R.id.v_border);
+                view.setVisibility(item.getChecked()?View.VISIBLE:View.INVISIBLE);
+
+                if (item.getColor().equals(LabelColor.color1)) {
+                    circleFrameLayout.setVisibility(View.GONE);
+                    imageView.setVisibility(View.VISIBLE);
+                } else {
+                    circleFrameLayout.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.GONE);
+                }
+                holder.itemView.setOnClickListener(v -> {
+                    for(LabelColor labelColor:labelColorList){
+                        labelColor.setChecked(false);
+                    }
+                    item.setChecked(true);
+                    notifyDataSetChanged();
+                });
+            }
+        };
+        adapter.setList(labelColorList);
+        binding.rvLabelList.setLayoutManager(new GridLayoutManager(context, 6));
+        binding.rvLabelList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 10f), 6));
+        binding.rvLabelList.setAdapter(adapter);
+
+        binding.tvCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        binding.tvFinish.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        lp.height = DisplayUtils.dip2px(context, 623f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+
+    }
     public static void showCustomRepetitionScheduleDialog(Context context) {
         List<String> list = new ArrayList<>();
         list.add("每");
@@ -328,47 +391,17 @@ public class DialogUtil {
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
-        BaseQuickAdapter adapter = new BaseQuickAdapter<Schedule, BaseViewHolder>(R.layout.item_dialog_month_schedule) {
-            @Override
-            protected void convert(@NonNull BaseViewHolder baseViewHolder, Schedule schedule) {
-                baseViewHolder.setText(R.id.tv_title, schedule.getTitle());
-                final ImageView imageView = baseViewHolder.getView(R.id.iv_type);
-                switch (schedule.getType()) {
-                    case Schedule.SCHEDULE_TYPE_SCHEDULE:
-                        imageView.setImageResource(R.drawable.type_schedule_icon);
-                        break;
-                    case Schedule.SCHEDULE_TYPE_SCHOOL_SCHEDULE:
-                        imageView.setImageResource(R.drawable.type_school_schedule_icon);
-                        break;
-                    case Schedule.SCHEDULE_TYPE_CONFERENCE:
-                        imageView.setImageResource(R.drawable.type_conference_icon);
-                        break;
-                    case Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE:
-                        imageView.setImageResource(R.drawable.type_class_schedule_icon);
-                        break;
-                    default:
-                        break;
-                }
-                final String startDate = schedule.getStartDate();
-                final String endDate = schedule.getEndDate();
-                baseViewHolder.setText(
-                        R.id.tv_date,
-                        DateUtils.formatTime(
-                                startDate,
-                                "",
-                                "HH:mm"
-                        ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
-                );
-            }
-        };
-
-        adapter.setList(scheduleList);
         binding.rvScheduleList.setLayoutManager(new LinearLayoutManager(context));
+        final ScheduleMonthListAdapter adapter = new ScheduleMonthListAdapter();
+        adapter.setList(scheduleList);
+        binding.rvScheduleList.addItemDecoration(new com.yyide.chatim.view.SpaceItemDecoration(10));
         binding.rvScheduleList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
-            Log.e(TAG, "convert: " + scheduleList.get(position).toString());
-            context.startActivity(new Intent(context, ScheduleEditActivity.class));
-        });
+                    mDialog.dismiss();
+                    context.startActivity(new Intent(context, ScheduleEditActivity.class));
+                }
+        );
+
         binding.clAddSchedule.setOnClickListener(v -> {
             mDialog.dismiss();
             DialogUtil.showAddScheduleDialog(context, null);
@@ -696,6 +729,10 @@ public class DialogUtil {
             Log.e(TAG, "showAddLabelDialog: " + labelList.toString());
             mDialog.dismiss();
         });
+        binding.tvAdd.setOnClickListener(v -> {
+            showLabelCreateScheduleDialog(context);
+        });
+
         BaseQuickAdapter adapter = new BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_dialog_add_label) {
             @Override
             protected void convert(@NonNull BaseViewHolder baseViewHolder, Label label) {

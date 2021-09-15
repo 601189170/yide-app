@@ -82,6 +82,27 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
             1
         )
         scheduleList.add(schedule2)
+
+        scheduleList.add(Schedule(
+            "开学提醒2", "开学提醒内容", 2,
+            "2021-09-11 16:10:00",
+            "2021-09-11 20:10:00",
+            1
+        ))
+
+        scheduleList.add(Schedule(
+            "开学提醒2", "开学提醒内容", 2,
+            "2021-09-11 16:10:00",
+            "2021-09-11 20:10:00",
+            1
+        ))
+        scheduleList.add(Schedule(
+            "开学提醒2", "开学提醒内容", 2,
+            "2021-09-11 16:10:00",
+            "2021-09-11 20:10:00",
+            1
+        ))
+
         val scheduleInner1 = ScheduleInner("2021-09-11 00:00:00", "周五", scheduleList)
         scheduleInnerList.add(scheduleInner1)
 

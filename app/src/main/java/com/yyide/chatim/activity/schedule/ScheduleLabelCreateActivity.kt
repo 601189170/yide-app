@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -47,6 +48,15 @@ class ScheduleLabelCreateActivity : BaseActivity() {
                         .setBackgroundColor(Color.parseColor(item.color))
                     holder.getView<View>(R.id.v_border).visibility =
                         if (item.checked) View.VISIBLE else View.INVISIBLE
+                    if (item.color == LabelColor.color1) {
+                        holder.getView<CircleFrameLayout>(R.id.v_border_circle).visibility =
+                            View.GONE
+                        holder.getView<ImageView>(R.id.iv_default_color).visibility = View.VISIBLE
+                    } else {
+                        holder.getView<CircleFrameLayout>(R.id.v_border_circle).visibility =
+                            View.VISIBLE
+                        holder.getView<ImageView>(R.id.iv_default_color).visibility = View.GONE
+                    }
                     holder.itemView.setOnClickListener {
                         labelColorList.forEach {
                             it.checked = false
@@ -59,7 +69,7 @@ class ScheduleLabelCreateActivity : BaseActivity() {
         adapter.setList(labelColorList)
         labelCreateBinding.rvLabelList.layoutManager = GridLayoutManager(this, 6)
         labelCreateBinding.rvLabelList.addItemDecoration(
-            SpaceItemDecoration(DisplayUtils.dip2px(this, 24f),6)
+            SpaceItemDecoration(DisplayUtils.dip2px(this, 10f), 6)
         )
         labelCreateBinding.rvLabelList.adapter = adapter
     }
