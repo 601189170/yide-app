@@ -36,14 +36,14 @@ import java.util.List;
  * time 2021年5月31日15:52:14
  * other lrz
  */
-public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener {
+public class ParentsStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener {
 
     private FragmentFamilyHeadBinding mViewBinding;
-    private String TAG = FamilyStudentAttendanceFragment.class.getSimpleName();
+    private String TAG = ParentsStudentAttendanceFragment.class.getSimpleName();
     private int index;
 
-    public static FamilyStudentAttendanceFragment newInstance(int index) {
-        FamilyStudentAttendanceFragment fragment = new FamilyStudentAttendanceFragment();
+    public static ParentsStudentAttendanceFragment newInstance(int index) {
+        ParentsStudentAttendanceFragment fragment = new ParentsStudentAttendanceFragment();
         Bundle args = new Bundle();
         args.putInt("index", index);
         fragment.setArguments(args);
@@ -97,9 +97,9 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
             if (students != null) {
                 ImageView img = holder.getView(R.id.iv_img);
                 TextView leave_desc = holder.getView(R.id.tv_attendance_leave_desc);
-                if(!TextUtils.isEmpty(students.getSubjectName())){
+                if (!TextUtils.isEmpty(students.getSubjectName())) {
                     holder.setText(R.id.tv_event_name, students.getSubjectName());
-                } else if(!TextUtils.isEmpty(students.getThingName())){
+                } else if (!TextUtils.isEmpty(students.getThingName())) {
                     holder.setText(R.id.tv_event_name, students.getThingName());
                 } else {
                     holder.setText(R.id.tv_event_name, students.getName());
@@ -137,7 +137,7 @@ public class FamilyStudentAttendanceFragment extends BaseMvpFragment<AttendanceC
                             leave_desc.setText("请假");
                             leave_desc.setTextColor(Color.parseColor("#F6BD16"));
                             img.setImageResource(R.drawable.icon_attendance_ask_for_leave);
-                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_ask_leave_text, students.getStartTime()+ "-" + students.getEndTime()));
+                            holder.setText(R.id.tv_attendance_card_time, getString(R.string.attendance_ask_leave_text, students.getStartTime() + "-" + students.getEndTime()));
                             break;
                     }
                 }

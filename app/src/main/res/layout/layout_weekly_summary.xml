@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_20">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="168dp"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_50"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_weekly_attendance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="43dp"
+                android:drawableLeft="@mipmap/icon_weekly_attendance"
+                android:drawablePadding="@dimen/dp_8"
+                android:text="全校学生考勤共20次异常，教职工共50次异常"
+                android:textColor="#ff1e1e1e"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_weekly_homework"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_16"
+                android:drawableLeft="@mipmap/icon_weekly_homework"
+                android:drawablePadding="@dimen/dp_8"
+                android:text="全校作业共300份，平均每天每班级作业4"
+                android:textColor="#ff1e1e1e"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_weekly_attendance"
+                app:layout_constraintTop_toBottomOf="@+id/tv_weekly_attendance" />
+
+            <TextView
+                android:id="@+id/tv_weekly_shopping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_16"
+                android:drawableLeft="@mipmap/icon_weekly_shopping"
+                android:drawablePadding="@dimen/dp_8"
+                android:text="本周全校消费总金额8000元"
+                android:textColor="#ff1e1e1e"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_weekly_homework"
+                app:layout_constraintTop_toBottomOf="@+id/tv_weekly_homework" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:src="@mipmap/icon_weekly_tag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_6"
+        android:text="本周小结"
+        android:textColor="#ffffffff"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

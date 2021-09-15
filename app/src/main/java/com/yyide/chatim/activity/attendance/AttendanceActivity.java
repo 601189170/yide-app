@@ -12,7 +12,6 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.fragment.SchoolAttendanceFragment;
 import com.yyide.chatim.activity.attendance.fragment.TeacherStudentAttendanceFragment;
-import com.yyide.chatim.activity.attendance.fragment.FamilyStudentAttendanceFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityAttendanceBinding;
 import com.yyide.chatim.model.GetUserSchoolRsp;

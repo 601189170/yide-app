@@ -63,7 +63,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
-        type = MMKV.defaultMMKV().decodeInt(MMKVConstant.MMKV_MAIN_JUMP_TYPE);
+        type = MMKV.defaultMMKV().decodeInt(MMKVConstant.YD_MAIN_JUMP_TYPE);
         fragment = new TodoMsgFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
@@ -82,7 +82,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
-        type = MMKV.defaultMMKV().decodeInt(MMKVConstant.MMKV_MAIN_JUMP_TYPE);
+        type = MMKV.defaultMMKV().decodeInt(MMKVConstant.YD_MAIN_JUMP_TYPE);
         if (!hidden && type > 0) {
             if (mSlidingTabLayout != null) {
                 Bundle bundle = new Bundle();

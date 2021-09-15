@@ -32,6 +32,7 @@ import com.yyide.chatim.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PowerActivity;
+import com.yyide.chatim.activity.PushSettingActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.activity.WebViewActivity;
@@ -106,7 +107,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         LinearLayout layout8 = mView.findViewById(R.id.layout8);
         LinearLayout layout9 = mView.findViewById(R.id.layout9);
         LinearLayout layout10 = mView.findViewById(R.id.layout10);
-
+        LinearLayout layoutPush = mView.findViewById(R.id.layout_push);
         mView.findViewById(R.id.exit).setOnClickListener(this);
         layout1.setOnClickListener(this);
         layout2.setOnClickListener(this);
@@ -118,6 +119,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         layout8.setOnClickListener(this);
         layout9.setOnClickListener(this);
         layout10.setOnClickListener(this);
+        layoutPush.setOnClickListener(this);
         head_img.setOnClickListener(this);
         setData();
 //        new BottomMenuPop(context);
@@ -328,6 +330,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 hide();
                 context.startActivity(new Intent(context, LoginActivity.class));
                 context.finish();
+                break;
+            case R.id.layout_push:
+                context.startActivity(new Intent(context, PushSettingActivity.class));
                 break;
         }
     }

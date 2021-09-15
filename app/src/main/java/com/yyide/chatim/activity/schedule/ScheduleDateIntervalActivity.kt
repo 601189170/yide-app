@@ -30,38 +30,38 @@ class ScheduleDateIntervalActivity : BaseActivity() {
     private fun initDate() {
         val dateStart = AtomicReference("")
         val dateEnd = AtomicReference("")
-        val ids: IntArray = binding.groupDateStart.getReferencedIds()
+        val ids: IntArray = binding.groupDateStart.referencedIds
         for (id in ids) {
-            findViewById<View>(id).setOnClickListener(View.OnClickListener { v: View? ->
-                if (binding.llVLine.getVisibility() == View.GONE) {
-                    binding.llVLine.setVisibility(View.VISIBLE)
-                    binding.dateTimePicker.setVisibility(View.VISIBLE)
+            findViewById<View>(id).setOnClickListener { v: View? ->
+                if (binding.llVLine.visibility == View.GONE) {
+                    binding.llVLine.visibility = View.VISIBLE
+                    binding.dateTimePicker.visibility = View.VISIBLE
                 }
-                binding.vDateTopMarkLeft.setVisibility(View.VISIBLE)
-                binding.vDateTopMarkRight.setVisibility(View.INVISIBLE)
-            })
+                binding.vDateTopMarkLeft.visibility = View.VISIBLE
+                binding.vDateTopMarkRight.visibility = View.INVISIBLE
+            }
         }
 
-        val ids2: IntArray = binding.groupDateEnd.getReferencedIds()
+        val ids2: IntArray = binding.groupDateEnd.referencedIds
         for (id in ids2) {
-            findViewById<View>(id).setOnClickListener(View.OnClickListener { v: View? ->
-                if (binding.llVLine.getVisibility() == View.GONE) {
-                    binding.llVLine.setVisibility(View.VISIBLE)
-                    binding.dateTimePicker.setVisibility(View.VISIBLE)
+            findViewById<View>(id).setOnClickListener { v: View? ->
+                if (binding.llVLine.visibility == View.GONE) {
+                    binding.llVLine.visibility = View.VISIBLE
+                    binding.dateTimePicker.visibility = View.VISIBLE
                 }
-                binding.vDateTopMarkLeft.setVisibility(View.INVISIBLE)
-                binding.vDateTopMarkRight.setVisibility(View.VISIBLE)
-            })
+                binding.vDateTopMarkLeft.visibility = View.INVISIBLE
+                binding.vDateTopMarkRight.visibility = View.VISIBLE
+            }
         }
         binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2)
-                binding.tvTimeStart.setVisibility(View.GONE)
-                binding.tvTimeEnd.setVisibility(View.GONE)
+                binding.tvTimeStart.visibility = View.GONE
+                binding.tvTimeEnd.visibility = View.GONE
             } else {
                 binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation)
-                binding.tvTimeStart.setVisibility(View.VISIBLE)
-                binding.tvTimeEnd.setVisibility(View.VISIBLE)
+                binding.tvTimeStart.visibility = View.VISIBLE
+                binding.tvTimeEnd.visibility = View.VISIBLE
             }
         }
         binding.dateTimePicker.setOnDateTimeChangedListener { aLong ->
@@ -70,27 +70,27 @@ class ScheduleDateIntervalActivity : BaseActivity() {
             loge("showEditScheduleDialog: $aLong,date=$date, time=$time")
             if (binding.vDateTopMarkLeft.visibility == View.VISIBLE) {
                 //左边选中设置左边的时间数据
-                binding.tvDateStart.setText(time)
-                if (!binding.checkBox.isChecked()) {
-                    binding.tvTimeStart.setText(DateUtils.formatTime(date, "", "HH:mm"))
+                binding.tvDateStart.text = time
+                if (!binding.checkBox.isChecked) {
+                    binding.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
                 }
                 dateStart.set(date)
-            } else if (binding.vDateTopMarkRight.getVisibility() == View.VISIBLE) {
+            } else if (binding.vDateTopMarkRight.visibility == View.VISIBLE) {
                 //右边被选中设置右边的时间数据
-                binding.tvDateEnd.setText(time)
-                if (!binding.checkBox.isChecked()) {
-                    binding.tvTimeEnd.setText(DateUtils.formatTime(date, "", "HH:mm"))
+                binding.tvDateEnd.text = time
+                if (!binding.checkBox.isChecked) {
+                    binding.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
                 }
                 dateEnd.set(date)
             } else {
                 //第一次设置两边的数据
-                binding.tvDateStart.setText(time)
-                if (!binding.checkBox.isChecked()) {
-                    binding.tvTimeStart.setText(DateUtils.formatTime(date, "", "HH:mm"))
+                binding.tvDateStart.text = time
+                if (!binding.checkBox.isChecked) {
+                    binding.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
                 }
-                binding.tvDateEnd.setText(time)
-                if (!binding.checkBox.isChecked()) {
-                    binding.tvTimeEnd.setText(DateUtils.formatTime(date, "", "HH:mm"))
+                binding.tvDateEnd.text = time
+                if (!binding.checkBox.isChecked) {
+                    binding.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
                 }
                 dateStart.set(date)
                 dateEnd.set(date)

@@ -81,6 +81,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+        <activity
+            android:name=".activity.weekly.WeeklyHomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.PushSettingActivity"
+            android:exported="true" />
+
         <meta-data
             android:name="design_width_in_dp"
             android:value="375" />
@@ -91,7 +98,7 @@
         <activity
             android:name=".activity.schedule.ScheduleSearchActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.book.BookPatriarchDetailActivity"
             android:exported="false"
@@ -599,13 +606,14 @@
         </activity>
         <activity android:name=".activity.scancode.BindingEquipmentActivity" />
         <activity android:name=".activity.scancode.ConfirmLoginActivity" />
-        <activity android:name=".activity.scancode.ConfirmSuccessActivity" />
-        <!-- 日程编辑 -->
+        <activity android:name=".activity.scancode.ConfirmSuccessActivity" /> <!-- 日程编辑 -->
         <activity android:name=".activity.schedule.ScheduleEditActivity" />
         <activity android:name=".activity.schedule.ScheduleRemindActivity" />
-        <activity android:name=".activity.schedule.ScheduleRepetitionActivity"/>
+        <activity android:name=".activity.schedule.ScheduleRepetitionActivity" />
         <activity android:name=".activity.schedule.ScheduleLabelCreateActivity" />
         <activity android:name=".activity.schedule.ScheduleLabelManageActivity" />
+        <activity android:name=".activity.schedule.ScheduleAddressActivity" />
+        <activity android:name=".activity.schedule.ScheduleDateIntervalActivity" />
         <activity android:name=".activity.schedule.ScheduleAddressActivity"/>
         <activity android:name=".activity.schedule.ScheduleDateIntervalActivity"/>
         <activity android:name=".activity.schedule.ScheduleCustomRepetitionActivity"/>

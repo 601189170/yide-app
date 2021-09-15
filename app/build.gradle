@@ -195,6 +195,9 @@ dependencies {
     //对话框
     implementation 'com.github.SheHuan:NiceDialog:1.1.9'
 
+    //activity侧滑
+    implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
+
     //zipfile
     implementation 'top.zibin:Luban:1.1.8'
     //Rxjava系列

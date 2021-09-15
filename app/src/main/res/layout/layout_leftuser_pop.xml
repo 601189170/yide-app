@@ -136,7 +136,7 @@
                         android:src="@drawable/icon_right" />
                 </LinearLayout>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="18dp"
@@ -223,7 +223,7 @@
                         android:src="@drawable/icon_right" />
                 </LinearLayout>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="18dp"
@@ -264,7 +264,7 @@
                         android:src="@drawable/icon_right" />
                 </LinearLayout>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="18dp"
@@ -305,7 +305,7 @@
                         android:src="@drawable/icon_right" />
                 </LinearLayout>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="18dp"
@@ -348,6 +348,44 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_push"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/white"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/icon_push_setting" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="推送通知"
+                        android:textColor="#1E232A"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_right" />
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:id="@+id/layout7"
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
@@ -385,7 +423,7 @@
                         android:src="@drawable/icon_right" />
                 </LinearLayout>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="18dp"

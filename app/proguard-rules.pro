@@ -112,3 +112,7 @@
 -dontwarn com.vivo.**
 # OPPO通道
 -keep public class * extends android.app.Service
+
+ #SwipeBackLayout
+ -dontwarn me.imid.swipebacklayout.lib.**
+ -keep class me.imid.swipebacklayout.lib.**{*;}

@@ -1,9 +1,7 @@
 package com.yyide.chatim.activity.schedule
 
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.text.TextUtils
-import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -19,7 +17,6 @@ import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.ActivityScheduleSearchBinding
 import com.yyide.chatim.dialog.ScheduleSearchFilterPop
 import com.yyide.chatim.view.SpacesItemDecoration
-import me.jessyan.autosize.internal.CustomAdapt
 import java.util.HashSet
 
 class ScheduleSearchActivity : BaseActivity() {
@@ -90,7 +87,7 @@ class ScheduleSearchActivity : BaseActivity() {
 
     private fun initSearchHistory() {
         val historyList =
-            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.MMKV_SCHEDULE_HISTORY, HashSet())
+            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.YD_SCHEDULE_HISTORY, HashSet())
         if (historyList.isEmpty()) {
             viewBinding.tvHistoryOrFilter.visibility = View.GONE
             viewBinding.ivDel.visibility = View.GONE
@@ -116,9 +113,9 @@ class ScheduleSearchActivity : BaseActivity() {
      */
     private fun clearHistory() {
         val search_history =
-            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.MMKV_SCHEDULE_HISTORY, HashSet())
+            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.YD_SCHEDULE_HISTORY, HashSet())
         search_history.clear()
-        MMKV.defaultMMKV().encode(MMKVConstant.MMKV_SCHEDULE_HISTORY, search_history)
+        MMKV.defaultMMKV().encode(MMKVConstant.YD_SCHEDULE_HISTORY, search_history)
         historyAdapter.setList(null)
     }
 
@@ -147,12 +144,12 @@ class ScheduleSearchActivity : BaseActivity() {
      */
     private fun saveHistory(keyWord: String) {
         val decodeStringSet =
-            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.MMKV_SCHEDULE_HISTORY, HashSet())
+            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.YD_SCHEDULE_HISTORY, HashSet())
         decodeStringSet.add(keyWord)
         if (decodeStringSet.isNotEmpty() && decodeStringSet.size > 20) {
 
         }
-        MMKV.defaultMMKV().encode(MMKVConstant.MMKV_SCHEDULE_HISTORY, decodeStringSet)
+        MMKV.defaultMMKV().encode(MMKVConstant.YD_SCHEDULE_HISTORY, decodeStringSet)
     }
 
 }
