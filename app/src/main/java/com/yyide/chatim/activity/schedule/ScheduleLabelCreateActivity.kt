@@ -59,7 +59,7 @@ class ScheduleLabelCreateActivity : BaseActivity() {
         adapter.setList(labelColorList)
         labelCreateBinding.rvLabelList.layoutManager = GridLayoutManager(this, 6)
         labelCreateBinding.rvLabelList.addItemDecoration(
-            SpaceItemDecoration(DisplayUtils.dip2px(this, 24f))
+            SpaceItemDecoration(DisplayUtils.dip2px(this, 24f),6)
         )
         labelCreateBinding.rvLabelList.adapter = adapter
     }

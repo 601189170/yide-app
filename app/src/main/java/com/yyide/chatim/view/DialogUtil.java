@@ -24,27 +24,34 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
+import com.yyide.chatim.databinding.DialogScheduleCustomRepetitionBinding;
 import com.yyide.chatim.databinding.DialogScheduleEditBinding;
 import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
 import com.yyide.chatim.databinding.DialogScheduleMonthListBinding;
 import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
 import com.yyide.chatim.model.schedule.Label;
+import com.yyide.chatim.model.schedule.MonthBean;
 import com.yyide.chatim.model.schedule.Remind;
 import com.yyide.chatim.model.schedule.Repetition;
 import com.yyide.chatim.model.schedule.Schedule;
+import com.yyide.chatim.model.schedule.WeekBean;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
+import com.yyide.chatim.widget.SpaceItemDecoration;
+import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
+import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -166,15 +173,165 @@ public class DialogUtil {
         return tipDialog;
     }
 
-    public static void showMonthScheduleListDialog(Context context,String date,List<Schedule> scheduleList){
+    public static void showCustomRepetitionScheduleDialog(Context context) {
+        List<String> list = new ArrayList<>();
+        list.add("每");
+        List<String> list2 = new ArrayList<>();
+        for (int i = 0; i < 31; i++) {
+            list2.add("" + (i + 1));
+        }
+        List<String> list22 = new ArrayList<>();
+        for (int i = 0; i < 72; i++) {
+            list22.add(""+(i+1));
+        }
+        List<String> list23 = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            list23.add(""+(i+1));
+        }
+
+        List<String> list3 = new ArrayList<>();
+        list3.add("天");
+        list3.add("月");
+        list3.add("周");
+        AtomicReference<String> number = new AtomicReference<>();
+        AtomicReference<String> unit = new AtomicReference<>();
+        DialogScheduleCustomRepetitionBinding binding = DialogScheduleCustomRepetitionBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        ScrollPickerView scrollPickerView = binding.scrollPickerView;
+        scrollPickerView.setLayoutManager(new LinearLayoutManager(context));
+        ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder =
+                new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
+                        .setDataList(list)
+                        .selectedItemOffset(1)
+                        .visibleItemNumber(3)
+                        .setDivideLineColor("#F2F7FA")
+                        .setItemViewProvider(null)
+                        .setOnClickListener(new ScrollPickerAdapter.OnClickListener() {
+                            @Override
+                            public void onSelectedItemClicked(View v) {
+                                String text = (String) v.getTag();
+                                Log.e(TAG, "onSelectedItemClicked: " + text);
+                            }
+                        });
+        ScrollPickerAdapter mScrollPickerAdapter = builder.build();
+        scrollPickerView.setAdapter(mScrollPickerAdapter);
+
+
+        ScrollPickerView scrollPickerNumber = binding.scrollPickerNumber;
+        scrollPickerNumber.setLayoutManager(new LinearLayoutManager(context));
+        ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder2 =
+                new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
+                        .setDataList(list2)
+                        .selectedItemOffset(1)
+                        .visibleItemNumber(3)
+                        .setDivideLineColor("#F2F7FA")
+                        .setItemViewProvider(null)
+                        .setOnScrolledListener(v -> {
+                            String text = (String) v.getTag();
+                            Log.e(TAG, "onSelectedItemClicked: " + text);
+                            number.set(text);
+                        });
+        final ScrollPickerAdapter scrollPickerNumberAdapter = builder2.build();
+        scrollPickerNumber.setAdapter(scrollPickerNumberAdapter);
+
+        ScrollPickerView scrollPickerUnit = binding.scrollPickerUnit;
+        scrollPickerUnit.setLayoutManager(new LinearLayoutManager(context));
+        ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder3 =
+                new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
+                        .setDataList(list3)
+                        .selectedItemOffset(1)
+                        .visibleItemNumber(3)
+                        .setDivideLineColor("#F2F7FA")
+                        .setItemViewProvider(null)
+                        .setOnScrolledListener(v->{
+                            String text = (String) v.getTag();
+                            Log.e(TAG, "onSelectedItemClicked: " + text);
+                            unit.set(text);
+                            if ("天".equals(text)){
+                                scrollPickerNumberAdapter.setDataList(list2);
+                                scrollPickerNumberAdapter.notifyDataSetChanged();
+                                binding.rvWeekList.setVisibility(View.GONE);
+                                binding.rvMonthList.setVisibility(View.GONE);
+                            }else if("月".equals(text)){
+                                scrollPickerNumberAdapter.setDataList(list23);
+                                scrollPickerNumberAdapter.notifyDataSetChanged();
+                                binding.rvWeekList.setVisibility(View.GONE);
+                                binding.rvMonthList.setVisibility(View.VISIBLE);
+                            }else if ("周".equals(text)){
+                                scrollPickerNumberAdapter.setDataList(list22);
+                                scrollPickerNumberAdapter.notifyDataSetChanged();
+                                binding.rvWeekList.setVisibility(View.VISIBLE);
+                                binding.rvMonthList.setVisibility(View.GONE);
+                            }
+                        });
+        final ScrollPickerAdapter scrollPickerUnitAdapter = builder3.build();
+        scrollPickerUnit.setAdapter(scrollPickerUnitAdapter);
+
+        List<WeekBean> weekList = WeekBean.Companion.getList();
+        binding.rvWeekList.setLayoutManager(new GridLayoutManager(context,3));
+        BaseQuickAdapter adapter = new BaseQuickAdapter<WeekBean,BaseViewHolder>(R.layout.item_dialog_week_custom_repetition){
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, WeekBean weekBean) {
+                baseViewHolder.setText(R.id.title,weekBean.getTitle());
+                baseViewHolder.getView(R.id.title).setSelected(weekBean.getChecked());
+                baseViewHolder.itemView.setOnClickListener(v -> {
+                    weekBean.setChecked(!weekBean.getChecked());
+                    baseViewHolder.getView(R.id.title).setSelected(weekBean.getChecked());
+                });
+            }
+        };
+        adapter.setList(weekList);
+        binding.rvWeekList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f),3));
+        binding.rvWeekList.setAdapter(adapter);
+
+        final List<MonthBean> monthList = MonthBean.Companion.getList();
+        binding.rvMonthList.setLayoutManager(new GridLayoutManager(context,7));
+        BaseQuickAdapter quickAdapter = new BaseQuickAdapter<MonthBean,BaseViewHolder>(R.layout.item_dialog_month_custom_repetition){
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, MonthBean monthBean) {
+                baseViewHolder.setText(R.id.title,monthBean.getTitle());
+                baseViewHolder.getView(R.id.title).setSelected(monthBean.getChecked());
+                baseViewHolder.itemView.setOnClickListener(v -> {
+                    monthBean.setChecked(!monthBean.getChecked());
+                    baseViewHolder.getView(R.id.title).setSelected(monthBean.getChecked());
+                });
+            }
+        };
+        quickAdapter.setList(monthList);
+        binding.rvMonthList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f),7));
+        binding.rvMonthList.setAdapter(quickAdapter);
+
+        binding.tvCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        binding.tvFinish.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        lp.height = DisplayUtils.dip2px(context, 623f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+    }
+
+    public static void showMonthScheduleListDialog(Context context, String date, List<Schedule> scheduleList) {
         DialogScheduleMonthListBinding binding = DialogScheduleMonthListBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
-        BaseQuickAdapter adapter = new BaseQuickAdapter<Schedule,BaseViewHolder>(R.layout.item_dialog_month_schedule){
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Schedule, BaseViewHolder>(R.layout.item_dialog_month_schedule) {
             @Override
             protected void convert(@NonNull BaseViewHolder baseViewHolder, Schedule schedule) {
-                baseViewHolder.setText(R.id.tv_title,schedule.getTitle());
+                baseViewHolder.setText(R.id.tv_title, schedule.getTitle());
                 final ImageView imageView = baseViewHolder.getView(R.id.iv_type);
                 switch (schedule.getType()) {
                     case Schedule.SCHEDULE_TYPE_SCHEDULE:
@@ -209,7 +366,7 @@ public class DialogUtil {
         binding.rvScheduleList.setLayoutManager(new LinearLayoutManager(context));
         binding.rvScheduleList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
-            Log.e(TAG, "convert: "+scheduleList.get(position).toString());
+            Log.e(TAG, "convert: " + scheduleList.get(position).toString());
             context.startActivity(new Intent(context, ScheduleEditActivity.class));
         });
         binding.clAddSchedule.setOnClickListener(v -> {
@@ -231,7 +388,7 @@ public class DialogUtil {
         mDialog.show();
     }
 
-    public static void showScheduleMenuDialog(Context context, View view,OnMenuItemListener onMenuItemListener) {
+    public static void showScheduleMenuDialog(Context context, View view, OnMenuItemListener onMenuItemListener) {
         DialogScheduleMenuBinding binding = DialogScheduleMenuBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -272,7 +429,7 @@ public class DialogUtil {
         final int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
         final int right = view.getRight();
         lp.x = widthPixels - DisplayUtils.dip2px(context, 160f) - (widthPixels - right); //对 dialog 设置 x 轴坐标
-        lp.y = location[1] + view.getHeight()*2 - notificationBar; //对dialog设置y轴坐标
+        lp.y = location[1] + view.getHeight() * 2 - notificationBar; //对dialog设置y轴坐标
 
         lp.width = DisplayUtils.dip2px(context, 160f);
         lp.height = DisplayUtils.dip2px(context, 284f);
@@ -283,19 +440,19 @@ public class DialogUtil {
         mDialog.show();
     }
 
-    public static void showRepetitionScheduleDialog(Context context){
+    public static void showRepetitionScheduleDialog(Context context) {
         DialogScheduleRepetitionBinding binding = DialogScheduleRepetitionBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         final val list = Repetition.Companion.getList();
-        BaseQuickAdapter adapter = new BaseQuickAdapter<Repetition,BaseViewHolder>(R.layout.item_dialog_schedule_remind_list){
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Repetition, BaseViewHolder>(R.layout.item_dialog_schedule_remind_list) {
 
             @Override
             protected void convert(@NonNull BaseViewHolder baseViewHolder, Repetition repetition) {
-                baseViewHolder.setText(R.id.tv_title,repetition.getTitle());
+                baseViewHolder.setText(R.id.tv_title, repetition.getTitle());
                 ImageView ivRemind = baseViewHolder.getView(R.id.iv_remind);
-                ivRemind.setVisibility(repetition.getChecked()?View.VISIBLE:View.GONE);
+                ivRemind.setVisibility(repetition.getChecked() ? View.VISIBLE : View.GONE);
                 baseViewHolder.itemView.setOnClickListener(v -> {
                     for (Repetition repetition1 : list) {
                         repetition1.setChecked(false);
@@ -313,6 +470,10 @@ public class DialogUtil {
             mDialog.dismiss();
         });
         binding.tvFinish.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        binding.clCustom.setOnClickListener(v -> {
+            showCustomRepetitionScheduleDialog(context);
             mDialog.dismiss();
         });
         Window dialogWindow = mDialog.getWindow();
@@ -334,13 +495,13 @@ public class DialogUtil {
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         final val list = Remind.Companion.getList();
-        BaseQuickAdapter adapter = new BaseQuickAdapter<Remind,BaseViewHolder>(R.layout.item_dialog_schedule_remind_list){
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Remind, BaseViewHolder>(R.layout.item_dialog_schedule_remind_list) {
 
             @Override
             protected void convert(@NonNull BaseViewHolder baseViewHolder, Remind remind) {
-                baseViewHolder.setText(R.id.tv_title,remind.getTitle());
+                baseViewHolder.setText(R.id.tv_title, remind.getTitle());
                 ImageView ivRemind = baseViewHolder.getView(R.id.iv_remind);
-                ivRemind.setVisibility(remind.getChecked()?View.VISIBLE:View.GONE);
+                ivRemind.setVisibility(remind.getChecked() ? View.VISIBLE : View.GONE);
                 baseViewHolder.itemView.setOnClickListener(v -> {
                     for (Remind remind1 : list) {
                         remind1.setChecked(false);
@@ -588,7 +749,7 @@ public class DialogUtil {
         void onEnsure(View view);
     }
 
-    public interface OnMenuItemListener{
+    public interface OnMenuItemListener {
         void onMenuItem(int index);
     }
 }

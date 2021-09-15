@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.schedule
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -52,6 +53,11 @@ class ScheduleRepetitionActivity : BaseActivity() {
         adapter.setList(list)
         scheduleRepetitionBinding.rvRepetitionList.setLayoutManager(LinearLayoutManager(this))
         scheduleRepetitionBinding.rvRepetitionList.setAdapter(adapter)
+
+        scheduleRepetitionBinding.clCustom.setOnClickListener {
+            val intent = Intent(this,ScheduleCustomRepetitionActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun getContentViewID(): Int = R.layout.activity_schedule_repetition

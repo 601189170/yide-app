@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
   private int space;
-  public SpaceItemDecoration(int space) {
+  private int column;
+  public SpaceItemDecoration(int space,int column) {
     this.space = space;
+    this.column = column;
   }
 
   @Override
@@ -17,9 +19,9 @@ public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
     outRect.left = space;
     outRect.bottom = space;
     //由于每行都只有3个，所以第一个都是3的倍数，把左边距设为0
-//    if (parent.getChildLayoutPosition(view) % 6==0) {
-//      outRect.left = 0;
-//    }
+    if (parent.getChildLayoutPosition(view) % column == 0) {
+      outRect.left = 0;
+    }
   }
 
 }

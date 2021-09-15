@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:auto_change_month_row="true"
-        app:default_view="month"
+        app:default_view="week"
         app:layout_constraintTop_toBottomOf="@id/weekBarView"
         app:schedule_list_start_with_sunday="false">
 
@@ -59,7 +59,7 @@
                     android:layout_height="@dimen/week_calendar_height"
                     android:background="@color/calendar_bg_color"
                     android:overScrollMode="never"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@id/rlMonthCalendar"
                     app:week_calendar_start_with_sunday="false"
                     app:week_day_text_size="@integer/calendar_text_size"
