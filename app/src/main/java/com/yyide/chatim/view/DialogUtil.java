@@ -236,6 +236,29 @@ public class DialogUtil {
         mDialog.show();
 
     }
+
+    private static ScrollPickerAdapter getScrollPickerAdapter(Context context,List<String> list,PickerAdapterListener listener){
+        ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder2 =
+                new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
+                        .setDataList(list)
+                        .selectedItemOffset(1)
+                        .visibleItemNumber(3)
+                        .setDivideLineColor("#F2F7FA")
+                        .setItemViewProvider(null)
+                        .setOnScrolledListener(v -> {
+                            String text = (String) v.getTag();
+                            Log.e(TAG, "onSelectedItemClicked: " + text);
+                            if (listener != null){
+                                listener.change(text);
+                            }
+                        });
+        return builder2.build();
+    }
+
+    public interface PickerAdapterListener{
+        void change(String number);
+    }
+
     public static void showCustomRepetitionScheduleDialog(Context context) {
         List<String> list = new ArrayList<>();
         list.add("每");
@@ -264,72 +287,33 @@ public class DialogUtil {
         mDialog.setContentView(rootView);
         ScrollPickerView scrollPickerView = binding.scrollPickerView;
         scrollPickerView.setLayoutManager(new LinearLayoutManager(context));
-        ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder =
-                new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
-                        .setDataList(list)
-                        .selectedItemOffset(1)
-                        .visibleItemNumber(3)
-                        .setDivideLineColor("#F2F7FA")
-                        .setItemViewProvider(null)
-                        .setOnClickListener(new ScrollPickerAdapter.OnClickListener() {
-                            @Override
-                            public void onSelectedItemClicked(View v) {
-                                String text = (String) v.getTag();
-                                Log.e(TAG, "onSelectedItemClicked: " + text);
-                            }
-                        });
-        ScrollPickerAdapter mScrollPickerAdapter = builder.build();
-        scrollPickerView.setAdapter(mScrollPickerAdapter);
-
+        scrollPickerView.setAdapter(getScrollPickerAdapter(context, list, null));
 
         ScrollPickerView scrollPickerNumber = binding.scrollPickerNumber;
         scrollPickerNumber.setLayoutManager(new LinearLayoutManager(context));
-        ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder2 =
-                new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
-                        .setDataList(list2)
-                        .selectedItemOffset(1)
-                        .visibleItemNumber(3)
-                        .setDivideLineColor("#F2F7FA")
-                        .setItemViewProvider(null)
-                        .setOnScrolledListener(v -> {
-                            String text = (String) v.getTag();
-                            Log.e(TAG, "onSelectedItemClicked: " + text);
-                            number.set(text);
-                        });
-        final ScrollPickerAdapter scrollPickerNumberAdapter = builder2.build();
-        scrollPickerNumber.setAdapter(scrollPickerNumberAdapter);
+        scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list2, number::set));
 
         ScrollPickerView scrollPickerUnit = binding.scrollPickerUnit;
         scrollPickerUnit.setLayoutManager(new LinearLayoutManager(context));
-        ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder3 =
-                new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
-                        .setDataList(list3)
-                        .selectedItemOffset(1)
-                        .visibleItemNumber(3)
-                        .setDivideLineColor("#F2F7FA")
-                        .setItemViewProvider(null)
-                        .setOnScrolledListener(v->{
-                            String text = (String) v.getTag();
-                            Log.e(TAG, "onSelectedItemClicked: " + text);
-                            unit.set(text);
-                            if ("天".equals(text)){
-                                scrollPickerNumberAdapter.setDataList(list2);
-                                scrollPickerNumberAdapter.notifyDataSetChanged();
-                                binding.rvWeekList.setVisibility(View.GONE);
-                                binding.rvMonthList.setVisibility(View.GONE);
-                            }else if("月".equals(text)){
-                                scrollPickerNumberAdapter.setDataList(list23);
-                                scrollPickerNumberAdapter.notifyDataSetChanged();
-                                binding.rvWeekList.setVisibility(View.GONE);
-                                binding.rvMonthList.setVisibility(View.VISIBLE);
-                            }else if ("周".equals(text)){
-                                scrollPickerNumberAdapter.setDataList(list22);
-                                scrollPickerNumberAdapter.notifyDataSetChanged();
-                                binding.rvWeekList.setVisibility(View.VISIBLE);
-                                binding.rvMonthList.setVisibility(View.GONE);
-                            }
-                        });
-        final ScrollPickerAdapter scrollPickerUnitAdapter = builder3.build();
+        final ScrollPickerAdapter scrollPickerUnitAdapter = getScrollPickerAdapter(context, list3, text -> {
+            if (text.equals(unit.get())){
+                return;
+            }
+            unit.set(text);
+            if ("天".equals(text)){
+                scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list2, number::set));
+                binding.rvWeekList.setVisibility(View.GONE);
+                binding.rvMonthList.setVisibility(View.GONE);
+            }else if("月".equals(text)){
+                scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list23, number::set));
+                binding.rvWeekList.setVisibility(View.GONE);
+                binding.rvMonthList.setVisibility(View.VISIBLE);
+            }else if ("周".equals(text)){
+                scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list22, number::set));
+                binding.rvWeekList.setVisibility(View.VISIBLE);
+                binding.rvMonthList.setVisibility(View.GONE);
+            }
+        });
         scrollPickerUnit.setAdapter(scrollPickerUnitAdapter);
 
         List<WeekBean> weekList = WeekBean.Companion.getList();

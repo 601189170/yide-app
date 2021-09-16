@@ -1,9 +1,7 @@
 package com.yyide.chatim.activity.schedule
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -11,16 +9,10 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleCustomRepetitionBinding
-import com.yyide.chatim.databinding.ActivityScheduleRepetitionBinding
 import com.yyide.chatim.model.schedule.MonthBean
-import com.yyide.chatim.model.schedule.MonthBean.Companion.getList
-import com.yyide.chatim.model.schedule.Repetition
-import com.yyide.chatim.model.schedule.Repetition.Companion.getList
 import com.yyide.chatim.model.schedule.WeekBean
-import com.yyide.chatim.model.schedule.WeekBean.Companion.getList
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
-import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.widget.SpaceItemDecoration
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter.ScrollPickerAdapterBuilder
@@ -75,66 +67,35 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
 
         val scrollPickerView: ScrollPickerView = scheduleRepetitionBinding.scrollPickerView
         scrollPickerView.layoutManager = LinearLayoutManager(this)
-        val builder = ScrollPickerAdapterBuilder<String>(this)
-            .setDataList(list)
-            .selectedItemOffset(1)
-            .visibleItemNumber(3)
-            .setDivideLineColor("#F2F7FA")
-            .setItemViewProvider(null)
-            .setOnClickListener { v ->
-                val text = v.tag as String
-                loge("onSelectedItemClicked: $text")
-            }
-        val mScrollPickerAdapter = builder.build()
-        scrollPickerView.adapter = mScrollPickerAdapter
+        scrollPickerView.adapter = getScrollPickerAdapter(list){}
 
 
         val scrollPickerNumber: ScrollPickerView = scheduleRepetitionBinding.scrollPickerNumber
         scrollPickerNumber.layoutManager = LinearLayoutManager(this)
-        val builder2 = ScrollPickerAdapterBuilder<String>(this)
-            .setDataList(list2)
-            .selectedItemOffset(1)
-            .visibleItemNumber(3)
-            .setDivideLineColor("#F2F7FA")
-            .setItemViewProvider(null)
-            .setOnScrolledListener { v: View ->
-                val text = v.tag as String
-                loge("onSelectedItemClicked: $text")
-                number.set(text)
-            }
-        val scrollPickerNumberAdapter = builder2.build()
-        scrollPickerNumber.adapter = scrollPickerNumberAdapter
+        scrollPickerNumber.adapter = getScrollPickerAdapter(list2,number::set)
 
         val scrollPickerUnit: ScrollPickerView = scheduleRepetitionBinding.scrollPickerUnit
         scrollPickerUnit.layoutManager = LinearLayoutManager(this)
-        val builder3 = ScrollPickerAdapterBuilder<String>(this)
-            .setDataList(list3)
-            .selectedItemOffset(1)
-            .visibleItemNumber(3)
-            .setDivideLineColor("#F2F7FA")
-            .setItemViewProvider(null)
-            .setOnScrolledListener { v: View ->
-                val text = v.tag as String
-                loge("onSelectedItemClicked: $text")
-                unit.set(text)
-                if ("天" == text) {
-                    scrollPickerNumberAdapter.setDataList(list2)
-                    scrollPickerNumberAdapter.notifyDataSetChanged()
-                    scheduleRepetitionBinding.rvWeekList.setVisibility(View.GONE)
-                    scheduleRepetitionBinding.rvMonthList.setVisibility(View.GONE)
-                } else if ("月" == text) {
-                    scrollPickerNumberAdapter.setDataList(list23)
-                    scrollPickerNumberAdapter.notifyDataSetChanged()
-                    scheduleRepetitionBinding.rvWeekList.setVisibility(View.GONE)
-                    scheduleRepetitionBinding.rvMonthList.setVisibility(View.VISIBLE)
-                } else if ("周" == text) {
-                    scrollPickerNumberAdapter.setDataList(list22)
-                    scrollPickerNumberAdapter.notifyDataSetChanged()
-                    scheduleRepetitionBinding.rvWeekList.setVisibility(View.VISIBLE)
-                    scheduleRepetitionBinding.rvMonthList.setVisibility(View.GONE)
-                }
+        val scrollPickerUnitAdapter = getScrollPickerAdapter(list3){
+
+            if (unit.get() == it){
+                return@getScrollPickerAdapter
             }
-        val scrollPickerUnitAdapter = builder3.build()
+            unit.set(it)
+            if ("天" == it) {
+                scrollPickerNumber.adapter = getScrollPickerAdapter(list2,number::set)
+                scheduleRepetitionBinding.rvWeekList.setVisibility(View.GONE)
+                scheduleRepetitionBinding.rvMonthList.setVisibility(View.GONE)
+            } else if ("月" == it) {
+                scrollPickerNumber.adapter = getScrollPickerAdapter(list23,number::set)
+                scheduleRepetitionBinding.rvWeekList.setVisibility(View.GONE)
+                scheduleRepetitionBinding.rvMonthList.setVisibility(View.VISIBLE)
+            } else if ("周" == it) {
+                scrollPickerNumber.adapter = getScrollPickerAdapter(list22,number::set)
+                scheduleRepetitionBinding.rvWeekList.setVisibility(View.VISIBLE)
+                scheduleRepetitionBinding.rvMonthList.setVisibility(View.GONE)
+            }
+        }
         scrollPickerUnit.adapter = scrollPickerUnitAdapter
 
         val weekList = WeekBean.getList()
@@ -180,6 +141,21 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
             )
         )
         scheduleRepetitionBinding.rvMonthList.setAdapter(quickAdapter)
+    }
+
+    private fun getScrollPickerAdapter(numberList: List<String>,listener:(String)->Unit): ScrollPickerAdapter<*> {
+        val builder2 = ScrollPickerAdapterBuilder<String>(this)
+            .setDataList(numberList)
+            .selectedItemOffset(1)
+            .visibleItemNumber(3)
+            .setDivideLineColor("#F2F7FA")
+            .setItemViewProvider(null)
+            .setOnScrolledListener { v: View ->
+                val text = v.tag as String
+                loge("onSelectedItemClicked: $text")
+                listener(text)
+            }
+        return builder2.build()
     }
 
     override fun getContentViewID(): Int = R.layout.activity_schedule_custom_repetition
