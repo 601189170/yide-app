@@ -12,6 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import androidx.core.widget.NestedScrollView;
+
 import com.yide.calendar.CalendarUtils;
 import com.yide.calendar.HintCircle;
 import com.yide.calendar.OnCalendarClickListener;
@@ -20,6 +22,7 @@ import com.yide.calendar.month.MonthCalendarView;
 import com.yide.calendar.month.MonthView;
 import com.yide.calendar.week.WeekCalendarView;
 import com.yide.calendar.week.WeekView;
+import com.yide.scheduleview.ScheduleEventView;
 
 import org.joda.time.DateTime;
 
@@ -56,6 +59,8 @@ public class ScheduleLayout extends FrameLayout {
     private OnCalendarClickListener mOnCalendarClickListener;
     private GestureDetector mGestureDetector;
     private boolean startWithSunday;
+    private MyScrollView nestedScrollView;
+    private ScheduleEventView scheduleEventView;
 
     public ScheduleLayout(Context context) {
         this(context, null);
@@ -100,6 +105,8 @@ public class ScheduleLayout extends FrameLayout {
         rlMonthCalendar = (RelativeLayout) findViewById(R.id.rlMonthCalendar);
         rlScheduleList = (RelativeLayout) findViewById(R.id.rlScheduleList);
         rvScheduleList = (ScheduleRecyclerView) findViewById(R.id.rvScheduleList);
+        scheduleEventView = findViewById(R.id.sevScheduleEventView);
+        //nestedScrollView = findViewById(R.id.myScrollView);
         bindingMonthAndWeekCalendar();
     }
 
@@ -278,6 +285,10 @@ public class ScheduleLayout extends FrameLayout {
     }
 
     private boolean isRecyclerViewTouch() {
+        if (rvScheduleList == null){
+            //return mState == ScheduleState.CLOSE && (nestedScrollView.getChildCount() == 0 || nestedScrollView.isScrollTop());
+            return mState == ScheduleState.CLOSE;
+        }
         return mState == ScheduleState.CLOSE && (rvScheduleList.getChildCount() == 0 || rvScheduleList.isScrollTop());
     }
 
@@ -576,6 +587,11 @@ public class ScheduleLayout extends FrameLayout {
     public ScheduleRecyclerView getSchedulerRecyclerView() {
         return rvScheduleList;
     }
+
+    public ScheduleEventView getScheduleEventView(){
+        return scheduleEventView;
+    }
+
 
     public MonthCalendarView getMonthCalendar() {
         return mcvCalendar;
