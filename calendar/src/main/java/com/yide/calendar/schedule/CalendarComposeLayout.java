@@ -90,6 +90,13 @@ public class CalendarComposeLayout extends FrameLayout {
         Log.e(TAG, "resetCurrentSelectDate: "+mCurrentSelectYear+", "+mCurrentSelectMonth+", "+mCurrentSelectDay );
     }
 
+    public void setSelectedData(int year, int month, int day){
+        mCurrentSelectYear = year;
+        mCurrentSelectMonth = month;
+        mCurrentSelectDay = day;
+        checkWeekCalendar();
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();

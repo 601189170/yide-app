@@ -4,6 +4,7 @@ import static com.yide.scheduleview.ScheduleEventViewUtil.*;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -52,6 +53,9 @@ import java.util.Locale;
  * Website: http://alamkanak.github.io/
  */
 public class ScheduleEventView extends View {
+
+    private Paint mTimeLinePaint;
+    private Paint mImagePaint;
 
     private enum Direction {
         NONE, LEFT, RIGHT, VERTICAL
@@ -417,6 +421,15 @@ public class ScheduleEventView extends View {
         mHourSeparatorPaint.setStrokeWidth(mHourSeparatorHeight);
         mHourSeparatorPaint.setColor(mHourSeparatorColor);
 
+        mImagePaint = new Paint();
+        mImagePaint.setAntiAlias(true);
+
+        //设置画时间线的paint
+        mTimeLinePaint = new Paint();
+        mTimeLinePaint.setStyle(Paint.Style.STROKE);
+        mTimeLinePaint.setStrokeWidth(5);
+        mTimeLinePaint.setColor(Color.parseColor("#FF1717"));
+
         // Prepare the "now" line color paint
         mNowLinePaint = new Paint();
         mNowLinePaint.setStrokeWidth(mNowLineThickness);
@@ -721,6 +734,14 @@ public class ScheduleEventView extends View {
 
             // Draw the lines for hours.
             canvas.drawLines(hourLines, mHourSeparatorPaint);
+            //画一条时间线
+            Calendar startTime = Calendar.getInstance();
+            final int hour = startTime.get(Calendar.HOUR_OF_DAY);
+            final int minute = startTime.get(Calendar.MINUTE);
+            float minuteHeight = (float) (minute/60.0)*mHourHeight;
+            float top = mHeaderHeight + mHeaderRowPadding * 2 + mCurrentOrigin.y + mHourHeight * hour + minuteHeight + mTimeTextHeight / 2 + mHeaderMarginBottom;
+            canvas.drawLine(0,top,startPixel + mWidthPerDay,top,mTimeLinePaint);
+            //canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.triangle_icon),start,top,mImagePaint);
 
             // Draw the events.
             drawEvents(day, startPixel, canvas);

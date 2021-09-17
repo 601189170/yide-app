@@ -35,6 +35,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
     ScheduleEventView.EmptyViewLongPressListener, ScheduleEventView.EventLongPressListener {
     private lateinit var scheduleEventView: ScheduleEventView
     lateinit var fragmentScheduleDayBinding: FragmentScheduleDayBinding
+    lateinit var calendarComposeLayout: CalendarComposeLayout
     private var labelList = mutableListOf<Label>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,8 +47,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val calendarComposeLayout: CalendarComposeLayout =
-            view.findViewById(R.id.calendarComposeLayout)
+        calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
         calendarComposeLayout.setOnCalendarClickListener(this)
         scheduleEventView = calendarComposeLayout.scheduleEventView
         fragmentScheduleDayBinding.fab.setOnClickListener {
@@ -87,6 +87,15 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
 
         // Set long press listener for empty view
         scheduleEventView.setEmptyViewLongPressListener(this)
+//        scheduleEventView.setScrollListener { newFirstVisibleDay, oldFirstVisibleDay ->
+//            if (newFirstVisibleDay != null){
+//                calendarComposeLayout.setSelectedData(
+//                    newFirstVisibleDay.get(Calendar.YEAR),
+//                    newFirstVisibleDay.get(Calendar.MONTH),
+//                    newFirstVisibleDay.get(Calendar.DAY_OF_MONTH)
+//                )
+//            }
+//        }
 
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
@@ -114,7 +123,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
     }
 
     override fun onMonthChange(newYear: Int, newMonth: Int): MutableList<out ScheduleEvent> {
-        ToastUtils.showShort("onMonthChange: newYear=$newYear,newMonth=$newMonth")
+        loge("onMonthChange: newYear=$newYear,newMonth=$newMonth")
         val events: MutableList<ScheduleEvent> = getEvents(newMonth, newYear)
         return events
     }
