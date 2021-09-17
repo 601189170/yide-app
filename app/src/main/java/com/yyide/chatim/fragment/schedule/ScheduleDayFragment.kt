@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.blankj.utilcode.util.ToastUtils
 import com.yide.calendar.OnCalendarClickListener
+import com.yide.calendar.schedule.CalendarComposeLayout
 import com.yide.calendar.schedule.ScheduleLayout
 import com.yide.scheduleview.DateTimeInterpreter
 import com.yide.scheduleview.MonthLoader
@@ -32,8 +33,6 @@ import java.util.*
 class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
     ScheduleEventView.EventClickListener, MonthLoader.MonthChangeListener,
     ScheduleEventView.EmptyViewLongPressListener, ScheduleEventView.EventLongPressListener {
-
-    private lateinit var slSchedule: ScheduleLayout
     private lateinit var scheduleEventView: ScheduleEventView
     lateinit var fragmentScheduleDayBinding: FragmentScheduleDayBinding
     private var labelList = mutableListOf<Label>()
@@ -47,9 +46,10 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        slSchedule = view.findViewById(R.id.slSchedule)
-        slSchedule.setOnCalendarClickListener(this)
-        scheduleEventView = slSchedule.scheduleEventView
+        val calendarComposeLayout: CalendarComposeLayout =
+            view.findViewById(R.id.calendarComposeLayout)
+        calendarComposeLayout.setOnCalendarClickListener(this)
+        scheduleEventView = calendarComposeLayout.scheduleEventView
         fragmentScheduleDayBinding.fab.setOnClickListener {
             DialogUtil.showAddScheduleDialog(context, labelList)
             //DialogUtil.showAddLabelDialog(context, labelList)

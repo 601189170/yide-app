@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/top_calendar"
-        layout="@layout/layout_day_calendar" />
+        layout="@layout/layout_schedule_with_calendar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

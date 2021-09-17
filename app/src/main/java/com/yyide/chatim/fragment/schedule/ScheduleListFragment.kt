@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.yide.calendar.OnCalendarClickListener
+import com.yide.calendar.schedule.CalendarComposeLayout
 import com.yide.calendar.schedule.ScheduleLayout
 import com.yide.calendar.schedule.ScheduleRecyclerView
 import com.yyide.chatim.R
@@ -30,9 +31,9 @@ import com.yyide.chatim.view.DialogUtil
  */
 class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     lateinit var fragmentScheduleListBinding: FragmentScheduleListBinding
-    private var slSchedule: ScheduleLayout? = null
+    //private var slSchedule: ScheduleLayout? = null
     private var rvScheduleList: ScheduleRecyclerView? = null
-    private var rLNoTask: RelativeLayout? = null
+    private lateinit var calendarComposeLayout: CalendarComposeLayout
     private var list = mutableListOf<ScheduleOuter>()
     private var labelList = mutableListOf<Label>()
     override fun onCreateView(
@@ -45,10 +46,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        slSchedule = view.findViewById(R.id.slSchedule)
-        rvScheduleList = view.findViewById(R.id.rvScheduleList)
-        rLNoTask = view.findViewById(R.id.rlNoTask)
-        slSchedule?.setOnCalendarClickListener(this)
+        calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
+        rvScheduleList = calendarComposeLayout.rvScheduleList
+        calendarComposeLayout.setOnCalendarClickListener(this)
         initScheduleList()
         fragmentScheduleListBinding.fab.setOnClickListener {
             DialogUtil.showAddScheduleDialog(context,labelList)
@@ -58,8 +58,6 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
 
     private fun initScheduleList() {
         initData()
-        rLNoTask?.visibility = View.GONE
-        rvScheduleList = slSchedule?.schedulerRecyclerView
         val manager = LinearLayoutManager(activity)
         manager.setOrientation(LinearLayoutManager.VERTICAL)
         rvScheduleList?.layoutManager = manager

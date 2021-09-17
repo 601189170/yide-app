@@ -53,6 +53,15 @@
         <attr name="schedule_list_start_with_sunday" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="CalendarComposeLayout">
+        <attr name="default_calendar_view">
+            <enum name="month" value="0"/>
+            <enum name="week" value="1"/>
+        </attr>
+        <attr name="schedule_auto_change_month_row" format="boolean"/>
+        <attr name="schedule_calendar_list_start_with_sunday" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="WeekView">
         <attr name="firstDayOfWeek" format="enum">
             <enum name="sunday" value="1"/>
