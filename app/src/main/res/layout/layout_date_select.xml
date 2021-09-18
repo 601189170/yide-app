@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingDefaultResource"
+    android:padding="@dimen/dp_20">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_date"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="1dp"
+            android:background="#979797"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_date_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_30"
+            android:text="09月3号 周五"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_time_start"
+            app:layout_constraintRight_toLeftOf="@id/v_line"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_time_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/tv_date_start"
+            app:layout_constraintRight_toRightOf="@id/tv_date_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_start" />
+
+        <TextView
+            android:id="@+id/tv_date_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_30"
+            android:text="09月3号 周五"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_time_end"
+            app:layout_constraintLeft_toRightOf="@id/v_line"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_time_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24:00"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/tv_date_end"
+            app:layout_constraintRight_toRightOf="@id/tv_date_end"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_end" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_date_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_date_start,tv_time_start" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_date_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_date_end,tv_time_end" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_v_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/cl_date">
+
+        <View
+            android:id="@+id/v_date_top_mark_left"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="#2C8AFF"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/v_date_top_mark_right"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="#2C8AFF"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <com.loper7.date_time_picker.DateTimePicker
+        android:id="@+id/dateTimePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/shape_bg_round_white_5"
+        android:visibility="visible"
+        app:layout="@layout/layout_date_picker_segmentation3"
+        app:layout_constraintTop_toBottomOf="@id/cl_date"
+        app:showLabel="true"
+        app:textSize="16sp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

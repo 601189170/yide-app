@@ -53,43 +53,51 @@
                         app:flexWrap="wrap"
                         app:layout_constraintTop_toBottomOf="@+id/textView18">
 
-                        <TextView
+                        <CheckBox
+                            android:id="@+id/cb_transaction_schedule"
                             android:layout_width="85dp"
                             android:layout_height="34dp"
-                            android:background="@drawable/bg_book_conners2"
+                            android:background="@drawable/schedule_filter_tag_bg_selector"
+                            android:button="@null"
                             android:gravity="center"
                             android:text="事务日程"
-                            android:textColor="#ff2c8aff"
+                            android:textColor="@color/schedule_filter_bg_text_color_selector"
                             android:textSize="15sp" />
 
-                        <TextView
+                        <CheckBox
+                            android:id="@+id/cb_school_calendar"
                             android:layout_width="85dp"
                             android:layout_height="34dp"
                             android:layout_marginStart="@dimen/dp_10"
-                            android:background="@drawable/bg_conners2"
+                            android:background="@drawable/schedule_filter_tag_bg_selector"
+                            android:button="@null"
                             android:gravity="center"
                             android:text="校历"
-                            android:textColor="@color/text_333333"
+                            android:textColor="@color/schedule_filter_bg_text_color_selector"
                             android:textSize="@dimen/text_15" />
 
-                        <TextView
+                        <CheckBox
+                            android:id="@+id/cb_meeting"
                             android:layout_width="85dp"
                             android:layout_height="34dp"
                             android:layout_marginStart="@dimen/dp_10"
-                            android:background="@drawable/bg_conners2"
+                            android:background="@drawable/schedule_filter_tag_bg_selector"
+                            android:button="@null"
                             android:gravity="center"
                             android:text="会议"
-                            android:textColor="@color/text_333333"
+                            android:textColor="@color/schedule_filter_bg_text_color_selector"
                             android:textSize="@dimen/text_15" />
 
-                        <TextView
+                        <CheckBox
+                            android:id="@+id/cb_class_schedule"
                             android:layout_width="85dp"
                             android:layout_height="34dp"
                             android:layout_marginTop="@dimen/dp_10"
-                            android:background="@drawable/bg_conners2"
+                            android:background="@drawable/schedule_filter_tag_bg_selector"
+                            android:button="@null"
                             android:gravity="center"
                             android:text="课表"
-                            android:textColor="@color/text_333333"
+                            android:textColor="@color/schedule_filter_bg_text_color_selector"
                             android:textSize="@dimen/text_15" />
                     </com.google.android.flexbox.FlexboxLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -120,31 +128,33 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_undone"
+                    <CheckBox
+                        android:id="@+id/cb_undone"
                         android:layout_width="85dp"
                         android:layout_height="34dp"
                         android:layout_marginTop="@dimen/dp_20"
-                        android:background="@drawable/bg_book_conners2"
+                        android:background="@drawable/schedule_filter_tag_bg_selector"
+                        android:button="@null"
                         android:gravity="center"
                         android:text="未完成"
-                        android:textColor="#ff2c8aff"
+                        android:textColor="@color/schedule_filter_bg_text_color_selector"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/tv_status"
                         app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
-                    <TextView
-                        android:id="@+id/tv_done"
+                    <CheckBox
+                        android:id="@+id/cb_done"
                         android:layout_width="85dp"
                         android:layout_height="34dp"
                         android:layout_marginStart="@dimen/dp_20"
-                        android:background="@drawable/bg_conners2"
+                        android:background="@drawable/schedule_filter_tag_bg_selector"
+                        android:button="@null"
                         android:gravity="center"
                         android:text="完成"
-                        android:textColor="@color/text_333333"
+                        android:textColor="@color/schedule_filter_bg_text_color_selector"
                         android:textSize="@dimen/text_15"
-                        app:layout_constraintStart_toEndOf="@+id/tv_undone"
-                        app:layout_constraintTop_toTopOf="@+id/tv_undone" />
+                        app:layout_constraintStart_toEndOf="@+id/cb_undone"
+                        app:layout_constraintTop_toTopOf="@+id/cb_undone" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -166,7 +176,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <include layout="@layout/item_time_select" />
+                <include
+                    android:id="@+id/dateSelect"
+                    layout="@layout/layout_date_select" />
 
                 <View
                     android:layout_width="match_parent"
@@ -194,6 +206,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_label_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"

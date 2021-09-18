@@ -2,18 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/dp_44">
 
     <TextView
+        android:id="@+id/tv_tab_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/tag_8676fe_2dp"
         android:padding="@dimen/dp_4"
-        android:layout_marginTop="@dimen/dp_10"
         android:text="阅读"
+        android:maxEms="6"
+        android:singleLine="true"
         android:textColor="#ffffffff"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
