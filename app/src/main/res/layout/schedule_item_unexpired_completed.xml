@@ -36,6 +36,7 @@
         android:textSize="16sp"
         android:ellipsize="end"
         android:lines="1"
+        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"
         app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
         app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"

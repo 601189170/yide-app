@@ -44,9 +44,12 @@ class ScheduleFragment : Fragment() {
         }
 
         fragmentScheduleBinding.btnSetting.setOnClickListener {
-            DialogUtil.showScheduleMenuDialog(requireContext(),fragmentScheduleBinding.btnSetting){
-                if (it == 4 ){
-                    startActivity(Intent(requireContext(),ScheduleLabelManageActivity::class.java))
+            DialogUtil.showScheduleMenuDialog(
+                requireContext(),
+                fragmentScheduleBinding.btnSetting
+            ) {
+                if (it == 4) {
+                    startActivity(Intent(requireContext(), ScheduleLabelManageActivity::class.java))
                     return@showScheduleMenuDialog
                 }
                 setFragment(it)
@@ -55,19 +58,29 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun setFragment(index: Int) {
-        if (!(index ==  1 || index == 2 || index == 3)){
+        if (!(index == 0 || index == 1 || index == 2 || index == 3)) {
             return
         }
         val fm: FragmentManager = childFragmentManager
         val ft = fm.beginTransaction()
+        var fg0 = fm.findFragmentByTag("f0")
         var fg1 = fm.findFragmentByTag("f1")
         var fg2 = fm.findFragmentByTag("f2")
         var fg3 = fm.findFragmentByTag("f3")
+        if (fg0 != null) ft.hide(fg0)
         if (fg1 != null) ft.hide(fg1)
         if (fg2 != null) ft.hide(fg2)
         if (fg3 != null) ft.hide(fg3)
 
         when (index) {
+            0 -> {
+                if (fg0 == null) {
+                    fg0 = ScheduleTodayFragment()
+                    ft.add(R.id.fl_content, fg0, "f0")
+                } else {
+                    ft.show(fg0)
+                }
+            }
             3 -> {
                 if (fg1 == null) {
                     fg1 = ScheduleListFragment()
