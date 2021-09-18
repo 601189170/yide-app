@@ -78,6 +78,22 @@ public class GetUserSchoolRsp {
             return identity;
         }
 
+        public boolean isSchool() {
+            return TYPE_PRESIDENT.equals(status);
+        }
+
+        public boolean isParent() {
+            return TYPE_PARENTS.equals(status);
+        }
+
+        public boolean isTeacherOrCharge() {
+            if (TYPE_CLASS_TEACHER.equals(status) || TYPE_TEACHER.equals(status)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         /**
          * 判断当前是否是教职工
          *

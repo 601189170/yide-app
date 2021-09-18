@@ -1,8 +1,11 @@
 package com.yyide.chatim.activity.weekly
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.weekly.home.ParentsWeeklyFragment
+import com.yyide.chatim.activity.weekly.home.SchoolWeeklyFragment
+import com.yyide.chatim.activity.weekly.home.TeacherChargeWeeklyFragment
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityWeeklyHomeBinding
 
@@ -27,5 +30,25 @@ class WeeklyHomeActivity : BaseActivity() {
     private fun initView() {
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.weekly_home_title)
+        when {
+            SpData.getIdentityInfo().isSchool -> {
+                supportFragmentManager.beginTransaction().replace(
+                    viewBinding.flContent.id,
+                    SchoolWeeklyFragment.newInstance()
+                ).commit()
+            }
+            SpData.getIdentityInfo().isParent -> {
+                supportFragmentManager.beginTransaction().replace(
+                    viewBinding.flContent.id,
+                    ParentsWeeklyFragment.newInstance()
+                ).commit()
+            }
+            SpData.getIdentityInfo().isTeacherOrCharge -> {
+                supportFragmentManager.beginTransaction().replace(
+                    viewBinding.flContent.id,
+                    TeacherChargeWeeklyFragment.newInstance()
+                ).commit()
+            }
+        }
     }
 }

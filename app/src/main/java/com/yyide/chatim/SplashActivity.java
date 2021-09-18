@@ -29,12 +29,14 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.mmkv.MMKV;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.yyide.chatim.activity.GuidePageActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.UserInfo;
+import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 
 import java.io.IOException;
 
@@ -66,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getWindow().setStatusBarColor(getResources().getColor(R.color.white));
         getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int vis = getWindow().getDecorView().getSystemUiVisibility();
             vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -206,6 +208,12 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void startMain() {
+        OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());
+        if (bean != null) {
+            OfflineMessageDispatcher.redirect(bean);
+            finish();
+            return;
+        }
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

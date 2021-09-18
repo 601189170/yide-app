@@ -10,7 +10,7 @@
     <color name="cpb_green">#ff99cc00</color>
     <color name="cpb_green_dark">#ff6d9b00</color>
     <color name="cpb_white">@android:color/white</color>
-
+    <color name="charts_bg">#142C8AFF</color>
     <color name="theme_bg">#F7FAFC</color>
     <color name="gray">#D8D8D8</color>
     <color name="white">#FFFFFF</color>

@@ -270,7 +270,7 @@ dependencies {
 //    implementation 'com.tencent.tpns:oppo:1.2.1.2-release'
 //    //vivo
 //    implementation 'com.tencent.tpns:vivo:1.2.1.2-release'
-      //日历
-      implementation project(":calendar")
+    //日历
+    implementation project(":calendar")
 }
 

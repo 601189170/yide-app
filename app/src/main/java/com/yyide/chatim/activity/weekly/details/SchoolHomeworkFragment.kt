@@ -1,39 +1,41 @@
-package com.yyide.chatim.activity.weekly
+package com.yyide.chatim.activity.weekly.details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.yyide.chatim.R
-import com.yyide.chatim.databinding.FragmentScheduleBinding
-import com.yyide.chatim.databinding.FragmentSchoolWeeklyBinding
+import com.yyide.chatim.databinding.FragmentSchoolHomeworkWeeklyDetailsBinding
 
 /**
  *
- * 家长周报统计界面
+ * 校长查看作业统计详情
  * date 2021年9月15日15:11:01
  * author LRZ
  */
-class PraentsWeeklyFragment : Fragment() {
+class SchoolHomeworkFragment : Fragment() {
 
-    private lateinit var viewBinding: FragmentSchoolWeeklyBinding
+    private lateinit var viewBinding: FragmentSchoolHomeworkWeeklyDetailsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        initView()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        viewBinding = FragmentSchoolWeeklyBinding.inflate(layoutInflater)
+    ): View {
+        viewBinding = FragmentSchoolHomeworkWeeklyDetailsBinding.inflate(layoutInflater)
         return viewBinding.root
     }
 
     companion object {
         @JvmStatic
         fun newInstance() =
-            PraentsWeeklyFragment().apply {}
+            SchoolHomeworkFragment().apply {}
+    }
+
+    private fun initView() {
+
     }
 }

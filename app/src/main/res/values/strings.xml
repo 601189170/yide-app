@@ -1,6 +1,4 @@
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingTranslation">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">一加壹</string>
 
     // 云通信
@@ -61,6 +59,10 @@
     <string name="no_data">暂无数据</string>
     <string name="weekly_home_desc">一加壹想代表所有学生和家长和您说一句：辛苦啦~</string>
     <string name="weekly_read_html"><b><font color='#1E1E1E'>全校学生考勤共<font color="#2C8AFF">%d</font>次异常，教职工共<font color="#2C8AFF">%d</font>次</font></b></string>
+    <string name="weekly_student_tab">学生篇</string>
+    <string name="weekly_teacher_tab">教师篇</string>
+    <string name="weekly_homework_chart">作业图表</string>
+    <string name="weekly_homework_data">作业数据</string>
 
     // 主页Tab相关
     <string name="tab_contact_tab_text">通讯录</string>

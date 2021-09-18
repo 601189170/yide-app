@@ -40,14 +40,14 @@ public class OfflineMessageDispatcher {
         }
         Bundle bundle = intent.getExtras();
         DemoLog.i(TAG, "bundle: " + bundle);
+        String ext;
         if (bundle == null) {
-            String ext = VIVOPushMessageReceiverImpl.getParams();
+            ext = VIVOPushMessageReceiverImpl.getParams();
             if (!TextUtils.isEmpty(ext)) {
                 return getOfflineMessageBeanFromContainer(ext);
             }
-            return null;
         } else {
-            String ext = bundle.getString("ext");
+            ext = bundle.getString("ext");
             DemoLog.i(TAG, "push custom data ext: " + ext);
             if (TextUtils.isEmpty(ext)) {
                 if (BrandUtil.isBrandXiaoMi()) {
@@ -60,8 +60,8 @@ public class OfflineMessageDispatcher {
             } else {
                 return getOfflineMessageBeanFromContainer(ext);
             }
-            return null;
         }
+        return null;
     }
 
     private static String getXiaomiMessage(Bundle bundle) {

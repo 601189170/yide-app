@@ -36,6 +36,7 @@ import com.yyide.chatim.activity.PushSettingActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.activity.WebViewActivity;
+import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
 import com.yyide.chatim.alipush.AliasUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
@@ -332,7 +333,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 context.finish();
                 break;
             case R.id.layout_push:
-                context.startActivity(new Intent(context, PushSettingActivity.class));
+                //context.startActivity(new Intent(context, PushSettingActivity.class));
+                context.startActivity(new Intent(context, WeeklyHomeActivity.class));
                 break;
         }
     }
