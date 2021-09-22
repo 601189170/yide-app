@@ -15,6 +15,7 @@ import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.huawei.HuaWeiRegister;
@@ -27,6 +28,8 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.alibaba.sdk.android.push.register.OppoRegister;
 import com.alibaba.sdk.android.push.register.ThirdPushManager;
 import com.alibaba.sdk.android.push.register.VivoRegister;
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.heytap.msp.push.HeytapPushManager;
@@ -41,24 +44,39 @@ import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
+import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.vivo.push.PushClient;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.MessageNotification;
 import com.yyide.chatim.chat.helper.ConfigHelper;
+import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.UserInfo;
+import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
+import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.BrandUtil;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.PrivateConstants;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 import java.util.Locale;
 
 import me.jessyan.autosize.AutoSize;
 import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.onAdaptListener;
 import me.jessyan.autosize.utils.AutoSizeLog;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2020/12/14.
@@ -389,7 +407,7 @@ public class BaseApplication extends Application {
                     public void onAdaptAfter(Object target, Activity activity) {
                         AutoSizeLog.d(String.format(Locale.ENGLISH, "%s onAdaptAfter!", target.getClass().getName()));
                     }
-                })
+                });
 
         //是否打印 AutoSize 的内部日志, 默认为 true, 如果您不想 AutoSize 打印日志, 则请设置为 false
 //                .setLog(false)
@@ -405,7 +423,5 @@ public class BaseApplication extends Application {
 
         //设置屏幕适配逻辑策略类, 一般不用设置, 使用框架默认的就好
 //                .setAutoAdaptStrategy(new AutoAdaptStrategy())
-        ;
     }
-
 }

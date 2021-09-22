@@ -259,7 +259,7 @@ dependencies {
     implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.4.0'
 
     //腾讯IM 离线推送配置
-    //小米
+//    //小米
 //    implementation 'com.tencent.tpns:xiaomi:1.2.1.2-release'
 //    //华为
 //    implementation 'com.tencent.tpns:huawei:1.2.1.2-release'

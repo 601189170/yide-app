@@ -11,12 +11,14 @@ import androidx.annotation.Nullable;
 
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.dialog.ReportPop;
 import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
@@ -82,16 +84,20 @@ public class ChatActivity extends BaseActivity {
             return;
         }
 
-//        OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(intent);
-//        if (bean != null) {
-//            mChatInfo = new ChatInfo();
-//            mChatInfo.setType(bean.chatType);
-//            mChatInfo.setId(bean.sender);
-//            bundle.putSerializable(Constants.CHAT_INFO, mChatInfo);
-//            DemoLog.i(TAG, "offline mChatInfo: " + mChatInfo);
-//        } else {
-        mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
-//        }
+        OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(intent);
+        if (bean != null) {
+            mChatInfo = new ChatInfo();
+            mChatInfo.setType(bean.chatType);
+            mChatInfo.setId(bean.sender);
+            bundle.putSerializable(Constants.CHAT_INFO, mChatInfo);
+            DemoLog.i(TAG, "offline mChatInfo: " + mChatInfo);
+        } else {
+            mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
+            if (mChatInfo == null) {
+                startSplashActivity(null);
+                return;
+            }
+        }
         EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE, ""));
         if (mChatInfo != null) {
             title.setText(mChatInfo.getChatName());

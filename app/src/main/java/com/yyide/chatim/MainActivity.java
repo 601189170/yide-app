@@ -625,7 +625,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             public void onSuccess(Object data) {
                 //腾讯IM离线调度
                 OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());
-                if (bean != null) {
+                 if (bean != null) {
                     OfflineMessageDispatcher.redirect(bean);
                 }
                 SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));

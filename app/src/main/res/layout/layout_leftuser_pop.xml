@@ -565,7 +565,6 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_exit"
                     android:clickable="false"
-                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
                     android:text="@string/exit"
                     android:textColor="@color/colorAccent"

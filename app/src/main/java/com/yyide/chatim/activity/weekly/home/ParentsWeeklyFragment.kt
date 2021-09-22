@@ -5,8 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.yyide.chatim.R
+import com.yyide.chatim.activity.attendance.fragment.SchoolStudentAttendanceFragment
 import com.yyide.chatim.databinding.FragmentParentsWeeklyBinding
+import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.dialog.WeeklyTopPop
+import com.yyide.chatim.model.AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean
 
 /**
  *
@@ -14,7 +20,7 @@ import com.yyide.chatim.dialog.WeeklyTopPop
  * date 2021年9月15日15:11:01
  * author LRZ
  */
-class ParentsWeeklyFragment : Fragment() {
+open class ParentsWeeklyFragment : Fragment() {
 
     private lateinit var viewBinding: FragmentParentsWeeklyBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,20 +44,49 @@ class ParentsWeeklyFragment : Fragment() {
 
     private fun initView() {
         viewBinding.tvEvent.setOnClickListener {
-            val dialog = WeeklyTopPop(activity, viewBinding.tvEvent)
-            dialog.setOnSelectDialogMenu(object : WeeklyTopPop.DialogMenu {
-                override fun onClickMenuListener(id: Long) {
+            val attendancePop = AttendancePop(activity, adapterEvent, "请选择考勤事件")
+            attendancePop.setOnSelectListener { index: Int ->
 
-                }
-            })
+            }
         }
-        viewBinding.tvTime.setOnClickListener {
-            val dialog = WeeklyTopPop(activity, viewBinding.tvTime)
-            dialog.setOnSelectDialogMenu(object : WeeklyTopPop.DialogMenu {
-                override fun onClickMenuListener(id: Long) {
 
-                }
-            })
+        viewBinding.tvTime.setOnClickListener {
+            val attendancePop = AttendancePop(activity, adapterDate, "请选择考勤事件")
+            attendancePop.setOnSelectListener { index: Int ->
+
+            }
+        }
+    }
+
+    private var index = -1
+
+    private val adapterEvent = object :
+        BaseQuickAdapter<SchoolPeopleAllFormBean?, BaseViewHolder>(R.layout.swich_class_item) {
+        override fun convert(holder: BaseViewHolder, item: SchoolPeopleAllFormBean?) {
+            holder.setText(R.id.className, item?.attName)
+            holder.getView<View>(R.id.select).visibility =
+                if (index == holder.adapterPosition) View.VISIBLE else View.GONE
+            if (this.itemCount - 1 == holder.adapterPosition) {
+                holder.getView<View>(R.id.view_line).visibility = View.GONE
+            } else {
+                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private var indexDate = -1
+
+    private val adapterDate = object :
+        BaseQuickAdapter<SchoolPeopleAllFormBean?, BaseViewHolder>(R.layout.swich_class_item) {
+        override fun convert(holder: BaseViewHolder, item: SchoolPeopleAllFormBean?) {
+            holder.setText(R.id.className, item?.attName)
+            holder.getView<View>(R.id.select).visibility =
+                if (indexDate == holder.adapterPosition) View.VISIBLE else View.GONE
+            if (this.itemCount - 1 == holder.adapterPosition) {
+                holder.getView<View>(R.id.view_line).visibility = View.GONE
+            } else {
+                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
+            }
         }
     }
 }

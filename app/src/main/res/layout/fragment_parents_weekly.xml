@@ -112,13 +112,23 @@
 
                         <include
                             android:id="@+id/homework"
-                            layout="@layout/layout_weekly_summary"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            layout="@layout/layout_weekly_summary" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_20" />
 
                         <include
                             android:id="@+id/attendance"
-                            layout="@layout/layout_weekly_parents_homework_statistical"
-                            app:layout_constraintTop_toBottomOf="@+id/homework" />
+                            layout="@layout/layout_weekly_parents_attendance" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_20" />
+
+                        <include
+                            android:id="@+id/homework_statistical"
+                            layout="@layout/layout_weekly_parents_homework_statistical" />
 
                         <View
                             android:layout_width="match_parent"
