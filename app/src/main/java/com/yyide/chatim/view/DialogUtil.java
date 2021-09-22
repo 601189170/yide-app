@@ -2,9 +2,12 @@ package com.yyide.chatim.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -23,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +40,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
+import com.yyide.chatim.databinding.DialogLabelTopMenuSelectLayoutBinding;
 import com.yyide.chatim.databinding.DialogScheduleCustomRepetitionBinding;
 import com.yyide.chatim.databinding.DialogScheduleEditBinding;
 import com.yyide.chatim.databinding.DialogScheduleLabelCreateBinding;
@@ -60,6 +65,7 @@ import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import lombok.val;
 import lombok.var;
@@ -704,6 +710,57 @@ public class DialogUtil {
         showKeyboard(context, editView);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void showTopMenuLabelDialog(Context context, View view, List<Label> labelList, OnLabelItemListener onLabelItemListener){
+        DialogLabelTopMenuSelectLayoutBinding binding = DialogLabelTopMenuSelectLayoutBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        BaseQuickAdapter adapter = new BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_dialog_label_top_menu_select) {
+            @Override
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, Label label) {
+                Log.e(TAG, "convert: " + label.toString());
+                baseViewHolder.setText(R.id.tv_label, label.getTitle());
+                final GradientDrawable gradientDrawable = new GradientDrawable();
+                gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context,2f));
+                gradientDrawable.setColor(Color.parseColor(label.getColor()));
+                baseViewHolder.getView(R.id.tv_label).setBackground(gradientDrawable);
+                baseViewHolder.getView(R.id.checkBox).setSelected(label.getChecked());
+                baseViewHolder.itemView.setOnClickListener(v -> {
+                    label.setChecked(!label.getChecked());
+                    notifyDataSetChanged();
+                });
+            }
+        };
+        adapter.setList(labelList);
+        binding.rvLabelList.setLayoutManager(new LinearLayoutManager(context));
+        binding.rvLabelList.setAdapter(adapter);
+
+        mDialog.setOnCancelListener(dialog -> {
+            onLabelItemListener.labelItem(labelList.stream().filter(it ->it.getChecked()).collect(Collectors.toList()));
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.TOP | Gravity.LEFT);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        //获取通知栏高度  重要的在这，获取到通知栏高度
+        int notificationBar = Resources.getSystem().getDimensionPixelSize(Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android"));
+        //location [0] 为x绝对坐标;location [1] 为y绝对坐标
+        int[] location = new int[2];
+        view.getLocationInWindow(location); //获取在当前窗体内的绝对坐标
+        view.getLocationOnScreen(location);//获取在整个屏幕内的绝对坐标
+        final int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
+        final int right = view.getRight();
+        lp.x = widthPixels - DisplayUtils.dip2px(context, 200f) - (widthPixels - right); //对 dialog 设置 x 轴坐标
+        lp.y = location[1] + view.getHeight() * 2 - notificationBar; //对dialog设置y轴坐标
+
+        lp.width = DisplayUtils.dip2px(context, 200f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.5f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+    }
+
     public static void showAddLabelDialog(Context context, List<Label> labelList) {
         DialogAddLabelLayoutBinding binding = DialogAddLabelLayoutBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
@@ -772,5 +829,9 @@ public class DialogUtil {
 
     public interface OnMenuItemListener {
         void onMenuItem(int index);
+    }
+
+    public interface OnLabelItemListener{
+        void labelItem(List<Label> labels);
     }
 }

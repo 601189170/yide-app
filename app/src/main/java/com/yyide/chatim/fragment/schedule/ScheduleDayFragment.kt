@@ -1,6 +1,9 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.graphics.Color
 import android.graphics.RectF
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -8,7 +11,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.blankj.utilcode.util.ToastUtils
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.schedule.CalendarComposeLayout
 import com.yide.calendar.schedule.ScheduleLayout
@@ -19,8 +30,10 @@ import com.yide.scheduleview.ScheduleEventView
 import com.yyide.chatim.R
 import com.yyide.chatim.databinding.FragmentScheduleDayBinding
 import com.yyide.chatim.model.schedule.Label
+import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
+import com.yyide.chatim.view.SpacesItemDecoration
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,6 +50,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
     lateinit var fragmentScheduleDayBinding: FragmentScheduleDayBinding
     lateinit var calendarComposeLayout: CalendarComposeLayout
     private var labelList = mutableListOf<Label>()
+    private var selectedLabelList = mutableListOf<Label>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +59,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
         return fragmentScheduleDayBinding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
@@ -54,7 +69,31 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
             DialogUtil.showAddScheduleDialog(context, labelList)
             //DialogUtil.showAddLabelDialog(context, labelList)
         }
+        initData()
         initScheduleView()
+        fragmentScheduleDayBinding.tvTagSelect.visibility = View.VISIBLE
+        fragmentScheduleDayBinding.rvLabelList.visibility = View.INVISIBLE
+        //初始化标签列表
+        val flexboxLayoutManager = FlexboxLayoutManager(requireContext())
+        flexboxLayoutManager.flexDirection = FlexDirection.ROW
+        flexboxLayoutManager.flexWrap = FlexWrap.WRAP
+        flexboxLayoutManager.justifyContent = JustifyContent.FLEX_START
+        fragmentScheduleDayBinding.rvLabelList.layoutManager = flexboxLayoutManager
+        fragmentScheduleDayBinding.rvLabelList.addItemDecoration(SpacesItemDecoration(SpacesItemDecoration.dip2px(5f)))
+        adapter.setList(selectedLabelList)
+        fragmentScheduleDayBinding.rvLabelList.adapter = adapter
+        //选择标签
+        fragmentScheduleDayBinding.tvTagSelect.setOnClickListener {
+            DialogUtil.showTopMenuLabelDialog(requireContext(),fragmentScheduleDayBinding.tvTagSelect,labelList){
+                if (it.isNotEmpty()){
+                    fragmentScheduleDayBinding.tvTagSelect.visibility = View.GONE
+                    fragmentScheduleDayBinding.rvLabelList.visibility = View.VISIBLE
+                    selectedLabelList.clear()
+                    selectedLabelList = it
+                    adapter.setList(selectedLabelList)
+                }
+            }
+        }
     }
 
     /**
@@ -109,12 +148,29 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
     override fun onPageChange(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
     }
+    val adapter = object : BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_day_schedule_label_list){
+        override fun convert(holder: BaseViewHolder, item: Label) {
+            val drawable = GradientDrawable()
+            drawable.cornerRadius = DisplayUtils.dip2px(requireContext(),4f).toFloat()
+            drawable.setColor(Color.parseColor(item.color))
+            holder.getView<TextView>(R.id.tv_label).background = drawable
+            holder.setText(R.id.tv_label,item.title)
+            holder.itemView.setOnClickListener {
+                remove(item)
+                selectedLabelList.remove(item)
+                if (selectedLabelList.isEmpty()){
+                    fragmentScheduleDayBinding.tvTagSelect.visibility = View.VISIBLE
+                    fragmentScheduleDayBinding.rvLabelList.visibility = View.INVISIBLE
+                }
+            }
+        }
+    }
 
     fun initData() {
-        labelList.add(Label("工作", "#19ADF8", false))
+        labelList.add(Label("工作阅读阅读阅读", "#19ADF8", false))
         labelList.add(Label("阅读", "#56D72C", false))
-        labelList.add(Label("睡觉", "#FD8208", false))
-        labelList.add(Label("吃饭", "#56D72C", false))
+        labelList.add(Label("睡觉阅读", "#FD8208", false))
+        labelList.add(Label("吃饭阅读", "#56D72C", false))
         labelList.add(Label("嗨皮", "#FD8208", false))
     }
 
