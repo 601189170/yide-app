@@ -70,6 +70,7 @@ import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
+import com.yyide.chatim.model.schedule.LabelListRsp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -720,4 +721,37 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/v1/app/addressBookApp/getAddressBook")
     Observable<BookRsp> getAddressBook(@Body RequestBody requestBody);
+
+    /**
+     * 查询标签列表
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/selectLabelList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/selectLabelList")
+    Call<LabelListRsp> selectLabelList();
+
+    /**
+     * 新增标签
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/addLabel
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/addLabel")
+    Call<BaseRsp> addLabel(@Body RequestBody requestBody);
+
+    /**
+     * 修改标签
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/editLabel
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/editLabel")
+    Call<BaseRsp> editLabel(@Body RequestBody requestBody);
+
+    /**
+     * 删除标签
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/deleteLabelById/1437700895651627009
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/deleteLabelById/{id}")
+    Call<BaseRsp> deleteLabelById(@Path("id") String id);
+
 }

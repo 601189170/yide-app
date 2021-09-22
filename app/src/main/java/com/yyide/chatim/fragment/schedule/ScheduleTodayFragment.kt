@@ -1,10 +1,12 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.yide.calendar.CalendarUtils
@@ -47,15 +49,17 @@ class ScheduleTodayFragment : Fragment() {
         return fragmentScheduleTodayBinding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
         initView()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         fragmentScheduleTodayBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, labelList)
+            DialogUtil.showAddScheduleDialog(context, this)
         }
 
         val linearLayoutManager = LinearLayoutManager(context)

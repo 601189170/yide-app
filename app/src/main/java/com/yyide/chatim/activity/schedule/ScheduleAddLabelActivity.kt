@@ -5,28 +5,32 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.databinding.ActivityScheduleAddLabelBinding
 import com.yyide.chatim.databinding.ActivityScheduleLabelManageBinding
 import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.LabelManageViewModel
 
-class ScheduleLabelManageActivity : BaseActivity() {
-    lateinit var labelManageBinding: ActivityScheduleLabelManageBinding
+class ScheduleAddLabelActivity : BaseActivity() {
+    lateinit var labelManageBinding: ActivityScheduleAddLabelBinding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
     private val labelManageViewModel: LabelManageViewModel by viewModels()
     private lateinit var adapter: BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        labelManageBinding = ActivityScheduleLabelManageBinding.inflate(layoutInflater)
+        labelManageBinding = ActivityScheduleAddLabelBinding.inflate(layoutInflater)
         setContentView(labelManageBinding.root)
         initView()
         labelManageViewModel.getLabelList().observe(this, Observer {
@@ -46,13 +50,27 @@ class ScheduleLabelManageActivity : BaseActivity() {
     }
 
     private fun initView() {
-        labelManageBinding.top.title.text = "标签管理"
+        labelManageBinding.top.title.text = "添加标签"
         labelManageBinding.top.backLayout.setOnClickListener {
+            finish()
+        }
+        labelManageBinding.top.tvRight.visibility = View.VISIBLE
+        labelManageBinding.top.tvRight.text = "确定"
+        labelManageBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
+        labelManageBinding.top.tvRight.setOnClickListener {
+            val checkedLabelList = labelList.filter { it.checked }
+            if (checkedLabelList.isEmpty()){
+                ToastUtils.showShort("请选择标签")
+                return@setOnClickListener
+            }
+            val intent1  = intent
+            intent1.putExtra("labelList",JSON.toJSONString(checkedLabelList))
+            setResult(RESULT_OK,intent1)
             finish()
         }
         adapter =
             object :
-                BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_label_manage_list) {
+                BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_add_label_list) {
                 override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
                     if (labelList[labelList.lastIndex] === item) {
                         holder.getView<View>(R.id.v_line).visibility = View.GONE
@@ -60,34 +78,13 @@ class ScheduleLabelManageActivity : BaseActivity() {
                     holder.setText(R.id.tv_label, item.labelName)
                     val drawable = GradientDrawable()
                     drawable.cornerRadius =
-                        DisplayUtils.dip2px(this@ScheduleLabelManageActivity, 2f).toFloat()
+                        DisplayUtils.dip2px(this@ScheduleAddLabelActivity, 2f).toFloat()
                     drawable.setColor(Color.parseColor(item.colorValue))
                     holder.getView<TextView>(R.id.tv_label).background = drawable
-
+                    holder.getView<CheckBox>(R.id.checkBox).isSelected = item.checked;
                     holder.itemView.setOnClickListener { v: View? ->
-
-                    }
-                    holder.getView<TextView>(R.id.tv_modify).setOnClickListener {
-                        loge("修改便签")
-                        val intent = Intent(
-                            this@ScheduleLabelManageActivity,
-                            ScheduleLabelCreateActivity::class.java
-                        )
-                        intent.putExtra("id", item.id)
-                        intent.putExtra("labelName", item.labelName)
-                        intent.putExtra("colorValue", item.colorValue)
-                        startActivity(intent)
-                    }
-
-                    holder.getView<TextView>(R.id.tv_delete).setOnClickListener {
-                        loge("删除标签")
-                        labelManageViewModel.deleteLabelById(item.id ?: "-1")
-                        labelManageViewModel.getLabelDeleteResult()
-                            .observe(this@ScheduleLabelManageActivity, {
-                                if (it) {
-                                    labelManageViewModel.selectLabelList()
-                                }
-                            })
+                        item.checked = !item.checked
+                        notifyDataSetChanged()
                     }
                 }
             }
@@ -101,6 +98,6 @@ class ScheduleLabelManageActivity : BaseActivity() {
     }
 
     override fun getContentViewID(): Int {
-        return R.layout.activity_schedule_label_manage
+        return R.layout.activity_schedule_add_label
     }
 }

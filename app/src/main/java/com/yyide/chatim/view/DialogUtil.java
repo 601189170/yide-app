@@ -1,5 +1,6 @@
 package com.yyide.chatim.view;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,14 +29,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
@@ -50,13 +57,16 @@ import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
 import com.yyide.chatim.model.schedule.Label;
 import com.yyide.chatim.model.schedule.LabelColor;
+import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.MonthBean;
+import com.yyide.chatim.model.schedule.NewLabel;
 import com.yyide.chatim.model.schedule.Remind;
 import com.yyide.chatim.model.schedule.Repetition;
 import com.yyide.chatim.model.schedule.Schedule;
 import com.yyide.chatim.model.schedule.WeekBean;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
+import com.yyide.chatim.viewmodel.LabelManageViewModel;
 import com.yyide.chatim.widget.CircleFrameLayout;
 import com.yyide.chatim.widget.SpaceItemDecoration;
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
@@ -64,6 +74,7 @@ import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -186,7 +197,8 @@ public class DialogUtil {
         return tipDialog;
     }
 
-    public static void showLabelCreateScheduleDialog(Context context){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void showLabelCreateScheduleDialog(Context context, LifecycleOwner lifecycleOwner){
         DialogScheduleLabelCreateBinding binding = DialogScheduleLabelCreateBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -227,9 +239,30 @@ public class DialogUtil {
         binding.tvCancel.setOnClickListener(v -> {
             mDialog.dismiss();
         });
+        final LabelManageViewModel viewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(LabelManageViewModel.class);
         binding.tvFinish.setOnClickListener(v -> {
-            mDialog.dismiss();
+            String labelName = binding.edit.getText().toString();
+            if (TextUtils.isEmpty(labelName)) {
+                ToastUtils.showShort("请输入标签名称");
+                return;
+            }
+            String colorValue = LabelColor.color1;
+            final Optional<LabelColor> first = labelColorList.stream().filter(it -> it.getChecked()).findFirst();
+            if (first.isPresent()) {
+                colorValue = first.get().getColor();
+            }
+            List<NewLabel> list = new ArrayList<>();
+            list.add(new NewLabel(labelName, colorValue));
+            viewModel.addLabel(list);
+            viewModel.getLabelAddOrEditResult().observe(lifecycleOwner, aBoolean -> {
+                if (aBoolean) {
+                    mDialog.dismiss();
+                } else {
+                    ToastUtils.showShort("添加标签失败");
+                }
+            });
         });
+
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.CENTER);
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -376,7 +409,7 @@ public class DialogUtil {
         mDialog.show();
     }
 
-    public static void showMonthScheduleListDialog(Context context, String date, List<Schedule> scheduleList) {
+    public static void showMonthScheduleListDialog(Context context, String date, List<Schedule> scheduleList,LifecycleOwner lifecycleOwner) {
         DialogScheduleMonthListBinding binding = DialogScheduleMonthListBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -394,7 +427,7 @@ public class DialogUtil {
 
         binding.clAddSchedule.setOnClickListener(v -> {
             mDialog.dismiss();
-            DialogUtil.showAddScheduleDialog(context, null);
+            DialogUtil.showAddScheduleDialog(context, lifecycleOwner);
         });
 
         binding.tvDate.setText(date);
@@ -665,7 +698,8 @@ public class DialogUtil {
         mDialog.show();
     }
 
-    public static void showAddScheduleDialog(Context context, List<Label> labelList) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void showAddScheduleDialog(Context context, LifecycleOwner lifecycleOwner) {
         ConstraintLayout rootView = (ConstraintLayout) LayoutInflater.from(context).inflate(R.layout.dialog_add_schedule_input, null);
         final EditText editView = rootView.findViewById(R.id.edit);
         //完成
@@ -684,10 +718,10 @@ public class DialogUtil {
         });
 
         tvLabel.setOnClickListener(v -> {
-            showAddLabelDialog(context, labelList);
+            showAddLabelDialog(context, lifecycleOwner);
         });
         ivLabel.setOnClickListener(v -> {
-            showAddLabelDialog(context, labelList);
+            showAddLabelDialog(context, lifecycleOwner);
         });
         tvDate.setOnClickListener(v -> {
             showEditScheduleDialog(context);
@@ -711,19 +745,20 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showTopMenuLabelDialog(Context context, View view, List<Label> labelList, OnLabelItemListener onLabelItemListener){
+    public static void showTopMenuLabelDialog(Context context, View view, LifecycleOwner lifecycleOwner, OnLabelItemListener onLabelItemListener){
+        List<LabelListRsp.DataBean> labelList = new ArrayList<LabelListRsp.DataBean>();
         DialogLabelTopMenuSelectLayoutBinding binding = DialogLabelTopMenuSelectLayoutBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
-        BaseQuickAdapter adapter = new BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_dialog_label_top_menu_select) {
+        BaseQuickAdapter adapter = new BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_dialog_label_top_menu_select) {
             @Override
-            protected void convert(@NonNull BaseViewHolder baseViewHolder, Label label) {
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, LabelListRsp.DataBean label) {
                 Log.e(TAG, "convert: " + label.toString());
-                baseViewHolder.setText(R.id.tv_label, label.getTitle());
+                baseViewHolder.setText(R.id.tv_label, label.getLabelName());
                 final GradientDrawable gradientDrawable = new GradientDrawable();
                 gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context,2f));
-                gradientDrawable.setColor(Color.parseColor(label.getColor()));
+                gradientDrawable.setColor(Color.parseColor(label.getColorValue()));
                 baseViewHolder.getView(R.id.tv_label).setBackground(gradientDrawable);
                 baseViewHolder.getView(R.id.checkBox).setSelected(label.getChecked());
                 baseViewHolder.itemView.setOnClickListener(v -> {
@@ -739,6 +774,13 @@ public class DialogUtil {
         mDialog.setOnCancelListener(dialog -> {
             onLabelItemListener.labelItem(labelList.stream().filter(it ->it.getChecked()).collect(Collectors.toList()));
         });
+        final LabelManageViewModel viewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(LabelManageViewModel.class);
+        viewModel.selectLabelList();
+        viewModel.getLabelList().observe(lifecycleOwner, dataBeans -> {
+            labelList.addAll(dataBeans);
+            adapter.setList(labelList);
+        });
+
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.TOP | Gravity.LEFT);
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
@@ -761,45 +803,54 @@ public class DialogUtil {
         mDialog.show();
     }
 
-    public static void showAddLabelDialog(Context context, List<Label> labelList) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void showAddLabelDialog(Context context, LifecycleOwner lifecycleOwner) {
+        List labelList = new ArrayList<LabelListRsp.DataBean>();
         DialogAddLabelLayoutBinding binding = DialogAddLabelLayoutBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
-        binding.btnClose.setOnClickListener(v -> {
+        binding.tvFinish.setOnClickListener(v -> {
             Log.e(TAG, "showAddLabelDialog: " + labelList.toString());
             mDialog.dismiss();
         });
+        binding.tvCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
         binding.tvAdd.setOnClickListener(v -> {
-            showLabelCreateScheduleDialog(context);
+            showLabelCreateScheduleDialog(context,lifecycleOwner);
         });
 
-        BaseQuickAdapter adapter = new BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_dialog_add_label) {
+        BaseQuickAdapter adapter = new BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_dialog_add_label) {
             @Override
-            protected void convert(@NonNull BaseViewHolder baseViewHolder, Label label) {
+            protected void convert(@NonNull BaseViewHolder baseViewHolder, LabelListRsp.DataBean label) {
                 Log.e(TAG, "convert: " + label.toString());
-                baseViewHolder.setText(R.id.tv_label, label.getTitle());
-                baseViewHolder.setBackgroundColor(R.id.tv_label, Color.parseColor(label.getColor()));
+                baseViewHolder.setText(R.id.tv_label, label.getLabelName());
+                final GradientDrawable gradientDrawable = new GradientDrawable();
+                gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context,2f));
+                gradientDrawable.setColor(Color.parseColor(label.getColorValue()));
+                baseViewHolder.getView(R.id.tv_label).setBackground(gradientDrawable);
+                baseViewHolder.getView(R.id.checkBox).setSelected(label.getChecked());
                 baseViewHolder.itemView.setOnClickListener(v -> {
                     label.setChecked(!label.getChecked());
                     notifyDataSetChanged();
-                });
-                final CheckBox checkbox = baseViewHolder.getView(R.id.checkBox);
-                checkbox.setChecked(label.getChecked());
-                checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                    label.setChecked(isChecked);
                 });
             }
         };
         adapter.setList(labelList);
         binding.rvLabelList.setLayoutManager(new LinearLayoutManager(context));
         binding.rvLabelList.setAdapter(adapter);
-
+        final LabelManageViewModel viewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(LabelManageViewModel.class);
+        viewModel.selectLabelList();
+        viewModel.getLabelList().observe(lifecycleOwner, dataBeans -> {
+            labelList.addAll(dataBeans);
+            adapter.setList(labelList);
+        });
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.CENTER);
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
-        lp.height = DisplayUtils.dip2px(context, 276f);
+        //lp.height = DisplayUtils.dip2px(context, 276f);
         rootView.measure(0, 0);
         lp.dimAmount = 0.75f;
         dialogWindow.setAttributes(lp);
@@ -832,6 +883,6 @@ public class DialogUtil {
     }
 
     public interface OnLabelItemListener{
-        void labelItem(List<Label> labels);
+        void labelItem(List<LabelListRsp.DataBean> labels);
     }
 }

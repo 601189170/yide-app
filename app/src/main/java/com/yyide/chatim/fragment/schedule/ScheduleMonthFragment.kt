@@ -1,10 +1,12 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSON
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
@@ -44,6 +46,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         return fragmentScheduleMonthBinding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mcvCalendar = view.findViewById(R.id.mcvCalendar)
@@ -53,9 +56,10 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         fragmentScheduleMonthBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, labelList)
+            DialogUtil.showAddScheduleDialog(context, this)
         }
         mcvCalendar?.setOnCalendarClickListener(this)
     }
@@ -145,7 +149,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         if (dayScheduleList.isEmpty()){
             return
         }
-        DialogUtil.showMonthScheduleListDialog(requireContext(),date,dayScheduleList)
+        DialogUtil.showMonthScheduleListDialog(requireContext(),date,dayScheduleList,this)
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {

@@ -621,8 +621,7 @@
         <activity android:name=".activity.schedule.ScheduleLabelManageActivity" />
         <activity android:name=".activity.schedule.ScheduleAddressActivity" />
         <activity android:name=".activity.schedule.ScheduleDateIntervalActivity" />
-        <activity android:name=".activity.schedule.ScheduleAddressActivity" />
-        <activity android:name=".activity.schedule.ScheduleDateIntervalActivity" />
+        <activity android:name=".activity.schedule.ScheduleAddLabelActivity" />
         <activity android:name=".activity.schedule.ScheduleCustomRepetitionActivity" />
 
     </application>

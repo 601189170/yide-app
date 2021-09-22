@@ -30,6 +30,7 @@ import com.yide.scheduleview.ScheduleEventView
 import com.yyide.chatim.R
 import com.yyide.chatim.databinding.FragmentScheduleDayBinding
 import com.yyide.chatim.model.schedule.Label
+import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
@@ -49,8 +50,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
     private lateinit var scheduleEventView: ScheduleEventView
     lateinit var fragmentScheduleDayBinding: FragmentScheduleDayBinding
     lateinit var calendarComposeLayout: CalendarComposeLayout
-    private var labelList = mutableListOf<Label>()
-    private var selectedLabelList = mutableListOf<Label>()
+    private var selectedLabelList = mutableListOf<LabelListRsp.DataBean>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,10 +66,9 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
         calendarComposeLayout.setOnCalendarClickListener(this)
         scheduleEventView = calendarComposeLayout.scheduleEventView
         fragmentScheduleDayBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, labelList)
+            DialogUtil.showAddScheduleDialog(context, this)
             //DialogUtil.showAddLabelDialog(context, labelList)
         }
-        initData()
         initScheduleView()
         fragmentScheduleDayBinding.tvTagSelect.visibility = View.VISIBLE
         fragmentScheduleDayBinding.rvLabelList.visibility = View.INVISIBLE
@@ -84,7 +83,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
         fragmentScheduleDayBinding.rvLabelList.adapter = adapter
         //选择标签
         fragmentScheduleDayBinding.tvTagSelect.setOnClickListener {
-            DialogUtil.showTopMenuLabelDialog(requireContext(),fragmentScheduleDayBinding.tvTagSelect,labelList){
+            DialogUtil.showTopMenuLabelDialog(requireContext(),fragmentScheduleDayBinding.tvTagSelect,this){
                 if (it.isNotEmpty()){
                     fragmentScheduleDayBinding.tvTagSelect.visibility = View.GONE
                     fragmentScheduleDayBinding.rvLabelList.visibility = View.VISIBLE
@@ -148,13 +147,13 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
     override fun onPageChange(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
     }
-    val adapter = object : BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_day_schedule_label_list){
-        override fun convert(holder: BaseViewHolder, item: Label) {
+    val adapter = object : BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_day_schedule_label_list){
+        override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             val drawable = GradientDrawable()
             drawable.cornerRadius = DisplayUtils.dip2px(requireContext(),4f).toFloat()
-            drawable.setColor(Color.parseColor(item.color))
+            drawable.setColor(Color.parseColor(item.colorValue))
             holder.getView<TextView>(R.id.tv_label).background = drawable
-            holder.setText(R.id.tv_label,item.title)
+            holder.setText(R.id.tv_label,item.labelName)
             holder.itemView.setOnClickListener {
                 remove(item)
                 selectedLabelList.remove(item)
@@ -164,14 +163,6 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
                 }
             }
         }
-    }
-
-    fun initData() {
-        labelList.add(Label("工作阅读阅读阅读", "#19ADF8", false))
-        labelList.add(Label("阅读", "#56D72C", false))
-        labelList.add(Label("睡觉阅读", "#FD8208", false))
-        labelList.add(Label("吃饭阅读", "#56D72C", false))
-        labelList.add(Label("嗨皮", "#FD8208", false))
     }
 
     override fun onEventClick(event: ScheduleEvent?, eventRect: RectF?) {

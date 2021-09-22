@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F9FA"
-    tools:context=".activity.schedule.ScheduleLabelCreateActivity">
+    tools:context=".activity.schedule.ScheduleLabelManageActivity">
 
     <include
         android:id="@+id/top"
@@ -15,39 +15,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_edit"
+        android:id="@+id/cl_add_label"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/top">
-        <EditText
-            android:id="@+id/edit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="标签名称"
-            android:textColor="#ff333333"
-            android:textColorHint="#ff999999"
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:drawableStart="@drawable/schedule_add_label_icon"
+            android:drawablePadding="@dimen/dp_6"
+            android:text="新建标签"
+            android:textColor="#ff1e1e1e"
             android:textSize="16sp"
-            android:paddingStart="@dimen/dp_20"
-            android:paddingEnd="@dimen/dp_20"
-            android:gravity="center_vertical"
-            android:background="@color/white"
-            android:singleLine="true"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_label_list"
+        android:id="@+id/cv_label_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/cl_edit"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"
-        tools:listitem="@layout/item_label_color"
-        android:paddingStart="@dimen/dp_20"
-        android:paddingEnd="@dimen/dp_20"
-        android:paddingTop="@dimen/dp_14"
-        android:paddingBottom="@dimen/dp_14"/>
-
+        app:layout_constraintTop_toBottomOf="@id/cl_add_label"
+        tools:listitem="@layout/item_add_label_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>
