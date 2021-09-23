@@ -763,5 +763,12 @@ public interface DingApiStores {
     @POST("/management/cloud-system/app/schedule/getSiteName")
     Call<SiteNameRsp> getSiteName();
 
+    /**
+     * 日程新增修改
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/saveSchedule
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/saveSchedule")
+    Call<BaseRsp> saveSchedule(@Body RequestBody requestBody);
 
 }

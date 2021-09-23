@@ -142,6 +142,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         return emptyList()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onClickDate(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
         val date = DateUtils.formatTime("$year-${month+1}-$day","yyyy-MM-dd","",true)

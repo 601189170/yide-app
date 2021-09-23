@@ -19,6 +19,7 @@ import com.yyide.chatim.databinding.ActivityScheduleEditBinding
 import com.yyide.chatim.model.schedule.Label
 import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.model.schedule.SiteNameRsp
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpacesItemDecoration
@@ -49,17 +50,20 @@ class ScheduleEditActivity : BaseActivity() {
         }
 
         scheduleEditBinding.clRemind.setOnClickListener {
-            startActivity(Intent(this, ScheduleRemindActivity::class.java))
+            val intent = Intent(this, ScheduleRemindActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_REMIND_SELECT)
         }
         scheduleEditBinding.clRepetition.setOnClickListener {
-            startActivity(Intent(this, ScheduleRepetitionActivity::class.java))
+            val intent = Intent(this, ScheduleRepetitionActivity::class.java)
+            startActivityForResult(intent,REQUEST_CODE_REPETITION_SELECT)
         }
         scheduleEditBinding.clAddress.setOnClickListener {
             val intent = Intent(this, ScheduleAddressActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_SITE_SELECT)
         }
         scheduleEditBinding.clDate.setOnClickListener {
-            startActivity(Intent(this, ScheduleDateIntervalActivity::class.java))
+            val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_DATE_SELECT)
         }
 
         val flexboxLayoutManager = FlexboxLayoutManager(this)
@@ -97,10 +101,12 @@ class ScheduleEditActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        //选择标签
         if (requestCode == REQUEST_CODE_LABEL_SELECT && resultCode == RESULT_OK && data != null) {
             val stringExtra = data.getStringExtra("labelList")
             loge("onActivityResult:$stringExtra")
-            val parseArray:List<LabelListRsp.DataBean> = JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
+            val parseArray: List<LabelListRsp.DataBean> =
+                JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
             if (parseArray.isNotEmpty()) {
                 labelList.addAll(parseArray)
                 adapter.setList(labelList)
@@ -108,19 +114,61 @@ class ScheduleEditActivity : BaseActivity() {
             return
         }
 
-        if (requestCode == REQUEST_CODE_SITE_SELECT && resultCode == RESULT_OK && data != null ){
+        //选择场地
+        if (requestCode == REQUEST_CODE_SITE_SELECT && resultCode == RESULT_OK && data != null) {
             val stringExtra = data.getStringExtra("address")
             loge("onActivityResult:$stringExtra")
-            val siteNameBean:SiteNameRsp.DataBean = JSON.parseObject(stringExtra, SiteNameRsp.DataBean::class.java)
+            val siteNameBean: SiteNameRsp.DataBean =
+                JSON.parseObject(stringExtra, SiteNameRsp.DataBean::class.java)
             val name = siteNameBean.name
             scheduleEditBinding.tvAddress.setTextColor(resources.getColor(R.color.black9))
             scheduleEditBinding.tvAddress.text = name
             return
         }
+
+        //选择日期
+        if (requestCode == REQUEST_CODE_DATE_SELECT && resultCode == RESULT_OK && data != null) {
+            val allDay = data.getBooleanExtra("allDay", false)
+            val startTime = data.getStringExtra("startTime")
+            val endTime = data.getStringExtra("endTime")
+            loge("allDay=$allDay,startTime=$startTime,endTime=$endTime")
+            scheduleEditBinding.tvDateStart.text =
+                DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm")
+            scheduleEditBinding.tvDateEnd.text = DateUtils.formatTime(endTime, "", "MM月dd日 HH:mm")
+            return
+        }
+        //选择提醒
+        if (requestCode == REQUEST_CODE_REMIND_SELECT && resultCode == RESULT_OK && data != null) {
+            val id = data.getStringExtra("id")
+            val name = data.getStringExtra("name")
+            loge("id=$id,name=$name")
+            scheduleEditBinding.tvRemind.text = name
+            return
+        }
+        //选择重复
+        if (requestCode == REQUEST_CODE_REPETITION_SELECT && resultCode == RESULT_OK && data != null){
+            val title = data.getStringExtra("title")
+            val rule = data.getStringExtra("rule")
+            loge("title=$title,rule=$rule")
+            scheduleEditBinding.tvRepetition.text = title
+            return
+        }
     }
 
-    companion object{
+    companion object {
+        //标签选择
         const val REQUEST_CODE_LABEL_SELECT = 100
+
+        //场地选择
         const val REQUEST_CODE_SITE_SELECT = 101
+
+        //提醒选择
+        const val REQUEST_CODE_REMIND_SELECT = 102
+
+        //重复选择
+        const val REQUEST_CODE_REPETITION_SELECT = 103
+
+        //时间选择
+        const val REQUEST_CODE_DATE_SELECT = 104
     }
 }

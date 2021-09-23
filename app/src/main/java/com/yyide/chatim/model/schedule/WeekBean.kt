@@ -8,18 +8,20 @@ package com.yyide.chatim.model.schedule
  */
 data class WeekBean(
     var title:String,
+    var shortname:String,
     var checked:Boolean
 ){
     companion object{
         fun getList():List<WeekBean>{
             val weekList = mutableListOf<WeekBean>()
-            weekList.add(WeekBean("周 一",false))
-            weekList.add(WeekBean("周 二",false))
-            weekList.add(WeekBean("周 三",false))
-            weekList.add(WeekBean("周 四",false))
-            weekList.add(WeekBean("周 五",false))
-            weekList.add(WeekBean("周 六",false))
-            weekList.add(WeekBean("周 日",false))
+            //MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)
+            weekList.add(WeekBean("周 一","MO",false))
+            weekList.add(WeekBean("周 二","TU",false))
+            weekList.add(WeekBean("周 三","WE",false))
+            weekList.add(WeekBean("周 四","TH",false))
+            weekList.add(WeekBean("周 五","FR",false))
+            weekList.add(WeekBean("周 六","SA",false))
+            weekList.add(WeekBean("周 日","SU",false))
             return weekList
         }
 

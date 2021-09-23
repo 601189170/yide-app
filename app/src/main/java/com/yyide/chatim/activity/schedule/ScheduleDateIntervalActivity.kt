@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.schedule
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
@@ -11,6 +12,8 @@ import java.util.concurrent.atomic.AtomicReference
 
 class ScheduleDateIntervalActivity : BaseActivity() {
     lateinit var binding: ActivityScheduleDateIntervalBinding
+    private val dateStart = AtomicReference("")
+    private val dateEnd = AtomicReference("")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScheduleDateIntervalBinding.inflate(layoutInflater)
@@ -20,8 +23,6 @@ class ScheduleDateIntervalActivity : BaseActivity() {
     }
 
     private fun initDate() {
-        val dateStart = AtomicReference("")
-        val dateEnd = AtomicReference("")
         val ids: IntArray = binding.groupDateStart.referencedIds
         for (id in ids) {
             findViewById<View>(id).setOnClickListener { v: View? ->
@@ -100,6 +101,14 @@ class ScheduleDateIntervalActivity : BaseActivity() {
         binding.top.tvRight.text = "完成"
         binding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         binding.top.tvRight.setOnClickListener {
+            val allDay = binding.checkBox.isChecked
+            val startTime = dateStart.get()
+            val endTime = dateEnd.get()
+            val intent = intent
+            intent.putExtra("allDay",allDay)
+            intent.putExtra("startTime",startTime)
+            intent.putExtra("endTime",endTime)
+            setResult(RESULT_OK,intent)
             finish()
         }
     }
