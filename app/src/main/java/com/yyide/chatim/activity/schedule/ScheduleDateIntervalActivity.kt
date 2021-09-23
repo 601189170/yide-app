@@ -1,20 +1,12 @@
 package com.yyide.chatim.activity.schedule
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
-import com.yyide.chatim.databinding.ActivityScheduleAddressBinding
 import com.yyide.chatim.databinding.ActivityScheduleDateIntervalBinding
-import com.yyide.chatim.model.schedule.Address
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.loge
-import com.yyide.chatim.view.DialogUtil
 import java.util.concurrent.atomic.AtomicReference
 
 class ScheduleDateIntervalActivity : BaseActivity() {

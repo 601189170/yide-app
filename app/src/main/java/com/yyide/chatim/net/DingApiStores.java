@@ -71,6 +71,7 @@ import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
+import com.yyide.chatim.model.schedule.SiteNameRsp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -753,5 +754,14 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/deleteLabelById/{id}")
     Call<BaseRsp> deleteLabelById(@Path("id") String id);
+
+    /**
+     * 获取场地信息-one
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getSiteName
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getSiteName")
+    Call<SiteNameRsp> getSiteName();
+
 
 }

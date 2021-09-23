@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONArray
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.google.android.flexbox.FlexDirection
@@ -17,6 +18,7 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleEditBinding
 import com.yyide.chatim.model.schedule.Label
 import com.yyide.chatim.model.schedule.LabelListRsp
+import com.yyide.chatim.model.schedule.SiteNameRsp
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpacesItemDecoration
@@ -43,7 +45,7 @@ class ScheduleEditActivity : BaseActivity() {
 
         scheduleEditBinding.btnAddLabel.setOnClickListener {
             val intent = Intent(this, ScheduleAddLabelActivity::class.java)
-            startActivityForResult(intent, 100)
+            startActivityForResult(intent, REQUEST_CODE_LABEL_SELECT)
         }
 
         scheduleEditBinding.clRemind.setOnClickListener {
@@ -53,7 +55,8 @@ class ScheduleEditActivity : BaseActivity() {
             startActivity(Intent(this, ScheduleRepetitionActivity::class.java))
         }
         scheduleEditBinding.clAddress.setOnClickListener {
-            startActivity(Intent(this, ScheduleAddressActivity::class.java))
+            val intent = Intent(this, ScheduleAddressActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_SITE_SELECT)
         }
         scheduleEditBinding.clDate.setOnClickListener {
             startActivity(Intent(this, ScheduleDateIntervalActivity::class.java))
@@ -94,13 +97,30 @@ class ScheduleEditActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == REQUEST_CODE_LABEL_SELECT && resultCode == RESULT_OK && data != null) {
             val stringExtra = data.getStringExtra("labelList")
-            val parseArray = JSON.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
+            loge("onActivityResult:$stringExtra")
+            val parseArray:List<LabelListRsp.DataBean> = JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
             if (parseArray.isNotEmpty()) {
                 labelList.addAll(parseArray)
                 adapter.setList(labelList)
             }
+            return
         }
+
+        if (requestCode == REQUEST_CODE_SITE_SELECT && resultCode == RESULT_OK && data != null ){
+            val stringExtra = data.getStringExtra("address")
+            loge("onActivityResult:$stringExtra")
+            val siteNameBean:SiteNameRsp.DataBean = JSON.parseObject(stringExtra, SiteNameRsp.DataBean::class.java)
+            val name = siteNameBean.name
+            scheduleEditBinding.tvAddress.setTextColor(resources.getColor(R.color.black9))
+            scheduleEditBinding.tvAddress.text = name
+            return
+        }
+    }
+
+    companion object{
+        const val REQUEST_CODE_LABEL_SELECT = 100
+        const val REQUEST_CODE_SITE_SELECT = 101
     }
 }

@@ -7,26 +7,26 @@ package com.yyide.chatim.model.schedule
  */
 
 data class LabelListRsp(
-    val code: Int = 0,
-    val success: Boolean = false,
-    val msg: String? = null,
-    val data: List<DataBean>? = null
+    var code: Int = 0,
+    var success: Boolean = false,
+    var msg: String? = null,
+    var data: List<DataBean>? = null
 ) {
     data class DataBean(
-        val id: String? = null,
-        val delInd: Any? = null,
-        val createdBy: Any? = null,
-        val createdDateTime: Any? = null,
-        val updatedBy: Any? = null,
-        val updatedDateTime: Any? = null,
-        val versionStamp: Any? = null,
-        val total: Int = 0,
-        val size: Int = 0,
-        val current: Int = 0,
-        val userId: Any? = null,
-        val labelName: String? = null,
-        val sort: Int = 0,
-        val colorValue: String? = null,
+        var id: String? = null,
+        var delInd: Any? = null,
+        var createdBy: Any? = null,
+        var createdDateTime: Any? = null,
+        var updatedBy: Any? = null,
+        var updatedDateTime: Any? = null,
+        var versionStamp: Any? = null,
+        var total: Int = 0,
+        var size: Int = 0,
+        var current: Int = 0,
+        var userId: Any? = null,
+        var labelName: String? = null,
+        var sort: Int = 0,
+        var colorValue: String? = null,
         var checked:Boolean = false
     )
 }
