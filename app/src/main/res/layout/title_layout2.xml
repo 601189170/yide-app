@@ -48,5 +48,15 @@
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
             android:text="保存"/>
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:paddingStart="@dimen/dp_20"
+            android:paddingEnd="@dimen/dp_20"
+            android:visibility="gone"
+            android:src="@drawable/schedule_setting_icon" />
     </FrameLayout>
 </LinearLayout>

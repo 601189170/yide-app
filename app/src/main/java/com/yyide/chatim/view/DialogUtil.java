@@ -50,6 +50,7 @@ import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
 import com.yyide.chatim.databinding.DialogLabelTopMenuSelectLayoutBinding;
 import com.yyide.chatim.databinding.DialogScheduleCustomRepetitionBinding;
+import com.yyide.chatim.databinding.DialogScheduleDelBinding;
 import com.yyide.chatim.databinding.DialogScheduleEditBinding;
 import com.yyide.chatim.databinding.DialogScheduleLabelCreateBinding;
 import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
@@ -469,6 +470,38 @@ public class DialogUtil {
         lp.height = DisplayUtils.dip2px(context, 330f);
         rootView.measure(0, 0);
         lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+    }
+
+    public static void showScheduleDelDialog(Context context, View view) {
+        DialogScheduleDelBinding binding = DialogScheduleDelBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        rootView.setOnClickListener(v -> {
+            //删除日程
+            mDialog.dismiss();
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.TOP | Gravity.LEFT);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        //获取通知栏高度  重要的在这，获取到通知栏高度
+        int notificationBar = Resources.getSystem().getDimensionPixelSize(Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android"));
+        //location [0] 为x绝对坐标;location [1] 为y绝对坐标
+        int[] location = new int[2];
+        view.getLocationInWindow(location); //获取在当前窗体内的绝对坐标
+        view.getLocationOnScreen(location);//获取在整个屏幕内的绝对坐标
+        final int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
+        final int right = view.getRight();
+        lp.x = widthPixels - DisplayUtils.dip2px(context, 112f) - (widthPixels - right) - view.getWidth() / 2 + DisplayUtils.dip2px(context, 12f); //对 dialog 设置 x 轴坐标
+        lp.y = location[1] + view.getHeight() - notificationBar; //对dialog设置y轴坐标
+
+        lp.width = DisplayUtils.dip2px(context, 112f);
+        lp.height = DisplayUtils.dip2px(context, 75f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.5f;
         dialogWindow.setAttributes(lp);
         mDialog.setCancelable(true);
         mDialog.show();

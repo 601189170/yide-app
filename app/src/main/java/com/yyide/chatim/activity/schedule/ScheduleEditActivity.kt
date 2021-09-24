@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
@@ -23,6 +24,7 @@ import com.yyide.chatim.model.schedule.SiteNameRsp
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 
@@ -45,6 +47,10 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleEditBinding.top.title.text = "日程编辑"
         scheduleEditBinding.top.backLayout.setOnClickListener {
             finish()
+        }
+        scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
+        scheduleEditBinding.top.ivRight.setOnClickListener {
+            DialogUtil.showScheduleDelDialog(this,scheduleEditBinding.top.ivRight)
         }
 
         scheduleEditBinding.btnAddLabel.setOnClickListener {
