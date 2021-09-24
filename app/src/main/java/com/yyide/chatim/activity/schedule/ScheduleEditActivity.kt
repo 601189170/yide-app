@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -23,10 +24,12 @@ import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpacesItemDecoration
+import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 
 class ScheduleEditActivity : BaseActivity() {
     lateinit var scheduleEditBinding: ActivityScheduleEditBinding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
+    private val scheduleEditViewModel:ScheduleEditViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleEditBinding = ActivityScheduleEditBinding.inflate(layoutInflater)
@@ -108,7 +111,9 @@ class ScheduleEditActivity : BaseActivity() {
             val parseArray: List<LabelListRsp.DataBean> =
                 JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
             if (parseArray.isNotEmpty()) {
+                labelList.clear()
                 labelList.addAll(parseArray)
+                scheduleEditViewModel.labelListLiveData.value = labelList
                 adapter.setList(labelList)
             }
             return

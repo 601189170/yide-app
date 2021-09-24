@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -907,6 +908,20 @@ public class DialogUtil {
             labelList.clear();
             labelList.addAll(dataBeans);
             adapter.setList(labelList);
+        });
+        mDialog.setOnShowListener(dialog -> {
+            Log.e(TAG, "setOnShowListener: "+dialog.toString() );
+        });
+
+        mDialog.setOnDismissListener(dialog -> {
+            Log.e(TAG, "setOnDismissListener: "+dialog.toString() );
+        });
+
+        mDialog.setOnKeyListener((dialog, keyCode, event) -> {
+            Log.e(TAG, "onKey: "+dialog.toString() );
+            Log.e(TAG, "onKey: "+keyCode );
+            Log.e(TAG, "onKey: "+event.toString() );
+            return false;
         });
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.CENTER);

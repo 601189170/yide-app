@@ -23,7 +23,7 @@ import retrofit2.Response
  *
  * @author liu tao
  * @date 2021/9/23 16:27
- * @description 描述
+ * @description 日程添加，修改，删除
  */
 class ScheduleEditViewModel : ViewModel() {
     //日程标题
