@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -18,8 +19,8 @@ import com.yyide.chatim.utils.loge
 class ScheduleRepetitionActivity : BaseActivity() {
     lateinit var scheduleRepetitionBinding: ActivityScheduleRepetitionBinding
     val list = getList()
-    private var title = ""
-    private var rule = ""
+    private var title:String? = null
+    private var rule:String? = null
     private lateinit var adapter: BaseQuickAdapter<Repetition, BaseViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +30,17 @@ class ScheduleRepetitionActivity : BaseActivity() {
     }
 
     private fun initView() {
+        val stringExtra = intent.getStringExtra("data")
+        val selectedRepetition = JSON.parseObject(stringExtra, Repetition::class.java)
+        if (selectedRepetition != null){
+            list.forEach {
+                it.checked = it.rule == selectedRepetition.rule
+            }
+            list.filter { it.checked }.ifEmpty {
+                //自定义重复
+                scheduleRepetitionBinding.ivNotRemind.setImageResource(R.drawable.schedule_remind_selected_icon)
+            }
+        }
         scheduleRepetitionBinding.top.title.text = "选择重复"
         scheduleRepetitionBinding.top.backLayout.setOnClickListener {
             finish()
@@ -45,8 +57,7 @@ class ScheduleRepetitionActivity : BaseActivity() {
                 title = "自定义重复"
             }
             val intent = intent
-            intent.putExtra("title", title)
-            intent.putExtra("rule",rule)
+            intent.putExtra("data",JSON.toJSONString(Repetition(title,true,rule)))
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -62,6 +73,7 @@ class ScheduleRepetitionActivity : BaseActivity() {
                         repetition1.checked = false
                     }
                     repetition.checked = true
+                    scheduleRepetitionBinding.ivNotRemind.setImageResource(R.drawable.schedule_arrow_right)
                     notifyDataSetChanged()
                 }
             }

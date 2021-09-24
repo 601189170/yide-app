@@ -7,9 +7,9 @@ package com.yyide.chatim.model.schedule
  * @description 描述
  */
 data class Repetition(
-    var title: String,
-    var checked: Boolean,
-    var rule:String
+    var title: String? = null,
+    var checked: Boolean = false,
+    var rule:String? = null
 ) {
     companion object {
         fun getList(): List<Repetition> {

@@ -18,9 +18,7 @@ import com.google.android.flexbox.JustifyContent
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleEditBinding
-import com.yyide.chatim.model.schedule.Label
-import com.yyide.chatim.model.schedule.LabelListRsp
-import com.yyide.chatim.model.schedule.SiteNameRsp
+import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
@@ -60,10 +58,12 @@ class ScheduleEditActivity : BaseActivity() {
 
         scheduleEditBinding.clRemind.setOnClickListener {
             val intent = Intent(this, ScheduleRemindActivity::class.java)
+            intent.putExtra("data",JSON.toJSONString(scheduleEditViewModel.remindLiveData.value))
             startActivityForResult(intent, REQUEST_CODE_REMIND_SELECT)
         }
         scheduleEditBinding.clRepetition.setOnClickListener {
             val intent = Intent(this, ScheduleRepetitionActivity::class.java)
+            intent.putExtra("data",JSON.toJSONString(scheduleEditViewModel.repetitionLiveData.value))
             startActivityForResult(intent,REQUEST_CODE_REPETITION_SELECT)
         }
         scheduleEditBinding.clAddress.setOnClickListener {
@@ -73,6 +73,10 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleEditBinding.clDate.setOnClickListener {
             val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_DATE_SELECT)
+        }
+        scheduleEditBinding.clParticipant.setOnClickListener {
+            val intent = Intent(this, ScheduleParticipantActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_PARTICIPANT_SELECT)
         }
 
         val flexboxLayoutManager = FlexboxLayoutManager(this)
@@ -150,18 +154,24 @@ class ScheduleEditActivity : BaseActivity() {
         }
         //选择提醒
         if (requestCode == REQUEST_CODE_REMIND_SELECT && resultCode == RESULT_OK && data != null) {
-            val id = data.getStringExtra("id")
-            val name = data.getStringExtra("name")
-            loge("id=$id,name=$name")
-            scheduleEditBinding.tvRemind.text = name
+            val stringExtra = data.getStringExtra("data")
+            val remind = JSON.parseObject(stringExtra, Remind::class.java)
+            loge("id=${remind.id},name=${remind.title}")
+            scheduleEditBinding.tvRemind.text = remind.title
+            scheduleEditViewModel.remindLiveData.value = remind
             return
         }
         //选择重复
         if (requestCode == REQUEST_CODE_REPETITION_SELECT && resultCode == RESULT_OK && data != null){
-            val title = data.getStringExtra("title")
-            val rule = data.getStringExtra("rule")
-            loge("title=$title,rule=$rule")
-            scheduleEditBinding.tvRepetition.text = title
+            val stringExtra = data.getStringExtra("data")
+            val repetition = JSON.parseObject(stringExtra, Repetition::class.java)
+            loge("title=${repetition.title},rule=${repetition.rule}")
+            scheduleEditBinding.tvRepetition.text = repetition.title
+            scheduleEditViewModel.repetitionLiveData.value = repetition
+            return
+        }
+        //选择参与人
+        if (requestCode == REQUEST_CODE_PARTICIPANT_SELECT && resultCode == RESULT_OK && data != null){
             return
         }
     }
@@ -181,5 +191,8 @@ class ScheduleEditActivity : BaseActivity() {
 
         //时间选择
         const val REQUEST_CODE_DATE_SELECT = 104
+
+        //选择参与人
+        const val REQUEST_CODE_PARTICIPANT_SELECT = 105
     }
 }

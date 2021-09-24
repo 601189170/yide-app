@@ -1,10 +1,11 @@
 package com.yyide.chatim.activity.schedule
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -22,7 +23,19 @@ class ScheduleRemindActivity : BaseActivity() {
     }
 
     private fun initView() {
+        val stringExtra = intent.getStringExtra("data")
+        val selectedRemind = JSON.parseObject(stringExtra, Remind::class.java)
         val list = Remind.getList()
+        if (selectedRemind != null){
+            //设置内容反选
+            scheduleRemindBinding.ivNotRemind.visibility = View.GONE
+            list.forEach {
+                it.checked = it.id == selectedRemind.id
+            }
+            if (TextUtils.isEmpty(selectedRemind.id)){
+                scheduleRemindBinding.ivNotRemind.visibility = View.VISIBLE
+            }
+        }
         scheduleRemindBinding.top.title.text = "日程提醒"
         scheduleRemindBinding.top.backLayout.setOnClickListener {
             finish()
@@ -39,8 +52,7 @@ class ScheduleRemindActivity : BaseActivity() {
                 remindName = selectList.first().title?:""
             }
             val intent = intent
-            intent.putExtra("id",remindId)
-            intent.putExtra("name",remindName)
+            intent.putExtra("data",JSON.toJSONString(Remind(remindId,remindName)))
             setResult(RESULT_OK,intent)
             finish()
         }
