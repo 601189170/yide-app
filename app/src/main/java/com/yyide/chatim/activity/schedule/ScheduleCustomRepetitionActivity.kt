@@ -17,7 +17,7 @@ import com.yyide.chatim.widget.SpaceItemDecoration
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter.ScrollPickerAdapterBuilder
 import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 class ScheduleCustomRepetitionActivity : BaseActivity() {
