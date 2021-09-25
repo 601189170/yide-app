@@ -53,6 +53,7 @@ class ScheduleEditActivity : BaseActivity() {
 
         scheduleEditBinding.btnAddLabel.setOnClickListener {
             val intent = Intent(this, ScheduleAddLabelActivity::class.java)
+            intent.putExtra("labelList",JSON.toJSONString(scheduleEditViewModel.labelListLiveData.value))
             startActivityForResult(intent, REQUEST_CODE_LABEL_SELECT)
         }
 
@@ -68,10 +69,17 @@ class ScheduleEditActivity : BaseActivity() {
         }
         scheduleEditBinding.clAddress.setOnClickListener {
             val intent = Intent(this, ScheduleAddressActivity::class.java)
+            intent.putExtra("data",JSON.toJSONString(scheduleEditViewModel.siteLiveData.value))
             startActivityForResult(intent, REQUEST_CODE_SITE_SELECT)
         }
         scheduleEditBinding.clDate.setOnClickListener {
             val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
+            val allDay = scheduleEditViewModel.allDayLiveData.value
+            val startTime = scheduleEditViewModel.startTimeLiveData.value
+            val endTime = scheduleEditViewModel.endTimeLiveData.value
+            intent.putExtra("allDay",allDay)
+            intent.putExtra("startTime",startTime)
+            intent.putExtra("endTime",endTime)
             startActivityForResult(intent, REQUEST_CODE_DATE_SELECT)
         }
         scheduleEditBinding.clParticipant.setOnClickListener {
@@ -138,6 +146,7 @@ class ScheduleEditActivity : BaseActivity() {
             val name = siteNameBean.name
             scheduleEditBinding.tvAddress.setTextColor(resources.getColor(R.color.black9))
             scheduleEditBinding.tvAddress.text = name
+            scheduleEditViewModel.siteLiveData.value = siteNameBean
             return
         }
 
@@ -150,6 +159,9 @@ class ScheduleEditActivity : BaseActivity() {
             scheduleEditBinding.tvDateStart.text =
                 DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm")
             scheduleEditBinding.tvDateEnd.text = DateUtils.formatTime(endTime, "", "MM月dd日 HH:mm")
+            scheduleEditViewModel.startTimeLiveData.value = startTime
+            scheduleEditViewModel.endTimeLiveData.value = endTime
+            scheduleEditViewModel.allDayLiveData.value = allDay
             return
         }
         //选择提醒

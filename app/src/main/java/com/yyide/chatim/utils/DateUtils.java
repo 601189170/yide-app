@@ -276,6 +276,22 @@ public class DateUtils {
         return simpleDateFormat.format(time);
     }
 
+    public static long formatTime(String time, String source) {
+        if (TextUtils.isEmpty(source)) {
+            source = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat resourceFormat = new SimpleDateFormat(source);
+        Date date = null;
+        try {
+            date = resourceFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (date != null) {
+            return date.getTime();
+        }
+        return 0;
+    }
     /**
      * 日期转换
      *

@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONArray
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -33,6 +34,8 @@ class ScheduleAddLabelActivity : BaseActivity() {
         labelManageBinding = ActivityScheduleAddLabelBinding.inflate(layoutInflater)
         setContentView(labelManageBinding.root)
         initView()
+        val stringExtra = intent.getStringExtra("labelList")
+        val labelListSource = JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
         labelManageViewModel.getLabelList().observe(this, Observer {
             if (it.isEmpty()) {
                 loge("没有数据")
@@ -40,6 +43,13 @@ class ScheduleAddLabelActivity : BaseActivity() {
             }
             labelList.clear()
             labelList.addAll(it)
+            if (labelListSource != null && labelListSource.isNotEmpty()) {
+                labelList.forEach { dataBean ->
+                    if (labelListSource.map { it.id }.contains(dataBean.id)) {
+                        dataBean.checked = true
+                    }
+                }
+            }
             adapter.setList(labelList)
         })
     }
@@ -59,13 +69,13 @@ class ScheduleAddLabelActivity : BaseActivity() {
         labelManageBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         labelManageBinding.top.tvRight.setOnClickListener {
             val checkedLabelList = labelList.filter { it.checked }
-            if (checkedLabelList.isEmpty()){
+            if (checkedLabelList.isEmpty()) {
                 ToastUtils.showShort("请选择标签")
                 return@setOnClickListener
             }
-            val intent1  = intent
-            intent1.putExtra("labelList",JSON.toJSONString(checkedLabelList))
-            setResult(RESULT_OK,intent1)
+            val intent1 = intent
+            intent1.putExtra("labelList", JSON.toJSONString(checkedLabelList))
+            setResult(RESULT_OK, intent1)
             finish()
         }
         adapter =

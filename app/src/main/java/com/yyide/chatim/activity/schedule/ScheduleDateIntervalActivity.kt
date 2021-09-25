@@ -23,6 +23,15 @@ class ScheduleDateIntervalActivity : BaseActivity() {
     }
 
     private fun initDate() {
+        val allDay = intent.getBooleanExtra("allDay", false)
+        if (allDay){
+            binding.checkBox.isChecked = allDay
+            binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2)
+            binding.tvTimeStart.visibility = View.GONE
+            binding.tvTimeEnd.visibility = View.GONE
+        }
+        val startTime = intent.getStringExtra("startTime")
+        val endTime = intent.getStringExtra("endTime")
         val ids: IntArray = binding.groupDateStart.referencedIds
         for (id in ids) {
             findViewById<View>(id).setOnClickListener { v: View? ->
@@ -32,6 +41,7 @@ class ScheduleDateIntervalActivity : BaseActivity() {
                 }
                 binding.vDateTopMarkLeft.visibility = View.VISIBLE
                 binding.vDateTopMarkRight.visibility = View.INVISIBLE
+                binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateStart.get(),""))
             }
         }
 
@@ -44,6 +54,7 @@ class ScheduleDateIntervalActivity : BaseActivity() {
                 }
                 binding.vDateTopMarkLeft.visibility = View.INVISIBLE
                 binding.vDateTopMarkRight.visibility = View.VISIBLE
+                binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateEnd.get(),""))
             }
         }
         binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -77,16 +88,32 @@ class ScheduleDateIntervalActivity : BaseActivity() {
                 dateEnd.set(date)
             } else {
                 //第一次设置两边的数据
-                binding.tvDateStart.text = time
-                if (!binding.checkBox.isChecked) {
-                    binding.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
+                if (TextUtils.isEmpty(startTime)) {
+                    binding.tvDateStart.text = time
+                    if (!binding.checkBox.isChecked) {
+                        binding.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
+                    }
+                    dateStart.set(date)
+                } else {
+                    binding.tvDateStart.text = DateUtils.formatTime(startTime, "", "", true)
+                    if (!binding.checkBox.isChecked) {
+                        binding.tvTimeStart.text = DateUtils.formatTime(startTime, "", "HH:mm")
+                    }
+                    dateStart.set(startTime)
                 }
-                binding.tvDateEnd.text = time
-                if (!binding.checkBox.isChecked) {
-                    binding.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
+                if (TextUtils.isEmpty(endTime)) {
+                    binding.tvDateEnd.text = time
+                    if (!binding.checkBox.isChecked) {
+                        binding.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
+                    }
+                    dateEnd.set(date)
+                } else {
+                    binding.tvDateEnd.text = DateUtils.formatTime(endTime, "", "", true)
+                    if (!binding.checkBox.isChecked) {
+                        binding.tvTimeEnd.text = DateUtils.formatTime(endTime, "", "HH:mm")
+                    }
+                    dateEnd.set(endTime)
                 }
-                dateStart.set(date)
-                dateEnd.set(date)
             }
             null
         }
@@ -105,10 +132,10 @@ class ScheduleDateIntervalActivity : BaseActivity() {
             val startTime = dateStart.get()
             val endTime = dateEnd.get()
             val intent = intent
-            intent.putExtra("allDay",allDay)
-            intent.putExtra("startTime",startTime)
-            intent.putExtra("endTime",endTime)
-            setResult(RESULT_OK,intent)
+            intent.putExtra("allDay", allDay)
+            intent.putExtra("startTime", startTime)
+            intent.putExtra("endTime", endTime)
+            setResult(RESULT_OK, intent)
             finish()
         }
     }

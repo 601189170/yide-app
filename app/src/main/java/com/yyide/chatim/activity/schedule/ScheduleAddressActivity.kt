@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.schedule
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -29,8 +30,17 @@ class ScheduleAddressActivity : BaseActivity() {
     }
 
     private fun initData() {
+        val stringExtra = intent.getStringExtra("data")
+        val siteNameBean: SiteNameRsp.DataBean? =
+            JSON.parseObject(stringExtra, SiteNameRsp.DataBean::class.java)
         siteManageViewModel.getSiteInfoList().observe(this, {
             list.addAll(it)
+            if (siteNameBean != null) {
+                it.forEach {
+                    it.checked = it.id == siteNameBean.id
+                }
+                scheduleAddressBinding.ivNotRemind.visibility = if (it.none { it.checked }) View.VISIBLE else View.GONE
+            }
             adapter.setList(list)
         })
     }
@@ -47,7 +57,7 @@ class ScheduleAddressActivity : BaseActivity() {
             val selectedList = list.filter { it.checked }
             if (selectedList.isEmpty()) {
                 val intent1 = intent
-                val site = SiteNameRsp.DataBean("","无场地",true)
+                val site = SiteNameRsp.DataBean("", "无场地", true)
                 intent1.putExtra("address", JSON.toJSONString(site))
                 setResult(RESULT_OK, intent1)
                 finish()

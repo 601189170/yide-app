@@ -7,10 +7,7 @@ import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.BaseRsp
-import com.yyide.chatim.model.schedule.LabelListRsp
-import com.yyide.chatim.model.schedule.Remind
-import com.yyide.chatim.model.schedule.Repetition
-import com.yyide.chatim.model.schedule.ScheduleData
+import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.loge
@@ -40,6 +37,8 @@ class ScheduleEditViewModel : ViewModel() {
     val remindLiveData = MutableLiveData<Remind>()
     //日程重复(为空时，说明不重复，不为空说明重复，并且值是重复规则)
     val repetitionLiveData = MutableLiveData<Repetition>()
+    //场地
+    val siteLiveData = MutableLiveData<SiteNameRsp.DataBean>()
     private var dingApiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
     /**
