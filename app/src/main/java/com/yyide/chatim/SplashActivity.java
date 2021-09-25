@@ -29,21 +29,14 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.mmkv.MMKV;
-import com.tencent.qcloud.tim.uikit.TUIKit;
-import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.yyide.chatim.activity.GuidePageActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.UserInfo;
-import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
-import com.yyide.chatim.utils.DemoLog;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 

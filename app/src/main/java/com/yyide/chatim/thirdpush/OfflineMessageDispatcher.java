@@ -6,14 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.tencent.imsdk.v2.V2TIMCallback;
-import com.tencent.imsdk.v2.V2TIMConversation;
-import com.tencent.imsdk.v2.V2TIMManager;
-import com.tencent.imsdk.v2.V2TIMSignalingInfo;
-import com.tencent.liteav.login.UserModel;
-import com.tencent.liteav.model.CallModel;
-import com.tencent.liteav.model.TRTCAVCallImpl;
-import com.tencent.liteav.trtcaudiocalldemo.ui.TRTCAudioCallActivity;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageContainerBean;
@@ -21,11 +13,14 @@ import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageHelper;
 import com.yyide.chatim.BaseApplication;
+import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
-import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.ChatActivity;
+import com.yyide.chatim.chat.helper.IBaseLiveListener;
+import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager;
 import com.yyide.chatim.utils.BrandUtil;
+import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
 import java.util.Map;
@@ -42,14 +37,14 @@ public class OfflineMessageDispatcher {
         }
         Bundle bundle = intent.getExtras();
         DemoLog.i(TAG, "bundle: " + bundle);
-        String ext;
         if (bundle == null) {
-            ext = VIVOPushMessageReceiverImpl.getParams();
+            String ext = VIVOPushMessageReceiverImpl.getParams();
             if (!TextUtils.isEmpty(ext)) {
                 return getOfflineMessageBeanFromContainer(ext);
             }
+            return null;
         } else {
-            ext = bundle.getString("ext");
+            String ext = bundle.getString("ext");
             DemoLog.i(TAG, "push custom data ext: " + ext);
             if (TextUtils.isEmpty(ext)) {
                 if (BrandUtil.isBrandXiaoMi()) {
@@ -62,8 +57,8 @@ public class OfflineMessageDispatcher {
             } else {
                 return getOfflineMessageBeanFromContainer(ext);
             }
+            return null;
         }
-        return null;
     }
 
     private static String getXiaomiMessage(Bundle bundle) {
@@ -133,52 +128,21 @@ public class OfflineMessageDispatcher {
             ChatInfo chatInfo = new ChatInfo();
             chatInfo.setType(bean.chatType);
             chatInfo.setId(bean.sender);
-            Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
-            intent.putExtra(BaseConstant.CHAT_INFO, chatInfo);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            BaseApplication.getInstance().startActivity(intent);
+            chatInfo.setChatName(bean.nickname);
+            Intent chatIntent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
+            chatIntent.putExtra(Constants.CHAT_INFO, chatInfo);
+            chatIntent.putExtra(Constants.IS_OFFLINE_PUSH_JUMP, true);
+            chatIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent mainIntent = new Intent(BaseApplication.getInstance(), SplashActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            BaseApplication.getInstance().startActivities(new Intent[]{mainIntent, chatIntent});
             return true;
         } else if (bean.action == OfflineMessageBean.REDIRECT_ACTION_CALL) {
-            final CallModel model = new Gson().fromJson(bean.content, CallModel.class);
-            DemoLog.i(TAG, "bean: " + bean + " model: " + model);
-            if (model != null) {
-                long timeout = V2TIMManager.getInstance().getServerTime() - bean.sendTime;
-                if (timeout >= model.timeout) {
-                    ToastUtil.toastLongMessage(BaseApplication.getInstance().getString(R.string.call_time_out));
-                } else {
-                    if (TextUtils.isEmpty(model.groupId)) {
-                        if (bean.chatType == V2TIMConversation.V2TIM_C2C) {
-                            // c2c 登录之后会同步消息，所以不需要主动调用通话界面
-                        } else {
-                            DemoLog.e(TAG, "group call but no group id");
-                        }
-                    } else {
-                        V2TIMSignalingInfo info = new V2TIMSignalingInfo();
-                        info.setInviteID(model.callId);
-                        info.setInviteeList(model.invitedList);
-                        info.setGroupID(model.groupId);
-                        info.setInviter(bean.sender);
-                        V2TIMManager.getSignalingManager().addInvitedSignaling(info, new V2TIMCallback() {
-
-                            @Override
-                            public void onError(int code, String desc) {
-                                DemoLog.e(TAG, "addInvitedSignaling code: " + code + " desc: " + desc);
-                            }
-
-                            @Override
-                            public void onSuccess() {
-                                ((TRTCAVCallImpl) (TRTCAVCallImpl.sharedInstance(BaseApplication.getInstance()))).
-                                        processInvite(model.callId, bean.sender, model.groupId, model.invitedList, bean.content);
-                            }
-                        });
-                        return true;
-                    }
-                }
+            IBaseLiveListener baseCallListener = TUIKitLiveListenerManager.getInstance().getBaseCallListener();
+            if (baseCallListener != null) {
+                baseCallListener.redirectCall(bean);
             }
         }
-        Intent intent = new Intent(BaseApplication.getInstance(), SplashActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        BaseApplication.getInstance().startActivity(intent);
         return true;
     }
 }

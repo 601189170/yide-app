@@ -69,6 +69,7 @@
                     android:paddingBottom="@dimen/dp_2"
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
+                    android:textStyle="bold"
                     app:drawableEndCompat="@mipmap/icon_down"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -80,6 +81,7 @@
                     android:layout_marginTop="@dimen/dp_18"
                     android:layout_marginEnd="@dimen/dp_20"
                     android:background="@drawable/bg_conrners_white_12"
+                    android:drawableStart="@mipmap/icon_weekly_left"
                     android:drawablePadding="@dimen/dp_8"
                     android:minWidth="@dimen/dp_60"
                     android:paddingStart="@dimen/dp_12"
@@ -88,7 +90,8 @@
                     android:paddingBottom="@dimen/dp_2"
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
-                    app:drawableEndCompat="@mipmap/icon_down"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@mipmap/icon_weekly_right"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,6 +105,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
+                        android:id="@+id/cl_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -172,14 +176,16 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
+                    android:id="@+id/tv_descs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_12"
                     android:layout_marginTop="25dp"
-                    android:text="@string/weekly_home_desc"
+                    android:layout_marginEnd="@dimen/dp_12"
                     android:textColor="#ffffffff"
                     android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
-                    app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

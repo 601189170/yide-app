@@ -15,7 +15,6 @@ import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.sdk.android.push.CloudPushService;
 import com.alibaba.sdk.android.push.CommonCallback;
 import com.alibaba.sdk.android.push.huawei.HuaWeiRegister;
@@ -24,12 +23,9 @@ import com.alibaba.sdk.android.push.impl.OppoMsgParseImpl;
 import com.alibaba.sdk.android.push.impl.VivoMsgParseImpl;
 import com.alibaba.sdk.android.push.impl.XiaoMiMsgParseImpl;
 import com.alibaba.sdk.android.push.noonesdk.PushServiceFactory;
-import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.alibaba.sdk.android.push.register.OppoRegister;
 import com.alibaba.sdk.android.push.register.ThirdPushManager;
 import com.alibaba.sdk.android.push.register.VivoRegister;
-import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.blankj.utilcode.util.Utils;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.heytap.msp.push.HeytapPushManager;
@@ -37,46 +33,33 @@ import com.huawei.hms.push.HmsMessaging;
 import com.meizu.cloud.pushsdk.PushManager;
 import com.meizu.cloud.pushsdk.util.MzSystemUtils;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
-import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
-import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.tencent.qcloud.tim.uikit.utils.TUIKitLog;
 import com.vivo.push.PushClient;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.chat.MessageNotification;
 import com.yyide.chatim.chat.helper.ConfigHelper;
-import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.UserInfo;
-import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
-import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.BrandUtil;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.PrivateConstants;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 import me.jessyan.autosize.AutoSize;
 import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.onAdaptListener;
 import me.jessyan.autosize.utils.AutoSizeLog;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * Created by Administrator on 2020/12/14.
@@ -146,7 +129,7 @@ public class BaseApplication extends Application {
         // 注册方法会自动判断是否支持小米系统推送，如不支持会跳过注册。
         final String XIAOMI_APPID = "2882303761519922795";
         final String XIAOMI_APPKEY = "5201992213795";
-        MiPushRegister.register(applicationContext, XIAOMI_APPID, XIAOMI_APPKEY);
+        //MiPushRegister.register(applicationContext, XIAOMI_APPID, XIAOMI_APPKEY);
         // vivo通道注册
         VivoRegister.register(applicationContext);
         // OPPO通道注册
@@ -193,7 +176,6 @@ public class BaseApplication extends Application {
          * @param sdkAppID 您在腾讯云注册应用时分配的sdkAppID
          * @param configs  TUIKit的相关配置项，一般使用默认即可，需特殊配置参考API文档
          */
-        TIMManager.getInstance();
         // bugly上报
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplicationContext());
         strategy.setAppVersion(V2TIMManager.getInstance().getVersion());
@@ -258,9 +240,8 @@ public class BaseApplication extends Application {
                         ThirdPushTokenMgr.getInstance().setThirdPushToken(token);
                     });
         }
-        if (!BrandUtil.isBrandHuawei()) {
-            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
-        }
+        registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
+        initSceneManager();
     }
 
     class StatisticActivityLifecycleCallback implements ActivityLifecycleCallbacks {
@@ -272,8 +253,8 @@ public class BaseApplication extends Application {
             public void onNewMessage(V2TIMMessage msg) {
                 //处理华为推送两条消息问题
                 DemoLog.i(TAG, "onNewMessage: " + msg.getMsgID());
-                MessageNotification notification = MessageNotification.getInstance();
-                notification.notify(msg);
+//                MessageNotification notification = MessageNotification.getInstance();
+//                notification.notify(msg);
             }
         };
 
@@ -360,6 +341,21 @@ public class BaseApplication extends Application {
         @Override
         public void onActivityDestroyed(Activity activity) {
 
+        }
+    }
+
+    private final String licenseUrl = "";
+    private final String licenseKey = "";
+    public static boolean isSceneEnable = false;
+
+    private void initSceneManager() {
+        try {
+            Class<?> classz = Class.forName("com.yyide.chatim.chat.scenes.SceneManager");
+            Method method = classz.getMethod("init", BaseApplication.class, String.class, String.class);
+            method.invoke(null, instance, licenseUrl, licenseKey);
+            isSceneEnable = true;
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            TUIKitLog.e(TAG, "initTUIKitLive error: " + e.getMessage());
         }
     }
 

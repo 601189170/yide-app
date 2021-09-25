@@ -6,6 +6,6 @@ class MMKVConstant {
         const val YD_SCHEDULE_HISTORY = "mmkv_schedule_history"
         const val YD_WEEKLY_PUSH_SETTING = "yd_weekly_push_setting"
         const val YD_SCHEDULE_PUSH_SETTING = "yd_schedule_push_setting"
-
+        const val YD_WEEKLY_DESC = "yd_weekly_desc"
     }
 }

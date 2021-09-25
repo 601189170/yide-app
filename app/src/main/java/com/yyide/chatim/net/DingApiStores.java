@@ -68,6 +68,7 @@ import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.UserSigRsp;
+import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
@@ -771,4 +772,11 @@ public interface DingApiStores {
     @POST("/management/cloud-system/app/schedule/saveSchedule")
     Call<BaseRsp> saveSchedule(@Body RequestBody requestBody);
 
+    /**
+     * 获取周报描述
+     *
+     * @return
+     */
+    @GET("/face/cloud-face/copywriter")
+    Observable<WeeklyDescBean> copywriter();
 }

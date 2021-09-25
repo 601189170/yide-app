@@ -74,17 +74,16 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         cd.setText(item.getLate() + " 人");
         qj.setText(item.getLeave() + " 人");
         number.setText(item.getNumber() + " 人");
-        PieChart piechart = view.findViewById(R.id.piechart);
-        piechart.setTouchEnabled(false);
-        InitPieChart.InitPieChart(((Activity) container.getContext()), piechart);
-        List<PieEntry> entries = new ArrayList<>();
         int absence = item.getAbsence();
         int leave = item.getLeave();
         int late = item.getLate();
         int applyNum = item.getApplyNum();
-
         absence = (absence + late + applyNum + leave) > 0 ? absence : 1;
 
+        PieChart piechart = view.findViewById(R.id.piechart);
+        piechart.setTouchEnabled(false);
+        InitPieChart.InitPieChart(((Activity) container.getContext()), piechart);
+        List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(absence, "缺勤"));
         entries.add(new PieEntry(item.getLeave(), "请假"));
         entries.add(new PieEntry(item.getLate(), "迟到"));
@@ -99,6 +98,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         PieData pieData = new PieData(dataSet);
         piechart.setData(pieData);
         piechart.invalidate();
+
         view.setOnClickListener(v -> {
             AttendanceActivity.start(view.getContext(), position);
         });

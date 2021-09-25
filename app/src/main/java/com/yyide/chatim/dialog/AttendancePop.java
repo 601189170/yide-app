@@ -78,11 +78,7 @@ public class AttendancePop extends PopupWindow {
                 ViewGroup.LayoutParams.MATCH_PARENT, true);
 
         popupWindow.setAnimationStyle(R.style.popwin_anim_style2);
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(false);
         popupWindow.setBackgroundDrawable(null);
-        popupWindow.getContentView().setFocusable(true);
-        popupWindow.getContentView().setFocusableInTouchMode(true);
         popupWindow.getContentView().setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (popupWindow != null && popupWindow.isShowing()) {

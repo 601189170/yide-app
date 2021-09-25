@@ -333,8 +333,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 context.finish();
                 break;
             case R.id.layout_push:
-                //context.startActivity(new Intent(context, PushSettingActivity.class));
-                context.startActivity(new Intent(context, WeeklyHomeActivity.class));
+                context.startActivity(new Intent(context, PushSettingActivity.class));
+//                context.startActivity(new Intent(context, WeeklyHomeActivity.class));
                 break;
         }
     }

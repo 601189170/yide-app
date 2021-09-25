@@ -79,7 +79,7 @@ public class GetUserSchoolRsp {
         }
 
         public boolean isSchool() {
-            return TYPE_PRESIDENT.equals(status);
+            return TYPE_PRESIDENT.equals(status) || TYPE_ADMIN.equals(status);
         }
 
         public boolean isParent() {
@@ -87,11 +87,7 @@ public class GetUserSchoolRsp {
         }
 
         public boolean isTeacherOrCharge() {
-            if (TYPE_CLASS_TEACHER.equals(status) || TYPE_TEACHER.equals(status)) {
-                return true;
-            } else {
-                return false;
-            }
+            return TYPE_CLASS_TEACHER.equals(status) || TYPE_TEACHER.equals(status);
         }
 
         /**

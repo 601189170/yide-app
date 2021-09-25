@@ -7,11 +7,6 @@
     android:background="#044FDB"
     tools:context=".activity.weekly.WeeklyHomeActivity">
 
-    <include
-        android:id="@+id/top"
-        layout="@layout/title_layout2"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_bottom"
         android:layout_width="match_parent"
@@ -37,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,6 +43,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/dp_30">
+
+                <ImageView
+                    android:id="@+id/ivBg"
+                    android:layout_width="match_parent"
+                    android:layout_height="256dp"
+                    android:layout_marginTop="@dimen/dp_32"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/icon_weekly_bg"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_event"
@@ -64,9 +68,17 @@
                     android:paddingBottom="@dimen/dp_2"
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
+                    android:textStyle="bold"
                     app:drawableEndCompat="@mipmap/icon_down"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
 
                 <TextView
                     android:id="@+id/tv_time"
@@ -75,6 +87,7 @@
                     android:layout_marginTop="@dimen/dp_18"
                     android:layout_marginEnd="@dimen/dp_20"
                     android:background="@drawable/bg_conrners_white_12"
+                    android:drawableStart="@mipmap/icon_weekly_left"
                     android:drawablePadding="@dimen/dp_8"
                     android:paddingStart="@dimen/dp_12"
                     android:paddingTop="@dimen/dp_2"
@@ -82,18 +95,11 @@
                     android:paddingBottom="@dimen/dp_2"
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
-                    app:drawableEndCompat="@mipmap/icon_down"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@mipmap/icon_weekly_right"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/ivBg"
-                    android:layout_width="match_parent"
-                    android:layout_height="256dp"
-                    android:layout_marginTop="@dimen/dp_32"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/icon_weekly_bg"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout"
@@ -105,6 +111,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
+                        android:id="@+id/cl_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -185,6 +192,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
+                    android:id="@+id/tv_descs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"

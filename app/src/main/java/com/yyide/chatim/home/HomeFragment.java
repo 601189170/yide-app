@@ -31,6 +31,8 @@ import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.nan.xarch.constant.MMKVKey;
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.BuildConfig;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
@@ -38,6 +40,7 @@ import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.base.MMKVConstant;
 import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.fragment.AttendanceTeacherFragment;
@@ -54,6 +57,7 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.TodoRsp;
+import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.TakePicUtil;
@@ -67,7 +71,10 @@ import org.objectweb.asm.Handle;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -143,6 +150,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         //mvpPresenter.getUserSchool();
         mvpPresenter.getHomeTodo();
         mvpPresenter.getNotice();
+        mvpPresenter.copywriter();
     }
 
     void initVerticalTextview() {
@@ -490,6 +498,18 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             } else {
                 tv_todo.setVisibility(View.GONE);
                 setData();
+            }
+        }
+    }
+
+    @Override
+    public void getCopywriter(WeeklyDescBean model) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            if (model.getData() != null && model.getData().size() > 0) {
+                List<String> data = model.getData();
+                Collections.addAll(data);//填充
+                Set<String> set = new HashSet<>(data);
+                MMKV.defaultMMKV().encode(MMKVConstant.YD_WEEKLY_DESC, set);
             }
         }
     }

@@ -11,6 +11,7 @@ import com.yyide.chatim.activity.attendance.AttendanceActivity
 import com.yyide.chatim.activity.attendance.StatisticsActivity
 import com.yyide.chatim.activity.leave.AskForLeaveActivity
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity
+import com.yyide.chatim.activity.weekly.WeeklyHomeActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.EventMessage
 import org.greenrobot.eventbus.EventBus
@@ -37,10 +38,10 @@ object JumpUtil {
                 mActivity.startActivity(intent)
             }
             "考勤" -> {
-                if(!SpData.getIdentityInfo().staffIdentity()){
+                if (!SpData.getIdentityInfo().staffIdentity()) {
                     val intent = Intent(mActivity, StatisticsActivity::class.java)
                     mActivity.startActivity(intent)
-                } else{
+                } else {
                     val intent = Intent(mActivity, AttendanceActivity::class.java)
                     mActivity.startActivity(intent)
                 }
@@ -48,6 +49,10 @@ object JumpUtil {
             "待办" -> {
                 EventBus.getDefault()
                     .post(EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1))
+            }
+            "周报" -> {
+                //context.startActivity(new Intent(context, PushSettingActivity.class));
+                mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
             }
             else -> if ("#" == url) {
                 ToastUtils.showShort("暂无权限")

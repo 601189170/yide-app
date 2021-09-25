@@ -1,5 +1,8 @@
 package com.yyide.chatim.chat;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.tencent.imsdk.v2.V2TIMConversation;
 import com.tencent.imsdk.v2.V2TIMGroupAtInfo;
 import com.tencent.imsdk.v2.V2TIMManager;
+import com.tencent.imsdk.v2.V2TIMMergerElem;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.imsdk.v2.V2TIMValueCallback;
 import com.tencent.qcloud.tim.uikit.base.BaseFragment;
@@ -20,9 +26,13 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.AudioPlayer;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.AbsChatLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatManagerKit;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.input.InputLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.MessageLayout;
+import com.tencent.qcloud.tim.uikit.modules.forward.ForwardSelectActivity;
+import com.tencent.qcloud.tim.uikit.modules.forward.base.ConversationBean;
 import com.tencent.qcloud.tim.uikit.modules.group.info.GroupInfo;
 import com.tencent.qcloud.tim.uikit.modules.group.info.StartGroupMemberSelectActivity;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
@@ -34,15 +44,10 @@ import com.yyide.chatim.chat.helper.ChatLayoutHelper;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import butterknife.BindView;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 
 
 public class ChatFragment extends BaseFragment {
@@ -62,6 +67,11 @@ public class ChatFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.chat_fragment, container, false);
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            return mBaseView;
+        }
+        mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
         return mBaseView;
     }
 
@@ -82,7 +92,7 @@ public class ChatFragment extends BaseFragment {
         MessageLayout messageLayout = mChatLayout.getMessageLayout();
         //获取单聊面板的标题栏
         mTitleBar = mChatLayout.getTitleBar();
-
+        InputLayout inputLayout = mChatLayout.getInputLayout();
         //单聊面板标记栏返回按钮点击事件，这里需要开发者自行控制
         mTitleBar.setOnLeftClickListener(view -> getActivity().finish());
         mTitleBar.setVisibility(GONE);
@@ -96,48 +106,61 @@ public class ChatFragment extends BaseFragment {
                 BaseApplication.getInstance().startActivity(intent);
             });
         }
+//        mChatLayout.setForwardSelectActivityListener(new AbsChatLayout.onForwardSelectActivityListener(){
+//            @Override
+//            public void onStartForwardSelectActivity(int mode, List<MessageInfo> msgIds) {
+//                mForwardMode = mode;
+//                mForwardSelectMsgInfos = msgIds;
+//
+//                Intent intent = new Intent(BaseApplication.getInstance(), ForwardSelectActivity.class);
+//                intent.putExtra(ForwardSelectActivity.FORWARD_MODE, mode);
+//                startActivityForResult(intent, TUIKitConstants.FORWARD_SELECT_ACTIVTY_CODE);
+//            }
+//        });
 
-        mChatLayout.getMessageLayout().setOnItemClickListener(new MessageLayout.OnItemClickListener() {
-            @Override
-            public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
-                //因为adapter中第一条为加载条目，位置需减1
-                mChatLayout.getMessageLayout().showItemPopMenu(position - 1, messageInfo, view);
-            }
+//        mChatLayout.getMessageLayout().setOnItemClickListener(new MessageLayout.OnItemLongClickListener() {
+//            @Override
+//            public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
+//                //因为adapter中第一条为加载条目，位置需减1
+//                mChatLayout.getMessageLayout().showItemPopMenu(position - 1, messageInfo, view);
+//            }
+//
+//            @Override
+//            public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
+//                if (null == messageInfo) {
+//                    return;
+//                }
 
-            @Override
-            public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
-                if (null == messageInfo) {
-                    return;
-                }
-                //先屏蔽点击事件
-//                ChatInfo info = new ChatInfo();
-//                info.setId(messageInfo.getFromUser());
-//                Intent intent = new Intent(MyApp.getInstance(), FriendProfileActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intent.putExtra(TUIKitConstants.ProfileType.CONTENT, info);
-//                MyApp.getInstance().startActivity(intent);
-            }
-        });
+//                V2TIMMergerElem mergerElem = messageInfo.getTimMessage().getMergerElem();
+//                if (mergerElem != null){
+//                    Intent intent = new Intent(BaseApplication.getInstance(), ForwardChatActivity.class);
+//                    Bundle bundle=new Bundle();
+//                    bundle.putSerializable(TUIKitConstants.FORWARD_MERGE_MESSAGE_KEY, messageInfo);
+//                    intent.putExtras(bundle);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    BaseApplication.getInstance().startActivity(intent);
+//                }else {
+//                    ChatInfo info = new ChatInfo();
+//                    info.setId(messageInfo.getFromUser());
+//                    Intent intent = new Intent(BaseApplication.getInstance(), FriendProfileActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra(TUIKitConstants.ProfileType.CONTENT, info);
+//                    BaseApplication.getInstance().startActivity(intent);
+//                }
+//            }
+//        });
 
-        mChatLayout.getInputLayout().setStartActivityListener(new InputLayout.onStartActivityListener() {
-            @Override
-            public void onStartGroupMemberSelectActivity() {
-                Intent intent = new Intent(BaseApplication.getInstance(), StartGroupMemberSelectActivity.class);
-                GroupInfo groupInfo = new GroupInfo();
-                groupInfo.setId(mChatInfo.getId());
-                groupInfo.setChatName(mChatInfo.getChatName());
-                intent.putExtra(TUIKitConstants.Group.GROUP_INFO, groupInfo);
-                startActivityForResult(intent, 1);
-            }
-
-            @Override
-            public boolean handleStartGroupLiveActivity() {
-                // 打开群直播
-                //LiveRoomAnchorActivity.start(BaseApplication.getInstance(), mChatInfo.getId());
-                // demo层对消息进行处理，不走默认的逻辑
-                return true;
-            }
-        });
+//        mChatLayout.getInputLayout().setStartActivityListener(new InputLayout.OnStartActivityListener() {
+//            @Override
+//            public void onStartGroupMemberSelectActivity() {
+//                Intent intent = new Intent(BaseApplication.getInstance(), StartGroupMemberSelectActivity.class);
+//                GroupInfo groupInfo = new GroupInfo();
+//                groupInfo.setId(mChatInfo.getId());
+//                groupInfo.setChatName(mChatInfo.getChatName());
+//                intent.putExtra(TUIKitConstants.Group.GROUP_INFO, groupInfo);
+//                startActivityForResult(intent, 1);
+//            }
+//        });
 
         if (false/*mChatInfo.getType() == V2TIMConversation.V2TIM_GROUP*/) {
             V2TIMManager.getConversationManager().getConversation(mChatInfo.getId(), new V2TIMValueCallback<V2TIMConversation>() {
@@ -157,30 +180,33 @@ public class ChatFragment extends BaseFragment {
                     final V2TIMMessage lastMessage = v2TIMConversation.getLastMessage();
 
                     updateAtInfoLayout();
-                    mChatLayout.getAtInfoLayout().setOnClickListener(v -> {
-                        final List<V2TIMGroupAtInfo> atInfoList = mChatInfo.getAtInfoList();
-                        if (atInfoList == null || atInfoList.isEmpty()) {
-                            mChatLayout.getAtInfoLayout().setVisibility(GONE);
-                            return;
-                        } else {
-                            mChatLayout.getChatManager().getAtInfoChatMessages(atInfoList.get(atInfoList.size() - 1).getSeq(), lastMessage, new IUIKitCallBack() {
-                                @Override
-                                public void onSuccess(Object data) {
-                                    mChatLayout.getMessageLayout().scrollToPosition((int) atInfoList.get(atInfoList.size() - 1).getSeq());
-                                    LinearLayoutManager mLayoutManager = (LinearLayoutManager) mChatLayout.getMessageLayout().getLayoutManager();
-                                    mLayoutManager.scrollToPositionWithOffset((int) atInfoList.get(atInfoList.size() - 1).getSeq(), 0);
+                    mChatLayout.getAtInfoLayout().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final List<V2TIMGroupAtInfo> atInfoList = mChatInfo.getAtInfoList();
+                            if (atInfoList == null || atInfoList.isEmpty()) {
+                                mChatLayout.getAtInfoLayout().setVisibility(GONE);
+                                return;
+                            } else {
+                                mChatLayout.getChatManager().getAtInfoChatMessages(atInfoList.get(atInfoList.size() - 1).getSeq(), lastMessage, new IUIKitCallBack() {
+                                    @Override
+                                    public void onSuccess(Object data) {
+                                        mChatLayout.getMessageLayout().scrollToPosition((int) atInfoList.get(atInfoList.size() - 1).getSeq());
+                                        LinearLayoutManager mLayoutManager = (LinearLayoutManager) mChatLayout.getMessageLayout().getLayoutManager();
+                                        mLayoutManager.scrollToPositionWithOffset((int) atInfoList.get(atInfoList.size() - 1).getSeq(), 0);
 
-                                    atInfoList.remove(atInfoList.size() - 1);
-                                    mChatInfo.setAtInfoList(atInfoList);
+                                        atInfoList.remove(atInfoList.size() - 1);
+                                        mChatInfo.setAtInfoList(atInfoList);
 
-                                    updateAtInfoLayout();
-                                }
+                                        updateAtInfoLayout();
+                                    }
 
-                                @Override
-                                public void onError(String module, int errCode, String errMsg) {
-                                    DemoLog.d(TAG, "getAtInfoChatMessages failed");
-                                }
-                            });
+                                    @Override
+                                    public void onError(String module, int errCode, String errMsg) {
+                                        DemoLog.d(TAG, "getAtInfoChatMessages failed");
+                                    }
+                                });
+                            }
                         }
                     });
                 }
@@ -246,6 +272,7 @@ public class ChatFragment extends BaseFragment {
         }
 
         return atInfoType;
+
     }
 
     @Override
@@ -270,8 +297,9 @@ public class ChatFragment extends BaseFragment {
         }
         initView();
 
-        // TODO 通过api设置ChatLayout各种属性的样例 语音通话  视频通话
+        // TODO 通过api设置ChatLayout各种属性的样例
         ChatLayoutHelper helper = new ChatLayoutHelper(getActivity());
+        helper.setGroupId(mChatInfo.getId());
         helper.customizeChatLayout(mChatLayout);
     }
 

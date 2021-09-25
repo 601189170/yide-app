@@ -50,7 +50,6 @@ import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.UnreadCountTextView;
-import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.vivo.push.IPushActionListener;
 import com.vivo.push.PushClient;
@@ -60,6 +59,8 @@ import com.yyide.chatim.alipush.NotifyUtil;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.base.MMKVConstant;
+import com.yyide.chatim.chat.helper.IBaseLiveListener;
+import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager;
 import com.yyide.chatim.fragment.schedule.ScheduleFragment;
 import com.yyide.chatim.home.AppFragment;
 import com.yyide.chatim.home.HelpFragment;
@@ -80,7 +81,6 @@ import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
 import com.yyide.chatim.thirdpush.OPPOPushImpl;
-import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr;
 import com.yyide.chatim.utils.BrandUtil;
 import com.yyide.chatim.utils.Constants;
@@ -312,6 +312,16 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         HUAWEIHmsMessageService.updateBadge(this, count);
     }
 
+    private void handleOfflinePush() {
+        boolean isFromOfflinePush = getIntent().getBooleanExtra(Constants.IS_OFFLINE_PUSH_JUMP, false);
+        if (isFromOfflinePush) {
+            IBaseLiveListener baseLiveListener = TUIKitLiveListenerManager.getInstance().getBaseCallListener();
+            if (baseLiveListener != null) {
+                baseLiveListener.handleOfflinePushCall(getIntent());
+            }
+        }
+    }
+
     private int messageCount = 0;//消息数量
     private int noticeCount = 0;//消息通知数量
     private int todoCount = 0;//代办数量
@@ -427,6 +437,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             mCallModel = null;
         }
         GSYVideoManager.onResume();
+        handleOfflinePush();
     }
 
     /**
@@ -624,10 +635,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             @Override
             public void onSuccess(Object data) {
                 //腾讯IM离线调度
-                OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());
-                 if (bean != null) {
-                    OfflineMessageDispatcher.redirect(bean);
-                }
+//                OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(getIntent());
+//                 if (bean != null) {
+//                    OfflineMessageDispatcher.redirect(bean);
+//                }
+                prepareThirdPushToken();
                 SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
                 SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
                 UserInfo.getInstance().setAutoLogin(true);

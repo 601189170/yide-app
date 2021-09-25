@@ -3,63 +3,136 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/SDK/platforms/android-29/data/res/drawable/progress_horizontal.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable-v24/drawable_material_button_radius_22.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_F7F9FA_conners2.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_blue.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_blue_conners2.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_book_conners2.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_conrners_green_20.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_conrners_white_12.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_conrners_white_4.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_7585A2_20.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_blue.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_blue_2.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_blue_4.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_gray_2.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_gray_week_22.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_green100.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_corners_green_20.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/bg_exit.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/blue_border_1dp.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/border_1dp_radius_18.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/circular_blue.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/item_schedule_search_filter.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/lefttop_leftbottom_wihte_10dp.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/parents_attendance.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progress.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progress_bar_ct.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progress_bg.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progress_bg2.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progress_bg3.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progress_bg_vertical.xml" value="0.3835616438356164" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progressbar_h1.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/progressbar_h_shape1.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/radius_f7f7f7_4dp.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/ripple_corrugated.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/schedule_add_label_selector.xml" value="0.15" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/schedule_list_item_bg_shape.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/schedule_time.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/shape_line.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/shape_list.xml" value="0.3726027397260274" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/drawable/tag_.xml" value="0.3726027397260274" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_attendance_class_student.xml" value="0.3416666666666667" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_book_search.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_main.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_message_notice_layout.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_note_layout.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_notice_layout.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_notice_release_personnel.xml" value="0.337037037037037" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_photo_view_sample.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_push_setting.xml" value="0.36342592592592593" />
-        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_schedule_search.xml" value="0.264" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_schedule_search.xml" value="0.1" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_splash.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_weekly_details.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/activity_weekly_home.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/attce_item.xml" value="0.3416666666666667" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/chat_fragment.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/contact_friend_profile_activity.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/conversation_fragment.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/dialog_add_schedule_input.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/dialog_week_messge.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/dialog_weekly_chart_desc.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/dialog_weekly_top.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_attendance.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_attendance_school.xml" value="0.3416666666666667" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_homework_weekly_details.xml" value="0.4" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_notice_my_recevied_list.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_notice_personnel_list.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_parents_weekly.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_request_leave_student.xml" value="0.264" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_schedule.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_attendance_weekly_details.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_homework_weekly_details.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_master_attendance.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_student_child_weekly_attendance.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_teacher_attendance.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_teacher_child_weekly_attendance.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_teacher_weekly_attendance.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_school_weekly.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_teacher_attendance_weekly.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_teacher_charge_weekly.xml" value="0.37453703703703706" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_teacher_child_weekly_attendance.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_teacher_homework_chart_weekly.xml" value="0.4" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_teacher_homework_data_weekly.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/fragment_teacher_homework_weekly.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/home_attence_fragmnet.xml" value="0.3416666666666667" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/home_fragmnet.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_address_book.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_address_book_member.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_attendance_day_statistics.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_attendance_parents.xml" value="0.3416666666666667" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_attendance_school.xml" value="0.3416666666666667" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_dialog_add_label.xml" value="0.13564814814814816" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_hot.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_progress_h.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_schedule_search.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_schedule_search_filter_tag.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_schedule_search_history.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_search_history.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_time_select.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_weekly_attendance.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_weekly_charts_columnar.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_weekly_charts_vertical.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_weekly_menu.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_weekly_progress_h.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/item_weekly_teacher_comments.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_blank_page.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_blank_page2.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_bttom_notice_time_pop.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_bttom_pop.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_leftuser_pop.xml" value="0.3584474885844749" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_schedule_search_filter.xml" value="0.264" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_teacher_charge_banner.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_attendance.xml" value="0.37453703703703706" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_attendance_h.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_charts_ver.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_charts_vertical.xml" value="0.4" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_desc.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_homeword.xml" value="0.37453703703703706" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_homework_summary.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_parents_attendance.xml" value="0.4" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_parents_homework_statistical.xml" value="0.4" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_parents_homework_statistical_.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_school_attendance.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_summary.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_teacher_charge_attendance.xml" value="0.36342592592592593" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/layout_weekly_teacher_comments.xml" value="0.36342592592592593" />
         <entry key="..\:/workspace/yideapp/app/src/main/res/layout/login_for_dev_activity.xml" value="0.3584474885844749" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/title_layout2.xml" value="0.3416666666666667" />
+        <entry key="..\:/workspace/yideapp/app/src/main/res/layout/work_fragmnet.xml" value="0.13564814814814816" />
+        <entry key="..\:/workspace/yideapp/tuikit/src/main/res/layout/audiocall_activity_call_history.xml" value="0.13564814814814816" />
+        <entry key="..\:/workspace/yideapp/tuikit/src/main/res/layout/chat_layout.xml" value="0.36342592592592593" />
       </map>
     </option>
   </component>

@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import com.tencent.imsdk.v2.V2TIMConversation;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.imsdk.v2.V2TIMOfflinePushInfo;
-import com.tencent.liteav.model.CallModel;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
@@ -24,7 +23,8 @@ import com.tencent.qcloud.tim.uikit.utils.TUIKitUtils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SplashActivity;
+import com.yyide.chatim.chat.helper.IBaseLiveListener;
+import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
@@ -60,13 +60,6 @@ public class MessageNotification {
         return sNotification;
     }
 
-    public void cancelNotification() {
-        if (mManager != null) {
-            mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
-            mManager.cancel(NOTIFICATION_CHANNEL_COMMON, NOTIFICATION_ID_COMMON);
-        }
-    }
-
     private void createNotificationChannel(boolean isDialing) {
         if (mManager == null) {
             return;
@@ -98,10 +91,10 @@ public class MessageNotification {
         }
         mHandler.removeCallbacksAndMessages(null);
 
-        CallModel callModel = CallModel.convert2VideoCallData(msg);
         boolean isDialing = false;
-        if (callModel != null && callModel.action == CallModel.VIDEO_CALL_ACTION_DIALING) {
-            isDialing = true;
+        IBaseLiveListener baseCallListener = TUIKitLiveListenerManager.getInstance().getBaseCallListener();
+        if (baseCallListener != null) {
+            isDialing = baseCallListener.isDialingMessage(msg);
         }
         DemoLog.e(TAG, "isDialing: " + isDialing);
 
@@ -122,7 +115,7 @@ public class MessageNotification {
             } else {
                 builder = new Notification.Builder(mContext, NOTIFICATION_CHANNEL_COMMON);
             }
-            //builder.setTimeoutAfter(DIALING_DURATION);
+            builder.setTimeoutAfter(DIALING_DURATION);
         } else {
             builder = new Notification.Builder(mContext);
         }
@@ -161,7 +154,7 @@ public class MessageNotification {
         // 小米手机需要在设置里面把【云通信IM】的"后台弹出权限"打开才能点击Notification跳转。
         if (isDialing) {
             launch = new Intent(mContext, MainActivity.class);
-            launch.putExtra(Constants.CHAT_INFO, callModel);
+            launch = baseCallListener.putCallExtra(launch, Constants.CHAT_INFO, msg);
             launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         } else {
             ChatInfo chatInfo = new ChatInfo();
@@ -175,37 +168,38 @@ public class MessageNotification {
             chatInfo.setChatName(title);
             launch = new Intent(mContext, ChatActivity.class);
             launch.putExtra(Constants.CHAT_INFO, chatInfo);
+            launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(mContext,
-                (int) SystemClock.uptimeMillis(), launch, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
+        builder.setContentIntent(PendingIntent.getActivity(mContext,
+                (int) SystemClock.uptimeMillis(), launch, PendingIntent.FLAG_UPDATE_CURRENT));
 
         Notification notification = builder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        builder.setAutoCancel(true);
         if (isDialing) {
             notification.flags = Notification.FLAG_INSISTENT;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 notification.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                 notification.vibrate = new long[]{0, 1000, 1000, 1000, 1000};
                 // 避免对端应用死掉导致本端一直响铃
-                mHandler.postDelayed(() -> {
-                    mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
-                    builder.setContentText(BaseApplication.getInstance().getString(R.string.call_nos));
-                    Notification lastNotification = builder.build();
-                    lastNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-                    lastNotification.defaults = Notification.DEFAULT_ALL;
-                    mManager.notify(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL, lastNotification);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
+                        builder.setContentText(BaseApplication.getInstance().getString(R.string.call_nos));
+                        Notification lastNotification = builder.build();
+                        lastNotification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+                        lastNotification.defaults = Notification.DEFAULT_ALL;
+                        mManager.notify(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL, lastNotification);
+                    }
                 }, DIALING_DURATION);
             }
         } else {
             mManager.cancel(NOTIFICATION_CHANNEL_CALL, NOTIFICATION_ID_CALL);
-            //notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+            notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 notification.defaults = Notification.DEFAULT_ALL;
             }
         }
+
         mManager.notify(tag, id, notification);
     }
 

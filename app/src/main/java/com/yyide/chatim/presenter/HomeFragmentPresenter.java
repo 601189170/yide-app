@@ -11,6 +11,7 @@ import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UploadRep;
+import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.HomeFragmentView;
 
@@ -100,6 +101,25 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
             @Override
             public void onSuccess(ResultBean model) {
                 mvpView.confirmNotice(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void copywriter() {
+        addSubscription(dingApiStores.copywriter(), new ApiCallback<WeeklyDescBean>() {
+            @Override
+            public void onSuccess(WeeklyDescBean model) {
+                mvpView.getCopywriter(model);
             }
 
             @Override

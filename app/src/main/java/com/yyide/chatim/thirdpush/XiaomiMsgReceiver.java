@@ -12,6 +12,7 @@ import com.xiaomi.mipush.sdk.MiPushMessage;
 import com.xiaomi.mipush.sdk.PushMessageReceiver;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.SplashActivity;
+import com.yyide.chatim.chat.ChatActivity;
 import com.yyide.chatim.utils.DemoLog;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class XiaomiMsgReceiver extends PushMessageReceiver {
             DemoLog.w(TAG, "onNotificationMessageClicked: no extra data found");
             return;
         }
-        Intent intent = new Intent(BaseApplication.getInstance(), SplashActivity.class);
+        Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
         intent.putExtra("ext", ext);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         BaseApplication.getInstance().startActivity(intent);

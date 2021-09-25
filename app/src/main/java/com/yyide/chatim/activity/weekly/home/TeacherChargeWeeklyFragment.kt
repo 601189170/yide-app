@@ -10,16 +10,25 @@ import android.widget.PopupWindow
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.tencent.mmkv.MMKV
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.weekly.home.viewmodel.SchoolViewModel
+import com.yyide.chatim.activity.weekly.home.viewmodel.TeacherViewModel
+import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.DialogWeekMessgeBinding
 import com.yyide.chatim.databinding.FragmentTeacherChargeWeeklyBinding
+import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.dialog.WeeklyTopPop
+import com.yyide.chatim.model.AttendanceCheckRsp
+import com.yyide.chatim.utils.DateUtils
+import java.util.HashSet
 
 
 /**
@@ -31,6 +40,7 @@ import com.yyide.chatim.dialog.WeeklyTopPop
 class TeacherChargeWeeklyFragment : Fragment() {
 
     private lateinit var viewBinding: FragmentTeacherChargeWeeklyBinding
+    private val viewModel: TeacherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,23 +62,44 @@ class TeacherChargeWeeklyFragment : Fragment() {
     }
 
     private fun initView() {
+        request()
+        viewBinding.tvEvent.text = "事件"
+        viewBinding.tvDescs.text = WeeklyUtil.getDesc()
         viewBinding.tvEvent.setOnClickListener {
-            val dialog = WeeklyTopPop(activity, viewBinding.tvEvent)
-            dialog.setOnSelectDialogMenu(object : WeeklyTopPop.DialogMenu {
-                override fun onClickMenuListener(id: Long) {
-                    ToastUtils.showShort("Event")
-                }
-            })
+            val attendancePop = AttendancePop(activity, adapterEvent, "请选择考勤事件")
+            attendancePop.setOnSelectListener { index: Int ->
+                this.index = index
+                viewBinding.tvEvent.text = adapterEvent.getItem(index).toString()
+            }
         }
+
+        viewBinding.tvTime.text = "9-24 10:28"
         viewBinding.tvTime.setOnClickListener {
-            val dialog = WeeklyTopPop(activity, viewBinding.tvTime)
-            dialog.setOnSelectDialogMenu(object : WeeklyTopPop.DialogMenu {
-                override fun onClickMenuListener(id: Long) {
-                    ToastUtils.showShort("Time")
-                }
-            })
+            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
+            attendancePop.setOnSelectListener { index: Int ->
+                this.indexDate = index
+                viewBinding.tvTime.text = adapterDate.getItem(index).toString()
+            }
         }
         initChart()
+    }
+
+    private fun request() {
+        viewModel.teacherLiveData.observe(viewLifecycleOwner) {
+            val bean = it.getOrNull()
+            if (null != bean) {
+                viewBinding.clContent.visibility = View.VISIBLE
+                viewBinding.cardViewNoData.visibility = View.GONE
+            } else {//接口返回空的情况处理
+                viewBinding.clContent.visibility = View.GONE
+                viewBinding.cardViewNoData.visibility = View.VISIBLE
+            }
+        }
+        val startData = DateUtils.getDate(DateUtils.getBeginDayOfWeek().time)
+        val endData = DateUtils.getDate(System.currentTimeMillis())
+        var classId = ""
+        var teacherId = ""
+        viewModel.requestTeacherWeekly(classId, teacherId, startData, endData)
     }
 
     private fun initChart() {
@@ -86,16 +117,11 @@ class TeacherChargeWeeklyFragment : Fragment() {
             //show(view, chartsAdapter.getItem(position), 60)
         }
         val datas = mutableListOf<String>()
-        datas.add("dfsafd1")
-        datas.add("dfsafd2")
-        datas.add("dfsafd3")
-        datas.add("dfsafd4")
-        datas.add("dfsafd5")
-        datas.add("dfsafd1")
-        datas.add("dfsafd2")
-        datas.add("dfsafd3")
-        datas.add("dfsafd4")
-        datas.add("dfsafd5")
+        datas.add("考勤考勤1")
+        datas.add("考勤考勤2")
+        datas.add("考勤考勤3")
+        datas.add("考勤考勤4")
+        datas.add("考勤考勤5")
         chartsAdapter.setList(datas)
     }
 
@@ -123,6 +149,42 @@ class TeacherChargeWeeklyFragment : Fragment() {
             (location[0]) - inflate.root.width / 2,
             location[1] - inflate.root.height
         )
+    }
+
+    private var index = -1
+    private val adapterEvent = object :
+        BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?, BaseViewHolder>(R.layout.swich_class_item) {
+        override fun convert(
+            holder: BaseViewHolder,
+            item: AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?
+        ) {
+            holder.setText(R.id.className, item?.attName)
+            holder.getView<View>(R.id.select).visibility =
+                if (index == holder.layoutPosition) View.VISIBLE else View.GONE
+            if (this.itemCount - 1 == holder.layoutPosition) {
+                holder.getView<View>(R.id.view_line).visibility = View.GONE
+            } else {
+                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private var indexDate = -1
+    private val adapterDate = object :
+        BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?, BaseViewHolder>(R.layout.swich_class_item) {
+        override fun convert(
+            holder: BaseViewHolder,
+            item: AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?
+        ) {
+            holder.setText(R.id.className, item?.attName)
+            holder.getView<View>(R.id.select).visibility =
+                if (indexDate == holder.layoutPosition) View.VISIBLE else View.GONE
+            if (this.itemCount - 1 == holder.layoutPosition) {
+                holder.getView<View>(R.id.view_line).visibility = View.GONE
+            } else {
+                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
+            }
+        }
     }
 
     private var selectPosition = -1

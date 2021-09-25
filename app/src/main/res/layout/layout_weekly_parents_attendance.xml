@@ -47,7 +47,7 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="@dimen/dp_12"
                 android:paddingBottom="3dp"
-                android:text="本周全校学生出勤率"
+                android:text="出入校"
                 android:textColor="#ff1e1e1e"
                 android:textSize="13sp"
                 android:textStyle="bold"
@@ -88,9 +88,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
             <TextView
+                android:id="@+id/tv_attendance_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_10"
                 android:text="08/01-08/07"
                 android:textColor="#ff1e1e1e"
                 android:textSize="15sp"
@@ -221,7 +222,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tv_attendance_number"
+                        android:id="@+id/zt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_8"
