@@ -33,6 +33,8 @@ class ScheduleRepetitionActivity : BaseActivity() {
         val stringExtra = intent.getStringExtra("data")
         val selectedRepetition = JSON.parseObject(stringExtra, Repetition::class.java)
         if (selectedRepetition != null){
+            title = selectedRepetition.title
+            rule = selectedRepetition.rule
             list.forEach {
                 it.checked = it.rule == selectedRepetition.rule
             }
@@ -84,6 +86,9 @@ class ScheduleRepetitionActivity : BaseActivity() {
 
         scheduleRepetitionBinding.clCustom.setOnClickListener {
             val intent = Intent(this, ScheduleCustomRepetitionActivity::class.java)
+            list.filter { it.checked }.ifEmpty {
+                intent.putExtra("rule",rule)
+            }
             startActivityForResult(intent, REQUEST_CODE_CUSTOM_REPETITION)
         }
     }

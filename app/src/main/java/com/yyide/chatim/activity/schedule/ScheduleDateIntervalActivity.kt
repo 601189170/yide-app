@@ -32,30 +32,23 @@ class ScheduleDateIntervalActivity : BaseActivity() {
         }
         val startTime = intent.getStringExtra("startTime")
         val endTime = intent.getStringExtra("endTime")
-        val ids: IntArray = binding.groupDateStart.referencedIds
-        for (id in ids) {
-            findViewById<View>(id).setOnClickListener { v: View? ->
-                if (binding.llVLine.visibility == View.GONE) {
-                    binding.llVLine.visibility = View.VISIBLE
-                    binding.dateTimePicker.visibility = View.VISIBLE
-                }
-                binding.vDateTopMarkLeft.visibility = View.VISIBLE
-                binding.vDateTopMarkRight.visibility = View.INVISIBLE
-                binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateStart.get(),""))
+        binding.clStartTime.setOnClickListener {
+            if (binding.llVLine.visibility == View.GONE) {
+                binding.llVLine.visibility = View.VISIBLE
+                binding.dateTimePicker.visibility = View.VISIBLE
             }
+            binding.vDateTopMarkLeft.visibility = View.VISIBLE
+            binding.vDateTopMarkRight.visibility = View.INVISIBLE
+            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateStart.get(),""))
         }
-
-        val ids2: IntArray = binding.groupDateEnd.referencedIds
-        for (id in ids2) {
-            findViewById<View>(id).setOnClickListener { v: View? ->
-                if (binding.llVLine.visibility == View.GONE) {
-                    binding.llVLine.visibility = View.VISIBLE
-                    binding.dateTimePicker.visibility = View.VISIBLE
-                }
-                binding.vDateTopMarkLeft.visibility = View.INVISIBLE
-                binding.vDateTopMarkRight.visibility = View.VISIBLE
-                binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateEnd.get(),""))
+        binding.clEndTime.setOnClickListener {
+            if (binding.llVLine.visibility == View.GONE) {
+                binding.llVLine.visibility = View.VISIBLE
+                binding.dateTimePicker.visibility = View.VISIBLE
             }
+            binding.vDateTopMarkLeft.visibility = View.INVISIBLE
+            binding.vDateTopMarkRight.visibility = View.VISIBLE
+            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateEnd.get(),""))
         }
         binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {

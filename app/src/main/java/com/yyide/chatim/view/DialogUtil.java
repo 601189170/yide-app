@@ -78,6 +78,7 @@ import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -566,6 +567,16 @@ public class DialogUtil {
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         final List<Repetition> list = Repetition.Companion.getList();
+        final Repetition value = scheduleEditViewModel.getRepetitionLiveData().getValue();
+        if (value != null){
+            for (Repetition repetition : list) {
+                repetition.setChecked(Objects.equals(repetition.getRule(), value.getRule()));
+            }
+            if (list.stream().noneMatch(Repetition::getChecked)) {
+                binding.ivNotRemind.setImageResource(R.drawable.schedule_remind_selected_icon);
+            }
+        }
+
         BaseQuickAdapter adapter = new BaseQuickAdapter<Repetition, BaseViewHolder>(R.layout.item_dialog_schedule_remind_list) {
 
             @Override
@@ -578,6 +589,7 @@ public class DialogUtil {
                         repetition1.setChecked(false);
                     }
                     repetition.setChecked(true);
+                    binding.ivNotRemind.setImageResource(R.drawable.schedule_arrow_right);
                     notifyDataSetChanged();
                 });
             }
@@ -620,6 +632,17 @@ public class DialogUtil {
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         final List<Remind> list = Remind.Companion.getList();
+        final Remind value = scheduleEditViewModel.getRemindLiveData().getValue();
+        if (value != null) {
+            //反选
+            binding.ivNotRemind.setVisibility(View.GONE);
+            for (Remind remind : list) {
+                remind.setChecked(Objects.equals(remind.getId(), value.getId()));
+            }
+            if (TextUtils.isEmpty(value.getId())) {
+                binding.ivNotRemind.setVisibility(View.VISIBLE);
+            }
+        }
         BaseQuickAdapter adapter = new BaseQuickAdapter<Remind, BaseViewHolder>(R.layout.item_dialog_schedule_remind_list) {
 
             @Override
@@ -685,28 +708,32 @@ public class DialogUtil {
         binding.clRepetition.setOnClickListener(v -> {
             showRepetitionScheduleDialog(context,scheduleEditViewModel);
         });
-        int[] ids = binding.groupDateStart.getReferencedIds();
-        for (int id : ids) {
-            rootView.findViewById(id).setOnClickListener(v -> {
-                if (binding.llVLine.getVisibility() == View.GONE) {
-                    binding.llVLine.setVisibility(View.VISIBLE);
-                    binding.dateTimePicker.setVisibility(View.VISIBLE);
-                }
-                binding.vDateTopMarkLeft.setVisibility(View.VISIBLE);
-                binding.vDateTopMarkRight.setVisibility(View.INVISIBLE);
-            });
-        }
-
-        int[] ids2 = binding.groupDateEnd.getReferencedIds();
-        for (int id : ids2) {
-            rootView.findViewById(id).setOnClickListener(v -> {
-                if (binding.llVLine.getVisibility() == View.GONE) {
-                    binding.llVLine.setVisibility(View.VISIBLE);
-                    binding.dateTimePicker.setVisibility(View.VISIBLE);
-                }
-                binding.vDateTopMarkLeft.setVisibility(View.INVISIBLE);
-                binding.vDateTopMarkRight.setVisibility(View.VISIBLE);
-            });
+        binding.clStartTime.setOnClickListener(v -> {
+            if (binding.llVLine.getVisibility() == View.GONE) {
+                binding.llVLine.setVisibility(View.VISIBLE);
+                binding.dateTimePicker.setVisibility(View.VISIBLE);
+            }
+            binding.vDateTopMarkLeft.setVisibility(View.VISIBLE);
+            binding.vDateTopMarkRight.setVisibility(View.INVISIBLE);
+            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateStart.get(),""));
+        });
+        binding.clEndTime.setOnClickListener(v -> {
+            if (binding.llVLine.getVisibility() == View.GONE) {
+                binding.llVLine.setVisibility(View.VISIBLE);
+                binding.dateTimePicker.setVisibility(View.VISIBLE);
+            }
+            binding.vDateTopMarkLeft.setVisibility(View.INVISIBLE);
+            binding.vDateTopMarkRight.setVisibility(View.VISIBLE);
+            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateEnd.get(),""));
+        });
+        final Boolean allDay = scheduleEditViewModel.getAllDayLiveData().getValue();
+        final String startTime = scheduleEditViewModel.getStartTimeLiveData().getValue();
+        final String endTime = scheduleEditViewModel.getEndTimeLiveData().getValue();
+        if (allDay != null && allDay){
+            binding.checkBox.setChecked(true);
+            binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2);
+            binding.tvTimeStart.setVisibility(View.GONE);
+            binding.tvTimeEnd.setVisibility(View.GONE);
         }
         binding.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             //设置是否全天
@@ -741,26 +768,41 @@ public class DialogUtil {
                 dateEnd.set(date);
             } else {
                 //第一次设置两边的数据
-                binding.tvDateStart.setText(time);
-                if (!binding.checkBox.isChecked()) {
-                    binding.tvTimeStart.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                if (TextUtils.isEmpty(startTime)) {
+                    binding.tvDateStart.setText(time);
+                    if (!binding.checkBox.isChecked()) {
+                        binding.tvTimeStart.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                    }
+                    dateStart.set(date);
+                } else {
+                    binding.tvDateStart.setText(DateUtils.formatTime(startTime, "", "", true));
+                    if (!binding.checkBox.isChecked()) {
+                        binding.tvTimeStart.setText(DateUtils.formatTime(startTime, "", "HH:mm"));
+                    }
+                    dateStart.set(startTime);
                 }
-                binding.tvDateEnd.setText(time);
-                if (!binding.checkBox.isChecked()) {
-                    binding.tvTimeEnd.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                if (TextUtils.isEmpty(endTime)) {
+                    binding.tvDateEnd.setText(time);
+                    if (!binding.checkBox.isChecked()) {
+                        binding.tvTimeEnd.setText(DateUtils.formatTime(date, "", "HH:mm"));
+                    }
+                    dateEnd.set(date);
+                } else {
+                    binding.tvDateEnd.setText(DateUtils.formatTime(endTime, "", "", true));
+                    if (!binding.checkBox.isChecked()) {
+                        binding.tvTimeEnd.setText(DateUtils.formatTime(endTime, "", "HH:mm"));
+                    }
+                    dateEnd.set(endTime);
                 }
-                dateStart.set(date);
-                dateEnd.set(date);
             }
 
             return null;
         });
 
         binding.tvFinish.setOnClickListener(v -> {
-            final String startTime = dateStart.get();
-            final String endTime = dateEnd.get();
-            scheduleEditViewModel.getStartTimeLiveData().setValue(startTime);
-            scheduleEditViewModel.getEndTimeLiveData().setValue(endTime);
+            scheduleEditViewModel.getStartTimeLiveData().setValue(dateStart.get());
+            scheduleEditViewModel.getEndTimeLiveData().setValue(dateEnd.get());
+            scheduleEditViewModel.getAllDayLiveData().setValue(binding.checkBox.isChecked());
             mDialog.dismiss();
         });
 
@@ -940,6 +982,14 @@ public class DialogUtil {
         viewModel.getLabelList().observe(lifecycleOwner, dataBeans -> {
             labelList.clear();
             labelList.addAll(dataBeans);
+            final List<LabelListRsp.DataBean> value = scheduleEditViewModel.getLabelListLiveData().getValue();
+            if (value != null) {
+                for (LabelListRsp.DataBean dataBean : labelList) {
+                    if (value.stream().map(LabelListRsp.DataBean::getId).collect(Collectors.toList()).contains(dataBean.getId())) {
+                        dataBean.setChecked(true);
+                    }
+                }
+            }
             adapter.setList(labelList);
         });
         mDialog.setOnShowListener(dialog -> {
