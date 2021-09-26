@@ -448,6 +448,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 .add("client_id", "yide-cloud")
                 .add("grant_type", "password")
                 .add("client_secret", "yide1234567")
+                .add("version", "2")
                 .add("username", username)
                 .add("password", password)
                 .build();

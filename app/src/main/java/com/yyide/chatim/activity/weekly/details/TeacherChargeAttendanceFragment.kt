@@ -17,10 +17,11 @@ import com.yyide.chatim.databinding.FragmentSchoolTeacherWeeklyAttendanceBinding
 class TeacherChargeAttendanceFragment : Fragment() {
 
     private lateinit var viewBinding: FragmentSchoolTeacherWeeklyAttendanceBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

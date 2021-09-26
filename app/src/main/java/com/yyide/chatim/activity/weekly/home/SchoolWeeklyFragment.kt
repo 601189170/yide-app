@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.weekly.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +19,7 @@ import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentSchoolWeeklyBinding
 import com.yyide.chatim.databinding.ItemWeeklyChartsVerticalBinding
 import com.yyide.chatim.dialog.AttendancePop
-import com.yyide.chatim.model.Attend
-import com.yyide.chatim.model.Summary
-import com.yyide.chatim.model.Work
+import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
 
 /**
@@ -69,8 +68,8 @@ class SchoolWeeklyFragment : BaseFragment() {
                 //考勤
                 initAttendance(video.attend)
             } else {//接口返回空的情况处理
-                viewBinding.clContent.visibility = View.GONE
-                viewBinding.cardViewNoData.visibility = View.VISIBLE
+//                viewBinding.clContent.visibility = View.GONE
+//                viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
         }
         val startData = DateUtils.getDate(DateUtils.getBeginDayOfWeek().time)
@@ -87,11 +86,11 @@ class SchoolWeeklyFragment : BaseFragment() {
         }
 
         viewBinding.layoutWeeklySchoolAttendance.cardView.setOnClickListener {
-            startActivity(Intent(activity, WeeklyDetailsActivity::class.java))
+            WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_ATTENDANCE_TYPE)
         }
 
         viewBinding.layoutWeeklyHomeworkSummary.cardView.setOnClickListener {
-            startActivity(Intent(activity, WeeklyDetailsActivity::class.java))
+            WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_HOMEWORK_TYPE)
         }
 
         for (item in 1..10) {
@@ -119,11 +118,8 @@ class SchoolWeeklyFragment : BaseFragment() {
         viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.adapter =
             adapterAttendance2
 
-        val attendanceList = mutableListOf<String>()
-        for (item in 1..10) {
-            attendanceList.add("事件名称$item")
-        }
-        adapterAttendance.setList(attendanceList)
+        //学生考勤
+        adapterAttendance.setList(attend.studentAttend)
         adapterAttendance.setOnItemClickListener { adapter, view, position ->
             selectPosition = if (selectPosition != position) {
                 position
@@ -132,7 +128,8 @@ class SchoolWeeklyFragment : BaseFragment() {
             }
             adapterAttendance.notifyDataSetChanged()
         }
-        adapterAttendance2.setList(attendanceList)
+        //教师考勤
+        adapterAttendance2.setList(attend.teacherAttend)
         adapterAttendance2.setOnItemClickListener { adapter, view, position ->
             selectPosition2 = if (selectPosition2 != position) {
                 position
@@ -152,12 +149,12 @@ class SchoolWeeklyFragment : BaseFragment() {
      */
     private var selectPosition = -1
     private val adapterAttendance = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: String) {
+        BaseQuickAdapter<StudentAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
+        override fun convert(holder: BaseViewHolder, item: StudentAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "50%"
-            bind.tvWeek.text = item
-            bind.progressbar.progress = 50
+            bind.tvProgress.text = "${item.value}%"
+            bind.tvWeek.text = item.name
+            bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
@@ -170,12 +167,12 @@ class SchoolWeeklyFragment : BaseFragment() {
      */
     private var selectPosition2 = -1
     private val adapterAttendance2 = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: String) {
+        BaseQuickAdapter<TeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
+        override fun convert(holder: BaseViewHolder, item: TeacherAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "50%"
-            bind.tvWeek.text = item
-            bind.progressbar.progress = 50
+            bind.tvProgress.text = "${item.value}%"
+            bind.tvWeek.text = item.name
+            bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition2 == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))

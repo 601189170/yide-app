@@ -3,6 +3,7 @@ package com.yyide.chatim.kotlin.network
 import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.model.SchoolWeeklyData
+import com.yyide.chatim.model.SchoolWeeklyTeacherBean
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -47,11 +48,28 @@ interface INetworkService {
         @Query("endTime") endTime: String
     ): BaseResponse<ResultBean>
 
-
     /**
      * 底部文案描述
      */
     @GET("/face/cloud-face/copywriter")
     suspend fun requestCopywriter(): BaseResponse<ResultBean>
 
+    /**
+     * 校长查看考勤 教师
+     */
+    @GET("/face/cloud-face/app/v1/headmaster/teacher/weekly/detail")
+    suspend fun requestSchoolTeacherAttendance(
+        @Query("startTime") startTime: String,
+        @Query("endTime") endTime: String
+    ): BaseResponse<SchoolWeeklyTeacherBean>
+
+
+    /**
+     * 校长查看考勤 学生
+     */
+    @GET("/face/cloud-face/app/v1/headmaster/teacher/weekly/detail")
+    suspend fun requestSchoolStudentAttendance(
+        @Query("startTime") startTime: String,
+        @Query("endTime") endTime: String
+    ): BaseResponse<SchoolWeeklyTeacherBean>
 }

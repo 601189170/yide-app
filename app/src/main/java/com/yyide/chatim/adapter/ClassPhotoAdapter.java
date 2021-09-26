@@ -28,15 +28,9 @@ import java.util.List;
 public class ClassPhotoAdapter extends LoopPagerAdapter {
 
     public List<ClassesPhotoRsp.DataBean.AlbumEntityBean> list = new ArrayList<>();
-    Activity context;
 
     public ClassPhotoAdapter(RollPagerView viewPager) {
         super(viewPager);
-    }
-
-    public ClassPhotoAdapter(RollPagerView viewPager, Activity context) {
-        super(viewPager);
-        this.context = context;
     }
 
     private ClassesPhotoRsp.DataBean.AlbumEntityBean getItem(int position) {

@@ -254,7 +254,7 @@ public class NoticeWebViewActivity extends AppCompatActivity {
                 if ("backApp".equalsIgnoreCase(webModel.enentName)) {
                     finish();
                 } else if ("getToken".equalsIgnoreCase(webModel.enentName)) {
-                    return SpData.User() != null ? SpData.User().getToken() : "";
+                    return SpData.User() != null ? SpData.User().data.accessToken : "";
                 } else if ("save".equalsIgnoreCase(webModel.enentName)) {
                     runOnUiThread(() -> {
                         Intent intent = new Intent(NoticeWebViewActivity.this, NoticeTemplatePushActivity.class);

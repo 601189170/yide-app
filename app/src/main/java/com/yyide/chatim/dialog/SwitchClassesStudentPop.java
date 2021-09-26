@@ -113,11 +113,11 @@ public class SwitchClassesStudentPop extends PopupWindow {
             }
         });
 
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setBackgroundDrawable(null);
-        popupWindow.getContentView().setFocusable(true);
-        popupWindow.getContentView().setFocusableInTouchMode(true);
+//        popupWindow.setFocusable(true);
+//        popupWindow.setOutsideTouchable(false);
+//        popupWindow.setBackgroundDrawable(null);
+//        popupWindow.getContentView().setFocusable(true);
+//        popupWindow.getContentView().setFocusableInTouchMode(true);
         popupWindow.getContentView().setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (popupWindow != null && popupWindow.isShowing()) {

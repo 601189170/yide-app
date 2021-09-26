@@ -84,9 +84,9 @@ public class AppClient {
         Request request = chain.request();
         LoginRsp user = SpData.User();
         if (user != null) {
-            Log.e("TAG", "intercept: " + JSON.toJSONString(user.getToken()));
+            Log.e("TAG", "intercept: " + JSON.toJSONString(user.data.accessToken));
             request = request.newBuilder()
-                    .addHeader("Authorization", user.getToken())
+                    .addHeader("Authorization", user.data.accessToken)
                     .cacheControl(cacheControl)
                     .build();
         }
@@ -111,7 +111,7 @@ public class AppClient {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            String token = SpData.User().getToken();
+            String token = SpData.User().data.accessToken;
             if (TextUtils.isEmpty(token)) {
                 Request originalRequest = chain.request();
                 return chain.proceed(originalRequest);

@@ -10,6 +10,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -33,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:text="全校教师的周报"
+                    android:text="全校学生的周报"
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
                     android:textStyle="bold"
@@ -76,25 +77,29 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/announRoll"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/attendance_recyclerview"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_marginTop="@dimen/dp_8"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+                        android:layout_marginTop="@dimen/dp_4"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+                        app:spanCount="3"
+                        tools:listitem="@layout/item_weekly_attendance" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/hot_recyclerview"
                         android:layout_width="wrap_content"
                         android:layout_height="10dp"
-                        android:layout_marginTop="@dimen/dp_4"
-                        app:layout_constraintEnd_toEndOf="@+id/announRoll"
-                        app:layout_constraintStart_toStartOf="@+id/announRoll"
-                        app:layout_constraintTop_toBottomOf="@+id/announRoll"
+                        app:layout_constraintEnd_toEndOf="@+id/attendance_recyclerview"
+                        app:layout_constraintStart_toStartOf="@+id/attendance_recyclerview"
+                        app:layout_constraintTop_toBottomOf="@+id/attendance_recyclerview"
                         tools:listitem="@layout/item_hot" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -105,6 +110,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:background="@color/white"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:layout_scrollFlags="scroll|snap|enterAlways"
             app:tl_indicator_color="@color/colorPrimary"
             app:tl_indicator_height="3dp"
             app:tl_indicator_width="50dp"
@@ -114,17 +120,29 @@
             app:tl_textUnselectColor="#909399"
             app:tl_textsize="16sp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#E4E7ED" />
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="1000dp" />
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!--    <include-->
+    <!--        layout="@layout/fragment_school_student_child_weekly_attendance"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />-->
 
     <!--    <androidx.viewpager.widget.ViewPager-->
     <!--        android:id="@+id/viewpager"-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent"-->
-    <!--        android:visibility="visible"-->
+    <!--        android:visibility="gone"-->
     <!--        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -50,14 +50,14 @@ import okhttp3.Response;
  * Created by Administrator on 2019/5/15.
  */
 
-public class SwitchSchoolPop extends PopupWindow {
+public class SwitchIdentityPop extends PopupWindow {
     Activity context;
     PopupWindow popupWindow;
     Window mWindow;
     OkHttpClient mOkHttpClient = new OkHttpClient();
     LoadingTools loadingTools;
 
-    public SwitchSchoolPop(Activity context) {
+    public SwitchIdentityPop(Activity context) {
         this.context = context;
         init();
     }
@@ -95,11 +95,11 @@ public class SwitchSchoolPop extends PopupWindow {
         });
 
 //        adapter.setIndex(1);
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setBackgroundDrawable(null);
-        popupWindow.getContentView().setFocusable(true);
-        popupWindow.getContentView().setFocusableInTouchMode(true);
+//        popupWindow.setFocusable(true);
+//        popupWindow.setOutsideTouchable(false);
+//        popupWindow.setBackgroundDrawable(null);
+//        popupWindow.getContentView().setFocusable(true);
+//        popupWindow.getContentView().setFocusableInTouchMode(true);
         popupWindow.getContentView().setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (popupWindow != null && popupWindow.isShowing()) {
@@ -145,7 +145,7 @@ public class SwitchSchoolPop extends PopupWindow {
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/selectUserSchool")
-                .addHeader("Authorization", SpData.User().getToken())
+                .addHeader("Authorization", SpData.User().data.accessToken)
                 .post(requestBody)
                 .build();
         //发起请求
@@ -180,6 +180,7 @@ public class SwitchSchoolPop extends PopupWindow {
                 .add("userId", userId)
                 .add("client_id", "yide-cloud")
                 .add("grant_type", "password")
+                .add("version", "2")
                 .add("client_secret", "yide1234567")
                 .build();
         //请求组合创建
@@ -218,7 +219,7 @@ public class SwitchSchoolPop extends PopupWindow {
         Request request = new Request.Builder()
 //                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().getToken())
+                .addHeader("Authorization", SpData.User().data.accessToken)
                 .build();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {
@@ -254,7 +255,7 @@ public class SwitchSchoolPop extends PopupWindow {
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .addHeader("Authorization", SpData.User().getToken())
+                .addHeader("Authorization", SpData.User().data.accessToken)
                 .post(body)
                 .build();
         //发起请求

@@ -21,8 +21,15 @@ import com.yyide.chatim.fragment.leave.RequestLeaveStudentFragment
 class TeacherHomeworkFragment : Fragment() {
 
     private lateinit var viewBinding: FragmentTeacherHomeworkWeeklyBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    companion object {
+        @JvmStatic
+        fun newInstance() =
+            TeacherHomeworkFragment().apply {}
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
     }
 
@@ -32,12 +39,6 @@ class TeacherHomeworkFragment : Fragment() {
     ): View {
         viewBinding = FragmentTeacherHomeworkWeeklyBinding.inflate(layoutInflater)
         return viewBinding.root
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            TeacherHomeworkFragment().apply {}
     }
 
     private fun initView() {

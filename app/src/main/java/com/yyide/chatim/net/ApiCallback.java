@@ -37,6 +37,7 @@ public abstract class ApiCallback<M> implements Observer<M> {
             if (code == 502 || code == 500 || code == 404) {
                 msg = "服务器异常，请稍后再试";
             }
+
         } else {
             msg = e.getMessage();
         }

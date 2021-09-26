@@ -4,8 +4,6 @@ package com.yyide.chatim.base;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.Nullable;
-
 import com.blankj.utilcode.util.ToastUtils;
 
 /**
@@ -34,16 +32,16 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends BaseFragm
 
     public void showLoading() {
         if (!getActivity().isFinishing()) {
-            showProgressDialog2();
+            loading();
         }
     }
 
     public void hideLoading() {
-        dismissProgressDialog2();
+        dismiss();
     }
 
     public void showError() {
-        dismissProgressDialog2();
+        dismiss();
         ToastUtils.showShort("出错啦！");
     }
 }

@@ -21,10 +21,11 @@ import com.yyide.chatim.databinding.*
 class SchoolTeacherChildAttendanceFragment : Fragment() {
 
     private lateinit var viewBinding: FragmentSchoolTeacherChildWeeklyAttendanceBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

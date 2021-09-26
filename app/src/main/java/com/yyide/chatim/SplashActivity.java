@@ -116,6 +116,7 @@ public class SplashActivity extends AppCompatActivity {
                     .add("userId", String.valueOf(userId))
                     .add("client_id", "yide-cloud")
                     .add("grant_type", "password")
+                    .add("version", "2")
                     .add("client_secret", "yide1234567")
                     .build();
             //请求组合创建
@@ -158,7 +159,7 @@ public class SplashActivity extends AppCompatActivity {
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().getToken())
+                .addHeader("Authorization", SpData.User().data.accessToken)
                 .build();
         //发起请求
         mOkHttpClient.newCall(request).enqueue(new Callback() {

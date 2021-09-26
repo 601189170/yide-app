@@ -2,6 +2,7 @@ package com.yyide.chatim.kotlin.network
 
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.kotlin.network.base.BaseNetworkApi
+import retrofit2.http.Query
 
 /**
  * 网络请求具体实现
@@ -39,6 +40,20 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
      */
     suspend fun requestCopywriter() = getResult {
         service.requestCopywriter()
+    }
+
+    /**
+     * 校长查看全校教师考勤
+     */
+    suspend fun requestSchoolTeacherAttendance(startTime: String, endTime: String) = getResult {
+        service.requestSchoolTeacherAttendance(startTime, endTime)
+    }
+
+    /**
+     * 校长查看全校学生考勤
+     */
+    suspend fun requestSchoolStudentAttendance(startTime: String, endTime: String) = getResult {
+        service.requestSchoolStudentAttendance(startTime, endTime)
     }
 
 }

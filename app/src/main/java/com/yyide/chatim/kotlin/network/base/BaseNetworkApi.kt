@@ -106,7 +106,7 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
         }
 
         //cache
-        var REWRITE_CACHE_CONTROL_INTERCEPTOR = label@ Interceptor { chain: Interceptor.Chain ->
+        private var REWRITE_CACHE_CONTROL_INTERCEPTOR = Interceptor { chain: Interceptor.Chain ->
             val cacheBuilder = CacheControl.Builder()
             cacheBuilder.maxAge(0, TimeUnit.SECONDS)
             cacheBuilder.maxStale(365, TimeUnit.DAYS)
@@ -114,9 +114,9 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
             var request = chain.request()
             val user = SpData.User()
             if (user != null) {
-                Log.e("TAG", "intercept: " + JSON.toJSONString(user.token))
+                Log.e("TAG", "intercept: " + JSON.toJSONString(user.data))
                 request = request.newBuilder()
-                    .addHeader("Authorization", user.token)
+                    .addHeader("Authorization", user.data.accessToken)
                     .cacheControl(cacheControl)
                     .build()
             }

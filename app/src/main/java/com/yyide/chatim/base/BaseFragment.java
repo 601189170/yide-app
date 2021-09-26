@@ -41,13 +41,19 @@ public class BaseFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    public void showProgressDialog2() {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        dismiss();
+    }
+
+    public void loading() {
         if (loadingTools != null && !getActivity().isFinishing()) {
             loadingTools.showLoading();
         }
     }
 
-    public void dismissProgressDialog2() {
+    public void dismiss() {
         if (loadingTools != null) {
             loadingTools.closeLoading();
         }

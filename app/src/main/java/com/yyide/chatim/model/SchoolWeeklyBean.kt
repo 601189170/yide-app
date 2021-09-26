@@ -34,12 +34,12 @@ data class StudentAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
-    var value: String
+    var value: Double
 )
 
 data class TeacherAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
-    var value: String
+    var value: Double
 )

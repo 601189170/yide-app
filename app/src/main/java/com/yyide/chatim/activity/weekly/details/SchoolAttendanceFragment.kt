@@ -18,11 +18,6 @@ import com.yyide.chatim.databinding.FragmentSchoolAttendanceWeeklyDetailsBinding
 class SchoolAttendanceFragment : Fragment() {
 
     private lateinit var viewBinding: FragmentSchoolAttendanceWeeklyDetailsBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,11 +32,15 @@ class SchoolAttendanceFragment : Fragment() {
             SchoolAttendanceFragment().apply {}
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
     private fun initView() {
         val mTitles: MutableList<String> = ArrayList()
-        mTitles.add(getString(R.string.weekly_teacher_tab))
         mTitles.add(getString(R.string.weekly_student_tab))
-        viewBinding.viewpager.offscreenPageLimit = 3
+        mTitles.add(getString(R.string.weekly_teacher_tab))
         viewBinding.viewpager.adapter = object :
             FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {

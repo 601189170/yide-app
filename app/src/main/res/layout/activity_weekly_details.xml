@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
     tools:context=".activity.weekly.WeeklyHomeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,15 +25,15 @@
             android:id="@+id/tv_event_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_4"
             android:textColor="#ff1e1e1e"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:drawablePadding="@dimen/dp_4"
+            app:drawableEndCompat="@mipmap/icon_weekly_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:drawableEndCompat="@mipmap/icon_weekly_down" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -40,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#E4E7ED"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"/>
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <FrameLayout
         android:id="@+id/fl_content"

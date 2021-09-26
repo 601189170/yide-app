@@ -210,8 +210,8 @@ public class WebViewActivity extends BaseActivity {
                 super.onPageFinished(view, url);
 
                 if (SpData.User() != null) {
-                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().getToken());
-                    mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().getToken() + "')");
+                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().data.accessToken);
+                    mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().data.accessToken + "')");
                     if (SpData.getIdentityInfo() != null) {
                         mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
                     }
@@ -246,7 +246,7 @@ public class WebViewActivity extends BaseActivity {
                 if ("backApp".equalsIgnoreCase(webModel.enentName)) {
                     finish();
                 } else if ("getToken".equalsIgnoreCase(webModel.enentName)) {
-                    return SpData.User() != null ? SpData.User().getToken() : "";
+                    return SpData.User() != null ? SpData.User().data.accessToken : "";
                 }
             }
         }
