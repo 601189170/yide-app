@@ -19,6 +19,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleEditBinding
 import com.yyide.chatim.model.schedule.*
+import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
@@ -108,7 +109,7 @@ class ScheduleEditActivity : BaseActivity() {
         override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             val drawable = GradientDrawable()
             drawable.cornerRadius = DisplayUtils.dip2px(this@ScheduleEditActivity, 2f).toFloat()
-            drawable.setColor(Color.parseColor(item.colorValue))
+            drawable.setColor(ColorUtil.parseColor(item.colorValue))
             holder.getView<TextView>(R.id.tv_label).background = drawable
             holder.setText(R.id.tv_label, item.labelName)
             holder.itemView.setOnClickListener {

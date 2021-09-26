@@ -66,6 +66,7 @@ import com.yyide.chatim.model.schedule.Remind;
 import com.yyide.chatim.model.schedule.Repetition;
 import com.yyide.chatim.model.schedule.Schedule;
 import com.yyide.chatim.model.schedule.WeekBean;
+import com.yyide.chatim.utils.ColorUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
 import com.yyide.chatim.viewmodel.LabelManageViewModel;
@@ -892,7 +893,7 @@ public class DialogUtil {
                 baseViewHolder.setText(R.id.tv_label, label.getLabelName());
                 final GradientDrawable gradientDrawable = new GradientDrawable();
                 gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context,2f));
-                gradientDrawable.setColor(Color.parseColor(label.getColorValue()));
+                gradientDrawable.setColor(ColorUtil.parseColor(label.getColorValue()));
                 baseViewHolder.getView(R.id.tv_label).setBackground(gradientDrawable);
                 baseViewHolder.getView(R.id.checkBox).setSelected(label.getChecked());
                 baseViewHolder.itemView.setOnClickListener(v -> {
@@ -965,7 +966,7 @@ public class DialogUtil {
                 baseViewHolder.setText(R.id.tv_label, label.getLabelName());
                 final GradientDrawable gradientDrawable = new GradientDrawable();
                 gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context,2f));
-                gradientDrawable.setColor(Color.parseColor(label.getColorValue()));
+                gradientDrawable.setColor(ColorUtil.parseColor(label.getColorValue()));
                 baseViewHolder.getView(R.id.tv_label).setBackground(gradientDrawable);
                 baseViewHolder.getView(R.id.checkBox).setSelected(label.getChecked());
                 baseViewHolder.itemView.setOnClickListener(v -> {
