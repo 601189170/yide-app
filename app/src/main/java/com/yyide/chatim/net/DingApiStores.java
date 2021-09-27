@@ -72,6 +72,7 @@ import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
+import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
 
 import java.util.HashMap;
@@ -771,6 +772,22 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/saveSchedule")
     Call<BaseRsp> saveSchedule(@Body RequestBody requestBody);
+
+    /**
+     * 查询个人设置
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getScheduleSetting
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/app/schedule/getScheduleSetting")
+    Call<Settings> getScheduleSetting();
+
+    /**
+     * 修改添加个人设置
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/saveScheduleSetting
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/saveScheduleSetting")
+    Call<BaseRsp> saveScheduleSetting(@Body RequestBody requestBody);
 
     /**
      * 获取周报描述
