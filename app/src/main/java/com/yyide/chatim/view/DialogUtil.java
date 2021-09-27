@@ -1,9 +1,7 @@
 package com.yyide.chatim.view;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -13,7 +11,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +28,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.BaseApplication;
@@ -49,6 +42,7 @@ import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
 import com.yyide.chatim.databinding.DialogLabelTopMenuSelectLayoutBinding;
+import com.yyide.chatim.databinding.DialogRepetitionScheduleModifyBinding;
 import com.yyide.chatim.databinding.DialogScheduleCustomRepetitionBinding;
 import com.yyide.chatim.databinding.DialogScheduleDelBinding;
 import com.yyide.chatim.databinding.DialogScheduleEditBinding;
@@ -57,7 +51,6 @@ import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
 import com.yyide.chatim.databinding.DialogScheduleMonthListBinding;
 import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
-import com.yyide.chatim.model.schedule.Label;
 import com.yyide.chatim.model.schedule.LabelColor;
 import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.MonthBean;
@@ -81,10 +74,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import lombok.val;
 import lombok.var;
 
 /**
@@ -1017,6 +1010,90 @@ public class DialogUtil {
         dialogWindow.setAttributes(lp);
         mDialog.setCancelable(true);
         mDialog.show();
+    }
+
+
+    /**
+     * 修改重复日程选项的弹框
+     */
+    public static void showRepetitionScheduleModifyDialog(Context context,OnMenuItemListener onMenuItemListener) {
+        DialogRepetitionScheduleModifyBinding binding = DialogRepetitionScheduleModifyBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        AtomicBoolean repetitionType1 = new AtomicBoolean(false);
+        AtomicBoolean repetitionType2 = new AtomicBoolean(false);
+        AtomicBoolean repetitionType3 = new AtomicBoolean(false);
+        binding.ivCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        binding.btnCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+        });
+        binding.btnEnsure.setOnClickListener(v -> {
+            Log.e(TAG, "showRepetitionScheduleModifyDialog: " + repetitionType1.get() + ", " + repetitionType2.get() + ", " + repetitionType3.get());
+            if (repetitionType1.get()) {
+                onMenuItemListener.onMenuItem(1);
+            } else if (repetitionType2.get()) {
+                onMenuItemListener.onMenuItem(2);
+            } else if (repetitionType3.get()) {
+                onMenuItemListener.onMenuItem(3);
+            } else {
+                ToastUtils.showShort("请选择编辑重复性日程类型");
+                return;
+            }
+            mDialog.dismiss();
+        });
+        binding.cbRepetitionType1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            setCheckboxListener(repetitionType1, repetitionType2, repetitionType3, isChecked, binding.cbRepetitionType2, binding.cbRepetitionType3);
+
+        });
+        binding.cbRepetitionType2.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            setCheckboxListener(repetitionType2, repetitionType1, repetitionType3, isChecked, binding.cbRepetitionType1, binding.cbRepetitionType3);
+        });
+        binding.cbRepetitionType3.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            setCheckboxListener(repetitionType3, repetitionType2, repetitionType1, isChecked, binding.cbRepetitionType2, binding.cbRepetitionType1);
+        });
+        binding.tvRepetitionType1.setOnClickListener(v -> {
+            setCheckboxTextListener(repetitionType1, repetitionType2, repetitionType3, binding.cbRepetitionType1, binding.cbRepetitionType2, binding.cbRepetitionType3);
+        });
+        binding.tvRepetitionType2.setOnClickListener(v -> {
+            setCheckboxTextListener(repetitionType2, repetitionType1, repetitionType3, binding.cbRepetitionType2, binding.cbRepetitionType1, binding.cbRepetitionType3);
+        });
+        binding.tvRepetitionType3.setOnClickListener(v -> {
+            setCheckboxTextListener(repetitionType3, repetitionType2, repetitionType1, binding.cbRepetitionType3, binding.cbRepetitionType2, binding.cbRepetitionType1);
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        lp.height = DisplayUtils.dip2px(context, 325f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+
+    }
+
+    private static void setCheckboxTextListener(AtomicBoolean repetitionType1, AtomicBoolean repetitionType2, AtomicBoolean repetitionType3, CheckBox p, CheckBox p2, CheckBox p3) {
+        p.setChecked(!repetitionType1.get());
+        if (!repetitionType1.get()) {
+            repetitionType2.set(false);
+            p2.setChecked(false);
+            repetitionType3.set(false);
+            p3.setChecked(false);
+        }
+    }
+
+    private static void setCheckboxListener(AtomicBoolean repetitionType1, AtomicBoolean repetitionType2, AtomicBoolean repetitionType3, boolean isChecked, CheckBox p, CheckBox p2) {
+        repetitionType1.set(isChecked);
+        if (isChecked) {
+            repetitionType2.set(false);
+            p.setChecked(false);
+            repetitionType3.set(false);
+            p2.setChecked(false);
+        }
     }
 
 

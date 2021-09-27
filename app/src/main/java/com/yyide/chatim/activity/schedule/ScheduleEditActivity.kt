@@ -45,7 +45,10 @@ class ScheduleEditActivity : BaseActivity() {
     private fun initView() {
         scheduleEditBinding.top.title.text = "日程编辑"
         scheduleEditBinding.top.backLayout.setOnClickListener {
-            finish()
+            //finish()
+            DialogUtil.showRepetitionScheduleModifyDialog(this){
+                loge("编辑日程重复性类型：$it")
+            }
         }
         scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
         scheduleEditBinding.top.ivRight.setOnClickListener {
