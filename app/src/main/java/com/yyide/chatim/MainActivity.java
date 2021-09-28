@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -77,6 +78,8 @@ import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.UserSigRsp;
+import com.yyide.chatim.model.WeeklyDateBean;
+import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.net.AppClient;
 import com.yyide.chatim.presenter.MainPresenter;
 import com.yyide.chatim.thirdpush.HUAWEIHmsMessageService;
@@ -97,6 +100,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -172,6 +179,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         new Handler().postDelayed(() -> mvpPresenter.getVersionInfo(), 2000);
         //检查是否开启消息通知
         showNotificationPermission();
+        mvpPresenter.copywriter();
+        mvpPresenter.getWeeklyDate();
     }
 
     private void prepareThirdPushToken() {
@@ -343,6 +352,27 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     @Override
     public void showError() {
 
+    }
+
+    @Override
+    public void getCopywriter(WeeklyDescBean model) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            if (model.getData() != null && model.getData().size() > 0) {
+                List<String> data = model.getData();
+                Collections.addAll(data);//填充
+                Set<String> set = new HashSet<>(data);
+                MMKV.defaultMMKV().encode(MMKVConstant.YD_WEEKLY_DESC, set);
+            }
+        }
+    }
+
+    @Override
+    public void getWeeklyDate(WeeklyDateBean model) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+            if (model.getData() != null) {
+                MMKV.defaultMMKV().encode(MMKVConstant.YD_WEEKLY_DATE, JSON.toJSONString(model.getData()));
+            }
+        }
     }
 
     @Override

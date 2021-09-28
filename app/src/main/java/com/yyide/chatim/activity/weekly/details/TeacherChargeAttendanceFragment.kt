@@ -44,7 +44,7 @@ class TeacherChargeAttendanceFragment : Fragment() {
         viewBinding.viewpager.adapter = object :
             FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                return SchoolTeacherChildAttendanceFragment.newInstance()
+                return SchoolTeacherChildAttendanceFragment.newInstance(null)
             }
 
             override fun getCount(): Int {

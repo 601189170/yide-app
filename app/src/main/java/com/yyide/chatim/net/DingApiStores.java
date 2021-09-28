@@ -68,6 +68,7 @@ import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.UserSigRsp;
+import com.yyide.chatim.model.WeeklyDateBean;
 import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
@@ -796,4 +797,12 @@ public interface DingApiStores {
      */
     @GET("/face/cloud-face/copywriter")
     Observable<WeeklyDescBean> copywriter();
+
+    /**
+     * 获取周报时间
+     *
+     * @return
+     */
+    @GET("/face/cloud-face/statistic/time")
+    Observable<WeeklyDateBean> getWeeklyDate();
 }

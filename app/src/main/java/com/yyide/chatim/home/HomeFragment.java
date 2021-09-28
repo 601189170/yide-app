@@ -150,7 +150,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         //mvpPresenter.getUserSchool();
         mvpPresenter.getHomeTodo();
         mvpPresenter.getNotice();
-        mvpPresenter.copywriter();
     }
 
     void initVerticalTextview() {
@@ -498,18 +497,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             } else {
                 tv_todo.setVisibility(View.GONE);
                 setData();
-            }
-        }
-    }
-
-    @Override
-    public void getCopywriter(WeeklyDescBean model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
-            if (model.getData() != null && model.getData().size() > 0) {
-                List<String> data = model.getData();
-                Collections.addAll(data);//填充
-                Set<String> set = new HashSet<>(data);
-                MMKV.defaultMMKV().encode(MMKVConstant.YD_WEEKLY_DESC, set);
             }
         }
     }

@@ -167,5 +167,5 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="7"
-        tools:listitem="@layout/item_weekly_charts_vertical" />
+        tools:listitem="@layout/item_weekly_charts_school_attendance" />
 </androidx.constraintlayout.widget.ConstraintLayout>

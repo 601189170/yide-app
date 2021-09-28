@@ -5,11 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.yyide.chatim.base.BaseViewModel
 import com.yyide.chatim.kotlin.network.NetworkApi
 import com.yyide.chatim.model.ResultBean
+import com.yyide.chatim.model.WeeklyTeacherBean
 import kotlinx.coroutines.launch
 
 class TeacherViewModel : BaseViewModel() {
 
-    val teacherLiveData = MutableLiveData<Result<ResultBean>>()
+    val teacherLiveData = MutableLiveData<Result<WeeklyTeacherBean>>()
 
     /**
     @Query("classId") classId: String,

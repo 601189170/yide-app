@@ -2,24 +2,23 @@ package com.yyide.chatim.model
 
 import com.alibaba.fastjson.annotation.JSONField
 
-
 data class SchoolWeeklyData(
     @JSONField(name = "attend")
-    var attend: Attend,
+    var attend: SchoolHomeAttendance,
     @JSONField(name = "summary")
-    var summary: Summary,
+    var summary: SchoolHomeSummary,
     @JSONField(name = "work")
-    var work: Work
+    var work: SchoolHomeWork
 )
 
-data class Attend(
+data class SchoolHomeAttendance(
     @JSONField(name = "studentAttend")
-    var studentAttend: List<StudentAttend>,
+    var studentAttend: List<SchoolHomeStudentAttend>,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<TeacherAttend>
+    var teacherAttend: List<SchoolHomeTeacherAttend>
 )
 
-data class Summary(
+data class SchoolHomeSummary(
     @JSONField(name = "attend")
     var attend: String,
     @JSONField(name = "expend")
@@ -28,16 +27,16 @@ data class Summary(
     var work: String
 )
 
-class Work
+class SchoolHomeWork
 
-data class StudentAttend(
+data class SchoolHomeStudentAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
     var value: Double
 )
 
-data class TeacherAttend(
+data class SchoolHomeTeacherAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")

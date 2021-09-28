@@ -63,6 +63,7 @@
     <string name="weekly_teacher_tab">教师篇</string>
     <string name="weekly_homework_chart">作业图表</string>
     <string name="weekly_homework_data">作业数据</string>
+    <string name="startTime_endTime">%s-%s</string>
 
     // 主页Tab相关
     <string name="tab_contact_tab_text">通讯录</string>

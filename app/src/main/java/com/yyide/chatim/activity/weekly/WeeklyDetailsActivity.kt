@@ -51,48 +51,56 @@ class WeeklyDetailsActivity : BaseActivity() {
         viewBinding.back.setOnClickListener { finish() }
         when (type) {
             SCHOOL_ATTENDANCE_TYPE -> {
+                viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     SchoolAttendanceFragment.newInstance()
                 ).commit()
             }
             SCHOOL_HOMEWORK_TYPE -> {
+                viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     SchoolHomeworkFragment.newInstance()
                 ).commit()
             }
             HEAD_TEACHER_ATTENDANCE_TYPE -> {
+                viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     TeacherAttendanceFragment.newInstance()
                 ).commit()
             }
             HEAD_TEACHER_HOMEWORK_TYPE -> {
+                viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     TeacherHomeworkFragment.newInstance()
                 ).commit()
             }
             TEACHER_ATTENDANCE_TYPE -> {
+                viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     TeacherAttendanceFragment.newInstance()
                 ).commit()
             }
             TEACHER_HOMEWORK_TYPE -> {
+                viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     TeacherHomeworkFragment.newInstance()
                 ).commit()
             }
             PARENT_ATTENDANCE_TYPE -> {
+                viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     SchoolWeeklyFragment.newInstance()
                 ).commit()
             }
             PARENT_HOMEWORK_TYPE -> {
+                viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
                     SchoolWeeklyFragment.newInstance()

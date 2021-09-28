@@ -56,6 +56,7 @@ public class SplashActivity extends AppCompatActivity {
     private UserInfo mUserInfo;
     public String loginName;
     public String passWord;
+    private String refresh_token;
     //是否第一次打开软件
     private boolean firstOpenApp;
     OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -93,8 +94,8 @@ public class SplashActivity extends AppCompatActivity {
             //第一次打开app
             new Handler().postDelayed(() -> startGuidePage(), 500);
         } else {
-            if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
-                Tologin(loginName, passWord);
+            if (SpData.User() != null && SpData.User().data != null && !TextUtils.isEmpty(SpData.User().data.refreshToken)) {
+                toLogin();
             } else {
                 new Handler().postDelayed(() -> startLogin(), 3000);
             }
@@ -107,16 +108,13 @@ public class SplashActivity extends AppCompatActivity {
         firstOpenApp = SPUtils.getInstance().getBoolean(BaseConstant.FIRST_OPEN_APP, true);
     }
 
-    void Tologin(String username, String password) {
-        if (SpData.getIdentityInfo() != null && !TextUtils.isEmpty(SpData.getIdentityInfo().userId)) {
-            String userId = SpData.getIdentityInfo().userId;
+    void toLogin() {
+        if (SpData.User() != null && SpData.User().data != null && !TextUtils.isEmpty(SpData.User().data.refreshToken)) {
             RequestBody body = new FormBody.Builder()
-                    .add("username", username)
-                    .add("password", password)
-                    .add("userId", String.valueOf(userId))
                     .add("client_id", "yide-cloud")
-                    .add("grant_type", "password")
+                    .add("grant_type", "refresh_token")
                     .add("version", "2")
+                    .add("refresh_token", SpData.User().data.refreshToken)
                     .add("client_secret", "yide1234567")
                     .build();
             //请求组合创建
@@ -311,8 +309,8 @@ public class SplashActivity extends AppCompatActivity {
                 //第一次打开app
                 new Handler().postDelayed(() -> startGuidePage(), 500);
             } else {
-                if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
-                    Tologin(loginName, passWord);
+                if (SpData.User() != null && SpData.User().data != null && !TextUtils.isEmpty(SpData.User().data.refreshToken)) {
+                    toLogin();
                 } else {
                     startLogin();
                 }
@@ -333,8 +331,8 @@ public class SplashActivity extends AppCompatActivity {
                     return;
                 }
             }
-            if (!TextUtils.isEmpty(loginName) && !TextUtils.isEmpty((passWord))) {
-                Tologin(loginName, passWord);
+            if (SpData.User() != null && SpData.User().data != null && !TextUtils.isEmpty(SpData.User().data.refreshToken)) {
+                toLogin();
             } else {
                 startLogin();
             }

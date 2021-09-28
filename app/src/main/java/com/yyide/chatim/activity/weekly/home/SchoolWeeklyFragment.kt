@@ -1,19 +1,18 @@
 package com.yyide.chatim.activity.weekly.home
 
-import android.content.Intent
+import android.animation.ValueAnimator
 import android.os.Bundle
-import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
+import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.home.viewmodel.SchoolViewModel
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentSchoolWeeklyBinding
@@ -54,34 +53,62 @@ class SchoolWeeklyFragment : BaseFragment() {
     }
 
     private val selectLists = mutableListOf<String>()
-    private val dateLists = mutableListOf<String>()
     private fun initView() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
-            val video = it.getOrNull()
-            if (null != video) {
+            dismiss()
+            val result = it.getOrNull()
+            if (null != result) {
                 viewBinding.clContent.visibility = View.VISIBLE
                 viewBinding.cardViewNoData.visibility = View.GONE
                 //本周小结
-                setSummary(video.summary)
+                setSummary(result.summary)
                 //作业
-                setWorkView(video.work)
+                setWorkView(result.work)
                 //考勤
-                initAttendance(video.attend)
+                initAttendance(result.attend)
             } else {//接口返回空的情况处理
 //                viewBinding.clContent.visibility = View.GONE
 //                viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
         }
-        val startData = DateUtils.getDate(DateUtils.getBeginDayOfWeek().time)
-        val endData = DateUtils.getDate(System.currentTimeMillis())
-        viewModel.requestSchoolWeekly(startData, endData)
-
         viewBinding.tvDescs.text = WeeklyUtil.getDesc()
+        val dateTime = WeeklyUtil.getDateTime()
+        if (dateTime != null) {
+            loading()
+            viewModel.requestSchoolWeekly(dateTime.startTime, dateTime.endTime)
+            viewBinding.tvTime.text = getString(
+                R.string.startTime_endTime, DateUtils.formatTime(
+                    dateTime.startTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                ), DateUtils.formatTime(
+                    dateTime.endTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                )
+            )
+        }
+        val dateLists = WeeklyUtil.getDateTimes()
+        val adapterDate = DateAdapter()
+        if (dateLists.isNotEmpty()) {
+            adapterDate.setList(dateLists)
+        }
         viewBinding.tvTime.setOnClickListener {
             val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
             attendancePop.setOnSelectListener { index: Int ->
-                indexDate = index
-                viewBinding.tvTime.text = dateLists[index]
+//                indexDate = index
+                viewBinding.tvTime.text = getString(
+                    R.string.startTime_endTime, DateUtils.formatTime(
+                        dateLists[index].startTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    ), DateUtils.formatTime(
+                        dateLists[index].endTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    )
+                )
+                viewModel.requestSchoolWeekly(dateLists[index].startTime, dateLists[index].endTime)
             }
         }
 
@@ -92,121 +119,92 @@ class SchoolWeeklyFragment : BaseFragment() {
         viewBinding.layoutWeeklyHomeworkSummary.cardView.setOnClickListener {
             WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_HOMEWORK_TYPE)
         }
-
-        for (item in 1..10) {
-            selectLists.add("$item + 事件")
-            dateLists.add("$item + 9:23-16:32")
-        }
-        viewBinding.tvTime.text = dateLists[0]
-        adapterEvent.setList(selectLists)
-        adapterDate.setList(dateLists)
     }
 
-    private fun setSummary(summary: Summary) {
+    private fun setSummary(summary: SchoolHomeSummary) {
         viewBinding.layoutWeeklySummary.tvWeeklyAttendance.text = summary.attend
         viewBinding.layoutWeeklySummary.tvWeeklyHomework.text = summary.work
         viewBinding.layoutWeeklySummary.tvWeeklyShopping.text = summary.expend
     }
 
-    private fun initAttendance(attend: Attend) {
+    private fun initAttendance(attend: SchoolHomeAttendance) {
+        //学生考勤
         viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.adapter =
-            adapterAttendance
+            adapterStudentAttendance
+        adapterStudentAttendance.setList(attend.studentAttend)
+        adapterStudentAttendance.setOnItemClickListener { adapter, view, position ->
+            selectStudentPosition = if (selectStudentPosition != position) {
+                position
+            } else {
+                -1
+            }
+            adapterStudentAttendance.notifyDataSetChanged()
+        }
+
+        //教师考勤
         viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.adapter =
-            adapterAttendance2
-
-        //学生考勤
-        adapterAttendance.setList(attend.studentAttend)
-        adapterAttendance.setOnItemClickListener { adapter, view, position ->
-            selectPosition = if (selectPosition != position) {
+            adapterTeacherAttendance
+        adapterTeacherAttendance.setList(attend.teacherAttend)
+        adapterTeacherAttendance.setOnItemClickListener { adapter, view, position ->
+            selectTeacherPosition = if (selectTeacherPosition != position) {
                 position
             } else {
                 -1
             }
-            adapterAttendance.notifyDataSetChanged()
-        }
-        //教师考勤
-        adapterAttendance2.setList(attend.teacherAttend)
-        adapterAttendance2.setOnItemClickListener { adapter, view, position ->
-            selectPosition2 = if (selectPosition2 != position) {
-                position
-            } else {
-                -1
-            }
-            adapterAttendance2.notifyDataSetChanged()
+            adapterTeacherAttendance.notifyDataSetChanged()
         }
     }
 
-    private fun setWorkView(work: Work) {
+    private fun setWorkView(work: SchoolHomeWork) {
 
     }
 
     /**
-     * 考勤数据
+     * 学生考勤数据
      */
-    private var selectPosition = -1
-    private val adapterAttendance = object :
-        BaseQuickAdapter<StudentAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: StudentAttend) {
+    private var selectStudentPosition = -1
+    private val adapterStudentAttendance = object :
+        BaseQuickAdapter<SchoolHomeStudentAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
+        override fun convert(holder: BaseViewHolder, item: SchoolHomeStudentAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.tvProgress.text = "${item.value}%"
             bind.tvWeek.text = item.name
-            bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
+            setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            if (selectPosition == holder.bindingAdapterPosition) {
+            if (selectStudentPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
             }
         }
     }
 
+    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
+        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
+        animator.addUpdateListener { valueAnimator: ValueAnimator ->
+            view.progress = valueAnimator.animatedValue as Int
+        }
+        animator.start()
+    }
+
     /**
-     * 考勤数据
+     * 教师考勤数据
      */
-    private var selectPosition2 = -1
-    private val adapterAttendance2 = object :
-        BaseQuickAdapter<TeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: TeacherAttend) {
+    private var selectTeacherPosition = -1
+    private val adapterTeacherAttendance = object :
+        BaseQuickAdapter<SchoolHomeTeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
+        override fun convert(holder: BaseViewHolder, item: SchoolHomeTeacherAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.tvProgress.text = "${item.value}%"
             bind.tvWeek.text = item.name
-            bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
+            setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            if (selectPosition2 == holder.bindingAdapterPosition) {
+            if (selectTeacherPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
             }
         }
     }
 
-    private var indexDate = 0
-    private val adapterDate = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.swich_class_item) {
-        override fun convert(holder: BaseViewHolder, item: String) {
-            holder.setText(R.id.className, item)
-            holder.getView<View>(R.id.select).visibility =
-                if (indexDate == holder.adapterPosition) View.VISIBLE else View.GONE
-            if (this.itemCount - 1 == holder.adapterPosition) {
-                holder.getView<View>(R.id.view_line).visibility = View.GONE
-            } else {
-                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
-            }
-        }
-    }
-
-    private var index = 0
-    private val adapterEvent = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.swich_class_item) {
-        override fun convert(holder: BaseViewHolder, item: String) {
-            holder.setText(R.id.className, item)
-            holder.getView<View>(R.id.select).visibility =
-                if (indexDate == holder.adapterPosition) View.VISIBLE else View.GONE
-            if (this.itemCount - 1 == holder.adapterPosition) {
-                holder.getView<View>(R.id.view_line).visibility = View.GONE
-            } else {
-                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
-            }
-        }
-    }
 }

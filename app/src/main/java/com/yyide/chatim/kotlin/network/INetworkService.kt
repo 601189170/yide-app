@@ -4,10 +4,12 @@ import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.model.SchoolWeeklyData
 import com.yyide.chatim.model.SchoolWeeklyTeacherBean
+import com.yyide.chatim.model.WeeklyTeacherBean
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface INetworkService {
+
     /**
      * 教师班主任周报
      * classId	是	string	班级id
@@ -22,7 +24,30 @@ interface INetworkService {
         @Query("teacherId") teacherId: String,
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String
+    ): BaseResponse<WeeklyTeacherBean>
+
+    /**
+     * 查看教师考勤
+     */
+    @GET("/face/cloud-face/app/v1/teacher/attend/teacher/detail")
+    suspend fun requestAttendanceTeacherDetail(
+        @Query("classId") classId: String,
+        @Query("teacherId") teacherId: String,
+        @Query("startTime") startTime: String,
+        @Query("endTime") endTime: String
     ): BaseResponse<ResultBean>
+
+    /**
+     * 查看学生考勤
+     */
+    @GET("/face/cloud-face/app/v1/teacher/attend/student/detail")
+    suspend fun requestAttendanceStudentDetail(
+        @Query("classId") classId: String,
+        @Query("teacherId") teacherId: String,
+        @Query("startTime") startTime: String,
+        @Query("endTime") endTime: String
+    ): BaseResponse<ResultBean>
+
 
     /**
      * 校长周报统计
@@ -43,6 +68,19 @@ interface INetworkService {
      */
     @GET("/face/cloud-face/app/v1/student/weekly")
     suspend fun requestStudentWeekly(
+        @Query("studentId") studentId: String,
+        @Query("startTime") startTime: String,
+        @Query("endTime") endTime: String
+    ): BaseResponse<ResultBean>
+
+    /**
+     * 家长查看学生周报统计详情
+     * studentId  学生ID
+     * startTime  开始时间
+     * endTime    结束时间
+     */
+    @GET("/face/cloud-face/app/v1/student/weekly/detail")
+    suspend fun requestStudentDetail(
         @Query("studentId") studentId: String,
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String

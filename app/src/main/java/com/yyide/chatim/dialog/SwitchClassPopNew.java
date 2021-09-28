@@ -83,17 +83,15 @@ public class SwitchClassPopNew extends PopupWindow {
         SwichClassAdapter adapter = new SwichClassAdapter();
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
-            ArrayList<GetUserSchoolRsp.DataBean.FormBean> formBeans = removeList(SpData.getIdentityInfo().form);
-            if (formBeans.size() > 0) {
-                adapter.notifyData(formBeans);
-                for (int i = 0; i < formBeans.size(); i++) {
-                    if (classBean != null
-                            && classBean.classesId != null
-                            && classBean.classesId.equals(formBeans.get(i).classesId)) {
-                        index = i;
-                        break;
-                    }
+        ArrayList<GetUserSchoolRsp.DataBean.FormBean> formBeans = SpData.getClassList();
+        if (formBeans.size() > 0) {
+            adapter.notifyData(formBeans);
+            for (int i = 0; i < formBeans.size(); i++) {
+                if (classBean != null
+                        && classBean.classesId != null
+                        && classBean.classesId.equals(formBeans.get(i).classesId)) {
+                    index = i;
+                    break;
                 }
             }
         }
@@ -156,12 +154,5 @@ public class SwitchClassPopNew extends PopupWindow {
             }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
-    }
-
-    //去重
-    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> removeList(List<GetUserSchoolRsp.DataBean.FormBean> persons) {
-        Set<GetUserSchoolRsp.DataBean.FormBean> personSet = new TreeSet<>((o1, o2) -> o1.classesId.compareTo(o2.classesId));
-        personSet.addAll(persons);
-        return new ArrayList<>(personSet);
     }
 }

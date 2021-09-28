@@ -13,7 +13,7 @@ class SchoolTeacherAttendanceViewModel : BaseViewModel() {
 
     val schoolTeacherAttendanceLiveData = MutableLiveData<Result<SchoolWeeklyTeacherBean>>()
 
-    fun requestSchoolAttendance(startTime: String, endTime: String) {
+    fun requestSchoolTeacherAttendance(startTime: String, endTime: String) {
         viewModelScope.launch {
             val result = NetworkApi.requestSchoolTeacherAttendance(startTime, endTime)
             schoolTeacherAttendanceLiveData.value = result

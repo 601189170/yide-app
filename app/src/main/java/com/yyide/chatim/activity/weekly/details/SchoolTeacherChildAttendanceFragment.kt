@@ -1,16 +1,22 @@
 package com.yyide.chatim.activity.weekly.details
 
+import android.animation.ValueAnimator
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
+import android.widget.ProgressBar
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.newnotice.fragment.NoticeBrandPersonnelFragment
-import com.yyide.chatim.activity.newnotice.fragment.NoticePersonnelFragment
+import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.*
+import com.yyide.chatim.model.DeptAttend
+import com.yyide.chatim.model.Detail
+import com.yyide.chatim.model.SchoolHomeStudentAttend
+import com.yyide.chatim.model.TeacherAttendance
 
 /**
  *
@@ -18,14 +24,13 @@ import com.yyide.chatim.databinding.*
  * date 2021年9月15日15:11:01
  * author LRZ
  */
-class SchoolTeacherChildAttendanceFragment : Fragment() {
+class SchoolTeacherChildAttendanceFragment : BaseFragment() {
 
     private lateinit var viewBinding: FragmentSchoolTeacherChildWeeklyAttendanceBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,11 +42,93 @@ class SchoolTeacherChildAttendanceFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            SchoolTeacherChildAttendanceFragment().apply {}
+        fun newInstance(item: Detail?) =
+            SchoolTeacherChildAttendanceFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("item", item)
+                }
+            }
     }
 
     private fun initView() {
+        //教职工出入校考勤统计
+        viewBinding.layoutCharts.recyclerview.layoutManager = GridLayoutManager(activity, 7)
+        viewBinding.layoutCharts.recyclerview.adapter =
+            adapterAttendance
+        adapterAttendance.setOnItemClickListener { adapter, view, position ->
+            selectPosition = if (selectPosition != position) {
+                position
+            } else {
+                -1
+            }
+            adapterAttendance.notifyDataSetChanged()
+        }
 
+        //教职工周统计横版
+        viewBinding.recyclerviewDept.layoutManager = LinearLayoutManager(activity)
+        viewBinding.recyclerviewDept.adapter =
+            adapterAttendanceDept
+        adapterAttendanceDept.setOnItemClickListener { adapter, view, position ->
+            selectPosition2 = if (selectPosition2 != position) {
+                position
+            } else {
+                -1
+            }
+            adapterAttendanceDept.notifyDataSetChanged()
+        }
+
+        var teacherAttends = mutableListOf<TeacherAttendance>()
+        var deptattends = mutableListOf<DeptAttend>()
+        arguments?.apply {
+            val detail = getSerializable("item") as Detail
+            teacherAttends = detail.teacherAttend as MutableList<TeacherAttendance>
+            deptattends = detail.deptAttend as MutableList<DeptAttend>
+        }
+        adapterAttendance.setList(teacherAttends)
+        adapterAttendanceDept.setList(deptattends)
+    }
+
+    /**
+     * 考勤数据
+     */
+    private var selectPosition = -1
+    private val adapterAttendance = object :
+        BaseQuickAdapter<TeacherAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
+        override fun convert(holder: BaseViewHolder, item: TeacherAttendance) {
+            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
+            bind.tvProgress.text = "${item.rate}%"
+            bind.tvWeek.text = item.name
+            setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
+            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
+            if (selectPosition == holder.bindingAdapterPosition) {
+                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+            }
+        }
+    }
+
+    /**
+     * 考勤数据
+     */
+    private var selectPosition2 = -1
+    private val adapterAttendanceDept = object :
+        BaseQuickAdapter<DeptAttend, BaseViewHolder>(R.layout.item_weekly_progress_h) {
+        override fun convert(holder: BaseViewHolder, item: DeptAttend) {
+            val bind = ItemWeeklyProgressHBinding.bind(holder.itemView)
+            bind.tvEventName.text = item.name
+            setAnimation(bind.progressbarLast, if (item.lastWeek <= 0) 0 else item.lastWeek.toInt())
+            setAnimation(bind.progressbarThis, if (item.thisWeek <= 0) 0 else item.thisWeek.toInt())
+            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
+            if (selectPosition2 == holder.bindingAdapterPosition) {
+                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+            }
+        }
+    }
+
+    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
+        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
+        animator.addUpdateListener { valueAnimator: ValueAnimator ->
+            view.progress = valueAnimator.animatedValue as Int
+        }
+        animator.start()
     }
 }
