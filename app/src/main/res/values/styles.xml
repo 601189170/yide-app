@@ -243,4 +243,8 @@
         <item name="android:windowSoftInputMode">stateAlwaysVisible</item><!--显示软件盘-->
     </style>
 
+    <style name="TabLayoutTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
