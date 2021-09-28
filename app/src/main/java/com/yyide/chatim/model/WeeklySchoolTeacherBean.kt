@@ -1,43 +1,43 @@
 package com.yyide.chatim.model
 
 import com.alibaba.fastjson.annotation.JSONField
-import java.io.Serializable
 
-data class SchoolWeeklyTeacherBean(
+
+data class WeeklySchoolTeacherBean(
     @JSONField(name = "attend")
-    var attend: List<SchoolAttendance>,
+    var attend: List<WeeklySchoolTeacherAttend>,
     @JSONField(name = "detail")
-    var detail: List<Detail>
-) : Serializable
+    var detail: List<WeeklySchoolTeacherDetail>
+)
 
-data class SchoolAttendance(
+data class WeeklySchoolTeacherAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
     var value: Int
-) : Serializable
+)
 
-data class Detail(
+data class WeeklySchoolTeacherDetail(
     @JSONField(name = "deptAttend")
-    var deptAttend: List<DeptAttend>,
+    var deptAttend: List<WeeklySchoolTeacherDeptAttend>,
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<TeacherAttendance>
-) : Serializable
+    var teacherAttend: List<WeeklySchoolTeacherTeacherAttend>
+)
 
-data class DeptAttend(
+data class WeeklySchoolTeacherDeptAttend(
     @JSONField(name = "lastWeek")
-    var lastWeek: Double,
+    var lastWeek: Int,
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "thisWeek")
-    var thisWeek: Double
-) : Serializable
+    var thisWeek: Int
+)
 
-data class TeacherAttendance(
+data class WeeklySchoolTeacherTeacherAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "rate")
     var rate: Double
-) : Serializable
+)

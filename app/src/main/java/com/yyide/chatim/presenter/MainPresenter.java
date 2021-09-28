@@ -13,6 +13,8 @@ import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.WeeklyDateBean;
+import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MainView;
 
@@ -55,6 +57,45 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
+
+    public void copywriter() {
+        addSubscription(dingApiStores.copywriter(), new ApiCallback<WeeklyDescBean>() {
+            @Override
+            public void onSuccess(WeeklyDescBean model) {
+                mvpView.getCopywriter(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.fail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void getWeeklyDate() {
+        addSubscription(dingApiStores.getWeeklyDate(), new ApiCallback<WeeklyDateBean>() {
+            @Override
+            public void onSuccess(WeeklyDateBean model) {
+                mvpView.getWeeklyDate(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.fail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
 
     public void ToUserLogout() {
         mvpView.showLoading();

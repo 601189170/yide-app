@@ -115,25 +115,6 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         });
     }
 
-    public void copywriter() {
-        addSubscription(dingApiStores.copywriter(), new ApiCallback<WeeklyDescBean>() {
-            @Override
-            public void onSuccess(WeeklyDescBean model) {
-                mvpView.getCopywriter(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
-
     public void uploadFile(File file) {
         if (file == null) {
             return;

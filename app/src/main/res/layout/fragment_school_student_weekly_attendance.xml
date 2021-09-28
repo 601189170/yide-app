@@ -49,6 +49,7 @@
                     android:gravity="center"
                     android:textColor="#ff1e1e1e"
                     android:textSize="13sp"
+                    android:textStyle="bold"
                     app:drawableLeftCompat="@mipmap/icon_weekly_left"
                     app:drawableRightCompat="@mipmap/icon_weekly_right"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_name"
@@ -77,24 +78,20 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/attendance_recyclerview"
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/announRoll"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_marginTop="@dimen/dp_4"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_desc"
-                        app:spanCount="3"
-                        tools:listitem="@layout/item_weekly_attendance" />
+                        android:layout_marginTop="@dimen/dp_8"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/hot_recyclerview"
                         android:layout_width="wrap_content"
                         android:layout_height="10dp"
-                        app:layout_constraintEnd_toEndOf="@+id/attendance_recyclerview"
-                        app:layout_constraintStart_toStartOf="@+id/attendance_recyclerview"
-                        app:layout_constraintTop_toBottomOf="@+id/attendance_recyclerview"
+                        app:layout_constraintEnd_toEndOf="@+id/announRoll"
+                        app:layout_constraintStart_toStartOf="@+id/announRoll"
+                        app:layout_constraintTop_toBottomOf="@+id/announRoll"
                         tools:listitem="@layout/item_hot" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

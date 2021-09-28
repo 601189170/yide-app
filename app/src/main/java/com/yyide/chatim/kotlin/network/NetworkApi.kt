@@ -56,4 +56,35 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
         service.requestSchoolStudentAttendance(startTime, endTime)
     }
 
+    /**
+     * 班主任查看老师考勤
+     */
+    suspend fun requestAttendanceTeacherDetail(
+        classId: String,
+        teacherId: String,
+        startTime: String,
+        endTime: String
+    ) = getResult {
+        service.requestAttendanceTeacherDetail(classId, teacherId, startTime, endTime)
+    }
+
+    /**
+     * 老师查看学生考勤
+     */
+    suspend fun requestAttendanceStudentDetail(
+        classId: String,
+        teacherId: String,
+        startTime: String,
+        endTime: String
+    ) = getResult {
+        service.requestAttendanceStudentDetail(classId, teacherId, startTime, endTime)
+    }
+
+    /**
+     * 家长周报
+     */
+    suspend fun parentsStudentDetail(studentId: String, startTime: String, endTime: String) = getResult {
+        service.requestStudentDetail(studentId, startTime, endTime)
+    }
+
 }

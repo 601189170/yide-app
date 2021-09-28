@@ -7,5 +7,7 @@ class MMKVConstant {
         const val YD_WEEKLY_PUSH_SETTING = "yd_weekly_push_setting"
         const val YD_SCHEDULE_PUSH_SETTING = "yd_schedule_push_setting"
         const val YD_WEEKLY_DESC = "yd_weekly_desc"
+        const val YD_WEEKLY_DATE = "yd_weekly_date"
+
     }
 }

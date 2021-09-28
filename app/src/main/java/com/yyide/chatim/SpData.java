@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -54,8 +56,23 @@ public class SpData {
         return JSON.parseObject(SPUtils.getInstance().getString(CLASS_INFO, ""), GetUserSchoolRsp.DataBean.FormBean.class);
     }
 
+    //去重
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> removeList(List<GetUserSchoolRsp.DataBean.FormBean> persons) {
+        Set<GetUserSchoolRsp.DataBean.FormBean> personSet = new TreeSet<>((o1, o2) -> o1.classesId.compareTo(o2.classesId));
+        personSet.addAll(persons);
+        return new ArrayList<>(personSet);
+    }
+
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getClassList() {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
+            return removeList(SpData.getIdentityInfo().form);
+        }
+        return new ArrayList<>();
+    }
+
     /**
      * 获取用户信息选择的班级名或者班级学生名
+     *
      * @return
      */
     public static String getClassesStudentName() {

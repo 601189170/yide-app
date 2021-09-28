@@ -33,5 +33,4 @@ public interface HomeFragmentView extends BaseView {
 
     void getIndexMyNotice(TodoRsp rsp);
 
-    void getCopywriter(WeeklyDescBean model);
 }

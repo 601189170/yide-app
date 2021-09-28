@@ -1,7 +1,9 @@
 package com.yyide.chatim.activity.weekly.home
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,21 +16,27 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.tencent.mmkv.MMKV
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
+import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
+import com.yyide.chatim.activity.weekly.details.adapter.HotAdapter
 import com.yyide.chatim.activity.weekly.home.viewmodel.SchoolViewModel
 import com.yyide.chatim.activity.weekly.home.viewmodel.TeacherViewModel
+import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.base.MMKVConstant
-import com.yyide.chatim.databinding.DialogWeekMessgeBinding
-import com.yyide.chatim.databinding.FragmentTeacherChargeWeeklyBinding
+import com.yyide.chatim.databinding.*
 import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.dialog.WeeklyTopPop
-import com.yyide.chatim.model.AttendanceCheckRsp
+import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
-import java.util.HashSet
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -37,7 +45,7 @@ import java.util.HashSet
  * date 2021年9月15日15:11:01
  * author LRZ
  */
-class TeacherChargeWeeklyFragment : Fragment() {
+class TeacherChargeWeeklyFragment : BaseFragment() {
 
     private lateinit var viewBinding: FragmentTeacherChargeWeeklyBinding
     private val viewModel: TeacherViewModel by viewModels()
@@ -56,6 +64,9 @@ class TeacherChargeWeeklyFragment : Fragment() {
             TeacherChargeWeeklyFragment().apply {}
     }
 
+    private var classId = ""
+    private var teacherId = ""
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimeBean
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -63,66 +74,204 @@ class TeacherChargeWeeklyFragment : Fragment() {
 
     private fun initView() {
         request()
-        viewBinding.tvEvent.text = "事件"
-        viewBinding.tvDescs.text = WeeklyUtil.getDesc()
-        viewBinding.tvEvent.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterEvent, "请选择考勤事件")
-            attendancePop.setOnSelectListener { index: Int ->
-                this.index = index
-                viewBinding.tvEvent.text = adapterEvent.getItem(index).toString()
-            }
+        SpData.getClassInfo().apply {
+            viewBinding.tvEvent.text = classesName
         }
 
-        viewBinding.tvTime.text = "9-24 10:28"
+        SpData.getClassList().apply {
+            if (size > 1) {
+                viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    getResources().getDrawable(R.mipmap.icon_down),
+                    null
+                )
+                viewBinding.tvEvent.setOnClickListener {
+                    val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
+                    attendancePop.setOnSelectListener { index: Int ->
+                        viewBinding.tvEvent.text = adapterEvent.getItem(index).classesName
+                        classId = adapterEvent.getItem(index).classesId
+                        requestTeacher(dateTime)
+                    }
+
+                }
+            } else {
+                viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            }
+            adapterEvent.setList(this)
+        }
+        viewBinding.tvDescs.text = WeeklyUtil.getDesc()
+
+        viewBinding.attendance.cardView.setOnClickListener {
+            WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_ATTENDANCE_TYPE)
+        }
+
+        viewBinding.homework.cardViewWork.setOnClickListener {
+            WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_ATTENDANCE_TYPE)
+        }
+        viewBinding.tvDescs.text = WeeklyUtil.getDesc()
+        teacherId = SpData.getIdentityInfo().teacherId
+        if (SpData.getClassInfo() != null) {
+            classId = SpData.getClassInfo().classesId
+        }
+        dateTime = WeeklyUtil.getDateTime()!!
+        if (dateTime != null){
+            viewBinding.tvTime.text = getString(
+                R.string.startTime_endTime, DateUtils.formatTime(
+                    dateTime.startTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                ), DateUtils.formatTime(
+                    dateTime.endTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                )
+            )
+        }
+        requestTeacher(dateTime)
+        val dateLists = WeeklyUtil.getDateTimes()
+        val adapterDate = DateAdapter()
+        if (dateLists.isNotEmpty()) {
+            adapterDate.setList(dateLists)
+        }
         viewBinding.tvTime.setOnClickListener {
             val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
             attendancePop.setOnSelectListener { index: Int ->
-                this.indexDate = index
-                viewBinding.tvTime.text = adapterDate.getItem(index).toString()
+//                indexDate = index
+                viewBinding.tvTime.text = getString(
+                    R.string.startTime_endTime, DateUtils.formatTime(
+                        dateLists[index].startTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    ), DateUtils.formatTime(
+                        dateLists[index].endTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    )
+                )
+                requestTeacher(dateTime)
             }
         }
-        initChart()
+    }
+
+    private fun requestTeacher(dateTime: WeeklyDateBean.DataBean.TimeBean?) {
+        if (dateTime != null) {
+            loading()
+            viewModel.requestTeacherWeekly(classId, teacherId, dateTime.startTime, dateTime.endTime)
+        }
     }
 
     private fun request() {
         viewModel.teacherLiveData.observe(viewLifecycleOwner) {
-            val bean = it.getOrNull()
-            if (null != bean) {
+            dismiss()
+            val result = it.getOrNull()
+            if (null != result) {
                 viewBinding.clContent.visibility = View.VISIBLE
                 viewBinding.cardViewNoData.visibility = View.GONE
+                viewBinding.attendance.tvAttendDesc.text = result.rank
+                setSummary(result.summary)
+                setAttendance(result.attend)
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
         }
-        val startData = DateUtils.getDate(DateUtils.getBeginDayOfWeek().time)
-        val endData = DateUtils.getDate(System.currentTimeMillis())
-        var classId = ""
-        var teacherId = ""
-        viewModel.requestTeacherWeekly(classId, teacherId, startData, endData)
     }
 
-    private fun initChart() {
-        viewBinding.attendance.layoutCharts.recyclerview.layoutManager =
-            LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
-        viewBinding.attendance.layoutCharts.recyclerview.adapter = chartsAdapter
-        chartsAdapter.setOnItemClickListener { adapter, view, position ->
+    private fun setSummary(summary: WeeklyTeacherSummary) {
+        viewBinding.summary.tvWeeklyAttendance.text = summary.attend
+        viewBinding.summary.tvWeeklyHomework.text = summary.work
+        viewBinding.summary.tvWeeklyShopping.text = summary.expend
+    }
 
+    private val spanCount = 3
+    private fun setAttendance(attend: WeeklyTeacherAttendance) {
+        viewBinding.attendance.tvWeeklyAttendance.text = attend.attend
+        viewBinding.attendance.tvWeeklyHomework.text = attend.course
+        //设置班级考勤
+        viewBinding.attendance.hotRecyclerview.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        viewBinding.attendance.hotRecyclerview.adapter = adapterHot
+
+        val splitList = splitList(attend.classAttend, spanCount)
+        val hotList = mutableListOf<Int>()
+        if (splitList != null) {
+            for (item in splitList.indices) {
+                hotList.add(item)
+            }
+        }
+        adapterHot.setList(hotList)
+        if (splitList != null && splitList.isNotEmpty()) {
+            initHotScroll(splitList)
+        }
+
+        //我的考勤
+        viewBinding.attendance.layoutCharts.recyclerview.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        viewBinding.attendance.layoutCharts.recyclerview.adapter =
+            adapterAttendance
+
+        adapterAttendance.setOnItemClickListener { adapter, view, position ->
             selectPosition = if (selectPosition != position) {
                 position
             } else {
                 -1
             }
-            chartsAdapter.notifyDataSetChanged()
-            //show(view, chartsAdapter.getItem(position), 60)
+            adapterAttendance.notifyDataSetChanged()
         }
-        val datas = mutableListOf<String>()
-        datas.add("考勤考勤1")
-        datas.add("考勤考勤2")
-        datas.add("考勤考勤3")
-        datas.add("考勤考勤4")
-        datas.add("考勤考勤5")
-        chartsAdapter.setList(datas)
+        adapterAttendance.setList(attend.teacherAttend)
+    }
+
+    private fun initHotScroll(attendance: List<List<WeeklyTeacherClassAttendance>>) {
+        val viewList = mutableListOf<View>()
+        attendance.forEachIndexed { index, schoolAttendance ->
+            viewList.add(attendanceBanner(attendance[index]))
+        }
+        val announAdapter = HotAdapter(viewList)
+        viewBinding.attendance.announRoll.adapter = announAdapter
+        viewBinding.attendance.announRoll.addOnPageChangeListener(object :
+            ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                val dex: Int = position % announAdapter.viewLists.size
+                hotIndex = dex
+                adapterHot.notifyDataSetChanged()
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {}
+        })
+    }
+
+    /**
+     * 按指定大小，分隔集合，将集合按规定个数分为n个部分
+     * @param <T>
+     *
+     * @param list
+     * @param len
+     * @return
+    </T> */
+    private fun splitList(
+        list: List<WeeklyTeacherClassAttendance>?,
+        len: Int
+    ): List<List<WeeklyTeacherClassAttendance>>? {
+        if (list == null || list.isEmpty() || len < 1) {
+            return Collections.emptyList()
+        }
+        val result: MutableList<List<WeeklyTeacherClassAttendance>> =
+            ArrayList()
+        val size = list.size
+        val count = (size + len - 1) / len
+        for (i in 0 until count) {
+            val subList = list.subList(i * len, if ((i + 1) * len > size) size else len * (i + 1))
+            result.add(subList)
+        }
+        return result
     }
 
     @SuppressLint("ResourceAsColor", "ResourceType")
@@ -137,7 +286,7 @@ class TeacherChargeWeeklyFragment : Fragment() {
         popWindow.setBackgroundDrawable(context?.getDrawable(android.R.color.transparent))
         popWindow.setOnDismissListener {
             selectPosition = -1
-            chartsAdapter.notifyDataSetChanged()
+            adapterAttendance.notifyDataSetChanged()
         }
         //获取需要在其上方显示的控件的位置信息
         val location = IntArray(2)
@@ -153,12 +302,12 @@ class TeacherChargeWeeklyFragment : Fragment() {
 
     private var index = -1
     private val adapterEvent = object :
-        BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?, BaseViewHolder>(R.layout.swich_class_item) {
+        BaseQuickAdapter<GetUserSchoolRsp.DataBean.FormBean, BaseViewHolder>(R.layout.swich_class_item) {
         override fun convert(
             holder: BaseViewHolder,
-            item: AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?
+            item: GetUserSchoolRsp.DataBean.FormBean
         ) {
-            holder.setText(R.id.className, item?.attName)
+            holder.setText(R.id.className, item.classesName)
             holder.getView<View>(R.id.select).visibility =
                 if (index == holder.layoutPosition) View.VISIBLE else View.GONE
             if (this.itemCount - 1 == holder.layoutPosition) {
@@ -169,61 +318,59 @@ class TeacherChargeWeeklyFragment : Fragment() {
         }
     }
 
-    private var indexDate = -1
-    private val adapterDate = object :
-        BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?, BaseViewHolder>(R.layout.swich_class_item) {
-        override fun convert(
-            holder: BaseViewHolder,
-            item: AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean?
-        ) {
-            holder.setText(R.id.className, item?.attName)
-            holder.getView<View>(R.id.select).visibility =
-                if (indexDate == holder.layoutPosition) View.VISIBLE else View.GONE
-            if (this.itemCount - 1 == holder.layoutPosition) {
-                holder.getView<View>(R.id.view_line).visibility = View.GONE
-            } else {
-                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
-            }
+    private var hotIndex = 0
+    private val adapterHot = object :
+        BaseQuickAdapter<Int, BaseViewHolder>(R.layout.item_hot) {
+        override fun convert(holder: BaseViewHolder, item: Int) {
+            val bind = ItemHotBinding.bind(holder.itemView)
+            if (hotIndex == holder.bindingAdapterPosition)
+                bind.view.setBackgroundResource(R.drawable.hot_round_wilhte)
+            else
+                bind.view.setBackgroundResource(R.drawable.hot_round_grray)
         }
     }
 
-    private var selectPosition = -1
-    private val chartsAdapter =
-        object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-            override fun convert(holder: BaseViewHolder, item: String) {
-                val rodom = (10..100).random()
-                val progressBar = holder.getView<ProgressBar>(R.id.progressbar)
-                val constraintLayout = holder.getView<ConstraintLayout>(R.id.constraintLayout)
-                progressBar.progress = rodom
-                holder.setText(R.id.tv_week, item)
-                holder.setText(R.id.tv_progress, "${rodom}%")
-                constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-                if (selectPosition == holder.bindingAdapterPosition) {
-                    constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
-                }
-                //when (holder.bindingAdapterPosition) {
-//                0 -> {
-//                    holder.setText(R.id.tv_week, "周一")
-//                }
-//                1 -> {
-//                    holder.setText(R.id.tv_week, "周二")
-//                }
-//                2 -> {
-//                    holder.setText(R.id.tv_week, "周三")
-//                }
-//                3 -> {
-//                    holder.setText(R.id.tv_week, "周四")
-//                }
-//                4 -> {
-//                    holder.setText(R.id.tv_week, "周五")
-//                }
-//                5 -> {
-//                    holder.setText(R.id.tv_week, "周六")
-//                }
-//                6 -> {
-//                    holder.setText(R.id.tv_week, "周日")
-//                }
+    private fun attendanceBanner(attendance: List<WeeklyTeacherClassAttendance>): View {
+        val view = ItemHBinding.inflate(layoutInflater)
+        view.attendanceRecyclerview.layoutManager = GridLayoutManager(activity, spanCount)
+        val adapterAttendance = object :
+            BaseQuickAdapter<WeeklyTeacherClassAttendance, BaseViewHolder>(R.layout.item_weekly_attendance) {
+            override fun convert(holder: BaseViewHolder, item: WeeklyTeacherClassAttendance) {
+                val bind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
+                bind.viewLine.visibility =
+                    if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE
+                bind.tvEventName.text = item.name
+                bind.tvAttendance.text = "${item.value}%"
             }
         }
+        view.attendanceRecyclerview.adapter = adapterAttendance
+        adapterAttendance.setList(attendance)
+        return view.root
+    }
 
+    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
+        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
+        animator.addUpdateListener { valueAnimator: ValueAnimator ->
+            view.progress = valueAnimator.animatedValue as Int
+        }
+        animator.start()
+    }
+
+    /**
+     * 考勤数据
+     */
+    private var selectPosition = -1
+    private val adapterAttendance = object :
+        BaseQuickAdapter<WeeklyTeacherTeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
+        override fun convert(holder: BaseViewHolder, item: WeeklyTeacherTeacherAttend) {
+            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
+            bind.tvProgress.text = "${item.value}%"
+            bind.tvWeek.text = item.name
+            setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
+            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
+            if (selectPosition == holder.bindingAdapterPosition) {
+                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+            }
+        }
+    }
 }

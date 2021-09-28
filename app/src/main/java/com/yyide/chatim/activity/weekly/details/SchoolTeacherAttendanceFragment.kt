@@ -13,16 +13,20 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.HotAdapter
 import com.yyide.chatim.activity.weekly.details.viewmodel.SchoolTeacherAttendanceViewModel
+import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentSchoolTeacherWeeklyAttendanceBinding
 import com.yyide.chatim.databinding.ItemHBinding
 import com.yyide.chatim.databinding.ItemHotBinding
 import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
+import com.yyide.chatim.dialog.AttendancePop
+import com.yyide.chatim.model.Detail
 import com.yyide.chatim.model.SchoolAttendance
-import com.yyide.chatim.model.SchoolWeeklyDetail
 import com.yyide.chatim.model.SchoolWeeklyTeacherBean
+import com.yyide.chatim.model.WeeklyDateBean
 import com.yyide.chatim.utils.DateUtils
 import java.util.*
 import kotlin.collections.ArrayList
@@ -61,7 +65,7 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
         request()
     }
 
-    private fun initViewPager(events: List<SchoolWeeklyDetail>) {
+    private fun initViewPager(events: List<Detail>) {
         val mTitles: MutableList<String> = ArrayList()
         for (item in events) {
             mTitles.add(item.name)
@@ -70,7 +74,7 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
         viewBinding.viewpager.adapter = object :
             FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                return SchoolTeacherChildAttendanceFragment.newInstance()
+                return SchoolTeacherChildAttendanceFragment.newInstance(events[position])
             }
 
             override fun getCount(): Int {
@@ -86,21 +90,58 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
     }
 
     private fun request() {
-        val startData = DateUtils.getDate(DateUtils.getBeginDayOfWeek().time)
-        val endData = DateUtils.getDate(System.currentTimeMillis())
-        viewModel.requestSchoolAttendance(startData, endData)
-        loading()
         viewModel.schoolTeacherAttendanceLiveData.observe(viewLifecycleOwner) {
             dismiss()
             val result = it.getOrNull()
             if (null != result) {
                 setWeekly(result)
             } else {//接口返回空的情况处理
+
+            }
+        }
+        val dateTime = WeeklyUtil.getDateTime()
+        if (dateTime != null) {
+            loading()
+            viewModel.requestSchoolTeacherAttendance(dateTime.startTime, dateTime.endTime)
+            viewBinding.tvTime.text = getString(
+                R.string.startTime_endTime, DateUtils.formatTime(
+                    dateTime.startTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                ), DateUtils.formatTime(
+                    dateTime.endTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                )
+            )
+        }
+        val dateLists = WeeklyUtil.getDateTimes()
+        val adapterDate = DateAdapter()
+        adapterDate.setList(dateLists)
+        viewBinding.tvTime.setOnClickListener {
+            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
+            attendancePop.setOnSelectListener { index: Int ->
+                //indexDate = index
+                viewBinding.tvTime.text = getString(
+                    R.string.startTime_endTime, DateUtils.formatTime(
+                        dateLists[index].startTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    ), DateUtils.formatTime(
+                        dateLists[index].endTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    )
+                )
+                viewModel.requestSchoolTeacherAttendance(
+                    dateLists[index].startTime,
+                    dateLists[index].endTime
+                )
             }
         }
     }
 
-    private val spanCount = 1
+    private val spanCount = 3
     private fun setWeekly(result: SchoolWeeklyTeacherBean) {
         viewBinding.hotRecyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
