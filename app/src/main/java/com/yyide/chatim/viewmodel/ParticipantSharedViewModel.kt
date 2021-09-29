@@ -10,8 +10,11 @@ import com.yyide.chatim.model.schedule.ParticipantRsp
  * @date 2021/9/28 17:31
  * @description 描述
  */
-class ParticipantSharedViewModel:ViewModel() {
-    val curStaffParticipantList = MutableLiveData<MutableList<ParticipantRsp.DataBean.ParticipantListBean>>()
+class ParticipantSharedViewModel : ViewModel() {
+    val curStaffParticipantList: MutableLiveData<MutableList<ParticipantRsp.DataBean.ParticipantListBean>> by lazy {
+        MutableLiveData()
+    }
+
     init {
         curStaffParticipantList.value = mutableListOf()
     }

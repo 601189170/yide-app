@@ -181,13 +181,20 @@ public class ScheduleData {
     }
 
     public static class ParticipantBean {
-        private long userId;
+        private String userId;
 
-        public long getUserId() {
+        public String getUserId() {
             return userId;
         }
 
-        public void setUserId(long userId) {
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public ParticipantBean() {
+        }
+
+        public ParticipantBean(String userId) {
             this.userId = userId;
         }
     }

@@ -73,6 +73,7 @@ import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
+import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
 
@@ -85,6 +86,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -789,6 +791,14 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/saveScheduleSetting")
     Call<BaseRsp> saveScheduleSetting(@Body RequestBody requestBody);
+
+    /**
+     * 获取教职工人员信息
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getTeacherParticipant
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getTeacherParticipant")
+    Call<ParticipantRsp> getTeacherParticipant(@Query("departmentId") String departmentId);
 
     /**
      * 获取周报描述

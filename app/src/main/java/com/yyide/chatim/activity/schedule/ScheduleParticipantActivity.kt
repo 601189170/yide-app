@@ -5,6 +5,8 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONArray
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.google.android.flexbox.FlexDirection
@@ -30,8 +32,8 @@ class ScheduleParticipantActivity : BaseActivity() {
     lateinit var scheduleParticipantBinding: ActivityScheduleParticipantBinding
     val fragments = mutableListOf<Fragment>()
     val tabs = mutableListOf<String>()
-    private val participantViewModel: ParticipantSharedViewModel by viewModels()
-    private val participantList = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
+    private val participantSharedViewModel: ParticipantSharedViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleParticipantBinding = ActivityScheduleParticipantBinding.inflate(layoutInflater)
@@ -40,13 +42,11 @@ class ScheduleParticipantActivity : BaseActivity() {
         initData()
         initParticipantSelected()
         initViewPager()
-        participantViewModel.curStaffParticipantList.observe(this, {
+        participantSharedViewModel.curStaffParticipantList.observe(this, {
             loge("当前选中参与人数据发生变化：${it.size}")
-            participantList.clear()
-            participantList.addAll(it)
             scheduleParticipantBinding.clSearchResult.visibility =
                 if (it.isEmpty()) View.GONE else View.VISIBLE
-            adapter.setList(participantList)
+            adapter.setList(it)
         })
     }
 
@@ -59,16 +59,13 @@ class ScheduleParticipantActivity : BaseActivity() {
         scheduleParticipantBinding.rvParticipant.addItemDecoration(
             SpacesFlowItemDecoration(DisplayUtils.dip2px(this, 20f), DisplayUtils.dip2px(this, 8f))
         )
-        adapter.setList(participantList)
+        adapter.setList(participantSharedViewModel.curStaffParticipantList.value)
         scheduleParticipantBinding.rvParticipant.adapter = adapter
         adapter.setOnItemClickListener { _, _, position ->
             //更新view model里的数据源
-            val removeAt = participantViewModel.curStaffParticipantList.value
+            val removeAt = participantSharedViewModel.curStaffParticipantList.value
             removeAt?.removeAt(position)
-            participantViewModel.curStaffParticipantList.postValue(removeAt)
-        }
-        if (participantList.isEmpty()) {
-            scheduleParticipantBinding.clSearchResult.visibility = View.GONE
+            participantSharedViewModel.curStaffParticipantList.postValue(removeAt)
         }
     }
 
@@ -112,6 +109,14 @@ class ScheduleParticipantActivity : BaseActivity() {
     }
 
     private fun initView() {
+        val stringExtra = intent.getStringExtra("data")
+        val participantDataList = JSONArray.parseArray(
+            stringExtra,
+            ParticipantRsp.DataBean.ParticipantListBean::class.java
+        )
+        if (participantDataList != null) {
+            participantSharedViewModel.curStaffParticipantList.value = participantDataList
+        }
         scheduleParticipantBinding.top.title.text = "添加参与人"
         scheduleParticipantBinding.top.backLayout.setOnClickListener {
             finish()
@@ -120,6 +125,12 @@ class ScheduleParticipantActivity : BaseActivity() {
         scheduleParticipantBinding.top.tvRight.text = "确定"
         scheduleParticipantBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         scheduleParticipantBinding.top.tvRight.setOnClickListener {
+            val list = participantSharedViewModel.curStaffParticipantList.value
+            if (list != null) {
+                val intent = intent
+                intent.putExtra("data", JSON.toJSONString(list))
+                setResult(RESULT_OK, intent)
+            }
             finish()
         }
 

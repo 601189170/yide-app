@@ -12,7 +12,7 @@ data class ParticipantRsp(
     val data: DataBean? = null,
 ) {
     data class DataBean(
-        var name: NameBean? = null,
+        var name: String? = null,
         var departmentList: List<ParticipantListBean>? = null,
         var participantList: List<ParticipantListBean>? = null
     ) {
@@ -33,9 +33,9 @@ data class ParticipantRsp(
         )*/
 
         data class ParticipantListBean(
-            val id: String? = null,
-            val name: String? = null,
-            val department:Boolean = false,
+            var id: String? = null,
+            var name: String? = null,
+            var department:Boolean = false,
             var checked:Boolean = false
         )
     }
