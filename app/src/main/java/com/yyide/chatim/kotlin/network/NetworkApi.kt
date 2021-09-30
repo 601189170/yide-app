@@ -83,7 +83,7 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
     /**
      * 家长周报
      */
-    suspend fun parentsStudentDetail(studentId: String, startTime: String, endTime: String) = getResult {
+    suspend fun requestParentsStudentDetail(studentId: String, startTime: String, endTime: String) = getResult {
         service.requestStudentDetail(studentId, startTime, endTime)
     }
 

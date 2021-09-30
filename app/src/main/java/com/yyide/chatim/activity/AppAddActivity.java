@@ -73,10 +73,8 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
 
     @OnClick({R.id.back_layout})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.back_layout:
-                finish();
-                break;
+        if (view.getId() == R.id.back_layout) {
+            finish();
         }
     }
 

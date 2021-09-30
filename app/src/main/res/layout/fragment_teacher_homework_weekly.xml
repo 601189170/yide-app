@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_class_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_12"
@@ -31,18 +31,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/dp_4"
             android:gravity="center"
-            android:text="08/01-08/07"
             android:textColor="#ff1e1e1e"
             android:textSize="13sp"
             app:drawableLeftCompat="@mipmap/icon_weekly_left"
             app:drawableRightCompat="@mipmap/icon_weekly_right"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_class_name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_name" />
+            app:layout_constraintTop_toTopOf="@+id/tv_class_name" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             android:paddingStart="@dimen/dp_15"
             android:paddingTop="@dimen/dp_15"
             android:paddingEnd="@dimen/dp_15"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name">
+            app:layout_constraintTop_toBottomOf="@+id/tv_class_name">
 
             <TextView
                 android:id="@+id/tv_desc"
@@ -126,14 +126,14 @@
             android:textSize="@dimen/text_13" />
     </RadioGroup>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_content"
+    <FrameLayout
+        android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp_12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rg_time_type">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

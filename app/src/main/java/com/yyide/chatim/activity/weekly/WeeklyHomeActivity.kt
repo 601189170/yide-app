@@ -30,29 +30,25 @@ class WeeklyHomeActivity : BaseActivity() {
     private fun initView() {
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.weekly_home_title)
-        supportFragmentManager.beginTransaction().replace(
-            viewBinding.flContent.id,
-            TeacherChargeWeeklyFragment.newInstance()
-        ).commit()
         when {
-//            SpData.getIdentityInfo().isSchool -> {
-//                supportFragmentManager.beginTransaction().replace(
-//                    viewBinding.flContent.id,
-//                    SchoolWeeklyFragment.newInstance()
-//                ).commit()
-//            }
-//            SpData.getIdentityInfo().isParent -> {
-//                supportFragmentManager.beginTransaction().replace(
-//                    viewBinding.flContent.id,
-//                    ParentsWeeklyFragment.newInstance()
-//                ).commit()
-//            }
-//            SpData.getIdentityInfo().isTeacherOrCharge -> {
-//                supportFragmentManager.beginTransaction().replace(
-//                    viewBinding.flContent.id,
-//                    TeacherChargeWeeklyFragment.newInstance()
-//                ).commit()
-//            }
+            SpData.getIdentityInfo().isSchool -> {
+                supportFragmentManager.beginTransaction().replace(
+                    viewBinding.flContent.id,
+                    SchoolWeeklyFragment.newInstance()
+                ).commit()
+            }
+            SpData.getIdentityInfo().isParent -> {
+                supportFragmentManager.beginTransaction().replace(
+                    viewBinding.flContent.id,
+                    ParentsWeeklyFragment.newInstance()
+                ).commit()
+            }
+            SpData.getIdentityInfo().isTeacherOrCharge -> {
+                supportFragmentManager.beginTransaction().replace(
+                    viewBinding.flContent.id,
+                    TeacherChargeWeeklyFragment.newInstance()
+                ).commit()
+            }
         }
     }
 }

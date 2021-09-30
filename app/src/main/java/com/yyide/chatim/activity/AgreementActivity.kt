@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityAgreementBinding
-import com.yyide.chatim.databinding.ActivityPrivacyBinding
 
 class AgreementActivity : BaseActivity() {
 

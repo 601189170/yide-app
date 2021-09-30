@@ -40,8 +40,31 @@
                 android:layout_marginTop="@dimen/dp_30"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:itemCount="4"
+                android:visibility="gone"
                 tools:listitem="@layout/item_weekly_teacher_comments" />
 
+            <View
+                android:id="@+id/view"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_6"
+                android:background="@drawable/circular_blue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_weekly_attendance" />
+
+            <TextView
+                android:id="@+id/tv_weekly_attendance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_35"
+                android:textColor="#ff1e1e1e"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/view"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

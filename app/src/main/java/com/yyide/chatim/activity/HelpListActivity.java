@@ -29,8 +29,6 @@ import butterknife.OnClick;
 
 public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter> implements HelpIntroductionView,
         SwipeRefreshLayout.OnRefreshListener {
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.recyclerview)

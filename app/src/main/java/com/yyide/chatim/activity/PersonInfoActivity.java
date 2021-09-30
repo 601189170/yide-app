@@ -35,8 +35,6 @@ import io.reactivex.rxjava3.functions.Consumer;
 
 public class PersonInfoActivity extends BaseActivity {
 
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.name)

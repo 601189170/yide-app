@@ -15,9 +15,6 @@ import butterknife.OnClick;
 
 public class CheckPhoneActivity extends BaseActivity {
 
-
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
 

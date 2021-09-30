@@ -1,17 +1,9 @@
 package com.yyide.chatim.activity;
 
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
@@ -23,8 +15,6 @@ import butterknife.OnClick;
 
 public class HelpInfoActivity extends BaseActivity {
 
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.tv_helpTitle)

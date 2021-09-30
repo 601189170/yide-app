@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.yyide.chatim.R
-import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.details.*
 import com.yyide.chatim.activity.weekly.home.SchoolWeeklyFragment
 import com.yyide.chatim.base.BaseActivity
@@ -19,6 +18,9 @@ class WeeklyDetailsActivity : BaseActivity() {
 
     companion object {
         private val TYPE = "type"
+        private val STUDNET_ID = "studnet_id"
+        private val STUDNET_NAME = "studnet_name"
+
         const val SCHOOL_ATTENDANCE_TYPE = "school_attendance_type"
         const val SCHOOL_HOMEWORK_TYPE = "school_homework_type"
         const val HEAD_TEACHER_ATTENDANCE_TYPE = "head_teacher_attendance_type"
@@ -31,6 +33,14 @@ class WeeklyDetailsActivity : BaseActivity() {
         fun jump(context: Context, type: String) {
             val intent = Intent(context, WeeklyDetailsActivity::class.java)
             intent.putExtra(TYPE, type)
+            context.startActivity(intent)
+        }
+
+        fun jump(context: Context, type: String, studentId: String, studentName: String) {
+            val intent = Intent(context, WeeklyDetailsActivity::class.java)
+            intent.putExtra(TYPE, type)
+            intent.putExtra(STUDNET_ID, studentId)
+            intent.putExtra(STUDNET_NAME, studentName)
             context.startActivity(intent)
         }
     }
@@ -48,6 +58,9 @@ class WeeklyDetailsActivity : BaseActivity() {
 
     private fun initView() {
         val type = intent.getStringExtra(TYPE)
+        val studentId = intent.getStringExtra(STUDNET_ID)
+        val studentName = intent.getStringExtra(STUDNET_NAME)
+
         viewBinding.back.setOnClickListener { finish() }
         when (type) {
             SCHOOL_ATTENDANCE_TYPE -> {
@@ -68,7 +81,7 @@ class WeeklyDetailsActivity : BaseActivity() {
                 viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherAttendanceFragment.newInstance()
+                    TeacherAttendanceHomeFragment.newInstance()
                 ).commit()
             }
             HEAD_TEACHER_HOMEWORK_TYPE -> {
@@ -82,7 +95,7 @@ class WeeklyDetailsActivity : BaseActivity() {
                 viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherAttendanceFragment.newInstance()
+                    TeacherAttendanceHomeFragment.newInstance()
                 ).commit()
             }
             TEACHER_HOMEWORK_TYPE -> {
@@ -96,7 +109,7 @@ class WeeklyDetailsActivity : BaseActivity() {
                 viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    SchoolWeeklyFragment.newInstance()
+                    ParentsAttendanceDetailFragment.newInstance(studentId, studentName)
                 ).commit()
             }
             PARENT_HOMEWORK_TYPE -> {
