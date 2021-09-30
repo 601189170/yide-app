@@ -16,25 +16,10 @@ data class ParticipantRsp(
         var departmentList: List<ParticipantListBean>? = null,
         var participantList: List<ParticipantListBean>? = null
     ) {
-        data class NameBean(
-            val id: String? = null,
-            val level: Int = 0,
-            val type: String? = null,
-            val name: String? = null,
-            val showName: String? = null,
-            val parentId: String? = null,
-            val schoolId: String? = null,
-            val parentName: String? = null,
-        )
-
-      /*  data class DepartmentListBean(
-            val id: String? = null,
-            val name: String? = null,
-        )*/
-
         data class ParticipantListBean(
             var id: String? = null,
             var name: String? = null,
+            var type: String? = null,
             var department:Boolean = false,
             var checked:Boolean = false
         )

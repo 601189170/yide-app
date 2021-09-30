@@ -76,6 +76,7 @@ import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
+import com.yyide.chatim.model.schedule.StudentGuardianRsp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -799,6 +800,16 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/getTeacherParticipant")
     Call<ParticipantRsp> getTeacherParticipant(@Query("departmentId") String departmentId);
+
+    /**
+     * 获取【家长/学生】人员信息
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getParticipant
+     * @param type  类型【0：学校名称及学段，1：年级】
+     * @param scope 范围【1：家长，2：学生】
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getParticipant")
+    Call<StudentGuardianRsp> getParticipant(@Query("id") String id,@Query("type") String type,@Query("scope") String scope);
 
     /**
      * 获取周报描述

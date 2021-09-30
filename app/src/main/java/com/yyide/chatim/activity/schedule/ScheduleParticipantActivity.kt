@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -80,28 +81,27 @@ class ScheduleParticipantActivity : BaseActivity() {
     }
 
     private fun initViewPager() {
-        fragments.add(StaffParticipantFragment.newInstance("教职工列表"))
-        fragments.add(StaffParticipantFragment.newInstance("学生列表"))
-        fragments.add(StaffParticipantFragment.newInstance("家长列表"))
+        fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STAFF))
+        fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STUDENT))
+        fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_GUARDIAN))
         tabs.add("教职工")
         tabs.add("学生")
         tabs.add("家长")
-        scheduleParticipantBinding.viewpager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = fragments.size
+        scheduleParticipantBinding.viewpager.adapter =
+            object : FragmentPagerAdapter(
+                supportFragmentManager,
+                BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+            ) {
+                override fun getCount(): Int = fragments.size
 
-            override fun createFragment(position: Int): Fragment {
-                return fragments[position]
+                override fun getItem(position: Int): Fragment {
+                    return fragments[position]
+                }
             }
-
-        }
-        TabLayoutMediator(
-            scheduleParticipantBinding.tablayout,
+        scheduleParticipantBinding.tablayout.setViewPager(
             scheduleParticipantBinding.viewpager,
-            true
-        ) { tab: TabLayout.Tab, position: Int ->
-            //这里需要根据position修改tab的样式和文字等
-            tab.text = tabs[position]
-        }.attach()
+            tabs.toTypedArray()
+        )
     }
 
     private fun initData() {

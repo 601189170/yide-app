@@ -27,7 +27,7 @@ import com.yyide.chatim.viewmodel.StaffParticipantViewModel
  * 参与人选择
  */
 class StaffParticipantFragment : Fragment() {
-    private var type: String? = null
+    private var type: Int = 0
     lateinit var staffParticipantBinding: FragmentStaffParticipantBinding
     private val staffParticipantViewModel: StaffParticipantViewModel by viewModels()
     private val participantSharedViewModel: ParticipantSharedViewModel by activityViewModels()
@@ -38,9 +38,9 @@ class StaffParticipantFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            type = it.getString(ARG_TYPE)
+            type = it.getInt(ARG_TYPE)
         }
-        staffParticipantViewModel.getTeacherParticipant()
+        requestData(null)
         staffParticipantViewModel.getResponseResult().observe(this, {
             if (it != null) {
                 listCache[it.name ?: "未知"] = it
@@ -132,9 +132,7 @@ class StaffParticipantFragment : Fragment() {
                         navAdapter.setList(staffParticipantViewModel.getParticipantList().value)
                     } else {
                         //缓存没数据则需要请求数据
-                        staffParticipantViewModel.getTeacherParticipant(
-                            participantListBean.id ?: ""
-                        )
+                        requestData(participantListBean)
                     }
                 } else {
                     val value = participantSharedViewModel.curStaffParticipantList.value
@@ -161,6 +159,32 @@ class StaffParticipantFragment : Fragment() {
                 }
 
             })
+    }
+
+    /**
+     * 请求参与人列表数据
+     */
+    private fun requestData(participantListBean: ParticipantRsp.DataBean.ParticipantListBean?) {
+        when (type) {
+            PARTICIPANT_TYPE_STAFF -> {
+                //请求教职工数据
+                staffParticipantViewModel.getTeacherParticipant(participantListBean?.id ?: "")
+            }
+            PARTICIPANT_TYPE_GUARDIAN -> {
+                //请求家长监护人数据
+                staffParticipantViewModel.getStudentGuardianParticipant(
+                    participantListBean?.id ?: "", participantListBean?.type ?: "0", "1"
+                )
+            }
+            PARTICIPANT_TYPE_STUDENT -> {
+                //请求学生数据
+                staffParticipantViewModel.getStudentGuardianParticipant(
+                    participantListBean?.id ?: "", participantListBean?.type ?: "0", "2"
+                )
+            }
+            else -> {
+            }
+        }
     }
 
     private fun synParticipantListSelectedStatus() {
@@ -207,11 +231,21 @@ class StaffParticipantFragment : Fragment() {
 
     companion object {
         private const val ARG_TYPE = "type"
+
+        //教职工
+        const val PARTICIPANT_TYPE_STAFF = 1
+
+        //学生
+        const val PARTICIPANT_TYPE_STUDENT = 2
+
+        //家长监护人
+        const val PARTICIPANT_TYPE_GUARDIAN = 3
+
         @JvmStatic
-        fun newInstance(type: String) =
+        fun newInstance(type: Int) =
             StaffParticipantFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_TYPE, type)
+                    putInt(ARG_TYPE, type)
                 }
             }
     }

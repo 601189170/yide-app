@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yyide.chatim.model.schedule.ParticipantRsp
+import com.yyide.chatim.model.schedule.StudentGuardianRsp
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import retrofit2.Call
@@ -30,7 +31,7 @@ class StaffParticipantViewModel : ViewModel() {
     }
 
     //当前参与人列表
-   val curParticipantList: MutableLiveData<MutableList<ParticipantRsp.DataBean.ParticipantListBean>> by lazy {
+    val curParticipantList: MutableLiveData<MutableList<ParticipantRsp.DataBean.ParticipantListBean>> by lazy {
         MutableLiveData(mutableListOf())
     }
 
@@ -38,7 +39,7 @@ class StaffParticipantViewModel : ViewModel() {
         MutableLiveData()
     }
 
-    fun getResponseResult() :LiveData<ParticipantRsp.DataBean?>{
+    fun getResponseResult(): LiveData<ParticipantRsp.DataBean?> {
         return responseResult
     }
 
@@ -59,6 +60,60 @@ class StaffParticipantViewModel : ViewModel() {
                     responseResult.postValue(null)
                 }
             }
+        })
+    }
+
+    /**
+     * 查询学生或家长
+     */
+    fun getStudentGuardianParticipant(id: String = "", type: String = "0", scope: String = "1") {
+        apiStores.getParticipant(id, type, scope).enqueue(object : Callback<StudentGuardianRsp> {
+            override fun onResponse(
+                call: Call<StudentGuardianRsp>,
+                response: Response<StudentGuardianRsp>
+            ) {
+                val body = response.body()
+                if (body != null && body.code == 200 && body.data != null) {
+                    val data = body.data
+                    val dataBean = ParticipantRsp.DataBean()
+                    val childList = data.childList
+                    if (childList != null) {
+                        dataBean.name = childList.name
+                        val list = childList.list
+                        val departmentList =
+                            mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
+                        val participantList =
+                            mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
+                        //学段/年级/班级
+                        list?.let {
+                            it.forEach {
+                                val participantListBean =
+                                    ParticipantRsp.DataBean.ParticipantListBean()
+                                participantListBean.department = true
+                                participantListBean.checked = false
+                                participantListBean.type = it.type
+                                participantListBean.name = it.name
+                                participantListBean.id = it.id
+                                departmentList.add(participantListBean)
+                            }
+                        }
+                        //学生或家长
+                        dataBean.departmentList = departmentList
+                        dataBean.participantList = participantList
+                        responseResult.postValue(dataBean)
+                    } else {
+                        responseResult.postValue(null)
+                    }
+
+                } else {
+                    responseResult.postValue(null)
+                }
+            }
+
+            override fun onFailure(call: Call<StudentGuardianRsp>, t: Throwable) {
+                responseResult.postValue(null)
+            }
+
         })
     }
 }
