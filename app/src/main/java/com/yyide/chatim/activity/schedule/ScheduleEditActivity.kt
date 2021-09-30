@@ -88,6 +88,7 @@ class ScheduleEditActivity : BaseActivity() {
         }
         scheduleEditBinding.clParticipant.setOnClickListener {
             val intent = Intent(this, ScheduleParticipantActivity::class.java)
+            intent.putExtra("data",JSON.toJSONString(scheduleEditViewModel.participantList.value))
             startActivityForResult(intent, REQUEST_CODE_PARTICIPANT_SELECT)
         }
 
@@ -187,7 +188,29 @@ class ScheduleEditActivity : BaseActivity() {
             return
         }
         //选择参与人
-        if (requestCode == REQUEST_CODE_PARTICIPANT_SELECT && resultCode == RESULT_OK && data != null){
+        if (requestCode == REQUEST_CODE_PARTICIPANT_SELECT && resultCode == RESULT_OK && data != null) {
+            val stringExtra = data.getStringExtra("data")
+            val list = JSONArray.parseArray(
+                stringExtra,
+                ParticipantRsp.DataBean.ParticipantListBean::class.java
+            )
+            if (list != null) {
+                scheduleEditViewModel.participantList.value = list
+                //list.map { ScheduleData.ParticipantBean(it.id) }
+                //显示参与人
+                val stringBuilder = StringBuilder()
+                list.map { it.name }.forEach {
+                    stringBuilder.append(it).append("  ")
+                }
+                if (stringBuilder.isEmpty() || stringBuilder.isBlank()){
+                    scheduleEditBinding.tvParticipant.text = "添加参与人"
+                    scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black11))
+                }else{
+                    scheduleEditBinding.tvParticipant.text = stringBuilder
+                    scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
+                }
+
+            }
             return
         }
     }

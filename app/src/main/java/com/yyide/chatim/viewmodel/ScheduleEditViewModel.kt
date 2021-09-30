@@ -39,6 +39,8 @@ class ScheduleEditViewModel : ViewModel() {
     val repetitionLiveData = MutableLiveData<Repetition>()
     //场地
     val siteLiveData = MutableLiveData<SiteNameRsp.DataBean>()
+    //参与人选择
+    val participantList = MutableLiveData<List<ParticipantRsp.DataBean.ParticipantListBean>>(mutableListOf())
     private var dingApiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
     /**
@@ -73,6 +75,7 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.endTime = endTime?:""
         scheduleData.isAllDay = if (allDay) "1" else "0"
         scheduleData.label = labelListLiveData.value
+        //scheduleData.participant = participantList.value
         val toJSONString = JSON.toJSONString(scheduleData)
         loge("toJSONString=$toJSONString")
         val body = RequestBody.create(BaseConstant.JSON, toJSONString)
