@@ -76,29 +76,21 @@ class StaffParticipantViewModel : ViewModel() {
                 if (body != null && body.code == 200 && body.data != null) {
                     val data = body.data
                     val dataBean = ParticipantRsp.DataBean()
-                    val childList = data.childList
 
                     val departmentList =
                         mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
                     val participantList =
                         mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
-                    if (childList != null) {
-                        dataBean.name = childList.name
-                        val list = childList.list
-
-                        //学段/年级/班级
-                        list?.let {
-                            it.forEach {
-                                val participantListBean =
-                                    ParticipantRsp.DataBean.ParticipantListBean()
-                                participantListBean.department = true
-                                participantListBean.checked = false
-                                participantListBean.type = it.type
-                                participantListBean.name = it.name
-                                participantListBean.id = it.id
-                                departmentList.add(participantListBean)
-                            }
-                        }
+                    dataBean.name = data.name
+                    data.childList?.list?.forEach {
+                        val participantListBean =
+                            ParticipantRsp.DataBean.ParticipantListBean()
+                        participantListBean.department = true
+                        participantListBean.checked = false
+                        participantListBean.type = it.type
+                        participantListBean.name = it.name
+                        participantListBean.id = it.id
+                        departmentList.add(participantListBean)
                     }
 
                     data.participantList?.forEach {

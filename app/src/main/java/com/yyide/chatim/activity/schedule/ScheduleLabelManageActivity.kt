@@ -15,6 +15,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleLabelManageBinding
 import com.yyide.chatim.model.schedule.LabelListRsp
+import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.LabelManageViewModel
@@ -61,7 +62,7 @@ class ScheduleLabelManageActivity : BaseActivity() {
                     val drawable = GradientDrawable()
                     drawable.cornerRadius =
                         DisplayUtils.dip2px(this@ScheduleLabelManageActivity, 2f).toFloat()
-                    drawable.setColor(Color.parseColor(item.colorValue))
+                    drawable.setColor(ColorUtil.parseColor(item.colorValue))
                     holder.getView<TextView>(R.id.tv_label).background = drawable
 
                     holder.itemView.setOnClickListener { v: View? ->
