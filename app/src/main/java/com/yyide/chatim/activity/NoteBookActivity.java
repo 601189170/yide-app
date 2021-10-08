@@ -36,8 +36,6 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
 
     @BindView(R.id.edit)
     TextView edit;
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.img)

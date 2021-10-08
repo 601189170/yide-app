@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.weekly.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +16,18 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
+import com.yyide.chatim.activity.weekly.details.adapter.ClassAdapter
+import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.home.viewmodel.ParentsViewModel
 import com.yyide.chatim.activity.weekly.home.viewmodel.TeacherViewModel
 import com.yyide.chatim.adapter.AttendanceAdapter
+import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentParentsWeeklyBinding
 import com.yyide.chatim.dialog.AttendancePop
+import com.yyide.chatim.model.*
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.InitPieChart
 import java.util.*
 
@@ -29,10 +37,12 @@ import java.util.*
  * date 2021年9月15日15:11:01
  * author LRZ
  */
-open class ParentsWeeklyFragment : Fragment() {
+open class ParentsWeeklyFragment : BaseFragment() {
 
     private lateinit var viewBinding: FragmentParentsWeeklyBinding
     private val viewModel: ParentsViewModel by viewModels()
+    private var studentId: String = ""
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimeBean
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,103 +63,192 @@ open class ParentsWeeklyFragment : Fragment() {
             ParentsWeeklyFragment().apply {}
     }
 
-    private val selectLists = mutableListOf<String>()
-    private val dateLists = mutableListOf<String>()
     private fun initView() {
-
-        viewModel.parentsLiveData.observe(viewLifecycleOwner){
-            val bean = it.getOrNull()
-            if (null != bean) {
+        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentId)) {
+            studentId = SpData.getClassInfo().studentId
+        }
+        viewModel.parentsLiveData.observe(viewLifecycleOwner) {
+            val result = it.getOrNull()
+            if (null != result) {
                 viewBinding.clContent.visibility = View.VISIBLE
                 viewBinding.cardViewNoData.visibility = View.GONE
+                setSummary(result.summary)
+                //考勤统计
+                if (result.attend.isNotEmpty()) {
+                    initAttendance(result.attend[0])
+                    adapterAttendance.setList(result.attend)
+                }
+                //教师评语
+                viewBinding.comments.tvWeeklyAttendance.text = result.eval
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
         }
-
-        viewBinding.tvEvent.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterEvent, "请选择考勤事件")
-            attendancePop.setOnSelectListener { index: Int ->
-                this.index = index
-                viewBinding.tvEvent.text = selectLists[index]
-            }
-        }
-        viewBinding.tvDescs.text = WeeklyUtil.getDesc()
-        viewBinding.tvTime.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-                indexDate = index
-                viewBinding.tvTime.text = dateLists[index]
-            }
-        }
-
-        for (item in 1..10) {
-            selectLists.add("$item + 事件")
-            dateLists.add("$item + 2021年9月23日16:32:55")
-        }
-        viewBinding.tvEvent.text = selectLists[0]
-        viewBinding.tvTime.text = dateLists[0]
-        adapterEvent.setList(selectLists)
-        adapterDate.setList(dateLists)
-        //本周小结
-
-        //考勤统计
-        initAttendance()
         //作业统计
         initStatistical()
         //教师评语
         initComments()
+        initDate()
+        initClassMenu()
     }
 
-    private fun initAttendance() {
-        val piechart: PieChart = viewBinding.attendance.piechart
-        piechart.setTouchEnabled(false)
-        InitPieChart.InitPieChart(activity, piechart)
-        val entries: MutableList<PieEntry> = ArrayList()
-        entries.add(PieEntry(2f, "缺勤"))
-        entries.add(PieEntry(1f, "请假"))
-        entries.add(PieEntry(3f, "迟到"))
-        entries.add(PieEntry(10f, "实到"))
-        piechart.centerText = "签到率"
-        piechart.setCenterTextSize(12f)
-        val dataSet = PieDataSet(entries, "")
-        dataSet.sliceSpace = 0f //设置饼块之间的间隔
+    private fun request() {
+        viewModel.requestParentsWeekly(studentId, dateTime.startTime, dateTime.endTime)
+    }
 
-        dataSet.setColors(*AttendanceAdapter.PIE_COLORS2) //设置饼块的颜色
-
-        dataSet.setDrawValues(false)
-        val pieData = PieData(dataSet)
-        piechart.data = pieData
-        piechart.invalidate()
-
-        viewBinding.attendance.cd.text = "3次"
-        viewBinding.attendance.qq.text = "2次"
-        viewBinding.attendance.qj.text = "1次"
-        viewBinding.attendance.zt.text = "0次"
-
-        viewBinding.attendance.textView.text = "学生出入校"
-        viewBinding.attendance.textView.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterAttendance, "请选择考勤事件")
-            attendancePop.setOnSelectListener { index: Int ->
-                indexAttendance = index
-                viewBinding.attendance.textView.text = dateLists[index]
-                setAttendanceData()
-                adapterAttendance.notifyDataSetChanged()
-            }
-            adapterAttendance.setList(selectLists)
+    private fun setSummary(summary: WeeklyParentsSummary?) {
+        if (summary != null) {
+            viewBinding.summary.tvWeeklyAttendance.text = summary.attend
+            viewBinding.summary.tvWeeklyHomework.text = summary.work
+            viewBinding.summary.tvWeeklyShopping.text = summary.expend
         }
     }
 
-    private fun setAttendanceData() {
+    private fun initDate() {
+        //获取日期时间
+        dateTime = WeeklyUtil.getDateTime()!!
+        if (dateTime != null) {
+            val time = getString(
+                R.string.startTime_endTime, DateUtils.formatTime(
+                    dateTime.startTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                ), DateUtils.formatTime(
+                    dateTime.endTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                )
+            )
+            viewBinding.tvTime.text = time
+            viewBinding.attendance.tvAttendanceTime.text = time
+        }
+        request()
+        val dateLists = WeeklyUtil.getDateTimes()
+        val adapterDate = DateAdapter()
+        if (dateLists.isNotEmpty()) {
+            adapterDate.setList(dateLists)
+        }
+        viewBinding.tvTime.setOnClickListener {
+            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
+            attendancePop.setOnSelectListener { index: Int ->
+                //                indexDate = index
+                val time = getString(
+                    R.string.startTime_endTime, DateUtils.formatTime(
+                        dateLists[index].startTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    ), DateUtils.formatTime(
+                        dateLists[index].endTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    )
+                )
+                viewBinding.tvTime.text = time
+                viewBinding.attendance.tvAttendanceTime.text = time
+                request()
+            }
+        }
+    }
 
+    private fun initClassMenu() {
+        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentName)) {
+            viewBinding.tvEvent.text = SpData.getClassInfo().studentName
+        }
+        val classList = SpData.getClassList()
+        if (classList != null) {
+            if (classList.size > 1) {
+                viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    null,
+                    resources.getDrawable(R.mipmap.icon_down),
+                    null
+                )
+                viewBinding.tvEvent.setOnClickListener {
+                    val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
+                    attendancePop.setOnSelectListener { index: Int ->
+                        viewBinding.tvEvent.text = adapterEvent.getItem(index).studentName
+                        studentId = adapterEvent.getItem(index).studentId
+                        request()
+                    }
+
+                }
+            } else {
+                viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            }
+            adapterEvent.setList(classList)
+        }
+    }
+
+    private fun initAttendance(attend: WeeklyParentsAttend?) {
+        if (attend != null) {
+            val piechart: PieChart = viewBinding.attendance.piechart
+            piechart.setTouchEnabled(false)
+            InitPieChart.InitPieChart(activity, piechart)
+            val entries: MutableList<PieEntry> = ArrayList()
+            entries.add(PieEntry(attend.earlyNumber.toFloat(), "早退"))
+            entries.add(PieEntry(attend.leaveNumber.toFloat(), "请假"))
+            entries.add(PieEntry(attend.lateNumber.toFloat(), "迟到"))
+            entries.add(PieEntry(attend.abNumber.toFloat(), "缺勤"))
+            piechart.centerText = "${attend.rate}%\n出勤率"
+            piechart.setCenterTextSize(12f)
+            val dataSet = PieDataSet(entries, "")
+            dataSet.sliceSpace = 0f //设置饼块之间的间隔
+
+            dataSet.setColors(*PIE_COLORS2) //设置饼块的颜色
+
+            dataSet.setDrawValues(false)
+            val pieData = PieData(dataSet)
+            piechart.data = pieData
+            piechart.invalidate()
+            viewBinding.attendance.cd.text = "${attend.lateNumber}次"
+            viewBinding.attendance.qq.text = "${attend.abNumber}次"
+            viewBinding.attendance.qj.text = "${attend.leaveNumber}次"
+            viewBinding.attendance.zt.text = "${attend.earlyNumber}次"
+            val desc =
+                if (attend.lateNumber <= 0 && attend.abNumber <= 0 && attend.leaveNumber <= 0 && attend.earlyNumber <= 0) {
+                    "无"
+                } else {
+                    "有"
+                }
+            viewBinding.attendance.tcAttendDescs.text =
+                getString(R.string.weekly_attend_desc, attend.name, desc)
+            viewBinding.attendance.tvEventName.text = attend.name
+            viewBinding.attendance.tvEventName.setOnClickListener {
+                val attendancePop = AttendancePop(activity, adapterAttendance, "请选择考勤事件")
+                attendancePop.setOnSelectListener { index: Int ->
+                    indexAttendance = index
+                    val item = adapterAttendance.getItem(index)
+                    viewBinding.attendance.tvEventName.text = item.name
+                    initAttendance(item)
+                    adapterAttendance.notifyDataSetChanged()
+                }
+            }
+            viewBinding.attendance.cardView.setOnClickListener {
+                WeeklyDetailsActivity.jump(
+                    mActivity,
+                    WeeklyDetailsActivity.PARENT_ATTENDANCE_TYPE,
+                    studentId,
+                    viewBinding.tvEvent.text.toString().trim()
+                )
+            }
+        }
     }
 
     //    -->设置各区块的颜色
     val PIE_COLORS2 = intArrayOf(
+        Color.rgb(61, 189, 134),
+        Color.rgb(246, 189, 22),
+        Color.rgb(246, 108, 108),
+        Color.rgb(44, 138, 255)
+    )
+
+    //    -->设置各区块的颜色
+    val PIE_COLORS = intArrayOf(
         Color.rgb(44, 138, 255),
         Color.rgb(115, 222, 179)
     )
+
     val PIE_COLORS3 = intArrayOf(
         Color.rgb(44, 138, 255),
         Color.rgb(115, 222, 179),
@@ -168,7 +267,7 @@ open class ParentsWeeklyFragment : Fragment() {
         val dataSet = PieDataSet(entries, "")
         dataSet.sliceSpace = 0f //设置饼块之间的间隔
 
-        dataSet.setColors(*PIE_COLORS2) //设置饼块的颜色
+        dataSet.setColors(*PIE_COLORS) //设置饼块的颜色
 
         dataSet.setDrawValues(false)
         val pieData = PieData(dataSet)
@@ -212,9 +311,9 @@ open class ParentsWeeklyFragment : Fragment() {
 
     private var index = 0
     private val adapterEvent = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.swich_class_item) {
-        override fun convert(holder: BaseViewHolder, item: String) {
-            holder.setText(R.id.className, item)
+        BaseQuickAdapter<GetUserSchoolRsp.DataBean.FormBean, BaseViewHolder>(R.layout.swich_class_item) {
+        override fun convert(holder: BaseViewHolder, item: GetUserSchoolRsp.DataBean.FormBean) {
+            holder.setText(R.id.className, item.studentName)
             holder.getView<View>(R.id.select).visibility =
                 if (index == holder.adapterPosition) View.VISIBLE else View.GONE
             if (this.itemCount - 1 == holder.adapterPosition) {
@@ -225,29 +324,14 @@ open class ParentsWeeklyFragment : Fragment() {
         }
     }
 
-    private var indexDate = 0
-    private val adapterDate = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.swich_class_item) {
-        override fun convert(holder: BaseViewHolder, item: String) {
-            holder.setText(R.id.className, item)
-            holder.getView<View>(R.id.select).visibility =
-                if (indexDate == holder.adapterPosition) View.VISIBLE else View.GONE
-            if (this.itemCount - 1 == holder.adapterPosition) {
-                holder.getView<View>(R.id.view_line).visibility = View.GONE
-            } else {
-                holder.getView<View>(R.id.view_line).visibility = View.VISIBLE
-            }
-        }
-    }
-
     private var indexAttendance = 0
     private val adapterAttendance = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.swich_class_item) {
-        override fun convert(holder: BaseViewHolder, item: String) {
-            holder.setText(R.id.className, item)
+        BaseQuickAdapter<WeeklyParentsAttend, BaseViewHolder>(R.layout.swich_class_item) {
+        override fun convert(holder: BaseViewHolder, item: WeeklyParentsAttend) {
+            holder.setText(R.id.className, item.name)
             holder.getView<View>(R.id.select).visibility =
-                if (indexDate == holder.adapterPosition) View.VISIBLE else View.GONE
-            if (this.itemCount - 1 == holder.adapterPosition) {
+                if (indexAttendance == holder.absoluteAdapterPosition) View.VISIBLE else View.GONE
+            if (this.itemCount - 1 == holder.absoluteAdapterPosition) {
                 holder.getView<View>(R.id.view_line).visibility = View.GONE
             } else {
                 holder.getView<View>(R.id.view_line).visibility = View.VISIBLE

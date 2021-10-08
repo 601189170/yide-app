@@ -32,7 +32,6 @@ class SchoolWeeklyFragment : BaseFragment() {
     private lateinit var viewBinding: FragmentSchoolWeeklyBinding
     private val viewModel: SchoolViewModel by viewModels()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -52,7 +51,6 @@ class SchoolWeeklyFragment : BaseFragment() {
             SchoolWeeklyFragment().apply {}
     }
 
-    private val selectLists = mutableListOf<String>()
     private fun initView() {
         viewModel.schoolLiveData.observe(viewLifecycleOwner) {
             dismiss()
@@ -121,45 +119,49 @@ class SchoolWeeklyFragment : BaseFragment() {
         }
     }
 
-    private fun setSummary(summary: SchoolHomeSummary) {
-        viewBinding.layoutWeeklySummary.tvWeeklyAttendance.text = summary.attend
-        viewBinding.layoutWeeklySummary.tvWeeklyHomework.text = summary.work
-        viewBinding.layoutWeeklySummary.tvWeeklyShopping.text = summary.expend
+    private fun setSummary(summary: SchoolHomeSummary?) {
+        if (summary != null) {
+            viewBinding.layoutWeeklySummary.tvWeeklyAttendance.text = summary.attend
+            viewBinding.layoutWeeklySummary.tvWeeklyHomework.text = summary.work
+            viewBinding.layoutWeeklySummary.tvWeeklyShopping.text = summary.expend
+        }
     }
 
-    private fun initAttendance(attend: SchoolHomeAttendance) {
+    private fun initAttendance(attend: SchoolHomeAttendance?) {
         //学生考勤
-        viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.layoutManager =
-            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.adapter =
-            adapterStudentAttendance
-        adapterStudentAttendance.setList(attend.studentAttend)
-        adapterStudentAttendance.setOnItemClickListener { adapter, view, position ->
-            selectStudentPosition = if (selectStudentPosition != position) {
-                position
-            } else {
-                -1
+        if (attend != null) {
+            viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.layoutManager =
+                LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.adapter =
+                adapterStudentAttendance
+            adapterStudentAttendance.setList(attend.studentAttend)
+            adapterStudentAttendance.setOnItemClickListener { adapter, view, position ->
+                selectStudentPosition = if (selectStudentPosition != position) {
+                    position
+                } else {
+                    -1
+                }
+                adapterStudentAttendance.notifyDataSetChanged()
             }
-            adapterStudentAttendance.notifyDataSetChanged()
-        }
 
-        //教师考勤
-        viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.layoutManager =
-            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.adapter =
-            adapterTeacherAttendance
-        adapterTeacherAttendance.setList(attend.teacherAttend)
-        adapterTeacherAttendance.setOnItemClickListener { adapter, view, position ->
-            selectTeacherPosition = if (selectTeacherPosition != position) {
-                position
-            } else {
-                -1
+            //教师考勤
+            viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.layoutManager =
+                LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.adapter =
+                adapterTeacherAttendance
+            adapterTeacherAttendance.setList(attend.teacherAttend)
+            adapterTeacherAttendance.setOnItemClickListener { adapter, view, position ->
+                selectTeacherPosition = if (selectTeacherPosition != position) {
+                    position
+                } else {
+                    -1
+                }
+                adapterTeacherAttendance.notifyDataSetChanged()
             }
-            adapterTeacherAttendance.notifyDataSetChanged()
         }
     }
 
-    private fun setWorkView(work: SchoolHomeWork) {
+    private fun setWorkView(work: SchoolHomeWork?) {
 
     }
 

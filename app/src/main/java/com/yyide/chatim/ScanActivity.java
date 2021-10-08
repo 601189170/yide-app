@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,7 +49,7 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.back_layout)
-    LinearLayout back_layout;
+    ImageView back_layout;
     @BindView(R.id.zbarview)
     ZBarView zbarview;
     int i;
@@ -89,7 +89,7 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
     public void onScanQRCodeSuccess(String result) {
         vibrate();
         Log.e(TAG, "onScanQRCodeSuccess: " + result);
-        if(isJson(result)){
+        if (isJson(result)) {
             final JSONObject jsonObject = JSON.parseObject(result);
             final String scanUrl = jsonObject.getString("scanUrl");
             if (!TextUtils.isEmpty(scanUrl)) {
@@ -132,6 +132,7 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
 
     /**
      * 判断string字符串是不是json格式
+     *
      * @param content
      * @return
      */

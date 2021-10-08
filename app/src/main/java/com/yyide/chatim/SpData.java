@@ -107,7 +107,7 @@ public class SpData {
                 GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
                 for (int i = 0; i < rsp.data.size(); i++) {
                     GetUserSchoolRsp.DataBean item = rsp.data.get(i);
-                    if (identityInfo != null && item.userId == identityInfo.userId) {
+                    if (identityInfo != null && item.userId.equals(identityInfo.userId)) {
                         SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(item));
                         setClassesData(item);
                         dataBean = item;
@@ -137,18 +137,19 @@ public class SpData {
      */
     public static void setClassesData(GetUserSchoolRsp.DataBean dataBean) {
         if (dataBean != null && dataBean.form != null && dataBean.form.size() > 0) {//保存班级信息
-            if (SpData.getClassInfo() != null) {//处理切换班级
+            GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+            if (classInfo != null) {//处理切换班级
                 GetUserSchoolRsp.DataBean.FormBean classBean = null;
                 for (GetUserSchoolRsp.DataBean.FormBean item : dataBean.form) {
                     if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(dataBean.status)) {
                         //家长默认选择班级
-                        if (!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName)
-                                && SpData.getClassInfo().classesStudentName.equals(item.classesStudentName)) {
+                        if (!TextUtils.isEmpty(classInfo.classesStudentName)
+                                && classInfo.classesStudentName.equals(item.classesStudentName)) {
                             classBean = item;
                             break;
                         }
                     } else {
-                        //教师默认选择班级
+                        //默认选择班级
                         if (!TextUtils.isEmpty(SpData.getClassInfo().classesId)
                                 && SpData.getClassInfo().classesId.equals(item.classesId)) {
                             classBean = item;

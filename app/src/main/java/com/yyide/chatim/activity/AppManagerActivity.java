@@ -39,8 +39,6 @@ import butterknife.OnClick;
 
 public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> implements AppManagerView {
 
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.fl_app_sort)

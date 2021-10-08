@@ -1,10 +1,7 @@
 package com.yyide.chatim.kotlin.network
 
 import com.yyide.chatim.kotlin.network.base.BaseResponse
-import com.yyide.chatim.model.ResultBean
-import com.yyide.chatim.model.SchoolWeeklyData
-import com.yyide.chatim.model.SchoolWeeklyTeacherBean
-import com.yyide.chatim.model.WeeklyTeacherBean
+import com.yyide.chatim.model.*
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -35,7 +32,7 @@ interface INetworkService {
         @Query("teacherId") teacherId: String,
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String
-    ): BaseResponse<ResultBean>
+    ): BaseResponse<WeeklyTeacherAttendanceBean>
 
     /**
      * 查看学生考勤
@@ -71,7 +68,7 @@ interface INetworkService {
         @Query("studentId") studentId: String,
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String
-    ): BaseResponse<ResultBean>
+    ): BaseResponse<WeeklyParentsBean>
 
     /**
      * 家长查看学生周报统计详情
@@ -84,7 +81,7 @@ interface INetworkService {
         @Query("studentId") studentId: String,
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String
-    ): BaseResponse<ResultBean>
+    ): BaseResponse<WeeklyParentsAttendDetailBean>
 
     /**
      * 底部文案描述

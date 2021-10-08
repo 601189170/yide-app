@@ -69,6 +69,7 @@
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    android:minWidth="60dp"
                     app:drawableEndCompat="@mipmap/icon_down"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -118,7 +119,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <include
-                            android:id="@+id/homework"
+                            android:id="@+id/summary"
                             layout="@layout/layout_weekly_summary" />
 
                         <View
