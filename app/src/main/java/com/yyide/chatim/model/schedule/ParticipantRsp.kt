@@ -19,6 +19,7 @@ data class ParticipantRsp(
         data class ParticipantListBean(
             var id: String? = null,
             var name: String? = null,
+            var realname: String? = null,
             var type: String? = null,
             var department:Boolean = false,
             var checked:Boolean = false

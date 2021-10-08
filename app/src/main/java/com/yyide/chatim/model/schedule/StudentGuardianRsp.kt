@@ -12,7 +12,8 @@ data class StudentGuardianRsp(
     val data: DataBean? = null
 ) {
     data class DataBean(
-        val childList: ChildListBean? = null
+        val childList: ChildListBean? = null,
+        val participantList:List<ParticipantRsp.DataBean.ParticipantListBean>? = null
     ) {
         data class ChildListBean(
             val name: String? = null,

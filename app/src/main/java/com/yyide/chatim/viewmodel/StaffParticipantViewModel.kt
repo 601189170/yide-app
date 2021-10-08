@@ -77,13 +77,15 @@ class StaffParticipantViewModel : ViewModel() {
                     val data = body.data
                     val dataBean = ParticipantRsp.DataBean()
                     val childList = data.childList
+
+                    val departmentList =
+                        mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
+                    val participantList =
+                        mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
                     if (childList != null) {
                         dataBean.name = childList.name
                         val list = childList.list
-                        val departmentList =
-                            mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
-                        val participantList =
-                            mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
+
                         //学段/年级/班级
                         list?.let {
                             it.forEach {
@@ -97,6 +99,19 @@ class StaffParticipantViewModel : ViewModel() {
                                 departmentList.add(participantListBean)
                             }
                         }
+                    }
+
+                    data.participantList?.forEach {
+                        val participantListBean =
+                            ParticipantRsp.DataBean.ParticipantListBean()
+                        participantListBean.id = it.id
+                        participantListBean.name = it.realname
+                        participantListBean.department = false
+                        participantListBean.checked = false
+                        participantList.add(participantListBean)
+                    }
+
+                    if (participantList.isNotEmpty() || departmentList.isNotEmpty()) {
                         //学生或家长
                         dataBean.departmentList = departmentList
                         dataBean.participantList = participantList
