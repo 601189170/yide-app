@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -68,35 +69,47 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         scheduleRepetitionBinding.top.tvRight.setOnClickListener {
             val unitStr = unit.get()
             val numberStr = number.get()
-            var rule = ""
+            var rule = mutableMapOf<String,String>()
             if (unitStr == "天") {
                 //rule = "每${numberStr}天"
-                rule = "{\"freq\": \"daily\",\"interval\": \"${numberStr}\"}"
+                //rule = "{\"freq\": \"daily\",\"interval\": \"${numberStr}\"}"
+                rule["freq"] = "daily"
+                rule["interval"] = numberStr
+
             } else if (unitStr == "月") {
                 val selectMonth = monthList.filter { it.checked }
                 //rule = "每${numberStr}月 $selectMonth"
                 if (selectMonth.isNotEmpty()) {
                     val bymonthday =
                         selectMonth.map { it.title }.toString().replace("[", "").replace("]", "")
-                    rule =
-                        "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\",\"bymonthday\":\"${bymonthday}\"}"
+                    //rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\",\"bymonthday\":\"${bymonthday}\"}"
+                    rule["freq"] = "monthly"
+                    rule["interval"] = numberStr
+                    rule["bymonthday"] = bymonthday
+
                 } else {
-                    rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\"}"
+                    //rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\"}"
+                    rule["freq"] = "monthly"
+                    rule["interval"] = numberStr
                 }
             } else if (unitStr == "周") {
                 val selectWeek = weekList.filter { it.checked }
                 if (selectWeek.isNotEmpty()) {
                     val byday =
                         selectWeek.map { it.shortname }.toString().replace("[", "").replace("]", "")
-                    rule =
-                        "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\",\"byday\":\"${byday}\"}"
+                    //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\",\"byday\":\"${byday}\"}"
+                    rule["freq"] = "weekly"
+                    rule["interval"] = numberStr
+                    rule["byday"] = byday
                 } else {
-                    rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\"}"
+                    //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\"}"
+                    rule["freq"] = "weekly"
+                    rule["interval"] = numberStr
                 }
                 //rule = "每${numberStr}周 $selectWeek"
             }
             val intent = intent
-            intent.putExtra("rule", rule)
+            intent.putExtra("rule", JSON.toJSONString(rule))
             setResult(RESULT_OK, intent)
             finish()
         }

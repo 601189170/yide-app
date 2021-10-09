@@ -77,6 +77,7 @@ import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
 import com.yyide.chatim.model.schedule.StudentGuardianRsp;
+import com.yyide.chatim.model.schedule.TodayListRsp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -810,6 +811,14 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/getParticipant")
     Call<StudentGuardianRsp> getParticipant(@Query("id") String id,@Query("type") String type,@Query("scope") String scope);
+
+    /**
+     * 获取【本周和今日】日程
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getThisWeekAndTodayList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getThisWeekAndTodayList")
+    Call<TodayListRsp> getThisWeekAndTodayList();
 
     /**
      * 获取周报描述

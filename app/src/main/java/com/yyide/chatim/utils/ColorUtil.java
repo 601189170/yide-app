@@ -8,7 +8,7 @@ import android.graphics.Color;
  * @description 描述
  */
 public class ColorUtil {
-    public static String formatColor(String color) {
+    private static String formatColor(String color) {
         if (color.length() == 4) {
             final StringBuilder stringBuilder = new StringBuilder(color);
             if (color.charAt(1) == color.charAt(2) && (color.charAt(2) == color.charAt(3) && (color.charAt(1) == color.charAt(3)))) {

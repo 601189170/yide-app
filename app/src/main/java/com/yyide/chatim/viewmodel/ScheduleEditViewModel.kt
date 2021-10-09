@@ -10,11 +10,13 @@ import com.yyide.chatim.model.BaseRsp
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
+import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.loge
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 /**
  *
@@ -25,6 +27,10 @@ import retrofit2.Response
 class ScheduleEditViewModel : ViewModel() {
     //日程标题
     val scheduleTitleLiveData = MutableLiveData<String>()
+    //日程的状态
+    val scheduleStatusLiveData = MutableLiveData<String>()
+    //日程id
+    val scheduleIdLiveData = MutableLiveData<String>()
     //当前选择的标签
     val labelListLiveData = MutableLiveData<List<LabelListRsp.DataBean>>()
     //是否是全天日程
@@ -41,6 +47,9 @@ class ScheduleEditViewModel : ViewModel() {
     val siteLiveData = MutableLiveData<SiteNameRsp.DataBean>()
     //参与人选择
     val participantList = MutableLiveData<List<ParticipantRsp.DataBean.ParticipantListBean>>(mutableListOf())
+    //更新类型
+    val updateTypeLiveData = MutableLiveData<String>()
+    val saveOrModifyResult = MutableLiveData<Boolean>()
     private var dingApiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
     /**
@@ -52,7 +61,7 @@ class ScheduleEditViewModel : ViewModel() {
      * 5：2小时前、6：1天前、7：2天前、8：1周前、9：日程开始时】
      * @param isAllDay 是否是全天日程【0：不是，1：是】
      */
-    fun saveSchedule(){
+    fun saveOrModifySchedule(modify:Boolean = false){
         val scheduleTitle = scheduleTitleLiveData.value
         if (TextUtils.isEmpty(scheduleTitle)){
             ToastUtils.showShort("你还没告诉我您要准备做什么！")
@@ -65,10 +74,18 @@ class ScheduleEditViewModel : ViewModel() {
         val remind = remindLiveData.value?.id
         val repetition = repetitionLiveData.value?.rule
         val scheduleData = ScheduleData()
+        if (modify){
+            scheduleData.id = scheduleIdLiveData.value
+            if (updateTypeLiveData.value != null){
+                scheduleData.updateType = updateTypeLiveData.value
+                scheduleData.updateDate = DateUtils.switchTime(Date(),"yyyy-MM-dd")
+            }
+        }
         scheduleData.name = scheduleTitle?:""
+        scheduleData.status = scheduleStatusLiveData.value
         scheduleData.type = "2"
-        scheduleData.isRepeat = if (TextUtils.isEmpty(repetition)) "0" else "1"
-        scheduleData.rrule = repetition?:""
+        scheduleData.isRepeat = if (repetition == null) "0" else "1"
+        scheduleData.rrule = repetition
         scheduleData.remindType = if (allDay) "1" else "0"
         scheduleData.remindTypeInfo = remind?:""
         scheduleData.startTime = startTime?:""
@@ -84,14 +101,17 @@ class ScheduleEditViewModel : ViewModel() {
                 val body1 = response.body()
                 loge("${body1}")
                 if (body1 != null && body1.code == 200){
-                    ToastUtils.showShort("日程添加成功")
+                    ToastUtils.showShort(if (modify)"日程修改成功" else "日程添加成功")
+                    saveOrModifyResult.postValue(true)
                     return
                 }
-                ToastUtils.showShort("日程添加失败")
+                ToastUtils.showShort(if (modify)"日程修改失败" else "日程添加失败")
+                saveOrModifyResult.postValue(false)
             }
 
             override fun onFailure(call: Call<BaseRsp>, t: Throwable) {
-                ToastUtils.showShort("日程添加失败")
+                ToastUtils.showShort(if (modify)"日程修改失败" else "日程添加失败")
+                saveOrModifyResult.postValue(false)
             }
         })
     }

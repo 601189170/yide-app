@@ -1,13 +1,20 @@
 package com.yyide.chatim.model.schedule;
 
+import static com.yyide.chatim.model.schedule.Schedule.*;
+
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.yyide.chatim.utils.DateUtils;
+
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author liu tao
  * @date 2021/9/24 10:08
  * @description 描述
  */
-public class ScheduleData {
+public class ScheduleData implements MultiItemEntity {
     private String id;
     private String name;
     private String siteId;
@@ -18,7 +25,7 @@ public class ScheduleData {
     private String filePath;
     private String isRepeat;
     private String status;
-    private String rrule;
+    private Map<String, String> rrule;
     private String remindType;
     private String remindTypeInfo;
     private String startTime;
@@ -27,6 +34,8 @@ public class ScheduleData {
     private String isAllDay;
     private List<LabelListRsp.DataBean> label;
     private List<ParticipantBean> participant;
+    private String updateType;
+    private String updateDate;
 
     public String getIsRepeat() {
         return isRepeat;
@@ -112,11 +121,11 @@ public class ScheduleData {
         this.status = status;
     }
 
-    public String getRrule() {
+    public Map<String, String> getRrule() {
         return rrule;
     }
 
-    public void setRrule(String rrule) {
+    public void setRrule(Map<String, String> rrule) {
         this.rrule = rrule;
     }
 
@@ -178,6 +187,36 @@ public class ScheduleData {
 
     public void setParticipant(List<ParticipantBean> participant) {
         this.participant = participant;
+    }
+
+    public String getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(String updateType) {
+        this.updateType = updateType;
+    }
+
+    public String getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(String updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    @Override
+    public int getItemType() {
+        if (Objects.equals(status, "1")) {
+            if (DateUtils.dateExpired(endTime)) {
+                return TYPE_EXPIRED_COMPLETED;
+            }
+            return TYPE_UNEXPIRED_COMPLETED;
+        }
+        if (DateUtils.dateExpired(endTime)) {
+            return TYPE_EXPIRED_NOT_COMPLETED;
+        }
+        return TYPE_UNEXPIRED_NOT_COMPLETED;
     }
 
     public static class ParticipantBean {

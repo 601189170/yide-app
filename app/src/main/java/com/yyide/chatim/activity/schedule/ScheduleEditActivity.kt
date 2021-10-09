@@ -31,6 +31,7 @@ class ScheduleEditActivity : BaseActivity() {
     lateinit var scheduleEditBinding: ActivityScheduleEditBinding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
     private val scheduleEditViewModel:ScheduleEditViewModel by viewModels()
+    private var repetitionModify:Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleEditBinding = ActivityScheduleEditBinding.inflate(layoutInflater)
@@ -43,16 +44,73 @@ class ScheduleEditActivity : BaseActivity() {
     }
 
     private fun initView() {
+        val stringExtra = intent.getStringExtra("data")
+        val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
+        scheduleData?.let {
+            //显示日程详情
+            scheduleEditViewModel.scheduleIdLiveData.value = it.id
+            scheduleEditBinding.tvScheduleTitle.text = it.name
+            scheduleEditViewModel.scheduleTitleLiveData.value = it.name
+
+            scheduleEditBinding.checkBox.isChecked = it.status == "1"
+            scheduleEditViewModel.scheduleStatusLiveData.value = it.status
+
+            scheduleEditBinding.tvDateStart.text = DateUtils.formatTime(it.startTime, "", "MM月dd日 HH:mm")
+            scheduleEditBinding.tvDateEnd.text = DateUtils.formatTime(it.endTime, "", "MM月dd日 HH:mm")
+            scheduleEditViewModel.startTimeLiveData.value = it.startTime
+            scheduleEditViewModel.endTimeLiveData.value = it.endTime
+            //是否全天【0：不是，1：是】
+            scheduleEditViewModel.allDayLiveData.value = it.isAllDay == "1"
+
+            Repetition.getList().forEach { repetition ->
+                if (repetition.rule == it.rrule) {
+                    scheduleEditBinding.tvRepetition.text = repetition.title
+                    scheduleEditViewModel.repetitionLiveData.value = repetition
+                }
+            }
+            if (scheduleEditViewModel.repetitionLiveData.value == null && it.rrule != null){
+                scheduleEditBinding.tvRepetition.text = "自定义重复"
+                scheduleEditViewModel.repetitionLiveData.value = Repetition("", true, it.rrule)
+            }
+            Remind.getList().forEach { remind ->
+                if(remind.id == it.remindTypeInfo){
+                    scheduleEditBinding.tvRemind.text = remind.title
+                    scheduleEditViewModel.remindLiveData.value = remind
+                }
+            }
+
+            labelList.clear()
+            labelList.addAll(it.label)
+            scheduleEditViewModel.labelListLiveData.value = labelList
+        }
+
         scheduleEditBinding.top.title.text = "日程编辑"
         scheduleEditBinding.top.backLayout.setOnClickListener {
             //finish()
+            if (!repetitionModify){
+                scheduleEditViewModel.saveOrModifySchedule(true)
+                finish()
+                return@setOnClickListener
+            }
             DialogUtil.showRepetitionScheduleModifyDialog(this){
                 loge("编辑日程重复性类型：$it")
+                if (it == -1){
+                    finish()
+                    return@showRepetitionScheduleModifyDialog
+                }
+                //修改日程
+                scheduleEditViewModel.updateTypeLiveData.value = "$it"
+                scheduleEditViewModel.saveOrModifySchedule(true)
+                finish()
             }
         }
         scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
         scheduleEditBinding.top.ivRight.setOnClickListener {
             DialogUtil.showScheduleDelDialog(this,scheduleEditBinding.top.ivRight)
+        }
+
+        scheduleEditBinding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            scheduleEditViewModel.scheduleStatusLiveData.value = if (isChecked) "1" else "0"
         }
 
         scheduleEditBinding.btnAddLabel.setOnClickListener {
@@ -161,8 +219,7 @@ class ScheduleEditActivity : BaseActivity() {
             val startTime = data.getStringExtra("startTime")
             val endTime = data.getStringExtra("endTime")
             loge("allDay=$allDay,startTime=$startTime,endTime=$endTime")
-            scheduleEditBinding.tvDateStart.text =
-                DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm")
+            scheduleEditBinding.tvDateStart.text = DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm")
             scheduleEditBinding.tvDateEnd.text = DateUtils.formatTime(endTime, "", "MM月dd日 HH:mm")
             scheduleEditViewModel.startTimeLiveData.value = startTime
             scheduleEditViewModel.endTimeLiveData.value = endTime
@@ -185,6 +242,7 @@ class ScheduleEditActivity : BaseActivity() {
             loge("title=${repetition.title},rule=${repetition.rule}")
             scheduleEditBinding.tvRepetition.text = repetition.title
             scheduleEditViewModel.repetitionLiveData.value = repetition
+            repetitionModify = true
             return
         }
         //选择参与人

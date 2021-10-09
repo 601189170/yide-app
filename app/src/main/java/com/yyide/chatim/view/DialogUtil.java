@@ -71,7 +71,9 @@ import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -395,28 +397,41 @@ public class DialogUtil {
             mDialog.dismiss();
         });
         binding.tvFinish.setOnClickListener(v -> {
-            String rule = "";
+            Map<String,String> rule = new HashMap();
             final String unitStr = unit.get();
             final String numberStr = number.get();
             if ("天".equals(unitStr)) {
-                rule = "{\"freq\": \"daily\",\"interval\": \"" + numberStr + "\"}";
+                //rule = "{\"freq\": \"daily\",\"interval\": \"" + numberStr + "\"}";
+                rule.put("freq","daily");
+                rule.put("interval",numberStr);
+
             } else if ("月".equals(unitStr)) {
                 final List<MonthBean> collect = monthList.stream().filter(MonthBean::getChecked).collect(Collectors.toList());
                 if (!collect.isEmpty()) {
                     String bymonthday = collect.stream().map(MonthBean::getTitle).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
-                    rule =
-                            "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\",\"bymonthday\":\"" + bymonthday + "\"}";
+                    //rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\",\"bymonthday\":\"" + bymonthday + "\"}";
+                    rule.put("freq","monthly");
+                    rule.put("interval",numberStr);
+                    rule.put("bymonthday",bymonthday);
+
                 } else {
-                    rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\"}";
+                    //rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\"}";
+                    rule.put("freq","monthly");
+                    rule.put("interval",numberStr);
                 }
 
             } else if ("周".equals(unitStr)) {
                 final List<WeekBean> collect = weekList.stream().filter(WeekBean::getChecked).collect(Collectors.toList());
                 if (!collect.isEmpty()) {
                     String byday = collect.stream().map(WeekBean::getShortname).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
-                    rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\",\"byday\":\"" + byday + "\"}";
+                    //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\",\"byday\":\"" + byday + "\"}";
+                    rule.put("freq","weekly");
+                    rule.put("interval",numberStr);
+                    rule.put("byday",byday);
                 } else {
-                    rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\"}";
+                    //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\"}";
+                    rule.put("freq","weekly");
+                    rule.put("interval",numberStr);
                 }
             }
             scheduleEditViewModel.getRepetitionLiveData().setValue(new Repetition("自定义重复",true,rule));
@@ -841,7 +856,7 @@ public class DialogUtil {
         finished.setOnClickListener(v -> {
             //日程提交
             scheduleEditViewModel.getScheduleTitleLiveData().setValue(editView.getText().toString());
-            scheduleEditViewModel.saveSchedule();
+            scheduleEditViewModel.saveOrModifySchedule(false);
             mDialog.dismiss();
         });
 
@@ -1025,19 +1040,21 @@ public class DialogUtil {
         AtomicBoolean repetitionType2 = new AtomicBoolean(false);
         AtomicBoolean repetitionType3 = new AtomicBoolean(false);
         binding.ivCancel.setOnClickListener(v -> {
+            onMenuItemListener.onMenuItem(-1);
             mDialog.dismiss();
         });
         binding.btnCancel.setOnClickListener(v -> {
+            onMenuItemListener.onMenuItem(-1);
             mDialog.dismiss();
         });
         binding.btnEnsure.setOnClickListener(v -> {
             Log.e(TAG, "showRepetitionScheduleModifyDialog: " + repetitionType1.get() + ", " + repetitionType2.get() + ", " + repetitionType3.get());
             if (repetitionType1.get()) {
-                onMenuItemListener.onMenuItem(1);
+                onMenuItemListener.onMenuItem(0);
             } else if (repetitionType2.get()) {
-                onMenuItemListener.onMenuItem(2);
+                onMenuItemListener.onMenuItem(1);
             } else if (repetitionType3.get()) {
-                onMenuItemListener.onMenuItem(3);
+                onMenuItemListener.onMenuItem(2);
             } else {
                 ToastUtils.showShort("请选择编辑重复性日程类型");
                 return;

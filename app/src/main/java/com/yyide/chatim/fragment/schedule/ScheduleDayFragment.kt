@@ -31,6 +31,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.databinding.FragmentScheduleDayBinding
 import com.yyide.chatim.model.schedule.Label
 import com.yyide.chatim.model.schedule.LabelListRsp
+import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
@@ -151,7 +152,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
         override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             val drawable = GradientDrawable()
             drawable.cornerRadius = DisplayUtils.dip2px(requireContext(),4f).toFloat()
-            drawable.setColor(Color.parseColor(item.colorValue))
+            drawable.setColor(ColorUtil.parseColor(item.colorValue))
             holder.getView<TextView>(R.id.tv_label).background = drawable
             holder.setText(R.id.tv_label,item.labelName)
             holder.itemView.setOnClickListener {
