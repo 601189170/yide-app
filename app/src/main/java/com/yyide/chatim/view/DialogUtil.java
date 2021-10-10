@@ -686,7 +686,7 @@ public class DialogUtil {
         binding.tvFinish.setOnClickListener(v -> {
             final List<Remind> collect = list.stream().filter(Remind::getChecked).collect(Collectors.toList());
             if (collect.isEmpty()) {
-                scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10","不提醒",true));
+                scheduleEditViewModel.getRemindLiveData().setValue(Remind.Companion.getNotRemind());
             } else {
                 scheduleEditViewModel.getRemindLiveData().setValue(collect.get(0));
             }
@@ -716,7 +716,7 @@ public class DialogUtil {
         final List<Remind> list2 = Remind.Companion.getList2();
         if (scheduleEditViewModel.getRemindLiveData().getValue() == null) {
             binding.tvRemind.setText("不重复");
-            scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10", "不重复", true));
+            scheduleEditViewModel.getRemindLiveData().setValue(Remind.Companion.getNotRemind());
         }
         binding.clRemind.setOnClickListener(v -> {
             showRemindScheduleDialog(context,scheduleEditViewModel,binding.checkBox.isChecked()?list2:list);
@@ -765,7 +765,7 @@ public class DialogUtil {
                     scheduleEditViewModel.getRemindLiveData().setValue(remind);
                     binding.tvRemind.setText(remind.getTitle());
                 } else {
-                    scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10", "不重复", true));
+                    scheduleEditViewModel.getRemindLiveData().setValue(Remind.Companion.getNotRemind());
                     binding.tvRemind.setText("不重复");
                 }
             } else {
@@ -779,7 +779,7 @@ public class DialogUtil {
                     scheduleEditViewModel.getRemindLiveData().setValue(remind);
                     binding.tvRemind.setText(remind.getTitle());
                 } else {
-                    scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10", "不重复", true));
+                    scheduleEditViewModel.getRemindLiveData().setValue(Remind.Companion.getNotRemind());
                     binding.tvRemind.setText("不重复");
                 }
             }
