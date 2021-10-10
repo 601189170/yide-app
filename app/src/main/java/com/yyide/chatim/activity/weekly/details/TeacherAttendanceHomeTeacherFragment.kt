@@ -17,27 +17,31 @@ import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.details.adapter.ClassAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.HotAdapter
-import com.yyide.chatim.activity.weekly.details.viewmodel.ParentsAttendanceViewModel
 import com.yyide.chatim.activity.weekly.details.viewmodel.TeacherAttendanceViewModel
 import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseFragment
-import com.yyide.chatim.databinding.*
+import com.yyide.chatim.databinding.FragmentTeacherAttendanceChildWeeklyBinding
+import com.yyide.chatim.databinding.ItemHBinding
+import com.yyide.chatim.databinding.ItemHotBinding
+import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
 import com.yyide.chatim.dialog.AttendancePop
-import com.yyide.chatim.model.*
+import com.yyide.chatim.model.WeeklyDateBean
+import com.yyide.chatim.model.WeeklyTeacherAttend
+import com.yyide.chatim.model.WeeklyTeacherDetail
 import com.yyide.chatim.utils.DateUtils
 import java.util.*
 import kotlin.collections.ArrayList
 
 /**
  *
- * 家长查看 学生考勤详情
+ * 教师/班主任 查看教师详情
  * date 2021年9月15日15:11:01
  * author LRZ
  */
-class ParentsAttendanceDetailFragment : BaseFragment() {
+class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
 
-    private lateinit var viewBinding: FragmentParentsAttendanceDetailWeeklyBinding
-    private val viewModel: ParentsAttendanceViewModel by viewModels()
+    private lateinit var viewBinding: FragmentTeacherAttendanceChildWeeklyBinding
+    private val viewModel: TeacherAttendanceViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -47,65 +51,59 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentParentsAttendanceDetailWeeklyBinding.inflate(layoutInflater)
+        viewBinding = FragmentTeacherAttendanceChildWeeklyBinding.inflate(layoutInflater)
         return viewBinding.root
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(studentId: String, studentName: String) =
-            ParentsAttendanceDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString("studentName", studentName)
-                    putString("studentId", studentId)
-                }
-            }
+        fun newInstance() =
+            TeacherAttendanceHomeTeacherFragment().apply {}
     }
 
     private fun request(dateTime: WeeklyDateBean.DataBean.TimeBean?) {
         if (dateTime != null) {
             loading()
             viewModel.requestAttendanceTeacherDetail(
-                studentId,
+                classId,
+                teacherId,
                 dateTime.startTime,
                 dateTime.endTime
             )
         }
     }
 
-    private var name: String = ""
     private fun initView() {
-        arguments?.apply {
-            studentId = getString("studentId", "")
-            viewBinding.tvClassName.text = getString("studentName", "")
-            name = getString("studentName", "")
+        teacherId = SpData.getIdentityInfo().teacherId
+        if (SpData.getClassInfo() != null) {
+            classId = SpData.getClassInfo().classesId
         }
         initClassMenu()
         initDate()
-        viewModel.parentsAttendanceLiveData.observe(viewLifecycleOwner) {
+        viewModel.teacherAttendanceLiveData.observe(viewLifecycleOwner) {
             dismiss()
             val result = it.getOrNull()
             if (null != result) {
-                initHotScroll(result.attendRate)
-                initViewpager(result.attendDetail)
+                initHotScroll(result.teacherAttend)
+                initViewpager(result.teacherDetail)
             } else {//接口返回空的情况处理
 
             }
         }
     }
 
-    private fun initViewpager(detailList: List<AttendDetail>?) {
+    private fun initViewpager(detailList: List<WeeklyTeacherDetail>?) {
         if (detailList != null) {
+            viewBinding.viewpager.offscreenPageLimit = 3
             viewBinding.viewpager.adapter = object :
                 FragmentStatePagerAdapter(
                     childFragmentManager,
                     BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
                 ) {
                 override fun getItem(position: Int): Fragment {
-                    return ParentsAttendanceChildFragment.newInstance(
+                    return TeacherAttendanceTeacherChildFragment.newInstance(
                         detailList[position],
-                        name,
-                        detailList[position].name
+                        detailList[position].attendName
                     )
                 }
 
@@ -114,7 +112,7 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
                 }
 
                 override fun getPageTitle(position: Int): CharSequence? {
-                    return detailList[position].name
+                    return detailList[position].attendName
                 }
             }
             viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
@@ -122,7 +120,8 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
         }
     }
 
-    private var studentId = ""
+    private var classId = ""
+    private var teacherId = ""
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimeBean
     private fun initDate() {
         //获取日期时间
@@ -167,6 +166,9 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
     }
 
     private fun initClassMenu() {
+        if (SpData.getClassInfo() != null) {
+            viewBinding.tvClassName.text = SpData.getClassInfo().classesName
+        }
         val classList = SpData.getClassList()
         val adapterEvent = ClassAdapter()
         if (classList != null) {
@@ -181,7 +183,7 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
                     attendancePop.setOnSelectListener { index: Int ->
                         viewBinding.tvClassName.text = adapterEvent.getItem(index).classesName
-                        studentId = adapterEvent.getItem(index).studentId
+                        classId = adapterEvent.getItem(index).classesId
                         request(dateTime)
                     }
 
@@ -199,7 +201,7 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
     }
 
     private var spanCount = 3
-    private fun initHotScroll(attendance: List<AttendRate>?) {
+    private fun initHotScroll(attendance: List<WeeklyTeacherAttend>?) {
         if (attendance != null && attendance.size < 3) {
             spanCount = attendance.size
         }
@@ -251,13 +253,13 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
      * @return
     </T> */
     private fun splitList(
-        list: List<AttendRate>?,
+        list: List<WeeklyTeacherAttend>?,
         len: Int
-    ): List<List<AttendRate>>? {
+    ): List<List<WeeklyTeacherAttend>>? {
         if (list == null || list.isEmpty() || len < 1) {
             return Collections.emptyList()
         }
-        val result: MutableList<List<AttendRate>> =
+        val result: MutableList<List<WeeklyTeacherAttend>> =
             ArrayList()
         val size = list.size
         val count = (size + len - 1) / len
@@ -280,12 +282,12 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
         }
     }
 
-    private fun attendanceBanner(attendance: List<AttendRate>, spanCount: Int): View {
+    private fun attendanceBanner(attendance: List<WeeklyTeacherAttend>, spanCount: Int): View {
         val view = ItemHBinding.inflate(layoutInflater)
         view.attendanceRecyclerview.layoutManager = GridLayoutManager(activity, spanCount)
         val adapterAttendance = object :
-            BaseQuickAdapter<AttendRate, BaseViewHolder>(R.layout.item_weekly_attendance) {
-            override fun convert(holder: BaseViewHolder, item: AttendRate) {
+            BaseQuickAdapter<WeeklyTeacherAttend, BaseViewHolder>(R.layout.item_weekly_attendance) {
+            override fun convert(holder: BaseViewHolder, item: WeeklyTeacherAttend) {
                 val bind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
                 bind.viewLine.visibility =
                     if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE

@@ -62,6 +62,7 @@
                     android:layout_marginTop="@dimen/dp_18"
                     android:background="@drawable/bg_conrners_white_12"
                     android:drawablePadding="@dimen/dp_8"
+                    android:minWidth="60dp"
                     android:paddingStart="@dimen/dp_12"
                     android:paddingTop="@dimen/dp_2"
                     android:paddingEnd="@dimen/dp_12"
@@ -69,7 +70,6 @@
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:minWidth="60dp"
                     app:drawableEndCompat="@mipmap/icon_down"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -136,7 +136,8 @@
 
                         <include
                             android:id="@+id/homework_statistical"
-                            layout="@layout/layout_weekly_parents_homework_statistical" />
+                            layout="@layout/layout_weekly_parents_homework_statistical"
+                            android:visibility="gone" />
 
                         <View
                             android:layout_width="match_parent"

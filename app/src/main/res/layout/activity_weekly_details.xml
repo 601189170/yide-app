@@ -29,7 +29,6 @@
             android:textColor="#ff1e1e1e"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:drawableEndCompat="@mipmap/icon_weekly_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -9,7 +9,7 @@ data class WeeklyParentsAttendDetailBean(
     @JSONField(name = "attendDetail")
     var attendDetail: List<AttendDetail>,
     @JSONField(name = "attendRate")
-    var attendRate: List<AttendRate>
+    var attendRate: List<AttendRate>,
 ) : Serializable
 
 data class AttendDetail(
@@ -56,3 +56,5 @@ data class AttendItem(
         TODO("Not yet implemented")
     }
 }
+
+data class AttendanceParentsBean(val name: String, val value: Int, val type: Int)

@@ -27,6 +27,7 @@
             android:minHeight="250dp">
 
             <ImageView
+                android:id="@+id/iv_bg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/icon_weekly_teacher_commnets"

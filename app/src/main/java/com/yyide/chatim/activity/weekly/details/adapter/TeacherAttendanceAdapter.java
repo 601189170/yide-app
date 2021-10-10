@@ -9,27 +9,26 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.AbnormalDetail;
 import com.yyide.chatim.model.AttendItem;
-import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.utils.TimeUtil;
+import com.yyide.chatim.model.ValueChild;
 import com.yyide.chatim.widget.treeview.adapter.SingleLayoutTreeAdapter;
 import com.yyide.chatim.widget.treeview.model.TreeNode;
 import com.yyide.chatim.widget.treeview.util.DpUtil;
 
 import java.util.List;
 
-public class ParentsAttendanceAdapter extends SingleLayoutTreeAdapter<AttendItem> {
+public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild> {
 
-    public ParentsAttendanceAdapter(int layoutResId, @Nullable List<TreeNode<AttendItem>> dataToBind) {
+    public TeacherAttendanceAdapter(int layoutResId, @Nullable List<TreeNode<ValueChild>> dataToBind) {
         super(layoutResId, dataToBind);
 
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, TreeNode<AttendItem> itemParent) {
+    protected void convert(BaseViewHolder holder, TreeNode<ValueChild> itemParent) {
         super.convert(holder, itemParent);
-        AttendItem item = itemParent.getData();
+        ValueChild item = itemParent.getData();
         TextView tvTime = holder.getView(R.id.tv_student_time);
         TextView tvStatus = holder.getView(R.id.tv_status);
         TextView tvName = holder.getView(R.id.tv_student_name);
@@ -37,29 +36,34 @@ public class ParentsAttendanceAdapter extends SingleLayoutTreeAdapter<AttendItem
         holder.setText(R.id.tv_student_time, "");
         holder.setText(R.id.tv_student_event, "");
         holder.setText(R.id.tv_status, "");
-        holder.setText(R.id.tv_student_name, item.getName());
+        holder.setText(R.id.tv_student_name, "");
+        tvName.setText(item.getClockDate() + " " + item.getDetailName());
+        tvStatus.setText(item.getStatusName());
         if (itemParent.getLevel() == 1) {
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
-            switch (item.getValue()) {
-                case 0://正常
+            if (TextUtils.isEmpty(item.getType())) {
+                return;
+            }
+            switch (item.getType()) {
+                case "0"://正常
 //                        tvStatus.setText(item.getStatusType());
 //                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
 //                        tvTime.setTextColor(Color.parseColor("#606266"));
                     break;
-                case 1://缺勤
+                case "1"://缺勤
                     tvStatus.setText("未打卡");
                     break;
-                case 3://早退
+                case "3"://早退
 //                        tvStatus.setText(item.getStatusType());
 //                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
 //                        tvTime.setTextColor(Color.parseColor("#63DAAB"));
                     break;
-                case 2://迟到
-                    holder.setText(R.id.tv_student_event, item.getName());
+                case "2"://迟到
+                    tvName.setText(item.getName());
                     //holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
-                case 4://请假
+                case "4"://请假
                     //tvStatus.setText(item.getStatusType());
 //                        String startTime = DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
 //                        String endTime = DateUtils.formatTime(item.getEndDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
@@ -72,7 +76,7 @@ public class ParentsAttendanceAdapter extends SingleLayoutTreeAdapter<AttendItem
             constraintLayout.setBackgroundColor(getContext().getResources().getColor(R.color.white));
             tvName.setEms(8);
             tvName.setLines(1);
-            tvName.setText(!TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名");
+            tvName.setText(!TextUtils.isEmpty(item.getDetailName()) ? item.getDetailName() : "未知姓名");
             // holder.setText(R.id.tv_status, item.specialPeople != null ? item.specialPeople.size() + "节" : "0节");
         }
         if (!itemParent.isLeaf()) {

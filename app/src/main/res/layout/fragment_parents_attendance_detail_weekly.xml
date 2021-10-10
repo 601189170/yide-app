@@ -97,7 +97,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/announRoll"
                         tools:listitem="@layout/item_hot" />
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

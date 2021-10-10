@@ -78,8 +78,7 @@ open class ParentsWeeklyFragment : BaseFragment() {
                     initAttendance(result.attend[0])
                     adapterAttendance.setList(result.attend)
                 }
-                //教师评语
-                viewBinding.comments.tvWeeklyAttendance.text = result.eval
+                setTeacherComments(result.eval)
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
@@ -95,6 +94,22 @@ open class ParentsWeeklyFragment : BaseFragment() {
 
     private fun request() {
         viewModel.requestParentsWeekly(studentId, dateTime.startTime, dateTime.endTime)
+    }
+
+    private fun setTeacherComments(eval: Eval) {
+        //教师评语
+        viewBinding.comments.tvWeeklyAttendance.text = eval.body
+        when (eval.level) {//1:非常优秀、2:比较优秀、3：较好
+            1 -> {
+                viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets)
+            }
+            2 -> {
+                viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets_good)
+            }
+            else -> {
+                viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets_general)
+            }
+        }
     }
 
     private fun setSummary(summary: WeeklyParentsSummary?) {

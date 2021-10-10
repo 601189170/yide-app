@@ -97,7 +97,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/announRoll"
                         tools:listitem="@layout/item_hot" />
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -115,7 +114,6 @@
             app:tl_indicator_height="3dp"
             app:tl_indicator_width="50dp"
             app:tl_tab_padding="@dimen/dp_20"
-            app:tl_tab_space_equal="true"
             app:tl_textSelectColor="#303133"
             app:tl_textUnselectColor="#909399"
             app:tl_textsize="16sp" />
