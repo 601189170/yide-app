@@ -485,13 +485,14 @@ public class DialogUtil {
         mDialog.show();
     }
 
-    public static void showScheduleDelDialog(Context context, View view) {
+    public static void showScheduleDelDialog(Context context, View view,OnClickListener onClickListener) {
         DialogScheduleDelBinding binding = DialogScheduleDelBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         rootView.setOnClickListener(v -> {
             //删除日程
+            onClickListener.onEnsure(v);
             mDialog.dismiss();
         });
         Window dialogWindow = mDialog.getWindow();

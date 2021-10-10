@@ -33,7 +33,8 @@ public class ScheduleData implements MultiItemEntity {
     private String iconImg;
     private String isAllDay;
     private List<LabelListRsp.DataBean> label;
-    private List<ParticipantBean> participant;
+    private List<ParticipantRsp.DataBean.ParticipantListBean> participant;
+    private String siteName;
     private String updateType;
     private String updateDate;
 
@@ -181,11 +182,11 @@ public class ScheduleData implements MultiItemEntity {
         this.label = label;
     }
 
-    public List<ParticipantBean> getParticipant() {
+    public List<ParticipantRsp.DataBean.ParticipantListBean> getParticipant() {
         return participant;
     }
 
-    public void setParticipant(List<ParticipantBean> participant) {
+    public void setParticipant(List<ParticipantRsp.DataBean.ParticipantListBean> participant) {
         this.participant = participant;
     }
 
@@ -205,6 +206,14 @@ public class ScheduleData implements MultiItemEntity {
         this.updateDate = updateDate;
     }
 
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
     @Override
     public int getItemType() {
         if (Objects.equals(status, "1")) {
@@ -217,24 +226,5 @@ public class ScheduleData implements MultiItemEntity {
             return TYPE_EXPIRED_NOT_COMPLETED;
         }
         return TYPE_UNEXPIRED_NOT_COMPLETED;
-    }
-
-    public static class ParticipantBean {
-        private String userId;
-
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
-
-        public ParticipantBean() {
-        }
-
-        public ParticipantBean(String userId) {
-            this.userId = userId;
-        }
     }
 }

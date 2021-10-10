@@ -821,6 +821,14 @@ public interface DingApiStores {
     Call<TodayListRsp> getThisWeekAndTodayList();
 
     /**
+     * 删除日程
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/deleteScheduleById/14
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @DELETE("/management/cloud-system/app/schedule/deleteScheduleById/{id}")
+    Call<BaseRsp> deleteScheduleById(@Path("id") String id);
+
+    /**
      * 获取周报描述
      *
      * @return

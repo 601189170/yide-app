@@ -30,10 +30,6 @@ class TodayScheduleViewModel : ViewModel() {
         return todayList
     }
 
-    init {
-        getThisWeekAndTodayList()
-    }
-
     fun getThisWeekAndTodayList(){
         apiStores.thisWeekAndTodayList.enqueue(object :Callback<TodayListRsp>{
             override fun onResponse(call: Call<TodayListRsp>, response: Response<TodayListRsp>) {

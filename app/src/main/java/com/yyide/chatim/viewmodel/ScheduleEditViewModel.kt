@@ -47,9 +47,12 @@ class ScheduleEditViewModel : ViewModel() {
     val siteLiveData = MutableLiveData<SiteNameRsp.DataBean>()
     //参与人选择
     val participantList = MutableLiveData<List<ParticipantRsp.DataBean.ParticipantListBean>>(mutableListOf())
+    //备注
+    val remarkLiveData = MutableLiveData<String>()
     //更新类型
     val updateTypeLiveData = MutableLiveData<String>()
     val saveOrModifyResult = MutableLiveData<Boolean>()
+    val deleteResult = MutableLiveData<Boolean>()
     private var dingApiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
     /**
@@ -92,7 +95,9 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.endTime = endTime?:""
         scheduleData.isAllDay = if (allDay) "1" else "0"
         scheduleData.label = labelListLiveData.value
-        //scheduleData.participant = participantList.value
+        scheduleData.participant = participantList.value
+        scheduleData.siteId = siteLiveData.value?.id
+        scheduleData.remark = remarkLiveData.value
         val toJSONString = JSON.toJSONString(scheduleData)
         loge("toJSONString=$toJSONString")
         val body = RequestBody.create(BaseConstant.JSON, toJSONString)
@@ -116,7 +121,26 @@ class ScheduleEditViewModel : ViewModel() {
         })
     }
 
-    fun editSchedule(){
+    /**
+     * 删除日程
+     */
+    fun deleteScheduleById(id:String){
+        dingApiStores.deleteScheduleById(id).enqueue(object :Callback<BaseRsp>{
+            override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
+                val body = response.body()
+                if (body != null && body.code == 200){
+                    ToastUtils.showShort("删除日程成功")
+                    deleteResult.postValue(true)
+                    return
+                }
+                ToastUtils.showShort("删除日程失败")
+                deleteResult.postValue(false)
+            }
 
+            override fun onFailure(call: Call<BaseRsp>, t: Throwable) {
+                ToastUtils.showShort("删除日程失败")
+                deleteResult.postValue(false)
+            }
+        })
     }
 }
