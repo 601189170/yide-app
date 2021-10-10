@@ -141,12 +141,14 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
         }
     }
 
-    private val spanCount = 3
+    private var spanCount = 3
     private fun setWeekly(result: SchoolWeeklyTeacherBean) {
         viewBinding.hotRecyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.hotRecyclerview.adapter = adapterHot
-
+        if (result.attend != null && result.attend.size < 3) {
+            spanCount = result.attend.size
+        }
         val splitList = splitList(result.attend, spanCount)
         val hotList = mutableListOf<Int>()
         if (splitList != null) {

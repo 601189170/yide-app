@@ -53,10 +53,11 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(item: Detail) =
+        fun newInstance(item: Detail, title : String) =
             SchoolStudentChildAttendanceFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("item", item)
+                    putString("tabTitle", title)
                 }
             }
     }
@@ -79,6 +80,8 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         var subjects = mutableListOf<DeptAttend>()
         arguments?.apply {
             val detail = getSerializable("item") as Detail
+            viewBinding.textView.text = getString(R.string.weekly_school_desc, getString("tabTitle", ""))
+
             teacherAttendances = detail.teacherAttend as MutableList<TeacherAttendance>
             subjects = detail.deptAttend as MutableList<DeptAttend>
         }

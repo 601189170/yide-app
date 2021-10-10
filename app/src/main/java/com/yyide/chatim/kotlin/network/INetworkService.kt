@@ -43,7 +43,7 @@ interface INetworkService {
         @Query("teacherId") teacherId: String,
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String
-    ): BaseResponse<ResultBean>
+    ): BaseResponse<WeeklyStudentBean>
 
 
     /**

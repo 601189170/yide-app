@@ -59,8 +59,37 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
 
     private fun initView() {
         request()
+        viewBinding.tvTime.setOnClickListener {9
+            val dateLists = WeeklyUtil.getDateTimes()
+            val adapterDate = DateAdapter()
+            adapterDate.setList(dateLists)
+            if (indexData < 0) {
+                indexData = dateLists.size - 1
+            }
+            adapterDate.setIndex(indexData)
+            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
+            attendancePop.setOnSelectListener { index: Int ->
+                indexData = index
+                viewBinding.tvTime.text = getString(
+                    R.string.startTime_endTime, DateUtils.formatTime(
+                        dateLists[index].startTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    ), DateUtils.formatTime(
+                        dateLists[index].endTime,
+                        "yyyy-MM-dd HH:mm:ss",
+                        "MM/dd"
+                    )
+                )
+                viewModel.requestSchoolAttendance(
+                    dateLists[index].startTime,
+                    dateLists[index].endTime
+                )
+            }
+        }
     }
 
+    private var indexData = -1
     private fun request() {
         viewModel.schoolStudentAttendanceLiveData.observe(viewLifecycleOwner) {
             dismiss()
@@ -87,35 +116,16 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
                 )
             )
         }
-        val dateLists = WeeklyUtil.getDateTimes()
-        val adapterDate = DateAdapter()
-        adapterDate.setList(dateLists)
-        viewBinding.tvTime.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-//                indexDate = index
-                viewBinding.tvTime.text = getString(
-                    R.string.startTime_endTime, DateUtils.formatTime(
-                        dateLists[index].startTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    ), DateUtils.formatTime(
-                        dateLists[index].endTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    )
-                )
-                viewModel.requestSchoolAttendance(dateLists[index].startTime, dateLists[index].endTime)
-            }
-        }
     }
 
-    private val spanCount = 3
+    private var spanCount = 3
     private fun setWeekly(result: SchoolWeeklyTeacherBean) {
         viewBinding.hotRecyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.hotRecyclerview.adapter = adapterHot
-
+        if (result.attend != null && result.attend.size < 3) {
+            spanCount = result.attend.size
+        }
         val splitList = splitList(result.attend, spanCount)
         val hotList = mutableListOf<Int>()
         if (splitList != null) {
@@ -189,7 +199,10 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
         viewBinding.viewpager.adapter = object :
             FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
-                return SchoolStudentChildAttendanceFragment.newInstance(attendance[position])
+                return SchoolStudentChildAttendanceFragment.newInstance(
+                    attendance[position],
+                    mTitles[position]
+                )
             }
 
             override fun getCount(): Int {

@@ -7,12 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.yyide.chatim.R
-import com.yyide.chatim.SpData
-import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
-import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.databinding.FragmentTeacherAttendanceWeeklyBinding
-import com.yyide.chatim.dialog.AttendancePop
-import com.yyide.chatim.utils.DateUtils
 
 /**
  *
@@ -52,10 +47,10 @@ class TeacherAttendanceHomeFragment : Fragment() {
             override fun getItem(position: Int): Fragment {
                 return when (position) {
                     0 -> {
-                        TeacherAttendanceHomeChildFragment.newInstance()
+                        TeacherAttendanceHomeStudentFragment.newInstance()
                     }
                     else -> {
-                        TeacherAttendanceHomeChildFragment.newInstance()
+                        TeacherAttendanceHomeTeacherFragment.newInstance()
                     }
                 }
             }
