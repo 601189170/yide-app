@@ -21,6 +21,8 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleEditBinding
 import com.yyide.chatim.model.schedule.*
+import com.yyide.chatim.model.schedule.Remind.Companion.getList
+import com.yyide.chatim.model.schedule.Remind.Companion.getList2
 import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
@@ -33,6 +35,8 @@ class ScheduleEditActivity : BaseActivity() {
     lateinit var scheduleEditBinding: ActivityScheduleEditBinding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
+    val list = getList()
+    val list2 = getList2()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleEditBinding = ActivityScheduleEditBinding.inflate(layoutInflater)
@@ -78,12 +82,22 @@ class ScheduleEditActivity : BaseActivity() {
                 scheduleEditViewModel.repetitionLiveData.value = Repetition("", true, it.rrule)
             }
             //日程提醒remind
-            Remind.getList().forEach { remind ->
-                if (remind.id == it.remindTypeInfo) {
-                    scheduleEditBinding.tvRemind.text = remind.title
-                    scheduleEditViewModel.remindLiveData.value = remind
+            if (it.isAllDay == "1") {
+                list2.forEach { remind ->
+                    if (remind.id == it.remindTypeInfo) {
+                        scheduleEditBinding.tvRemind.text = remind.title
+                        scheduleEditViewModel.remindLiveData.value = remind
+                    }
+                }
+            } else {
+                list.forEach { remind ->
+                    if (remind.id == it.remindTypeInfo) {
+                        scheduleEditBinding.tvRemind.text = remind.title
+                        scheduleEditViewModel.remindLiveData.value = remind
+                    }
                 }
             }
+
             //日程便签label
             labelList.clear()
             labelList.addAll(it.label)
@@ -161,6 +175,7 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleEditBinding.clRemind.setOnClickListener {
             val intent = Intent(this, ScheduleRemindActivity::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleEditViewModel.remindLiveData.value))
+            intent.putExtra("allDay", scheduleEditViewModel.allDayLiveData.value)
             startActivityForResult(intent, REQUEST_CODE_REMIND_SELECT)
         }
         scheduleEditBinding.clRepetition.setOnClickListener {
@@ -213,7 +228,7 @@ class ScheduleEditActivity : BaseActivity() {
             }
         })
 
-        scheduleEditViewModel.saveOrModifyResult.observe(this,{
+        scheduleEditViewModel.saveOrModifyResult.observe(this, {
             if (it) {
                 finish()
             }
@@ -279,6 +294,26 @@ class ScheduleEditActivity : BaseActivity() {
             scheduleEditViewModel.startTimeLiveData.value = startTime
             scheduleEditViewModel.endTimeLiveData.value = endTime
             scheduleEditViewModel.allDayLiveData.value = allDay
+            if (allDay) {
+                val selectedRemind = list2.filter { it.checked }
+                if (selectedRemind.isNotEmpty()) {
+                    scheduleEditViewModel.remindLiveData.value = selectedRemind[0]
+                    scheduleEditBinding.tvRemind.text = selectedRemind[0].title
+                } else {
+                    scheduleEditViewModel.remindLiveData.value = Remind.getNotRemind()
+                    scheduleEditBinding.tvRemind.text = Remind.getNotRemind().title
+                }
+
+            } else {
+                val selectedRemind = list.filter { it.checked }
+                if (selectedRemind.isNotEmpty()) {
+                    scheduleEditViewModel.remindLiveData.value = selectedRemind[0]
+                    scheduleEditBinding.tvRemind.text = selectedRemind[0].title
+                } else {
+                    scheduleEditViewModel.remindLiveData.value = Remind.getNotRemind()
+                    scheduleEditBinding.tvRemind.text = Remind.getNotRemind().title
+                }
+            }
             return
         }
         //选择提醒
@@ -288,6 +323,15 @@ class ScheduleEditActivity : BaseActivity() {
             loge("id=${remind.id},name=${remind.title}")
             scheduleEditBinding.tvRemind.text = remind.title
             scheduleEditViewModel.remindLiveData.value = remind
+            if (scheduleEditViewModel.allDayLiveData.value == true) {
+                list2.forEach {
+                    it.checked = it.id == remind.id
+                }
+            } else {
+                list.forEach {
+                    it.checked = it.id == remind.id
+                }
+            }
             return
         }
         //选择重复

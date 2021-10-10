@@ -636,12 +636,12 @@ public class DialogUtil {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showRemindScheduleDialog(Context context, ScheduleEditViewModel scheduleEditViewModel) {
+    public static void showRemindScheduleDialog(Context context, ScheduleEditViewModel scheduleEditViewModel,List<Remind> list) {
         DialogScheduleRemindBinding binding = DialogScheduleRemindBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
-        final List<Remind> list = Remind.Companion.getList();
+        //final List<Remind> list = Remind.Companion.getList();
         final Remind value = scheduleEditViewModel.getRemindLiveData().getValue();
         if (value != null) {
             //反选
@@ -649,7 +649,7 @@ public class DialogUtil {
             for (Remind remind : list) {
                 remind.setChecked(Objects.equals(remind.getId(), value.getId()));
             }
-            if (TextUtils.isEmpty(value.getId())) {
+            if (!TextUtils.isEmpty(value.getId()) && "10".equals(value.getId())) {
                 binding.ivNotRemind.setVisibility(View.VISIBLE);
             }
         }
@@ -686,7 +686,7 @@ public class DialogUtil {
         binding.tvFinish.setOnClickListener(v -> {
             final List<Remind> collect = list.stream().filter(Remind::getChecked).collect(Collectors.toList());
             if (collect.isEmpty()) {
-                scheduleEditViewModel.getRemindLiveData().setValue(new Remind("","不提醒",true));
+                scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10","不提醒",true));
             } else {
                 scheduleEditViewModel.getRemindLiveData().setValue(collect.get(0));
             }
@@ -712,8 +712,14 @@ public class DialogUtil {
         mDialog.setContentView(rootView);
         AtomicReference<String> dateStart = new AtomicReference<>("");
         AtomicReference<String> dateEnd = new AtomicReference<>("");
+        final List<Remind> list = Remind.Companion.getList();
+        final List<Remind> list2 = Remind.Companion.getList2();
+        if (scheduleEditViewModel.getRemindLiveData().getValue() == null) {
+            binding.tvRemind.setText("不重复");
+            scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10", "不重复", true));
+        }
         binding.clRemind.setOnClickListener(v -> {
-            showRemindScheduleDialog(context,scheduleEditViewModel);
+            showRemindScheduleDialog(context,scheduleEditViewModel,binding.checkBox.isChecked()?list2:list);
         });
         binding.clRepetition.setOnClickListener(v -> {
             showRepetitionScheduleDialog(context,scheduleEditViewModel);
@@ -752,10 +758,30 @@ public class DialogUtil {
                 binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2);
                 binding.tvTimeStart.setVisibility(View.GONE);
                 binding.tvTimeEnd.setVisibility(View.GONE);
+                //修改提醒类型 全天
+                final Optional<Remind> optionalRemind = list2.stream().filter(Remind::getChecked).findFirst();
+                if (optionalRemind.isPresent()) {
+                    final Remind remind = optionalRemind.get();
+                    scheduleEditViewModel.getRemindLiveData().setValue(remind);
+                    binding.tvRemind.setText(remind.getTitle());
+                } else {
+                    scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10", "不重复", true));
+                    binding.tvRemind.setText("不重复");
+                }
             } else {
                 binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation);
                 binding.tvTimeStart.setVisibility(View.VISIBLE);
                 binding.tvTimeEnd.setVisibility(View.VISIBLE);
+                //修改提醒类型 非全天
+                final Optional<Remind> optionalRemind = list.stream().filter(Remind::getChecked).findFirst();
+                if (optionalRemind.isPresent()) {
+                    final Remind remind = optionalRemind.get();
+                    scheduleEditViewModel.getRemindLiveData().setValue(remind);
+                    binding.tvRemind.setText(remind.getTitle());
+                } else {
+                    scheduleEditViewModel.getRemindLiveData().setValue(new Remind("10", "不重复", true));
+                    binding.tvRemind.setText("不重复");
+                }
             }
         });
         binding.dateTimePicker.setOnDateTimeChangedListener(aLong -> {

@@ -13,6 +13,10 @@ data class Remind(
     var checked: Boolean = false
 ) {
     companion object {
+        fun getNotRemind(): Remind {
+            return Remind("10", "不提醒", false)
+        }
+
         fun getList(): List<Remind> {
             val remindList = mutableListOf<Remind>()
             remindList.add(Remind("9", "日程开始时", false))
@@ -25,6 +29,17 @@ data class Remind(
             remindList.add(Remind("6", "1天前", false))
             remindList.add(Remind("7", "2天前", false))
             remindList.add(Remind("8", "1周前", false))
+            return remindList
+        }
+
+        fun getList2(): List<Remind> {
+            val remindList = mutableListOf<Remind>()
+            remindList.add(Remind("11", "当天07:00", false))
+            remindList.add(Remind("12", "当天08:00", false))
+            remindList.add(Remind("13", "当天09:00", false))
+            remindList.add(Remind("14", "提前一天07:00", false))
+            remindList.add(Remind("15", "提前一天08:00", false))
+            remindList.add(Remind("16", "提前一天09:00", false))
             return remindList
         }
     }

@@ -24,15 +24,17 @@ class ScheduleRemindActivity : BaseActivity() {
 
     private fun initView() {
         val stringExtra = intent.getStringExtra("data")
+        val allDay = intent.getBooleanExtra("allDay", false)
         val selectedRemind = JSON.parseObject(stringExtra, Remind::class.java)
-        val list = Remind.getList()
+        val list = if (allDay) Remind.getList2() else Remind.getList()
         if (selectedRemind != null){
             //设置内容反选
             scheduleRemindBinding.ivNotRemind.visibility = View.GONE
             list.forEach {
                 it.checked = it.id == selectedRemind.id
             }
-            if (TextUtils.isEmpty(selectedRemind.id)){
+
+            if (TextUtils.isEmpty(selectedRemind.id) || selectedRemind.id == "10"){
                 scheduleRemindBinding.ivNotRemind.visibility = View.VISIBLE
             }
         }
