@@ -47,14 +47,12 @@ class ScheduleRemindActivity : BaseActivity() {
         scheduleRemindBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         scheduleRemindBinding.top.tvRight.setOnClickListener {
             val selectList = list.filter { it.checked }
-            var remindId = ""
-            var remindName = "不提醒"
+            var remind = Remind.getNotRemind()
             if (selectList.isNotEmpty()){
-                remindId = selectList.first().id?:""
-                remindName = selectList.first().title?:""
+                remind = selectList[0]
             }
             val intent = intent
-            intent.putExtra("data",JSON.toJSONString(Remind(remindId,remindName)))
+            intent.putExtra("data",JSON.toJSONString(remind))
             setResult(RESULT_OK,intent)
             finish()
         }

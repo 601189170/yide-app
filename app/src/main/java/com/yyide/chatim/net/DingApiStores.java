@@ -1,6 +1,7 @@
 package com.yyide.chatim.net;
 
 
+import com.yyide.chatim.kotlin.network.base.BaseResponse;
 import com.yyide.chatim.model.ActivateRsp;
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.model.AddressBookRsp;
@@ -74,12 +75,14 @@ import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.ParticipantRsp;
+import com.yyide.chatim.model.schedule.ScheduleData;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
 import com.yyide.chatim.model.schedule.StudentGuardianRsp;
 import com.yyide.chatim.model.schedule.TodayListRsp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -827,6 +830,14 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @DELETE("/management/cloud-system/app/schedule/deleteScheduleById/{id}")
     Call<BaseRsp> deleteScheduleById(@Path("id") String id);
+
+    /**
+     * 日程搜索
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/searchSchedule
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/searchSchedule")
+    Call<BaseResponse<List<ScheduleData>>> searchSchedule(@Body RequestBody requestBody);
 
     /**
      * 获取周报描述

@@ -82,18 +82,25 @@ class ScheduleEditActivity : BaseActivity() {
                 scheduleEditViewModel.repetitionLiveData.value = Repetition("", true, it.rrule)
             }
             //日程提醒remind
-            if (it.isAllDay == "1") {
-                list2.forEach { remind ->
-                    if (remind.id == it.remindTypeInfo) {
-                        scheduleEditBinding.tvRemind.text = remind.title
-                        scheduleEditViewModel.remindLiveData.value = remind
-                    }
-                }
+            if (it.remindTypeInfo == "10") {
+                scheduleEditBinding.tvRemind.text = Remind.getNotRemind().title
+                scheduleEditViewModel.remindLiveData.value = Remind.getNotRemind()
             } else {
-                list.forEach { remind ->
-                    if (remind.id == it.remindTypeInfo) {
-                        scheduleEditBinding.tvRemind.text = remind.title
-                        scheduleEditViewModel.remindLiveData.value = remind
+                if (it.isAllDay == "1") {
+                    list2.forEach { remind ->
+                        if (remind.id == it.remindTypeInfo) {
+                            scheduleEditBinding.tvRemind.text = remind.title
+                            scheduleEditViewModel.remindLiveData.value = remind
+                            return@forEach
+                        }
+                    }
+                } else {
+                    list.forEach { remind ->
+                        if (remind.id == it.remindTypeInfo) {
+                            scheduleEditBinding.tvRemind.text = remind.title
+                            scheduleEditViewModel.remindLiveData.value = remind
+                            return@forEach
+                        }
                     }
                 }
             }

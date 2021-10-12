@@ -109,6 +109,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/tv_search_time"
         tools:layout_editor_absoluteX="73dp">
 
@@ -116,7 +119,6 @@
             android:id="@+id/tv_history_or_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_18"
             android:text="最近搜索"
             android:textColor="#666666"
             android:textSize="14sp"
@@ -211,10 +213,10 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_10"
+        android:padding="@dimen/dp_20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="37dp"
-        tools:listitem="@layout/item_schedule_search" />
+        tools:listitem="@layout/schedule_item_unexpired_not_completed" />
 </androidx.constraintlayout.widget.ConstraintLayout>

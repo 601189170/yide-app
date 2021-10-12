@@ -25,6 +25,7 @@
         android:layout_height="@dimen/dp_16"
         android:background="@drawable/schedule_add_label_selector"
         android:button="@null"
+        android:clickable="false"
         android:theme="@style/Widget.AppCompat.CompoundButton.RadioButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

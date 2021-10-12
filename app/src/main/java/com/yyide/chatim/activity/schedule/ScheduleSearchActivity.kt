@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.schedule
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -8,35 +9,58 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.*
+import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.tencent.mmkv.MMKV
 import com.yyide.chatim.R
+import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.ActivityScheduleSearchBinding
 import com.yyide.chatim.dialog.ScheduleSearchFilterPop
+import com.yyide.chatim.model.schedule.FilterTagCollect
+import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.model.schedule.ScheduleFilterTag
 import com.yyide.chatim.model.schedule.TagType
+import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.view.SpaceItemDecoration
 import com.yyide.chatim.view.SpacesItemDecoration
-import javassist.bytecode.stackmap.TypeTag
-import java.util.HashSet
+import com.yyide.chatim.viewmodel.LabelManageViewModel
+import com.yyide.chatim.viewmodel.ScheduleSearchViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ScheduleSearchActivity : BaseActivity() {
-
-
+    private val labelManageViewModel: LabelManageViewModel by viewModels()
+    private val scheduleSearchViewModel: ScheduleSearchViewModel by viewModels()
     private lateinit var viewBinding: ActivityScheduleSearchBinding
-    val tagList = mutableListOf<TagType>()
+    private val tagList = mutableListOf<TagType>()
+    private var filterTagCollect: FilterTagCollect = FilterTagCollect()
+    private val scheduleSearchResultList = mutableListOf<ScheduleData>()
+    private lateinit var scheduleSearchResultListAdapter: ScheduleTodayAdapter
+    private val searchHistoryList = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityScheduleSearchBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initView()
+        labelManageViewModel.selectLabelList()
+        scheduleSearchViewModel.getScheduleSearchResultList().observe(this, {
+            if (it.isEmpty()) {
+                ToastUtils.showShort("没有搜索到结果~")
+            }
+            scheduleSearchResultList.clear()
+            scheduleSearchResultList.addAll(it)
+            scheduleSearchResultListAdapter.setList(scheduleSearchResultList)
+        })
     }
 
     override fun getContentViewID(): Int {
@@ -44,11 +68,18 @@ class ScheduleSearchActivity : BaseActivity() {
     }
 
     fun initView() {
+        val simpleDateFormat1 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
+        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date())
         viewBinding.cancel.setOnClickListener { finish() }
         viewBinding.btnDeleteSearch.setOnClickListener { viewBinding.edit.text = null }
         viewBinding.ivDel.setOnClickListener { clearHistory() }
+        //选择过滤条件
         viewBinding.tvFilter.setOnClickListener {
-            val scheduleSearchFilterPop = ScheduleSearchFilterPop(mActivity)
+            val scheduleSearchFilterPop = ScheduleSearchFilterPop(
+                mActivity,
+                labelManageViewModel.getLabelList().value ?: listOf(),
+                filterTagCollect
+            )
             scheduleSearchFilterPop.setOnSelectListener(object :
                 ScheduleSearchFilterPop.OnSelectListener {
                 override fun result(tag: ScheduleFilterTag) {
@@ -56,25 +87,16 @@ class ScheduleSearchActivity : BaseActivity() {
                     initFilterCondition(tag)
                 }
             })
-            if (scheduleSearchFilterPop.isShowing) {
-                viewBinding.tvFilter.setTextColor(resources.getColor(R.color.colorPrimary))
-                viewBinding.tvFilter.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    resources.getDrawable(R.mipmap.icon_yd_filter_select),
-                    null
-                )
-            } else {
-                viewBinding.tvFilter.setTextColor(resources.getColor(R.color.text_666666))
-                viewBinding.tvFilter.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    resources.getDrawable(R.mipmap.icon_yd_filter),
-                    null
-                )
-            }
         }
-
+        //根据日期查询
+        viewBinding.tvSearchTime.setOnClickListener {
+            DatePickerDialogUtil.showDateTime(
+                this,
+                "选择日程开始时间",
+                filterTagCollect.startTime,
+                searchTimeListener
+            )
+        }
         viewBinding.edit.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 (v.context
@@ -90,21 +112,78 @@ class ScheduleSearchActivity : BaseActivity() {
                 }
                 saveHistory(keyWord)
                 //search(keyWord)
+                //开始查询日程
+                scheduleSearchViewModel.searchSchedule(filterTagCollect)
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
 
         //初始化搜索结果列表
-        viewBinding.recyclerview.layoutManager = LinearLayoutManager(this)
-        viewBinding.recyclerview.adapter = searchAdapter
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        viewBinding.recyclerview.layoutManager = linearLayoutManager
+        scheduleSearchResultListAdapter = ScheduleTodayAdapter(scheduleSearchResultList)
+        viewBinding.recyclerview.addItemDecoration(SpaceItemDecoration(SpacesItemDecoration.dip2px(10f)))
+        viewBinding.recyclerview.adapter = scheduleSearchResultListAdapter
+        scheduleSearchResultListAdapter.setOnItemClickListener { _, _, position ->
+            loge("setOnItemClickListener：$position")
+            val intent = Intent(this@ScheduleSearchActivity, ScheduleEditActivity::class.java)
+            val scheduleData = scheduleSearchResultList[position]
+            intent.putExtra("data", JSON.toJSONString(scheduleData))
+            startActivity(intent)
+        }
         initSearchHistory()
-
         //清空选择过滤条件
         viewBinding.ivDelFilter.setOnClickListener {
             tagList.clear()
             viewBinding.clFilterCondition.visibility = View.GONE
+            viewBinding.tvSearchTime.visibility = View.VISIBLE
             filterAdapter.setList(null)
+            filterTagCollect = FilterTagCollect()
+        }
+        //初始化过滤条件的布局
+        val flexboxLayoutManager = FlexboxLayoutManager(this)
+        viewBinding.filterRecyclerView.layoutManager =flexboxLayoutManager
+        viewBinding.filterRecyclerView.addItemDecoration(SpacesItemDecoration(SpacesItemDecoration.dip2px(5f)))
+        viewBinding.filterRecyclerView.adapter = filterAdapter
+        filterAdapter.setList(tagList)
+    }
+
+    private val searchTimeListener = OnDateSetListener { _, millSeconds ->
+        val simpleDateFormat1 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
+        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date(millSeconds))
+        val simpleDateFormat2 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
+        val startTime = simpleDateFormat2.format(Date(millSeconds))
+        filterTagCollect.startTime = startTime
+        //开始查询日程
+        scheduleSearchViewModel.searchSchedule(filterTagCollect)
+    }
+
+
+    private fun showFilterIconColor(isShowing: Boolean) {
+        if (isShowing) {
+            viewBinding.clFilterCondition.visibility = View.VISIBLE
+            viewBinding.clSearchHistory.visibility = View.GONE
+            viewBinding.tvSearchTime.visibility = View.INVISIBLE
+            viewBinding.tvFilter.setTextColor(resources.getColor(R.color.colorPrimary))
+            viewBinding.tvFilter.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                null,
+                resources.getDrawable(R.mipmap.icon_yd_filter_select),
+                null
+            )
+        } else {
+            viewBinding.clFilterCondition.visibility = View.GONE
+            viewBinding.clSearchHistory.visibility = View.VISIBLE
+            viewBinding.tvSearchTime.visibility = View.VISIBLE
+            viewBinding.tvFilter.setTextColor(resources.getColor(R.color.text_666666))
+            viewBinding.tvFilter.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                null,
+                resources.getDrawable(R.mipmap.icon_yd_filter),
+                null
+            )
         }
     }
 
@@ -126,27 +205,39 @@ class ScheduleSearchActivity : BaseActivity() {
                 tagList.add(TagType(1, it, -1))
             }
         }
-
-        viewBinding.filterRecyclerView.layoutManager = FlexboxLayoutManager(this)
-        viewBinding.filterRecyclerView.addItemDecoration(
-            SpacesItemDecoration(
-                SpacesItemDecoration.dip2px(
-                    5f
-                )
-            )
-        )
-        viewBinding.filterRecyclerView.adapter = filterAdapter
+        //设置过滤icon的背景
+        if (scheduleFilterTag.tags.isEmpty()
+            && scheduleFilterTag.types.isEmpty()
+            && TextUtils.isEmpty(scheduleFilterTag.endDate)
+            && TextUtils.isEmpty(scheduleFilterTag.startDate)
+            && scheduleFilterTag.status.isEmpty()
+        ) {
+            showFilterIconColor(false)
+        } else {
+            showFilterIconColor(true)
+        }
         filterAdapter.setList(tagList)
-
+        //根据日程过滤添加请求日程
+        filterTagCollect.startTime = scheduleFilterTag.startDate
+        filterTagCollect.endTime = scheduleFilterTag.endDate
+        filterTagCollect.status = scheduleFilterTag.status
+        filterTagCollect.type = scheduleFilterTag.types
+        val labelList = scheduleFilterTag.tags.map { it.id.toString() }
+        filterTagCollect.labelId = if (labelList.isEmpty()) null else labelList
+        //开始查询日程
+        scheduleSearchViewModel.searchSchedule(filterTagCollect)
     }
 
     private fun initSearchHistory() {
         val historyList =
             MMKV.defaultMMKV().decodeStringSet(MMKVConstant.YD_SCHEDULE_HISTORY, HashSet())
         if (historyList.isEmpty()) {
-            viewBinding.tvHistoryOrFilter.visibility = View.GONE
-            viewBinding.ivDel.visibility = View.GONE
+            viewBinding.clSearchHistory.visibility = View.GONE
+        } else {
+            viewBinding.clSearchHistory.visibility = View.VISIBLE
         }
+        searchHistoryList.clear()
+        searchHistoryList.addAll(historyList)
         viewBinding.historyRecyclerView.layoutManager = FlexboxLayoutManager(this)
         viewBinding.historyRecyclerView.addItemDecoration(
             SpacesItemDecoration(
@@ -156,10 +247,11 @@ class ScheduleSearchActivity : BaseActivity() {
             )
         )
         viewBinding.historyRecyclerView.adapter = historyAdapter
-        historyAdapter.setList(historyList)
+        historyAdapter.setList(searchHistoryList)
         historyAdapter.setOnItemClickListener { adapter, view, position ->
             //搜索
-            ToastUtils.showShort("搜索")
+            filterTagCollect.name = searchHistoryList[position]
+            scheduleSearchViewModel.searchSchedule(filterTagCollect)
         }
     }
 
@@ -172,6 +264,7 @@ class ScheduleSearchActivity : BaseActivity() {
         search_history.clear()
         MMKV.defaultMMKV().encode(MMKVConstant.YD_SCHEDULE_HISTORY, search_history)
         historyAdapter.setList(null)
+        searchHistoryList.clear()
         viewBinding.clSearchHistory.visibility = View.GONE
     }
 
@@ -189,18 +282,26 @@ class ScheduleSearchActivity : BaseActivity() {
         BaseQuickAdapter<TagType, BaseViewHolder>(R.layout.item_schedule_search_history) {
         override fun convert(holder: BaseViewHolder, item: TagType) {
             if (item.type == 0) {
+                val drawable = GradientDrawable()
+                drawable.cornerRadius = DisplayUtils.dip2px(context, 2f).toFloat()
+                drawable.setColor(context.resources.getColor(R.color.color_f3f3f3))
+                holder.getView<TextView>(R.id.tv_search_value).background = drawable
+                holder.setTextColor(
+                    R.id.tv_search_value,
+                    context.resources.getColor(R.color.black9)
+                )
                 when (item.scheduleType) {
-                    //类型1日程2校历3会议4课表
-                    1 -> {
+                    //【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
+                    2 -> {
                         holder.setText(R.id.tv_search_value, "事务日程")
                     }
-                    2 -> {
+                    0 -> {
                         holder.setText(R.id.tv_search_value, "校历")
                     }
                     3 -> {
                         holder.setText(R.id.tv_search_value, "会议")
                     }
-                    4 -> {
+                    1 -> {
                         holder.setText(R.id.tv_search_value, "课表")
                     }
                     else -> {
@@ -210,23 +311,13 @@ class ScheduleSearchActivity : BaseActivity() {
             } else {
                 val drawable = GradientDrawable()
                 drawable.cornerRadius = DisplayUtils.dip2px(context, 2f).toFloat()
-                drawable.setColor(Color.parseColor(item.label?.color))
+                drawable.setColor(Color.parseColor(item.label?.colorValue))
                 holder.getView<TextView>(R.id.tv_search_value).background = drawable
-                holder.setTextColor(R.id.tv_search_value,context.resources.getColor(R.color.white))
-                holder.setText(R.id.tv_search_value, item.label?.title)
+                holder.setTextColor(R.id.tv_search_value, context.resources.getColor(R.color.white))
+                holder.setText(R.id.tv_search_value, item.label?.labelName)
             }
         }
 
-    }
-
-    /**
-     * 搜索结果适配器
-     */
-    private val searchAdapter = object :
-        BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_schedule_search) {
-        override fun convert(holder: BaseViewHolder, item: String) {
-
-        }
     }
 
     /**

@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="MissingDefaultResource"
-    android:padding="@dimen/dp_20">
+    android:padding="@dimen/dp_20"
+    tools:ignore="MissingDefaultResource">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_date"
         android:layout_width="match_parent"
         android:layout_height="74dp"
+        android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -24,65 +25,69 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_date_start"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_start_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/dp_30"
-            android:text="09月3号 周五"
-            android:textColor="#ff333333"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/tv_time_start"
             app:layout_constraintRight_toLeftOf="@id/v_line"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_time_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00"
-            android:textColor="#ff333333"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/tv_date_start"
-            app:layout_constraintRight_toRightOf="@id/tv_date_start"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_start" />
+            <TextView
+                android:id="@+id/tv_date_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09月3号 周五"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/tv_time_start"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_date_end"
+            <TextView
+                android:id="@+id/tv_time_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/tv_date_start"
+                app:layout_constraintRight_toRightOf="@id/tv_date_start"
+                app:layout_constraintTop_toBottomOf="@id/tv_date_start" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_end_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/dp_30"
-            android:text="09月3号 周五"
-            android:textColor="#ff333333"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/tv_time_end"
             app:layout_constraintLeft_toRightOf="@id/v_line"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_time_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="24:00"
-            android:textColor="#ff333333"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/tv_date_end"
-            app:layout_constraintRight_toRightOf="@id/tv_date_end"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_end" />
+            <TextView
+                android:id="@+id/tv_date_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09月3号 周五"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/tv_time_end"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group_date_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="tv_date_start,tv_time_start" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group_date_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="tv_date_end,tv_time_end" />
+            <TextView
+                android:id="@+id/tv_time_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24:00"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/tv_date_end"
+                app:layout_constraintRight_toRightOf="@id/tv_date_end"
+                app:layout_constraintTop_toBottomOf="@id/tv_date_end" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -90,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="@id/cl_date">
 
         <View
@@ -99,7 +104,7 @@
             android:layout_height="1dp"
             android:layout_weight="1"
             android:background="#2C8AFF"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
         <View
             android:id="@+id/v_date_top_mark_right"
@@ -114,10 +119,10 @@
         android:id="@+id/dateTimePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/shape_bg_round_white_5"
-        android:visibility="visible"
-        app:layout="@layout/layout_date_picker_segmentation3"
+        android:visibility="gone"
+        app:layout="@layout/layout_date_picker_segmentation"
         app:layout_constraintTop_toBottomOf="@id/cl_date"
         app:showLabel="true"
         app:textSize="16sp" />

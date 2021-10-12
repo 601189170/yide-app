@@ -4,6 +4,8 @@ import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.GradientDrawable
+import android.text.TextUtils
+import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import android.widget.LinearLayout
@@ -13,25 +15,35 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.notice.NoticeScopeActivity
 import com.yyide.chatim.databinding.LayoutScheduleSearchFilterBinding
+import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.Label
+import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.model.schedule.ScheduleFilterTag
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Created by Administrator on 2019/5/15.
  */
-class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
+class ScheduleSearchFilterPop(
+    val context: Activity?,
+    val labelList: List<LabelListRsp.DataBean>,
+    val filterTagCollect: FilterTagCollect
+) :
+    PopupWindow() {
     lateinit var popupWindow: PopupWindow
     lateinit var mWindow: Window
     val dateStart = AtomicReference("")
     val dateEnd = AtomicReference("")
-    private var labelList = mutableListOf<Label>()
+
+    //private var labelList = mutableListOf<Label>()
     private lateinit var onSelectListener: OnSelectListener
-    lateinit var adapter: BaseQuickAdapter<Label, BaseViewHolder>
+    lateinit var adapter: BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>
 
     init {
         init()
@@ -52,6 +64,7 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
         mView.clBg.setOnClickListener { v ->
             popupWindow.dismiss()
         }
+        initView(mView)
         initLabel(mView)
         initDate(mView)
         mView.tvConfirm.setOnClickListener {
@@ -101,6 +114,65 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
         )
     }
 
+    private fun initView(binding: LayoutScheduleSearchFilterBinding) {
+        //反选类型 日程类型【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
+        filterTagCollect.type?.forEach {
+            when (it) {
+                2 -> {
+                    binding.cbTransactionSchedule.isChecked = true
+                }
+                0 -> {
+                    binding.cbSchoolCalendar.isChecked = true
+                }
+                3 -> {
+                    binding.cbMeeting.isChecked = true
+                }
+                1 -> {
+                    binding.cbClassSchedule.isChecked = true
+                }
+                else -> {
+                }
+            }
+        }
+        //状态
+        filterTagCollect.status?.forEach {
+            when (it) {
+                0 -> {
+                    binding.cbUndone.isChecked = true
+                }
+                1 -> {
+                    binding.cbDone.isChecked = true
+                }
+                else -> {
+                }
+            }
+        }
+        //开始日期
+        dateStart.set(filterTagCollect.startTime ?: DateUtils.switchTime(Date()))
+        //结束日期
+        dateEnd.set(filterTagCollect.endTime ?: DateUtils.switchTime(Date()))
+        //标签
+        labelList.forEach {
+            it.checked = filterTagCollect.labelId?.contains(it.id) == true
+        }
+
+        binding.cbUndone.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (!buttonView.isPressed) {
+                loge("initView: 代码触发，不处理监听事件。")
+                return@setOnCheckedChangeListener
+            }
+            binding.cbDone.isChecked = !isChecked
+        }
+
+        binding.cbDone.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (!buttonView.isPressed) {
+                loge("initView: 代码触发，不处理监听事件。")
+                return@setOnCheckedChangeListener
+            }
+            binding.cbUndone.isChecked = !isChecked
+        }
+    }
+
     private fun reset(binding: LayoutScheduleSearchFilterBinding) {
         binding.cbTransactionSchedule.isChecked = false
         binding.cbSchoolCalendar.isChecked = false
@@ -112,19 +184,24 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
         labelList.forEach {
             it.checked = false
         }
-        adapter.notifyDataSetChanged()
+        adapter.setList(labelList)
+        //重置日期
+        dateStart.set(null)
+        dateEnd.set(null)
+        binding.dateSelect.llVLine.visibility = View.GONE
+        binding.dateSelect.dateTimePicker.visibility = View.GONE
     }
 
     private fun commit(binding: LayoutScheduleSearchFilterBinding) {
-        //类型1日程2校历3会议4课表
+        //日程类型【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
         val types = mutableListOf<Int>()
         val cbTransactionSchedule = binding.cbTransactionSchedule.isChecked
         if (cbTransactionSchedule) {
-            types.add(1)
+            types.add(2)
         }
         val cbSchoolCalendar = binding.cbSchoolCalendar.isChecked
         if (cbSchoolCalendar) {
-            types.add(2)
+            types.add(0)
         }
         val cbMeeting = binding.cbMeeting.isChecked
         if (cbMeeting) {
@@ -132,7 +209,7 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
         }
         val cbClassSchedule = binding.cbClassSchedule.isChecked
         if (cbClassSchedule) {
-            types.add(4)
+            types.add(1)
         }
         val status = mutableListOf<Int>()
         val cbUndone = binding.cbUndone.isChecked
@@ -147,7 +224,12 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
         val endDate = dateEnd.get()
 
         val scheduleFilterTag =
-            ScheduleFilterTag(types, status, startDate, endDate, labelList.filter { it.checked })
+            ScheduleFilterTag(
+                types,
+                status,
+                startDate,
+                if (TextUtils.isEmpty(endDate)) startDate else endDate,
+                labelList.filter { it.checked })
         onSelectListener.result(scheduleFilterTag)
     }
 
@@ -158,25 +240,15 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
     }
 
     private fun initLabel(binding: LayoutScheduleSearchFilterBinding) {
-        labelList.add(Label("工作", "#19ADF8", false))
-        labelList.add(Label("阅读阅读阅读", "#56D72C", false))
-        labelList.add(Label("睡阅读阅读阅读阅读阅读阅读阅读阅读阅读阅读", "#FD8208", false))
-        labelList.add(Label("吃饭阅读", "#56D72C", false))
-        labelList.add(Label("嗨皮阅读", "#FD8208", false))
         adapter = object :
-            BaseQuickAdapter<Label, BaseViewHolder>(R.layout.item_schedule_search_filter_tag) {
-            override fun convert(holder: BaseViewHolder, item: Label) {
-                holder.setText(R.id.tv_tab_title, item.title)
+            BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_search_filter_tag) {
+            override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
+                holder.setText(R.id.tv_tab_title, item.labelName)
                 val drawable = GradientDrawable()
                 drawable.cornerRadius = DisplayUtils.dip2px(context, 2f).toFloat()
-                drawable.setColor(Color.parseColor(item.color))
+                drawable.setColor(Color.parseColor(item.colorValue))
                 holder.getView<TextView>(R.id.tv_tab_title).background = drawable
-                val checkBox = holder.getView<CheckBox>(R.id.cb_check)
-                checkBox.isChecked = item.checked
-                checkBox.setOnCheckedChangeListener { _, isChecked ->
-                    item.checked = isChecked
-                }
-
+                holder.getView<CheckBox>(R.id.cb_check).isSelected = item.checked
                 holder.itemView.setOnClickListener {
                     item.checked = !item.checked
                     notifyDataSetChanged()
@@ -190,28 +262,44 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
     }
 
     private fun initDate(binding: LayoutScheduleSearchFilterBinding) {
-        val ids: IntArray = binding.dateSelect.groupDateStart.referencedIds
-        for (id in ids) {
-            binding.dateSelect.root.findViewById<View>(id).setOnClickListener { v: View? ->
-                if (binding.dateSelect.llVLine.visibility == View.GONE) {
-                    binding.dateSelect.llVLine.visibility = View.VISIBLE
-                    binding.dateSelect.dateTimePicker.visibility = View.VISIBLE
-                }
-                binding.dateSelect.vDateTopMarkLeft.visibility = View.VISIBLE
-                binding.dateSelect.vDateTopMarkRight.visibility = View.INVISIBLE
+        binding.dateSelect.tvDateStart.text = DateUtils.formatTime(dateStart.get(), "", "", true)
+        binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(dateStart.get(), "", "HH:mm")
+        binding.dateSelect.tvDateEnd.text = DateUtils.formatTime(dateEnd.get(), "", "", true)
+        binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(dateEnd.get(), "", "HH:mm")
+        binding.dateSelect.dateTimePicker.setDefaultMillisecond(
+            DateUtils.formatTime(
+                dateStart.get(),
+                ""
+            )
+        )
+        binding.dateSelect.clStartTime.setOnClickListener {
+            if (binding.dateSelect.llVLine.visibility == View.GONE) {
+                binding.dateSelect.llVLine.visibility = View.VISIBLE
+                binding.dateSelect.dateTimePicker.visibility = View.VISIBLE
             }
+            binding.dateSelect.vDateTopMarkLeft.visibility = View.VISIBLE
+            binding.dateSelect.vDateTopMarkRight.visibility = View.INVISIBLE
+            binding.dateSelect.dateTimePicker.setDefaultMillisecond(
+                DateUtils.formatTime(
+                    dateStart.get(),
+                    ""
+                )
+            )
         }
 
-        val ids2: IntArray = binding.dateSelect.groupDateEnd.referencedIds
-        for (id in ids2) {
-            binding.dateSelect.root.findViewById<View>(id).setOnClickListener { v: View? ->
-                if (binding.dateSelect.llVLine.visibility == View.GONE) {
-                    binding.dateSelect.llVLine.visibility = View.VISIBLE
-                    binding.dateSelect.dateTimePicker.visibility = View.VISIBLE
-                }
-                binding.dateSelect.vDateTopMarkLeft.visibility = View.INVISIBLE
-                binding.dateSelect.vDateTopMarkRight.visibility = View.VISIBLE
+        binding.dateSelect.clEndTime.setOnClickListener {
+            if (binding.dateSelect.llVLine.visibility == View.GONE) {
+                binding.dateSelect.llVLine.visibility = View.VISIBLE
+                binding.dateSelect.dateTimePicker.visibility = View.VISIBLE
             }
+            binding.dateSelect.vDateTopMarkLeft.visibility = View.INVISIBLE
+            binding.dateSelect.vDateTopMarkRight.visibility = View.VISIBLE
+            binding.dateSelect.dateTimePicker.setDefaultMillisecond(
+                DateUtils.formatTime(
+                    dateEnd.get(),
+                    ""
+                )
+            )
         }
 
         binding.dateSelect.dateTimePicker.setOnDateTimeChangedListener { aLong ->
@@ -230,12 +318,16 @@ class ScheduleSearchFilterPop(val context: Activity?) : PopupWindow() {
                 dateEnd.set(date)
             } else {
                 //第一次设置两边的数据
-                binding.dateSelect.tvDateStart.text = time
-                binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
-                binding.dateSelect.tvDateEnd.text = time
-                binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
-                dateStart.set(date)
-                dateEnd.set(date)
+                if (dateStart.get() == null) {
+                    binding.dateSelect.tvDateStart.text = time
+                    binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
+                    dateStart.set(date)
+                }
+                if (dateEnd.get() == null) {
+                    binding.dateSelect.tvDateEnd.text = time
+                    binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
+                    dateEnd.set(date)
+                }
             }
             null
         }
