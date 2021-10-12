@@ -23,7 +23,6 @@ class TeacherHomeworkChartFragment : Fragment() {
         initView()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

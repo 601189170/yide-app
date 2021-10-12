@@ -20,7 +20,6 @@ import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
 import com.yyide.chatim.activity.weekly.details.adapter.ClassAdapter
-import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.HotAdapter
 import com.yyide.chatim.activity.weekly.home.viewmodel.TeacherViewModel
 import com.yyide.chatim.base.BaseFragment
@@ -57,16 +56,31 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
             TeacherChargeWeeklyFragment().apply {}
     }
 
-    private var classId = ""
-    private var teacherId = ""
-    private lateinit var dateTime: WeeklyDateBean.DataBean.TimeBean
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
 
     private fun initView() {
-        request()
+        viewModel.teacherLiveData.observe(viewLifecycleOwner) {
+            dismiss()
+            val result = it.getOrNull()
+            if (null != result) {
+                viewBinding.clContent.visibility = View.VISIBLE
+                viewBinding.cardViewNoData.visibility = View.GONE
+                viewBinding.attendance.tvAttendDesc.text = result.rank
+                setSummary(result.summary)
+                setAttendance(result.attend)
+                if (result.summary == null && result.attend == null) {
+                    viewBinding.clContent.visibility = View.GONE
+                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+                }
+            } else {//接口返回空的情况处理
+                viewBinding.clContent.visibility = View.GONE
+                viewBinding.cardViewNoData.visibility = View.VISIBLE
+            }
+        }
         viewBinding.attendance.cardView.setOnClickListener {
             WeeklyDetailsActivity.jump(
                 mActivity,
@@ -86,44 +100,34 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
         initDate()
     }
 
+    private var classId = ""
+    private var teacherId = ""
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
+    private var timePosition = -1
     private fun initDate() {
         //获取日期时间
-        dateTime = WeeklyUtil.getDateTime()!!
-        if (dateTime != null) {
-            viewBinding.tvTime.text = getString(
-                R.string.startTime_endTime, DateUtils.formatTime(
-                    dateTime.startTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                ), DateUtils.formatTime(
-                    dateTime.endTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                )
-            )
-        }
-        requestTeacher(dateTime)
         val dateLists = WeeklyUtil.getDateTimes()
-        val adapterDate = DateAdapter()
         if (dateLists.isNotEmpty()) {
-            adapterDate.setList(dateLists)
-        }
-        viewBinding.tvTime.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-                //                indexDate = index
-                viewBinding.tvTime.text = getString(
-                    R.string.startTime_endTime, DateUtils.formatTime(
-                        dateLists[index].startTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    ), DateUtils.formatTime(
-                        dateLists[index].endTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    )
-                )
-                requestTeacher(dateTime)
+            timePosition = dateLists.size - 1
+            dateTime = dateLists[dateLists.size - 1]
+            requestTeacher(dateTime)
+            viewBinding.tvStartTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition > 0) {
+                        timePosition -= 1
+                        dateTime = dateLists[timePosition]
+                        requestTeacher(dateTime)
+                    }
+                }
+            }
+            viewBinding.tvEndTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition < (dateLists.size - 1)) {
+                        timePosition += 1
+                        dateTime = dateLists[timePosition]
+                        requestTeacher(dateTime)
+                    }
+                }
             }
         }
     }
@@ -158,27 +162,20 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
         }
     }
 
-    private fun requestTeacher(dateTime: WeeklyDateBean.DataBean.TimeBean?) {
+    private fun requestTeacher(dateTime: WeeklyDateBean.DataBean.TimesBean?) {
         if (dateTime != null) {
+            viewBinding.tvStartTime.text = DateUtils.formatTime(
+                dateTime.startTime,
+                "yyyy-MM-dd HH:mm:ss",
+                "MM/dd"
+            )
+            viewBinding.tvEndTime.text = DateUtils.formatTime(
+                dateTime.endTime,
+                "yyyy-MM-dd HH:mm:ss",
+                "MM/dd"
+            )
             loading()
             viewModel.requestTeacherWeekly(classId, teacherId, dateTime.startTime, dateTime.endTime)
-        }
-    }
-
-    private fun request() {
-        viewModel.teacherLiveData.observe(viewLifecycleOwner) {
-            dismiss()
-            val result = it.getOrNull()
-            if (null != result) {
-                viewBinding.clContent.visibility = View.VISIBLE
-                viewBinding.cardViewNoData.visibility = View.GONE
-                viewBinding.attendance.tvAttendDesc.text = result.rank
-                setSummary(result.summary)
-                setAttendance(result.attend)
-            } else {//接口返回空的情况处理
-                viewBinding.clContent.visibility = View.GONE
-                viewBinding.cardViewNoData.visibility = View.VISIBLE
-            }
         }
     }
 
@@ -343,14 +340,6 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
         return view.root
     }
 
-    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
-        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
-        animator.addUpdateListener { valueAnimator: ValueAnimator ->
-            view.progress = valueAnimator.animatedValue as Int
-        }
-        animator.start()
-    }
-
     /**
      * 考勤数据
      */
@@ -361,7 +350,7 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.tvProgress.text = "${item.value}%"
             bind.tvWeek.text = item.name
-            setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
+            WeeklyUtil.setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))

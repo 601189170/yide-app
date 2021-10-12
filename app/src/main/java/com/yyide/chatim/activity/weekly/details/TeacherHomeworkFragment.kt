@@ -75,8 +75,8 @@ class TeacherHomeworkFragment : BaseFragment() {
 
     private var classId = ""
     private var teacherId = ""
-    private lateinit var dateTime: WeeklyDateBean.DataBean.TimeBean
-    private fun requestTeacher(dateTime: WeeklyDateBean.DataBean.TimeBean?) {
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
+    private fun requestTeacher(dateTime: WeeklyDateBean.DataBean.TimesBean?) {
         if (dateTime != null) {
             //loading()
             //viewModel.requestTeacherWeekly(classId, teacherId, dateTime.startTime, dateTime.endTime)

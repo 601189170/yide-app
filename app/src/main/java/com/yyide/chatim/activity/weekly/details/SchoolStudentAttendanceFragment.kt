@@ -58,39 +58,6 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
     }
 
     private fun initView() {
-        request()
-        viewBinding.tvTime.setOnClickListener {9
-            val dateLists = WeeklyUtil.getDateTimes()
-            val adapterDate = DateAdapter()
-            adapterDate.setList(dateLists)
-            if (indexData < 0) {
-                indexData = dateLists.size - 1
-            }
-            adapterDate.setIndex(indexData)
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-                indexData = index
-                viewBinding.tvTime.text = getString(
-                    R.string.startTime_endTime, DateUtils.formatTime(
-                        dateLists[index].startTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    ), DateUtils.formatTime(
-                        dateLists[index].endTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    )
-                )
-                viewModel.requestSchoolAttendance(
-                    dateLists[index].startTime,
-                    dateLists[index].endTime
-                )
-            }
-        }
-    }
-
-    private var indexData = -1
-    private fun request() {
         viewModel.schoolStudentAttendanceLiveData.observe(viewLifecycleOwner) {
             dismiss()
             val result = it.getOrNull()
@@ -100,21 +67,53 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
 
             }
         }
-        val dateTime = WeeklyUtil.getDateTime()
+        initDate()
+    }
+
+    private var timePosition = -1
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
+    private fun initDate() {
+        //获取日期时间
+        val dateLists = WeeklyUtil.getDateTimes()
+        if (dateLists.isNotEmpty()) {
+            timePosition = dateLists.size - 1
+            dateTime = dateLists[dateLists.size - 1]
+            request()
+            viewBinding.tvStartTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition > 0) {
+                        timePosition -= 1
+                        dateTime = dateLists[timePosition]
+                        request()
+                    }
+                }
+            }
+            viewBinding.tvEndTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition < (dateLists.size - 1)) {
+                        timePosition += 1
+                        dateTime = dateLists[timePosition]
+                        request()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun request() {
         if (dateTime != null) {
+            viewBinding.tvStartTime.text = DateUtils.formatTime(
+                dateTime.startTime,
+                "yyyy-MM-dd HH:mm:ss",
+                "MM/dd"
+            )
+            viewBinding.tvEndTime.text = DateUtils.formatTime(
+                dateTime.endTime,
+                "yyyy-MM-dd HH:mm:ss",
+                "MM/dd"
+            )
             loading()
             viewModel.requestSchoolAttendance(dateTime.startTime, dateTime.endTime)
-            viewBinding.tvTime.text = getString(
-                R.string.startTime_endTime, DateUtils.formatTime(
-                    dateTime.startTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                ), DateUtils.formatTime(
-                    dateTime.endTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                )
-            )
         }
     }
 

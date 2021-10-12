@@ -97,6 +97,9 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                     String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
                     int weekDay = c.get(Calendar.DAY_OF_WEEK);
                     long mMillisecond = DateUtils.getWhenPoint(minute);
+                    if (weekDay == 1) {//系统日历周日默认==1
+                        weekDay = 7;
+                    }
                     if (item.weekTime == (weekDay - 1)) {
                         if (mMillisecond > toDateTime) {//课后
                             isTable = true;

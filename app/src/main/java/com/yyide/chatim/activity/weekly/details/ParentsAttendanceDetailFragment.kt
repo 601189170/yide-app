@@ -62,8 +62,18 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
             }
     }
 
-    private fun request(dateTime: WeeklyDateBean.DataBean.TimeBean?) {
+    private fun request(dateTime: WeeklyDateBean.DataBean.TimesBean?) {
         if (dateTime != null) {
+            viewBinding.tvStartTime.text = DateUtils.formatTime(
+                dateTime.startTime,
+                "yyyy-MM-dd HH:mm:ss",
+                "MM/dd"
+            )
+            viewBinding.tvEndTime.text = DateUtils.formatTime(
+                dateTime.endTime,
+                "yyyy-MM-dd HH:mm:ss",
+                "MM/dd"
+            )
             loading()
             viewModel.requestAttendanceTeacherDetail(
                 studentId,
@@ -123,45 +133,32 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
     }
 
     private var studentId = ""
-    private lateinit var dateTime: WeeklyDateBean.DataBean.TimeBean
+    private var timePosition = -1
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
     private fun initDate() {
         //获取日期时间
-        dateTime = WeeklyUtil.getDateTime()!!
-        if (dateTime != null) {
-            viewBinding.tvTime.text = getString(
-                R.string.startTime_endTime, DateUtils.formatTime(
-                    dateTime.startTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                ), DateUtils.formatTime(
-                    dateTime.endTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                )
-            )
-        }
-        request(dateTime)
         val dateLists = WeeklyUtil.getDateTimes()
-        val adapterDate = DateAdapter()
         if (dateLists.isNotEmpty()) {
-            adapterDate.setList(dateLists)
-        }
-        viewBinding.tvTime.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-                //                indexDate = index
-                viewBinding.tvTime.text = getString(
-                    R.string.startTime_endTime, DateUtils.formatTime(
-                        dateLists[index].startTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    ), DateUtils.formatTime(
-                        dateLists[index].endTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    )
-                )
-                request(dateTime)
+            timePosition = dateLists.size - 1
+            dateTime = dateLists[dateLists.size - 1]
+            request(dateTime)
+            viewBinding.tvStartTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition > 0) {
+                        timePosition -= 1
+                        dateTime = dateLists[timePosition]
+                        request(dateTime)
+                    }
+                }
+            }
+            viewBinding.tvEndTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition < (dateLists.size - 1)) {
+                        timePosition += 1
+                        dateTime = dateLists[timePosition]
+                        request(dateTime)
+                    }
+                }
             }
         }
     }

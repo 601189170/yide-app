@@ -61,7 +61,13 @@ data class StudentValue(
     var statusName: String,
     @JSONField(name = "clockDate")
     var clockDate: String,
-    @JSONField(name = "type")
+    @JSONField(name = "clockTime")
+    var clockTime: String,
+    @JSONField(name = "leaveTime")
+    var leaveTime: String,
+    @JSONField(name = "equipment")
+    var equipment: String,
+    @JSONField(name = "value")
     var value: List<StudentValue>
 ) : NodeId, Serializable {
     override fun getId(): String {

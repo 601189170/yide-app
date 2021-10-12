@@ -60,56 +60,20 @@ class SchoolWeeklyFragment : BaseFragment() {
                 viewBinding.cardViewNoData.visibility = View.GONE
                 //本周小结
                 setSummary(result.summary)
-                //作业
-                setWorkView(result.work)
                 //考勤
                 initAttendance(result.attend)
+                //作业
+//                setWorkView(result.work)
+                if (!viewBinding.layoutWeeklySummary.root.isShown && !viewBinding.layoutWeeklySchoolAttendance.root.isShown) {
+                    viewBinding.clContent.visibility = View.GONE
+                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+                }
             } else {//接口返回空的情况处理
-//                viewBinding.clContent.visibility = View.GONE
-//                viewBinding.cardViewNoData.visibility = View.VISIBLE
+                viewBinding.clContent.visibility = View.GONE
+                viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
         }
         viewBinding.tvDescs.text = WeeklyUtil.getDesc()
-        val dateTime = WeeklyUtil.getDateTime()
-        if (dateTime != null) {
-            loading()
-            viewModel.requestSchoolWeekly(dateTime.startTime, dateTime.endTime)
-            viewBinding.tvTime.text = getString(
-                R.string.startTime_endTime, DateUtils.formatTime(
-                    dateTime.startTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                ), DateUtils.formatTime(
-                    dateTime.endTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                )
-            )
-        }
-        val dateLists = WeeklyUtil.getDateTimes()
-        val adapterDate = DateAdapter()
-        if (dateLists.isNotEmpty()) {
-            adapterDate.setList(dateLists)
-        }
-        viewBinding.tvTime.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-//                indexDate = index
-                viewBinding.tvTime.text = getString(
-                    R.string.startTime_endTime, DateUtils.formatTime(
-                        dateLists[index].startTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    ), DateUtils.formatTime(
-                        dateLists[index].endTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    )
-                )
-                viewModel.requestSchoolWeekly(dateLists[index].startTime, dateLists[index].endTime)
-            }
-        }
-
         viewBinding.layoutWeeklySchoolAttendance.cardView.setOnClickListener {
             WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_ATTENDANCE_TYPE)
         }
@@ -117,6 +81,52 @@ class SchoolWeeklyFragment : BaseFragment() {
         viewBinding.layoutWeeklyHomeworkSummary.cardView.setOnClickListener {
             WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_HOMEWORK_TYPE)
         }
+        initDate()
+    }
+
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
+    private var timePosition = -1
+    private fun initDate() {
+        //获取日期时间
+        val dateLists = WeeklyUtil.getDateTimes()
+        if (dateLists.isNotEmpty()) {
+            timePosition = dateLists.size - 1
+            dateTime = dateLists[dateLists.size - 1]
+            request(dateTime)
+            viewBinding.tvStartTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition > 0) {
+                        timePosition -= 1
+                        dateTime = dateLists[timePosition]
+                        request(dateTime)
+                    }
+                }
+            }
+            viewBinding.tvEndTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition < (dateLists.size - 1)) {
+                        timePosition += 1
+                        dateTime = dateLists[timePosition]
+                        request(dateTime)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun request(dateTime: WeeklyDateBean.DataBean.TimesBean) {
+        viewBinding.tvStartTime.text = DateUtils.formatTime(
+            dateTime.startTime,
+            "yyyy-MM-dd HH:mm:ss",
+            "MM/dd"
+        )
+        viewBinding.tvEndTime.text = DateUtils.formatTime(
+            dateTime.endTime,
+            "yyyy-MM-dd HH:mm:ss",
+            "MM/dd"
+        )
+        loading()
+        viewModel.requestSchoolWeekly(dateTime.startTime, dateTime.endTime)
     }
 
     private fun setSummary(summary: SchoolHomeSummary?) {
@@ -128,36 +138,52 @@ class SchoolWeeklyFragment : BaseFragment() {
     }
 
     private fun initAttendance(attend: SchoolHomeAttendance?) {
-        //学生考勤
         if (attend != null) {
-            viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-            viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.adapter =
-                adapterStudentAttendance
-            adapterStudentAttendance.setList(attend.studentAttend)
-            adapterStudentAttendance.setOnItemClickListener { adapter, view, position ->
-                selectStudentPosition = if (selectStudentPosition != position) {
-                    position
-                } else {
-                    -1
+            //学生考勤
+            if (attend.studentAttend != null) {
+                viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.adapter =
+                    adapterStudentAttendance
+                adapterStudentAttendance.setList(attend.studentAttend)
+                adapterStudentAttendance.setOnItemClickListener { adapter, view, position ->
+                    selectStudentPosition = if (selectStudentPosition != position) {
+                        position
+                    } else {
+                        -1
+                    }
+                    adapterStudentAttendance.notifyDataSetChanged()
                 }
-                adapterStudentAttendance.notifyDataSetChanged()
+            } else {
+//                viewBinding.layoutWeeklySchoolAttendance.textView.visibility = View.GONE
+//                viewBinding.layoutWeeklySchoolAttendance.layoutCharts.root.visibility = View.GONE
             }
 
             //教师考勤
-            viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-            viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.adapter =
-                adapterTeacherAttendance
-            adapterTeacherAttendance.setList(attend.teacherAttend)
-            adapterTeacherAttendance.setOnItemClickListener { adapter, view, position ->
-                selectTeacherPosition = if (selectTeacherPosition != position) {
-                    position
-                } else {
-                    -1
+            if (attend.teacherAttend != null) {
+                viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.layoutManager =
+                    LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.adapter =
+                    adapterTeacherAttendance
+                adapterTeacherAttendance.setList(attend.teacherAttend)
+                adapterTeacherAttendance.setOnItemClickListener { adapter, view, position ->
+                    selectTeacherPosition = if (selectTeacherPosition != position) {
+                        position
+                    } else {
+                        -1
+                    }
+                    adapterTeacherAttendance.notifyDataSetChanged()
                 }
-                adapterTeacherAttendance.notifyDataSetChanged()
+            } else {
+//                viewBinding.layoutWeeklySchoolAttendance.textView1.visibility = View.GONE
+//                viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.root.visibility =
+//                    View.GONE
             }
+            if (attend.teacherAttend == null && attend.studentAttend == null) {
+                viewBinding.layoutWeeklySchoolAttendance.root.visibility = View.GONE
+            }
+        } else {
+            viewBinding.layoutWeeklySchoolAttendance.root.visibility = View.GONE
         }
     }
 
@@ -175,20 +201,12 @@ class SchoolWeeklyFragment : BaseFragment() {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.tvProgress.text = "${item.value}%"
             bind.tvWeek.text = item.name
-            setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
+            WeeklyUtil.setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectStudentPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
             }
         }
-    }
-
-    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
-        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
-        animator.addUpdateListener { valueAnimator: ValueAnimator ->
-            view.progress = valueAnimator.animatedValue as Int
-        }
-        animator.start()
     }
 
     /**
@@ -201,7 +219,7 @@ class SchoolWeeklyFragment : BaseFragment() {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.tvProgress.text = "${item.value}%"
             bind.tvWeek.text = item.name
-            setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
+            WeeklyUtil.setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectTeacherPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))

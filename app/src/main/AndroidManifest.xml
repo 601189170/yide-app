@@ -81,7 +81,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-
+        <activity
+            android:name=".activity.meeting.MeetingHistoryActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.meeting.MeetingCreateActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activity.meeting.MeetingHomeActivity"
+            android:exported="true" />
         <activity
             android:name=".activity.weekly.WeeklyDetailsActivity"
             android:exported="false"
@@ -121,7 +129,6 @@
         <activity
             android:name=".activity.book.NewBookActivity"
             android:screenOrientation="portrait" /> <!-- 如果您项目中的所有页面都只需要以高或宽中的一个作为基准进行适配的话, 那就只需要填写高或宽中的一个设计图尺寸即可 -->
-
         <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait" />
@@ -623,7 +630,7 @@
         <activity android:name=".activity.schedule.ScheduleDateIntervalActivity" />
         <activity android:name=".activity.schedule.ScheduleAddLabelActivity" />
         <activity android:name=".activity.schedule.ScheduleCustomRepetitionActivity" />
-        <activity android:name=".activity.schedule.ScheduleParticipantActivity"/>
+        <activity android:name=".activity.schedule.ScheduleParticipantActivity" />
         <activity android:name=".activity.schedule.ScheduleSettingsActivity" />
     </application>
 

@@ -46,6 +46,12 @@ data class ValueChild(
     var detailName: String,
     @JSONField(name = "statusName")
     var statusName: String,
+    @JSONField(name = "clockTime")
+    var clockTime: String,
+    @JSONField(name = "leaveTime ")
+    var leaveTime : String,
+    @JSONField(name = "equipment")
+    var equipment: String,
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "type")

@@ -12,6 +12,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.model.AbnormalDetail;
 import com.yyide.chatim.model.AttendItem;
 import com.yyide.chatim.model.ValueChild;
+import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.widget.treeview.adapter.SingleLayoutTreeAdapter;
 import com.yyide.chatim.widget.treeview.model.TreeNode;
 import com.yyide.chatim.widget.treeview.util.DpUtil;
@@ -32,6 +33,7 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
         TextView tvTime = holder.getView(R.id.tv_student_time);
         TextView tvStatus = holder.getView(R.id.tv_status);
         TextView tvName = holder.getView(R.id.tv_student_name);
+        TextView tvEvent = holder.getView(R.id.tv_student_event);
         ConstraintLayout constraintLayout = holder.getView(R.id.cl_bg);
         holder.setText(R.id.tv_student_time, "");
         holder.setText(R.id.tv_student_event, "");
@@ -52,24 +54,26 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
                     break;
                 case "1"://缺勤
                     tvStatus.setText("未打卡");
+                    tvEvent.setText(item.getStatusName());
+
                     break;
                 case "3"://早退
-//                        tvStatus.setText(item.getStatusType());
-//                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
-//                        tvTime.setTextColor(Color.parseColor("#63DAAB"));
+                    tvEvent.setText(item.getStatusName());
+                    tvStatus.setText(item.getEquipment());
+                    holder.setText(R.id.tv_student_time, item.getClockTime());
+                    tvTime.setTextColor(Color.parseColor("#63DAAB"));
                     break;
                 case "2"://迟到
-                    tvName.setText(item.getName());
-                    //holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                    tvEvent.setText(item.getStatusName());
+                    tvStatus.setText(item.getEquipment());
+                    holder.setText(R.id.tv_student_time, item.getClockTime());
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
                 case "4"://请假
-                    //tvStatus.setText(item.getStatusType());
-//                        String startTime = DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-//                        String endTime = DateUtils.formatTime(item.getEndDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-//                        holder.setText(R.id.tv_student_event, "请假时间");
-//                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
-//                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
+                    tvStatus.setText("请假");
+                    holder.setText(R.id.tv_student_event, "请假时间");
+                    holder.setText(R.id.tv_student_time, item.getLeaveTime());
+                    tvTime.setTextColor(Color.parseColor("#F6BD16"));
                     break;
             }
         } else {
@@ -80,8 +84,7 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
             // holder.setText(R.id.tv_status, item.specialPeople != null ? item.specialPeople.size() + "节" : "0节");
         }
         if (!itemParent.isLeaf()) {
-            //helper.setImageResource(R.id.level_icon, R.drawable.video);
-            tvStatus.setText(getContext().getString(R.string.attendance_node, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
+            tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
             if (itemParent.isExpand()) {
                 tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_up), null);
             } else {

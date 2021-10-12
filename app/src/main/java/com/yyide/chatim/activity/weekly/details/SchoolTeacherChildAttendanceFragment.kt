@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.*
 import com.yyide.chatim.model.DeptAttend
@@ -98,7 +99,7 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.tvProgress.text = "${item.rate}%"
             bind.tvWeek.text = item.name
-            setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
+            WeeklyUtil.setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
@@ -115,8 +116,14 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
         override fun convert(holder: BaseViewHolder, item: DeptAttend) {
             val bind = ItemWeeklyProgressHBinding.bind(holder.itemView)
             bind.tvEventName.text = item.name
-            setAnimation(bind.progressbarLast, if (item.lastWeek <= 0) 0 else item.lastWeek.toInt())
-            setAnimation(bind.progressbarThis, if (item.thisWeek <= 0) 0 else item.thisWeek.toInt())
+            WeeklyUtil.setAnimation(
+                bind.progressbarLast,
+                if (item.lastWeek <= 0) 0 else item.lastWeek.toInt()
+            )
+            WeeklyUtil.setAnimation(
+                bind.progressbarThis,
+                if (item.thisWeek <= 0) 0 else item.thisWeek.toInt()
+            )
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition2 == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
@@ -124,11 +131,4 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
         }
     }
 
-    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
-        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
-        animator.addUpdateListener { valueAnimator: ValueAnimator ->
-            view.progress = valueAnimator.animatedValue as Int
-        }
-        animator.start()
-    }
 }

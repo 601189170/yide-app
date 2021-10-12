@@ -125,6 +125,7 @@ class ParentsAttendanceChildFragment : BaseFragment() {
 //        barDataSet.barShadowColor = Color.parseColor("#01000000")
         val barDataSets = mutableListOf<BarDataSet>()
         barDataSet.valueTextColor = Color.parseColor("#909399")
+        barDataSet.valueTextSize = 10f
         barDataSets.add(barDataSet)
         // 绘制值
         barDataSet.setDrawValues(true)
@@ -231,7 +232,6 @@ class ParentsAttendanceChildFragment : BaseFragment() {
         return nodes
     }
 
-
     fun setAnimation(view: ProgressBar, mProgressBar: Int) {
         val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
         animator.addUpdateListener { valueAnimator: ValueAnimator ->
@@ -240,51 +240,4 @@ class ParentsAttendanceChildFragment : BaseFragment() {
         animator.start()
     }
 
-    /**
-     * 考勤数据
-     */
-    private var selectPosition = -1
-    private val adapterAttendance = object :
-        BaseQuickAdapter<AttendanceParentsBean, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: AttendanceParentsBean) {
-            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            if (selectPosition == holder.bindingAdapterPosition) {
-                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
-            }
-            bind.tvWeek.text = item.name
-            when (item.type) {
-                0 -> {
-                    bind.progressbar.progressDrawable =
-                        activity?.resources?.getDrawable(R.drawable.progress_bg_vertical_gary)
-                    bind.tvProgress.text = "${item.value}%"
-                    setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value)
-                }
-                1 -> {
-                    bind.progressbar.progressDrawable =
-                        activity?.resources?.getDrawable(R.drawable.progress_bg_vertical_red)
-                    bind.tvProgress.text = "${item.value}%"
-                    setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value)
-                }
-                2 -> {
-                    bind.progressbar.progressDrawable =
-                        activity?.resources?.getDrawable(R.drawable.progress_bg_vertical_yellow)
-                    bind.tvProgress.text = "${item.value}%"
-                    setAnimation(
-                        bind.progressbar,
-                        if (item.value <= 0) 0 else item.value
-                    )
-                }
-                3 -> {
-                    bind.progressbar.progressDrawable =
-                        activity?.resources?.getDrawable(R.drawable.progress_bg_vertical_grenn)
-                    bind.tvProgress.text = "${item.value}%"
-                    setAnimation(
-                        bind.progressbar,
-                        if (item.value <= 0) 0 else item.value
-                    )
-                }
-            }
-        }
-    }
 }

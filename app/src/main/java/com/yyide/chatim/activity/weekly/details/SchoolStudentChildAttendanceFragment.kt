@@ -23,6 +23,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.details.view.LineChartMarkView
+import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.databinding.*
 import com.yyide.chatim.model.DeptAttend
 import com.yyide.chatim.model.Detail
@@ -222,14 +223,6 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         viewBinding.lineChart.invalidate()
     }
 
-    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
-        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
-        animator.addUpdateListener { valueAnimator: ValueAnimator ->
-            view.progress = valueAnimator.animatedValue as Int
-        }
-        animator.start()
-    }
-
     /**
      * 考勤数据
      */
@@ -240,7 +233,7 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.tvProgress.text = "${item.rate}%"
             bind.tvWeek.text = item.name
-            setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
+            WeeklyUtil.setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))

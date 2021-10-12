@@ -53,7 +53,7 @@ public class WeeklyDateBean {
 
     public static class DataBean implements Serializable {
         private List<TimesBean> times;
-        private TimeBean time;
+        private TimesBean time;
 
         //添加无参的构造方法，不然报错
         public DataBean() {
@@ -68,39 +68,14 @@ public class WeeklyDateBean {
             this.times = times;
         }
 
-        public TimeBean getTime() {
+        public TimesBean getTime() {
             return time;
         }
 
-        public void setTime(TimeBean time) {
+        public void setTime(TimesBean time) {
             this.time = time;
         }
 
-        public static class TimeBean implements Serializable {
-            private String startTime;
-            private String endTime;
-
-            public TimeBean() {
-                super();
-            }
-
-            public String getStartTime() {
-                return startTime;
-            }
-
-            public void setStartTime(String startTime) {
-                this.startTime = startTime;
-            }
-
-            public String getEndTime() {
-                return endTime;
-            }
-
-            public void setEndTime(String endTime) {
-                this.endTime = endTime;
-            }
-
-        }
 
         public static class TimesBean implements Serializable {
             private String startTime;

@@ -49,11 +49,11 @@ data class AttendItem(
     var list: List<AttendItem>
 ) : NodeId, Serializable {
     override fun getId(): String {
-        TODO("Not yet implemented")
+        return ""
     }
 
     override fun getPId(): String {
-        TODO("Not yet implemented")
+        return ""
     }
 }
 

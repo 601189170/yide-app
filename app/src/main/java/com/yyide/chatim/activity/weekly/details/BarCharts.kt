@@ -37,7 +37,6 @@ class BarCharts {
         barChart.setDrawMarkerViews(true)
         //隐藏右下角英文
         barChart.description.isEnabled = false
-        //设置每个柱子宽度
         // 设置启用日志
         barChart.isLogEnabled = true
         // 设置拖动减速功能

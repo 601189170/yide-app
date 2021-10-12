@@ -42,7 +42,6 @@ open class ParentsWeeklyFragment : BaseFragment() {
     private lateinit var viewBinding: FragmentParentsWeeklyBinding
     private val viewModel: ParentsViewModel by viewModels()
     private var studentId: String = ""
-    private lateinit var dateTime: WeeklyDateBean.DataBean.TimeBean
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,17 +67,28 @@ open class ParentsWeeklyFragment : BaseFragment() {
             studentId = SpData.getClassInfo().studentId
         }
         viewModel.parentsLiveData.observe(viewLifecycleOwner) {
+            dismiss()
             val result = it.getOrNull()
             if (null != result) {
                 viewBinding.clContent.visibility = View.VISIBLE
                 viewBinding.cardViewNoData.visibility = View.GONE
                 setSummary(result.summary)
                 //考勤统计
-                if (result.attend.isNotEmpty()) {
+                if (result.attend != null && result.attend.isNotEmpty()) {
                     initAttendance(result.attend[0])
                     adapterAttendance.setList(result.attend)
+                } else {
+                    viewBinding.attendance.tcAttendDescs.text = "你的本周考勤无异常记录，太棒啦～"
+                    viewBinding.attendance.tvEventName.visibility = View.INVISIBLE
+                    viewBinding.attendance.clAttend.visibility = View.GONE
+                    viewBinding.attendance.ivNoData.visibility = View.VISIBLE
                 }
-                setTeacherComments(result.eval)
+
+                if (result.eval != null) {
+                    setTeacherComments(result.eval)
+                } else {
+                    viewBinding.comments.root.visibility = View.GONE
+                }
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
@@ -93,6 +103,17 @@ open class ParentsWeeklyFragment : BaseFragment() {
     }
 
     private fun request() {
+        viewBinding.tvStartTime.text = DateUtils.formatTime(
+            dateTime.startTime,
+            "yyyy-MM-dd HH:mm:ss",
+            "MM/dd"
+        )
+        viewBinding.tvEndTime.text = DateUtils.formatTime(
+            dateTime.endTime,
+            "yyyy-MM-dd HH:mm:ss",
+            "MM/dd"
+        )
+        loading()
         viewModel.requestParentsWeekly(studentId, dateTime.startTime, dateTime.endTime)
     }
 
@@ -120,48 +141,32 @@ open class ParentsWeeklyFragment : BaseFragment() {
         }
     }
 
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
+    private var timePosition = -1
     private fun initDate() {
         //获取日期时间
-        dateTime = WeeklyUtil.getDateTime()!!
-        if (dateTime != null) {
-            val time = getString(
-                R.string.startTime_endTime, DateUtils.formatTime(
-                    dateTime.startTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                ), DateUtils.formatTime(
-                    dateTime.endTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                )
-            )
-            viewBinding.tvTime.text = time
-            viewBinding.attendance.tvAttendanceTime.text = time
-        }
-        request()
         val dateLists = WeeklyUtil.getDateTimes()
-        val adapterDate = DateAdapter()
         if (dateLists.isNotEmpty()) {
-            adapterDate.setList(dateLists)
-        }
-        viewBinding.tvTime.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-                //                indexDate = index
-                val time = getString(
-                    R.string.startTime_endTime, DateUtils.formatTime(
-                        dateLists[index].startTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    ), DateUtils.formatTime(
-                        dateLists[index].endTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    )
-                )
-                viewBinding.tvTime.text = time
-                viewBinding.attendance.tvAttendanceTime.text = time
-                request()
+            timePosition = dateLists.size - 1
+            dateTime = dateLists[dateLists.size - 1]
+            request()
+            viewBinding.tvStartTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition > 0) {
+                        timePosition -= 1
+                        dateTime = dateLists[timePosition]
+                        request()
+                    }
+                }
+            }
+            viewBinding.tvEndTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition < (dateLists.size - 1)) {
+                        timePosition += 1
+                        dateTime = dateLists[timePosition]
+                        request()
+                    }
+                }
             }
         }
     }

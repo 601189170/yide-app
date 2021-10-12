@@ -43,7 +43,7 @@ public class BaseConstant {
     /**
      * 请求ip==>baseUrl
      */
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.129:8888";//Dev 环境
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
 //        public static final String API_SERVER_URL_UAT = "http://192.168.3.147:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";

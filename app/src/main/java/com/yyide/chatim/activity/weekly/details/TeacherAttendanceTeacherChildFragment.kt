@@ -114,6 +114,7 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
 //        barDataSet.barShadowColor = Color.parseColor("#01000000")
         val barDataSets = mutableListOf<BarDataSet>()
         barDataSet.valueTextColor = Color.parseColor("#909399")
+        barDataSet.valueTextSize = 10f
         barDataSets.add(barDataSet)
         // 绘制值
         barDataSet.setDrawValues(true)
@@ -205,7 +206,7 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
     ): List<TreeNode<ValueChild>> {
         val nodes: MutableList<TreeNode<ValueChild>> = ArrayList()
         val childs = mutableListOf<TreeNode<ValueChild>>()
-        val item = ValueChild("", data.name, "", "", "", mutableListOf())
+        val item = ValueChild("", data.name, "", "", "", "", "", "", mutableListOf())
         val treeNode: TreeNode<ValueChild> = TreeNode(item, -1)
         for (childItem in data.value) {
             val child: TreeNode<ValueChild> = TreeNode(childItem, -1)

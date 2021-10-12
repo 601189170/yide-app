@@ -74,26 +74,60 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv_time"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="24dp"
                     android:layout_marginTop="@dimen/dp_18"
                     android:layout_marginEnd="@dimen/dp_20"
+                    android:minWidth="@dimen/dp_50"
                     android:background="@drawable/bg_conrners_white_12"
-                    android:drawableStart="@mipmap/icon_weekly_left"
-                    android:drawablePadding="@dimen/dp_8"
-                    android:minWidth="@dimen/dp_60"
-                    android:paddingStart="@dimen/dp_12"
-                    android:paddingTop="@dimen/dp_2"
-                    android:paddingEnd="@dimen/dp_12"
-                    android:paddingBottom="@dimen/dp_2"
-                    android:textColor="#ff1e1e1e"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:drawableEndCompat="@mipmap/icon_weekly_right"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/dp_8"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:textColor="#ff1e1e1e"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:paddingStart="@dimen/dp_12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:drawableStartCompat="@mipmap/icon_weekly_left"
+                        app:layout_constraintEnd_toStartOf="@+id/tvCenter"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvCenter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:textColor="#ff1e1e1e"
+                        android:textSize="15sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/dp_8"
+                        android:textColor="#ff1e1e1e"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:paddingEnd="@dimen/dp_12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tvCenter"
+                        app:drawableEndCompat="@mipmap/icon_weekly_right"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout"

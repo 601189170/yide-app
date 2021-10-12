@@ -81,11 +81,9 @@ class TeacherAttendanceStudentChildFragment : BaseFragment() {
     /**
      * 这个方法是初始化数据的
      *
-     * @param count X 轴的个数
-     * @param range Y 轴的数据
      */
     private var color: Array<String> = arrayOf("#919399", "#F66C6C", "#FFC000", "#63DAAB")
-    private fun getBarData(numbers: StudentNumber): BarData? {
+    private fun getBarData(numbers: StudentNumber): BarData {
 //        val xValues = ArrayList<String>()
 //        for (i in numbers) {
 //            xValues.add("" + (i) + "") // 设置每个柱壮图的文字描述
@@ -113,10 +111,12 @@ class TeacherAttendanceStudentChildFragment : BaseFragment() {
         // y轴的数据集合
         val barDataSet = BarDataSet(yValues, "")
         barDataSet.colors = colors
+        barDataSet.valueTextSize = 12f
         // 设置栏阴影颜色
 //        barDataSet.barShadowColor = Color.parseColor("#01000000")
         val barDataSets = mutableListOf<BarDataSet>()
         barDataSet.valueTextColor = Color.parseColor("#909399")
+        barDataSet.valueTextSize = 10f
         barDataSets.add(barDataSet)
         // 绘制值
         barDataSet.setDrawValues(true)
@@ -194,21 +194,13 @@ class TeacherAttendanceStudentChildFragment : BaseFragment() {
         })
     }
 
-    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
-        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
-        animator.addUpdateListener { valueAnimator: ValueAnimator ->
-            view.progress = valueAnimator.animatedValue as Int
-        }
-        animator.start()
-    }
-
     private fun convertDataToTreeNode(
         datas: List<StudentValue>
     ): List<TreeNode<StudentValue>> {
         val nodes: MutableList<TreeNode<StudentValue>> = ArrayList()
         for (item in datas) {
             val childs = mutableListOf<TreeNode<StudentValue>>()
-            val itemChild = StudentValue("", "", item.name, "", "", mutableListOf())
+            val itemChild = StudentValue("", "", item.name, "", "", "", "", "", mutableListOf())
             val treeNode: TreeNode<StudentValue> = TreeNode(itemChild, -1)
             for (childItem in item.value) {
                 childItem.type = item.type
