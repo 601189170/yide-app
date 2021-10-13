@@ -16,7 +16,7 @@ data class WeeklyTeacherAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
-    var value: Double
+    var value: String
 ) : Serializable
 
 data class WeeklyTeacherDetail(
@@ -49,7 +49,7 @@ data class ValueChild(
     @JSONField(name = "clockTime")
     var clockTime: String,
     @JSONField(name = "leaveTime ")
-    var leaveTime : String,
+    var leaveTime: String,
     @JSONField(name = "equipment")
     var equipment: String,
     @JSONField(name = "name")

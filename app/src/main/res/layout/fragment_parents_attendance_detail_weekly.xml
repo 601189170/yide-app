@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             app:contentScrim="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -137,8 +138,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/slidingTabLayout"
             android:layout_width="match_parent"
@@ -151,7 +150,7 @@
             app:tl_indicator_height="3dp"
             app:tl_indicator_width="50dp"
             app:tl_tab_padding="@dimen/dp_20"
-            app:tl_tab_space_equal="true"
+            app:tl_tab_space_equal="false"
             app:tl_textSelectColor="#303133"
             app:tl_textUnselectColor="#909399"
             app:tl_textsize="16sp" />

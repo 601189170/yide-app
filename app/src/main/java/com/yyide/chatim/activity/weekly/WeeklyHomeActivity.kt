@@ -5,7 +5,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.home.ParentsWeeklyFragment
 import com.yyide.chatim.activity.weekly.home.SchoolWeeklyFragment
-import com.yyide.chatim.activity.weekly.home.TeacherChargeWeeklyFragment
+import com.yyide.chatim.activity.weekly.home.TeacherWeeklyFragment
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityWeeklyHomeBinding
 
@@ -46,7 +46,7 @@ class WeeklyHomeActivity : BaseActivity() {
             SpData.getIdentityInfo().isTeacherOrCharge -> {
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherChargeWeeklyFragment.newInstance()
+                    TeacherWeeklyFragment.newInstance()
                 ).commit()
             }
         }

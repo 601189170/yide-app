@@ -14,16 +14,20 @@ data class SchoolAttendance(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
-    var value: Int
+    var value: Double
 ) : Serializable
 
 data class Detail(
     @JSONField(name = "deptAttend")
     var deptAttend: List<DeptAttend>,
+    @JSONField(name = "gradeAttend")
+    var gradeAttend: List<DeptAttend>,
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<TeacherAttendance>
+    var teacherAttend: List<TeacherAttendance>,
+    @JSONField(name = "studentAttend")
+    var studentAttend: List<SchoolAttendance>
 ) : Serializable
 
 data class DeptAttend(

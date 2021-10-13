@@ -55,7 +55,6 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
                 case "1"://缺勤
                     tvStatus.setText("未打卡");
                     tvEvent.setText(item.getStatusName());
-
                     break;
                 case "3"://早退
                     tvEvent.setText(item.getStatusName());
@@ -81,10 +80,9 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
             tvName.setEms(8);
             tvName.setLines(1);
             tvName.setText(!TextUtils.isEmpty(item.getDetailName()) ? item.getDetailName() : "未知姓名");
-            // holder.setText(R.id.tv_status, item.specialPeople != null ? item.specialPeople.size() + "节" : "0节");
+            tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
         }
         if (!itemParent.isLeaf()) {
-            tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
             if (itemParent.isExpand()) {
                 tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_up), null);
             } else {
@@ -92,6 +90,7 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
             }
         } else {
             tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            tvStatus.setTextColor(Color.parseColor("#909399"));
         }
     }
 

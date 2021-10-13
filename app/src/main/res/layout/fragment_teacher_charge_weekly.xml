@@ -58,14 +58,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginTop="@dimen/dp_18"
                     android:background="@drawable/bg_conrners_white_12"
-                    android:drawablePadding="@dimen/dp_8"
+                    android:drawablePadding="@dimen/dp_6"
                     android:minWidth="@dimen/dp_60"
-                    android:paddingStart="@dimen/dp_12"
+                    android:paddingStart="@dimen/dp_10"
                     android:paddingTop="@dimen/dp_2"
-                    android:paddingEnd="@dimen/dp_12"
+                    android:paddingEnd="@dimen/dp_10"
                     android:paddingBottom="@dimen/dp_2"
                     android:textColor="#ff1e1e1e"
                     android:textSize="15sp"
@@ -75,12 +75,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout9"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     android:layout_marginTop="@dimen/dp_18"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:minWidth="@dimen/dp_50"
+                    android:layout_marginEnd="@dimen/dp_10"
                     android:background="@drawable/bg_conrners_white_12"
+                    android:minWidth="@dimen/dp_50"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -88,44 +89,44 @@
                         android:id="@+id/tv_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/dp_8"
                         android:layout_marginEnd="@dimen/dp_4"
+                        android:drawablePadding="@dimen/dp_6"
+                        android:paddingStart="@dimen/dp_10"
                         android:textColor="#ff1e1e1e"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:paddingStart="@dimen/dp_12"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:drawableStartCompat="@mipmap/icon_weekly_left"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvCenter"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tvCenter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="5dp"
+                        android:layout_height="16dp"
                         android:text="-"
                         android:textColor="#ff1e1e1e"
                         android:textSize="15sp"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/dp_8"
+                        android:drawablePadding="@dimen/dp_6"
+                        android:gravity="center"
+                        android:paddingEnd="@dimen/dp_10"
                         android:textColor="#ff1e1e1e"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:gravity="center"
-                        android:paddingEnd="@dimen/dp_12"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tvCenter"
                         app:drawableEndCompat="@mipmap/icon_weekly_right"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tvCenter"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

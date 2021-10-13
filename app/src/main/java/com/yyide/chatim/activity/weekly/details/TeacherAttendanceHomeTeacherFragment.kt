@@ -57,8 +57,12 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            TeacherAttendanceHomeTeacherFragment().apply {}
+        fun newInstance(dateTime: WeeklyDateBean.DataBean.TimesBean) =
+            TeacherAttendanceHomeTeacherFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("item", dateTime)
+                }
+            }
     }
 
     private fun request(dateTime: WeeklyDateBean.DataBean.TimesBean?) {
@@ -135,11 +139,14 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
     private var timePosition = -1
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
     private fun initDate() {
+        arguments?.apply {
+            dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
+        }
         //获取日期时间
         val dateLists = WeeklyUtil.getDateTimes()
         if (dateLists.isNotEmpty()) {
-            timePosition = dateLists.size - 1
-            dateTime = dateLists[dateLists.size - 1]
+            timePosition = WeeklyUtil.getTimePosition(dateTime, dateLists)
+            //dateTime = dateLists[dateLists.size - 1]
             request(dateTime)
             viewBinding.tvStartTime.setOnClickListener {
                 if (dateLists.isNotEmpty()) {
@@ -164,7 +171,7 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
 
     private fun initClassMenu() {
         if (SpData.getClassInfo() != null) {
-            viewBinding.tvClassName.text = SpData.getClassInfo().classesName
+            viewBinding.tvClassName.text = SpData.getClassInfo().classesName + "的周报"
         }
         val classList = SpData.getClassList()
         val adapterEvent = ClassAdapter()
@@ -179,7 +186,8 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
                 viewBinding.tvClassName.setOnClickListener {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
                     attendancePop.setOnSelectListener { index: Int ->
-                        viewBinding.tvClassName.text = adapterEvent.getItem(index).classesName
+                        viewBinding.tvClassName.text =
+                            adapterEvent.getItem(index).classesName + "的周报"
                         classId = adapterEvent.getItem(index).classesId
                         request(dateTime)
                     }
@@ -199,8 +207,11 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
 
     private var spanCount = 3
     private fun initHotScroll(attendance: List<WeeklyTeacherAttend>?) {
-        if (attendance != null && attendance.size < 3) {
-            spanCount = attendance.size
+        adapterHot.setList(null)
+        spanCount = if (attendance != null && attendance.size < 3) {
+            attendance.size
+        } else {
+            3
         }
         val splitList = splitList(attendance, spanCount)
         val hotList = mutableListOf<Int>()
@@ -289,7 +300,7 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
                 bind.viewLine.visibility =
                     if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE
                 bind.tvEventName.text = item.name
-                bind.tvAttendance.text = "${item.value}%"
+                bind.tvAttendance.text = item.value
             }
         }
         view.attendanceRecyclerview.adapter = adapterAttendance

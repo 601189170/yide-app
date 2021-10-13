@@ -67,6 +67,8 @@
     <string name="weekly_attend_desc">你的本周%s考勤%s异常记录</string>
     <string name="weekly_desc_name">本周%s考勤</string>
     <string name="weekly_school_desc">全校教职工每天%s考勤率</string>
+    <string name="weekly_school_student_desc">全校学生每天%s出勤率</string>
+    <string name="weekly_school_student_attend">全校各年级%s出勤率</string>
     // 主页Tab相关
     <string name="tab_contact_tab_text">通讯录</string>
     <string name="tab_conversation_tab_text">消息</string>

@@ -14,6 +14,8 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.details.adapter.ParentsAttendanceAdapter
@@ -126,6 +128,8 @@ class ParentsAttendanceChildFragment : BaseFragment() {
         val barDataSets = mutableListOf<BarDataSet>()
         barDataSet.valueTextColor = Color.parseColor("#909399")
         barDataSet.valueTextSize = 10f
+        barDataSet.valueFormatter =
+            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> "${value.toInt()}" }
         barDataSets.add(barDataSet)
         // 绘制值
         barDataSet.setDrawValues(true)
@@ -178,16 +182,14 @@ class ParentsAttendanceChildFragment : BaseFragment() {
 
     private fun setAttendanceList(datas: List<AttendItem>) {
         dataToBind.clear()
-        if (datas.isNotEmpty()) {
-            dataToBind.addAll(convertDataToTreeNode(datas))
-        }
+        dataToBind.addAll(convertDataToTreeNode(datas))
         val adapter =
             ParentsAttendanceAdapter(R.layout.item_attendance_parents_status, dataToBind)
         viewBinding.recyclerview.layoutManager = LinearLayoutManager(
             context
         )
         viewBinding.recyclerview.adapter = adapter
-        adapter.setEmptyView(R.layout.empty_top)
+//        adapter.setEmptyView(R.layout.empty_top)
         adapter.setOnTreeClickedListener(object :
             SingleLayoutTreeAdapter.OnTreeClickedListener<AttendItem> {
             override fun onNodeClicked(view: View, node: TreeNode<AttendItem>, position: Int) {
@@ -222,10 +224,12 @@ class ParentsAttendanceChildFragment : BaseFragment() {
         val childs = mutableListOf<TreeNode<AttendItem>>()
         val item = AttendItem(studentName, 1, datas)
         val treeNode: TreeNode<AttendItem> = TreeNode(item, -1)
-        for (childItem in item.list) {
-            val child: TreeNode<AttendItem> = TreeNode(childItem, -1)
-            child.parent = treeNode
-            childs.add(child)
+        if (datas != null) {
+            for (childItem in item.list) {
+                val child: TreeNode<AttendItem> = TreeNode(childItem, -1)
+                child.parent = treeNode
+                childs.add(child)
+            }
         }
         treeNode.children = childs
         nodes.add(treeNode)

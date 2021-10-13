@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.weekly.home
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
@@ -103,6 +104,13 @@ open class ParentsWeeklyFragment : BaseFragment() {
     }
 
     private fun request() {
+        setTime()
+        loading()
+        viewModel.requestParentsWeekly(studentId, dateTime.startTime, dateTime.endTime)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setTime() {
         viewBinding.tvStartTime.text = DateUtils.formatTime(
             dateTime.startTime,
             "yyyy-MM-dd HH:mm:ss",
@@ -113,8 +121,16 @@ open class ParentsWeeklyFragment : BaseFragment() {
             "yyyy-MM-dd HH:mm:ss",
             "MM/dd"
         )
-        loading()
-        viewModel.requestParentsWeekly(studentId, dateTime.startTime, dateTime.endTime)
+        viewBinding.attendance.tvAttendanceTime.text = DateUtils.formatTime(
+            dateTime.startTime,
+            "yyyy-MM-dd HH:mm:ss",
+            "MM/dd"
+        ) + "-" +
+                DateUtils.formatTime(
+                    dateTime.endTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "MM/dd"
+                )
     }
 
     private fun setTeacherComments(eval: Eval) {
@@ -206,9 +222,9 @@ open class ParentsWeeklyFragment : BaseFragment() {
             piechart.setTouchEnabled(false)
             InitPieChart.InitPieChart(activity, piechart)
             val entries: MutableList<PieEntry> = ArrayList()
+            entries.add(PieEntry(attend.lateNumber.toFloat(), "迟到"))
             entries.add(PieEntry(attend.earlyNumber.toFloat(), "早退"))
             entries.add(PieEntry(attend.leaveNumber.toFloat(), "请假"))
-            entries.add(PieEntry(attend.lateNumber.toFloat(), "迟到"))
             entries.add(PieEntry(attend.abNumber.toFloat(), "缺勤"))
             piechart.centerText = "${attend.rate}%\n出勤率"
             piechart.setCenterTextSize(12f)
@@ -249,7 +265,8 @@ open class ParentsWeeklyFragment : BaseFragment() {
                     mActivity,
                     WeeklyDetailsActivity.PARENT_ATTENDANCE_TYPE,
                     studentId,
-                    viewBinding.tvEvent.text.toString().trim()
+                    viewBinding.tvEvent.text.toString().trim(),
+                    dateTime
                 )
             }
         }
@@ -257,10 +274,10 @@ open class ParentsWeeklyFragment : BaseFragment() {
 
     //    -->设置各区块的颜色
     val PIE_COLORS2 = intArrayOf(
-        Color.rgb(61, 189, 134),
-        Color.rgb(246, 189, 22),
-        Color.rgb(246, 108, 108),
-        Color.rgb(44, 138, 255)
+        Color.rgb(246, 108, 108),//迟到
+        Color.rgb(31, 193, 195),//早退
+        Color.rgb(143, 129, 254),//请假
+        Color.rgb(246, 205, 87)//缺勤
     )
 
     //    -->设置各区块的颜色

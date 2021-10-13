@@ -20,121 +20,121 @@
             app:contentScrim="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
-                android:layout_width="match_parent"
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/white"
+            android:paddingStart="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_20"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_class_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
-                android:paddingStart="@dimen/dp_12"
-                android:paddingEnd="@dimen/dp_12"
-                android:paddingBottom="@dimen/dp_20"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginTop="@dimen/dp_12"
+                android:drawablePadding="@dimen/dp_4"
+                android:textColor="#ff1e1e1e"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:drawableEndCompat="@mipmap/icon_down"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:background="@drawable/bg_conrners_white_12"
+                android:minWidth="@dimen/dp_50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_class_name">
 
                 <TextView
-                    android:id="@+id/tv_class_name"
+                    android:id="@+id/tv_start_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_12"
-                    android:drawablePadding="@dimen/dp_4"
                     android:textColor="#ff1e1e1e"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     android:textStyle="bold"
-                    app:drawableEndCompat="@mipmap/icon_down"
+                    app:drawableStartCompat="@mipmap/icon_weekly_left"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tvCenter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <TextView
+                    android:id="@+id/tvCenter"
                     android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:background="@drawable/bg_conrners_white_12"
-                    android:minWidth="@dimen/dp_50"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textColor="#ff1e1e1e"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_class_name">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_start_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#ff1e1e1e"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        app:drawableStartCompat="@mipmap/icon_weekly_left"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/tvCenter"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvCenter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-"
-                        android:textColor="#ff1e1e1e"
-                        android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_end_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#ff1e1e1e"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        app:drawableEndCompat="@mipmap/icon_weekly_right"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tvCenter"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="118dp"
-                    android:layout_marginTop="@dimen/dp_15"
-                    android:background="@mipmap/icon_weekly_teacher_charge_bg"
-                    android:paddingStart="@dimen/dp_15"
-                    android:paddingTop="@dimen/dp_15"
-                    android:paddingEnd="@dimen/dp_15"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_class_name">
-
-                    <TextView
-                        android:id="@+id/tv_desc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="本周统计"
-                        android:textColor="#ffffffff"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/announRoll"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="@dimen/dp_8"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/hot_recyclerview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="10dp"
-                        android:layout_marginTop="@dimen/dp_4"
-                        android:nestedScrollingEnabled="false"
-                        app:layout_constraintEnd_toEndOf="@+id/announRoll"
-                        app:layout_constraintStart_toStartOf="@+id/announRoll"
-                        app:layout_constraintTop_toBottomOf="@+id/announRoll"
-                        tools:listitem="@layout/item_hot" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff1e1e1e"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@mipmap/icon_weekly_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvCenter"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="118dp"
+                android:layout_marginTop="@dimen/dp_15"
+                android:background="@mipmap/icon_weekly_teacher_charge_bg"
+                android:paddingStart="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingEnd="@dimen/dp_15"
+                app:layout_constraintTop_toBottomOf="@+id/tv_class_name">
+
+                <TextView
+                    android:id="@+id/tv_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="本周统计"
+                    android:textColor="#ffffffff"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/announRoll"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hot_recyclerview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintEnd_toEndOf="@+id/announRoll"
+                    app:layout_constraintStart_toStartOf="@+id/announRoll"
+                    app:layout_constraintTop_toBottomOf="@+id/announRoll"
+                    tools:listitem="@layout/item_hot" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/slidingTabLayout"

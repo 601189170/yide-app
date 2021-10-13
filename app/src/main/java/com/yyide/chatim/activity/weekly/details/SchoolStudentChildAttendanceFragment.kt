@@ -1,12 +1,15 @@
 package com.yyide.chatim.activity.weekly.details
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import com.blankj.utilcode.util.SizeUtils
@@ -27,6 +30,7 @@ import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.databinding.*
 import com.yyide.chatim.model.DeptAttend
 import com.yyide.chatim.model.Detail
+import com.yyide.chatim.model.SchoolAttendance
 import com.yyide.chatim.model.TeacherAttendance
 import java.util.ArrayList
 
@@ -54,7 +58,7 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(item: Detail, title : String) =
+        fun newInstance(item: Detail, title: String) =
             SchoolStudentChildAttendanceFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("item", item)
@@ -76,18 +80,48 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
                 -1
             }
             adapterAttendance.notifyDataSetChanged()
+            val item = adapterAttendance.getItem(position)
+            //show(view, item.name, "${item.value}%")
         }
-        var teacherAttendances = mutableListOf<TeacherAttendance>()
+        var studentAttendances = mutableListOf<SchoolAttendance>()
         var subjects = mutableListOf<DeptAttend>()
         arguments?.apply {
             val detail = getSerializable("item") as Detail
-            viewBinding.textView.text = getString(R.string.weekly_school_desc, getString("tabTitle", ""))
-
-            teacherAttendances = detail.teacherAttend as MutableList<TeacherAttendance>
-            subjects = detail.deptAttend as MutableList<DeptAttend>
+            viewBinding.textView.text =
+                getString(R.string.weekly_school_student_desc, getString("tabTitle", ""))
+            viewBinding.tvAttend.text =
+                getString(R.string.weekly_school_student_attend, getString("tabTitle", ""))
+            studentAttendances = detail.studentAttend as MutableList<SchoolAttendance>
+            subjects = detail.gradeAttend as MutableList<DeptAttend>
         }
-        adapterAttendance.setList(teacherAttendances)
+        adapterAttendance.setList(studentAttendances)
         initLineCharts(subjects)
+    }
+
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    private fun show(view: View, desc: String, number: String) {
+        val inflate = DialogWeekMessgeBinding.inflate(layoutInflater)
+        val popWindow = PopupWindow(
+            inflate.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
+        )
+        inflate.tvName.text = desc
+        inflate.tvProgress.text = number
+        popWindow.setBackgroundDrawable(context?.getDrawable(android.R.color.transparent))
+        popWindow.setOnDismissListener {
+            adapterAttendance.notifyItemChanged(selectPosition)
+            selectPosition = -1
+        }
+        //获取需要在其上方显示的控件的位置信息
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        //在控件上方显示
+        popWindow.showAtLocation(
+            view,
+            Gravity.NO_GRAVITY,
+            (location[0]) - inflate.root.width / 2,
+            location[1] - inflate.root.height
+        )
     }
 
     private fun initLineCharts(subjects: List<DeptAttend>) {
@@ -97,7 +131,7 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         viewBinding.lineChart.description.isEnabled = false
         viewBinding.lineChart.setDrawGridBackground(false)
         //是否可以拖动
-        viewBinding.lineChart.isDragEnabled = false
+        viewBinding.lineChart.isDragEnabled = true
         //是否绘制在图表里面
         /***折线图例 标签 设置***/
         val legend = viewBinding.lineChart.legend
@@ -133,14 +167,13 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         xAxis.setDrawGridLines(false)
 
         val leftAxis: YAxis = viewBinding.lineChart.axisLeft
+        leftAxis.labelCount = 6
         leftAxis.setLabelCount(6, true)
         leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
         leftAxis.enableGridDashedLine(10f, 10f, 0f)
         leftAxis.valueFormatter = IAxisValueFormatter { value, axis -> "${value.toInt()}%" }
-        leftAxis.labelCount = 6
 
         val rightAxis: YAxis = viewBinding.lineChart.axisRight
-        rightAxis.setLabelCount(5, false)
         rightAxis.setDrawGridLines(false)
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
         // set data
@@ -166,23 +199,36 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
     private fun generateDataLine(subjects: List<DeptAttend>): LineData {
         val values1 = ArrayList<Entry>()
         val values2 = ArrayList<Entry>()
-
+        val values = ArrayList<Entry>()
         subjects.forEachIndexed { index, deptAttend ->
+            values.add(
+                Entry(
+                    index.toFloat(), 91f
+                )
+            )
             //上周数据
             values1.add(
                 Entry(
-                    index.toFloat(), deptAttend.thisWeek.toFloat()
+                    index.toFloat(), deptAttend.lastWeek.toFloat()
                 )
             )
             //本周数据
             values2.add(
                 Entry(
-                    index.toFloat(), (deptAttend.lastWeek).toFloat()
+                    index.toFloat(), (deptAttend.thisWeek).toFloat()
                 )
             )
 
         }
 
+        val d = LineDataSet(values, "")
+        d.highLightColor = Color.argb(0, 0, 0, 0)
+        d.setCircleColor(Color.argb(0, 0, 0, 0))
+        d.color = Color.argb(0, 0, 0, 0)
+        //圆圈的大小
+        d.circleHoleRadius = 0f
+        //是否显示圆点处的数据
+        d.setDrawValues(false)
         val d1 = LineDataSet(values1, "")
         d1.lineWidth = 2f
         d1.circleRadius = 4f
@@ -208,6 +254,7 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
 //        d2.color = ColorTemplate.VORDIPLOM_COLORS[0]
 //        d2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0])
         val sets = ArrayList<ILineDataSet>()
+        sets.add(d)
         sets.add(d1)
         sets.add(d2)
         return LineData(sets)
@@ -228,12 +275,15 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
      */
     private var selectPosition = -1
     private val adapterAttendance = object :
-        BaseQuickAdapter<TeacherAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
-        override fun convert(holder: BaseViewHolder, item: TeacherAttendance) {
+        BaseQuickAdapter<SchoolAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
+        override fun convert(holder: BaseViewHolder, item: SchoolAttendance) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "${item.rate}%"
+            bind.tvProgress.text = "${item.value}%"
             bind.tvWeek.text = item.name
-            WeeklyUtil.setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
+            WeeklyUtil.setAnimation(
+                bind.progressbar,
+                if (item.value <= 0) 0 else item.value.toInt()
+            )
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))

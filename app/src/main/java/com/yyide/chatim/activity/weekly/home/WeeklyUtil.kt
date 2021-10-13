@@ -56,4 +56,16 @@ object WeeklyUtil {
         }
         animator.start()
     }
+
+    fun getTimePosition(
+        item: WeeklyDateBean.DataBean.TimesBean,
+        datas: List<WeeklyDateBean.DataBean.TimesBean>
+    ): Int {
+        datas.forEachIndexed { index, list ->
+            if (item.startTime.equals(list.startTime)) {
+                return index
+            }
+        }
+        return -1
+    }
 }

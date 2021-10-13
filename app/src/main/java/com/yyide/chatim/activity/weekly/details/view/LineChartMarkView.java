@@ -51,11 +51,11 @@ public class LineChartMarkView extends MarkerView {
                 LineDataSet dataSet = (LineDataSet) dataSetList.get(i);
                 //获取到曲线的所有在Y轴的数据集合，根据当前X轴的位置 来获取对应的Y轴值
                 float y = dataSet.getValues().get((int) e.getX()).getY();
-                if (i == 0) {
-                    tv_this_week.setText(df.format(y) + "%");
-                }
                 if (i == 1) {
-                    tv_last_week.setText(df.format(y) + "%");
+                    tv_last_week.setText(y + "%");
+                }
+                if (i == 2) {
+                    tv_this_week.setText(y + "%");
                 }
             }
             tv_name.setText(xAxisValueFormatter.getFormattedValue(e.getX(), null));

@@ -53,8 +53,12 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            SchoolStudentAttendanceFragment().apply {}
+        fun newInstance(dateTime: WeeklyDateBean.DataBean.TimesBean) =
+            SchoolStudentAttendanceFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("item", dateTime)
+                }
+            }
     }
 
     private fun initView() {
@@ -73,11 +77,14 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
     private var timePosition = -1
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
     private fun initDate() {
+        arguments?.apply {
+            dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
+        }
         //获取日期时间
         val dateLists = WeeklyUtil.getDateTimes()
         if (dateLists.isNotEmpty()) {
-            timePosition = dateLists.size - 1
-            dateTime = dateLists[dateLists.size - 1]
+            timePosition = WeeklyUtil.getTimePosition(dateTime, dateLists)
+            //dateTime = dateLists[dateLists.size - 1]
             request()
             viewBinding.tvStartTime.setOnClickListener {
                 if (dateLists.isNotEmpty()) {
@@ -122,8 +129,11 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
         viewBinding.hotRecyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.hotRecyclerview.adapter = adapterHot
-        if (result.attend != null && result.attend.size < 3) {
-            spanCount = result.attend.size
+        adapterHot.setList(null)
+        spanCount = if (result.attend != null && result.attend.size < 3) {
+            result.attend.size
+        } else{
+            3
         }
         val splitList = splitList(result.attend, spanCount)
         val hotList = mutableListOf<Int>()

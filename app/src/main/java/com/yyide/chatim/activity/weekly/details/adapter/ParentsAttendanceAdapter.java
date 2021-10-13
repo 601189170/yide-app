@@ -67,10 +67,9 @@ public class ParentsAttendanceAdapter extends SingleLayoutTreeAdapter<AttendItem
             tvName.setEms(8);
             tvName.setLines(1);
             tvName.setText(!TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名");
-            // holder.setText(R.id.tv_status, item.specialPeople != null ? item.specialPeople.size() + "节" : "0节");
+            tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
         }
         if (!itemParent.isLeaf()) {
-            tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
             if (itemParent.isExpand()) {
                 tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_up), null);
             } else {
@@ -78,6 +77,7 @@ public class ParentsAttendanceAdapter extends SingleLayoutTreeAdapter<AttendItem
             }
         } else {
             tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            tvStatus.setTextColor(Color.parseColor("#909399"));
         }
     }
 

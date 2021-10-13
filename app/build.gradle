@@ -223,7 +223,7 @@ dependencies {
     implementation 'com.github.paradoxie:AutoVerticalTextview:0.1'
     //noinspection GradleCompatible
     implementation 'com.android.support:design:25.2.0'
-
+    implementation 'com.github.gzu-liyujiang:EnhancedProgressBar:1.0.0'
     implementation 'com.tencent:mmkv-static:1.0.24'
 //    //implementation 'com.github.yalantis:ucrop:2.2.6'
     implementation 'com.kevin:crop:1.0.2'

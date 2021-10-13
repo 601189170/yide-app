@@ -102,7 +102,7 @@ interface INetworkService {
     /**
      * 校长查看考勤 学生
      */
-    @GET("/face/cloud-face/app/v1/headmaster/teacher/weekly/detail")
+    @GET("/face/cloud-face/app/v1/headmaster/student/weekly/detail")
     suspend fun requestSchoolStudentAttendance(
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String

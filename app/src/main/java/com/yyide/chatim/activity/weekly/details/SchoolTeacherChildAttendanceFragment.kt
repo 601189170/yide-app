@@ -1,11 +1,9 @@
 package com.yyide.chatim.activity.weekly.details
 
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -13,10 +11,11 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseFragment
-import com.yyide.chatim.databinding.*
+import com.yyide.chatim.databinding.FragmentSchoolTeacherChildWeeklyAttendanceBinding
+import com.yyide.chatim.databinding.ItemWeeklyChartsVerticalBinding
+import com.yyide.chatim.databinding.ItemWeeklyProgressHBinding
 import com.yyide.chatim.model.DeptAttend
 import com.yyide.chatim.model.Detail
-import com.yyide.chatim.model.SchoolHomeStudentAttend
 import com.yyide.chatim.model.TeacherAttendance
 
 /**
@@ -43,10 +42,11 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(item: Detail?) =
+        fun newInstance(item: Detail?, tabTitle: String) =
             SchoolTeacherChildAttendanceFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("item", item)
+                    putString("tabTitle", tabTitle)
                 }
             }
     }
@@ -84,6 +84,8 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
             val detail = getSerializable("item") as Detail
             teacherAttends = detail.teacherAttend as MutableList<TeacherAttendance>
             deptattends = detail.deptAttend as MutableList<DeptAttend>
+            viewBinding.textView.text = "全校教职工每天${getString("tabTitle", "")}考勤率"
+            viewBinding.tvFaculty.text = "教职工各部门${getString("tabTitle", "")}考勤率"
         }
         adapterAttendance.setList(teacherAttends)
         adapterAttendanceDept.setList(deptattends)
@@ -124,6 +126,12 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
                 bind.progressbarThis,
                 if (item.thisWeek <= 0) 0 else item.thisWeek.toInt()
             )
+            if (item.lastWeek <= 0) {
+                bind.progressbarLast.visibility = View.INVISIBLE
+            }
+            if (item.thisWeek <= 0) {
+                bind.progressbarThis.visibility = View.INVISIBLE
+            }
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition2 == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))

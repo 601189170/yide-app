@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.yyide.chatim.R
 import com.yyide.chatim.databinding.FragmentSchoolAttendanceWeeklyDetailsBinding
+import com.yyide.chatim.model.WeeklyDateBean
 
 /**
  *
@@ -28,8 +29,12 @@ class SchoolAttendanceFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            SchoolAttendanceFragment().apply {}
+        fun newInstance(dateTime : WeeklyDateBean.DataBean.TimesBean) =
+            SchoolAttendanceFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("item", dateTime)
+                }
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +42,11 @@ class SchoolAttendanceFragment : Fragment() {
         initView()
     }
 
+    private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
     private fun initView() {
+        arguments?.apply {
+            dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
+        }
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add(getString(R.string.weekly_student_tab))
         mTitles.add(getString(R.string.weekly_teacher_tab))
@@ -46,10 +55,10 @@ class SchoolAttendanceFragment : Fragment() {
             override fun getItem(position: Int): Fragment {
                 return when (position) {
                     0 -> {
-                        SchoolStudentAttendanceFragment.newInstance()
+                        SchoolStudentAttendanceFragment.newInstance(dateTime)
                     }
                     else -> {
-                        SchoolTeacherAttendanceFragment.newInstance()
+                        SchoolTeacherAttendanceFragment.newInstance(dateTime)
                     }
                 }
             }

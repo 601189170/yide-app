@@ -77,10 +77,10 @@ public class StudentAttendanceAdapter extends SingleLayoutTreeAdapter<StudentVal
             constraintLayout.setBackgroundColor(getContext().getResources().getColor(R.color.white));
             tvName.setEms(8);
             tvName.setLines(1);
-            tvName.setText(item.getClockDate() + " " + item.getStatusName() + " " + item.getDetailName());
+            tvName.setText(item.getDetailName());
+            tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
         }
         if (!itemParent.isLeaf()) {
-            tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
             if (itemParent.isExpand()) {
                 tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_up), null);
             } else {
@@ -88,6 +88,7 @@ public class StudentAttendanceAdapter extends SingleLayoutTreeAdapter<StudentVal
             }
         } else {
             tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            tvStatus.setTextColor(Color.parseColor("#909399"));
         }
     }
 

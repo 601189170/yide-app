@@ -1,6 +1,5 @@
 package com.yyide.chatim.activity.weekly.home
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +35,7 @@ import kotlin.collections.ArrayList
  * date 2021年9月15日15:11:01
  * author LRZ
  */
-class TeacherChargeWeeklyFragment : BaseFragment() {
+class TeacherWeeklyFragment : BaseFragment() {
 
     private lateinit var viewBinding: FragmentTeacherChargeWeeklyBinding
     private val viewModel: TeacherViewModel by viewModels()
@@ -53,7 +51,7 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
     companion object {
         @JvmStatic
         fun newInstance() =
-            TeacherChargeWeeklyFragment().apply {}
+            TeacherWeeklyFragment().apply {}
     }
 
 
@@ -84,11 +82,18 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
         viewBinding.attendance.cardView.setOnClickListener {
             WeeklyDetailsActivity.jump(
                 mActivity,
-                WeeklyDetailsActivity.HEAD_TEACHER_ATTENDANCE_TYPE
+                WeeklyDetailsActivity.HEAD_TEACHER_ATTENDANCE_TYPE,
+                "",
+                "",
+                dateTime
             )
         }
         viewBinding.homework.cardViewWork.setOnClickListener {
-            WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.HEAD_TEACHER_HOMEWORK_TYPE)
+            WeeklyDetailsActivity.jump(
+                mActivity, WeeklyDetailsActivity.HEAD_TEACHER_HOMEWORK_TYPE, "",
+                "",
+                dateTime
+            )
         }
         viewBinding.tvDescs.text = WeeklyUtil.getDesc()
         teacherId = SpData.getIdentityInfo().teacherId
@@ -134,7 +139,7 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
 
     private fun initClassMenu() {
         if (SpData.getClassInfo() != null) {
-            viewBinding.tvEvent.text = SpData.getClassInfo().classesName
+            viewBinding.tvEvent.text = SpData.getClassInfo().classesName + "的周报"
         }
         val classList = SpData.getClassList()
         val adapterEvent = ClassAdapter()
@@ -149,7 +154,7 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
                 viewBinding.tvEvent.setOnClickListener {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
                     attendancePop.setOnSelectListener { index: Int ->
-                        viewBinding.tvEvent.text = adapterEvent.getItem(index).classesName
+                        viewBinding.tvEvent.text = adapterEvent.getItem(index).classesName + "的周报"
                         classId = adapterEvent.getItem(index).classesId
                         requestTeacher(dateTime)
                     }
@@ -226,8 +231,10 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
                 -1
             }
             adapterAttendance.notifyDataSetChanged()
+            val item = adapterAttendance.getItem(position)
+            show(view, item.name, "${item.value}%")
         }
-        adapterAttendance.setList(attend?.teacherAttend)
+        adapterAttendance.setList(attend.teacherAttend)
     }
 
     private fun initHotScroll(attendance: List<List<WeeklyTeacherClassAttendance>>) {
@@ -283,18 +290,18 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
     }
 
     @SuppressLint("ResourceAsColor", "ResourceType")
-    private fun show(view: View, desc: String, number: Int) {
+    private fun show(view: View, desc: String, number: String) {
         val inflate = DialogWeekMessgeBinding.inflate(layoutInflater)
         val popWindow = PopupWindow(
             inflate.root,
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
         )
         inflate.tvName.text = desc
-        inflate.tvProgress.text = "${number}%"
+        inflate.tvProgress.text = number
         popWindow.setBackgroundDrawable(context?.getDrawable(android.R.color.transparent))
         popWindow.setOnDismissListener {
+            adapterAttendance.notifyItemChanged(selectPosition)
             selectPosition = -1
-            adapterAttendance.notifyDataSetChanged()
         }
         //获取需要在其上方显示的控件的位置信息
         val location = IntArray(2)
@@ -325,18 +332,18 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
     ): View {
         val view = ItemHBinding.inflate(layoutInflater)
         view.attendanceRecyclerview.layoutManager = GridLayoutManager(activity, spanCount)
-        val adapterAttendance = object :
+        val attendanceBannerAdapter = object :
             BaseQuickAdapter<WeeklyTeacherClassAttendance, BaseViewHolder>(R.layout.item_weekly_attendance) {
             override fun convert(holder: BaseViewHolder, item: WeeklyTeacherClassAttendance) {
                 val bind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
                 bind.viewLine.visibility =
                     if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE
                 bind.tvEventName.text = item.name
-                bind.tvAttendance.text = "${item.value}%"
+                bind.tvAttendance.text = item.value
             }
         }
-        view.attendanceRecyclerview.adapter = adapterAttendance
-        adapterAttendance.setList(attendance)
+        view.attendanceRecyclerview.adapter = attendanceBannerAdapter
+        attendanceBannerAdapter.setList(attendance)
         return view.root
     }
 
@@ -348,12 +355,16 @@ class TeacherChargeWeeklyFragment : BaseFragment() {
         BaseQuickAdapter<WeeklyTeacherTeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
         override fun convert(holder: BaseViewHolder, item: WeeklyTeacherTeacherAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "${item.value}%"
-            bind.tvWeek.text = item.name
-            WeeklyUtil.setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+            } else {
+                bind.tvProgress.text = "${item.value}%"
+                bind.tvWeek.text = item.name
+                WeeklyUtil.setAnimation(
+                    bind.progressbar,
+                    if (item.value <= 0) 0 else item.value.toInt()
+                )
             }
         }
     }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.details.adapter.TeacherAttendanceAdapter
@@ -115,6 +116,8 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
         val barDataSets = mutableListOf<BarDataSet>()
         barDataSet.valueTextColor = Color.parseColor("#909399")
         barDataSet.valueTextSize = 10f
+        barDataSet.valueFormatter =
+            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> "${value.toInt()}" }
         barDataSets.add(barDataSet)
         // 绘制值
         barDataSet.setDrawValues(true)
@@ -142,6 +145,12 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
             setButton()
             viewBinding.tvLeave.setTextColor(resources.getColor(R.color.white))
             viewBinding.tvLeave.isChecked = true
+            initAttendanceList(detail.abnormalDetails.leave)
+        }
+        viewBinding.tvEarly.setOnClickListener {
+            setButton()
+            viewBinding.tvEarly.setTextColor(resources.getColor(R.color.white))
+            viewBinding.tvEarly.isChecked = true
             initAttendanceList(detail.abnormalDetails.LeaveEarly)
         }
     }
@@ -150,9 +159,12 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
         viewBinding.tvAbsenteeism.isChecked = false
         viewBinding.tvLeave.isChecked = false
         viewBinding.tvLate.isChecked = false
+        viewBinding.tvEarly.isChecked = false
         viewBinding.tvAbsenteeism.setTextColor(resources.getColor(R.color.text_1E1E1E))
         viewBinding.tvLeave.setTextColor(resources.getColor(R.color.text_1E1E1E))
         viewBinding.tvLate.setTextColor(resources.getColor(R.color.text_1E1E1E))
+        viewBinding.tvEarly.setTextColor(resources.getColor(R.color.text_1E1E1E))
+
     }
 
     private val dataToBind = mutableListOf<TreeNode<ValueChild>>()
@@ -193,22 +205,18 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
         })
     }
 
-    fun setAnimation(view: ProgressBar, mProgressBar: Int) {
-        val animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(600)
-        animator.addUpdateListener { valueAnimator: ValueAnimator ->
-            view.progress = valueAnimator.animatedValue as Int
-        }
-        animator.start()
-    }
-
     private fun convertDataToTreeNode(
         data: ValueChild
     ): List<TreeNode<ValueChild>> {
+        if (data == null) {
+            return mutableListOf()
+        }
         val nodes: MutableList<TreeNode<ValueChild>> = ArrayList()
         val childs = mutableListOf<TreeNode<ValueChild>>()
-        val item = ValueChild("", data.name, "", "", "", "", "", "", mutableListOf())
+        val item = ValueChild("", data.name, "", "", "", "", "", data.type, mutableListOf())
         val treeNode: TreeNode<ValueChild> = TreeNode(item, -1)
         for (childItem in data.value) {
+            childItem.type = data.type
             val child: TreeNode<ValueChild> = TreeNode(childItem, -1)
             child.parent = treeNode
             childs.add(child)

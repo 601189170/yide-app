@@ -8,6 +8,8 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.IValueFormatter
+import java.math.BigDecimal
 
 class BarCharts {
 
@@ -90,9 +92,13 @@ class BarCharts {
 
         val axisLeft = barChart.axisLeft
         axisLeft.enableGridDashedLine(10f, 10f, 0f)
-        axisLeft.axisMinimum = 0f
         axisLeft.textColor = Color.parseColor("#909399")
         axisLeft.textSize = 10f
+        axisLeft.axisMinimum = 0f
+        axisLeft.setLabelCount(6, true)
+        axisLeft.valueFormatter = IAxisValueFormatter { value, axis ->
+            "${value.toInt()}"
+        }
         if (isSlither) {
             //当为true时,放大图
             // 为了使 柱状图成为可滑动的,将水平方向 放大 2.5倍

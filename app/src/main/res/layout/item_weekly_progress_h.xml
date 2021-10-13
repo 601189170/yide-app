@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_6"
+    android:paddingBottom="@dimen/dp_6">
 
     <TextView
         android:id="@+id/tv_event_name"
@@ -11,36 +13,47 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="#909399"
-        android:textSize="6sp"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
+    <com.github.gzuliyujiang.progressbar.EnhancedProgressBar
         android:id="@+id/progressbar_this"
-        style="@style/MyProgressBar2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/dp_4"
-        android:layout_marginTop="@dimen/dp_6"
-        android:max="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_event_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:lyj_cut_corner="none"
+        app:lyj_reached_color="#2C8AFF"
+        app:lyj_reached_height="15dp"
+        app:lyj_text_align="middle"
+        app:lyj_text_bold="false"
+        app:lyj_text_color="#909399"
+        app:lyj_text_offset="4dp"
+        app:lyj_text_size="10sp"
+        app:lyj_text_visible="true"
+        app:lyj_unreached_color="#FFFFFF" />
 
-    <ProgressBar
+    <com.github.gzuliyujiang.progressbar.EnhancedProgressBar
         android:id="@+id/progressbar_last"
-        style="@style/MyProgressBar3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/dp_4"
-        android:layout_marginTop="@dimen/dp_2"
-        android:layout_marginBottom="@dimen/dp_6"
-        android:max="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_event_name"
-        app:layout_constraintTop_toBottomOf="@+id/progressbar_this" />
+        app:layout_constraintTop_toBottomOf="@+id/progressbar_this"
+        app:lyj_cut_corner="none"
+        app:lyj_reached_color="#4DCD9A"
+        app:lyj_reached_height="15dp"
+        app:lyj_text_align="middle"
+        app:lyj_text_bold="false"
+        app:lyj_text_color="#909399"
+        app:lyj_text_offset="4dp"
+        app:lyj_text_size="10sp"
+        app:lyj_text_visible="true"
+        app:lyj_unreached_color="#FFFFFF" />
 </androidx.constraintlayout.widget.ConstraintLayout>

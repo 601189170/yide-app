@@ -5,13 +5,13 @@
     <color name="colorAccent">#2196F3</color>
 
     <!--Progress Button-->
-    <color name="cpb_red">#5D7092</color>
-    <color name="cpb_red_dark">#ffcd3a3a</color>
-    <color name="cpb_green">#ff99cc00</color>
+    <color name="cpb_red">#1FC1C3</color>
+    <color name="cpb_red_dark">#F66C6C</color>
+    <color name="cpb_green">#8F81FE</color>
     <color name="cpb_green_dark">#2C8AFF</color>
     <color name="cpb_white">@android:color/white</color>
     <color name="charts_bg">#142C8AFF</color>
-    <color name="theme_bg">#F7FAFC</color>
+    <color name="theme_bg">#00000000</color>
     <color name="gray">#D8D8D8</color>
     <color name="white">#FFFFFF</color>
     <color name="white10">#50FFFFFF</color>
@@ -43,7 +43,7 @@
     <color name="line3">#EEF1FD</color>
     <color name="line4">#EBF2FF</color>
     <color name="line5">#F7FAFF</color>
-    <color name="transparent">#00000000</color>
+    <color name="transparent">#FFFFFF</color>
     <color name="yellow">#FFD24B</color>
     <color name="yellow2">#FFE610</color>
     <color name="yellow3">#FFEC69</color>

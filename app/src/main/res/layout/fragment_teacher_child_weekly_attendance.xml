@@ -107,6 +107,22 @@
                     app:layout_constraintStart_toEndOf="@+id/tv_absenteeism"
                     app:layout_constraintTop_toTopOf="@+id/tv_absenteeism" />
 
+                <CheckedTextView
+                    android:id="@+id/tv_early"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:background="@drawable/selector_checked_tv"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/dp_14"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="@dimen/dp_14"
+                    android:paddingBottom="5dp"
+                    android:text="早退"
+                    android:textColor="@color/text_1E1E1E"
+                    android:textSize="@dimen/text_15"
+                    app:layout_constraintStart_toEndOf="@+id/tv_leave"
+                    app:layout_constraintTop_toTopOf="@+id/tv_leave" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView

@@ -37,7 +37,7 @@ data class AttendRate(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
-    var value: Double
+    var value: String
 )
 
 data class AttendItem(

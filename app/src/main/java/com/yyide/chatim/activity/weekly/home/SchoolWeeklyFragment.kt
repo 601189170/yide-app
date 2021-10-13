@@ -1,10 +1,13 @@
 package com.yyide.chatim.activity.weekly.home
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +18,7 @@ import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
 import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.home.viewmodel.SchoolViewModel
 import com.yyide.chatim.base.BaseFragment
+import com.yyide.chatim.databinding.DialogWeekMessgeBinding
 import com.yyide.chatim.databinding.FragmentSchoolWeeklyBinding
 import com.yyide.chatim.databinding.ItemWeeklyChartsVerticalBinding
 import com.yyide.chatim.dialog.AttendancePop
@@ -75,11 +79,23 @@ class SchoolWeeklyFragment : BaseFragment() {
         }
         viewBinding.tvDescs.text = WeeklyUtil.getDesc()
         viewBinding.layoutWeeklySchoolAttendance.cardView.setOnClickListener {
-            WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_ATTENDANCE_TYPE)
+            WeeklyDetailsActivity.jump(
+                mActivity,
+                WeeklyDetailsActivity.SCHOOL_ATTENDANCE_TYPE,
+                "",
+                "",
+                dateTime
+            )
         }
 
         viewBinding.layoutWeeklyHomeworkSummary.cardView.setOnClickListener {
-            WeeklyDetailsActivity.jump(mActivity, WeeklyDetailsActivity.SCHOOL_HOMEWORK_TYPE)
+            WeeklyDetailsActivity.jump(
+                mActivity,
+                WeeklyDetailsActivity.SCHOOL_HOMEWORK_TYPE,
+                "",
+                "",
+                dateTime
+            )
         }
         initDate()
     }
@@ -159,6 +175,17 @@ class SchoolWeeklyFragment : BaseFragment() {
 //                viewBinding.layoutWeeklySchoolAttendance.layoutCharts.root.visibility = View.GONE
             }
 
+            adapterStudentAttendance.setOnItemClickListener { adapter, view, position ->
+                selectStudentPosition = if (selectStudentPosition != position) {
+                    position
+                } else {
+                    -1
+                }
+                adapterStudentAttendance.notifyDataSetChanged()
+                val item = adapterStudentAttendance.getItem(position)
+                //show(view, item.name, "${item.value}%")
+            }
+
             //教师考勤
             if (attend.teacherAttend != null) {
                 viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.layoutManager =
@@ -179,6 +206,16 @@ class SchoolWeeklyFragment : BaseFragment() {
 //                viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.root.visibility =
 //                    View.GONE
             }
+            adapterTeacherAttendance.setOnItemClickListener { adapter, view, position ->
+                selectTeacherPosition = if (selectTeacherPosition != position) {
+                    position
+                } else {
+                    -1
+                }
+                adapterTeacherAttendance.notifyDataSetChanged()
+                val item = adapterTeacherAttendance.getItem(position)
+                //show(view, item.name, "${item.value}%")
+            }
             if (attend.teacherAttend == null && attend.studentAttend == null) {
                 viewBinding.layoutWeeklySchoolAttendance.root.visibility = View.GONE
             }
@@ -191,6 +228,37 @@ class SchoolWeeklyFragment : BaseFragment() {
 
     }
 
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    private fun show(view: View, desc: String, number: String) {
+        val inflate = DialogWeekMessgeBinding.inflate(layoutInflater)
+        val popWindow = PopupWindow(
+            inflate.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
+        )
+        inflate.tvName.text = desc
+        inflate.tvProgress.text = number
+        popWindow.setBackgroundDrawable(context?.getDrawable(android.R.color.transparent))
+        popWindow.setOnDismissListener {
+            if (selectTeacherPosition > -1) {
+                adapterTeacherAttendance.notifyItemChanged(selectTeacherPosition)
+                selectTeacherPosition = -1
+            } else if (selectStudentPosition > -1) {
+                adapterStudentAttendance.notifyItemChanged(selectStudentPosition)
+                selectStudentPosition = -1
+            }
+        }
+        //获取需要在其上方显示的控件的位置信息
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        //在控件上方显示
+        popWindow.showAtLocation(
+            view,
+            Gravity.NO_GRAVITY,
+            (location[0]) - inflate.root.width / 2,
+            location[1] - inflate.root.height
+        )
+    }
+
     /**
      * 学生考勤数据
      */
@@ -199,12 +267,17 @@ class SchoolWeeklyFragment : BaseFragment() {
         BaseQuickAdapter<SchoolHomeStudentAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
         override fun convert(holder: BaseViewHolder, item: SchoolHomeStudentAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "${item.value}%"
-            bind.tvWeek.text = item.name
-            WeeklyUtil.setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectStudentPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+            } else {
+                bind.tvProgress.text = "${item.value}%"
+                bind.tvWeek.text = item.name
+                bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
+//                WeeklyUtil.setAnimation(
+//                    bind.progressbar,
+//                    if (item.value <= 0) 0 else item.value.toInt()
+//                )
             }
         }
     }
@@ -217,12 +290,17 @@ class SchoolWeeklyFragment : BaseFragment() {
         BaseQuickAdapter<SchoolHomeTeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
         override fun convert(holder: BaseViewHolder, item: SchoolHomeTeacherAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "${item.value}%"
-            bind.tvWeek.text = item.name
-            WeeklyUtil.setAnimation(bind.progressbar, if (item.value <= 0) 0 else item.value.toInt())
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectTeacherPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+            } else {
+                bind.tvProgress.text = "${item.value}%"
+                bind.tvWeek.text = item.name
+                bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
+//                WeeklyUtil.setAnimation(
+//                    bind.progressbar,
+//                    if (item.value <= 0) 0 else item.value.toInt()
+//                )
             }
         }
     }
