@@ -27,6 +27,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ActivityUtils;
@@ -92,6 +93,7 @@ import com.yyide.chatim.utils.LogUtil;
 import com.yyide.chatim.utils.PrivateConstants;
 import com.yyide.chatim.view.DialogUtil;
 import com.yyide.chatim.view.MainView;
+import com.yyide.chatim.viewmodel.ScheduleMangeViewModel;
 import com.yyide.chatim.widget.LoadingButton;
 
 import org.greenrobot.eventbus.EventBus;
@@ -181,6 +183,10 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         showNotificationPermission();
         mvpPresenter.copywriter();
         mvpPresenter.getWeeklyDate();
+
+        //请求日程数据 并保存本地
+        final ScheduleMangeViewModel scheduleMangeViewModel = new ViewModelProvider(this).get(ScheduleMangeViewModel.class);
+        scheduleMangeViewModel.getAllScheduleList();
     }
 
     private void prepareThirdPushToken() {

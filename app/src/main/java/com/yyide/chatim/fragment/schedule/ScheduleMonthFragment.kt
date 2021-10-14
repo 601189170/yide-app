@@ -31,7 +31,6 @@ import com.yyide.chatim.view.DialogUtil
  */
 class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonthBinding
-    private var labelList = mutableListOf<Label>()
     private var list = mutableListOf<ScheduleOuter>()
     private var mcvCalendar: MonthCalendarView? = null
     private var mCurrentSelectYear = 2021
@@ -70,65 +69,6 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
             mCurrentSelectMonth = it.selectMonth
             mCurrentSelectDay = it.selectDay
         }
-        val scheduleInnerList = mutableListOf<ScheduleInner>()
-        val scheduleList = mutableListOf<Schedule>()
-        val schedule1 = Schedule(
-            "开学提醒", "开学提醒内容", 1,
-            "2021-09-11 09:10:00",
-            "2021-09-11 14:15:00",
-            0
-        )
-        scheduleList.add(schedule1)
-        val schedule2 = Schedule(
-            "开学提醒2", "开学提醒内容", 2,
-            "2021-09-11 16:10:00",
-            "2021-09-11 20:10:00",
-            1
-        )
-        scheduleList.add(schedule2)
-
-        scheduleList.add(Schedule(
-            "开学提醒2", "开学提醒内容", 2,
-            "2021-09-11 16:10:00",
-            "2021-09-11 20:10:00",
-            1
-        ))
-
-        scheduleList.add(Schedule(
-            "开学提醒2", "开学提醒内容", 2,
-            "2021-09-11 16:10:00",
-            "2021-09-11 20:10:00",
-            1
-        ))
-        scheduleList.add(Schedule(
-            "开学提醒2", "开学提醒内容", 2,
-            "2021-09-11 16:10:00",
-            "2021-09-11 20:10:00",
-            1
-        ))
-
-        val scheduleInner1 = ScheduleInner("2021-09-11 00:00:00", "周五", scheduleList)
-        scheduleInnerList.add(scheduleInner1)
-
-        val scheduleList2 = mutableListOf<Schedule>()
-        val schedule3 = Schedule(
-            "开学提醒3", "开学提醒内容", 3,
-            "2021-09-13 09:10:00",
-            "2021-09-13 14:15:00",
-            1
-        )
-        scheduleList2.add(schedule3)
-        val scheduleInner2 = ScheduleInner("2021-09-13 00:00:00", "周五", scheduleList2)
-        scheduleInnerList.add(scheduleInner2)
-
-        val scheduleOuter = ScheduleOuter("2021-09-13 00:00:00", scheduleInnerList)
-        list.add(scheduleOuter)
-
-        labelList.add(Label("工作", "#19ADF8", false))
-        labelList.add(Label("阅读", "#56D72C", false))
-        labelList.add(Label("睡觉", "#FD8208", false))
-        labelList.add(Label("吃饭", "#56D72C", false))
-        labelList.add(Label("嗨皮", "#FD8208", false))
     }
 
     fun getDayScheduleList(year: Int, month: Int, day: Int):List<Schedule>{

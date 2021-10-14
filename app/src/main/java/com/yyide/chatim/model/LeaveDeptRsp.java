@@ -2,9 +2,6 @@ package com.yyide.chatim.model;
 
 import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * @Description: java类作用描述
  * @Author: liu tao
@@ -14,8 +11,7 @@ import lombok.NoArgsConstructor;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-@NoArgsConstructor
-@Data
+
 public class LeaveDeptRsp {
 
     private int code;
@@ -23,8 +19,41 @@ public class LeaveDeptRsp {
     private String msg;
     private List<DataBean> data;
 
-    @NoArgsConstructor
-    @Data
+    public LeaveDeptRsp() {
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public List<DataBean> getData() {
+        return data;
+    }
+
+    public void setData(List<DataBean> data) {
+        this.data = data;
+    }
+
     public static class DataBean {
         private String deptName;
         private String deptId;
@@ -34,5 +63,72 @@ public class LeaveDeptRsp {
         private int isDefault;
         private String classId;
         private String studentUserId;
+
+        public String getDeptName() {
+            return deptName;
+        }
+
+        public void setDeptName(String deptName) {
+            this.deptName = deptName;
+        }
+
+        public String getDeptId() {
+            return deptId;
+        }
+
+        public void setDeptId(String deptId) {
+            this.deptId = deptId;
+        }
+
+        public String getDeptHeadId() {
+            return deptHeadId;
+        }
+
+        public void setDeptHeadId(String deptHeadId) {
+            this.deptHeadId = deptHeadId;
+        }
+
+        public String getSchoolId() {
+            return schoolId;
+        }
+
+        public void setSchoolId(String schoolId) {
+            this.schoolId = schoolId;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public int getIsDefault() {
+            return isDefault;
+        }
+
+        public void setIsDefault(int isDefault) {
+            this.isDefault = isDefault;
+        }
+
+        public String getClassId() {
+            return classId;
+        }
+
+        public void setClassId(String classId) {
+            this.classId = classId;
+        }
+
+        public String getStudentUserId() {
+            return studentUserId;
+        }
+
+        public void setStudentUserId(String studentUserId) {
+            this.studentUserId = studentUserId;
+        }
+
+        public DataBean() {
+        }
     }
 }

@@ -76,6 +76,7 @@ import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.ScheduleData;
+import com.yyide.chatim.model.schedule.ScheduleListRsp;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
 import com.yyide.chatim.model.schedule.StudentGuardianRsp;
@@ -838,6 +839,22 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/searchSchedule")
     Call<BaseResponse<List<ScheduleData>>> searchSchedule(@Body RequestBody requestBody);
+
+    /**
+     * 日程列表接口 日/月
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/scheduleList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/scheduleList")
+    Call<ScheduleListRsp> scheduleList(@Body RequestBody requestBody);
+
+    /**
+     * 查询所有日程
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/selectAllScheduleList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/selectAllScheduleList")
+    Call<BaseResponse<List<ScheduleData>>> selectAllScheduleList();
 
     /**
      * 获取周报描述

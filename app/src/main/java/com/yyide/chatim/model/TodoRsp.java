@@ -1,6 +1,5 @@
 package com.yyide.chatim.model;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;

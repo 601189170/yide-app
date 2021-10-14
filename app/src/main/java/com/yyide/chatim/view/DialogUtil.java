@@ -80,7 +80,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import lombok.var;
+
 
 /**
  * @Description: java类作用描述
@@ -204,12 +204,12 @@ public class DialogUtil {
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
-        final var labelColorList = LabelColor.Companion.getLabelColorList();
-        final var adapter = new BaseQuickAdapter<LabelColor, BaseViewHolder>(R.layout.item_label_color){
+        final List<LabelColor> labelColorList = LabelColor.Companion.getLabelColorList();
+        final BaseQuickAdapter adapter = new BaseQuickAdapter<LabelColor, BaseViewHolder>(R.layout.item_label_color){
 
             @Override
             protected void convert(@NonNull BaseViewHolder holder, LabelColor item) {
-                final var circleFrameLayout = (CircleFrameLayout)holder.getView(R.id.v_border_circle);
+                final CircleFrameLayout circleFrameLayout = (CircleFrameLayout)holder.getView(R.id.v_border_circle);
                 final ImageView imageView = (ImageView) holder.getView(R.id.iv_default_color);
                 circleFrameLayout.setRadius(DisplayUtils.dip2px(context, 24f));
                 circleFrameLayout.setBackgroundColor(Color.parseColor(item.getColor()));

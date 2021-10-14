@@ -1,7 +1,6 @@
 package com.yyide.chatim.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 /**
  * @Description: java类作用描述
@@ -12,8 +11,7 @@ import lombok.NoArgsConstructor;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-@NoArgsConstructor
-@Data
+
 public class ActivateRsp {
 
     private int code;
@@ -21,8 +19,38 @@ public class ActivateRsp {
     private String msg;
     private DataBean data;
 
-    @NoArgsConstructor
-    @Data
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
     public static class DataBean {
         private String activateCode;
         //激活状态（1：已启用，2：禁用）
@@ -31,5 +59,37 @@ public class ActivateRsp {
         private String bangingState;
         //开通验证方式【0：未開通，1：已開通】
         private String openState;
+
+        public String getActivateCode() {
+            return activateCode;
+        }
+
+        public void setActivateCode(String activateCode) {
+            this.activateCode = activateCode;
+        }
+
+        public String getActivateState() {
+            return activateState;
+        }
+
+        public void setActivateState(String activateState) {
+            this.activateState = activateState;
+        }
+
+        public String getBangingState() {
+            return bangingState;
+        }
+
+        public void setBangingState(String bangingState) {
+            this.bangingState = bangingState;
+        }
+
+        public String getOpenState() {
+            return openState;
+        }
+
+        public void setOpenState(String openState) {
+            this.openState = openState;
+        }
     }
 }

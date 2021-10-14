@@ -1,6 +1,9 @@
 package com.yyide.chatim.model.schedule;
 
-import static com.yyide.chatim.model.schedule.Schedule.*;
+import static com.yyide.chatim.model.schedule.Schedule.TYPE_EXPIRED_COMPLETED;
+import static com.yyide.chatim.model.schedule.Schedule.TYPE_EXPIRED_NOT_COMPLETED;
+import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_COMPLETED;
+import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_NOT_COMPLETED;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.yyide.chatim.utils.DateUtils;
@@ -37,6 +40,8 @@ public class ScheduleData implements MultiItemEntity {
     private String siteName;
     private String updateType;
     private String updateDate;
+    private String dayOfMonth;
+    private String promoterName;
 
     public String getIsRepeat() {
         return isRepeat;
@@ -212,6 +217,22 @@ public class ScheduleData implements MultiItemEntity {
 
     public void setSiteName(String siteName) {
         this.siteName = siteName;
+    }
+
+    public String getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(String dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public String getPromoterName() {
+        return promoterName;
+    }
+
+    public void setPromoterName(String promoterName) {
+        this.promoterName = promoterName;
     }
 
     @Override

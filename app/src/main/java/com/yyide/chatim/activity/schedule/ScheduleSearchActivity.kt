@@ -34,6 +34,7 @@ import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpaceItemDecoration
 import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.LabelManageViewModel
+import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.viewmodel.ScheduleSearchViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,6 +42,7 @@ import java.util.*
 class ScheduleSearchActivity : BaseActivity() {
     private val labelManageViewModel: LabelManageViewModel by viewModels()
     private val scheduleSearchViewModel: ScheduleSearchViewModel by viewModels()
+    private val scheduleMangeViewModel: ScheduleMangeViewModel by viewModels()
     private lateinit var viewBinding: ActivityScheduleSearchBinding
     private val tagList = mutableListOf<TagType>()
     private var filterTagCollect: FilterTagCollect = FilterTagCollect()
@@ -61,6 +63,8 @@ class ScheduleSearchActivity : BaseActivity() {
             scheduleSearchResultList.addAll(it)
             scheduleSearchResultListAdapter.setList(scheduleSearchResultList)
         })
+
+        scheduleMangeViewModel.selectAllScheduleList()
     }
 
     override fun getContentViewID(): Int {

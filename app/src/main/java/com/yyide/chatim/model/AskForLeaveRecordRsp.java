@@ -1,10 +1,5 @@
 package com.yyide.chatim.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * @Description: java类作用描述
  * @Author: liu tao
@@ -14,11 +9,45 @@ import lombok.NoArgsConstructor;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-@NoArgsConstructor
-@Data
+
 public class AskForLeaveRecordRsp {
     private long id;
     private int status;//1,审批中，2，已撤销，3，审批通过 4，审批拒绝
     private String title;
     private String date;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public AskForLeaveRecordRsp() {
+    }
 }
