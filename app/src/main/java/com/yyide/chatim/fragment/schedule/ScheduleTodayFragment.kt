@@ -114,6 +114,8 @@ class ScheduleTodayFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        todayScheduleViewModel.getThisWeekAndTodayList()
+        ///todayScheduleViewModel.getThisWeekAndTodayList()
+        todayScheduleViewModel.getThisWeekScheduleList()
+        todayScheduleViewModel.getTodayScheduleList()
     }
 }

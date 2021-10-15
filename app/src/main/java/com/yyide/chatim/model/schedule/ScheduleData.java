@@ -28,7 +28,7 @@ public class ScheduleData implements MultiItemEntity {
     private String filePath;
     private String isRepeat;
     private String status;
-    private Map<String, String> rrule;
+    private Map<String, Object> rrule;
     private String remindType;
     private String remindTypeInfo;
     private String startTime;
@@ -127,11 +127,11 @@ public class ScheduleData implements MultiItemEntity {
         this.status = status;
     }
 
-    public Map<String, String> getRrule() {
+    public Map<String, Object> getRrule() {
         return rrule;
     }
 
-    public void setRrule(Map<String, String> rrule) {
+    public void setRrule(Map<String, Object> rrule) {
         this.rrule = rrule;
     }
 

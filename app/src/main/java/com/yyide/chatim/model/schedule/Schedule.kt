@@ -3,6 +3,7 @@ package com.yyide.chatim.model.schedule
 import com.blankj.utilcode.util.LogUtils
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yyide.chatim.utils.DateUtils
+import org.joda.time.DateTime
 
 /**
  *
@@ -48,3 +49,17 @@ data class Schedule(
         const val SCHEDULE_TYPE_CLASS_SCHEDULE = 4
     }
 }
+
+/**
+ * 日程月按日分组数据
+ * dateTime 分组key
+ */
+data class DayOfMonth(
+    var dateTime: DateTime,
+    var scheduleData: ScheduleData
+)
+
+data class DayGroupOfMonth(
+    var dateTime: DateTime,
+    var scheduleDataList: List<ScheduleData>
+)

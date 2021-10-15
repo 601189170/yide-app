@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.viewModels
 import com.alibaba.fastjson.JSON
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
@@ -20,8 +21,11 @@ import com.yyide.chatim.model.schedule.Schedule
 import com.yyide.chatim.model.schedule.ScheduleInner
 import com.yyide.chatim.model.schedule.ScheduleOuter
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
+import com.yyide.chatim.viewmodel.ScheduleMonthViewModel
+import org.joda.time.DateTime
 
 /**
  *
@@ -36,7 +40,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     private var mCurrentSelectYear = 2021
     private var mCurrentSelectMonth = 8
     private var mCurrentSelectDay = 12
-
+    private val scheduleMonthViewModel:ScheduleMonthViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,11 +52,22 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loge("onViewCreated")
         mcvCalendar = view.findViewById(R.id.mcvCalendar)
         initData()
         initView()
-        addTaskHint(HintCircle(5, 3))
-        addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
+        scheduleMonthViewModel.monthDataList.observe(requireActivity(),{
+            loge("keys ${it.keys.size}")
+            it.keys.forEach {dateTime->
+                val value = it[dateTime]
+                if (value != null){
+                    addTaskHint(HintCircle(dateTime.dayOfMonth,value.size))
+                }
+            }
+        })
+        scheduleMonthViewModel.scheduleList(DateTime.now())
+        //addTaskHint(HintCircle(5, 3))
+        //addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -85,12 +100,19 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onClickDate(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
-        val date = DateUtils.formatTime("$year-${month+1}-$day","yyyy-MM-dd","",true)
-        val dayScheduleList = getDayScheduleList(year, month, day)
-        if (dayScheduleList.isEmpty()){
-            return
+//        val date = DateUtils.formatTime("$year-${month+1}-$day","yyyy-MM-dd","",true)
+//        val dayScheduleList = getDayScheduleList(year, month, day)
+//        if (dayScheduleList.isEmpty()){
+//            return
+//        }
+        val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
+        val value = scheduleMonthViewModel.monthDataList.value
+        if (value!=null && value[dateTime] != null){
+            val mutableList = value[dateTime]
+            val showDataTime = dateTime.toString("yyyy-MM-dd")
+            DialogUtil.showMonthScheduleListDialog(requireContext(),showDataTime,mutableList,this)
         }
-        DialogUtil.showMonthScheduleListDialog(requireContext(),date,dayScheduleList,this)
+
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
@@ -98,6 +120,9 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         mCurrentSelectYear = year
         mCurrentSelectMonth = month
         mCurrentSelectDay = day
+        val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
+        loge("dateTime=$dateTime")
+        scheduleMonthViewModel.scheduleList(dateTime)
     }
 
     /**

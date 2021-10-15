@@ -20,7 +20,7 @@ class ScheduleRepetitionActivity : BaseActivity() {
     lateinit var scheduleRepetitionBinding: ActivityScheduleRepetitionBinding
     val list = getList()
     private var title:String? = null
-    private var rule:MutableMap<String,String>? = null
+    private var rule:MutableMap<String,Any>? = null
     private lateinit var adapter: BaseQuickAdapter<Repetition, BaseViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +99,7 @@ class ScheduleRepetitionActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_CUSTOM_REPETITION && resultCode == RESULT_OK && data != null) {
             val rule = data.getStringExtra("rule")
-            this.rule = JSON.parseObject(rule,Map::class.java) as MutableMap<String, String>?
+            this.rule = JSON.parseObject(rule,Map::class.java) as MutableMap<String, Any>?
             loge("rule=$rule")
             if (!TextUtils.isEmpty(rule)) {
                 list.forEach {

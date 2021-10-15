@@ -81,7 +81,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 //rule = "每${numberStr}月 $selectMonth"
                 if (selectMonth.isNotEmpty()) {
                     val bymonthday =
-                        selectMonth.map { it.title }.toString().replace("[", "").replace("]", "")
+                        selectMonth.map { it.title }.toString()//.replace("[", "").replace("]", "")
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\",\"bymonthday\":\"${bymonthday}\"}"
                     rule["freq"] = "monthly"
                     rule["interval"] = numberStr
@@ -95,12 +95,12 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
             } else if (unitStr == "周") {
                 val selectWeek = weekList.filter { it.checked }
                 if (selectWeek.isNotEmpty()) {
-                    val byday =
-                        selectWeek.map { it.shortname }.toString().replace("[", "").replace("]", "")
-                    //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\",\"byday\":\"${byday}\"}"
+                    val byweekday =
+                        selectWeek.map { it.shortname }.toString()//.replace("[", "").replace("]", "")
+                    //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\",\"byweekday\":\"${byweekday}\"}"
                     rule["freq"] = "weekly"
                     rule["interval"] = numberStr
-                    rule["byday"] = byday
+                    rule["byweekday"] = byweekday
                 } else {
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\"}"
                     rule["freq"] = "weekly"

@@ -60,6 +60,7 @@ class ScheduleMangeViewModel : ViewModel() {
      */
 
     private fun insertScheduleToDb(scheduls: List<ScheduleData>) {
+        ScheduleDaoUtil.clearAll()
         scheduls.forEach {
             val scheduleId = it.id
             val scheduleBean = ScheduleBean()
@@ -105,6 +106,7 @@ class ScheduleMangeViewModel : ViewModel() {
                 label.scheduleCreatorId = scheduleId
                 labelList.add(label)
             }
+
             //插入数据到本地数据库
             AppDatabase.getInstance(BaseApplication.getInstance()).scheduleDao()
                 .insert(scheduleBean, participantList, labelList)

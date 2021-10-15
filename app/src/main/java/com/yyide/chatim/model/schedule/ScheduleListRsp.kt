@@ -1,7 +1,6 @@
 package com.yyide.chatim.model.schedule
 
-import lombok.Data
-import lombok.NoArgsConstructor
+
 
 /**
  * @author liu tao

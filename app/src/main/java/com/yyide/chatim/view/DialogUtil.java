@@ -32,6 +32,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -58,6 +59,7 @@ import com.yyide.chatim.model.schedule.NewLabel;
 import com.yyide.chatim.model.schedule.Remind;
 import com.yyide.chatim.model.schedule.Repetition;
 import com.yyide.chatim.model.schedule.Schedule;
+import com.yyide.chatim.model.schedule.ScheduleData;
 import com.yyide.chatim.model.schedule.WeekBean;
 import com.yyide.chatim.utils.ColorUtil;
 import com.yyide.chatim.utils.DateUtils;
@@ -397,7 +399,7 @@ public class DialogUtil {
             mDialog.dismiss();
         });
         binding.tvFinish.setOnClickListener(v -> {
-            Map<String,String> rule = new HashMap();
+            Map<String,Object> rule = new HashMap();
             final String unitStr = unit.get();
             final String numberStr = number.get();
             if ("天".equals(unitStr)) {
@@ -408,7 +410,7 @@ public class DialogUtil {
             } else if ("月".equals(unitStr)) {
                 final List<MonthBean> collect = monthList.stream().filter(MonthBean::getChecked).collect(Collectors.toList());
                 if (!collect.isEmpty()) {
-                    String bymonthday = collect.stream().map(MonthBean::getTitle).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
+                    String bymonthday = collect.stream().map(MonthBean::getTitle).collect(Collectors.toList()).toString();//.replace("[", "").replace("]", "");
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\",\"bymonthday\":\"" + bymonthday + "\"}";
                     rule.put("freq","monthly");
                     rule.put("interval",numberStr);
@@ -423,11 +425,11 @@ public class DialogUtil {
             } else if ("周".equals(unitStr)) {
                 final List<WeekBean> collect = weekList.stream().filter(WeekBean::getChecked).collect(Collectors.toList());
                 if (!collect.isEmpty()) {
-                    String byday = collect.stream().map(WeekBean::getShortname).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
-                    //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\",\"byday\":\"" + byday + "\"}";
+                    String byweekday = collect.stream().map(WeekBean::getShortname).collect(Collectors.toList()).toString();//.replace("[", "").replace("]", "");
+                    //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\",\"byweekday\":\"" + byweekday + "\"}";
                     rule.put("freq","weekly");
                     rule.put("interval",numberStr);
-                    rule.put("byday",byday);
+                    rule.put("byweekday",byweekday);
                 } else {
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\"}";
                     rule.put("freq","weekly");
@@ -450,7 +452,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showMonthScheduleListDialog(Context context, String date, List<Schedule> scheduleList, LifecycleOwner lifecycleOwner) {
+    public static void showMonthScheduleListDialog(Context context, String date, List<ScheduleData> scheduleList, LifecycleOwner lifecycleOwner) {
         DialogScheduleMonthListBinding binding = DialogScheduleMonthListBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -462,7 +464,9 @@ public class DialogUtil {
         binding.rvScheduleList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
                     mDialog.dismiss();
-                    context.startActivity(new Intent(context, ScheduleEditActivity.class));
+                    final Intent intent = new Intent(context, ScheduleEditActivity.class);
+                    intent.putExtra("data", JSON.toJSONString(scheduleList.get(position)));
+                    context.startActivity(intent);
                 }
         );
 
@@ -1077,11 +1081,11 @@ public class DialogUtil {
         binding.btnEnsure.setOnClickListener(v -> {
             Log.e(TAG, "showRepetitionScheduleModifyDialog: " + repetitionType1.get() + ", " + repetitionType2.get() + ", " + repetitionType3.get());
             if (repetitionType1.get()) {
-                onMenuItemListener.onMenuItem(0);
-            } else if (repetitionType2.get()) {
                 onMenuItemListener.onMenuItem(1);
-            } else if (repetitionType3.get()) {
+            } else if (repetitionType2.get()) {
                 onMenuItemListener.onMenuItem(2);
+            } else if (repetitionType3.get()) {
+                onMenuItemListener.onMenuItem(0);
             } else {
                 ToastUtils.showShort("请选择编辑重复性日程类型");
                 return;

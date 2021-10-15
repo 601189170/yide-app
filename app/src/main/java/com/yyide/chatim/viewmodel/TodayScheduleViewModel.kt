@@ -3,6 +3,7 @@ package com.yyide.chatim.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.model.schedule.TodayListRsp
 import com.yyide.chatim.net.AppClient
@@ -50,4 +51,13 @@ class TodayScheduleViewModel : ViewModel() {
             }
         })
     }
+
+    fun getTodayScheduleList(){
+        todayList.postValue(ScheduleDaoUtil.todayList())
+    }
+
+    fun getThisWeekScheduleList(){
+        thisWeekUndoList.postValue(ScheduleDaoUtil.undoneOfWeek())
+    }
+
 }

@@ -1,7 +1,11 @@
 package com.yyide.chatim.utils
 
+import android.text.TextUtils
+import com.alibaba.fastjson.JSON
 import com.yyide.chatim.model.schedule.Repetition
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 
 /**
  *
@@ -10,6 +14,24 @@ import org.joda.time.DateTime
  * @description 计算日程重复规则
  */
 object ScheduleRepetitionRuleUtil {
+
+    /**
+     * 简化日期 去掉时分秒 如 2021-10-15 00:00:00
+     */
+    fun DateTime.simplifiedDataTime():DateTime{
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        return DateTime.parse(this.toString("yyyy-MM-dd ")+"00:00:00",dateTimeFormatter)
+    }
+    /**
+     * 返回满足重复规则的日期 yyyy-MM-dd 00:00:00
+     */
+    fun calculate(startDate: String, endDate: String, rule: MutableMap<String, Any>): List<DateTime>{
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        val startDateTime = DateTime.parse(startDate, dateTimeFormatter)
+        val endDateTime = DateTime.parse(endDate, dateTimeFormatter)
+        val calculate = calculate(startDateTime, endDateTime, rule)
+        return calculate.map { DateTime.parse(it.toString("yyyy-MM-dd ")+"00:00:00",dateTimeFormatter) }
+    }
     /**
      * 计算日程重复规则
      * 规矩重复规则，计算指定时间内的日期
@@ -17,19 +39,34 @@ object ScheduleRepetitionRuleUtil {
      * @param endDate 重复结束日期
      * @param rule 重复规则
      */
-    fun calculate(startDate: DateTime, endDate: DateTime, rule: MutableMap<String, String>): List<DateTime> {
+    fun calculate(startDate: DateTime, endDate: DateTime, rule: MutableMap<String, Any>): List<DateTime> {
         val freq = rule["freq"]
-        val interval = rule["interval"]?.toInt() ?: 1
+        val interval = rule["interval"]?.toString()?.toInt() ?: 1
         //星期 MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)
-        val byday = rule["byday"]
-        //月 1,2,....31
-        val bymonthday = rule["bymonthday"]
+        var byweekday = mutableListOf<String>()
+        var bymonthday = mutableListOf<String>()
+        if (rule["byweekday"] != null){
+            try {
+                byweekday = JSON.parseArray(rule["byweekday"]?.toString(), String::class.java)
+            } catch (e: Exception) {
+                loge("${rule["byweekday"]}解析报错：${e.localizedMessage}")
+            }
+
+        }
+        if (rule["bymonthday"] != null){
+            try {
+                bymonthday = JSON.parseArray(rule["bymonthday"]?.toString(), String::class.java)
+            } catch (e: Exception) {
+                loge("${rule["bymonthday"]}解析报错：${e.localizedMessage}")
+            }
+        }
+
         when (freq) {
             "daily","DAILY" -> {
                 return dailyRule(startDate, endDate, interval)
             }
             "weekly","WEEKLY" -> {
-                return weeklyRule(startDate, endDate, interval, byday)
+                return weeklyRule(startDate, endDate, interval, byweekday)
             }
             "monthly","MONTHLY" -> {
                 return monthlyRule(startDate, endDate, interval, bymonthday)
@@ -52,12 +89,12 @@ object ScheduleRepetitionRuleUtil {
         var nowDateTime = startDate
         repetitionDate.add(nowDateTime)
         while (true) {
-            nowDateTime = nowDateTime.plusDays(interval)
             if (nowDateTime < endDate) {
                 repetitionDate.add(nowDateTime)
             } else {
                 break
             }
+            nowDateTime = nowDateTime.plusDays(interval)
         }
         return repetitionDate
     }
@@ -66,19 +103,18 @@ object ScheduleRepetitionRuleUtil {
      * 每周规则
      * {"freq": "weekly","interval": "1","byday":"MO,TU,WE,TH,FR"}
      */
-    private fun weeklyRule(startDate: DateTime, endDate: DateTime, interval: Int, byday: String?): List<DateTime> {
+    private fun weeklyRule(startDate: DateTime, endDate: DateTime, interval: Int, byweekday: List<String>): List<DateTime> {
         val repetitionDate = mutableListOf<DateTime>()
         var nowDateTime = startDate
         while (true) {
             if (nowDateTime < endDate) {
-                if (byday.isNullOrEmpty()) {
+                if (byweekday.isNullOrEmpty()) {
                     repetitionDate.add(nowDateTime)
                 } else {
                     //有byday SU(周日),MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),
-                    val bydayList = byday.split(",") ?: listOf()
-                    val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek)
+                    val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
                     println("$nowDateTime,本周第一天,$firstDayOfWeek")
-                    bydayList.forEach {
+                    byweekday.forEach {
                         when (it) {
                             "SU" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(0)
@@ -139,7 +175,7 @@ object ScheduleRepetitionRuleUtil {
      * 每月规则
      * {"freq": "monthly","interval": "1","bymonthday":"1,2,3,5"}
      */
-    private fun monthlyRule(startDate: DateTime, endDate: DateTime, interval: Int, bymonthday: String?): List<DateTime> {
+    private fun monthlyRule(startDate: DateTime, endDate: DateTime, interval: Int, bymonthday: List<String>): List<DateTime> {
         val repetitionDate = mutableListOf<DateTime>()
         var nowDateTime = startDate
         while (true) {
@@ -148,11 +184,10 @@ object ScheduleRepetitionRuleUtil {
                     repetitionDate.add(nowDateTime)
                 } else {
                     //有byday SU(周日),MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),
-                    val bymonthdayList = bymonthday.split(",")
                     //每个月的1日
                     val firstDayOfMonth = nowDateTime.minusDays(nowDateTime.dayOfMonth - 1)
                     println("$nowDateTime,本月第一天,$firstDayOfMonth")
-                    bymonthdayList.forEach {
+                    bymonthday.forEach {
                         val dayOfMonth = firstDayOfMonth.plusDays(it.toInt() - 1)
                         if (dayOfMonth >= startDate && dayOfMonth < endDate) {
                             repetitionDate.add(dayOfMonth)
