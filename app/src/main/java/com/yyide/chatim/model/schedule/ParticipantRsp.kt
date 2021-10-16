@@ -18,6 +18,10 @@ data class ParticipantRsp(
     ) {
         data class ParticipantListBean(
             var id: String? = null,
+            var userId:String?=null,
+            var teacherId:String?=null,
+            var participantId:String?=null,
+            var userName:String?=null,
             var name: String? = null,
             var realname: String? = null,
             var type: String? = null,

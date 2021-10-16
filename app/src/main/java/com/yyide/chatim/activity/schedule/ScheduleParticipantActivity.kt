@@ -45,6 +45,7 @@ class ScheduleParticipantActivity : BaseActivity() {
         initViewPager()
         participantSharedViewModel.curStaffParticipantList.observe(this, {
             loge("当前选中参与人数据发生变化：${it.size}")
+            loge("当前选中参与人数据发生变化${JSON.toJSONString(it)}")
             scheduleParticipantBinding.clSearchResult.visibility =
                 if (it.isEmpty()) View.GONE else View.VISIBLE
             adapter.setList(it)
@@ -110,11 +111,19 @@ class ScheduleParticipantActivity : BaseActivity() {
 
     private fun initView() {
         val stringExtra = intent.getStringExtra("data")
+        loge("参与人已选中$stringExtra")
         val participantDataList = JSONArray.parseArray(
             stringExtra,
             ParticipantRsp.DataBean.ParticipantListBean::class.java
         )
         if (participantDataList != null) {
+            participantDataList.forEach {
+                it.name = it.userName
+                it.realname = it.userName
+                it.teacherId = it.userId
+                it.participantId = it.userId
+                //it.id = it.userId
+            }
             participantSharedViewModel.curStaffParticipantList.value = participantDataList
         }
         scheduleParticipantBinding.top.title.text = "添加参与人"

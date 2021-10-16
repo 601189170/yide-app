@@ -1,14 +1,17 @@
 package com.yyide.chatim.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.database.*
 import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.schedule.ScheduleData
+import com.yyide.chatim.model.schedule.ScheduleEvent
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.loge
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,7 +27,7 @@ import retrofit2.Response
 class ScheduleMangeViewModel : ViewModel() {
     private var apiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
-
+    val requestAllScheduleResult:MutableLiveData<Boolean> = MutableLiveData()
     fun getAllScheduleList() {
         apiStores.selectAllScheduleList()
             .enqueue(object : Callback<BaseResponse<List<ScheduleData>>> {
@@ -36,12 +39,17 @@ class ScheduleMangeViewModel : ViewModel() {
                     loge("onResponse $body")
                     if (body != null && body.code == 200 && body.data != null) {
                         //查询日程成功 并保存
+                        requestAllScheduleResult.postValue(true)
                         insertScheduleToDb(body.data)
+                        EventBus.getDefault().post(ScheduleEvent(ScheduleEvent.NEW_TYPE,true))
+                        return
                     }
+                    requestAllScheduleResult.postValue(false)
                 }
 
                 override fun onFailure(call: Call<BaseResponse<List<ScheduleData>>>, t: Throwable) {
                     loge("onFailure ${t.localizedMessage}")
+                    requestAllScheduleResult.postValue(false)
                 }
             })
     }

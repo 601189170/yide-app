@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -150,6 +151,7 @@ class StaffParticipantFragment : Fragment() {
         participantSharedViewModel.curStaffParticipantList.observe(
             requireActivity(),
             { participantList ->
+                loge("当前选中参与人数据发生变化${JSON.toJSONString(participantList)}")
                 loge("当前选中参与人数据发生变化：${participantList.size}")
                 staffParticipantViewModel.curParticipantList.value?.also { curList ->
                     curList.forEach {

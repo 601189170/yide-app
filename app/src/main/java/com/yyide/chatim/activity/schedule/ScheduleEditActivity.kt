@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.google.android.flexbox.FlexDirection
@@ -19,6 +20,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.ActivityScheduleEditBinding
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.model.schedule.Remind.Companion.getList
@@ -30,11 +32,13 @@ import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
+import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 
 class ScheduleEditActivity : BaseActivity() {
     lateinit var scheduleEditBinding: ActivityScheduleEditBinding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
+    private val scheduleMangeViewModel: ScheduleMangeViewModel by viewModels()
     val list = getList()
     val list2 = getList2()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -228,17 +232,33 @@ class ScheduleEditActivity : BaseActivity() {
         )
         adapter.setList(labelList)
         scheduleEditBinding.rvLabelList.adapter = adapter
-
+        //日程删除监听
         scheduleEditViewModel.deleteResult.observe(this, {
             if (it) {
+                //日程删除成功 并删除本地数据
+                val scheduleId = scheduleEditViewModel.scheduleIdLiveData.value ?: ""
+                ScheduleDaoUtil.deleteScheduleData(scheduleId)
                 finish()
             }
         })
-
+        //日程修改监听
         scheduleEditViewModel.saveOrModifyResult.observe(this, {
             if (it) {
-                finish()
+                scheduleMangeViewModel.getAllScheduleList()
+                return@observe
             }
+            ToastUtils.showShort("修改日程失败")
+            finish()
+        })
+        //获取日程监听
+        scheduleMangeViewModel.requestAllScheduleResult.observe(this, {
+            if (it) {
+                ToastUtils.showShort("修改日程成功")
+                finish()
+                return@observe
+            }
+            ToastUtils.showShort("修改日程失败")
+            finish()
         })
     }
 
@@ -353,6 +373,7 @@ class ScheduleEditActivity : BaseActivity() {
         //选择参与人
         if (requestCode == REQUEST_CODE_PARTICIPANT_SELECT && resultCode == RESULT_OK && data != null) {
             val stringExtra = data.getStringExtra("data")
+            loge("onActivityResult:$stringExtra")
             val list = JSONArray.parseArray(
                 stringExtra,
                 ParticipantRsp.DataBean.ParticipantListBean::class.java

@@ -7,12 +7,14 @@ import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.BaseRsp
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.loge
 import okhttp3.RequestBody
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -106,19 +108,57 @@ class ScheduleEditViewModel : ViewModel() {
                 val body1 = response.body()
                 loge("${body1}")
                 if (body1 != null && body1.code == 200){
-                    ToastUtils.showShort(if (modify)"日程修改成功" else "日程添加成功")
+                    if (!modify){
+                        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+                        ToastUtils.showShort("日程添加成功")
+                    }
                     saveOrModifyResult.postValue(true)
                     return
                 }
-                ToastUtils.showShort(if (modify)"日程修改失败" else "日程添加失败")
+                if (!modify){
+                    ToastUtils.showShort("日程添加失败")
+                }
+
                 saveOrModifyResult.postValue(false)
             }
 
             override fun onFailure(call: Call<BaseRsp>, t: Throwable) {
-                ToastUtils.showShort(if (modify)"日程修改失败" else "日程添加失败")
+                if (!modify){
+                    ToastUtils.showShort("日程添加失败")
+                }
                 saveOrModifyResult.postValue(false)
             }
         })
+    }
+
+    fun curScheduleData():ScheduleData{
+        val allDay = allDayLiveData.value?:false
+        val startTime = startTimeLiveData.value
+        val endTime = endTimeLiveData.value
+        val remind = remindLiveData.value?.id
+        val repetition = repetitionLiveData.value?.rule
+        val scheduleData = ScheduleData()
+        scheduleData.id = scheduleIdLiveData.value
+        if (updateTypeLiveData.value != null){
+            scheduleData.updateType = updateTypeLiveData.value
+            scheduleData.updateDate = DateUtils.switchTime(Date(),"yyyy-MM-dd")
+        }
+        val scheduleTitle = scheduleTitleLiveData.value
+        scheduleData.name = scheduleTitle?:""
+        scheduleData.status = scheduleStatusLiveData.value
+        scheduleData.type = "2"
+        scheduleData.isRepeat = if (repetition == null) "0" else "1"
+        scheduleData.rrule = repetition
+        scheduleData.remindType = if (allDay) "1" else "0"
+        scheduleData.remindTypeInfo = remind?:""
+        scheduleData.startTime = startTime?:""
+        scheduleData.endTime = endTime?:""
+        scheduleData.isAllDay = if (allDay) "1" else "0"
+        scheduleData.label = labelListLiveData.value
+        scheduleData.participant = participantList.value
+        scheduleData.siteId = siteLiveData.value?.id
+        scheduleData.remark = remarkLiveData.value
+        return scheduleData
     }
 
     /**

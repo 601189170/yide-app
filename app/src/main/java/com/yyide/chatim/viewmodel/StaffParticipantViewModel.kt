@@ -55,7 +55,15 @@ class StaffParticipantViewModel : ViewModel() {
             ) {
                 val body = response.body()
                 if (body != null && body.code == 200 && body.data != null) {
-                    responseResult.postValue(body.data)
+                    val data = body.data
+                    data.participantList?.let {
+                        it.forEach {
+                            it.userId = it.teacherId
+                            it.participantId = it.teacherId
+                            it.userName = it.name
+                        }
+                    }
+                    responseResult.postValue(data)
                 } else {
                     responseResult.postValue(null)
                 }
@@ -97,7 +105,10 @@ class StaffParticipantViewModel : ViewModel() {
                         val participantListBean =
                             ParticipantRsp.DataBean.ParticipantListBean()
                         participantListBean.id = it.id
+                        participantListBean.userId = it.id
+                        participantListBean.participantId = it.id
                         participantListBean.name = it.realname
+                        participantListBean.userName = it.realname
                         participantListBean.department = false
                         participantListBean.checked = false
                         participantList.add(participantListBean)

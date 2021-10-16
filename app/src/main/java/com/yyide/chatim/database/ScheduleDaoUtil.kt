@@ -100,6 +100,14 @@ object ScheduleDaoUtil {
     }
 
     /**
+     * 删除一条本地的日程数据
+     */
+    fun deleteScheduleData(scheduleId:String){
+        scheduleDao().deleteSchedule(scheduleId)
+        scheduleDao().deleteParticipant(scheduleId)
+        scheduleDao().deleteLabel(scheduleId)
+    }
+    /**
      * 清空数据 临时
      */
     fun clearAll() {
@@ -107,5 +115,13 @@ object ScheduleDaoUtil {
         scheduleDao().deleteAllParticipant()
         scheduleDao().deleteAllLabel()
     }
+
+//    /**
+//     * 更新日程数据
+//     */
+//    fun updateScheduleData(scheduleData: ScheduleData){
+//        val scheduleWithParticipantAndLabel = scheduleData.scheduleDataToScheduleWithParticipantAndLabel()
+//        scheduleDao().updateSchedule(scheduleWithParticipantAndLabel)
+//    }
 
 }

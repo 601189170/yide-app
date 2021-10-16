@@ -28,6 +28,9 @@ import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpaceItemDecoration
 import com.yyide.chatim.viewmodel.TodayScheduleViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import kotlin.math.log
 
 /**
@@ -56,8 +59,24 @@ class ScheduleTodayFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        EventBus.getDefault().register(this)
         initData()
         initView()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun event(event: ScheduleEvent){
+        loge("$event")
+        if (event.type == ScheduleEvent.NEW_TYPE) {
+            if (event.result){
+                //日程新增成功
+                updateData()
+            }
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -115,6 +134,10 @@ class ScheduleTodayFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         ///todayScheduleViewModel.getThisWeekAndTodayList()
+        updateData()
+    }
+
+    private fun updateData() {
         todayScheduleViewModel.getThisWeekScheduleList()
         todayScheduleViewModel.getTodayScheduleList()
     }

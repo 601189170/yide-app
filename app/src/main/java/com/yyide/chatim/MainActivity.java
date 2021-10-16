@@ -143,7 +143,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private boolean isShow = false;
     private long firstTime = 0;
     private CallModel mCallModel;
-
+    private ScheduleMangeViewModel scheduleMangeViewModel;
     @Override
     public int getContentViewID() {
         return R.layout.activity_main;
@@ -185,7 +185,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         mvpPresenter.getWeeklyDate();
 
         //请求日程数据 并保存本地
-        final ScheduleMangeViewModel scheduleMangeViewModel = new ViewModelProvider(this).get(ScheduleMangeViewModel.class);
+        scheduleMangeViewModel = new ViewModelProvider(this).get(ScheduleMangeViewModel.class);
         scheduleMangeViewModel.getAllScheduleList();
     }
 
@@ -307,6 +307,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         } else if (BaseConstant.TYPE_NOTICE_NUM.equals(messageEvent.getCode())) {
             noticeCount = messageEvent.getCount();
             setMessageCount(todoCount + messageCount + noticeCount);
+        }else if(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA.equals(messageEvent.getCode())){
+            //更新日程数据并存本地
+            if (scheduleMangeViewModel != null) {
+                scheduleMangeViewModel.getAllScheduleList();
+            }
         }
     }
 

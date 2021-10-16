@@ -56,6 +56,11 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         mcvCalendar = view.findViewById(R.id.mcvCalendar)
         initData()
         initView()
+        //计算当前的年月日
+        mCurrentSelectYear = DateTime.now().year
+        mCurrentSelectMonth = DateTime.now().monthOfYear-1
+        mCurrentSelectDay = DateTime.now().dayOfMonth
+        loge("当前日期：$mCurrentSelectYear-$mCurrentSelectMonth-$mCurrentSelectDay")
         scheduleMonthViewModel.monthDataList.observe(requireActivity(),{
             loge("keys ${it.keys.size}")
             it.keys.forEach {dateTime->
