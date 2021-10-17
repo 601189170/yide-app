@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -14,8 +14,11 @@ import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentTeacherHomeworkWeeklyBinding
+import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
 import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.GetUserSchoolRsp
+import com.yyide.chatim.model.SchoolAttendance
+import com.yyide.chatim.model.SchoolHomeWork
 import com.yyide.chatim.model.WeeklyDateBean
 import com.yyide.chatim.utils.DateUtils
 
@@ -31,8 +34,12 @@ class TeacherHomeworkFragment : BaseFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() =
-            TeacherHomeworkFragment().apply {}
+        fun newInstance(dateTime: WeeklyDateBean.DataBean.TimesBean) =
+            TeacherHomeworkFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("item", dateTime)
+                }
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,60 +76,69 @@ class TeacherHomeworkFragment : BaseFragment() {
                 }
             }
         }
+
         initClass()
         initDate()
+        setData()
     }
 
-    private var classId = ""
-    private var teacherId = ""
+    private fun setData() {
+        viewBinding.workRecyclerview.layoutManager = GridLayoutManager(activity, 4)
+        viewBinding.workRecyclerview.adapter = workAdapter
+        val datas1 = mutableListOf<SchoolAttendance>()
+        datas1.add(SchoolAttendance("总作业", 50.0))
+        datas1.add(SchoolAttendance("上周作业", 60.0))
+        datas1.add(SchoolAttendance("每天作业", 3.5))
+        datas1.add(SchoolAttendance("其他反馈", 30.0))
+        workAdapter.setList(datas1)
+    }
+
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
-    private fun requestTeacher(dateTime: WeeklyDateBean.DataBean.TimesBean?) {
-        if (dateTime != null) {
-            //loading()
-            //viewModel.requestTeacherWeekly(classId, teacherId, dateTime.startTime, dateTime.endTime)
-        }
-    }
-
+    private var timePosition = -1
     private fun initDate() {
         //获取日期时间
-        dateTime = WeeklyUtil.getDateTime()!!
-        if (dateTime != null) {
-            viewBinding.tvTime.text = getString(
-                R.string.startTime_endTime, DateUtils.formatTime(
-                    dateTime.startTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                ), DateUtils.formatTime(
-                    dateTime.endTime,
-                    "yyyy-MM-dd HH:mm:ss",
-                    "MM/dd"
-                )
-            )
+        arguments?.apply {
+            dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
         }
-        requestTeacher(dateTime)
         val dateLists = WeeklyUtil.getDateTimes()
-        val adapterDate = DateAdapter()
         if (dateLists.isNotEmpty()) {
-            adapterDate.setList(dateLists)
-        }
-        viewBinding.tvTime.setOnClickListener {
-            val attendancePop = AttendancePop(activity, adapterDate, "请选择时间")
-            attendancePop.setOnSelectListener { index: Int ->
-//                indexDate = index
-                viewBinding.tvTime.text = getString(
-                    R.string.startTime_endTime, DateUtils.formatTime(
-                        dateLists[index].startTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    ), DateUtils.formatTime(
-                        dateLists[index].endTime,
-                        "yyyy-MM-dd HH:mm:ss",
-                        "MM/dd"
-                    )
-                )
-                requestTeacher(dateTime)
+            timePosition = dateLists.size - 1
+            dateTime = dateLists[dateLists.size - 1]
+            request(dateTime)
+            viewBinding.tvStartTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition > 0) {
+                        timePosition -= 1
+                        dateTime = dateLists[timePosition]
+                        request(dateTime)
+                    }
+                }
+            }
+            viewBinding.tvEndTime.setOnClickListener {
+                if (dateLists.isNotEmpty()) {
+                    if (timePosition < (dateLists.size - 1)) {
+                        timePosition += 1
+                        dateTime = dateLists[timePosition]
+                        request(dateTime)
+                    }
+                }
             }
         }
+    }
+
+    private fun request(dateTime: WeeklyDateBean.DataBean.TimesBean) {
+        viewBinding.tvStartTime.text = DateUtils.formatTime(
+            dateTime.startTime,
+            "yyyy-MM-dd HH:mm:ss",
+            "MM/dd"
+        )
+        viewBinding.tvEndTime.text = DateUtils.formatTime(
+            dateTime.endTime,
+            "yyyy-MM-dd HH:mm:ss",
+            "MM/dd"
+        )
+        //loading()
+        //viewModel.requestSchoolWeekly(dateTime.startTime, dateTime.endTime)
     }
 
     private fun initClass() {
@@ -176,4 +192,17 @@ class TeacherHomeworkFragment : BaseFragment() {
             }
         }
     }
+
+    private val workAdapter =
+        object :
+            BaseQuickAdapter<SchoolAttendance, BaseViewHolder>(R.layout.item_weekly_attendance) {
+            override fun convert(holder: BaseViewHolder, item: SchoolAttendance) {
+                val viewBind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
+                viewBind.tvAttendance.text = "${item.value.toInt()}"
+                viewBind.tvEventName.text = item.name
+                viewBind.viewLine.visibility =
+                    if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE
+            }
+
+        }
 }

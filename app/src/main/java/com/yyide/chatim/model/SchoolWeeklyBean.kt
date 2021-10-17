@@ -27,7 +27,11 @@ data class SchoolHomeSummary(
     var work: String
 )
 
-class SchoolHomeWork
+class SchoolHomeWork(
+    @JSONField(name = "name")
+    var name: String, @JSONField(name = "value")
+    var value: String
+)
 
 data class SchoolHomeStudentAttend(
     @JSONField(name = "name")

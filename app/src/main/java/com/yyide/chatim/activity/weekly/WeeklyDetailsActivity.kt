@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.details.*
-import com.yyide.chatim.activity.weekly.home.SchoolWeeklyFragment
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityWeeklyDetailsBinding
 import com.yyide.chatim.model.WeeklyDateBean
@@ -77,7 +76,7 @@ class WeeklyDetailsActivity : BaseActivity() {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    SchoolHomeworkFragment.newInstance()
+                    SchoolHomeworkFragment.newInstance(dateTime)
                 ).commit()
             }
             HEAD_TEACHER_ATTENDANCE_TYPE -> {
@@ -91,7 +90,7 @@ class WeeklyDetailsActivity : BaseActivity() {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherHomeworkFragment.newInstance()
+                    TeacherHomeworkFragment.newInstance(dateTime)
                 ).commit()
             }
             TEACHER_ATTENDANCE_TYPE -> {
@@ -105,7 +104,7 @@ class WeeklyDetailsActivity : BaseActivity() {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherHomeworkFragment.newInstance()
+                    TeacherHomeworkFragment.newInstance(dateTime)
                 ).commit()
             }
             PARENT_ATTENDANCE_TYPE -> {
@@ -119,7 +118,7 @@ class WeeklyDetailsActivity : BaseActivity() {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    SchoolWeeklyFragment.newInstance()
+                    TeacherHomeworkFragment.newInstance(dateTime)
                 ).commit()
             }
         }

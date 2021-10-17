@@ -294,5 +294,4 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         }
     }
 
-
 }

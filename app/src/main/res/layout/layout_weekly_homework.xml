@@ -41,15 +41,14 @@
                 android:layout_marginTop="@dimen/dp_44"
                 android:layout_marginEnd="@dimen/dp_12"
                 android:background="@mipmap/icon_weekly_teacher_charge_bg"
-                android:paddingStart="@dimen/dp_12"
                 android:paddingTop="@dimen/dp_15"
-                android:paddingEnd="@dimen/dp_12"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/tv_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_12"
                     android:text="本周统计"
                     android:textColor="#ffffffff"
                     android:textSize="18sp"
@@ -57,23 +56,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/attendance_recyclerview"
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/announRoll"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_desc"
-                    app:spanCount="3"
-                    tools:listitem="@layout/item_weekly_attendance" />
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/hot_recyclerview"
                     android:layout_width="wrap_content"
                     android:layout_height="10dp"
-                    android:layout_marginTop="@dimen/dp_2"
-                    app:layout_constraintEnd_toEndOf="@+id/attendance_recyclerview"
-                    app:layout_constraintStart_toStartOf="@+id/attendance_recyclerview"
-                    app:layout_constraintTop_toBottomOf="@+id/attendance_recyclerview"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintEnd_toEndOf="@+id/announRoll"
+                    app:layout_constraintStart_toStartOf="@+id/announRoll"
+                    app:layout_constraintTop_toBottomOf="@+id/announRoll"
                     tools:listitem="@layout/item_hot" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
