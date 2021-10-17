@@ -7,10 +7,11 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.model.schedule.Schedule
+import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
 
-class ScheduleAdapter(data: List<Schedule>) :
-        BaseMultiItemQuickAdapter<Schedule, BaseViewHolder>() {
+class ScheduleAdapter(data: List<ScheduleData>) :
+        BaseMultiItemQuickAdapter<ScheduleData, BaseViewHolder>() {
         init {
             super.setList(data)
             addItemType(Schedule.TYPE_EXPIRED_COMPLETED, R.layout.schedule_item_expired_completed)
@@ -28,81 +29,89 @@ class ScheduleAdapter(data: List<Schedule>) :
             )
         }
 
-        override fun convert(holder: BaseViewHolder, item: Schedule) {
-            when (holder.itemViewType) {
-                Schedule.TYPE_EXPIRED_COMPLETED -> {
-                    holder.setText(R.id.tv_schedule_name, item.title)
-                    holder.setText(
-                        R.id.tv_schedule_time_interval,
-                        DateUtils.formatTime(
-                            item.startDate,
-                            "",
-                            "HH:mm"
-                        ) + "-" + DateUtils.formatTime(item.endDate, "", "HH:mm")
-                    )
-                    loadImage(
-                        item.type,
-                        DateUtils.dateExpired(item.endDate),
-                        holder.getView(R.id.iv_schedule_type_img)
-                    )
-                }
-                Schedule.TYPE_EXPIRED_NOT_COMPLETED -> {
-                    holder.setText(R.id.tv_schedule_name, item.title)
-                    holder.setText(
-                        R.id.tv_schedule_time_interval,
-                        DateUtils.formatTime(
-                            item.startDate,
-                            "",
-                            "HH:mm"
-                        ) + "-" + DateUtils.formatTime(item.endDate, "", "HH:mm")
-                    )
-                    loadImage(
-                        item.type,
-                        DateUtils.dateExpired(item.endDate),
-                        holder.getView(R.id.iv_schedule_type_img)
-                    )
-                }
-                Schedule.TYPE_UNEXPIRED_COMPLETED -> {
-                    holder.setText(R.id.tv_schedule_name, item.title)
-                    holder.setText(
-                        R.id.tv_schedule_time_interval,
-                        DateUtils.formatTime(
-                            item.startDate,
-                            "",
-                            "HH:mm"
-                        ) + "-" + DateUtils.formatTime(item.endDate, "", "HH:mm")
-                    )
-                    loadImage(
-                        item.type,
-                        DateUtils.dateExpired(item.endDate),
-                        holder.getView(R.id.iv_schedule_type_img)
-                    )
-                }
-                Schedule.TYPE_UNEXPIRED_NOT_COMPLETED -> {
-                    holder.setText(R.id.tv_schedule_name, item.title)
-                    holder.setText(
-                        R.id.tv_schedule_time_interval,
-                        DateUtils.formatTime(
-                            item.startDate,
-                            "",
-                            "HH:mm"
-                        ) + "-" + DateUtils.formatTime(item.endDate, "", "HH:mm")
-                    )
-                    loadImage(
-                        item.type,
-                        DateUtils.dateExpired(item.endDate),
-                        holder.getView(R.id.iv_schedule_type_img)
-                    )
-                }
-                else -> {
-                }
+    override fun convert(holder: BaseViewHolder, item: ScheduleData) {
+        when (holder.itemViewType) {
+            Schedule.TYPE_EXPIRED_COMPLETED -> {
+                holder.setText(R.id.tv_schedule_name, item.name)
+                val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
+                holder.setText(
+                    R.id.tv_schedule_time_interval,
+                    "$formatTime " +
+                            DateUtils.formatTime(
+                                item.startTime,
+                                "",
+                                "HH:mm"
+                            ) + "-" + DateUtils.formatTime(item.endTime, "", "HH:mm")
+                )
+                loadImage(
+                    item.type.toInt(),
+                    DateUtils.dateExpired(item.endTime),
+                    holder.getView(R.id.iv_schedule_type_img)
+                )
             }
-
-            holder.itemView.setOnClickListener {
-                val intent = Intent(context,ScheduleEditActivity::class.java)
-                context.startActivity(intent)
+            Schedule.TYPE_EXPIRED_NOT_COMPLETED -> {
+                holder.setText(R.id.tv_schedule_name, item.name)
+                val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
+                holder.setText(
+                    R.id.tv_schedule_time_interval,
+                    "$formatTime " +
+                            DateUtils.formatTime(
+                                item.startTime,
+                                "",
+                                "HH:mm"
+                            ) + "-" + DateUtils.formatTime(item.endTime, "", "HH:mm")
+                )
+                loadImage(
+                    item.type.toInt(),
+                    DateUtils.dateExpired(item.endTime),
+                    holder.getView(R.id.iv_schedule_type_img)
+                )
+            }
+            Schedule.TYPE_UNEXPIRED_COMPLETED -> {
+                holder.setText(R.id.tv_schedule_name, item.name)
+                val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
+                holder.setText(
+                    R.id.tv_schedule_time_interval,
+                    "$formatTime " +
+                            DateUtils.formatTime(
+                                item.startTime,
+                                "",
+                                "HH:mm"
+                            ) + "-" + DateUtils.formatTime(item.endTime, "", "HH:mm")
+                )
+                loadImage(
+                    item.type.toInt(),
+                    DateUtils.dateExpired(item.endTime),
+                    holder.getView(R.id.iv_schedule_type_img)
+                )
+            }
+            Schedule.TYPE_UNEXPIRED_NOT_COMPLETED -> {
+                holder.setText(R.id.tv_schedule_name, item.name)
+                val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
+                holder.setText(
+                    R.id.tv_schedule_time_interval,
+                    "$formatTime " +
+                            DateUtils.formatTime(
+                                item.startTime,
+                                "",
+                                "HH:mm"
+                            ) + "-" + DateUtils.formatTime(item.startTime, "", "HH:mm")
+                )
+                loadImage(
+                    item.type.toInt(),
+                    DateUtils.dateExpired(item.endTime),
+                    holder.getView(R.id.iv_schedule_type_img)
+                )
+            }
+            else -> {
             }
         }
+
+//        holder.itemView.setOnClickListener {
+//            val intent = Intent(context, ScheduleEditActivity::class.java)
+//            context.startActivity(intent)
+//        }
+    }
 
         private fun loadImage(type: Int, expired: Boolean, imageView: ImageView) {
             when (type) {

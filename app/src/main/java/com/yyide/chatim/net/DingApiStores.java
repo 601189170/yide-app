@@ -857,6 +857,14 @@ public interface DingApiStores {
     Call<BaseResponse<List<ScheduleData>>> selectAllScheduleList();
 
     /**
+     * 更新日程状态
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/changeScheduleState
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/changeScheduleState")
+    Call<BaseRsp> changeScheduleState(@Body RequestBody requestBody);
+
+    /**
      * 获取周报描述
      *
      * @return

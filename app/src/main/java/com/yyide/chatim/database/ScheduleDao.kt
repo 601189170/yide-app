@@ -23,7 +23,11 @@ interface ScheduleDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     //fun insert(scheduleWithParticipantAndLabel: ScheduleWithParticipantAndLabel)
-    fun insert(schedule: ScheduleBean, participantList: List<ParticipantList>, labelList: List<LabelList>)
+    fun insert(
+        schedule: ScheduleBean,
+        participantList: List<ParticipantList>,
+        labelList: List<LabelList>
+    )
 
     @Query("DELETE FROM schedule ")
     fun deleteAllSchedule()
@@ -57,6 +61,11 @@ interface ScheduleDao {
 
     @Query("delete from label where id=:scheduleCreatorId")
     fun deleteLabel(scheduleCreatorId: String)
+
+    //@Query("UPDATE face SET msg = :msg, face_token = :faceToken, feature = :feature WHERE face_id = :faceId")
+    //update schedule set status=4 where id = '1447918736553639938'
+    @Query("update schedule set status=:status where id = :id")
+    fun changeScheduleState(id: String, status: String)
 
 //    @Transaction
 //    @Update

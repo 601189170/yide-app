@@ -5,6 +5,7 @@ import com.yyide.chatim.model.schedule.DayOfMonth
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
+import com.yyide.chatim.utils.loge
 import org.joda.time.DateTime
 
 /**
@@ -33,6 +34,7 @@ object ScheduleDaoUtil {
         scheduleDataList.forEach {
             val repetitionDate =
                 ScheduleRepetitionRuleUtil.calculate(it.startTime, finallyTime, it.rrule)
+            loge("${it.name} repetitionDate:$repetitionDate")
             if (repetitionDate.contains(DateTime.now().simplifiedDataTime())) {
                 listAllSchedule.add(it)
             }
@@ -114,6 +116,13 @@ object ScheduleDaoUtil {
         scheduleDao().deleteAllSchedule()
         scheduleDao().deleteAllParticipant()
         scheduleDao().deleteAllLabel()
+    }
+
+    /**
+     * 修改日程完成状态
+     */
+    fun changeScheduleState(id: String, status: String){
+        scheduleDao().changeScheduleState(id, status)
     }
 
 //    /**

@@ -55,6 +55,7 @@ class ScheduleEditViewModel : ViewModel() {
     val updateTypeLiveData = MutableLiveData<String>()
     val saveOrModifyResult = MutableLiveData<Boolean>()
     val deleteResult = MutableLiveData<Boolean>()
+    val changeStatusResult = MutableLiveData<Boolean>()
     private var dingApiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
     /**
@@ -180,6 +181,28 @@ class ScheduleEditViewModel : ViewModel() {
             override fun onFailure(call: Call<BaseRsp>, t: Throwable) {
                 ToastUtils.showShort("删除日程失败")
                 deleteResult.postValue(false)
+            }
+        })
+    }
+
+    /**
+     * 修改日程状态
+     */
+    fun changeScheduleState(scheduleData: ScheduleData){
+        val toJSONString = JSON.toJSONString(scheduleData)
+        val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
+        dingApiStores.changeScheduleState(requestBody).enqueue(object :Callback<BaseRsp>{
+            override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
+                val body = response.body()
+                if (body != null && body.code == 200){
+                    changeStatusResult.postValue(true)
+                    return
+                }
+                changeStatusResult.postValue(false)
+            }
+
+            override fun onFailure(call: Call<BaseRsp>, t: Throwable) {
+                changeStatusResult.postValue(false)
             }
         })
     }

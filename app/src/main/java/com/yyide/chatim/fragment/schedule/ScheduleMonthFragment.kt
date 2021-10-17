@@ -8,23 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
-import com.alibaba.fastjson.JSON
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.month.MonthCalendarView
-import com.yide.calendar.schedule.ScheduleLayout
 import com.yyide.chatim.R
 import com.yyide.chatim.databinding.FragmentScheduleMonthBinding
-import com.yyide.chatim.model.schedule.Label
-import com.yyide.chatim.model.schedule.Schedule
-import com.yyide.chatim.model.schedule.ScheduleInner
-import com.yyide.chatim.model.schedule.ScheduleOuter
+import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.viewmodel.ScheduleMonthViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.joda.time.DateTime
 
 /**
@@ -53,6 +51,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loge("onViewCreated")
+        EventBus.getDefault().register(this)
         mcvCalendar = view.findViewById(R.id.mcvCalendar)
         initData()
         initView()
@@ -73,6 +72,29 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         scheduleMonthViewModel.scheduleList(DateTime.now())
         //addTaskHint(HintCircle(5, 3))
         //addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun event(event: ScheduleEvent){
+        loge("$event")
+        if (event.type == ScheduleEvent.NEW_TYPE) {
+            if (event.result){
+                //日程新增成功
+                updateData()
+            }
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    private fun updateData(){
+        //计算当前的年月日
+        mCurrentSelectYear = DateTime.now().year
+        mCurrentSelectMonth = DateTime.now().monthOfYear-1
+        mCurrentSelectDay = DateTime.now().dayOfMonth
+        scheduleMonthViewModel.scheduleList(DateTime.now())
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

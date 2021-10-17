@@ -66,6 +66,7 @@
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_24"
         android:text="阅读"
+        android:singleLine="true"
         android:textColor="#ffffffff"
         android:textSize="14sp"
         android:background="#BF57DA"

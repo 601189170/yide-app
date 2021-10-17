@@ -1,5 +1,6 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +9,12 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.ToastUtils
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.schedule.CalendarComposeLayout
 import com.yide.calendar.schedule.ScheduleLayout
@@ -18,12 +22,19 @@ import com.yide.calendar.schedule.ScheduleRecyclerView
 import com.yyide.chatim.R
 import com.yyide.chatim.adapter.schedule.ScheduleListOuterAdapter
 import com.yyide.chatim.databinding.FragmentScheduleListBinding
-import com.yyide.chatim.model.schedule.Label
-import com.yyide.chatim.model.schedule.Schedule
-import com.yyide.chatim.model.schedule.ScheduleInner
-import com.yyide.chatim.model.schedule.ScheduleOuter
+import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
+import com.yyide.chatim.viewmodel.ScheduleListViewViewModel
+import org.joda.time.DateTime
+import com.yyide.chatim.MainActivity
+import com.yyide.chatim.activity.schedule.ScheduleEditActivity
+import com.yyide.chatim.adapter.schedule.ListViewEvent
+import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.viewmodel.ScheduleEditViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  *
@@ -33,11 +44,19 @@ import com.yyide.chatim.view.DialogUtil
  */
 class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     lateinit var fragmentScheduleListBinding: FragmentScheduleListBinding
-    //private var slSchedule: ScheduleLayout? = null
-    private var rvScheduleList: ScheduleRecyclerView? = null
+    private val scheduleListViewViewModel: ScheduleListViewViewModel by viewModels()
+    private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
+    private lateinit var rvScheduleList: ScheduleRecyclerView
     private lateinit var calendarComposeLayout: CalendarComposeLayout
-    private var list = mutableListOf<ScheduleOuter>()
-    private var labelList = mutableListOf<Label>()
+    private var list = mutableListOf<MonthViewScheduleData>()
+    private var first: Boolean = true
+    private lateinit var adapterOuter: ScheduleListOuterAdapter
+    private lateinit var curBottomDateTime: DateTime
+    private lateinit var curTopDateTime: DateTime
+
+    //当前滚动方向是 0没滚动 1 向下滚动底部 -1向上滚动打顶部
+    private var scrollOrientation: Int = 0
+    private var curModifySchedule: ScheduleData? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,27 +68,80 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        EventBus.getDefault().register(this)
         calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
         rvScheduleList = calendarComposeLayout.rvScheduleList
         calendarComposeLayout.setOnCalendarClickListener(this)
         initScheduleList()
+        initData()
         fragmentScheduleListBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context,this)
+            DialogUtil.showAddScheduleDialog(context, this)
             //DialogUtil.showAddLabelDialog(context, labelList)
         }
+
+        scheduleListViewViewModel.listViewData.observe(requireActivity(), {
+            if (it.isEmpty()) {
+                return@observe
+            }
+            if (scrollOrientation == -1) {
+                list.addAll(0, it)
+            } else {
+                list.addAll(it)
+            }
+            adapterOuter.setList(list)
+        })
+        //删除监听
+        scheduleEditViewModel.deleteResult.observe(requireActivity(), {
+            if (it) {
+                ScheduleDaoUtil.deleteScheduleData(curModifySchedule?.id ?: "")
+                updateDate()
+            }
+        })
+        //修改日程状态监听
+        scheduleEditViewModel.changeStatusResult.observe(requireActivity(), {
+            if (it) {
+                ToastUtils.showShort("日程修改成功")
+                ScheduleDaoUtil.changeScheduleState(
+                    curModifySchedule?.id ?: "","1"
+                )
+                updateDate()
+            } else {
+                ToastUtils.showShort("日程修改失败")
+            }
+        })
     }
 
     private fun initScheduleList() {
-        initData()
         val manager = LinearLayoutManager(activity)
         manager.setOrientation(LinearLayoutManager.VERTICAL)
-        rvScheduleList?.layoutManager = manager
+        rvScheduleList.layoutManager = manager
         val itemAnimator = DefaultItemAnimator()
         itemAnimator.supportsChangeAnimations = false
-        rvScheduleList?.setItemAnimator(itemAnimator)
-        val adapterOuter = ScheduleListOuterAdapter()
-        adapterOuter.setList(list)
-        rvScheduleList?.adapter = adapterOuter
+        rvScheduleList.setItemAnimator(itemAnimator)
+        adapterOuter = ScheduleListOuterAdapter()
+        rvScheduleList.adapter = adapterOuter
+        adapterOuter.addListViewEvent(object : ListViewEvent {
+            override fun deleteItem(scheduleData: ScheduleData) {
+                loge("删除日程 $scheduleData")
+                curModifySchedule = scheduleData
+                scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+            }
+
+            override fun clickItem(scheduleData: ScheduleData) {
+                loge("点击日程 $scheduleData")
+                curModifySchedule = scheduleData
+                val intent = Intent(context, ScheduleEditActivity::class.java)
+                intent.putExtra("data", JSON.toJSONString(scheduleData))
+                startActivity(intent)
+            }
+
+            override fun modifyItem(scheduleData: ScheduleData) {
+                loge("修改日程状态 $scheduleData")
+                curModifySchedule = scheduleData
+                scheduleEditViewModel.changeScheduleState(scheduleData)
+            }
+
+        })
     }
 
     override fun onClickDate(year: Int, month: Int, day: Int) {
@@ -80,70 +152,53 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         loge("onClickDate year=$year,month=$month,day=$day")
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun event(event: ScheduleEvent){
+        loge("$event")
+        if (event.type == ScheduleEvent.NEW_TYPE) {
+            if (event.result){
+                //日程新增成功
+                updateDate()
+            }
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
     private fun initData() {
-        val scheduleInnerList = mutableListOf<ScheduleInner>()
-        val scheduleList = mutableListOf<Schedule>()
-        val schedule1 = Schedule(
-            "开学提醒", "开学提醒内容", 1,
-            "2021-08-11 09:10:00",
-            "2021-08-11 14:15:00",
-            0
-        )
-        scheduleList.add(schedule1)
-        val schedule2 = Schedule(
-            "开学提醒2", "开学提醒内容", 2,
-            "2021-08-11 16:10:00",
-            "2021-08-11 20:10:00",
-            1
-        )
-        scheduleList.add(schedule2)
-        val scheduleInner1 = ScheduleInner("2021-08-11 00:00:00", "周五", scheduleList)
-        scheduleInnerList.add(scheduleInner1)
+        updateDate()
+        //监听列表滚动
+        rvScheduleList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                // canScrollVertically(1) 为false 的时候滑动到底部了
+                if (!rvScheduleList.canScrollVertically(1)) {
+                    loge("滑动到底部了")
+                    scrollOrientation = 1
+                    curBottomDateTime = curBottomDateTime.plusMonths(1)
+                    scheduleListViewViewModel.scheduleList(curBottomDateTime)
+                }
+                // canScrollVertically(-1) 为false 的时候滑动到顶部了
+                if (!rvScheduleList.canScrollVertically(-1)) {
+                    if (first) {
+                        first = false
+                        return
+                    }
+                    loge("滑动到顶部了")
+                    //日期减一请求数据
+                    scrollOrientation = -1
+                    curTopDateTime = curTopDateTime.minusMonths(1)
+                    scheduleListViewViewModel.scheduleList(curTopDateTime)
+                }
+            }
+        })
+    }
 
-        val scheduleList2 = mutableListOf<Schedule>()
-        val schedule3 = Schedule(
-            "开学提醒3", "开学提醒内容", 3,
-            "2021-08-12 09:10:00",
-            "2021-08-12 14:15:00",
-            1
-        )
-        scheduleList2.add(schedule3)
-        val scheduleInner2 = ScheduleInner("2021-08-12 00:00:00", "周五", scheduleList2)
-        scheduleInnerList.add(scheduleInner2)
-
-        val scheduleOuter = ScheduleOuter("2021-08-12 00:00:00", scheduleInnerList)
-        list.add(scheduleOuter)
-        //下一个月的
-        val scheduleInnerList1 = mutableListOf<ScheduleInner>()
-        val scheduleList3 = mutableListOf<Schedule>()
-        val schedule13 = Schedule(
-            "开学提醒", "开学提醒内容", 1,
-            "2021-09-08 09:10:00",
-            "2021-09-08 14:15:00",
-            1
-        )
-        scheduleList3.add(schedule13)
-        val scheduleInner13 = ScheduleInner("2021-09-08 00:00:00", "周一", scheduleList3)
-        scheduleInnerList1.add(scheduleInner13)
-
-        val scheduleList23 = mutableListOf<Schedule>()
-        val schedule33 = Schedule(
-            "开学提醒", "开学提醒内容", 4,
-            "2021-09-11 09:10:00",
-            "2021-09-11 14:15:00",
-            0
-        )
-        scheduleList23.add(schedule33)
-        val scheduleInner23 = ScheduleInner("2021-09-11 00:00:00", "周六", scheduleList23)
-        scheduleInnerList1.add(scheduleInner23)
-        val scheduleOuter2 = ScheduleOuter("2021-09-11 00:00:00", scheduleInnerList1)
-        list.add(scheduleOuter2)
-        loge("initData: ${JSON.toJSON(list)}")
-
-        labelList.add(Label("工作", "#19ADF8", false))
-        labelList.add(Label("阅读", "#56D72C", false))
-        labelList.add(Label("睡觉", "#FD8208", false))
-        labelList.add(Label("吃饭", "#56D72C", false))
-        labelList.add(Label("嗨皮", "#FD8208", false))
+    private fun updateDate() {
+        list.clear()
+        curTopDateTime = DateTime.now()
+        curBottomDateTime = DateTime.now()
+        scheduleListViewViewModel.scheduleList(DateTime.now())
     }
 }

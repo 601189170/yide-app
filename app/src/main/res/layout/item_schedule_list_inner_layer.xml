@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_title_day"
         android:layout_marginTop="@dimen/dp_10"
         />
-    <androidx.recyclerview.widget.RecyclerView
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
         android:id="@+id/rv_schedule_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
