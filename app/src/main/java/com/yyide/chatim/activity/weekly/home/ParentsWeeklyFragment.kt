@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -26,6 +27,7 @@ import com.yyide.chatim.activity.weekly.home.viewmodel.TeacherViewModel
 import com.yyide.chatim.adapter.AttendanceAdapter
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentParentsWeeklyBinding
+import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
 import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
@@ -107,6 +109,16 @@ open class ParentsWeeklyFragment : BaseFragment() {
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
+        }
+
+        viewBinding.homeworkStatistical.cardView.setOnClickListener {
+            WeeklyDetailsActivity.jump(
+                mActivity,
+                WeeklyDetailsActivity.PARENT_HOMEWORK_TYPE,
+                "",
+                "",
+                dateTime
+            )
         }
         //作业统计
         initStatistical()
@@ -323,6 +335,16 @@ open class ParentsWeeklyFragment : BaseFragment() {
     )
 
     private fun initStatistical() {
+        //最多作业条目
+        viewBinding.homeworkStatistical.statisticsRecyclerview.layoutManager =
+            GridLayoutManager(activity, 3)
+        viewBinding.homeworkStatistical.statisticsRecyclerview.adapter = mostAdapter
+        val datas = mutableListOf<SchoolHomeWork>()
+        datas.add(SchoolHomeWork("50", "本周总作业数"))
+        datas.add(SchoolHomeWork("3.5", "作业最多科目"))
+        datas.add(SchoolHomeWork("30", "作业最少科目"))
+        mostAdapter.setList(datas)
+
         val piechart: PieChart = viewBinding.homeworkStatistical.piechart
         piechart.setTouchEnabled(false)
         InitPieChart.InitPieChart(activity, piechart)
@@ -405,4 +427,17 @@ open class ParentsWeeklyFragment : BaseFragment() {
             }
         }
     }
+
+    private val mostAdapter =
+        object :
+            BaseQuickAdapter<SchoolHomeWork, BaseViewHolder>(R.layout.item_weekly_attendance) {
+            override fun convert(holder: BaseViewHolder, item: SchoolHomeWork) {
+                val viewBind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
+                viewBind.tvEventName.text = item.value
+                viewBind.tvAttendance.text = item.name
+                viewBind.viewLine.visibility =
+                    if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE
+            }
+
+        }
 }

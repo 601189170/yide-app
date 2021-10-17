@@ -103,6 +103,7 @@ class TeacherWeeklyFragment : BaseFragment() {
 
         initClassMenu()
         initDate()
+        initHomework()
     }
 
     private var classId = ""
@@ -201,6 +202,60 @@ class TeacherWeeklyFragment : BaseFragment() {
         }
     }
 
+    private fun initHomework() {
+        val datas = mutableListOf<WeeklyTeacherClassAttendance>()
+        datas.add(WeeklyTeacherClassAttendance("本班总作业数", "50份"))
+        datas.add(WeeklyTeacherClassAttendance("上周总作业数", "60"))
+        datas.add(WeeklyTeacherClassAttendance("作业最多科目", "语文"))
+        datas.add(WeeklyTeacherClassAttendance("作业最少科目", "化学"))
+        datas.add(WeeklyTeacherClassAttendance("本班总作业数", "50份"))
+        datas.add(WeeklyTeacherClassAttendance("本班总作业数", "50份"))
+        viewBinding.homework.root.visibility = View.VISIBLE
+        //设置班级考勤
+        viewBinding.homework.hotRecyclerview.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        viewBinding.homework.hotRecyclerview.adapter = adapterHot2
+//        if (datas.size < spanCount) {
+//            spanCount = datas.size
+//        }
+        val splitList = splitList(datas, 4)
+        val hotList = mutableListOf<Int>()
+        if (splitList != null) {
+            for (item in splitList.indices) {
+                hotList.add(item)
+            }
+        }
+        if (hotList != null && hotList.size > 1) {
+            adapterHot2.setList(hotList)
+        }
+        if (splitList != null && splitList.isNotEmpty()) {
+//            initHotScroll(splitList)
+            val viewList = mutableListOf<View>()
+            splitList.forEachIndexed { index, schoolAttendance ->
+                viewList.add(attendanceBanner(splitList[index], 4))
+            }
+            val announAdapter = HotAdapter(viewList)
+            viewBinding.homework.announRoll.adapter = announAdapter
+            viewBinding.homework.announRoll.addOnPageChangeListener(object :
+                ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    val dex: Int = position % announAdapter.viewLists.size
+                    hotIndex2 = dex
+                    adapterHot2.notifyDataSetChanged()
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {}
+            })
+        }
+    }
+
     private var spanCount = 3
     private fun setAttendance(attend: WeeklyTeacherAttendance?) {
         if (attend == null) return
@@ -253,7 +308,7 @@ class TeacherWeeklyFragment : BaseFragment() {
     private fun initHotScroll(attendance: List<List<WeeklyTeacherClassAttendance>>) {
         val viewList = mutableListOf<View>()
         attendance.forEachIndexed { index, schoolAttendance ->
-            viewList.add(attendanceBanner(attendance[index]))
+            viewList.add(attendanceBanner(attendance[index], spanCount))
         }
         val announAdapter = HotAdapter(viewList)
         viewBinding.attendance.announRoll.adapter = announAdapter
@@ -340,11 +395,24 @@ class TeacherWeeklyFragment : BaseFragment() {
         }
     }
 
+    private var hotIndex2 = 0
+    private val adapterHot2 = object :
+        BaseQuickAdapter<Int, BaseViewHolder>(R.layout.item_hot) {
+        override fun convert(holder: BaseViewHolder, item: Int) {
+            val bind = ItemHotBinding.bind(holder.itemView)
+            if (hotIndex2 == holder.bindingAdapterPosition)
+                bind.view.setBackgroundResource(R.drawable.hot_round_wilhte)
+            else
+                bind.view.setBackgroundResource(R.drawable.hot_round_grray)
+        }
+    }
+
     private fun attendanceBanner(
-        attendance: List<WeeklyTeacherClassAttendance>
+        attendance: List<WeeklyTeacherClassAttendance>,
+        size: Int
     ): View {
         val view = ItemHBinding.inflate(layoutInflater)
-        view.attendanceRecyclerview.layoutManager = GridLayoutManager(activity, spanCount)
+        view.attendanceRecyclerview.layoutManager = GridLayoutManager(activity, size)
         val attendanceBannerAdapter = object :
             BaseQuickAdapter<WeeklyTeacherClassAttendance, BaseViewHolder>(R.layout.item_weekly_attendance) {
             override fun convert(holder: BaseViewHolder, item: WeeklyTeacherClassAttendance) {
@@ -372,6 +440,9 @@ class TeacherWeeklyFragment : BaseFragment() {
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
             } else {
+                if (item.value <= 0) {
+                    bind.tvProgress.visibility = View.GONE
+                }
                 bind.tvProgress.text = "${item.value}%"
                 bind.tvWeek.text = item.name
                 WeeklyUtil.setAnimation(

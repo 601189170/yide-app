@@ -163,7 +163,6 @@
                         <include
                             android:id="@+id/homework"
                             layout="@layout/layout_weekly_homework"
-                            android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@+id/attendance" />
                     </LinearLayout>
 

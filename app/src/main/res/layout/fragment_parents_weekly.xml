@@ -171,7 +171,7 @@
                         <include
                             android:id="@+id/homework_statistical"
                             layout="@layout/layout_weekly_parents_homework_statistical"
-                            android:visibility="gone" />
+                            android:visibility="visible" />
 
                         <View
                             android:layout_width="match_parent"
