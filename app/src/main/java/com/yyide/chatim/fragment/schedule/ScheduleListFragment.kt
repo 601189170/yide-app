@@ -31,10 +31,13 @@ import com.yyide.chatim.MainActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.adapter.schedule.ListViewEvent
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 
 /**
  *
@@ -53,7 +56,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     private lateinit var adapterOuter: ScheduleListOuterAdapter
     private lateinit var curBottomDateTime: DateTime
     private lateinit var curTopDateTime: DateTime
-
+    //是否显示时间轴
+    private var showTimeAxis:Boolean = true
+    private lateinit var timeAxisDateTime:DateTime
     //当前滚动方向是 0没滚动 1 向下滚动底部 -1向上滚动打顶部
     private var scrollOrientation: Int = 0
     private var curModifySchedule: ScheduleData? = null
@@ -146,10 +151,54 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
 
     override fun onClickDate(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
+        scrollToPosition(year, month, day)
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
+    }
+
+    fun scrollToPosition(year: Int, month: Int, day: Int){
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        //定位到指定日期
+        val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter)
+        var scrollOuter:Int = 0
+        var scrollInner:Int = 0
+        list.let {
+            for (i in 0 until list.size){
+                val monthViewScheduleData = list[i]
+                val list1 = monthViewScheduleData.list
+                for (j in 0 until list1.size){
+                    val dayViewScheduleData = list1[j]
+                    if (dayViewScheduleData.dateTime == dateTime){
+                        scrollOuter = i
+                        scrollInner = j
+                        return@let
+                    }
+                }
+            }
+        }
+
+        loge("需要滚动到 scrollOuter=$scrollOuter,scrollInner=$scrollInner")
+        moveToPosition(scrollInner,adapterOuter.getInnerRecyclerView())
+        moveToPosition(scrollOuter,rvScheduleList)
+
+    }
+
+    fun moveToPosition(position: Int,recyclerView:RecyclerView?) {
+        if (recyclerView == null){
+            return
+        }
+        val firstItem: Int = recyclerView.getChildLayoutPosition(recyclerView.getChildAt(0))
+        val lastItem: Int =
+            recyclerView.getChildLayoutPosition(recyclerView.getChildAt(recyclerView.getChildCount() - 1))
+        if (position < firstItem || position > lastItem) {
+            recyclerView.smoothScrollToPosition(position)
+        } else {
+            val movePosition = position - firstItem
+            val top: Int = recyclerView.getChildAt(movePosition).getTop()
+            recyclerView.smoothScrollBy(0, top)
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -177,7 +226,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                     loge("滑动到底部了")
                     scrollOrientation = 1
                     curBottomDateTime = curBottomDateTime.plusMonths(1)
-                    scheduleListViewViewModel.scheduleList(curBottomDateTime)
+                    scheduleListViewViewModel.scheduleList(curBottomDateTime,timeAxisDateTime)
                 }
                 // canScrollVertically(-1) 为false 的时候滑动到顶部了
                 if (!rvScheduleList.canScrollVertically(-1)) {
@@ -189,7 +238,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                     //日期减一请求数据
                     scrollOrientation = -1
                     curTopDateTime = curTopDateTime.minusMonths(1)
-                    scheduleListViewViewModel.scheduleList(curTopDateTime)
+                    scheduleListViewViewModel.scheduleList(curTopDateTime,timeAxisDateTime)
                 }
             }
         })
@@ -199,6 +248,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         list.clear()
         curTopDateTime = DateTime.now()
         curBottomDateTime = DateTime.now()
-        scheduleListViewViewModel.scheduleList(DateTime.now())
+        timeAxisDateTime = DateTime.now().simplifiedDataTime()
+        scheduleListViewViewModel.scheduleList(DateTime.now(),timeAxisDateTime)
     }
 }

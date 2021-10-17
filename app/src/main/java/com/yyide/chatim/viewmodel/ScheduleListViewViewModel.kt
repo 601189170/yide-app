@@ -28,9 +28,9 @@ class ScheduleListViewViewModel : ViewModel() {
      * 请求列表视图的日程数据 按日分组
      * @param dateTime 需要请求日程列表的时间 月
      */
-    fun scheduleList(dateTime: DateTime){
+    fun scheduleList(dateTime: DateTime,timeAxisDateTime:DateTime?){
         val map = mutableMapOf<DateTime, MutableList<ScheduleData>>()
-        val monthlyList = ScheduleDaoUtil.monthlyList(dateTime)
+        val monthlyList = ScheduleDaoUtil.monthlyList(dateTime,timeAxisDateTime)
         monthlyList.forEach {
             if (map.containsKey(it.dateTime)) {
                 if (map[it.dateTime] == null) {

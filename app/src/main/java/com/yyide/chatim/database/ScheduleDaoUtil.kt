@@ -7,6 +7,8 @@ import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 
 /**
  *
@@ -18,6 +20,11 @@ object ScheduleDaoUtil {
 
     private fun scheduleDao(): ScheduleDao {
         return AppDatabase.getInstance(BaseApplication.getInstance()).scheduleDao()
+    }
+
+    private fun toDateTime(date:String):DateTime{
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        return DateTime.parse(date,dateTimeFormatter)
     }
 
     /**
@@ -66,6 +73,14 @@ object ScheduleDaoUtil {
             )
             repetitionDate.forEach {
                 if (it in firstDayOfWeek..lastDayOfWeek) {
+//                    val toDateTime = toDateTime(schedule.startTime)
+//                    val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+//                    val toDateTime2 = toDateTime(schedule.endTime)
+//                    val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+//                    loge("dataTime=$dataTime,dataTime2=$dataTime")
+//                    //暂时不考虑跨天
+//                    schedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+//                    schedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                     listAllSchedule.add(schedule)
                 }
             }
@@ -76,7 +91,7 @@ object ScheduleDaoUtil {
     /**
      * 查询指定月的数据
      */
-    fun monthlyList(monthDateTime: DateTime): List<DayOfMonth> {
+    fun monthlyList(monthDateTime: DateTime,timeAxisDateTime:DateTime?): List<DayOfMonth> {
         val firstDayOfMonth = monthDateTime.dayOfMonth().withMinimumValue().simplifiedDataTime()
         val lastDayOfMonth = monthDateTime.dayOfMonth().withMaximumValue().simplifiedDataTime()
         //本周最后的时间
@@ -98,6 +113,20 @@ object ScheduleDaoUtil {
                 }
             }
         }
+        timeAxisDateTime?.let {
+            for (i in 0 until listAllSchedule.size-1){
+                val dateTime1 = listAllSchedule[i].dateTime.simplifiedDataTime()
+                val dateTime2 = listAllSchedule[i+1].dateTime.simplifiedDataTime()
+                if (it>=dateTime1 && it<dateTime2){
+                    loge("----找到时间轴的位置----")
+                    val scheduleData = ScheduleData()
+                    scheduleData.isTimeAxis = true
+                    listAllSchedule.add(i,DayOfMonth(it,scheduleData))
+                    return@let
+                }
+            }
+        }
+
         return listAllSchedule
     }
 

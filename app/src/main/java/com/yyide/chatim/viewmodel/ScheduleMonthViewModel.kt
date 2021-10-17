@@ -30,7 +30,7 @@ class ScheduleMonthViewModel : ViewModel() {
      */
     fun scheduleList(dateTime: DateTime){
         val map = mutableMapOf<DateTime, MutableList<ScheduleData>>()
-        val monthlyList = ScheduleDaoUtil.monthlyList(dateTime)
+        val monthlyList = ScheduleDaoUtil.monthlyList(dateTime,null)
         monthlyList.forEach {
             if (map.containsKey(it.dateTime)) {
                 if (map[it.dateTime] == null) {

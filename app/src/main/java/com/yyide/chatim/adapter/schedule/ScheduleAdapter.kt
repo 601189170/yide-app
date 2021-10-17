@@ -11,23 +11,24 @@ import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
 
 class ScheduleAdapter(data: List<ScheduleData>) :
-        BaseMultiItemQuickAdapter<ScheduleData, BaseViewHolder>() {
-        init {
-            super.setList(data)
-            addItemType(Schedule.TYPE_EXPIRED_COMPLETED, R.layout.schedule_item_expired_completed)
-            addItemType(
-                Schedule.TYPE_EXPIRED_NOT_COMPLETED,
-                R.layout.schedule_item_expired_not_completed
-            )
-            addItemType(
-                Schedule.TYPE_UNEXPIRED_COMPLETED,
-                R.layout.schedule_item_unexpired_completed
-            )
-            addItemType(
-                Schedule.TYPE_UNEXPIRED_NOT_COMPLETED,
-                R.layout.schedule_item_unexpired_not_completed
-            )
-        }
+    BaseMultiItemQuickAdapter<ScheduleData, BaseViewHolder>() {
+    init {
+        super.setList(data)
+        addItemType(Schedule.TYPE_EXPIRED_COMPLETED, R.layout.schedule_item_expired_completed)
+        addItemType(
+            Schedule.TYPE_EXPIRED_NOT_COMPLETED,
+            R.layout.schedule_item_expired_not_completed
+        )
+        addItemType(
+            Schedule.TYPE_UNEXPIRED_COMPLETED,
+            R.layout.schedule_item_unexpired_completed
+        )
+        addItemType(
+            Schedule.TYPE_UNEXPIRED_NOT_COMPLETED,
+            R.layout.schedule_item_unexpired_not_completed
+        )
+        addItemType(Schedule.TYPE_TIME_AXIS, R.layout.schedule_item_time_axis)
+    }
 
     override fun convert(holder: BaseViewHolder, item: ScheduleData) {
         when (holder.itemViewType) {
@@ -113,23 +114,23 @@ class ScheduleAdapter(data: List<ScheduleData>) :
 //        }
     }
 
-        private fun loadImage(type: Int, expired: Boolean, imageView: ImageView) {
-            when (type) {
-                Schedule.SCHEDULE_TYPE_SCHEDULE -> {
-                    imageView.setImageResource(if (expired) R.drawable.type_schedule_finished_icon else R.drawable.type_schedule_icon)
-                }
-                Schedule.SCHEDULE_TYPE_SCHOOL_SCHEDULE -> {
-                    imageView.setImageResource(if (expired) R.drawable.type_school_schedule_finished_icon else R.drawable.type_school_schedule_icon)
-                }
-                Schedule.SCHEDULE_TYPE_CONFERENCE -> {
-                    imageView.setImageResource(if (expired) R.drawable.type_conference_finished_icon else R.drawable.type_conference_icon)
-                }
-                Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE -> {
-                    imageView.setImageResource(if (expired) R.drawable.type_class_schedule_finished_icon else R.drawable.type_class_schedule_icon)
-                }
-                else -> {
-                }
+    private fun loadImage(type: Int, expired: Boolean, imageView: ImageView) {
+        when (type) {
+            Schedule.SCHEDULE_TYPE_SCHEDULE -> {
+                imageView.setImageResource(if (expired) R.drawable.type_schedule_finished_icon else R.drawable.type_schedule_icon)
+            }
+            Schedule.SCHEDULE_TYPE_SCHOOL_SCHEDULE -> {
+                imageView.setImageResource(if (expired) R.drawable.type_school_schedule_finished_icon else R.drawable.type_school_schedule_icon)
+            }
+            Schedule.SCHEDULE_TYPE_CONFERENCE -> {
+                imageView.setImageResource(if (expired) R.drawable.type_conference_finished_icon else R.drawable.type_conference_icon)
+            }
+            Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE -> {
+                imageView.setImageResource(if (expired) R.drawable.type_class_schedule_finished_icon else R.drawable.type_class_schedule_icon)
+            }
+            else -> {
             }
         }
-
     }
+
+}

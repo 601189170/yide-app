@@ -2,11 +2,14 @@ package com.yyide.chatim.model.schedule;
 
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_EXPIRED_COMPLETED;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_EXPIRED_NOT_COMPLETED;
+import static com.yyide.chatim.model.schedule.Schedule.TYPE_TIME_AXIS;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_COMPLETED;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_NOT_COMPLETED;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.yyide.chatim.utils.DateUtils;
+
+import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,7 @@ public class ScheduleData implements MultiItemEntity {
     private String updateDate;
     private String dayOfMonth;
     private String promoterName;
+    private boolean timeAxis;//日程时间轴
 
     public String getIsRepeat() {
         return isRepeat;
@@ -195,6 +199,14 @@ public class ScheduleData implements MultiItemEntity {
         this.participant = participant;
     }
 
+    public boolean isTimeAxis() {
+        return timeAxis;
+    }
+
+    public void setTimeAxis(boolean timeAxis) {
+        this.timeAxis = timeAxis;
+    }
+
     public String getUpdateType() {
         return updateType;
     }
@@ -237,6 +249,10 @@ public class ScheduleData implements MultiItemEntity {
 
     @Override
     public int getItemType() {
+        if (timeAxis) {
+            //时间轴
+            return TYPE_TIME_AXIS;
+        }
         if (Objects.equals(status, "1")) {
             if (DateUtils.dateExpired(endTime)) {
                 return TYPE_EXPIRED_COMPLETED;
