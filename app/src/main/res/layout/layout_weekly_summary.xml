@@ -27,16 +27,16 @@
                 android:id="@+id/tv_weekly_attendance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginTop="43dp"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:drawablePadding="@dimen/dp_8"
                 android:textColor="#ff1e1e1e"
                 android:textSize="14sp"
-                android:layout_marginStart="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_10"
+                app:drawableLeftCompat="@mipmap/icon_weekly_attendance"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:drawableLeftCompat="@mipmap/icon_weekly_attendance" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_weekly_homework"
@@ -65,6 +65,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_weekly_homework"
                 app:layout_constraintTop_toBottomOf="@+id/tv_weekly_homework" />
+
+            <TextView
+                android:id="@+id/tv_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="暂无数据"
+                android:textColor="#ff909399"
+                android:textSize="14sp"
+                android:visibility="gone" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

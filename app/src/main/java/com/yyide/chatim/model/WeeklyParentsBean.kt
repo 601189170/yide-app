@@ -7,11 +7,11 @@ data class WeeklyParentsBean(
     @JSONField(name = "attend")
     var attend: List<WeeklyParentsAttend>,
     @JSONField(name = "eval")
-    var eval: Eval,
+    var eval: Eval?,
     @JSONField(name = "expend")
-    var expend: WeeklyParentsExpend,
+    var expend: WeeklyParentsExpend?,
     @JSONField(name = "summary")
-    var summary: WeeklyParentsSummary,
+    var summary: WeeklyParentsSummary?,
     @JSONField(name = "work")
     var work: Work
 )

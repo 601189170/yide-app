@@ -1,16 +1,14 @@
 package com.yyide.chatim.activity.weekly.details
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.blankj.utilcode.util.SizeUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -31,8 +29,7 @@ import com.yyide.chatim.databinding.*
 import com.yyide.chatim.model.DeptAttend
 import com.yyide.chatim.model.Detail
 import com.yyide.chatim.model.SchoolAttendance
-import com.yyide.chatim.model.TeacherAttendance
-import java.util.ArrayList
+import java.util.*
 
 /**
  *
@@ -73,16 +70,16 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         viewBinding.layoutCharts.recyclerview.adapter =
             adapterAttendance
 
-        adapterAttendance.setOnItemClickListener { adapter, view, position ->
-            selectPosition = if (selectPosition != position) {
-                position
-            } else {
-                -1
-            }
-            adapterAttendance.notifyDataSetChanged()
-            val item = adapterAttendance.getItem(position)
-            //show(view, item.name, "${item.value}%")
-        }
+//        adapterAttendance.setOnItemClickListener { adapter, view, position ->
+//            selectPosition = if (selectPosition != position) {
+//                position
+//            } else {
+//                -1
+//            }
+//            adapterAttendance.notifyDataSetChanged()
+//            val item = adapterAttendance.getItem(position)
+//            //show(view, item.name, "${item.value}%")
+//        }
         var studentAttendances = mutableListOf<SchoolAttendance>()
         var subjects = mutableListOf<DeptAttend>()
         arguments?.apply {
@@ -150,6 +147,8 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         //是否有触摸事件
         viewBinding.lineChart.setTouchEnabled(true)
         viewBinding.lineChart.setBackgroundColor(Color.WHITE)
+        //设置双击缩放功能
+        viewBinding.lineChart.isDoubleTapToZoomEnabled = false
         //是否显示边界
         viewBinding.lineChart.setDrawBorders(false)
         val xAxis: XAxis = viewBinding.lineChart.xAxis
@@ -158,10 +157,15 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
 
         xAxis.valueFormatter =
             IAxisValueFormatter { value, axis ->
-                subjects[value.toInt() % subjects.size].name
+                if (value > -1 && value < subjects.size) {
+                    return@IAxisValueFormatter subjects[value.toInt() % subjects.size].name
+                } else {
+                    return@IAxisValueFormatter ""
+                }
             }
 
         xAxis.granularity = 1f
+        xAxis.labelCount = subjects.size
         xAxis.position = XAxisPosition.BOTTOM
         //虚线
         xAxis.setDrawGridLines(false)
@@ -178,6 +182,7 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
         // set data
         // set data
+
         viewBinding.lineChart.data = generateDataLine(subjects)
         rightAxis.setDrawGridLines(false)
         //设置X Y轴网格线为虚线（实体线长度、间隔距离、偏移量：通常使用 0）
@@ -278,16 +283,14 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         BaseQuickAdapter<SchoolAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
         override fun convert(holder: BaseViewHolder, item: SchoolAttendance) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "${item.value}%"
+            if (item.value > 0) {
+                bind.tvProgress.text = "${item.value}%"
+            }
             bind.tvWeek.text = item.name
             WeeklyUtil.setAnimation(
                 bind.progressbar,
                 if (item.value <= 0) 0 else item.value.toInt()
             )
-            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            if (selectPosition == holder.bindingAdapterPosition) {
-                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
-            }
         }
     }
 

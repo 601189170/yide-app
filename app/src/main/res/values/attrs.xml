@@ -58,4 +58,33 @@
         <attr name="circle_color" format="color"/>
         <attr name="circle_radius" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="EnhancedProgressBar">
+        <attr format="integer" name="android:progress"/>
+        <attr format="reference|color" name="lyj_unreached_color"/>
+        <attr format="reference|color" name="lyj_reached_color"/>
+        <attr format="reference|dimension" name="lyj_reached_height"/>
+        <attr format="reference|dimension" name="lyj_unreached_height"/>
+        <attr format="boolean" name="lyj_text_visible"/>
+        <attr format="reference|dimension" name="lyj_text_size"/>
+        <attr format="reference|color" name="lyj_text_color"/>
+        <attr format="reference|dimension" name="lyj_text_offset"/>
+        <attr format="enum" name="lyj_text_align">
+            <enum name="middle" value="0"/>
+            <enum name="top" value="1"/>
+        </attr>
+        <attr format="boolean" name="lyj_text_bold"/>
+        <attr format="enum" name="lyj_cut_corner">
+            <enum name="none" value="0"/>
+            <enum name="parallelogram" value="1"/>
+            <enum name="ellipse" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BarItemView">
+        <attr format="reference|color" name="moneyColor"/>
+        <attr format="reference|color" name="barColor"/>
+        <attr format="reference|color" name="lineColor"/>
+        <attr format="reference|color" name="bar_textColor"/>
+    </declare-styleable>
 </resources>

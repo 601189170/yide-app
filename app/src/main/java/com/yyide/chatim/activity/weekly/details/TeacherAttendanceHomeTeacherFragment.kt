@@ -170,39 +170,13 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
     }
 
     private fun initClassMenu() {
-        if (SpData.getClassInfo() != null) {
-            viewBinding.tvClassName.text = SpData.getClassInfo().classesName + "的周报"
-        }
-        val classList = SpData.getClassList()
-        val adapterEvent = ClassAdapter()
-        if (classList != null) {
-            if (classList.size > 1) {
-                viewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    resources.getDrawable(R.mipmap.icon_down),
-                    null
-                )
-                viewBinding.tvClassName.setOnClickListener {
-                    val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
-                    attendancePop.setOnSelectListener { index: Int ->
-                        viewBinding.tvClassName.text =
-                            adapterEvent.getItem(index).classesName + "的周报"
-                        classId = adapterEvent.getItem(index).classesId
-                        request(dateTime)
-                    }
-
-                }
-            } else {
-                viewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(
-                    null,
-                    null,
-                    null,
-                    null
-                )
-            }
-            adapterEvent.setList(classList)
-        }
+        viewBinding.tvClassName.text = "我的考勤"
+        viewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(
+            null,
+            null,
+            null,
+            null
+        )
     }
 
     private var spanCount = 3

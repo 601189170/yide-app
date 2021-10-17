@@ -65,7 +65,7 @@
     </style>
 
     <style name="MyProgressBar_vertical" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:minWidth">21dp</item>
+        <item name="android:minWidth">20dp</item>
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/progress_bg_vertical</item>
     </style>

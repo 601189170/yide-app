@@ -1,9 +1,13 @@
 package com.yyide.chatim.activity.weekly.details
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -56,27 +60,11 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
         viewBinding.layoutCharts.recyclerview.layoutManager = GridLayoutManager(activity, 7)
         viewBinding.layoutCharts.recyclerview.adapter =
             adapterAttendance
-        adapterAttendance.setOnItemClickListener { adapter, view, position ->
-            selectPosition = if (selectPosition != position) {
-                position
-            } else {
-                -1
-            }
-            adapterAttendance.notifyDataSetChanged()
-        }
 
         //教职工周统计横版
         viewBinding.recyclerviewDept.layoutManager = LinearLayoutManager(activity)
         viewBinding.recyclerviewDept.adapter =
             adapterAttendanceDept
-        adapterAttendanceDept.setOnItemClickListener { adapter, view, position ->
-            selectPosition2 = if (selectPosition2 != position) {
-                position
-            } else {
-                -1
-            }
-            adapterAttendanceDept.notifyDataSetChanged()
-        }
 
         var teacherAttends = mutableListOf<TeacherAttendance>()
         var deptattends = mutableListOf<DeptAttend>()
@@ -94,25 +82,21 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
     /**
      * 考勤数据
      */
-    private var selectPosition = -1
     private val adapterAttendance = object :
         BaseQuickAdapter<TeacherAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
         override fun convert(holder: BaseViewHolder, item: TeacherAttendance) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "${item.rate}%"
+            if (item.rate > 0) {
+                bind.tvProgress.text = "${item.rate}%"
+            }
             bind.tvWeek.text = item.name
             WeeklyUtil.setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
-            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            if (selectPosition == holder.bindingAdapterPosition) {
-                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
-            }
         }
     }
 
     /**
      * 考勤数据
      */
-    private var selectPosition2 = -1
     private val adapterAttendanceDept = object :
         BaseQuickAdapter<DeptAttend, BaseViewHolder>(R.layout.item_weekly_progress_h) {
         override fun convert(holder: BaseViewHolder, item: DeptAttend) {
@@ -128,15 +112,16 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
             )
             if (item.lastWeek <= 0) {
                 bind.progressbarLast.visibility = View.INVISIBLE
+            } else {
+                bind.progressbarLast.setProgress(item.lastWeek)
             }
             if (item.thisWeek <= 0) {
                 bind.progressbarThis.visibility = View.INVISIBLE
-            }
-            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            if (selectPosition2 == holder.bindingAdapterPosition) {
-                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+            } else {
+                bind.progressbarThis.setProgress(item.thisWeek)
             }
         }
     }
+
 
 }

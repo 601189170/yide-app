@@ -70,6 +70,13 @@ public class SpData {
         return new ArrayList<>();
     }
 
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getDuplicationClassList() {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
+            return (ArrayList<GetUserSchoolRsp.DataBean.FormBean>) SpData.getIdentityInfo().form;
+        }
+        return new ArrayList<>();
+    }
+
     /**
      * 获取用户信息选择的班级名或者班级学生名
      *

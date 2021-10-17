@@ -30,6 +30,7 @@ import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.InitPieChart
+import org.w3c.dom.Text
 import java.util.*
 
 /**
@@ -73,11 +74,15 @@ open class ParentsWeeklyFragment : BaseFragment() {
             if (null != result) {
                 viewBinding.clContent.visibility = View.VISIBLE
                 viewBinding.cardViewNoData.visibility = View.GONE
+                viewBinding.summary.tvNoData.visibility = View.GONE
                 setSummary(result.summary)
                 //考勤统计
                 if (result.attend != null && result.attend.isNotEmpty()) {
                     initAttendance(result.attend[0])
                     adapterAttendance.setList(result.attend)
+                    viewBinding.attendance.tvEventName.visibility = View.VISIBLE
+                    viewBinding.attendance.clAttend.visibility = View.VISIBLE
+                    viewBinding.attendance.ivNoData.visibility = View.GONE
                 } else {
                     viewBinding.attendance.tcAttendDescs.text = "你的本周考勤无异常记录，太棒啦～"
                     viewBinding.attendance.tvEventName.visibility = View.INVISIBLE
@@ -87,8 +92,16 @@ open class ParentsWeeklyFragment : BaseFragment() {
 
                 if (result.eval != null) {
                     setTeacherComments(result.eval)
-                } else {
-                    viewBinding.comments.root.visibility = View.GONE
+                }
+                //处理整体数据为空的情况
+                if (result.attend.isEmpty() && (result.summary != null
+                            && TextUtils.isEmpty(result.summary!!.attend)
+                            && TextUtils.isEmpty(result.summary!!.expend)
+                            && TextUtils.isEmpty(result.summary!!.work))
+                    && result.eval != null && TextUtils.isEmpty(result.eval!!.body)
+                ) {
+                    viewBinding.clContent.visibility = View.GONE
+                    viewBinding.cardViewNoData.visibility = View.VISIBLE
                 }
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
@@ -133,27 +146,42 @@ open class ParentsWeeklyFragment : BaseFragment() {
                 )
     }
 
-    private fun setTeacherComments(eval: Eval) {
+    private fun setTeacherComments(eval: Eval?) {
         //教师评语
-        viewBinding.comments.tvWeeklyAttendance.text = eval.body
-        when (eval.level) {//1:非常优秀、2:比较优秀、3：较好
-            1 -> {
-                viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets)
+        viewBinding.comments.root.visibility = View.VISIBLE
+        if (eval != null) {
+            viewBinding.comments.tvWeeklyAttendance.text = eval.body
+            when (eval.level) {//1:非常优秀、2:比较优秀、3：较好
+                1 -> {
+                    viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets)
+                }
+                2 -> {
+                    viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets_good)
+                }
+                else -> {
+                    viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets_general)
+                }
             }
-            2 -> {
-                viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets_good)
-            }
-            else -> {
-                viewBinding.comments.ivBg.setBackgroundResource(R.mipmap.icon_weekly_teacher_commnets_general)
-            }
+        }
+
+        if (eval != null && TextUtils.isEmpty(eval.body)) {
+            viewBinding.comments.root.visibility = View.GONE
         }
     }
 
     private fun setSummary(summary: WeeklyParentsSummary?) {
         if (summary != null) {
+            viewBinding.summary.root.visibility = View.VISIBLE
             viewBinding.summary.tvWeeklyAttendance.text = summary.attend
             viewBinding.summary.tvWeeklyHomework.text = summary.work
             viewBinding.summary.tvWeeklyShopping.text = summary.expend
+        }
+        if (summary != null
+            && TextUtils.isEmpty(summary.attend)
+            && TextUtils.isEmpty(summary.expend)
+            && TextUtils.isEmpty(summary.work)
+        ) {
+            viewBinding.summary.root.visibility = View.GONE
         }
     }
 
@@ -189,9 +217,10 @@ open class ParentsWeeklyFragment : BaseFragment() {
 
     private fun initClassMenu() {
         if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentName)) {
-            viewBinding.tvEvent.text = SpData.getClassInfo().studentName
+            viewBinding.tvEvent.text = SpData.getClassInfo().studentName + "的周报"
+            studentName = SpData.getClassInfo().studentName
         }
-        val classList = SpData.getClassList()
+        val classList = SpData.getDuplicationClassList()
         if (classList != null) {
             if (classList.size > 1) {
                 viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(
@@ -203,7 +232,8 @@ open class ParentsWeeklyFragment : BaseFragment() {
                 viewBinding.tvEvent.setOnClickListener {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
                     attendancePop.setOnSelectListener { index: Int ->
-                        viewBinding.tvEvent.text = adapterEvent.getItem(index).studentName
+                        viewBinding.tvEvent.text = adapterEvent.getItem(index).studentName + "的周报"
+                        studentName = adapterEvent.getItem(index).studentName
                         studentId = adapterEvent.getItem(index).studentId
                         request()
                     }
@@ -346,13 +376,13 @@ open class ParentsWeeklyFragment : BaseFragment() {
         }
     }
 
-    private var index = 0
+    private var studentName = ""
     private val adapterEvent = object :
         BaseQuickAdapter<GetUserSchoolRsp.DataBean.FormBean, BaseViewHolder>(R.layout.swich_class_item) {
         override fun convert(holder: BaseViewHolder, item: GetUserSchoolRsp.DataBean.FormBean) {
             holder.setText(R.id.className, item.studentName)
             holder.getView<View>(R.id.select).visibility =
-                if (index == holder.adapterPosition) View.VISIBLE else View.GONE
+                if (studentName == item.studentName) View.VISIBLE else View.GONE
             if (this.itemCount - 1 == holder.adapterPosition) {
                 holder.getView<View>(R.id.view_line).visibility = View.GONE
             } else {

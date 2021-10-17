@@ -13,7 +13,7 @@
     <item android:id="@android:id/progress">
         <scale
             android:drawable="@drawable/progress_bar_ct"
-            android:scaleHeight="90%"
+            android:scaleHeight="100%"
             android:scaleGravity="bottom" />
     </item>
 

@@ -186,15 +186,28 @@ class TeacherWeeklyFragment : BaseFragment() {
 
     private fun setSummary(summary: WeeklyTeacherSummary?) {
         if (summary != null) {
+            viewBinding.summary.root.visibility = View.VISIBLE
             viewBinding.summary.tvWeeklyAttendance.text = summary.attend
             viewBinding.summary.tvWeeklyHomework.text = summary.work
             viewBinding.summary.tvWeeklyShopping.text = summary.expend
+        }
+
+        if (summary != null
+            && TextUtils.isEmpty(summary.attend)
+            && TextUtils.isEmpty(summary.expend)
+            && TextUtils.isEmpty(summary.work)
+        ) {
+            viewBinding.summary.root.visibility = View.GONE
         }
     }
 
     private var spanCount = 3
     private fun setAttendance(attend: WeeklyTeacherAttendance?) {
         if (attend == null) return
+        viewBinding.attendance.root.visibility = View.VISIBLE
+        if (attend != null && attend.classAttend.isEmpty() && attend.teacherAttend.isEmpty()) {
+            viewBinding.attendance.root.visibility = View.GONE
+        }
         viewBinding.attendance.tvWeeklyAttendance.text = attend.attend
         viewBinding.attendance.tvWeeklyHomework.text = attend.course
         //设置班级考勤
