@@ -92,7 +92,7 @@ object ScheduleRepetitionRuleUtil {
     private fun dailyRule(startDate: DateTime, endDate: DateTime, interval: Int): List<DateTime> {
         val repetitionDate = mutableListOf<DateTime>()
         var nowDateTime = startDate
-        repetitionDate.add(nowDateTime)
+        //repetitionDate.add(nowDateTime)
         while (true) {
             if (nowDateTime < endDate) {
                 repetitionDate.add(nowDateTime)

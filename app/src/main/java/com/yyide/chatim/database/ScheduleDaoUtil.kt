@@ -73,15 +73,16 @@ object ScheduleDaoUtil {
             )
             repetitionDate.forEach {
                 if (it in firstDayOfWeek..lastDayOfWeek) {
-//                    val toDateTime = toDateTime(schedule.startTime)
-//                    val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
-//                    val toDateTime2 = toDateTime(schedule.endTime)
-//                    val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
-//                    loge("dataTime=$dataTime,dataTime2=$dataTime")
-//                    //暂时不考虑跨天
-//                    schedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
-//                    schedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
-                    listAllSchedule.add(schedule)
+                    val newSchedule = schedule.clone() as ScheduleData
+                    val toDateTime = toDateTime(newSchedule.startTime)
+                    val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                    val toDateTime2 = toDateTime(newSchedule.endTime)
+                    val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                    loge("dataTime=$dataTime,dataTime2=$dataTime")
+                    //暂时不考虑跨天
+                    newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+                    newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                    listAllSchedule.add(newSchedule)
                 }
             }
         }
@@ -109,6 +110,15 @@ object ScheduleDaoUtil {
             )
             repetitionDate.forEach {
                 if (it in firstDayOfMonth..lastDayOfMonth) {
+                    val newSchedule = schedule.clone() as ScheduleData
+                    val toDateTime = toDateTime(newSchedule.startTime)
+                    val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                    val toDateTime2 = toDateTime(newSchedule.endTime)
+                    val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                    loge("dataTime=$dataTime,dataTime2=$dataTime")
+                    //暂时不考虑跨天
+                    newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+                    newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                     listAllSchedule.add(DayOfMonth(it,schedule))
                 }
             }
