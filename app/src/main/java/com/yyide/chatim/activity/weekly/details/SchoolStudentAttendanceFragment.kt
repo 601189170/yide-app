@@ -126,13 +126,26 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
 
     private var spanCount = 3
     private fun setWeekly(result: SchoolWeeklyTeacherBean) {
+        adapterHot.setList(null)
+        viewBinding.announRoll.removeAllViews()
+        if (result.attend != null && result.attend.isEmpty() && result.detail != null && result.detail.isEmpty()) {
+            viewBinding.cardViewNoData.visibility = View.VISIBLE
+            viewBinding.constraintLayout.visibility = View.GONE
+            viewBinding.announRoll.visibility = View.GONE
+            viewBinding.slidingTabLayout.visibility = View.GONE
+        } else {
+            viewBinding.cardViewNoData.visibility = View.GONE
+            viewBinding.constraintLayout.visibility = View.VISIBLE
+            viewBinding.announRoll.visibility = View.VISIBLE
+            viewBinding.slidingTabLayout.visibility = View.VISIBLE
+        }
         viewBinding.hotRecyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.hotRecyclerview.adapter = adapterHot
         adapterHot.setList(null)
         spanCount = if (result.attend != null && result.attend.size < 3) {
             result.attend.size
-        } else{
+        } else {
             3
         }
         val splitList = splitList(result.attend, spanCount)
