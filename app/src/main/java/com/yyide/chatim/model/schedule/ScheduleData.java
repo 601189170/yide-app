@@ -9,6 +9,7 @@ import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_NOT_COMPLE
 import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.utils.DateUtils;
 
 import org.joda.time.DateTime;
@@ -22,7 +23,7 @@ import java.util.Objects;
  * @date 2021/9/24 10:08
  * @description 描述
  */
-public class ScheduleData implements MultiItemEntity,Cloneable {
+public class ScheduleData implements MultiItemEntity,Cloneable,Comparable<ScheduleData> {
     private String id;
     private String name;
     private String siteId;
@@ -271,5 +272,12 @@ public class ScheduleData implements MultiItemEntity,Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    @Override
+    public int compareTo(ScheduleData other) {
+        final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(this.startTime);
+        final DateTime dateTime1 = ScheduleDaoUtil.INSTANCE.toDateTime(other.startTime);
+        return dateTime.compareTo(dateTime1);
     }
 }

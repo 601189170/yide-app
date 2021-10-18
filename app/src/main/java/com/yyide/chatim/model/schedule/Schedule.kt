@@ -42,7 +42,7 @@ data class Schedule(
         const val TYPE_EXPIRED_COMPLETED: Int = 2
         const val TYPE_UNEXPIRED_COMPLETED: Int = 3
         const val TYPE_UNEXPIRED_NOT_COMPLETED: Int = 4
-        const val TYPE_TIME_AXIS:Int = 5
+        const val TYPE_TIME_AXIS: Int = 5
 
         const val SCHEDULE_TYPE_SCHEDULE = 1
         const val SCHEDULE_TYPE_SCHOOL_SCHEDULE = 2
@@ -58,7 +58,12 @@ data class Schedule(
 data class DayOfMonth(
     var dateTime: DateTime,
     var scheduleData: ScheduleData
-)
+) : Comparable<DayOfMonth> {
+    override fun compareTo(other: DayOfMonth): Int {
+        return this.dateTime.compareTo(other.dateTime)
+    }
+
+}
 
 data class DayGroupOfMonth(
     var dateTime: DateTime,

@@ -9,6 +9,7 @@ import com.yyide.chatim.utils.loge
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  *
@@ -22,7 +23,7 @@ object ScheduleDaoUtil {
         return AppDatabase.getInstance(BaseApplication.getInstance()).scheduleDao()
     }
 
-    private fun toDateTime(date:String):DateTime{
+    fun toDateTime(date:String):DateTime{
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         return DateTime.parse(date,dateTimeFormatter)
     }
@@ -86,6 +87,7 @@ object ScheduleDaoUtil {
                 }
             }
         }
+        listAllSchedule.sort()
         return listAllSchedule
     }
 
@@ -115,11 +117,12 @@ object ScheduleDaoUtil {
                     val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
                     val toDateTime2 = toDateTime(newSchedule.endTime)
                     val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
-                    loge("dataTime=$dataTime,dataTime2=$dataTime")
+
                     //暂时不考虑跨天
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
-                    listAllSchedule.add(DayOfMonth(it,schedule))
+                    loge("$it,$newSchedule")
+                    listAllSchedule.add(DayOfMonth(it,newSchedule))
                 }
             }
         }
@@ -136,7 +139,7 @@ object ScheduleDaoUtil {
                 }
             }
         }
-
+        listAllSchedule.sort()
         return listAllSchedule
     }
 
