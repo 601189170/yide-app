@@ -124,7 +124,7 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
             participant.id = it.id
             participant.type = it.type
             //学生和教职工取值不一
-            participant.name = it.userName
+            participant.userName = it.userName
             participantList.add(participant)
         }
         scheduleData.participant = participantList

@@ -39,6 +39,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
@@ -464,6 +465,11 @@ public class DialogUtil {
         binding.rvScheduleList.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter1, view, position) -> {
                     mDialog.dismiss();
+                    ScheduleData scheduleData = scheduleList.get(position);
+                    if (scheduleData.getType().equals("" + Schedule.SCHEDULE_TYPE_CONFERENCE)) {
+                        MeetingSaveActivity.Companion.jumpUpdate(context, scheduleData.getId());
+                        return;
+                    }
                     final Intent intent = new Intent(context, ScheduleEditActivity.class);
                     intent.putExtra("data", JSON.toJSONString(scheduleList.get(position)));
                     context.startActivity(intent);

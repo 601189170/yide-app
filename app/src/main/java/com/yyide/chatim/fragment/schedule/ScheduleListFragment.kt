@@ -28,6 +28,7 @@ import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.viewmodel.ScheduleListViewViewModel
 import org.joda.time.DateTime
 import com.yyide.chatim.MainActivity
+import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.adapter.schedule.ListViewEvent
 import com.yyide.chatim.database.ScheduleDaoUtil
@@ -135,6 +136,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             override fun clickItem(scheduleData: ScheduleData) {
                 loge("点击日程 $scheduleData")
                 curModifySchedule = scheduleData
+                if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE){
+                    MeetingSaveActivity.jumpUpdate(requireContext(),scheduleData.id)
+                    return
+                }
                 val intent = Intent(context, ScheduleEditActivity::class.java)
                 intent.putExtra("data", JSON.toJSONString(scheduleData))
                 startActivity(intent)

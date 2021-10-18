@@ -17,6 +17,7 @@ import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.month.MonthCalendarView
 import com.yide.calendar.schedule.ScheduleLayout
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.adapter.schedule.ScheduleAdapter
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
@@ -93,8 +94,12 @@ class ScheduleTodayFragment : Fragment() {
         fragmentScheduleTodayBinding.rvWeekUndoList.adapter = thisWeekScheduleTodayAdapter
         thisWeekScheduleTodayAdapter.setOnItemClickListener { adapter, view, position ->
             loge("本周未完成：$position")
-            val intent = Intent(context, ScheduleEditActivity::class.java)
             val scheduleData = weekUndoList[position]
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE){
+                MeetingSaveActivity.jumpUpdate(requireContext(),scheduleData.id)
+                return@setOnItemClickListener
+            }
+            val intent = Intent(context, ScheduleEditActivity::class.java)
             intent.putExtra("data",JSON.toJSONString(scheduleData))
             startActivity(intent)
         }
@@ -107,8 +112,12 @@ class ScheduleTodayFragment : Fragment() {
         fragmentScheduleTodayBinding.rvTodayList.adapter = todayScheduleTodayAdapter
         todayScheduleTodayAdapter.setOnItemClickListener { adapter, view, position ->
             loge("今日清单：$position")
-            val intent = Intent(context, ScheduleEditActivity::class.java)
             val scheduleData = todayList[position]
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE){
+                MeetingSaveActivity.jumpUpdate(requireContext(),scheduleData.id)
+                return@setOnItemClickListener
+            }
+            val intent = Intent(context, ScheduleEditActivity::class.java)
             intent.putExtra("data",JSON.toJSONString(scheduleData))
             startActivity(intent)
         }

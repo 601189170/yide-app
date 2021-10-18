@@ -19,15 +19,13 @@ import com.google.android.flexbox.*
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.tencent.mmkv.MMKV
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.ActivityScheduleSearchBinding
 import com.yyide.chatim.dialog.ScheduleSearchFilterPop
-import com.yyide.chatim.model.schedule.FilterTagCollect
-import com.yyide.chatim.model.schedule.ScheduleData
-import com.yyide.chatim.model.schedule.ScheduleFilterTag
-import com.yyide.chatim.model.schedule.TagType
+import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
@@ -132,8 +130,12 @@ class ScheduleSearchActivity : BaseActivity() {
         viewBinding.recyclerview.adapter = scheduleSearchResultListAdapter
         scheduleSearchResultListAdapter.setOnItemClickListener { _, _, position ->
             loge("setOnItemClickListener：$position")
-            val intent = Intent(this@ScheduleSearchActivity, ScheduleEditActivity::class.java)
             val scheduleData = scheduleSearchResultList[position]
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE){
+                MeetingSaveActivity.jumpUpdate(this@ScheduleSearchActivity,scheduleData.id)
+                return@setOnItemClickListener
+            }
+            val intent = Intent(this@ScheduleSearchActivity, ScheduleEditActivity::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }

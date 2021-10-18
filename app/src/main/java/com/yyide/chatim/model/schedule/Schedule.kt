@@ -43,11 +43,11 @@ data class Schedule(
         const val TYPE_UNEXPIRED_COMPLETED: Int = 3
         const val TYPE_UNEXPIRED_NOT_COMPLETED: Int = 4
         const val TYPE_TIME_AXIS: Int = 5
-
-        const val SCHEDULE_TYPE_SCHEDULE = 1
-        const val SCHEDULE_TYPE_SCHOOL_SCHEDULE = 2
+        //日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
+        const val SCHEDULE_TYPE_SCHEDULE = 2
+        const val SCHEDULE_TYPE_SCHOOL_SCHEDULE = 0
         const val SCHEDULE_TYPE_CONFERENCE = 3
-        const val SCHEDULE_TYPE_CLASS_SCHEDULE = 4
+        const val SCHEDULE_TYPE_CLASS_SCHEDULE = 1
     }
 }
 
