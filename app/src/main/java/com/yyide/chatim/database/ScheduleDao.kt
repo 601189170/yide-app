@@ -67,8 +67,13 @@ interface ScheduleDao {
     @Query("update schedule set status=:status where id = :id")
     fun changeScheduleState(id: String, status: String)
 
-//    @Transaction
-//    @Update
-//    fun updateSchedule(scheduleWithParticipantAndLabel:ScheduleWithParticipantAndLabel)
+    //select * from schedule left join label on schedule.id = label.scheduleCreatorId
+    // where  name like '%历史%' and type in (1,2) and status in (0,1) and label.id in(1447838531185115138)
+    //搜索日程根据赛选条件
+    @Transaction
+    @Query("select * from schedule left join label on schedule.id = label.scheduleCreatorId where :where")
+    fun searchSchedule(
+       where:String
+    ): List<ScheduleWithParticipantAndLabel>
 
 }

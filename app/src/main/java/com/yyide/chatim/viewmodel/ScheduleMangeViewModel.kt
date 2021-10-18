@@ -68,6 +68,7 @@ class ScheduleMangeViewModel : ViewModel() {
      */
 
     private fun insertScheduleToDb(scheduls: List<ScheduleData>) {
+        loge("scheduls ${JSON.toJSONString(scheduls)}")
         ScheduleDaoUtil.clearAll()
         scheduls.forEach {
             val scheduleId = it.id
@@ -101,7 +102,7 @@ class ScheduleMangeViewModel : ViewModel() {
                 participant.scheduleId = scheduleId
                 participant.type = it.type
                 //学生和教职工取值不一
-                participant.userName = it.name
+                participant.userName = it.userName
                 participant.scheduleCreatorId = scheduleId
                 participantList.add(participant)
             }

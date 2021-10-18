@@ -2,6 +2,7 @@ package com.yyide.chatim.database
 
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.model.schedule.DayOfMonth
+import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
@@ -79,7 +80,7 @@ object ScheduleDaoUtil {
                     val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
                     val toDateTime2 = toDateTime(newSchedule.endTime)
                     val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
-                    loge("dataTime=$dataTime,dataTime2=$dataTime")
+                    //loge("dataTime=$dataTime,dataTime2=$dataTime")
                     //暂时不考虑跨天
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
@@ -121,7 +122,7 @@ object ScheduleDaoUtil {
                     //暂时不考虑跨天
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
-                    loge("$it,$newSchedule")
+                    //loge("$it,$newSchedule")
                     listAllSchedule.add(DayOfMonth(it,newSchedule))
                 }
             }
@@ -130,7 +131,7 @@ object ScheduleDaoUtil {
             for (i in 0 until listAllSchedule.size-1){
                 val dateTime1 = listAllSchedule[i].dateTime.simplifiedDataTime()
                 val dateTime2 = listAllSchedule[i+1].dateTime.simplifiedDataTime()
-                if (it>=dateTime1 && it<dateTime2){
+                if (it>dateTime1 && it<dateTime2){
                     loge("----找到时间轴的位置----")
                     val scheduleData = ScheduleData()
                     scheduleData.isTimeAxis = true
@@ -174,5 +175,89 @@ object ScheduleDaoUtil {
 //        val scheduleWithParticipantAndLabel = scheduleData.scheduleDataToScheduleWithParticipantAndLabel()
 //        scheduleDao().updateSchedule(scheduleWithParticipantAndLabel)
 //    }
-
+    /**
+     * 搜索过滤条件的数据
+     * 日程类型【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
+     * name like '%' || :name || '%' and type in (:type) and status in (:status) and label.id in(:labelId) group by schedule.id
+     *
+     */
+    fun filterOfSearchSchedule(filterTagCollect: FilterTagCollect): List<ScheduleData>{
+        filterTagCollect.also {
+            var where = "1=1"
+            it.name?.let {
+                where += " and name like '%"+it+"%'"
+            }
+            it.type?.let {
+                where += " and type in("+it+")"
+            }
+            it.status?.let {
+                where += " and status in("+it+")"
+            }
+            it.labelId?.let {
+                where += " and label.id in(:"+it+")"
+            }
+            where += " group by schedule.id"
+            loge("where====> $where")
+            val searchSchedule = scheduleDao().searchSchedule(where)
+            loge("searchSchedule size ${searchSchedule.size}")
+            loge("searchSchedule data  $searchSchedule")
+            val scheduleDataList = mutableListOf<ScheduleData>()
+            scheduleDataList.addAll(searchSchedule.map { it.scheduleWithParticipantAndLabelToScheduleData() })
+            if (filterTagCollect.startTime == null){
+                return scheduleDataList
+            }
+            val startTimeDate = toDateTime(filterTagCollect.startTime?:"").simplifiedDataTime()
+            if (filterTagCollect.endTime == null){
+                //没有截止时间，查询满足条件 和开始时间当天的日程 相当于查询当日日程
+                val listAllSchedule = mutableListOf<ScheduleData>()
+                val endTimeDate = startTimeDate.simplifiedDataTime().toString("yyyy-MM-dd ") + "23:59:59"
+                scheduleDataList.forEach {schedule->
+                    val repetitionDate =
+                        ScheduleRepetitionRuleUtil.calculate(schedule.startTime, endTimeDate, schedule.rrule)
+                    loge("${it.name} repetitionDate:$repetitionDate")
+                    if (repetitionDate.contains(DateTime.now().simplifiedDataTime())) {
+                        val newSchedule = schedule.clone() as ScheduleData
+                        val toDateTime = toDateTime(newSchedule.startTime)
+                        val dataTime = startTimeDate.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                        val toDateTime2 = toDateTime(newSchedule.endTime)
+                        val dataTime2 = startTimeDate.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                        //loge("dataTime=$dataTime,dataTime2=$dataTime")
+                        //暂时不考虑跨天
+                        newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+                        newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                        listAllSchedule.add(newSchedule)
+                    }
+                }
+                listAllSchedule.sort()
+                return listAllSchedule
+            }
+            //计算开始时间和截止时间满足条件的日程数据
+            val endTimeDate = toDateTime(filterTagCollect.endTime?:"").simplifiedDataTime()
+            val finallyTime = endTimeDate.toString("yyyy-MM-dd ") + "23:59:59"
+            val listAllSchedule = mutableListOf<ScheduleData>()
+            scheduleDataList.forEach { schedule ->
+                val repetitionDate = ScheduleRepetitionRuleUtil.calculate(
+                    schedule.startTime,
+                    finallyTime,
+                    schedule.rrule
+                )
+                repetitionDate.forEach {
+                    if (it in startTimeDate..endTimeDate) {
+                        val newSchedule = schedule.clone() as ScheduleData
+                        val toDateTime = toDateTime(newSchedule.startTime)
+                        val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                        val toDateTime2 = toDateTime(newSchedule.endTime)
+                        val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                        //loge("dataTime=$dataTime,dataTime2=$dataTime")
+                        //暂时不考虑跨天
+                        newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+                        newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                        listAllSchedule.add(newSchedule)
+                    }
+                }
+            }
+            listAllSchedule.sort()
+            return scheduleDataList
+        }
+    }
 }

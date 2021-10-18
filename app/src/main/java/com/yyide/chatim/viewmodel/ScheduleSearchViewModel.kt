@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.BaseRsp
 import com.yyide.chatim.model.schedule.FilterTagCollect
+import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
@@ -35,26 +37,35 @@ class ScheduleSearchViewModel : ViewModel() {
      * 搜索日程
      */
     fun searchSchedule(filterTagCollect: FilterTagCollect) {
+        searchLocalSchedule(filterTagCollect)
         val toJSONString = JSON.toJSONString(filterTagCollect)
         loge("搜索日程：$toJSONString")
-        val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
-        apiStores.searchSchedule(requestBody)
-            .enqueue(object : Callback<BaseResponse<List<ScheduleData>>> {
-                override fun onResponse(
-                    call: Call<BaseResponse<List<ScheduleData>>>,
-                    response: Response<BaseResponse<List<ScheduleData>>>
-                ) {
-                    val body = response.body()
-                    if (body != null && body.code == 200 && body.data != null) {
-                        scheduleSearchResultList.postValue(body.data ?: listOf())
-                        return
-                    }
-                    scheduleSearchResultList.postValue(listOf())
-                }
+//        val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
+//        apiStores.searchSchedule(requestBody)
+//            .enqueue(object : Callback<BaseResponse<List<ScheduleData>>> {
+//                override fun onResponse(
+//                    call: Call<BaseResponse<List<ScheduleData>>>,
+//                    response: Response<BaseResponse<List<ScheduleData>>>
+//                ) {
+//                    val body = response.body()
+//                    if (body != null && body.code == 200 && body.data != null) {
+//                        scheduleSearchResultList.postValue(body.data ?: listOf())
+//                        return
+//                    }
+//                    scheduleSearchResultList.postValue(listOf())
+//                }
+//
+//                override fun onFailure(call: Call<BaseResponse<List<ScheduleData>>>, t: Throwable) {
+//                    scheduleSearchResultList.postValue(listOf())
+//                }
+//            })
+    }
 
-                override fun onFailure(call: Call<BaseResponse<List<ScheduleData>>>, t: Throwable) {
-                    scheduleSearchResultList.postValue(listOf())
-                }
-            })
+    /**
+     * 搜索本地日程 根据赛选条件
+     */
+    fun searchLocalSchedule(filterTagCollect: FilterTagCollect) {
+        val filterOfSearchSchedule = ScheduleDaoUtil.filterOfSearchSchedule(filterTagCollect)
+        scheduleSearchResultList.postValue(filterOfSearchSchedule)
     }
 }

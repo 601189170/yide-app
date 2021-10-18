@@ -391,7 +391,7 @@ class ScheduleEditActivity : BaseActivity() {
 
     private fun showSelectedParticipant(list: MutableList<ParticipantRsp.DataBean.ParticipantListBean>) {
         val stringBuilder = StringBuilder()
-        list.map { it.name }.forEach {
+        list.map { it.userName }.forEach {
             stringBuilder.append(it).append("  ")
         }
         if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {

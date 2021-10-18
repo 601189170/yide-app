@@ -58,9 +58,8 @@ class StaffParticipantViewModel : ViewModel() {
                     val data = body.data
                     data.participantList?.let {
                         it.forEach {
-                            it.userId = it.teacherId
-                            it.participantId = it.teacherId
-                            it.userName = it.name
+                            it.name = it.realname
+                            it.userName = it.realname
                         }
                     }
                     responseResult.postValue(data)
@@ -105,10 +104,10 @@ class StaffParticipantViewModel : ViewModel() {
                         val participantListBean =
                             ParticipantRsp.DataBean.ParticipantListBean()
                         participantListBean.id = it.id
-                        participantListBean.userId = it.id
-                        participantListBean.participantId = it.id
+                        participantListBean.userId = it.userId
                         participantListBean.name = it.realname
                         participantListBean.userName = it.realname
+                        //participantListBean.userName = it.realname
                         participantListBean.department = false
                         participantListBean.checked = false
                         participantList.add(participantListBean)

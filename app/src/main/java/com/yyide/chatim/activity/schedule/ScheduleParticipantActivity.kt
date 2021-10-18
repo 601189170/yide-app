@@ -120,8 +120,9 @@ class ScheduleParticipantActivity : BaseActivity() {
             participantDataList.forEach {
                 it.name = it.userName
                 it.realname = it.userName
-                it.teacherId = it.userId
-                it.participantId = it.userId
+                //it.realname = it.userName
+                //it.teacherId = it.userId
+                //it.participantId = it.userId
                 //it.id = it.userId
             }
             participantSharedViewModel.curStaffParticipantList.value = participantDataList
