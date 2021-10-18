@@ -144,6 +144,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private long firstTime = 0;
     private CallModel mCallModel;
     private ScheduleMangeViewModel scheduleMangeViewModel;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_main;
@@ -307,11 +308,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         } else if (BaseConstant.TYPE_NOTICE_NUM.equals(messageEvent.getCode())) {
             noticeCount = messageEvent.getCount();
             setMessageCount(todoCount + messageCount + noticeCount);
-        }else if(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA.equals(messageEvent.getCode())){
+        } else if (BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA.equals(messageEvent.getCode())) {
             //更新日程数据并存本地
             if (scheduleMangeViewModel != null) {
                 scheduleMangeViewModel.getAllScheduleList();
             }
+        } else if (BaseConstant.TYPE_HOME_CHECK_SCHEDULE.equals(messageEvent.getCode())) {
+            setTab(4, 0);
         }
     }
 

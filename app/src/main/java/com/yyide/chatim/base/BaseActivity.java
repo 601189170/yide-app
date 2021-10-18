@@ -98,21 +98,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         loading = new LoadingTools(this);
         mDingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.white));
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
-            int vis = getWindow().getDecorView().getSystemUiVisibility();
-            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-            getWindow().getDecorView().setSystemUiVisibility(vis);
-        }
+        setStatusBar(getResources().getColor(R.color.white));
         //这里注意下 因为在评论区发现有网友调用setRootViewFitsSystemWindows 里面 winContent.getChildCount()=0 导致代码无法继续
         //是因为你需要在setContentView之后才可以调用 setRootViewFitsSystemWindows
 
         //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
 //        ImmersionBar.with(this).init();
         TUIKit.addIMEventListener(mIMEventListener);
+    }
+
+    protected void setStatusBar(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().setStatusBarColor(color);
+            getWindow().setNavigationBarColor(color);
+            int vis = getWindow().getDecorView().getSystemUiVisibility();
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            getWindow().getDecorView().setSystemUiVisibility(vis);
+        }
     }
 
     @Override

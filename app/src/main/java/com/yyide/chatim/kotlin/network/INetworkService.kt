@@ -2,8 +2,9 @@ package com.yyide.chatim.kotlin.network
 
 import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.*
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.yyide.chatim.model.schedule.ScheduleData
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 interface INetworkService {
 
@@ -98,7 +99,6 @@ interface INetworkService {
         @Query("endTime") endTime: String
     ): BaseResponse<SchoolWeeklyTeacherBean>
 
-
     /**
      * 校长查看考勤 学生
      */
@@ -107,4 +107,33 @@ interface INetworkService {
         @Query("startTime") startTime: String,
         @Query("endTime") endTime: String
     ): BaseResponse<SchoolWeeklyTeacherBean>
+
+    /**
+     * 会议首页列表
+     */
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("/management/cloud-system/app/schedule/today/meetingList")
+    suspend fun requestMeetingHomeList(@Body requestBody: RequestBody): BaseResponse<List<ScheduleData>>
+
+    /**
+     * 会议创建/修改
+     */
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("/management/cloud-system/app/schedule/saveSchedule")
+    suspend fun requestMeetingSave(@Body requestBody: RequestBody): BaseResponse<ResultBean>
+
+    /**
+     * 会议列表
+     */
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("/management/cloud-system/app/schedule/meetingList")
+    suspend fun requestMeetingHistoryList(@Body requestBody: RequestBody): BaseResponse<List<ScheduleData>>
+
+    /**
+     * 校长查看考勤 学生
+     */
+    @POST("/management/cloud-system/app/schedule/findMeetingDetails/{id}")
+    suspend fun requestMeetingDetail(
+        @Path("id") id: String
+    ): BaseResponse<ScheduleData>
 }

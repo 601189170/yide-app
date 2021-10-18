@@ -52,7 +52,7 @@
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
-                        <com.yyide.chatim.widget.MyGridView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/mygrid"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

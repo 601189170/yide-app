@@ -2,6 +2,7 @@ package com.yyide.chatim.kotlin.network
 
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.kotlin.network.base.BaseNetworkApi
+import okhttp3.RequestBody
 import retrofit2.http.Query
 
 /**
@@ -83,8 +84,40 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
     /**
      * 家长周报
      */
-    suspend fun requestParentsStudentDetail(studentId: String, startTime: String, endTime: String) = getResult {
-        service.requestStudentDetail(studentId, startTime, endTime)
-    }
+    suspend fun requestParentsStudentDetail(studentId: String, startTime: String, endTime: String) =
+        getResult {
+            service.requestStudentDetail(studentId, startTime, endTime)
+        }
 
+    /**
+     * 会议首页今日列表
+     */
+    suspend fun requestMeetingHomeList(requestBody: RequestBody) =
+        getResult {
+            service.requestMeetingHomeList(requestBody)
+        }
+
+    /**
+     * 会议创建、修改
+     */
+    suspend fun requestMeetingSave(requestBody: RequestBody) =
+        getResult {
+            service.requestMeetingSave(requestBody)
+        }
+
+    /**
+     * 会议列表
+     */
+    suspend fun requestMeetingList(requestBody: RequestBody) =
+        getResult {
+            service.requestMeetingHistoryList(requestBody)
+        }
+
+    /**
+     * 会议详情
+     */
+    suspend fun requestMeetingDetail(id: String) =
+        getResult {
+            service.requestMeetingDetail(id)
+        }
 }
