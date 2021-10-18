@@ -32,6 +32,7 @@ class ScheduleListInnerAdapter :
         val week = item.dateTime.dayOfWeek+1
         holder.setText(R.id.tv_title_day, "${day}日")
         holder.setText(R.id.tv_title_week, DateUtils.getWeek(week))
+        loge("item.dateTime.dayOfWeek = ${item.dateTime.dayOfWeek},week=${DateUtils.getWeek(week)}")
         val innerRecyclerView: SwipeRecyclerView = holder.getView(R.id.rv_schedule_list)
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL

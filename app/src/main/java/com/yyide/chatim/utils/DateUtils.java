@@ -381,6 +381,8 @@ public class DateUtils {
                 return "周五";
             case 7:
                 return "周六";
+            case 8:
+                return "周日";
             default:
                 break;
 

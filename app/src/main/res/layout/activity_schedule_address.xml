@@ -49,5 +49,6 @@
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/cl_whether_remind"
-        tools:listitem="@layout/item_dialog_schedule_remind_list" />
+        tools:listitem="@layout/item_dialog_schedule_remind_list"
+        android:paddingBottom="120dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

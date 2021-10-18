@@ -41,6 +41,7 @@ class ScheduleEditActivity : BaseActivity() {
     private val scheduleMangeViewModel: ScheduleMangeViewModel by viewModels()
     val list = getList()
     val list2 = getList2()
+    private var sourceRepetitionRule: Repetition? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleEditBinding = ActivityScheduleEditBinding.inflate(layoutInflater)
@@ -60,7 +61,7 @@ class ScheduleEditActivity : BaseActivity() {
             //日程id
             scheduleEditViewModel.scheduleIdLiveData.value = it.id
             //日程名称name
-            scheduleEditBinding.tvScheduleTitle.text = it.name
+            scheduleEditBinding.etScheduleTitle.setText(it.name)
             scheduleEditViewModel.scheduleTitleLiveData.value = it.name
             //日程状态status
             scheduleEditBinding.checkBox.isChecked = it.status == "1"
@@ -79,11 +80,14 @@ class ScheduleEditActivity : BaseActivity() {
                 if (repetition.rule == it.rrule) {
                     scheduleEditBinding.tvRepetition.text = repetition.title
                     scheduleEditViewModel.repetitionLiveData.value = repetition
+                    sourceRepetitionRule = repetition
                 }
             }
             if (scheduleEditViewModel.repetitionLiveData.value == null && it.rrule != null) {
                 scheduleEditBinding.tvRepetition.text = "自定义重复"
-                scheduleEditViewModel.repetitionLiveData.value = Repetition("", true, it.rrule)
+                val repetition = Repetition("", true, it.rrule)
+                scheduleEditViewModel.repetitionLiveData.value = repetition
+                sourceRepetitionRule = repetition
             }
             //日程提醒remind
             if (it.remindTypeInfo == "10") {
@@ -131,9 +135,14 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleEditBinding.top.title.text = "日程编辑"
         scheduleEditBinding.top.backLayout.setOnClickListener {
             //finish()
+            if (TextUtils.isEmpty(scheduleEditBinding.etScheduleTitle.text.toString())){
+                ToastUtils.showShort("需要输入日程名称")
+                return@setOnClickListener
+            }
+            val rule = sourceRepetitionRule?.rule
+            scheduleEditViewModel.scheduleTitleLiveData.value = scheduleEditBinding.etScheduleTitle.text.toString()
             val repetition = scheduleEditViewModel.repetitionLiveData.value
-
-            if (repetition == null || repetition.rule?.isEmpty() != false) {
+            if ((repetition == null || repetition.rule?.isEmpty() != false) && (sourceRepetitionRule == null || rule == null)) {
                 scheduleEditViewModel.saveOrModifySchedule(true)
                 return@setOnClickListener
             }

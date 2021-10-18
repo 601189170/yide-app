@@ -31,21 +31,32 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
                 app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/tv_schedule_title"
+                <ImageView
+                    android:id="@+id/iv_schedule_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:src="@drawable/type_schedule_icon"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     android:layout_marginStart="@dimen/dp_20"
-                    android:drawableStart="@drawable/type_schedule_icon"
-                    android:drawablePadding="@dimen/dp_6"
-                    android:text="初三10班  语文"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+                <EditText
+                    android:id="@+id/et_schedule_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_6"
+                    android:text="语文初三10班  语文"
+                    android:hint="需要输入日程名称"
                     android:textStyle="bold"
+                    android:singleLine="true"
                     android:textColor="#ff333333"
+                    android:maxEms="15"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintLeft_toRightOf="@id/iv_schedule_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@color/white"/>
 
                 <CheckBox
                     android:id="@+id/checkBox"

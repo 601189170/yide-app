@@ -30,43 +30,18 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_week_undo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_20"
-                android:drawableStart="@drawable/schedule_title_indicate_vertical_line_shape"
-                android:drawablePadding="@dimen/dp_10"
-                android:text="本周未完成"
-                android:textColor="#ff666666"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_week_undo_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/dp_20"
-                android:paddingTop="@dimen/dp_12"
-                android:paddingEnd="@dimen/dp_20"
-                app:layout_constraintTop_toBottomOf="@id/tv_week_undo"
-                tools:itemCount="4"
-                tools:listitem="@layout/schedule_item_unexpired_not_completed" />
-
-            <TextView
                 android:id="@+id/tv_today_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_30"
+                android:layout_marginStart="@dimen/dp_20"
                 android:drawableStart="@drawable/schedule_title_indicate_vertical_line_shape"
                 android:drawablePadding="@dimen/dp_10"
                 android:text="今日清单"
                 android:textColor="#ff666666"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="@id/tv_week_undo"
-                app:layout_constraintTop_toBottomOf="@id/rv_week_undo_list" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_today_list"
@@ -75,8 +50,33 @@
                 android:paddingStart="@dimen/dp_20"
                 android:paddingTop="@dimen/dp_12"
                 android:paddingEnd="@dimen/dp_20"
-                android:paddingBottom="100dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_today_list"
+                tools:itemCount="4"
+                tools:listitem="@layout/schedule_item_unexpired_not_completed" />
+
+            <TextView
+                android:id="@+id/tv_week_undo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_30"
+                android:drawableStart="@drawable/schedule_title_indicate_vertical_line_shape"
+                android:drawablePadding="@dimen/dp_10"
+                android:text="本周未完成"
+                android:textColor="#ff666666"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@id/tv_today_list"
+                app:layout_constraintTop_toBottomOf="@id/rv_today_list" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_week_undo_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_12"
+                android:paddingEnd="@dimen/dp_20"
+                android:paddingBottom="100dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_week_undo"
                 tools:itemCount="4"
                 tools:listitem="@layout/schedule_item_unexpired_not_completed" />
         </androidx.constraintlayout.widget.ConstraintLayout>
