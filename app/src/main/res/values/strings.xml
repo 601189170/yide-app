@@ -69,6 +69,13 @@
     <string name="weekly_school_desc">全校教职工每天%s考勤率</string>
     <string name="weekly_school_student_desc">全校学生每天%s出勤率</string>
     <string name="weekly_school_student_attend">全校各年级%s出勤率</string>
+
+    <!--会议-->
+    <string name="meeting_create_title">创建会议</string>
+    <string name="meeting_update_title">修改会议</string>
+    <string name="meeting_title">会议</string>
+    <string name="meeting_history_title">历史会议</string>
+    
     // 主页Tab相关
     <string name="tab_contact_tab_text">通讯录</string>
     <string name="tab_conversation_tab_text">消息</string>

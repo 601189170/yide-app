@@ -85,7 +85,7 @@
             android:name=".activity.meeting.MeetingHistoryActivity"
             android:exported="true" />
         <activity
-            android:name=".activity.meeting.MeetingCreateActivity"
+            android:name=".activity.meeting.MeetingSaveActivity"
             android:exported="true" />
         <activity
             android:name=".activity.meeting.MeetingHomeActivity"

@@ -12,10 +12,13 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
@@ -45,7 +48,7 @@ import butterknife.BindView;
 public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.mygrid)
-    GridView mygrid;
+    RecyclerView mygrid;
     @BindView(R.id.recy)
     RecyclerView recy;
     @BindView(R.id.listview)
@@ -78,13 +81,14 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) ->
-            mSwipeRefreshLayout.setEnabled(verticalOffset >= 0)
+                mSwipeRefreshLayout.setEnabled(verticalOffset >= 0)
         );
         adapter = new MyAppItemAdapter();
         //我的应用
+        mygrid.setLayoutManager(new GridLayoutManager(mActivity, 4));
         mygrid.setAdapter(adapter);
-        mygrid.setOnItemClickListener((parent, view1, position, id) -> {
-            final MyAppListRsp.DataBean item = (MyAppListRsp.DataBean) parent.getItemAtPosition(position);
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            final MyAppListRsp.DataBean item = (MyAppListRsp.DataBean) adapter.getItem(position);
             JumpUtil.appOpen(requireContext(), item.getName(), item.getPath());
         });
 
@@ -96,7 +100,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         recy.setLayoutManager(linearLayoutManager);
         recylAppAdapter.setOnItemClickListener((view12, position) -> {
             appBarLayout.setExpanded(false);
-                    sc = false;
+            sc = false;
             recylAppAdapter.setPosition(position);
 //            recyclerViewApp.smoothScrollToPosition(position);
             recy.smoothScrollToPosition(position);
@@ -184,7 +188,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
                     data = new ArrayList<>();
                 }
                 data.add(itemBean);
-                adapter.notifyData(data);
+                adapter.setList(data);
             }
         }
     }

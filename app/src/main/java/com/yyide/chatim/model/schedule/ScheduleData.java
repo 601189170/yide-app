@@ -9,7 +9,6 @@ import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_NOT_COMPLE
 import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.utils.DateUtils;
 
 import org.joda.time.DateTime;

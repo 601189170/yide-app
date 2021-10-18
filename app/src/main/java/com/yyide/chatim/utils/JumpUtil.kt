@@ -10,6 +10,7 @@ import com.yyide.chatim.activity.WebViewActivity
 import com.yyide.chatim.activity.attendance.AttendanceActivity
 import com.yyide.chatim.activity.attendance.StatisticsActivity
 import com.yyide.chatim.activity.leave.AskForLeaveActivity
+import com.yyide.chatim.activity.meeting.MeetingHomeActivity
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity
 import com.yyide.chatim.activity.weekly.WeeklyHomeActivity
 import com.yyide.chatim.base.BaseConstant
@@ -53,6 +54,11 @@ object JumpUtil {
             "周报" -> {
                 //context.startActivity(new Intent(context, PushSettingActivity.class));
                 mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
+            }
+            "日程" -> {
+//                EventBus.getDefault()
+//                    .post(EventMessage(BaseConstant.TYPE_HOME_CHECK_SCHEDULE, "", 0))
+                mActivity.startActivity(Intent(mActivity, MeetingHomeActivity::class.java))
             }
             else -> if ("#" == url) {
                 ToastUtils.showShort("暂无权限")

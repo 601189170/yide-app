@@ -1,13 +1,19 @@
 package com.yyide.chatim.activity.meeting
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.meeting.viewmodel.MeetingHistoryViewModel
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityMeetingHistoryBinding
 import com.yyide.chatim.databinding.ItemMeetingHomeBinding
+import com.yyide.chatim.model.schedule.ScheduleData
+import com.yyide.chatim.utils.DateUtils
 
 /**
  * 历史会议-搜索
@@ -17,6 +23,9 @@ import com.yyide.chatim.databinding.ItemMeetingHomeBinding
 class MeetingHistoryActivity : BaseActivity() {
 
     private lateinit var viewBinding: ActivityMeetingHistoryBinding
+    private val viewModel: MeetingHistoryViewModel by viewModels()
+    private val size = 15
+    private var current = 1
 
     override fun getContentViewID(): Int {
         return R.layout.activity_meeting_history
@@ -27,27 +36,60 @@ class MeetingHistoryActivity : BaseActivity() {
         viewBinding = ActivityMeetingHistoryBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initView()
+        request()
     }
 
     private fun initView() {
+        viewBinding.cancel.setOnClickListener { finish() }
+        viewBinding.top.backLayout.setOnClickListener { finish() }
+        viewBinding.ivDel.setOnClickListener { viewBinding.edit.text = null }
+        viewBinding.top.title.text = getString(R.string.meeting_history_title)
         viewBinding.recyclerview.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerview.adapter = adapter
-        val lists = mutableListOf<String>()
-        lists.add("1")
-        lists.add("2")
-        lists.add("3")
-        lists.add("4")
-        lists.add("5")
-        lists.add("6")
-        adapter.setList(lists)
+        adapter.setEmptyView(R.layout.empty)
+        adapter.loadMoreModule.setOnLoadMoreListener {
+            adapter.loadMoreModule.isEnableLoadMore = true
+            //请求数据
+            current++
+            viewModel.requestMeetingHomeList(size, current)
+        }
+        adapter.loadMoreModule.isAutoLoadMore = true
+        //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
+        adapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
+//        adapter.setOnItemClickListener { adapter, view, position ->
+//            val item = adapter.getItem(position) as ScheduleData
+//            MeetingCreateUpdateActivity.jumpUpdate(this, item.id)
+//        }
+    }
+
+    private fun request() {
+        showLoading()
+        viewModel.meetingHistoryLiveData.observe(this) {
+            hideLoading()
+            val result = it.getOrNull()
+            if (result != null) {
+                adapter.setList(result)
+            }
+        }
+        viewModel.requestMeetingHomeList(size, current)
     }
 
     private val adapter =
-        object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_meeting_home) {
-            override fun convert(holder: BaseViewHolder, item: String) {
+        object : BaseQuickAdapter<ScheduleData, BaseViewHolder>(R.layout.item_meeting_home),
+            LoadMoreModule {
+            @SuppressLint("SetTextI18n")
+            override fun convert(holder: BaseViewHolder, item: ScheduleData) {
                 val viewBind = ItemMeetingHomeBinding.bind(holder.itemView)
-                viewBind.tvTitle.text = "本学期研讨会议"
-                viewBind.tvTime.text = "09:00-10:00"
+                viewBind.tvTitle.text = item.name
+                viewBind.tvTime.text = DateUtils.formatTime(
+                    item.startTime,
+                    "",
+                    "HH:mm"
+                ) + "-" + DateUtils.formatTime(
+                    item.endTime,
+                    "",
+                    "HH:mm"
+                )
             }
         }
 }

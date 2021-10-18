@@ -93,6 +93,8 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
     public static final String TYPE_SELECT_MESSAGE_TODO = "type_select_message_todo";
     public static final String TYPE_UPDATE_MESSAGE_TODO = "type_update_message_todo";
+    public static final String TYPE_HOME_CHECK_SCHEDULE = "type_home_check_schedule";
+    public static final String TYPE_MEETING_UPDATE_LIST = "type_meeting_update_list";
 
     public static final String TYPE_MAIN = "type_main";
     public static final String TYPE_MESSAGE = "type_message";
@@ -120,5 +122,4 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_APP = "type_update_app";
     public static final String TYPE_UPDATE_NOTICE_MY_RELEASE = "type_update_notice_my_release";
     public static final String TYPE_UPDATE_SCHEDULE_LIST_DATA = "type_update_schedule_list_data";
-
 }

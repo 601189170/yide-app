@@ -7,6 +7,11 @@
     android:background="@color/white"
     tools:context=".activity.meeting.MeetingHistoryActivity">
 
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout2"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/ll_search"
         android:layout_width="match_parent"
@@ -15,6 +20,7 @@
         android:orientation="horizontal"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_10"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -47,13 +53,13 @@
                 android:textColor="@color/text_333333"
                 android:textSize="13sp" />
 
-            <Button
-                android:id="@+id/btn_delete_search"
+            <ImageView
+                android:id="@+id/iv_del"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginEnd="@dimen/dp_10"
-                android:background="@drawable/icon_delete_search"
-                android:paddingStart="@dimen/dp_20" />
+                android:paddingStart="@dimen/dp_20"
+                android:src="@drawable/icon_delete_search" />
         </LinearLayout>
 
         <TextView
@@ -74,7 +80,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"
         android:background="#F7F9FA"
-        app:layout_constraintTop_toBottomOf="@+id/ll_search" />
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/top" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -84,7 +91,7 @@
         android:paddingTop="@dimen/dp_6"
         android:paddingEnd="@dimen/dp_20"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_line"
+        app:layout_constraintTop_toBottomOf="@+id/top"
         tools:itemCount="6"
         tools:listitem="@layout/item_meeting_home" />
 </androidx.constraintlayout.widget.ConstraintLayout>
