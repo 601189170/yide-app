@@ -34,7 +34,6 @@ class ScheduleLabelManageActivity : BaseActivity() {
         labelManageViewModel.getLabelList().observe(this, Observer {
             if (it.isEmpty()) {
                 loge("没有数据")
-                return@Observer
             }
             labelList.clear()
             labelList.addAll(it)

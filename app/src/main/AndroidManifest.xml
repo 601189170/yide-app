@@ -618,20 +618,49 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.scancode.BindingEquipmentActivity" />
-        <activity android:name=".activity.scancode.ConfirmLoginActivity" />
-        <activity android:name=".activity.scancode.ConfirmSuccessActivity" /> <!-- 日程编辑 -->
-        <activity android:name=".activity.schedule.ScheduleEditActivity" />
-        <activity android:name=".activity.schedule.ScheduleRemindActivity" />
-        <activity android:name=".activity.schedule.ScheduleRepetitionActivity" />
-        <activity android:name=".activity.schedule.ScheduleLabelCreateActivity" />
-        <activity android:name=".activity.schedule.ScheduleLabelManageActivity" />
-        <activity android:name=".activity.schedule.ScheduleAddressActivity" />
-        <activity android:name=".activity.schedule.ScheduleDateIntervalActivity" />
-        <activity android:name=".activity.schedule.ScheduleAddLabelActivity" />
-        <activity android:name=".activity.schedule.ScheduleCustomRepetitionActivity" />
-        <activity android:name=".activity.schedule.ScheduleParticipantActivity" />
-        <activity android:name=".activity.schedule.ScheduleSettingsActivity" />
+        <activity
+            android:name=".activity.scancode.BindingEquipmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.scancode.ConfirmLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.scancode.ConfirmSuccessActivity"
+            android:screenOrientation="portrait" />
+        <!-- 日程编辑 -->
+        <activity
+            android:name=".activity.schedule.ScheduleEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleRemindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleRepetitionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleLabelCreateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleLabelManageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleDateIntervalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleAddLabelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleCustomRepetitionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleParticipantActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleSettingsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -202,7 +202,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showLabelCreateScheduleDialog(Context context, LifecycleOwner lifecycleOwner){
+    public static void showLabelCreateScheduleDialog(Context context, LifecycleOwner lifecycleOwner,OnClickListener onClickListener){
         DialogScheduleLabelCreateBinding binding = DialogScheduleLabelCreateBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -261,6 +261,7 @@ public class DialogUtil {
             viewModel.getLabelAddOrEditResult().observe(lifecycleOwner, aBoolean -> {
                 if (aBoolean) {
                     mDialog.dismiss();
+                    onClickListener.onEnsure(v);
                 } else {
                     ToastUtils.showShort("添加标签失败");
                 }
@@ -1000,9 +1001,6 @@ public class DialogUtil {
         binding.tvCancel.setOnClickListener(v -> {
             mDialog.dismiss();
         });
-        binding.tvAdd.setOnClickListener(v -> {
-            showLabelCreateScheduleDialog(context,lifecycleOwner);
-        });
 
         BaseQuickAdapter adapter = new BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_dialog_add_label) {
             @Override
@@ -1038,6 +1036,20 @@ public class DialogUtil {
             }
             adapter.setList(labelList);
         });
+        binding.tvAdd.setOnClickListener(v -> {
+            showLabelCreateScheduleDialog(context, lifecycleOwner, new OnClickListener() {
+                @Override
+                public void onCancel(View view) {
+
+                }
+
+                @Override
+                public void onEnsure(View view) {
+                    viewModel.selectLabelList();
+                }
+            });
+        });
+
         mDialog.setOnShowListener(dialog -> {
             Log.e(TAG, "setOnShowListener: "+dialog.toString() );
         });
