@@ -98,7 +98,7 @@ class ScheduleMangeViewModel : ViewModel() {
             it.participant.forEach {
                 val participant = ParticipantList()
                 participant.id = it.id
-                participant.userId = it.id
+                participant.userId = it.userId
                 participant.scheduleId = scheduleId
                 participant.type = it.type
                 //学生和教职工取值不一

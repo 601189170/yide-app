@@ -137,8 +137,16 @@ class StaffParticipantFragment : Fragment() {
                     }
                 } else {
                     val value = participantSharedViewModel.curStaffParticipantList.value
-                    if (value?.map { it.name }?.contains(participantListBean.name) == true) {
-                        value.remove(participantListBean)
+                    if (value?.map { it.userId }?.contains(participantListBean.userId) == true) {
+                        //value.remove(participantListBean)
+                        val iterator = value.iterator()
+                        while (iterator.hasNext()){
+                            val next = iterator.next()
+                            if (next.userId == participantListBean.userId){
+                                value.remove(next)
+                                break
+                            }
+                        }
                     } else {
                         value?.add(participantListBean)
                     }
@@ -155,7 +163,8 @@ class StaffParticipantFragment : Fragment() {
                 loge("当前选中参与人数据发生变化：${participantList.size}")
                 staffParticipantViewModel.curParticipantList.value?.also { curList ->
                     curList.forEach {
-                        it.checked = participantList.contains(it)
+                        loge("对比---participantList=${JSON.toJSONString(participantList)}\n it=${JSON.toJSONString(it)}")
+                        it.checked = participantList.map { it.userId }.contains(it.userId)
                     }
                     staffAdapter.setList(curList)
                 }
@@ -194,7 +203,7 @@ class StaffParticipantFragment : Fragment() {
         val value = participantSharedViewModel.curStaffParticipantList.value
         staffParticipantViewModel.curParticipantList.value?.forEach {
             if (value != null) {
-                it.checked = value.map { it.id }.contains(it.id)
+                it.checked = value.map { it.userId }.contains(it.userId)
             }
         }
     }
