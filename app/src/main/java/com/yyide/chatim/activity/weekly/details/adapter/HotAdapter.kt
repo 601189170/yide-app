@@ -16,7 +16,7 @@ class HotAdapter(list: MutableList<View>) : PagerAdapter() {
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        container.addView(viewLists.get(position))
+        container.addView(viewLists[position])
         return viewLists[position]
     }
 
@@ -28,4 +28,5 @@ class HotAdapter(list: MutableList<View>) : PagerAdapter() {
         //super.destroyItem(container, position, `object`)
         container.removeView(viewLists[position])
     }
+
 }

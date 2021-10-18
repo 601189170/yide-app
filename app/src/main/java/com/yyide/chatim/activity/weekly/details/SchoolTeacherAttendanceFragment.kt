@@ -157,6 +157,21 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
 
     private var spanCount = 3
     private fun setWeekly(result: SchoolWeeklyTeacherBean) {
+        //初始化控件清空数据
+        adapterHot.setList(null)
+        viewBinding.announRoll.removeAllViews()
+        if (result.attend != null && result.attend.isEmpty() && result.detail != null && result.detail.isEmpty()) {
+            viewBinding.cardViewNoData.visibility = View.VISIBLE
+            viewBinding.constraintLayout.visibility = View.GONE
+            viewBinding.announRoll.visibility = View.GONE
+            viewBinding.slidingTabLayout.visibility = View.GONE
+        } else {
+            viewBinding.cardViewNoData.visibility = View.GONE
+            viewBinding.constraintLayout.visibility = View.VISIBLE
+            viewBinding.announRoll.visibility = View.VISIBLE
+            viewBinding.slidingTabLayout.visibility = View.VISIBLE
+        }
+        //数据填充
         viewBinding.hotRecyclerview.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.hotRecyclerview.adapter = adapterHot
@@ -182,10 +197,11 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
 
     private fun initHotScroll(attendance: List<List<SchoolAttendance>>) {
         val viewList = mutableListOf<View>()
+        val announAdapter = HotAdapter(viewList)
         attendance.forEachIndexed { index, schoolAttendance ->
             viewList.add(attendanceBanner(attendance[index]))
         }
-        val announAdapter = HotAdapter(viewList)
+        viewBinding.announRoll.visibility = View.VISIBLE
         viewBinding.announRoll.adapter = announAdapter
         viewBinding.announRoll.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(

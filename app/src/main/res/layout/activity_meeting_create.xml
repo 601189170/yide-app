@@ -117,7 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_6"
-            android:text="会议时间"
+            android:text="请选择会议时间"
             android:textColor="#ff999999"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_time"

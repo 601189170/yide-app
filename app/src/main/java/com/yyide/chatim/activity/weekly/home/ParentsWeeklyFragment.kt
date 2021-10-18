@@ -242,7 +242,7 @@ open class ParentsWeeklyFragment : BaseFragment() {
                     null
                 )
                 viewBinding.tvEvent.setOnClickListener {
-                    val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
+                    val attendancePop = AttendancePop(activity, adapterEvent, "请选择学生")
                     attendancePop.setOnSelectListener { index: Int ->
                         viewBinding.tvEvent.text = adapterEvent.getItem(index).studentName + "的周报"
                         studentName = adapterEvent.getItem(index).studentName

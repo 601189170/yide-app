@@ -56,8 +56,10 @@ object JumpUtil {
                 mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
             }
             "日程" -> {
-//                EventBus.getDefault()
-//                    .post(EventMessage(BaseConstant.TYPE_HOME_CHECK_SCHEDULE, "", 0))
+                EventBus.getDefault()
+                    .post(EventMessage(BaseConstant.TYPE_HOME_CHECK_SCHEDULE, "", 0))
+            }
+            "会议" -> {
                 mActivity.startActivity(Intent(mActivity, MeetingHomeActivity::class.java))
             }
             else -> if ("#" == url) {

@@ -118,6 +118,7 @@ class MeetingSaveActivity : BaseActivity() {
             viewBinding.tvSite.setTextColor(resources.getColor(R.color.text_1E1E1E))
             viewBinding.tvSite.text = item.siteName
         }
+        viewModel.siteLiveData.value = SiteNameRsp.DataBean(item.siteId, item.siteName, false)
         viewModel.startTimeLiveData.value = item.startTime
         viewModel.endTimeLiveData.value = item.endTime
         viewBinding.tvTime.setTextColor(resources.getColor(R.color.text_1E1E1E))
@@ -146,7 +147,6 @@ class MeetingSaveActivity : BaseActivity() {
      */
     private fun sava() {
         val title = viewBinding.etMeetingTitle.text.toString().trim()
-        val site = viewBinding.tvSite.text.toString().trim()
         val time = viewBinding.tvTime.text.toString().trim()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
@@ -158,7 +158,7 @@ class MeetingSaveActivity : BaseActivity() {
             TextUtils.isEmpty(title) -> {
                 ToastUtils.showShort("请输入会议标题")
             }
-            time == "会议时间" -> {
+            time == "请选择会议时间" -> {
                 ToastUtils.showShort("请选择会议时间")
             }
             else -> {
@@ -166,9 +166,13 @@ class MeetingSaveActivity : BaseActivity() {
                 if (!TextUtils.isEmpty(id)) {
                     scheduleData.id = id
                 }
-                scheduleData.siteName = site
+                if (viewModel.siteLiveData.value != null) {
+                    scheduleData.siteId = viewModel.siteLiveData.value?.id
+                }
                 scheduleData.name = title
-                scheduleData.participant = viewModel.participantList.value
+                if(viewModel.participantList.value != null){
+                    scheduleData.participant = viewModel.participantList.value
+                }
                 scheduleData.startTime = viewModel.startTimeLiveData.value
                 scheduleData.endTime = viewModel.endTimeLiveData.value
                 scheduleData.type = "3"
