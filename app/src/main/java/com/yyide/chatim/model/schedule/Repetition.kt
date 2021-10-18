@@ -12,6 +12,9 @@ data class Repetition(
     var rule:MutableMap<String,Any>? = null
 ) {
     companion object {
+        fun getNotRepetition(): Repetition {
+            return Repetition("不重复", true,null)
+        }
         fun getList(): List<Repetition> {
             val remindList = mutableListOf<Repetition>()
             remindList.add(Repetition("不重复", true,null))

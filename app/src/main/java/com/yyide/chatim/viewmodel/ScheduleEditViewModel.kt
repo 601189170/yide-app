@@ -15,6 +15,7 @@ import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.loge
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
+import org.joda.time.DateTime
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,6 +59,15 @@ class ScheduleEditViewModel : ViewModel() {
     val changeStatusResult = MutableLiveData<Boolean>()
     private var dingApiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
+
+    init {
+        //初始化一个简单日程需要的数据
+        startTimeLiveData.value = DateTime.now().toString("yyyy-MM-dd HH:mm:ss")
+        endTimeLiveData.value = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+        //默认不提醒
+        remindLiveData.value = Remind.getNotRemind()
+        repetitionLiveData.value = Repetition.getNotRepetition()
+    }
     /**
      * 日程新增
      * @param type 日程类型【0：校历日程，1：课表日程，2：事务日程】
