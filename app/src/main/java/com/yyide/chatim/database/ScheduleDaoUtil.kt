@@ -1,6 +1,7 @@
 package com.yyide.chatim.database
 
 import android.text.TextUtils
+import com.alibaba.fastjson.JSON
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.model.schedule.DayOfMonth
 import com.yyide.chatim.model.schedule.FilterTagCollect
@@ -25,15 +26,15 @@ object ScheduleDaoUtil {
         return AppDatabase.getInstance(BaseApplication.getInstance()).scheduleDao()
     }
 
-    fun toDateTime(date:String):DateTime{
+    fun toDateTime(date: String): DateTime {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-        return DateTime.parse(date,dateTimeFormatter)
+        return DateTime.parse(date, dateTimeFormatter)
     }
 
     /**
      * datetime to format string date
      */
-    fun DateTime.toStringTime(format:String = ""):String{
+    fun DateTime.toStringTime(format: String = ""): String {
         if (!TextUtils.isEmpty(format)) {
             val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern(format)
             return this.toString(dateTimeFormatter)
@@ -90,9 +91,19 @@ object ScheduleDaoUtil {
                 if (it in firstDayOfWeek..lastDayOfWeek) {
                     val newSchedule = schedule.clone() as ScheduleData
                     val toDateTime = toDateTime(newSchedule.startTime)
-                    val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                    val dataTime = it.withTime(
+                        toDateTime.hourOfDay,
+                        toDateTime.minuteOfHour,
+                        toDateTime.secondOfMinute,
+                        0
+                    )
                     val toDateTime2 = toDateTime(newSchedule.endTime)
-                    val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                    val dataTime2 = it.withTime(
+                        toDateTime2.hourOfDay,
+                        toDateTime2.minuteOfHour,
+                        toDateTime2.secondOfMinute,
+                        0
+                    )
                     //loge("dataTime=$dataTime,dataTime2=$dataTime")
                     //暂时不考虑跨天
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
@@ -108,7 +119,7 @@ object ScheduleDaoUtil {
     /**
      * 查询指定月的数据
      */
-    fun monthlyList(monthDateTime: DateTime,timeAxisDateTime:DateTime?): List<DayOfMonth> {
+    fun monthlyList(monthDateTime: DateTime, timeAxisDateTime: DateTime?): List<DayOfMonth> {
         val firstDayOfMonth = monthDateTime.dayOfMonth().withMinimumValue().simplifiedDataTime()
         val lastDayOfMonth = monthDateTime.dayOfMonth().withMaximumValue().simplifiedDataTime()
         //本周最后的时间
@@ -128,15 +139,25 @@ object ScheduleDaoUtil {
                 if (it in firstDayOfMonth..lastDayOfMonth) {
                     val newSchedule = schedule.clone() as ScheduleData
                     val toDateTime = toDateTime(newSchedule.startTime)
-                    val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                    val dataTime = it.withTime(
+                        toDateTime.hourOfDay,
+                        toDateTime.minuteOfHour,
+                        toDateTime.secondOfMinute,
+                        0
+                    )
                     val toDateTime2 = toDateTime(newSchedule.endTime)
-                    val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                    val dataTime2 = it.withTime(
+                        toDateTime2.hourOfDay,
+                        toDateTime2.minuteOfHour,
+                        toDateTime2.secondOfMinute,
+                        0
+                    )
 
                     //暂时不考虑跨天
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                     //loge("$it,$newSchedule")
-                    listAllSchedule.add(DayOfMonth(it,newSchedule))
+                    listAllSchedule.add(DayOfMonth(it, newSchedule))
                 }
             }
         }
@@ -160,11 +181,12 @@ object ScheduleDaoUtil {
     /**
      * 删除一条本地的日程数据
      */
-    fun deleteScheduleData(scheduleId:String){
+    fun deleteScheduleData(scheduleId: String) {
         scheduleDao().deleteSchedule(scheduleId)
         scheduleDao().deleteParticipant(scheduleId)
         scheduleDao().deleteLabel(scheduleId)
     }
+
     /**
      * 清空数据 临时
      */
@@ -177,7 +199,7 @@ object ScheduleDaoUtil {
     /**
      * 修改日程完成状态
      */
-    fun changeScheduleState(id: String, status: String){
+    fun changeScheduleState(id: String, status: String) {
         scheduleDao().changeScheduleState(id, status)
     }
 
@@ -194,46 +216,62 @@ object ScheduleDaoUtil {
      * name like '%' || :name || '%' and type in (:type) and status in (:status) and label.id in(:labelId) group by schedule.id
      *
      */
-    fun filterOfSearchSchedule(filterTagCollect: FilterTagCollect): List<ScheduleData>{
+    fun filterOfSearchSchedule(filterTagCollect: FilterTagCollect): List<ScheduleData> {
+        val toJSONString = JSON.toJSONString(filterTagCollect)
+        loge("搜索日程：$toJSONString")
         filterTagCollect.also {
-            var where = "1=1"
-            it.name?.let {
-                where += " and name like '%"+it+"%'"
+            val searchSchedule: List<ScheduleWithParticipantAndLabel>
+            if (filterTagCollect.labelId == null || filterTagCollect.labelId?.isEmpty() == true) {
+                searchSchedule = scheduleDao().searchSchedule(
+                    filterTagCollect.name ?: "",
+                    filterTagCollect.status ?: listOf(0, 1),
+                    filterTagCollect.type ?: listOf(2, 0, 3, 1)
+                )
+            } else {
+                searchSchedule = scheduleDao().searchSchedule(
+                    filterTagCollect.name ?: "",
+                    filterTagCollect.status ?: listOf(0, 1),
+                    filterTagCollect.type ?: listOf(2, 0, 3, 1),
+                    filterTagCollect.labelId ?: listOf()
+                )
             }
-            it.type?.let {
-                where += " and type in("+it+")"
-            }
-            it.status?.let {
-                where += " and status in("+it+")"
-            }
-            it.labelId?.let {
-                where += " and label.id in(:"+it+")"
-            }
-            where += " group by schedule.id"
-            loge("where====> $where")
-            val searchSchedule = scheduleDao().searchSchedule(where)
             loge("searchSchedule size ${searchSchedule.size}")
             loge("searchSchedule data  $searchSchedule")
             val scheduleDataList = mutableListOf<ScheduleData>()
             scheduleDataList.addAll(searchSchedule.map { it.scheduleWithParticipantAndLabelToScheduleData() })
-            if (filterTagCollect.startTime == null){
+            if (filterTagCollect.startTime == null) {
                 return scheduleDataList
             }
-            val startTimeDate = toDateTime(filterTagCollect.startTime?:"").simplifiedDataTime()
-            if (filterTagCollect.endTime == null){
+            val startTimeDate = toDateTime(filterTagCollect.startTime ?: "").simplifiedDataTime()
+            if (filterTagCollect.endTime == null) {
                 //没有截止时间，查询满足条件 和开始时间当天的日程 相当于查询当日日程
                 val listAllSchedule = mutableListOf<ScheduleData>()
-                val endTimeDate = startTimeDate.simplifiedDataTime().toString("yyyy-MM-dd ") + "23:59:59"
-                scheduleDataList.forEach {schedule->
+                val endTimeDate =
+                    startTimeDate.simplifiedDataTime().toString("yyyy-MM-dd ") + "23:59:59"
+                scheduleDataList.forEach { schedule ->
                     val repetitionDate =
-                        ScheduleRepetitionRuleUtil.calculate(schedule.startTime, endTimeDate, schedule.rrule)
+                        ScheduleRepetitionRuleUtil.calculate(
+                            schedule.startTime,
+                            endTimeDate,
+                            schedule.rrule
+                        )
                     loge("${it.name} repetitionDate:$repetitionDate")
                     if (repetitionDate.contains(DateTime.now().simplifiedDataTime())) {
                         val newSchedule = schedule.clone() as ScheduleData
                         val toDateTime = toDateTime(newSchedule.startTime)
-                        val dataTime = startTimeDate.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                        val dataTime = startTimeDate.withTime(
+                            toDateTime.hourOfDay,
+                            toDateTime.minuteOfHour,
+                            toDateTime.secondOfMinute,
+                            0
+                        )
                         val toDateTime2 = toDateTime(newSchedule.endTime)
-                        val dataTime2 = startTimeDate.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                        val dataTime2 = startTimeDate.withTime(
+                            toDateTime2.hourOfDay,
+                            toDateTime2.minuteOfHour,
+                            toDateTime2.secondOfMinute,
+                            0
+                        )
                         //loge("dataTime=$dataTime,dataTime2=$dataTime")
                         //暂时不考虑跨天
                         newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
@@ -245,7 +283,7 @@ object ScheduleDaoUtil {
                 return listAllSchedule
             }
             //计算开始时间和截止时间满足条件的日程数据
-            val endTimeDate = toDateTime(filterTagCollect.endTime?:"").simplifiedDataTime()
+            val endTimeDate = toDateTime(filterTagCollect.endTime ?: "").simplifiedDataTime()
             val finallyTime = endTimeDate.toString("yyyy-MM-dd ") + "23:59:59"
             val listAllSchedule = mutableListOf<ScheduleData>()
             scheduleDataList.forEach { schedule ->
@@ -258,9 +296,19 @@ object ScheduleDaoUtil {
                     if (it in startTimeDate..endTimeDate) {
                         val newSchedule = schedule.clone() as ScheduleData
                         val toDateTime = toDateTime(newSchedule.startTime)
-                        val dataTime = it.withTime(toDateTime.hourOfDay,toDateTime.minuteOfHour,toDateTime.secondOfMinute,0)
+                        val dataTime = it.withTime(
+                            toDateTime.hourOfDay,
+                            toDateTime.minuteOfHour,
+                            toDateTime.secondOfMinute,
+                            0
+                        )
                         val toDateTime2 = toDateTime(newSchedule.endTime)
-                        val dataTime2 = it.withTime(toDateTime2.hourOfDay,toDateTime2.minuteOfHour,toDateTime2.secondOfMinute,0)
+                        val dataTime2 = it.withTime(
+                            toDateTime2.hourOfDay,
+                            toDateTime2.minuteOfHour,
+                            toDateTime2.secondOfMinute,
+                            0
+                        )
                         //loge("dataTime=$dataTime,dataTime2=$dataTime")
                         //暂时不考虑跨天
                         newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")

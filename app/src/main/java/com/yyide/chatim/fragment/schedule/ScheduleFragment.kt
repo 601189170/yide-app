@@ -127,35 +127,4 @@ class ScheduleFragment : Fragment() {
         }
         ft.commitAllowingStateLoss()
     }
-
-    private fun initFragmentContainer() {
-        fragments.add(ScheduleListFragment())
-        fragments.add(ScheduleDayFragment())
-        fragments.add(ScheduleMonthFragment())
-        fragmentScheduleBinding.viewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        fragmentScheduleBinding.viewpager.isUserInputEnabled = false
-        fragmentScheduleBinding.viewpager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int {
-                return fragments.size
-            }
-
-            override fun createFragment(position: Int): Fragment {
-                return fragments[position]
-            }
-        }
-
-        fragmentScheduleBinding.tabLayout.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.tab_list -> {
-                    fragmentScheduleBinding.viewpager.currentItem = 0
-                }
-                R.id.tab_day -> {
-                    fragmentScheduleBinding.viewpager.currentItem = 1
-                }
-                R.id.tab_month -> {
-                    fragmentScheduleBinding.viewpager.currentItem = 2
-                }
-            }
-        }
-    }
 }

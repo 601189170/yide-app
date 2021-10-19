@@ -45,6 +45,7 @@ object ScheduleRepetitionRuleUtil {
      * @param rule 重复规则
      */
     fun calculate(startDate: DateTime, endDate: DateTime, rule: MutableMap<String, Any>): List<DateTime> {
+        loge("startDate=$startDate endDate=$endDate rule=${JSON.toJSONString(rule)}")
         val freq = rule["freq"]
         val interval = rule["interval"]?.toString()?.toInt() ?: 1
         //星期 MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)

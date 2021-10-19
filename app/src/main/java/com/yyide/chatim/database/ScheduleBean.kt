@@ -198,6 +198,7 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
  * @return  如果转换失败返回null,
  */
 fun jsonToMap(content: String): MutableMap<String, Any?> {
+    Log.e("jsonToMap","jsonToMap: $content" )
     var content = content
     content = content.trim { it <= ' ' }
     var result: MutableMap<String, Any?> = mutableMapOf()

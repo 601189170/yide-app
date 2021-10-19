@@ -68,12 +68,23 @@ interface ScheduleDao {
     fun changeScheduleState(id: String, status: String)
 
     //select * from schedule left join label on schedule.id = label.scheduleCreatorId
-    // where  name like '%历史%' and type in (1,2) and status in (0,1) and label.id in(1447838531185115138)
+    // where  name like '%历史%' and type in (1,2) and status in (0,1) and label.id in(1447838531185115138) group by schedule.id
     //搜索日程根据赛选条件
     @Transaction
-    @Query("select * from schedule left join label on schedule.id = label.scheduleCreatorId where :where")
+    @Query("select * from schedule left join label on schedule.id = label.scheduleCreatorId where name like '%' || :name || '%' and status in (:status) and type in(:type) group by schedule.id")
     fun searchSchedule(
-       where:String
+       name:String,
+       status: List<Int>,
+       type: List<Int>
+    ): List<ScheduleWithParticipantAndLabel>
+
+    @Transaction
+    @Query("select * from schedule left join label on schedule.id = label.scheduleCreatorId where name like '%' || :name || '%' and status in (:status) and type in(:type) and label.id in(:labelId) group by schedule.id")
+    fun searchSchedule(
+        name:String,
+        status: List<Int>,
+        type: List<Int>,
+        labelId: List<String>
     ): List<ScheduleWithParticipantAndLabel>
 
 }

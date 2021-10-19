@@ -115,6 +115,7 @@ class ScheduleSearchActivity : BaseActivity() {
                 saveHistory(keyWord)
                 //search(keyWord)
                 //开始查询日程
+                filterTagCollect.name = keyWord
                 scheduleSearchViewModel.searchSchedule(filterTagCollect)
                 return@setOnEditorActionListener true
             }
@@ -257,6 +258,7 @@ class ScheduleSearchActivity : BaseActivity() {
         historyAdapter.setOnItemClickListener { adapter, view, position ->
             //搜索
             filterTagCollect.name = searchHistoryList[position]
+            viewBinding.edit.setText(filterTagCollect.name)
             scheduleSearchViewModel.searchSchedule(filterTagCollect)
         }
     }

@@ -65,6 +65,14 @@ class ScheduleSearchViewModel : ViewModel() {
      * 搜索本地日程 根据赛选条件
      */
     fun searchLocalSchedule(filterTagCollect: FilterTagCollect) {
+        if (filterTagCollect.status?.isEmpty() == true){
+            filterTagCollect.status = listOf(0,1)
+        }
+
+        if (filterTagCollect.type?.isEmpty() == true){
+            filterTagCollect.type = listOf(2,0,3,1)
+        }
+
         val filterOfSearchSchedule = ScheduleDaoUtil.filterOfSearchSchedule(filterTagCollect)
         scheduleSearchResultList.postValue(filterOfSearchSchedule)
     }
