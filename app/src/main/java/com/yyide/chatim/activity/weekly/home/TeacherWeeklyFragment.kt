@@ -164,6 +164,7 @@ class TeacherWeeklyFragment : BaseFragment() {
             } else {
                 viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
+            adapterEvent.setClassId(SpData.getClassInfo().classesId)
             adapterEvent.setList(classList)
         }
     }

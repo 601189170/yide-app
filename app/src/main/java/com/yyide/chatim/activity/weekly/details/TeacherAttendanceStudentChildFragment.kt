@@ -113,7 +113,7 @@ class TeacherAttendanceStudentChildFragment : BaseFragment() {
         barDataSet.colors = colors
         barDataSet.valueTextSize = 12f
         barDataSet.valueFormatter =
-            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> "${value.toInt()}" }
+            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> if (value > 0) "${value.toInt()}" else "" }
         // 设置栏阴影颜色
 //        barDataSet.barShadowColor = Color.parseColor("#01000000")
         val barDataSets = mutableListOf<BarDataSet>()

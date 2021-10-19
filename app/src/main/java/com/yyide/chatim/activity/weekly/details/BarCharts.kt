@@ -96,8 +96,7 @@ class BarCharts {
         axisLeft.textSize = 10f
         axisLeft.axisMinimum = 0f
         axisLeft.setLabelCount(6, true)
-        axisLeft.valueFormatter = IAxisValueFormatter { value, axis ->
-            "${value.toInt()}"
+        axisLeft.valueFormatter = IAxisValueFormatter { value, axis -> "${value.toInt()}"
         }
         if (isSlither) {
             //当为true时,放大图

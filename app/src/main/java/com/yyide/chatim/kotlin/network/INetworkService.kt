@@ -130,10 +130,18 @@ interface INetworkService {
     suspend fun requestMeetingHistoryList(@Body requestBody: RequestBody): BaseResponse<List<ScheduleData>>
 
     /**
-     * 校长查看考勤 学生
+     * 查看会议详情
      */
     @POST("/management/cloud-system/app/schedule/findMeetingDetails/{id}")
     suspend fun requestMeetingDetail(
         @Path("id") id: String
     ): BaseResponse<ScheduleData>
+
+    /**
+     * 删除会议
+     */
+    @DELETE("/management/cloud-system/app/schedule/deleteScheduleById/{scheduleId}")
+    suspend fun requestMeetingDel(
+        @Path("scheduleId") id: String
+    ): BaseResponse<ResultBean>
 }

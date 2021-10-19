@@ -6,6 +6,8 @@ import static com.yyide.chatim.model.schedule.Schedule.TYPE_TIME_AXIS;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_COMPLETED;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_NOT_COMPLETED;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
@@ -23,7 +25,7 @@ import java.util.Objects;
  * @date 2021/9/24 10:08
  * @description 描述
  */
-public class ScheduleData implements MultiItemEntity,Cloneable,Comparable<ScheduleData> {
+public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<ScheduleData> {
     private String id;
     private String name;
     private String siteId;
@@ -262,7 +264,7 @@ public class ScheduleData implements MultiItemEntity,Cloneable,Comparable<Schedu
             }
             return TYPE_UNEXPIRED_COMPLETED;
         }
-        if (DateUtils.dateExpired(endTime)) {
+        if (!TextUtils.isEmpty(endTime) && DateUtils.dateExpired(endTime)) {
             return TYPE_EXPIRED_NOT_COMPLETED;
         }
         return TYPE_UNEXPIRED_NOT_COMPLETED;

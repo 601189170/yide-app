@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
+import android.view.View
 import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -24,6 +25,7 @@ import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.model.schedule.SiteNameRsp
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.view.DialogUtil
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -74,15 +76,32 @@ class MeetingSaveActivity : BaseActivity() {
 
     private fun initView() {
         val type = intent.getIntExtra("type", -1)
+        viewBinding.top.title.text = getString(R.string.meeting_create_title)
         if (type == UPDATE_TYPE) {
-            getDetail()
             id = intent.getStringExtra("id")
-            viewBinding.tvTitle.text = getString(R.string.meeting_update_title)
+            viewModel.scheduleId.value = id
+            getDetail()
+            viewBinding.top.ivRight.visibility = View.VISIBLE
+            viewBinding.top.title.text = getString(R.string.meeting_update_title)
             viewBinding.btnConfirm.text = getString(R.string.meeting_update_title)
-        } else {
+            viewBinding.top.ivRight.setOnClickListener {
+                DialogUtil.showScheduleDelDialog(
+                    this,
+                    viewBinding.top.ivRight,
+                    object : DialogUtil.OnClickListener {
+                        override fun onCancel(view: View?) {
+
+                        }
+
+                        override fun onEnsure(view: View?) {
+                            val scheduleId = viewModel.scheduleId.value ?: ""
+                            del(scheduleId)
+                        }
+                    })
+            }
         }
         viewBinding.btnConfirm.setOnClickListener { sava() }
-        viewBinding.backLayout.setOnClickListener { finish() }
+        viewBinding.top.backLayout.setOnClickListener { finish() }
         //选择场地
         viewBinding.tvSite.setOnClickListener {
             val intent = Intent(this, ScheduleAddressActivity::class.java)
@@ -105,6 +124,7 @@ class MeetingSaveActivity : BaseActivity() {
             intent.putExtra("endTime", endTime)
             startActivityForResult(intent, REQUEST_CODE_DATE_SELECT)
         }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -142,6 +162,18 @@ class MeetingSaveActivity : BaseActivity() {
         viewModel.requestMeetingDetail(id)
     }
 
+    private fun del(scheduleId: String) {
+        showLoading()
+        viewModel.meetingSaveLiveData.observe(this) {
+            hideLoading()
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
+            finish()
+        }
+        viewModel.requestDel(scheduleId)
+    }
+
     /**
      * 新增、修改 会议
      */
@@ -150,6 +182,7 @@ class MeetingSaveActivity : BaseActivity() {
         val time = viewBinding.tvTime.text.toString().trim()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
             EventBus.getDefault()
                 .post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
@@ -170,7 +203,7 @@ class MeetingSaveActivity : BaseActivity() {
                     scheduleData.siteId = viewModel.siteLiveData.value?.id
                 }
                 scheduleData.name = title
-                if(viewModel.participantList.value != null){
+                if (viewModel.participantList.value != null) {
                     scheduleData.participant = viewModel.participantList.value
                 }
                 scheduleData.startTime = viewModel.startTimeLiveData.value

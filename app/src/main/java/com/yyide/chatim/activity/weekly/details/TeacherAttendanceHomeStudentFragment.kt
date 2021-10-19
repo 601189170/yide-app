@@ -100,15 +100,25 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
             if (null != result) {
                 initHotScroll(result.studentAttend)
                 initViewpager(result.studentDetail)
-            } else {//接口返回空的情况处理
-
+                if (result.studentDetail == null && result.studentAttend == null) {
+                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+                    viewBinding.clTop.visibility = View.GONE
+                    viewBinding.slidingTabLayout.visibility = View.GONE
+                    viewBinding.viewpager.visibility = View.GONE
+                } else {
+                    viewBinding.cardViewNoData.visibility = View.GONE
+                    viewBinding.clTop.visibility = View.VISIBLE
+                    viewBinding.slidingTabLayout.visibility = View.VISIBLE
+                    viewBinding.viewpager.visibility = View.VISIBLE
+                }
             }
         }
     }
 
     private fun initViewpager(detailList: List<StudentDetail>?) {
-        if (detailList != null) {
-            viewBinding.viewpager.offscreenPageLimit = 3
+        if (detailList != null && detailList.isNotEmpty()) {
+            viewBinding.slidingTabLayout.visibility = View.VISIBLE
+            viewBinding.viewpager.visibility = View.VISIBLE
             viewBinding.viewpager.adapter = object :
                 FragmentStatePagerAdapter(
                     childFragmentManager,
@@ -131,6 +141,9 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
             }
             viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
             viewBinding.slidingTabLayout.currentTab = 0
+        } else {
+            viewBinding.viewpager.visibility = View.INVISIBLE
+            viewBinding.slidingTabLayout.visibility = View.INVISIBLE
         }
     }
 
@@ -170,8 +183,10 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
     }
 
     private fun initClassMenu() {
+        var classesId = ""
         if (SpData.getClassInfo() != null) {
             viewBinding.tvClassName.text = SpData.getClassInfo().classesName + "的周报"
+            classesId = SpData.getClassInfo().classesId
         }
         val classList = SpData.getClassList()
         val adapterEvent = ClassAdapter()
@@ -186,6 +201,8 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                 viewBinding.tvClassName.setOnClickListener {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
                     attendancePop.setOnSelectListener { index: Int ->
+                        classesId = adapterEvent.getItem(index).classesId
+                        adapterEvent.setClassId(classesId)
                         viewBinding.tvClassName.text =
                             adapterEvent.getItem(index).classesName + "的周报"
                         classId = adapterEvent.getItem(index).classesId
@@ -201,6 +218,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                     null
                 )
             }
+            adapterEvent.setClassId(classesId)
             adapterEvent.setList(classList)
         }
     }
@@ -272,7 +290,8 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
         val size = list.size
         val count = (size + len - 1) / len
         for (i in 0 until count) {
-            val subList = list.subList(i * len, if ((i + 1) * len > size) size else len * (i + 1))
+            val subList =
+                list.subList(i * len, if ((i + 1) * len > size) size else len * (i + 1))
             result.add(subList)
         }
         return result

@@ -44,6 +44,11 @@ class MeetingHomeActivity : BaseActivity() {
     }
 
     private fun initView() {
+        viewBinding.swipeRefreshLayout.isRefreshing = true
+        viewBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+        viewBinding.swipeRefreshLayout.setOnRefreshListener {
+            request()
+        }
         viewBinding.ivAdd.setOnClickListener { MeetingSaveActivity.jumpCreate(this) }
         viewBinding.clHistory.setOnClickListener {
             startActivity(
@@ -67,6 +72,7 @@ class MeetingHomeActivity : BaseActivity() {
 //        showLoading()
         viewModel.meetingHomeLiveData.observe(this) {
 //            hideLoading()
+            viewBinding.swipeRefreshLayout.isRefreshing = false
             val result = it.getOrNull()
             if (result != null) {
                 adapter.setList(result)

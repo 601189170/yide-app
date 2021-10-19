@@ -35,6 +35,9 @@ class MeetingSaveViewModel : BaseViewModel() {
     val participantList =
         MutableLiveData<List<ParticipantRsp.DataBean.ParticipantListBean>>(mutableListOf())
 
+    //日程id
+    val scheduleId = MutableLiveData<String>()
+
     /**
      * 创建会议
      */
@@ -53,6 +56,13 @@ class MeetingSaveViewModel : BaseViewModel() {
         viewModelScope.launch {
             val result = NetworkApi.requestMeetingDetail(id)
             meetingDetailLiveData.value = result
+        }
+    }
+
+    fun requestDel(scheduleId: String) {
+        viewModelScope.launch {
+            val result = NetworkApi.requestMeetingDel(scheduleId)
+            meetingSaveLiveData.value = result
         }
     }
 }
