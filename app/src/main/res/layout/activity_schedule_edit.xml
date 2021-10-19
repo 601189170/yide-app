@@ -368,10 +368,11 @@
                     app:layout_constraintTop_toBottomOf="@id/rv_label_list"/>
 
                 <TextView
+                    android:id="@+id/tv_bottom_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="110dp"
-                    android:text="创建于4月9日 06:00     完成于4月9日 09:10"
+                    android:text="@string/schedule_edit_bottom_date"
                     android:textColor="#ff999999"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="parent"

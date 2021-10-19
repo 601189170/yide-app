@@ -73,6 +73,9 @@ class ScheduleEditActivity : BaseActivity() {
                 DateUtils.formatTime(it.endTime, "", "MM月dd日 HH:mm")
             scheduleEditViewModel.startTimeLiveData.value = it.startTime
             scheduleEditViewModel.endTimeLiveData.value = it.endTime
+            val bottomStartTime = DateUtils.formatTime(it.startTime,"","MM月dd HH:mm")
+            val bottomEndTime = DateUtils.formatTime(it.endTime,"","MM月dd HH:mm")
+            scheduleEditBinding.tvBottomDate.text = String.format(getString(R.string.schedule_edit_bottom_date),bottomStartTime,bottomEndTime)
             //是否全天isAllDay【0：不是，1：是】
             scheduleEditViewModel.allDayLiveData.value = it.isAllDay == "1"
             //日程重复repetition
