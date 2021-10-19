@@ -158,7 +158,7 @@ public class CalendarComposeLayout extends FrameLayout {
             boolean isSixRow = CalendarUtils.getMonthRows(year, month,startWithSunday) == 6;
             if (mCurrentRowsIsSix != isSixRow) {
                 mCurrentRowsIsSix = isSixRow;
-                if (mState == ScheduleState.OPEN) {
+                if (mState == ScheduleState.OPEN && scheduleEventView!=null) {
                     if (mCurrentRowsIsSix) {
                         AutoMoveAnimation animation = new AutoMoveAnimation(scheduleEventView, mRowSize);
                         scheduleEventView.startAnimation(animation);

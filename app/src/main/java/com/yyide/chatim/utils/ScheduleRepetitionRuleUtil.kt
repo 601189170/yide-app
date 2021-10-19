@@ -119,7 +119,7 @@ object ScheduleRepetitionRuleUtil {
                 } else {
                     //有byday SU(周日),MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),
                     val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
-                    println("$nowDateTime,本周第一天,$firstDayOfWeek")
+                    loge("$nowDateTime,本周第一天,$firstDayOfWeek")
                     byweekday.forEach {
                         when (it) {
                             "SU" -> {
