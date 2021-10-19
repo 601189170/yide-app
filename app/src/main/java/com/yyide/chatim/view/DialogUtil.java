@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -900,6 +901,12 @@ public class DialogUtil {
             scheduleEditViewModel.getScheduleTitleLiveData().setValue(editView.getText().toString());
             scheduleEditViewModel.saveOrModifySchedule(false);
             mDialog.dismiss();
+        });
+
+        scheduleEditViewModel.getStartTimeLiveData().observe(lifecycleOwner, dateTime -> {
+            Log.e(TAG, "showAddScheduleDialog: 日期已修改" );
+            String startTime = DateUtils.formatTime(dateTime, "", "MM月dd日 HH:mm");
+            tvDate.setText(startTime);
         });
 
         tvLabel.setOnClickListener(v -> {
