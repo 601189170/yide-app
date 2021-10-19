@@ -120,4 +120,12 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
         getResult {
             service.requestMeetingDetail(id)
         }
+
+    /**
+     * 会议详情
+     */
+    suspend fun requestMeetingDel(scheduleId: String) =
+        getResult {
+            service.requestMeetingDel(scheduleId)
+        }
 }

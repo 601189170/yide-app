@@ -117,7 +117,7 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
         barDataSet.valueTextColor = Color.parseColor("#909399")
         barDataSet.valueTextSize = 10f
         barDataSet.valueFormatter =
-            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> "${value.toInt()}" }
+            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> if (value > 0) "${value.toInt()}" else "" }
         barDataSets.add(barDataSet)
         // 绘制值
         barDataSet.setDrawValues(true)

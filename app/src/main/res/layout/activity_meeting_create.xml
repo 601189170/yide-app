@@ -7,44 +7,12 @@
     android:background="@color/white"
     tools:context=".activity.meeting.MeetingSaveActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
         android:id="@+id/top"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/back_layout"
-            android:layout_width="44dp"
-            android:layout_height="match_parent"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:scaleType="center"
-            android:src="@drawable/create_c2c"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_10"
-            android:text="@string/meeting_create_title"
-            android:textColor="#ff1e1e1e"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_setting"
-            android:layout_width="49dp"
-            android:layout_height="match_parent"
-            android:scaleType="center"
-            android:src="@drawable/schedule_setting_icon"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        layout="@layout/title_layout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/view1"
@@ -162,8 +130,8 @@
         android:id="@+id/view4"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#EBEBEB"
         android:layout_marginStart="@dimen/dp_20"
+        android:background="#EBEBEB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_participant" />
@@ -188,8 +156,8 @@
         android:id="@+id/view5"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="#EBEBEB"
         android:layout_marginStart="@dimen/dp_20"
+        android:background="#EBEBEB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_site" />

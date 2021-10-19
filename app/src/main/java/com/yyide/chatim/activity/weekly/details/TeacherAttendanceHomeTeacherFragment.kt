@@ -100,15 +100,25 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
             if (null != result) {
                 initHotScroll(result.teacherAttend)
                 initViewpager(result.teacherDetail)
-            } else {//接口返回空的情况处理
-
+                if (result.teacherAttend == null && result.teacherDetail == null) {
+                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+                    viewBinding.clTop.visibility = View.GONE
+                    viewBinding.slidingTabLayout.visibility = View.GONE
+                    viewBinding.viewpager.visibility = View.GONE
+                } else {
+                    viewBinding.cardViewNoData.visibility = View.GONE
+                    viewBinding.clTop.visibility = View.VISIBLE
+                    viewBinding.slidingTabLayout.visibility = View.VISIBLE
+                    viewBinding.viewpager.visibility = View.VISIBLE
+                }
             }
         }
     }
 
     private fun initViewpager(detailList: List<WeeklyTeacherDetail>?) {
-        if (detailList != null) {
-            viewBinding.viewpager.offscreenPageLimit = 3
+        if (detailList != null && detailList.isNotEmpty()) {
+            viewBinding.slidingTabLayout.visibility = View.VISIBLE
+            viewBinding.viewpager.visibility = View.VISIBLE
             viewBinding.viewpager.adapter = object :
                 FragmentStatePagerAdapter(
                     childFragmentManager,
@@ -131,6 +141,9 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
             }
             viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
             viewBinding.slidingTabLayout.currentTab = 0
+        } else {
+            viewBinding.slidingTabLayout.visibility = View.INVISIBLE
+            viewBinding.viewpager.visibility = View.INVISIBLE
         }
     }
 

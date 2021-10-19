@@ -156,22 +156,20 @@
                             android:id="@+id/summary"
                             layout="@layout/layout_weekly_summary" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_20" />
-
                         <include
                             android:id="@+id/attendance"
                             layout="@layout/layout_weekly_parents_attendance" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_20" />
 
                         <include
                             android:id="@+id/homework_statistical"
                             layout="@layout/layout_weekly_parents_homework_statistical"
                             android:visibility="visible" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_20" />
+
+                        <include layout="@layout/layout_jz" />
 
                         <View
                             android:layout_width="match_parent"

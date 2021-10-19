@@ -83,13 +83,16 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".activity.meeting.MeetingHistoryActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.meeting.MeetingSaveActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.meeting.MeetingHomeActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.weekly.WeeklyDetailsActivity"
             android:exported="false"
