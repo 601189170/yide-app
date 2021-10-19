@@ -158,6 +158,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
 
     override fun onResume() {
         super.onResume()
+        updateData()
         scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
     }
 
@@ -166,6 +167,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         loge("onHiddenChanged $hidden")
         if(!hidden){
             //更新头部日期
+            updateData()
             scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
         }
     }

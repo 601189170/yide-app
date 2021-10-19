@@ -161,19 +161,19 @@ object ScheduleDaoUtil {
                 }
             }
         }
-//        timeAxisDateTime?.let {
-//            for (i in 0 until listAllSchedule.size-1){
-//                val dateTime1 = listAllSchedule[i].dateTime.simplifiedDataTime()
-//                val dateTime2 = listAllSchedule[i+1].dateTime.simplifiedDataTime()
-//                if (it>dateTime1 && it<dateTime2){
-//                    loge("----找到时间轴的位置----")
-//                    val scheduleData = ScheduleData()
-//                    scheduleData.isTimeAxis = true
-//                    listAllSchedule.add(i,DayOfMonth(it,scheduleData))
-//                    return@let
-//                }
-//            }
-//        }
+        timeAxisDateTime?.let {
+            for (i in 0 until listAllSchedule.size-1){
+                val dateTime1 = listAllSchedule[i].dateTime.simplifiedDataTime()
+                val dateTime2 = listAllSchedule[i+1].dateTime.simplifiedDataTime()
+                if (it>dateTime1 && it<dateTime2){
+                    loge("----找到时间轴的位置----")
+                    val scheduleData = ScheduleData()
+                    scheduleData.isTimeAxis = true
+                    listAllSchedule.add(i,DayOfMonth(it,scheduleData))
+                    return@let
+                }
+            }
+        }
         listAllSchedule.sort()
         return listAllSchedule
     }

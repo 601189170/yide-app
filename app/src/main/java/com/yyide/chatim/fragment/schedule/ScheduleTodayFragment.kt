@@ -149,6 +149,7 @@ class ScheduleTodayFragment : Fragment() {
         loge("onHiddenChanged $hidden")
         if(!hidden){
             //更新头部日期
+            updateData()
             scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
         }
     }
