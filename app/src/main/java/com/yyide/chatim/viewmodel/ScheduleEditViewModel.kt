@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.model.BaseRsp
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
@@ -85,8 +86,14 @@ class ScheduleEditViewModel : ViewModel() {
         }
         //val label:List<String?>? = labelListLiveData.value?.map { it.id }
         val allDay = allDayLiveData.value?:false
-        val startTime = startTimeLiveData.value
-        val endTime = endTimeLiveData.value
+        val startTime = startTimeLiveData.value?:""
+        var endTime = endTimeLiveData.value?:""
+        val startTimeToDateTime = ScheduleDaoUtil.toDateTime(startTime)
+        val endTimeToDateTime = ScheduleDaoUtil.toDateTime(endTime)
+        if (startTimeToDateTime == endTimeToDateTime){
+            endTime = startTimeToDateTime.toString("yyyy-MM-dd ") + "23:59:59"
+        }
+
         val remind = remindLiveData.value?.id
         val repetition = repetitionLiveData.value
         val scheduleData = ScheduleData()

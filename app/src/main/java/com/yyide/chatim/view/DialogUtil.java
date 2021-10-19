@@ -892,6 +892,10 @@ public class DialogUtil {
         mDialog.setContentView(rootView);
         final ScheduleEditViewModel scheduleEditViewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(ScheduleEditViewModel.class);
         finished.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(editView.getText().toString())) {
+                ToastUtils.showShort("你还没告诉我您要准备做什么！");
+                return;
+            }
             //日程提交
             scheduleEditViewModel.getScheduleTitleLiveData().setValue(editView.getText().toString());
             scheduleEditViewModel.saveOrModifySchedule(false);
