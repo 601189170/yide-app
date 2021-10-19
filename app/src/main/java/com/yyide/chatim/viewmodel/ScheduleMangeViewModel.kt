@@ -12,6 +12,7 @@ import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.loge
 import org.greenrobot.eventbus.EventBus
+import org.joda.time.DateTime
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +29,11 @@ class ScheduleMangeViewModel : ViewModel() {
     private var apiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
     val requestAllScheduleResult:MutableLiveData<Boolean> = MutableLiveData()
+    //显示日期
+    val curDateTime:MutableLiveData<DateTime> = MutableLiveData()
+    init {
+        curDateTime.value = DateTime.now()
+    }
     fun getAllScheduleList() {
         apiStores.selectAllScheduleList()
             .enqueue(object : Callback<BaseResponse<List<ScheduleData>>> {

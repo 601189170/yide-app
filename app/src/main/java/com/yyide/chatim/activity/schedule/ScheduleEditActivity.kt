@@ -85,7 +85,7 @@ class ScheduleEditActivity : BaseActivity() {
             }
             if (scheduleEditViewModel.repetitionLiveData.value == null && it.rrule != null) {
                 scheduleEditBinding.tvRepetition.text = "自定义重复"
-                val repetition = Repetition("", true, it.rrule)
+                val repetition = Repetition(8,"", true, it.rrule)
                 scheduleEditViewModel.repetitionLiveData.value = repetition
                 sourceRepetitionRule = repetition
             }

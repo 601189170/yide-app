@@ -1,5 +1,6 @@
 package com.yyide.chatim.database
 
+import android.text.TextUtils
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.model.schedule.DayOfMonth
 import com.yyide.chatim.model.schedule.FilterTagCollect
@@ -27,6 +28,18 @@ object ScheduleDaoUtil {
     fun toDateTime(date:String):DateTime{
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         return DateTime.parse(date,dateTimeFormatter)
+    }
+
+    /**
+     * datetime to format string date
+     */
+    fun DateTime.toStringTime(format:String = ""):String{
+        if (!TextUtils.isEmpty(format)) {
+            val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern(format)
+            return this.toString(dateTimeFormatter)
+        }
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        return this.toString(dateTimeFormatter)
     }
 
     /**

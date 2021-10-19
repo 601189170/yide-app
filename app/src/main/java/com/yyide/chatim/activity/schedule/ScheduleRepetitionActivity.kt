@@ -20,6 +20,7 @@ class ScheduleRepetitionActivity : BaseActivity() {
     lateinit var scheduleRepetitionBinding: ActivityScheduleRepetitionBinding
     val list = getList()
     private var title:String? = null
+    private var isRepetition: String? = null
     private var rule:MutableMap<String,Any>? = null
     private lateinit var adapter: BaseQuickAdapter<Repetition, BaseViewHolder>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +56,14 @@ class ScheduleRepetitionActivity : BaseActivity() {
             if (selectList.isNotEmpty()) {
                 title = selectList.first().title
                 rule = selectList.first().rule
+                isRepetition = selectList.first().code.toString()
             } else {
                 title = "自定义重复"
+                isRepetition = "8"
             }
             val intent = intent
-            intent.putExtra("data",JSON.toJSONString(Repetition(title,true,rule)))
+            val code = isRepetition?.toInt()?:0
+            intent.putExtra("data",JSON.toJSONString(Repetition(code,title,true,rule)))
             setResult(RESULT_OK, intent)
             finish()
         }

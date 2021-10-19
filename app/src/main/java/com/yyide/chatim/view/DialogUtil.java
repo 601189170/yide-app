@@ -438,7 +438,7 @@ public class DialogUtil {
                     rule.put("interval",numberStr);
                 }
             }
-            scheduleEditViewModel.getRepetitionLiveData().setValue(new Repetition("自定义重复",true,rule));
+            scheduleEditViewModel.getRepetitionLiveData().setValue(new Repetition(8,"自定义重复",true,rule));
             mDialog.dismiss();
         });
         Window dialogWindow = mDialog.getWindow();

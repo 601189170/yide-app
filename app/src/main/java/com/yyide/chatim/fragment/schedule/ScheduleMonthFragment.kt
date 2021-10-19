@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
@@ -19,6 +20,7 @@ import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
+import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.viewmodel.ScheduleMonthViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -39,6 +41,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     private var mCurrentSelectMonth = 8
     private var mCurrentSelectDay = 12
     private val scheduleMonthViewModel:ScheduleMonthViewModel by viewModels()
+    private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -150,6 +153,21 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
         loge("dateTime=$dateTime")
         scheduleMonthViewModel.scheduleList(dateTime)
+        scheduleViewModel.curDateTime.postValue(dateTime)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        loge("onHiddenChanged $hidden")
+        if(!hidden){
+            //更新头部日期
+            scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
+        }
     }
 
     /**

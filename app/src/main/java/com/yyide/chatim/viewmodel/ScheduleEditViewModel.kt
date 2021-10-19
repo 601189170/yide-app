@@ -88,7 +88,7 @@ class ScheduleEditViewModel : ViewModel() {
         val startTime = startTimeLiveData.value
         val endTime = endTimeLiveData.value
         val remind = remindLiveData.value?.id
-        val repetition = repetitionLiveData.value?.rule
+        val repetition = repetitionLiveData.value
         val scheduleData = ScheduleData()
         if (modify){
             scheduleData.id = scheduleIdLiveData.value
@@ -100,8 +100,8 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.name = scheduleTitle?:""
         scheduleData.status = scheduleStatusLiveData.value
         scheduleData.type = "2"
-        scheduleData.isRepeat = if (repetition == null) "0" else "1"
-        scheduleData.rrule = repetition
+        scheduleData.isRepeat = repetition?.code.toString()
+        scheduleData.rrule = if (repetition?.rule?.isEmpty() == true) null else repetition?.rule
         scheduleData.remindType = if (allDay) "1" else "0"
         scheduleData.remindTypeInfo = remind?:""
         scheduleData.startTime = startTime?:""

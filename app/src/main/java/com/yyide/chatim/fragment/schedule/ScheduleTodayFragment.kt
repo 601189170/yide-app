@@ -8,31 +8,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
-import com.yide.calendar.CalendarUtils
-import com.yide.calendar.HintCircle
-import com.yide.calendar.OnCalendarClickListener
-import com.yide.calendar.month.MonthCalendarView
-import com.yide.calendar.schedule.ScheduleLayout
-import com.yyide.chatim.R
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
-import com.yyide.chatim.adapter.schedule.ScheduleAdapter
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
-import com.yyide.chatim.databinding.FragmentScheduleMonthBinding
 import com.yyide.chatim.databinding.FragmentScheduleTodayBinding
 import com.yyide.chatim.model.schedule.*
-import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpaceItemDecoration
+import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.viewmodel.TodayScheduleViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import kotlin.math.log
+import org.joda.time.DateTime
 
 /**
  *
@@ -42,7 +36,7 @@ import kotlin.math.log
  */
 class ScheduleTodayFragment : Fragment() {
     lateinit var fragmentScheduleTodayBinding: FragmentScheduleTodayBinding
-
+    private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val todayScheduleViewModel: TodayScheduleViewModel by viewModels()
     private val weekUndoList = mutableListOf<ScheduleData>()
     private val todayList = mutableListOf<ScheduleData>()
@@ -61,9 +55,11 @@ class ScheduleTodayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         EventBus.getDefault().register(this)
+        loge("onViewCreated")
         initData()
         initView()
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun event(event: ScheduleEvent){
@@ -75,6 +71,7 @@ class ScheduleTodayFragment : Fragment() {
             }
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
@@ -144,8 +141,17 @@ class ScheduleTodayFragment : Fragment() {
         super.onResume()
         ///todayScheduleViewModel.getThisWeekAndTodayList()
         updateData()
+        loge("onResume")
+        scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
     }
-
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        loge("onHiddenChanged $hidden")
+        if(!hidden){
+            //更新头部日期
+            scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
+        }
+    }
     private fun updateData() {
         todayScheduleViewModel.getThisWeekScheduleList()
         todayScheduleViewModel.getTodayScheduleList()

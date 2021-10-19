@@ -2,21 +2,24 @@ package com.yyide.chatim.fragment.schedule
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.schedule.ScheduleLabelManageActivity
 import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
 import com.yyide.chatim.activity.schedule.ScheduleSettingsActivity
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentScheduleBinding
+import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
+import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
+import org.joda.time.DateTime
 
 /**
  *
@@ -26,6 +29,7 @@ import com.yyide.chatim.view.DialogUtil
  */
 class ScheduleFragment : Fragment() {
     lateinit var fragmentScheduleBinding: FragmentScheduleBinding
+    val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     val fragments = mutableListOf<Fragment>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +65,12 @@ class ScheduleFragment : Fragment() {
                 setFragment(it)
             }
         }
+        fragmentScheduleBinding.tvCurrentDate.text = DateTime.now().toStringTime("yyyy年MM月")
+        scheduleViewModel.curDateTime.observe(requireActivity(),{
+            loge("更新日期：${it.toStringTime()}")
+            fragmentScheduleBinding.tvCurrentDate.text = it.toStringTime("yyyy年MM月")
+        })
+
     }
 
     private fun setFragment(index: Int) {

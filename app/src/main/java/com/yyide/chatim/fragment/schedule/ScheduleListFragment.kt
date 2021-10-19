@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +35,7 @@ import com.yyide.chatim.adapter.schedule.ListViewEvent
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
+import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -57,6 +59,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     private lateinit var adapterOuter: ScheduleListOuterAdapter
     private lateinit var curBottomDateTime: DateTime
     private lateinit var curTopDateTime: DateTime
+    private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     //是否显示时间轴
     private var showTimeAxis:Boolean = true
     private lateinit var timeAxisDateTime:DateTime
@@ -157,10 +160,16 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     override fun onClickDate(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
         scrollToPosition(year, month, day)
+        val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
+        loge("dateTime=$dateTime")
+        scheduleViewModel.curDateTime.value = dateTime
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
-        loge("onClickDate year=$year,month=$month,day=$day")
+        loge("onPageChange year=$year,month=$month,day=$day")
+        val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
+        loge("dateTime=$dateTime")
+        scheduleViewModel.curDateTime.value = dateTime
     }
 
     fun scrollToPosition(year: Int, month: Int, day: Int){
@@ -216,6 +225,21 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        loge("onHiddenChanged $hidden")
+        if(!hidden){
+            //更新头部日期
+            scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)

@@ -27,6 +27,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.alibaba.fastjson.JSON;
@@ -99,6 +100,7 @@ import com.yyide.chatim.widget.LoadingButton;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.IOException;
@@ -144,7 +146,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private long firstTime = 0;
     private CallModel mCallModel;
     private ScheduleMangeViewModel scheduleMangeViewModel;
-
+    private DateTime curDateTime;
     @Override
     public int getContentViewID() {
         return R.layout.activity_main;
@@ -188,6 +190,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         //请求日程数据 并保存本地
         scheduleMangeViewModel = new ViewModelProvider(this).get(ScheduleMangeViewModel.class);
         scheduleMangeViewModel.getAllScheduleList();
+        scheduleMangeViewModel.getCurDateTime().observe(this, dateTime -> {
+            Log.e(TAG, "时间改变: "+dateTime.toString());
+            if (curDateTime != null){
+                scheduleMangeViewModel.getCurDateTime().setValue(dateTime);
+                curDateTime = dateTime;
+            }
+        });
     }
 
     private void prepareThirdPushToken() {
