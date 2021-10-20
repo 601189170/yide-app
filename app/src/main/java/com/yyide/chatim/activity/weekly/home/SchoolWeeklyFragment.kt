@@ -26,6 +26,7 @@ import com.yyide.chatim.databinding.FragmentSchoolWeeklyBinding
 import com.yyide.chatim.databinding.ItemWeeklyChartsVerticalBinding
 import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
+import java.math.BigDecimal
 
 /**
  *
@@ -70,10 +71,10 @@ class SchoolWeeklyFragment : BaseFragment() {
                 initAttendance(result.attend)
                 //作业
 //                setWorkView(result.work)
-                if (!viewBinding.layoutWeeklySummary.root.isShown && !viewBinding.layoutWeeklySchoolAttendance.root.isShown) {
-                    viewBinding.clContent.visibility = View.GONE
-                    viewBinding.cardViewNoData.visibility = View.VISIBLE
-                }
+//                if (!viewBinding.layoutWeeklySummary.root.isShown && !viewBinding.layoutWeeklySchoolAttendance.root.isShown) {
+//                    viewBinding.clContent.visibility = View.GONE
+//                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+//                }
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
@@ -165,7 +166,8 @@ class SchoolWeeklyFragment : BaseFragment() {
 
     private fun initAttendance(attend: SchoolHomeAttendance?) {
         if (attend != null) {
-            viewBinding.layoutWeeklySchoolAttendance.root.visibility = View.VISIBLE
+            viewBinding.layoutWeeklySchoolAttendance.cardViewNoData.visibility = View.GONE
+            viewBinding.layoutWeeklySchoolAttendance.cardView.visibility = View.VISIBLE
             viewBinding.layoutWeeklySchoolAttendance.textView1.visibility = View.VISIBLE
             viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.root.visibility =
                 View.VISIBLE
@@ -212,10 +214,12 @@ class SchoolWeeklyFragment : BaseFragment() {
                     View.GONE
             }
             if (attend.teacherAttend != null && attend.studentAttend != null && attend.teacherAttend!!.isEmpty() && attend.studentAttend!!.isEmpty()) {
-                viewBinding.layoutWeeklySchoolAttendance.root.visibility = View.GONE
+                viewBinding.layoutWeeklySchoolAttendance.cardViewNoData.visibility = View.VISIBLE
+                viewBinding.layoutWeeklySchoolAttendance.cardView.visibility = View.GONE
             }
         } else {
-            viewBinding.layoutWeeklySchoolAttendance.root.visibility = View.GONE
+            viewBinding.layoutWeeklySchoolAttendance.cardViewNoData.visibility = View.VISIBLE
+            viewBinding.layoutWeeklySchoolAttendance.cardView.visibility = View.GONE
         }
     }
 
@@ -268,7 +272,10 @@ class SchoolWeeklyFragment : BaseFragment() {
             //bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
             WeeklyUtil.setAnimation(
                 bind.progressbar,
-                if (item.value <= 0) 0 else item.value.toInt()
+                if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
+                    0,
+                    BigDecimal.ROUND_HALF_UP
+                ).toInt()
             )
         }
     }
@@ -286,7 +293,10 @@ class SchoolWeeklyFragment : BaseFragment() {
 //            bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
             WeeklyUtil.setAnimation(
                 bind.progressbar,
-                if (item.value <= 0) 0 else item.value.toInt()
+                if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
+                    0,
+                    BigDecimal.ROUND_HALF_UP
+                ).toInt()
             )
         }
     }

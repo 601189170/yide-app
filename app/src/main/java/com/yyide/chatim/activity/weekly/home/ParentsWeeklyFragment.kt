@@ -96,15 +96,15 @@ open class ParentsWeeklyFragment : BaseFragment() {
                     setTeacherComments(result.eval)
                 }
                 //处理整体数据为空的情况
-                if (result.attend.isEmpty() && (result.summary != null
-                            && TextUtils.isEmpty(result.summary!!.attend)
-                            && TextUtils.isEmpty(result.summary!!.expend)
-                            && TextUtils.isEmpty(result.summary!!.work))
-                    && result.eval != null && TextUtils.isEmpty(result.eval!!.body)
-                ) {
-                    viewBinding.clContent.visibility = View.GONE
-                    viewBinding.cardViewNoData.visibility = View.VISIBLE
-                }
+//                if (result.attend.isEmpty() && (result.summary != null
+//                            && TextUtils.isEmpty(result.summary!!.attend)
+//                            && TextUtils.isEmpty(result.summary!!.expend)
+//                            && TextUtils.isEmpty(result.summary!!.work))
+//                    && result.eval != null && TextUtils.isEmpty(result.eval!!.body)
+//                ) {
+//                    viewBinding.clContent.visibility = View.GONE
+//                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+//                }
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE

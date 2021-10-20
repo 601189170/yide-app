@@ -25,6 +25,7 @@ import com.yyide.chatim.databinding.*
 import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -54,7 +55,6 @@ class TeacherWeeklyFragment : BaseFragment() {
             TeacherWeeklyFragment().apply {}
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -70,10 +70,6 @@ class TeacherWeeklyFragment : BaseFragment() {
                 viewBinding.attendance.tvAttendDesc.text = result.rank
                 setSummary(result.summary)
                 setAttendance(result.attend)
-                if (result.summary == null && result.attend == null) {
-                    viewBinding.clContent.visibility = View.GONE
-                    viewBinding.cardViewNoData.visibility = View.VISIBLE
-                }
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
@@ -164,7 +160,9 @@ class TeacherWeeklyFragment : BaseFragment() {
             } else {
                 viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
-            adapterEvent.setClassId(SpData.getClassInfo().classesId)
+            if (SpData.getClassInfo() != null) {
+                adapterEvent.setClassId(SpData.getClassInfo().classesId)
+            }
             adapterEvent.setList(classList)
         }
     }
@@ -259,7 +257,13 @@ class TeacherWeeklyFragment : BaseFragment() {
 
     private var spanCount = 3
     private fun setAttendance(attend: WeeklyTeacherAttendance?) {
-        if (attend == null) return
+        if (attend == null) {
+            viewBinding.attendance.clAttend.visibility = View.GONE
+            viewBinding.attendance.cardViewNoData.visibility = View.VISIBLE
+            return
+        }
+        viewBinding.attendance.clAttend.visibility = View.VISIBLE
+        viewBinding.attendance.cardViewNoData.visibility = View.GONE
         viewBinding.attendance.root.visibility = View.VISIBLE
         if (attend != null && attend.classAttend.isEmpty() && attend.teacherAttend.isEmpty()) {
             viewBinding.attendance.root.visibility = View.GONE
@@ -273,7 +277,7 @@ class TeacherWeeklyFragment : BaseFragment() {
         if (attend?.classAttend != null && attend.classAttend.size < spanCount) {
             spanCount = attend.classAttend.size
         }
-        val splitList = splitList(attend?.classAttend, spanCount)
+        val splitList = splitList(attend.classAttend, spanCount)
         val hotList = mutableListOf<Int>()
         if (splitList != null) {
             for (item in splitList.indices) {
@@ -448,7 +452,7 @@ class TeacherWeeklyFragment : BaseFragment() {
                 bind.tvWeek.text = item.name
                 WeeklyUtil.setAnimation(
                     bind.progressbar,
-                    if (item.value <= 0) 0 else item.value.toInt()
+                    if (item.value <= 0) 0 else BigDecimal(item.value).setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
                 )
             }
         }

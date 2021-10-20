@@ -96,7 +96,7 @@ class ParentsAttendanceChildFragment : BaseFragment() {
      * @param range Y 轴的数据
      */
     private var color: Array<String> = arrayOf("#919399", "#F66C6C", "#FFC000", "#63DAAB")
-    private fun getBarData(numbers: StudentNumber): BarData? {
+    private fun getBarData(numbers: StudentNumber): BarData {
 //        val xValues = ArrayList<String>()
 //        for (i in numbers) {
 //            xValues.add("" + (i) + "") // 设置每个柱壮图的文字描述

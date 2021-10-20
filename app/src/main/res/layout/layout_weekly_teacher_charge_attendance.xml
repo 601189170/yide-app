@@ -14,6 +14,7 @@
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_12"
         android:foreground="?android:attr/selectableItemBackground"
+        android:minHeight="200dp"
         android:paddingBottom="@dimen/dp_50"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp"
@@ -23,11 +24,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_attend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/dp_12"
             android:paddingEnd="@dimen/dp_12"
-            android:paddingBottom="@dimen/dp_20">
+            android:paddingBottom="@dimen/dp_20"
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -186,6 +189,50 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/cardView1"
                 app:layout_constraintTop_toBottomOf="@+id/cardView1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_10"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_weekly_empty_no_data"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:text="@string/no_data"
+                android:textColor="#ff909399"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

@@ -202,7 +202,9 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
                     null
                 )
             }
-            adapterEvent.setClassStudent(classesItem)
+            if (classesItem != null) {
+                adapterEvent.setClassStudent(classesItem)
+            }
             adapterEvent.setList(classList)
         }
     }
