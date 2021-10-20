@@ -44,7 +44,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/et_schedule_title"
+                    android:id="@+id/tv_schedule_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_6"
@@ -66,6 +66,7 @@
                 android:layout_height="100dp"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/cl_schedule_title">
 
                 <TextView
@@ -75,7 +76,7 @@
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_14"
                     android:layout_marginEnd="@dimen/dp_35"
-                    android:text="课前提醒：\n吧啦吧啦吧吧啦吧啦吧吧啦吧啦吧吧啦吧啦吧"
+                    android:text="课前提醒：\n"
                     android:textColor="#ff999999"
                     android:textSize="16sp"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -89,6 +90,7 @@
                 android:layout_height="@dimen/dp_44"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/cl_remind_content">
 
                 <TextView
@@ -119,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="09月3号 周五 第2节 00:00-09:00"
+                    android:text="@string/schedule_timetable_date"
                     android:textColor="#ff999999"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -127,63 +129,13 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_repetition"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/cl_date">
-
-                <ImageView
-                    android:id="@+id/iv_repetition"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:src="@drawable/schedule_repetition_nor_icon"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_repetition"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:text="不重复"
-                    android:textColor="#999999"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/iv_repetition"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@drawable/schedule_arrow_right"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/v_line2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="46dp"
-                android:background="#EBEBEB"
-                app:layout_constraintTop_toBottomOf="@id/cl_repetition" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_remind"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/v_line2">
+                android:layout_marginTop="@dimen/dp_10"
+                app:layout_constraintTop_toBottomOf="@id/cl_date">
 
                 <ImageView
                     android:id="@+id/iv_remind"
@@ -226,19 +178,20 @@
                 app:layout_constraintTop_toBottomOf="@id/cl_remind"
                 app:layout_constraintBottom_toBottomOf="parent">
 
-                <TextView
+                <EditText
                     android:id="@+id/tv_remark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginBottom="@dimen/dp_20"
                     android:layout_marginEnd="@dimen/dp_20"
-                    android:singleLine="true"
-                    android:text="添加备注"
+                    android:hint="添加备注"
                     android:textColor="#333333"
                     android:textSize="16sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@color/white"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

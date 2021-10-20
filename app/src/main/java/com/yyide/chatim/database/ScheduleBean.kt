@@ -69,7 +69,7 @@ data class ParticipantList(
     var userId: String? = null,
     var scheduleId: String? = null,
     var type: String? = null,
-    var userName: String? = null,
+    var realname: String? = null,
     var scheduleCreatorId: String? = null
 ) {
     @Ignore
@@ -124,8 +124,7 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
             participant.id = it.id
             participant.type = it.type
             //学生和教职工取值不一
-            participant.userName = it.userName
-            participant.realname = it.userName
+            participant.realname = it.realname
             participant.userId = it.userId
             participantList.add(participant)
         }
@@ -176,7 +175,7 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
             participant.scheduleId = scheduleId
             participant.type = it.type
             //学生和教职工取值不一
-            participant.userName = it.name
+            participant.realname = it.name
             participant.scheduleCreatorId = scheduleId
             participantList.add(participant)
         }

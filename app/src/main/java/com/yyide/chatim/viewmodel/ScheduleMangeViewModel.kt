@@ -108,7 +108,7 @@ class ScheduleMangeViewModel : ViewModel() {
                 participant.scheduleId = scheduleId
                 participant.type = it.type
                 //学生和教职工取值不一
-                participant.userName = it.userName
+                participant.realname = it.realname
                 participant.scheduleCreatorId = scheduleId
                 participantList.add(participant)
             }

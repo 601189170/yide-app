@@ -403,7 +403,7 @@ class ScheduleEditActivity : BaseActivity() {
 
     private fun showSelectedParticipant(list: MutableList<ParticipantRsp.DataBean.ParticipantListBean>) {
         val stringBuilder = StringBuilder()
-        list.map { it.userName }.forEach {
+        list.map { it.realname }.forEach {
             stringBuilder.append(it).append("  ")
         }
         if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {

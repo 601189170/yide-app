@@ -267,9 +267,9 @@ class MeetingSaveActivity : BaseActivity() {
         val sb = StringBuffer()
         list.forEachIndexed { index, participantListBean ->
             if (index == list.size - 1) {
-                sb.append(participantListBean.userName)
+                sb.append(participantListBean.realname)
             } else {
-                sb.append(participantListBean.userName).append("，")
+                sb.append(participantListBean.realname).append("，")
             }
         }
         return sb.toString()
