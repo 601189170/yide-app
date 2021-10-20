@@ -80,7 +80,7 @@ class ScheduleEditActivity : BaseActivity() {
             scheduleEditViewModel.allDayLiveData.value = it.isAllDay == "1"
             //日程重复repetition
             Repetition.getList().forEach { repetition ->
-                if (repetition.rule == it.rrule) {
+                if ("${repetition.code}" == it.isRepeat) {
                     scheduleEditBinding.tvRepetition.text = repetition.title
                     scheduleEditViewModel.repetitionLiveData.value = repetition
                     sourceRepetitionRule = repetition
