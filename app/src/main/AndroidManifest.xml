@@ -664,6 +664,8 @@
         <activity
             android:name=".activity.schedule.ScheduleSettingsActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.schedule.ScheduleTimetableClassActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

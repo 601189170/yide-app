@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
+import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.databinding.FragmentScheduleTodayBinding
 import com.yyide.chatim.model.schedule.*
@@ -96,6 +97,10 @@ class ScheduleTodayFragment : Fragment() {
                 MeetingSaveActivity.jumpUpdate(requireContext(),scheduleData.id)
                 return@setOnItemClickListener
             }
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE){
+                ScheduleTimetableClassActivity.jump(requireContext(),scheduleData)
+                return@setOnItemClickListener
+            }
             val intent = Intent(context, ScheduleEditActivity::class.java)
             intent.putExtra("data",JSON.toJSONString(scheduleData))
             startActivity(intent)
@@ -112,6 +117,10 @@ class ScheduleTodayFragment : Fragment() {
             val scheduleData = todayList[position]
             if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE){
                 MeetingSaveActivity.jumpUpdate(requireContext(),scheduleData.id)
+                return@setOnItemClickListener
+            }
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE){
+                ScheduleTimetableClassActivity.jump(requireContext(),scheduleData)
                 return@setOnItemClickListener
             }
             val intent = Intent(context, ScheduleEditActivity::class.java)

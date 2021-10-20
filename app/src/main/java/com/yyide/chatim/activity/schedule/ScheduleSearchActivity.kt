@@ -136,6 +136,12 @@ class ScheduleSearchActivity : BaseActivity() {
                 MeetingSaveActivity.jumpUpdate(this@ScheduleSearchActivity,scheduleData.id)
                 return@setOnItemClickListener
             }
+
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE){
+                ScheduleTimetableClassActivity.jump(this@ScheduleSearchActivity,scheduleData)
+                return@setOnItemClickListener
+            }
+
             val intent = Intent(this@ScheduleSearchActivity, ScheduleEditActivity::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)

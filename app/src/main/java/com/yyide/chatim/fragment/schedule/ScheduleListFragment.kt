@@ -31,6 +31,7 @@ import org.joda.time.DateTime
 import com.yyide.chatim.MainActivity
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
+import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ListViewEvent
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
@@ -141,6 +142,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                 curModifySchedule = scheduleData
                 if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE){
                     MeetingSaveActivity.jumpUpdate(requireContext(),scheduleData.id)
+                    return
+                }
+                if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE){
+                    ScheduleTimetableClassActivity.jump(requireContext(),scheduleData)
                     return
                 }
                 val intent = Intent(context, ScheduleEditActivity::class.java)

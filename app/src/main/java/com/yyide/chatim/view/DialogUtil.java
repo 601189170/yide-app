@@ -42,6 +42,7 @@ import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
+import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
 import com.yyide.chatim.databinding.DialogLabelTopMenuSelectLayoutBinding;
@@ -470,6 +471,10 @@ public class DialogUtil {
                     ScheduleData scheduleData = scheduleList.get(position);
                     if (scheduleData.getType().equals("" + Schedule.SCHEDULE_TYPE_CONFERENCE)) {
                         MeetingSaveActivity.Companion.jumpUpdate(context, scheduleData.getId());
+                        return;
+                    }
+                    if (scheduleData.getType().equals(""+Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE)){
+                        ScheduleTimetableClassActivity.Companion.jump(context,scheduleData);
                         return;
                     }
                     final Intent intent = new Intent(context, ScheduleEditActivity.class);
