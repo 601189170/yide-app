@@ -41,9 +41,12 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:drawableEnd="@drawable/schedule_fold_down_icon"/>
 
-            <androidx.recyclerview.widget.RecyclerView
+
+
+            <com.yanzhenjie.recyclerview.SwipeRecyclerView
                 android:id="@+id/rv_today_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,10 +68,11 @@
                 android:textColor="#ff666666"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:drawableEnd="@drawable/schedule_fold_down_icon"
                 app:layout_constraintLeft_toLeftOf="@id/tv_today_list"
                 app:layout_constraintTop_toBottomOf="@id/rv_today_list" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.yanzhenjie.recyclerview.SwipeRecyclerView
                 android:id="@+id/rv_week_undo_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
