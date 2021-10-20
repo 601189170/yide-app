@@ -75,7 +75,7 @@ class ScheduleEditActivity : BaseActivity() {
             scheduleEditViewModel.endTimeLiveData.value = it.endTime
             val bottomStartTime = DateUtils.formatTime(it.startTime,"","MM月dd HH:mm")
             val bottomEndTime = DateUtils.formatTime(it.endTime,"","MM月dd HH:mm")
-            scheduleEditBinding.tvBottomDate.text = String.format(getString(R.string.schedule_edit_bottom_date),bottomStartTime,bottomEndTime)
+            //scheduleEditBinding.tvBottomDate.text = String.format(getString(R.string.schedule_edit_bottom_date),bottomStartTime,bottomEndTime)
             //是否全天isAllDay【0：不是，1：是】
             scheduleEditViewModel.allDayLiveData.value = it.isAllDay == "1"
             //日程重复repetition
@@ -137,7 +137,9 @@ class ScheduleEditActivity : BaseActivity() {
 
         scheduleEditBinding.top.title.text = "日程编辑"
         scheduleEditBinding.top.backLayout.setOnClickListener {
-            //finish()
+            finish()
+        }
+        scheduleEditBinding.btnCommit.setOnClickListener {
             if (TextUtils.isEmpty(scheduleEditBinding.etScheduleTitle.text.toString())){
                 ToastUtils.showShort("需要输入日程名称")
                 return@setOnClickListener

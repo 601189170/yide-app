@@ -87,7 +87,9 @@ class ScheduleMangeViewModel : ViewModel() {
             scheduleBean.filePath = it.filePath
             scheduleBean.isRepeat = it.isRepeat
             scheduleBean.status = it.status
-            scheduleBean.rrule = JSON.toJSONString(it.rrule)
+            if (it.isRepeat != "0"){
+                scheduleBean.rrule = JSON.toJSONString(it.rrule)
+            }
             scheduleBean.remindType = it.remindType
             scheduleBean.remindTypeInfo = it.remindTypeInfo
             scheduleBean.startTime = it.startTime

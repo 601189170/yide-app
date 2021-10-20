@@ -1,5 +1,6 @@
 package com.yyide.chatim.database
 
+import android.text.TextUtils
 import android.util.Log
 import androidx.room.*
 import com.alibaba.fastjson.JSON
@@ -201,6 +202,9 @@ fun jsonToMap(content: String): MutableMap<String, Any?> {
     var content = content
     content = content.trim { it <= ' ' }
     var result: MutableMap<String, Any?> = mutableMapOf()
+    if (TextUtils.isEmpty(content)){
+        return result
+    }
     try {
         if (content[0] == '[') {
             val jsonArray = JSONArray(content)

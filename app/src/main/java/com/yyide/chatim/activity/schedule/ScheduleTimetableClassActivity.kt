@@ -58,6 +58,9 @@ class ScheduleTimetableClassActivity : BaseActivity() {
 
         scheduleTimetableBinding.top.title.text = "课表编辑"
         scheduleTimetableBinding.top.backLayout.setOnClickListener {
+           finish()
+        }
+        scheduleTimetableBinding.btnCommit.setOnClickListener {
             timetableViewModel.scheduleData.value?.remark = scheduleTimetableBinding.tvRemark.text.toString()
             val repetition = timetableViewModel.scheduleData.value?.rrule
             if (repetition  == null) {

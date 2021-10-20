@@ -579,7 +579,7 @@ public class DialogUtil {
         lp.y = location[1] + view.getHeight() * 2 - notificationBar; //对dialog设置y轴坐标
 
         lp.width = DisplayUtils.dip2px(context, 160f);
-        lp.height = DisplayUtils.dip2px(context, 284f);
+        lp.height = DisplayUtils.dip2px(context, 244f);
         rootView.measure(0, 0);
         lp.dimAmount = 0.5f;
         dialogWindow.setAttributes(lp);
