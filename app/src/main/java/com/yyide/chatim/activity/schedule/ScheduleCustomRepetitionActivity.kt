@@ -69,7 +69,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         scheduleRepetitionBinding.top.tvRight.setOnClickListener {
             val unitStr = unit.get()
             val numberStr = number.get()
-            var rule = mutableMapOf<String,String>()
+            var rule = mutableMapOf<String,Any>()
             if (unitStr == "天") {
                 //rule = "每${numberStr}天"
                 //rule = "{\"freq\": \"daily\",\"interval\": \"${numberStr}\"}"
@@ -81,7 +81,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 //rule = "每${numberStr}月 $selectMonth"
                 if (selectMonth.isNotEmpty()) {
                     val bymonthday =
-                        selectMonth.map { it.title }.toString()//.replace("[", "").replace("]", "")
+                        selectMonth.map { it.title }//.toString()//.replace("[", "").replace("]", "")
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\",\"bymonthday\":\"${bymonthday}\"}"
                     rule["freq"] = "monthly"
                     rule["interval"] = numberStr
@@ -96,7 +96,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 val selectWeek = weekList.filter { it.checked }
                 if (selectWeek.isNotEmpty()) {
                     val byweekday =
-                        selectWeek.map { it.shortname }.toString()//.replace("[", "").replace("]", "")
+                        selectWeek.map { it.shortname }//.toString()//.replace("[", "").replace("]", "")
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\",\"byweekday\":\"${byweekday}\"}"
                     rule["freq"] = "weekly"
                     rule["interval"] = numberStr

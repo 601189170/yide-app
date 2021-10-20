@@ -203,7 +203,7 @@
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginEnd="@dimen/dp_20"
                 android:background="@drawable/bg_blue"
-                android:text="修改"
+                android:text="保存"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_18"
                 />
