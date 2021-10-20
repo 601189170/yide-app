@@ -28,7 +28,7 @@ import java.util.TreeSet;
 public class SpData {
 
     /*用户信息，登录返回，登录信息版本号*/
-    public static final String LOGINDATA = "LOGINDATA";
+    public static final String LOGINDATA = "LOGINDATA_NEW";
     public static final String USERPHONE = "USERPHONE";
     public static final String SCHOOLINFO = "SCHOOLINFO";
     public static final String IDENTIY_INFO = "IDENTIY_INFO";
