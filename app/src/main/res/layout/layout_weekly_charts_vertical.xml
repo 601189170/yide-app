@@ -152,4 +152,10 @@
         tools:itemCount="7"
         tools:listitem="@layout/item_weekly_charts_vertical" />
 
+<!--    <com.yyide.chatim.widget.BarChartView-->
+<!--        android:id="@+id/barChartView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

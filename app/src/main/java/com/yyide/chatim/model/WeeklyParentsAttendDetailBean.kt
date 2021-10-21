@@ -45,6 +45,10 @@ data class AttendItem(
     var name: String,
     @JSONField(name = "value")
     var value: Int,
+    @JSONField(name = "clockName")
+    var clockName: String,
+    @JSONField(name = "time")
+    var time: String,
     @JSONField(name = "list")
     var list: List<AttendItem>
 ) : NodeId, Serializable {

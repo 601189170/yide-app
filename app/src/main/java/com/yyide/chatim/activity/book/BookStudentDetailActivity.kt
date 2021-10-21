@@ -49,7 +49,8 @@ class BookStudentDetailActivity : BaseActivity() {
     }
 
     private fun initView() {
-        val student: BookStudentItem = intent.getSerializableExtra("student") as BookStudentItem
+        if(intent.getSerializableExtra("student") == null) return
+        val student = intent.getSerializableExtra("student") as BookStudentItem
         viewBinding.clMessage.visibility = View.VISIBLE
         GlideUtil.loadImageHead(
             this,

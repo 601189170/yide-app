@@ -166,7 +166,8 @@ class MeetingSaveActivity : BaseActivity() {
         showLoading()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault()
                 .post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
@@ -182,7 +183,8 @@ class MeetingSaveActivity : BaseActivity() {
         val time = viewBinding.tvTime.text.toString().trim()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault()
                 .post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
@@ -193,6 +195,9 @@ class MeetingSaveActivity : BaseActivity() {
             }
             time == "请选择会议时间" -> {
                 ToastUtils.showShort("请选择会议时间")
+            }
+            viewModel.startTimeLiveData.value == viewModel.endTimeLiveData.value -> {
+                ToastUtils.showShort("结束时间需大于开始时间")
             }
             else -> {
                 val scheduleData = ScheduleData()
@@ -209,6 +214,7 @@ class MeetingSaveActivity : BaseActivity() {
                 scheduleData.startTime = viewModel.startTimeLiveData.value
                 scheduleData.endTime = viewModel.endTimeLiveData.value
                 scheduleData.type = "3"
+                scheduleData.isAllDay = if (viewModel.allDayLiveData.value == true) "1" else "0"
                 showLoading()
                 viewModel.requestMeetingSave(scheduleData)
             }

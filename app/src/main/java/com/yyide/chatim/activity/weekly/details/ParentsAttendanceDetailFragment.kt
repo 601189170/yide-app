@@ -105,8 +105,6 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
             if (null != result) {
                 initHotScroll(result.attendRate)
                 initViewpager(result.attendDetail)
-            } else {//接口返回空的情况处理
-
             }
         }
     }
@@ -136,6 +134,7 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
             }
             viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
             viewBinding.slidingTabLayout.currentTab = 0
+            viewBinding.slidingTabLayout.notifyDataSetChanged()
         }
     }
 

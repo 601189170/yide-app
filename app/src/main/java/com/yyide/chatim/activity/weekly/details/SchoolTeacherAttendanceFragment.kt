@@ -136,6 +136,7 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
         }
         viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
         viewBinding.slidingTabLayout.currentTab = 0
+        viewBinding.slidingTabLayout.notifyDataSetChanged()
     }
 
     private fun request() {

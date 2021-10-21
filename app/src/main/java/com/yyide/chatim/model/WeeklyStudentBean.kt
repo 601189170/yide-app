@@ -67,6 +67,10 @@ data class StudentValue(
     var leaveTime: String,
     @JSONField(name = "equipment")
     var equipment: String,
+    @JSONField(name = "clockName")
+    var clockName: String,
+    @JSONField(name = "time")
+    var time: String,
     @JSONField(name = "value")
     var value: List<StudentValue>
 ) : NodeId, Serializable {

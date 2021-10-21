@@ -40,6 +40,7 @@ class TeacherWeeklyFragment : BaseFragment() {
 
     private lateinit var viewBinding: FragmentTeacherChargeWeeklyBinding
     private val viewModel: TeacherViewModel by viewModels()
+    private lateinit var classBean: GetUserSchoolRsp.DataBean.FormBean
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +58,7 @@ class TeacherWeeklyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        classBean = SpData.getClassInfo()
         initView()
     }
 
@@ -71,8 +73,8 @@ class TeacherWeeklyFragment : BaseFragment() {
                 setSummary(result.summary)
                 setAttendance(result.attend)
             } else {//接口返回空的情况处理
-                viewBinding.clContent.visibility = View.GONE
-                viewBinding.cardViewNoData.visibility = View.VISIBLE
+//                viewBinding.clContent.visibility = View.GONE
+//                viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
         }
         viewBinding.attendance.cardView.setOnClickListener {
@@ -81,26 +83,63 @@ class TeacherWeeklyFragment : BaseFragment() {
                 WeeklyDetailsActivity.HEAD_TEACHER_ATTENDANCE_TYPE,
                 "",
                 "",
-                dateTime
+                dateTime,
+                classBean
             )
         }
         viewBinding.homework.cardViewWork.setOnClickListener {
             WeeklyDetailsActivity.jump(
                 mActivity, WeeklyDetailsActivity.HEAD_TEACHER_HOMEWORK_TYPE, "",
                 "",
-                dateTime
+                dateTime,
+                classBean
             )
         }
         viewBinding.tvDescs.text = WeeklyUtil.getDesc()
         teacherId = SpData.getIdentityInfo().teacherId
-        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-            classId = SpData.getClassInfo().classesId
+        if (classBean != null && !TextUtils.isEmpty(classBean.classesId)) {
+            classId = classBean.classesId
         }
 
         initClassMenu()
         initDate()
         initHomework()
+//        setX()
     }
+
+//    private fun setX() {
+//        val yList = ArrayList<Float>()
+//        yList.add(10f)
+//        yList.add(20f)
+//        yList.add(30f)
+//        yList.add(40f)
+//        yList.add(50f)
+//        yList.add(60f)
+//        yList.add(70f)
+//        yList.add(80f)
+//        yList.add(70f)
+//        yList.add(60f)
+//        yList.add(50f)
+//        yList.add(40f)
+//
+//        val type = ArrayList<String>()
+//        type.add("支付宝")
+//        type.add("微信")
+//        type.add("QQ")
+//        type.add("微博")
+//        type.add("空间")
+//        type.add("新浪")
+//        type.add("网易")
+//        type.add("360")
+//        type.add("暴雪")
+//        type.add("小米")
+//        type.add("苹果")
+//        type.add("华为")
+//
+//        viewBinding.attendance.layoutCharts.barChartView.setBarTextColor(Color.parseColor("#909399"))
+//        viewBinding.attendance.layoutCharts.barChartView.setBarColor(R.color.colorAccent)
+//        viewBinding.attendance.layoutCharts.barChartView.setChartData(type, yList, false, "营业额")
+//    }
 
     private var classId = ""
     private var teacherId = ""
@@ -152,7 +191,10 @@ class TeacherWeeklyFragment : BaseFragment() {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
                     attendancePop.setOnSelectListener { index: Int ->
                         viewBinding.tvEvent.text = adapterEvent.getItem(index).classesName + "的周报"
+                        val item = adapterEvent.getItem(index)
+                        classBean = item
                         classId = adapterEvent.getItem(index).classesId
+                        adapterEvent.setClassId(classId)
                         requestTeacher(dateTime)
                     }
 
@@ -258,12 +300,8 @@ class TeacherWeeklyFragment : BaseFragment() {
     private var spanCount = 3
     private fun setAttendance(attend: WeeklyTeacherAttendance?) {
         if (attend == null) {
-            viewBinding.attendance.clAttend.visibility = View.GONE
-            viewBinding.attendance.cardViewNoData.visibility = View.VISIBLE
             return
         }
-        viewBinding.attendance.clAttend.visibility = View.VISIBLE
-        viewBinding.attendance.cardViewNoData.visibility = View.GONE
         viewBinding.attendance.root.visibility = View.VISIBLE
         if (attend != null && attend.classAttend.isEmpty() && attend.teacherAttend.isEmpty()) {
             viewBinding.attendance.root.visibility = View.GONE
@@ -452,7 +490,10 @@ class TeacherWeeklyFragment : BaseFragment() {
                 bind.tvWeek.text = item.name
                 WeeklyUtil.setAnimation(
                     bind.progressbar,
-                    if (item.value <= 0) 0 else BigDecimal(item.value).setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
+                    if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
+                        0,
+                        BigDecimal.ROUND_HALF_UP
+                    ).toInt()
                 )
             }
         }

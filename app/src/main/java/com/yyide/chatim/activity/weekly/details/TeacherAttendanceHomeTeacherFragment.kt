@@ -25,6 +25,7 @@ import com.yyide.chatim.databinding.ItemHBinding
 import com.yyide.chatim.databinding.ItemHotBinding
 import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
 import com.yyide.chatim.dialog.AttendancePop
+import com.yyide.chatim.model.GetUserSchoolRsp
 import com.yyide.chatim.model.WeeklyDateBean
 import com.yyide.chatim.model.WeeklyTeacherAttend
 import com.yyide.chatim.model.WeeklyTeacherDetail
@@ -42,6 +43,7 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
 
     private lateinit var viewBinding: FragmentTeacherAttendanceChildWeeklyBinding
     private val viewModel: TeacherAttendanceViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -141,6 +143,7 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
             }
             viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
             viewBinding.slidingTabLayout.currentTab = 0
+            viewBinding.slidingTabLayout.notifyDataSetChanged()
         } else {
             viewBinding.slidingTabLayout.visibility = View.INVISIBLE
             viewBinding.viewpager.visibility = View.INVISIBLE

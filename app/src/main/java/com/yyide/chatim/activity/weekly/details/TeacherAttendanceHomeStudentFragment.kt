@@ -25,6 +25,7 @@ import com.yyide.chatim.databinding.ItemHBinding
 import com.yyide.chatim.databinding.ItemHotBinding
 import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
 import com.yyide.chatim.dialog.AttendancePop
+import com.yyide.chatim.model.GetUserSchoolRsp
 import com.yyide.chatim.model.StudentAttend
 import com.yyide.chatim.model.StudentDetail
 import com.yyide.chatim.model.WeeklyDateBean
@@ -57,10 +58,14 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(dateTime: WeeklyDateBean.DataBean.TimesBean) =
+        fun newInstance(
+            dateTime: WeeklyDateBean.DataBean.TimesBean,
+            classBean: GetUserSchoolRsp.DataBean.FormBean
+        ) =
             TeacherAttendanceHomeStudentFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("item", dateTime)
+                    putSerializable("classBean", classBean)
                 }
             }
     }
@@ -92,8 +97,8 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
         if (SpData.getClassInfo() != null) {
             classId = SpData.getClassInfo().classesId
         }
-        initClassMenu()
         initDate()
+        initClassMenu()
         viewModel.teacherAttendanceStudentLiveData.observe(viewLifecycleOwner) {
             dismiss()
             val result = it.getOrNull()
@@ -141,6 +146,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
             }
             viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
             viewBinding.slidingTabLayout.currentTab = 0
+            viewBinding.slidingTabLayout.notifyDataSetChanged()
         } else {
             viewBinding.viewpager.visibility = View.INVISIBLE
             viewBinding.slidingTabLayout.visibility = View.INVISIBLE
@@ -151,9 +157,11 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
     private var teacherId = ""
     private var timePosition = -1
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
+    private var classBean = SpData.getClassInfo()
     private fun initDate() {
         arguments?.apply {
             dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
+            classBean = getSerializable("classBean") as GetUserSchoolRsp.DataBean.FormBean
         }
         //获取日期时间
         val dateLists = WeeklyUtil.getDateTimes()
@@ -184,9 +192,9 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
 
     private fun initClassMenu() {
         var classesId = ""
-        if (SpData.getClassInfo() != null) {
-            viewBinding.tvClassName.text = SpData.getClassInfo().classesName + "的周报"
-            classesId = SpData.getClassInfo().classesId
+        if (classBean != null) {
+            viewBinding.tvClassName.text = classBean.classesName + "的周报"
+            classesId = classBean.classesId
         }
         val classList = SpData.getClassList()
         val adapterEvent = ClassAdapter()
