@@ -67,19 +67,22 @@ object ScheduleRepetitionRuleUtil {
         val dtstart = rule["dtstart"]
         //日程截止时间
         val until = rule["until"]?.toString()
-        loge("startDate=$startDate <<->> endDate=$endDate dtstart= $dtstart <<->> until=$until,rule=${JSON.toJSONString(rule)}")
+        logd(JSON.toJSONString(rule))
+        loge("startDate=$startDate <<->> endDate=$endDate")
+        logd("dtstart= $dtstart <<->> until=$until")
         var untilDateTime: DateTime = startDate
         until?.also {
             untilDateTime = ScheduleDaoUtil.toDateTime(until).simplifiedDataTime()
         }
         //星期 MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)
-        var byweekday = mutableListOf<String>()
-        var bymonthday = mutableListOf<String>()
+        var byweekday = listOf<String>()
+        var bymonthday = listOf<String>()
         if (rule["byweekday"] != null) {
             try {
                 byweekday = JSON.parseArray(rule["byweekday"]?.toString(), String::class.java)
             } catch (e: Exception) {
                 loge("${rule["byweekday"]}解析报错：${e.localizedMessage}")
+                byweekday = rule["byweekday"].toString().replace("[","").replace("]","").split(",")
             }
 
         }
@@ -88,6 +91,7 @@ object ScheduleRepetitionRuleUtil {
                 bymonthday = JSON.parseArray(rule["bymonthday"]?.toString(), String::class.java)
             } catch (e: Exception) {
                 loge("${rule["bymonthday"]}解析报错：${e.localizedMessage}")
+                bymonthday = rule["bymonthday"].toString().replace("[","").replace("]","").split(",")
             }
         }
 
@@ -154,9 +158,8 @@ object ScheduleRepetitionRuleUtil {
                 } else {
                     //有byday SU(周日),MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),
                     val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
-                    loge("$nowDateTime,本周第一天,$firstDayOfWeek")
                     byweekday.forEach {
-                        when (it) {
+                        when (it.trim()) {
                             "SU" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(0)
                                 if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
@@ -235,7 +238,6 @@ object ScheduleRepetitionRuleUtil {
                     //有byday SU(周日),MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),
                     //每个月的1日
                     val firstDayOfMonth = nowDateTime.minusDays(nowDateTime.dayOfMonth - 1)
-                    println("$nowDateTime,本月第一天,$firstDayOfMonth")
                     bymonthday.forEach {
                         val dayOfMonth = firstDayOfMonth.plusDays(it.toInt() - 1)
                         if (dayOfMonth >= startDate && dayOfMonth < endDate && until >= startDate) {
