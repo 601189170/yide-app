@@ -19,6 +19,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.ActivityScheduleEditBinding
@@ -54,6 +55,7 @@ class ScheduleEditActivity : BaseActivity() {
     }
 
     private fun initView() {
+        scheduleEditBinding.clParticipant.visibility = if (SpData.getIdentityInfo().staffIdentity()) View.VISIBLE else View.GONE
         val stringExtra = intent.getStringExtra("data")
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
         scheduleData?.let {

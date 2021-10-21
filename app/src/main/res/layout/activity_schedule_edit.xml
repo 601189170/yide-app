@@ -31,32 +31,33 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
                 app:layout_constraintTop_toTopOf="parent">
+
                 <ImageView
                     android:id="@+id/iv_schedule_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/type_schedule_icon"
-                    app:layout_constraintLeft_toLeftOf="parent"
                     android:layout_marginStart="@dimen/dp_20"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/type_schedule_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <EditText
                     android:id="@+id/et_schedule_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_6"
-                    android:text="语文初三10班  语文"
+                    android:background="@color/white"
                     android:hint="需要输入日程名称"
-                    android:textStyle="bold"
-                    android:singleLine="true"
-                    android:textColor="#ff333333"
                     android:maxEms="15"
+                    android:singleLine="true"
+                    android:text="语文初三10班  语文"
+                    android:textColor="#ff333333"
                     android:textSize="16sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/iv_schedule_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:background="@color/white"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <CheckBox
                     android:id="@+id/checkBox"
@@ -229,13 +230,19 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+                android:id="@+id/v_line_10"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                app:layout_constraintTop_toBottomOf="@id/cl_remind" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_participant"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/cl_remind">
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/v_line_10">
 
                 <TextView
                     android:id="@+id/tv_participant"
@@ -243,29 +250,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginEnd="@dimen/dp_20"
+                    android:singleLine="true"
                     android:text="添加参与人"
                     android:textColor="#ff999999"
                     android:textSize="16sp"
-                    android:singleLine="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:id="@+id/v_line4"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/dp_20"
-                android:background="#EBEBEB"
-                app:layout_constraintTop_toBottomOf="@id/cl_participant" />
+                <View
+                    android:id="@+id/v_line4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="#EBEBEB"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_address"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/v_line4">
+                app:layout_constraintTop_toBottomOf="@id/cl_participant">
 
                 <TextView
                     android:id="@+id/tv_address"
@@ -278,15 +285,15 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:id="@+id/v_line5"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="@dimen/dp_20"
-                android:background="#EBEBEB"
-                app:layout_constraintTop_toBottomOf="@id/cl_address" />
+                <View
+                    android:id="@+id/v_line5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:background="#EBEBEB"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_attachment"
@@ -294,7 +301,7 @@
                 android:layout_height="48dp"
                 android:background="@color/white"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/v_line5">
+                app:layout_constraintTop_toBottomOf="@id/cl_address">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -314,6 +321,7 @@
                 android:layout_height="1dp"
                 android:layout_marginStart="@dimen/dp_20"
                 android:background="#EBEBEB"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/cl_attachment" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -343,15 +351,17 @@
                 android:background="@color/white"
                 android:paddingBottom="45dp"
                 app:layout_constraintTop_toBottomOf="@id/cl_remark">
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_label_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:paddingStart="@dimen/dp_20"
-                    android:paddingEnd="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_18"
-                    android:paddingBottom="@dimen/dp_18"/>
+                    android:paddingEnd="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_18"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <Button
                     android:id="@+id/btn_add_label"
                     android:layout_width="wrap_content"
@@ -367,32 +377,31 @@
                     android:textColor="#1E1E1E"
                     android:textSize="@dimen/text_15"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rv_label_list"/>
+                    app:layout_constraintTop_toBottomOf="@id/rv_label_list" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_bottom_date"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="110dp"-->
-<!--                    android:text="@string/schedule_edit_bottom_date"-->
-<!--                    android:textColor="#ff999999"-->
-<!--                    android:textSize="14sp"-->
-<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                    app:layout_constraintRight_toRightOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/btn_add_label" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tv_bottom_date"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="110dp"-->
+                <!--                    android:text="@string/schedule_edit_bottom_date"-->
+                <!--                    android:textColor="#ff999999"-->
+                <!--                    android:textSize="14sp"-->
+                <!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+                <!--                    app:layout_constraintRight_toRightOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@id/btn_add_label" />-->
                 <Button
                     android:id="@+id/btn_commit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_44"
-                    app:layout_constraintTop_toBottomOf="@id/btn_add_label"
-                    android:layout_marginTop="@dimen/dp_50"
                     android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_50"
                     android:layout_marginEnd="@dimen/dp_20"
                     android:background="@drawable/bg_blue"
                     android:text="保存"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_18"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/btn_add_label" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
