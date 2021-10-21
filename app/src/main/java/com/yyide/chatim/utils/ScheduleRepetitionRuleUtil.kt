@@ -36,11 +36,12 @@ object ScheduleRepetitionRuleUtil {
         val startDateTime = DateTime.parse(startDate, dateTimeFormatter)
         val endDateTime = DateTime.parse(endDate, dateTimeFormatter)
         val calculate = calculate(startDateTime, endDateTime, rule)
-        if (calculate.isEmpty()) {
-            val mutableListOf = mutableListOf<DateTime>()
-            mutableListOf.add(startDateTime.simplifiedDataTime())
-            return mutableListOf
-        }
+        loge("calculate:${calculate.size} , ${calculate.toString()}")
+//        if (calculate.isEmpty()) {
+//            val mutableListOf = mutableListOf<DateTime>()
+//            mutableListOf.add(startDateTime.simplifiedDataTime())
+//            return mutableListOf
+//        }
         return calculate.map {
             DateTime.parse(
                 it.toString("yyyy-MM-dd ") + "00:00:00",
@@ -72,8 +73,9 @@ object ScheduleRepetitionRuleUtil {
         logd("dtstart= $dtstart <<->> until=$until")
         var untilDateTime: DateTime = startDate
         until?.also {
-            untilDateTime = ScheduleDaoUtil.toDateTime(until).simplifiedDataTime()
+            untilDateTime = ScheduleDaoUtil.toDateTime(until)
         }
+        logd("startDate= $startDate <<->> until=${untilDateTime.toString()}")
         //星期 MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)
         var byweekday = listOf<String>()
         var bymonthday = listOf<String>()
@@ -154,7 +156,9 @@ object ScheduleRepetitionRuleUtil {
         while (true) {
             if (nowDateTime < endDate) {
                 if (byweekday.isNullOrEmpty()) {
-                    repetitionDate.add(nowDateTime)
+                    if (until >= startDate){
+                        repetitionDate.add(nowDateTime)
+                    }
                 } else {
                     //有byday SU(周日),MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),
                     val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
