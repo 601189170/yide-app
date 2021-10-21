@@ -75,6 +75,7 @@ import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
 import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -321,7 +322,37 @@ public class DialogUtil {
         for (int i = 0; i < 12; i++) {
             list23.add(""+(i+1));
         }
+        List<WeekBean> weekList = WeekBean.Companion.getList();
+        final List<MonthBean> monthList = MonthBean.Companion.getList();
+        final Repetition repetition = scheduleEditViewModel.getRepetitionLiveData().getValue();
+        Log.e(TAG, "showCustomRepetitionScheduleDialog: "+JSON.toJSONString(repetition) );
+        if (repetition != null && repetition.getRule() != null && !repetition.getRule().isEmpty()){
+            final Map<String, Object> repetitionRule = repetition.getRule();
+            final String freq = (String) repetitionRule.get("freq");
+            if ("weekly".equals(freq) || "WEEKLY".equals(freq)){
+                final String byweekday = (String) repetitionRule.get("byweekday");
+                final String[] byweekdayList = byweekday.replace("[", "").replace("]", "").split(",");
+                final List<String> stringList = new ArrayList<>();
+                for (String s : byweekdayList) {
+                    stringList.add(s.trim());
+                }
+                for (WeekBean weekBean : weekList) {
+                    weekBean.setChecked(stringList.contains(weekBean.getShortname()));
+                }
+            }
 
+            if ("monthly".equals(freq) || "MONTHLY".equals(freq)){
+                final String bymonthday = (String) repetitionRule.get("bymonthday");
+                final String[] bymonthdayList = bymonthday.replace("[", "").replace("]", "").split(",");
+                final List<String> stringList = new ArrayList<>();
+                for (String s : bymonthdayList) {
+                    stringList.add(s.trim());
+                }
+                for (MonthBean monthBean : monthList) {
+                    monthBean.setChecked(stringList.contains(monthBean.getTitle()));
+                }
+            }
+        }
         List<String> list3 = new ArrayList<>();
         list3.add("天");
         list3.add("月");
@@ -363,7 +394,7 @@ public class DialogUtil {
         });
         scrollPickerUnit.setAdapter(scrollPickerUnitAdapter);
 
-        List<WeekBean> weekList = WeekBean.Companion.getList();
+
         binding.rvWeekList.setLayoutManager(new GridLayoutManager(context,3));
         BaseQuickAdapter adapter = new BaseQuickAdapter<WeekBean,BaseViewHolder>(R.layout.item_dialog_week_custom_repetition){
 
@@ -381,7 +412,6 @@ public class DialogUtil {
         binding.rvWeekList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f),3));
         binding.rvWeekList.setAdapter(adapter);
 
-        final List<MonthBean> monthList = MonthBean.Companion.getList();
         binding.rvMonthList.setLayoutManager(new GridLayoutManager(context,7));
         BaseQuickAdapter quickAdapter = new BaseQuickAdapter<MonthBean,BaseViewHolder>(R.layout.item_dialog_month_custom_repetition){
 

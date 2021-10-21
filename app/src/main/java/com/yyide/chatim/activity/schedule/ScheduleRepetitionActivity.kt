@@ -32,12 +32,13 @@ class ScheduleRepetitionActivity : BaseActivity() {
 
     private fun initView() {
         val stringExtra = intent.getStringExtra("data")
+        loge("stringExtra $stringExtra")
         val selectedRepetition = JSON.parseObject(stringExtra, Repetition::class.java)
         if (selectedRepetition != null){
             title = selectedRepetition.title
             rule = selectedRepetition.rule
             list.forEach {
-                it.checked = it.rule == selectedRepetition.rule
+                it.checked = it.code == selectedRepetition.code
             }
             list.filter { it.checked }.ifEmpty {
                 //自定义重复
@@ -91,7 +92,7 @@ class ScheduleRepetitionActivity : BaseActivity() {
         scheduleRepetitionBinding.clCustom.setOnClickListener {
             val intent = Intent(this, ScheduleCustomRepetitionActivity::class.java)
             list.filter { it.checked }.ifEmpty {
-                //intent.putExtra("rule",rule)
+                intent.putExtra("rule",JSON.toJSONString(rule))
             }
             startActivityForResult(intent, REQUEST_CODE_CUSTOM_REPETITION)
         }

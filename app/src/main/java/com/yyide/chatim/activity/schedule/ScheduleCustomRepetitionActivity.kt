@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.database.ScheduleBean
+import com.yyide.chatim.database.jsonToMap
 import com.yyide.chatim.databinding.ActivityScheduleCustomRepetitionBinding
 import com.yyide.chatim.model.schedule.MonthBean
 import com.yyide.chatim.model.schedule.WeekBean
@@ -27,8 +30,8 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
     val list2: MutableList<String> = ArrayList()
     val list22: MutableList<String> = ArrayList()
     val list23: MutableList<String> = ArrayList()
-
     val list3: MutableList<String> = ArrayList()
+    var jsonToMap = mutableMapOf<String, Any?>()
     var number = AtomicReference<String>()
     var unit = AtomicReference<String>()
     lateinit var scheduleRepetitionBinding: ActivityScheduleCustomRepetitionBinding
@@ -41,6 +44,11 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
     }
 
     private fun initData() {
+        val stringExtra = intent.getStringExtra("rule")
+        jsonToMap = jsonToMap(stringExtra ?: "")
+        loge("jsonToMap ${jsonToMap}")
+        //{byweekday=[MO, TU, WE, FR], freq=weekly, interval=1}
+        //{bymonthday=[1, 2, 3, 4, 5, 6], freq=monthly, interval=1}
         list.add("每")
         for (i in 0..30) {
             list2.add("" + (i + 1))
@@ -59,6 +67,45 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
     private fun initView() {
         val weekList = WeekBean.getList()
         val monthList = MonthBean.getList()
+        val freq = jsonToMap["freq"]
+        val interval = jsonToMap["interval"]?.toString()?:"1"
+        if (freq == "weekly" || freq == "WEEKLY") {
+            var byweekday: List<String>
+            try {
+                byweekday = JSON.parseArray(jsonToMap["byweekday"]?.toString(), String::class.java)
+            } catch (e: Exception) {
+                byweekday =
+                    jsonToMap["byweekday"].toString().replace("[", "").replace("]", "").split(",")
+                        .map { it.trim() }
+            }
+            loge("byweekday $byweekday")
+            byweekday.also {
+                weekList.forEach { weekBean ->
+                    weekBean.checked = it.contains(weekBean.shortname)
+                }
+            }
+        }
+
+        if (freq == "monthly" || freq == "MONTHLY") {
+            var bymonthday: List<String>
+            try {
+                bymonthday =
+                    JSON.parseArray(jsonToMap["bymonthday"]?.toString(), String::class.java)
+            } catch (e: Exception) {
+                bymonthday =
+                    jsonToMap["byweekday"].toString().replace("[", "").replace("]", "").split(",")
+                        .map {
+                            it.trim()
+                        }
+            }
+            loge("bymonthday $bymonthday")
+            bymonthday.also {
+                monthList.forEach { monthBean ->
+                    monthBean.checked = it.contains(monthBean.title)
+                }
+            }
+        }
+
         scheduleRepetitionBinding.top.title.text = "自定义重复"
         scheduleRepetitionBinding.top.backLayout.setOnClickListener {
             finish()
@@ -69,7 +116,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         scheduleRepetitionBinding.top.tvRight.setOnClickListener {
             val unitStr = unit.get()
             val numberStr = number.get()
-            var rule = mutableMapOf<String,Any>()
+            var rule = mutableMapOf<String, Any>()
             if (unitStr == "天") {
                 //rule = "每${numberStr}天"
                 //rule = "{\"freq\": \"daily\",\"interval\": \"${numberStr}\"}"
@@ -81,7 +128,8 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 //rule = "每${numberStr}月 $selectMonth"
                 if (selectMonth.isNotEmpty()) {
                     val bymonthday =
-                        selectMonth.map { it.title }.toString()//.replace("[", "").replace("]", "")
+                        selectMonth.map { it.title }
+                            .toString()//.replace("[", "").replace("]", "")
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\",\"bymonthday\":\"${bymonthday}\"}"
                     rule["freq"] = "monthly"
                     rule["interval"] = numberStr
@@ -96,7 +144,8 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 val selectWeek = weekList.filter { it.checked }
                 if (selectWeek.isNotEmpty()) {
                     val byweekday =
-                        selectWeek.map { it.shortname }.toString()//.replace("[", "").replace("]", "")
+                        selectWeek.map { it.shortname }
+                            .toString()//.replace("[", "").replace("]", "")
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\",\"byweekday\":\"${byweekday}\"}"
                     rule["freq"] = "weekly"
                     rule["interval"] = numberStr
@@ -171,7 +220,10 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         scheduleRepetitionBinding.rvMonthList.setLayoutManager(GridLayoutManager(this, 7))
         val quickAdapter: BaseQuickAdapter<MonthBean, BaseViewHolder> = object :
             BaseQuickAdapter<MonthBean, BaseViewHolder>(R.layout.item_dialog_month_custom_repetition) {
-            protected override fun convert(baseViewHolder: BaseViewHolder, monthBean: MonthBean) {
+            protected override fun convert(
+                baseViewHolder: BaseViewHolder,
+                monthBean: MonthBean
+            ) {
                 baseViewHolder.setText(R.id.title, monthBean.title)
                 baseViewHolder.getView<View>(R.id.title).isSelected = monthBean.checked
                 baseViewHolder.itemView.setOnClickListener { v: View? ->

@@ -18,7 +18,7 @@ interface ScheduleDao {
     fun getScheduleWithParticipantAndLabelLists(): List<ScheduleWithParticipantAndLabel>
 
     /**
-     * 查询一条日程
+     * 插入一条日程
      */
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -71,7 +71,7 @@ interface ScheduleDao {
     // where  name like '%历史%' and type in (1,2) and status in (0,1) and label.id in(1447838531185115138) group by schedule.id
     //搜索日程根据赛选条件
     @Transaction
-    @Query("select * from schedule left join label on schedule.id = label.scheduleCreatorId where name like '%' || :name || '%' and status in (:status) and type in(:type) group by schedule.id")
+    @Query("select schedule.* from schedule left join label on schedule.id = label.scheduleCreatorId where name like '%' || :name || '%' and status in (:status) and type in(:type) group by schedule.id")
     fun searchSchedule(
        name:String,
        status: List<Int>,
@@ -79,7 +79,7 @@ interface ScheduleDao {
     ): List<ScheduleWithParticipantAndLabel>
 
     @Transaction
-    @Query("select * from schedule left join label on schedule.id = label.scheduleCreatorId where name like '%' || :name || '%' and status in (:status) and type in(:type) and label.id in(:labelId) group by schedule.id")
+    @Query("select schedule.* from schedule left join label on schedule.id = label.scheduleCreatorId where name like '%' || :name || '%' and status in (:status) and type in(:type) and label.id in(:labelId) group by schedule.id")
     fun searchSchedule(
         name:String,
         status: List<Int>,
