@@ -104,42 +104,7 @@ class TeacherWeeklyFragment : BaseFragment() {
         initClassMenu()
         initDate()
         initHomework()
-//        setX()
     }
-
-//    private fun setX() {
-//        val yList = ArrayList<Float>()
-//        yList.add(10f)
-//        yList.add(20f)
-//        yList.add(30f)
-//        yList.add(40f)
-//        yList.add(50f)
-//        yList.add(60f)
-//        yList.add(70f)
-//        yList.add(80f)
-//        yList.add(70f)
-//        yList.add(60f)
-//        yList.add(50f)
-//        yList.add(40f)
-//
-//        val type = ArrayList<String>()
-//        type.add("支付宝")
-//        type.add("微信")
-//        type.add("QQ")
-//        type.add("微博")
-//        type.add("空间")
-//        type.add("新浪")
-//        type.add("网易")
-//        type.add("360")
-//        type.add("暴雪")
-//        type.add("小米")
-//        type.add("苹果")
-//        type.add("华为")
-//
-//        viewBinding.attendance.layoutCharts.barChartView.setBarTextColor(Color.parseColor("#909399"))
-//        viewBinding.attendance.layoutCharts.barChartView.setBarColor(R.color.colorAccent)
-//        viewBinding.attendance.layoutCharts.barChartView.setChartData(type, yList, false, "营业额")
-//    }
 
     private var classId = ""
     private var teacherId = ""
