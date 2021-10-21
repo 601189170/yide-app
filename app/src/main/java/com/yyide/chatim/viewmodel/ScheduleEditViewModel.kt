@@ -104,7 +104,7 @@ class ScheduleEditViewModel : ViewModel() {
             scheduleData.id = scheduleIdLiveData.value
             if (updateTypeLiveData.value != null){
                 scheduleData.updateType = updateTypeLiveData.value
-                scheduleData.updateDate = DateUtils.switchTime(Date(),"yyyy-MM-dd")
+                scheduleData.updateDate = startTime//DateUtils.switchTime(Date(),"yyyy-MM-dd")
             }
         }
         scheduleData.name = scheduleTitle?:""
