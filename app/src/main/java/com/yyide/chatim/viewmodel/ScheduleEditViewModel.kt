@@ -96,6 +96,9 @@ class ScheduleEditViewModel : ViewModel() {
 
         val remind = remindLiveData.value?.id
         val repetition = repetitionLiveData.value
+        if (repetition?.rule != null){
+            repetition.rule?.set("dtstart",startTime)
+        }
         val scheduleData = ScheduleData()
         if (modify){
             scheduleData.id = scheduleIdLiveData.value
