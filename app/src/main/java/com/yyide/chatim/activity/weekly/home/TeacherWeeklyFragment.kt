@@ -40,6 +40,7 @@ class TeacherWeeklyFragment : BaseFragment() {
 
     private lateinit var viewBinding: FragmentTeacherChargeWeeklyBinding
     private val viewModel: TeacherViewModel by viewModels()
+    private lateinit var classBean: GetUserSchoolRsp.DataBean.FormBean
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +58,7 @@ class TeacherWeeklyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        classBean = SpData.getClassInfo()
         initView()
     }
 
@@ -71,8 +73,8 @@ class TeacherWeeklyFragment : BaseFragment() {
                 setSummary(result.summary)
                 setAttendance(result.attend)
             } else {//接口返回空的情况处理
-                viewBinding.clContent.visibility = View.GONE
-                viewBinding.cardViewNoData.visibility = View.VISIBLE
+//                viewBinding.clContent.visibility = View.GONE
+//                viewBinding.cardViewNoData.visibility = View.VISIBLE
             }
         }
         viewBinding.attendance.cardView.setOnClickListener {
@@ -81,20 +83,22 @@ class TeacherWeeklyFragment : BaseFragment() {
                 WeeklyDetailsActivity.HEAD_TEACHER_ATTENDANCE_TYPE,
                 "",
                 "",
-                dateTime
+                dateTime,
+                classBean
             )
         }
         viewBinding.homework.cardViewWork.setOnClickListener {
             WeeklyDetailsActivity.jump(
                 mActivity, WeeklyDetailsActivity.HEAD_TEACHER_HOMEWORK_TYPE, "",
                 "",
-                dateTime
+                dateTime,
+                classBean
             )
         }
         viewBinding.tvDescs.text = WeeklyUtil.getDesc()
         teacherId = SpData.getIdentityInfo().teacherId
-        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-            classId = SpData.getClassInfo().classesId
+        if (classBean != null && !TextUtils.isEmpty(classBean.classesId)) {
+            classId = classBean.classesId
         }
 
         initClassMenu()
@@ -152,7 +156,10 @@ class TeacherWeeklyFragment : BaseFragment() {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择班级")
                     attendancePop.setOnSelectListener { index: Int ->
                         viewBinding.tvEvent.text = adapterEvent.getItem(index).classesName + "的周报"
+                        val item = adapterEvent.getItem(index)
+                        classBean = item
                         classId = adapterEvent.getItem(index).classesId
+                        adapterEvent.setClassId(classId)
                         requestTeacher(dateTime)
                     }
 
@@ -258,12 +265,8 @@ class TeacherWeeklyFragment : BaseFragment() {
     private var spanCount = 3
     private fun setAttendance(attend: WeeklyTeacherAttendance?) {
         if (attend == null) {
-            viewBinding.attendance.clAttend.visibility = View.GONE
-            viewBinding.attendance.cardViewNoData.visibility = View.VISIBLE
             return
         }
-        viewBinding.attendance.clAttend.visibility = View.VISIBLE
-        viewBinding.attendance.cardViewNoData.visibility = View.GONE
         viewBinding.attendance.root.visibility = View.VISIBLE
         if (attend != null && attend.classAttend.isEmpty() && attend.teacherAttend.isEmpty()) {
             viewBinding.attendance.root.visibility = View.GONE
@@ -452,7 +455,10 @@ class TeacherWeeklyFragment : BaseFragment() {
                 bind.tvWeek.text = item.name
                 WeeklyUtil.setAnimation(
                     bind.progressbar,
-                    if (item.value <= 0) 0 else BigDecimal(item.value).setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
+                    if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
+                        0,
+                        BigDecimal.ROUND_HALF_UP
+                    ).toInt()
                 )
             }
         }

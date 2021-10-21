@@ -4,9 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.details.*
+import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityWeeklyDetailsBinding
+import com.yyide.chatim.model.GetUserSchoolRsp
 import com.yyide.chatim.model.WeeklyDateBean
 
 /**
@@ -21,6 +24,7 @@ class WeeklyDetailsActivity : BaseActivity() {
         private val STUDNET_ID = "studnet_id"
         private val STUDNET_NAME = "studnet_name"
         private val DATE_TIME = "date_time"
+        private val CLASSBEAN = "classbean"
 
         const val SCHOOL_ATTENDANCE_TYPE = "school_attendance_type"
         const val SCHOOL_HOMEWORK_TYPE = "school_homework_type"
@@ -36,13 +40,15 @@ class WeeklyDetailsActivity : BaseActivity() {
             type: String,
             studentId: String,
             studentName: String,
-            dateTime: WeeklyDateBean.DataBean.TimesBean
+            dateTime: WeeklyDateBean.DataBean.TimesBean,
+            classBean: GetUserSchoolRsp.DataBean.FormBean?
         ) {
             val intent = Intent(context, WeeklyDetailsActivity::class.java)
             intent.putExtra(TYPE, type)
             intent.putExtra(STUDNET_ID, studentId)
             intent.putExtra(STUDNET_NAME, studentName)
             intent.putExtra(DATE_TIME, dateTime)
+            intent.putExtra(CLASSBEAN, classBean)
             context.startActivity(intent)
         }
     }
@@ -62,63 +68,71 @@ class WeeklyDetailsActivity : BaseActivity() {
         val type = intent.getStringExtra(TYPE)
         val studentId = intent.getStringExtra(STUDNET_ID)
         val studentName = intent.getStringExtra(STUDNET_NAME)
-        val dateTime = intent.getSerializableExtra(DATE_TIME) as WeeklyDateBean.DataBean.TimesBean
+        val dateTime = if (intent.getSerializableExtra(DATE_TIME) != null) {
+            intent.getSerializableExtra(DATE_TIME) as WeeklyDateBean.DataBean.TimesBean
+        } else {
+            WeeklyUtil.getDateTime()
+        }
+        val classBean =
+            if (intent.getSerializableExtra(CLASSBEAN) != null) intent.getSerializableExtra(
+                CLASSBEAN
+            ) as GetUserSchoolRsp.DataBean.FormBean else SpData.getClassInfo()
         viewBinding.back.setOnClickListener { finish() }
         when (type) {
             SCHOOL_ATTENDANCE_TYPE -> {
                 viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    SchoolAttendanceFragment.newInstance(dateTime)
+                    SchoolAttendanceFragment.newInstance(dateTime!!)
                 ).commit()
             }
             SCHOOL_HOMEWORK_TYPE -> {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    SchoolHomeworkFragment.newInstance(dateTime)
+                    SchoolHomeworkFragment.newInstance(dateTime!!)
                 ).commit()
             }
             HEAD_TEACHER_ATTENDANCE_TYPE -> {
                 viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherAttendanceHomeFragment.newInstance(dateTime)
+                    TeacherAttendanceHomeFragment.newInstance(dateTime!!, classBean)
                 ).commit()
             }
             HEAD_TEACHER_HOMEWORK_TYPE -> {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherHomeworkFragment.newInstance(dateTime)
+                    TeacherHomeworkFragment.newInstance(dateTime!!)
                 ).commit()
             }
             TEACHER_ATTENDANCE_TYPE -> {
                 viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherAttendanceHomeFragment.newInstance(dateTime)
+                    TeacherAttendanceHomeFragment.newInstance(dateTime!!, classBean)
                 ).commit()
             }
             TEACHER_HOMEWORK_TYPE -> {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherHomeworkFragment.newInstance(dateTime)
+                    TeacherHomeworkFragment.newInstance(dateTime!!)
                 ).commit()
             }
             PARENT_ATTENDANCE_TYPE -> {
                 viewBinding.tvEventTitle.text = "考勤"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    ParentsAttendanceDetailFragment.newInstance(studentId, studentName, dateTime)
+                    ParentsAttendanceDetailFragment.newInstance(studentId, studentName, dateTime!!)
                 ).commit()
             }
             PARENT_HOMEWORK_TYPE -> {
                 viewBinding.tvEventTitle.text = "作业"
                 supportFragmentManager.beginTransaction().replace(
                     viewBinding.flContent.id,
-                    TeacherHomeworkFragment.newInstance(dateTime)
+                    TeacherHomeworkFragment.newInstance(dateTime!!)
                 ).commit()
             }
         }

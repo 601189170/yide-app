@@ -39,6 +39,9 @@ public class ParentsAttendanceAdapter extends SingleLayoutTreeAdapter<AttendItem
         holder.setText(R.id.tv_student_event, "");
         holder.setText(R.id.tv_status, "");
         holder.setText(R.id.tv_student_name, item.getName());
+        /**
+         * 考勤详情状态(0正常 1缺勤 2迟到 3早退 4无效打卡 5请假 6未打卡)
+         */
         if (itemParent.getLevel() == 1) {
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
             switch (item.getValue()) {
@@ -52,12 +55,18 @@ public class ParentsAttendanceAdapter extends SingleLayoutTreeAdapter<AttendItem
                     break;
                 case 3://早退
                     tvTime.setTextColor(Color.parseColor("#63DAAB"));
+                    tvTime.setText(item.getTime());
+                    tvStatus.setText(item.getClockName());
                     break;
                 case 2://迟到
+                    tvStatus.setText(item.getClockName());
+                    tvTime.setText(item.getTime());
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
-                case 4://请假
-                    tvEvent.setText("请假");
+                case 4:
+                    break;
+                case 5://请假
+                    tvTime.setText(item.getTime());
                     tvStatus.setText("请假时间");
                     tvTime.setTextColor(Color.parseColor("#F6BD16"));
                     break;

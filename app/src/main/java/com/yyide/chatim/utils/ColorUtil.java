@@ -1,6 +1,7 @@
 package com.yyide.chatim.utils;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 
 /**
  * @author liu tao
@@ -9,6 +10,9 @@ import android.graphics.Color;
  */
 public class ColorUtil {
     private static String formatColor(String color) {
+        if(TextUtils.isEmpty(color)){
+            return "";
+        }
         if (color.length() == 4) {
             final StringBuilder stringBuilder = new StringBuilder(color);
             if (color.charAt(1) == color.charAt(2) && (color.charAt(2) == color.charAt(3) && (color.charAt(1) == color.charAt(3)))) {

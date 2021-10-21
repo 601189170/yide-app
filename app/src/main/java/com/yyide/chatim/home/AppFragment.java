@@ -47,8 +47,8 @@ import butterknife.BindView;
 
 public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppView, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.mygrid)
-    RecyclerView mygrid;
+    @BindView(R.id.myRecyclerView)
+    RecyclerView myRecyclerView;
     @BindView(R.id.recy)
     RecyclerView recy;
     @BindView(R.id.listview)
@@ -85,8 +85,8 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         );
         adapter = new MyAppItemAdapter();
         //我的应用
-        mygrid.setLayoutManager(new GridLayoutManager(mActivity, 4));
-        mygrid.setAdapter(adapter);
+        myRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 4));
+        myRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((adapter, view1, position) -> {
             final MyAppListRsp.DataBean item = (MyAppListRsp.DataBean) adapter.getItem(position);
             JumpUtil.appOpen(requireContext(), item.getName(), item.getPath());

@@ -46,6 +46,7 @@ open class ParentsWeeklyFragment : BaseFragment() {
     private lateinit var viewBinding: FragmentParentsWeeklyBinding
     private val viewModel: ParentsViewModel by viewModels()
     private var studentId: String = ""
+    private var classInfo = SpData.getClassInfo()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,8 +68,8 @@ open class ParentsWeeklyFragment : BaseFragment() {
     }
 
     private fun initView() {
-        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentId)) {
-            studentId = SpData.getClassInfo().studentId
+        if (classInfo != null && !TextUtils.isEmpty(classInfo.studentId)) {
+            studentId = classInfo.studentId
         }
         viewModel.parentsLiveData.observe(viewLifecycleOwner) {
             dismiss()
@@ -117,7 +118,8 @@ open class ParentsWeeklyFragment : BaseFragment() {
                 WeeklyDetailsActivity.PARENT_HOMEWORK_TYPE,
                 "",
                 "",
-                dateTime
+                dateTime,
+                classInfo
             )
         }
         //作业统计
@@ -245,6 +247,7 @@ open class ParentsWeeklyFragment : BaseFragment() {
                     val attendancePop = AttendancePop(activity, adapterEvent, "请选择学生")
                     attendancePop.setOnSelectListener { index: Int ->
                         viewBinding.tvEvent.text = adapterEvent.getItem(index).studentName + "的周报"
+                        classInfo = adapterEvent.getItem(index)
                         studentName = adapterEvent.getItem(index).studentName
                         studentId = adapterEvent.getItem(index).studentId
                         request()
@@ -308,7 +311,8 @@ open class ParentsWeeklyFragment : BaseFragment() {
                     WeeklyDetailsActivity.PARENT_ATTENDANCE_TYPE,
                     studentId,
                     viewBinding.tvEvent.text.toString().trim(),
-                    dateTime
+                    dateTime,
+                    classInfo
                 )
             }
         }

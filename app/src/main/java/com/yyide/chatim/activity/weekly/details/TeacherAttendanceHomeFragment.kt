@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.databinding.FragmentTeacherAttendanceWeeklyBinding
+import com.yyide.chatim.model.GetUserSchoolRsp
 import com.yyide.chatim.model.WeeklyDateBean
 
 /**
@@ -24,7 +26,6 @@ class TeacherAttendanceHomeFragment : Fragment() {
         initView()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,17 +36,27 @@ class TeacherAttendanceHomeFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(dateTime : WeeklyDateBean.DataBean.TimesBean) =
+        fun newInstance(
+            dateTime: WeeklyDateBean.DataBean.TimesBean,
+            classBean: GetUserSchoolRsp.DataBean.FormBean
+        ) =
             TeacherAttendanceHomeFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("item", dateTime)
+                    putSerializable("classBean", classBean)
                 }
             }
     }
+
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
+    private var classBean = SpData.getClassInfo()
     private fun initView() {
         arguments?.apply {
             dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
+            classBean = getSerializable("classBean") as GetUserSchoolRsp.DataBean.FormBean
+        }
+        if (classBean == null) {
+            classBean = SpData.getClassInfo()
         }
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add(getString(R.string.weekly_student_tab))
@@ -55,7 +66,7 @@ class TeacherAttendanceHomeFragment : Fragment() {
             override fun getItem(position: Int): Fragment {
                 return when (position) {
                     0 -> {
-                        TeacherAttendanceHomeStudentFragment.newInstance(dateTime)
+                        TeacherAttendanceHomeStudentFragment.newInstance(dateTime, classBean)
                     }
                     else -> {
                         TeacherAttendanceHomeTeacherFragment.newInstance(dateTime)

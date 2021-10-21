@@ -129,7 +129,7 @@ class ParentsAttendanceChildFragment : BaseFragment() {
         barDataSet.valueTextColor = Color.parseColor("#909399")
         barDataSet.valueTextSize = 10f
         barDataSet.valueFormatter =
-            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> "${value.toInt()}" }
+            IValueFormatter { value, entry, dataSetIndex, viewPortHandler -> if (value > 0) "${value.toInt()}" else "" }
         barDataSets.add(barDataSet)
         // 绘制值
         barDataSet.setDrawValues(true)
@@ -222,7 +222,7 @@ class ParentsAttendanceChildFragment : BaseFragment() {
     ): List<TreeNode<AttendItem>> {
         val nodes: MutableList<TreeNode<AttendItem>> = ArrayList()
         val childs = mutableListOf<TreeNode<AttendItem>>()
-        val item = AttendItem(studentName, 1, datas)
+        val item = AttendItem(studentName, 1, "", "", datas)
         val treeNode: TreeNode<AttendItem> = TreeNode(item, -1)
         if (datas != null) {
             for (childItem in item.list) {

@@ -87,7 +87,8 @@ class SchoolWeeklyFragment : BaseFragment() {
                 WeeklyDetailsActivity.SCHOOL_ATTENDANCE_TYPE,
                 "",
                 "",
-                dateTime
+                dateTime,
+                null
             )
         }
 
@@ -97,7 +98,8 @@ class SchoolWeeklyFragment : BaseFragment() {
                 WeeklyDetailsActivity.SCHOOL_HOMEWORK_TYPE,
                 "",
                 "",
-                dateTime
+                dateTime,
+                null
             )
         }
         initDate()

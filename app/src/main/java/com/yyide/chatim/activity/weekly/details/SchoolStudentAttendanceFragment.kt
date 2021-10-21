@@ -237,6 +237,8 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
         }
         viewBinding.slidingTabLayout.setViewPager(viewBinding.viewpager)
         viewBinding.slidingTabLayout.currentTab = 0
+        viewBinding.slidingTabLayout.notifyDataSetChanged()
+
     }
 
     private var hotIndex = 0

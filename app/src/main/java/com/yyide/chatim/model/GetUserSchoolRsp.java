@@ -2,9 +2,10 @@ package com.yyide.chatim.model;
 
 import android.text.TextUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GetUserSchoolRsp {
+public class GetUserSchoolRsp implements Serializable {
 
     /**
      * code : 200
@@ -19,7 +20,7 @@ public class GetUserSchoolRsp {
     public String message;
     public List<DataBean> data;
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * realname : 胡老师
          * username : 14712341234
@@ -129,7 +130,7 @@ public class GetUserSchoolRsp {
         public int weekNum;
         public String studentName;
 
-        public static class FormBean {
+        public static class FormBean implements Serializable {
             /**
              * classesId : 1985
              * classesName : 小一2021级3班

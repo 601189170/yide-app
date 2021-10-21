@@ -68,7 +68,7 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
                     holder.setText(R.id.tv_student_time, item.getClockTime());
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
-                case "4"://请假
+                case "5"://请假
                     tvStatus.setText("请假");
                     holder.setText(R.id.tv_student_event, "请假时间");
                     holder.setText(R.id.tv_student_time, item.getLeaveTime());
