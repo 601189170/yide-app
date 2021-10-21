@@ -54,12 +54,36 @@ object ScheduleDaoUtil {
         scheduleDataList.addAll(startDateBeforeScheduleList.map { it.scheduleWithParticipantAndLabelToScheduleData() })
         //需要的日程数据包括重复日程
         val listAllSchedule = mutableListOf<ScheduleData>()
-        scheduleDataList.forEach {
+        scheduleDataList.forEach {schedule->
             val repetitionDate =
-                ScheduleRepetitionRuleUtil.calculate(it.startTime, finallyTime, it.rrule)
-            loge("${it.name} repetitionDate:$repetitionDate")
-            if (repetitionDate.contains(DateTime.now().simplifiedDataTime())) {
-                listAllSchedule.add(it)
+                ScheduleRepetitionRuleUtil.calculate(schedule.startTime, finallyTime, schedule.rrule)
+            loge("${schedule.name} repetitionDate:$repetitionDate")
+//            if (repetitionDate.contains(DateTime.now().simplifiedDataTime())) {
+//                listAllSchedule.add(schedule)
+//            }
+            repetitionDate.forEach {
+                if (it.simplifiedDataTime() == DateTime.now().simplifiedDataTime()){
+                    val newSchedule = schedule.clone() as ScheduleData
+                    val toDateTime = toDateTime(newSchedule.startTime)
+                    val dataTime = it.withTime(
+                        toDateTime.hourOfDay,
+                        toDateTime.minuteOfHour,
+                        toDateTime.secondOfMinute,
+                        0
+                    )
+                    val toDateTime2 = toDateTime(newSchedule.endTime)
+                    val dataTime2 = it.withTime(
+                        toDateTime2.hourOfDay,
+                        toDateTime2.minuteOfHour,
+                        toDateTime2.secondOfMinute,
+                        0
+                    )
+                    //loge("dataTime=$dataTime,dataTime2=$dataTime")
+                    //暂时不考虑跨天
+                    newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+                    newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                    listAllSchedule.add(newSchedule)
+                }
             }
         }
         return listAllSchedule
