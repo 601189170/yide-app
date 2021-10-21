@@ -83,10 +83,10 @@ class ScheduleParticipantActivity : BaseActivity() {
 
     private fun initViewPager() {
         fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STAFF))
-        fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STUDENT))
+        ///fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_STUDENT))
         fragments.add(StaffParticipantFragment.newInstance(StaffParticipantFragment.PARTICIPANT_TYPE_GUARDIAN))
         tabs.add("教职工")
-        tabs.add("学生")
+        //tabs.add("学生")
         tabs.add("家长")
         scheduleParticipantBinding.viewpager.adapter =
             object : FragmentPagerAdapter(
