@@ -96,7 +96,7 @@ class ScheduleAdapter(data: List<ScheduleData>) :
                                 item.startTime,
                                 "",
                                 "HH:mm"
-                            ) + "-" + DateUtils.formatTime(item.startTime, "", "HH:mm")
+                            ) + "-" + DateUtils.formatTime(item.endTime, "", "HH:mm")
                 )
                 loadImage(
                     item.type.toInt(),
