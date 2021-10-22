@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.View
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.ActivityScheduleDateIntervalBinding
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.loge
@@ -122,9 +123,15 @@ class ScheduleDateIntervalActivity : BaseActivity() {
         binding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         binding.top.tvRight.setOnClickListener {
             val allDay = binding.checkBox.isChecked
-            val startTime = dateStart.get()
-            val endTime = dateEnd.get()
+            var startTime = dateStart.get()
+            var endTime = dateEnd.get()
             val intent = intent
+            val startTimeToDateTime = ScheduleDaoUtil.toDateTime(startTime)
+            val endTimeToDateTime = ScheduleDaoUtil.toDateTime(endTime)
+            if (allDay){
+                startTime = startTimeToDateTime.toString("yyyy-MM-dd ") + "00:00:00"
+                endTime = endTimeToDateTime.toString("yyyy-MM-dd ") + "23:59:59"
+            }
             intent.putExtra("allDay", allDay)
             intent.putExtra("startTime", startTime)
             intent.putExtra("endTime", endTime)
