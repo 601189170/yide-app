@@ -95,12 +95,16 @@ class SettingsViewModel : ViewModel() {
                     it.isOpen = if(historyScheduleEnable.value == true) 1 else 0
                 }
                 4 -> {
+                    it.isOpen = if (conferenceEnable.value == true) 1 else 0
+                }
+                5 -> {
+
                 }
                 else -> {
                 }
             }
 
-            //设置子集 【0：课程表，1：校历，2：当前时间线标识，3：历史日程，4：时区】
+            //设置子集 【0：课程表，1：校历，2：当前时间线标识，3：历史日程，4：会议,5:时区】
             val subList = it.subList
             subList?.forEach {
                 val remindType1 = it.remindType
@@ -171,6 +175,7 @@ class SettingsViewModel : ViewModel() {
                                     historyScheduleEnable.postValue(open)
                                 }
                                 4 -> {
+                                    conferenceEnable.postValue(open)
                                 }
                                 else -> {
                                 }
