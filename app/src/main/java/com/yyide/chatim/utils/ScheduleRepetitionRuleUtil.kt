@@ -37,11 +37,11 @@ object ScheduleRepetitionRuleUtil {
         val endDateTime = DateTime.parse(endDate, dateTimeFormatter)
         val calculate = calculate(startDateTime, endDateTime, rule)
         loge("calculate:${calculate.size} , ${calculate.toString()}")
-//        if (calculate.isEmpty()) {
-//            val mutableListOf = mutableListOf<DateTime>()
-//            mutableListOf.add(startDateTime.simplifiedDataTime())
-//            return mutableListOf
-//        }
+        if (calculate.isEmpty() && rule.isEmpty() && startDateTime.simplifiedDataTime() == endDateTime.simplifiedDataTime()) {
+            val mutableListOf = mutableListOf<DateTime>()
+            mutableListOf.add(startDateTime.simplifiedDataTime())
+            return mutableListOf
+        }
         return calculate.map {
             DateTime.parse(
                 it.toString("yyyy-MM-dd ") + "00:00:00",
