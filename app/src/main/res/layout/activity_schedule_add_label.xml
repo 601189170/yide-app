@@ -43,5 +43,6 @@
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/cl_add_label"
-        tools:listitem="@layout/item_add_label_list" />
+        tools:listitem="@layout/item_add_label_list"
+        android:paddingBottom="120dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

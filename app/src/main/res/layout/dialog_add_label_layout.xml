@@ -65,6 +65,7 @@
         tools:listitem="@layout/item_dialog_add_label"
         android:layout_marginBottom="74dp"
         android:layout_marginStart="@dimen/dp_20"
+        android:paddingBottom="120dp"
         />
 
     <RelativeLayout

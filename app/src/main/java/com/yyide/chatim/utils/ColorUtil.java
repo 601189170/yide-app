@@ -3,6 +3,8 @@ package com.yyide.chatim.utils;
 import android.graphics.Color;
 import android.text.TextUtils;
 
+import com.yyide.chatim.model.schedule.LabelColor;
+
 /**
  * @author liu tao
  * @date 2021/9/26 9:50
@@ -11,7 +13,7 @@ import android.text.TextUtils;
 public class ColorUtil {
     private static String formatColor(String color) {
         if(TextUtils.isEmpty(color)){
-            return "";
+            return LabelColor.color1;
         }
         if (color.length() == 4) {
             final StringBuilder stringBuilder = new StringBuilder(color);
