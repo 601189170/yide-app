@@ -32,6 +32,26 @@ object ScheduleDaoUtil {
     }
 
     /**
+     * 指定日期拼接现在得时间（yyy-MM-dd + HH:mm:ss）
+     */
+    fun DateTime.dateTimeJointNowTime(): DateTime {
+        val nowDateTime = DateTime.now()
+        return this.withTime(
+            nowDateTime.hourOfDay,
+            nowDateTime.minuteOfHour,
+            nowDateTime.secondOfMinute,
+            0
+        )
+    }
+
+    /**
+     * 指定时间的最后一天的时间
+     */
+    fun DateTime.lastTimeOfDay():DateTime{
+        return toDateTime(this.toString("yyyy-MM-dd ") + "23:59:59")
+    }
+
+    /**
      * datetime to format string date
      */
     fun DateTime.toStringTime(format: String = ""): String {

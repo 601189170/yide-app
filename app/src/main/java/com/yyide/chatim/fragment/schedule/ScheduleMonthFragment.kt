@@ -14,6 +14,7 @@ import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.month.MonthCalendarView
 import com.yyide.chatim.R
+import com.yyide.chatim.database.ScheduleDaoUtil.dateTimeJointNowTime
 import com.yyide.chatim.databinding.FragmentScheduleMonthBinding
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DateUtils
@@ -40,6 +41,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     private var mCurrentSelectYear = 2021
     private var mCurrentSelectMonth = 8
     private var mCurrentSelectDay = 12
+    private var curDateTime:DateTime = DateTime.now()
     private val scheduleMonthViewModel:ScheduleMonthViewModel by viewModels()
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val hints = mutableListOf<HintCircle>()
@@ -108,7 +110,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         fragmentScheduleMonthBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, this)
+            DialogUtil.showAddScheduleDialog(context, this,curDateTime.dateTimeJointNowTime())
         }
         mcvCalendar?.setOnCalendarClickListener(this)
     }
@@ -141,10 +143,11 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
 //            return
 //        }
         val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
+        curDateTime = dateTime
         val value = scheduleMonthViewModel.monthDataList.value
         if (value!=null && value[dateTime] != null){
             val mutableList = value[dateTime]
-            val showDataTime = dateTime.toString("yyyy-MM-dd")
+            val showDataTime = dateTime.toString("yyyy-MM-dd HH:mm:ss")
             DialogUtil.showMonthScheduleListDialog(requireContext(),showDataTime,mutableList,this)
         }
 

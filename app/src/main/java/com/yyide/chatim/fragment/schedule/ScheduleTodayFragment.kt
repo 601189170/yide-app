@@ -91,7 +91,7 @@ class ScheduleTodayFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         fragmentScheduleTodayBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, this)
+            DialogUtil.showAddScheduleDialog(context, this, DateTime.now())
         }
         val drawableLeft = resources.getDrawable(R.drawable.schedule_title_indicate_vertical_line_shape)
         drawableLeft.setBounds(0, 0, drawableLeft.minimumWidth, drawableLeft.minimumHeight)

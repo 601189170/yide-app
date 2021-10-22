@@ -44,6 +44,7 @@ import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
 import com.yyide.chatim.databinding.DialogLabelTopMenuSelectLayoutBinding;
 import com.yyide.chatim.databinding.DialogRepetitionScheduleModifyBinding;
@@ -73,6 +74,8 @@ import com.yyide.chatim.widget.CircleFrameLayout;
 import com.yyide.chatim.widget.SpaceItemDecoration;
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
 import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -514,11 +517,13 @@ public class DialogUtil {
         );
 
         binding.clAddSchedule.setOnClickListener(v -> {
+            final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(date);
+            final DateTime nowTime = ScheduleDaoUtil.INSTANCE.dateTimeJointNowTime(dateTime);
             mDialog.dismiss();
-            DialogUtil.showAddScheduleDialog(context, lifecycleOwner);
+            DialogUtil.showAddScheduleDialog(context, lifecycleOwner,nowTime);
         });
 
-        binding.tvDate.setText(date);
+        binding.tvDate.setText(DateUtils.formatTime(date,"","",true));
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.BOTTOM);
         dialogWindow.setWindowAnimations(R.style.popwin_anim_style2);
@@ -911,7 +916,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showAddScheduleDialog(Context context, LifecycleOwner lifecycleOwner) {
+    public static void showAddScheduleDialog(Context context, LifecycleOwner lifecycleOwner, DateTime date) {
         ConstraintLayout rootView = (ConstraintLayout) LayoutInflater.from(context).inflate(R.layout.dialog_add_schedule_input, null);
         final EditText editView = rootView.findViewById(R.id.edit);
         //完成
@@ -922,11 +927,18 @@ public class DialogUtil {
         //日期
         final TextView tvDate = rootView.findViewById(R.id.tv_date);
         final ImageView ivTime = rootView.findViewById(R.id.iv_time);
-        final String time = DateUtils.formatTime(DateUtils.switchTime(new Date()), "", "MM月dd日 HH:mm");
-        tvDate.setText(time);
+
         Dialog mDialog = new Dialog(context, R.style.inputDialog);
         mDialog.setContentView(rootView);
         final ScheduleEditViewModel scheduleEditViewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(ScheduleEditViewModel.class);
+        String time = DateUtils.formatTime(DateUtils.switchTime(new Date()), "", "MM月dd日 HH:mm");
+        if (date != null){
+            time = date.toString("MM月dd日 MM月dd日 HH:mm");
+            scheduleEditViewModel.getStartTimeLiveData().setValue(date.toString("yyyy-MM-dd HH:mm:ss"));
+            scheduleEditViewModel.getEndTimeLiveData().setValue(date.toString("yyyy-MM-dd ")+"23:59:59");
+        }
+
+        tvDate.setText(time);
         finished.setOnClickListener(v -> {
             if (TextUtils.isEmpty(editView.getText().toString())) {
                 ToastUtils.showShort("你还没告诉我您要准备做什么！");

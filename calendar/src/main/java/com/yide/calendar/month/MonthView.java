@@ -235,13 +235,13 @@ public class MonthView extends View {
         mPaint.setColor(mLastOrNextMonthTextColor);
         int monthDays = CalendarUtils.getMonthDays(lastYear, lastMonth);
         int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth,startWithSunday);
-        Log.e(TAG, "drawLastMonth: lastYear="+lastYear+",lastMonth="+lastMonth +",monthDays="+monthDays+",weekNumber="+weekNumber);
+        //Log.e(TAG, "drawLastMonth: lastYear="+lastYear+",lastMonth="+lastMonth +",monthDays="+monthDays+",weekNumber="+weekNumber);
         for (int day = 0; day < weekNumber - 1; day++) {
             mDaysText[0][day] = monthDays - weekNumber + day + 2;
             String dayString = String.valueOf(mDaysText[0][day]);
             int startX = (int) (mColumnSize * day + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
-            Log.d(TAG, "drawLastMonth: dayString="+dayString);
+            //Log.d(TAG, "drawLastMonth: dayString="+dayString);
             canvas.drawText(dayString, startX, startY, mPaint);
             mHolidayOrLunarText[0][day] = CalendarUtils.getHolidayFromSolar(lastYear, lastMonth, mDaysText[0][day]);
         }

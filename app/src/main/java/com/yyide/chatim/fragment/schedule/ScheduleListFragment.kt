@@ -85,7 +85,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         initScheduleList()
         initData()
         fragmentScheduleListBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, this)
+            DialogUtil.showAddScheduleDialog(context, this,null)
             //DialogUtil.showAddLabelDialog(context, labelList)
         }
 

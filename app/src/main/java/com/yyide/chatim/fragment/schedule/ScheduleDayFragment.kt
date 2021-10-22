@@ -67,7 +67,7 @@ class ScheduleDayFragment : Fragment(), OnCalendarClickListener,
         calendarComposeLayout.setOnCalendarClickListener(this)
         scheduleEventView = calendarComposeLayout.scheduleEventView
         fragmentScheduleDayBinding.fab.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, this)
+            DialogUtil.showAddScheduleDialog(context, this,null)
             //DialogUtil.showAddLabelDialog(context, labelList)
         }
         initScheduleView()
