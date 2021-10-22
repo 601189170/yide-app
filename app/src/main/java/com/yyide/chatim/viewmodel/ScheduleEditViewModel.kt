@@ -86,12 +86,17 @@ class ScheduleEditViewModel : ViewModel() {
         }
         //val label:List<String?>? = labelListLiveData.value?.map { it.id }
         val allDay = allDayLiveData.value?:false
-        val startTime = startTimeLiveData.value?:""
+        var startTime = startTimeLiveData.value?:""
         var endTime = endTimeLiveData.value?:""
         val startTimeToDateTime = ScheduleDaoUtil.toDateTime(startTime)
         val endTimeToDateTime = ScheduleDaoUtil.toDateTime(endTime)
         if (startTimeToDateTime == endTimeToDateTime){
             endTime = startTimeToDateTime.toString("yyyy-MM-dd ") + "23:59:59"
+        }
+
+        if (allDay){
+            startTime = startTimeToDateTime.toString("yyyy-MM-dd ") + "00:00:00"
+            endTime = endTimeToDateTime.toString("yyyy-MM-dd ") + "23:59:59"
         }
 
         val remind = remindLiveData.value?.id
