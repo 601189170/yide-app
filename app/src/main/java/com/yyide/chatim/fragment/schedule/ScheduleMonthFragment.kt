@@ -42,6 +42,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     private var mCurrentSelectDay = 12
     private val scheduleMonthViewModel:ScheduleMonthViewModel by viewModels()
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
+    private val hints = mutableListOf<HintCircle>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,10 +66,13 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         loge("当前日期：$mCurrentSelectYear-$mCurrentSelectMonth-$mCurrentSelectDay")
         scheduleMonthViewModel.monthDataList.observe(requireActivity(),{
             loge("keys ${it.keys.size}")
+            removeTaskHints(hints)
             it.keys.forEach {dateTime->
                 val value = it[dateTime]
                 if (value != null){
-                    addTaskHint(HintCircle(dateTime.dayOfMonth,value.size))
+                    val hintCircle = HintCircle(dateTime,dateTime.dayOfMonth, value.size)
+                    hints.add(hintCircle)
+                    addTaskHint(hintCircle)
                 }
             }
         })
@@ -88,6 +92,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         }
     }
     override fun onDestroy() {
+        removeTaskHints(hints)
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
@@ -191,6 +196,21 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
      */
     fun removeTaskHint(day: HintCircle) {
         mcvCalendar?.currentMonthView?.removeTaskHint(day)
+    }
+
+    /**
+     * 移除任务点
+     */
+    fun removeTaskHints(hints:List<HintCircle>){
+        hints.forEach {
+            val dateTime = it.dateTime
+            if (CalendarUtils.getInstance(context).removeTaskHint(dateTime.year,dateTime.monthOfYear-1,it)) {
+                if (mcvCalendar!!.currentMonthView != null) {
+                    mcvCalendar!!.currentMonthView.invalidate()
+                }
+            }
+        }
+        this.hints.clear()
     }
 
     /**

@@ -54,15 +54,15 @@ object ScheduleDaoUtil {
         scheduleDataList.addAll(startDateBeforeScheduleList.map { it.scheduleWithParticipantAndLabelToScheduleData() })
         //需要的日程数据包括重复日程
         val listAllSchedule = mutableListOf<ScheduleData>()
-        scheduleDataList.forEach {schedule->
+        scheduleDataList.forEach { schedule ->
             val repetitionDate =
-                ScheduleRepetitionRuleUtil.calculate(schedule.startTime, finallyTime, schedule.rrule)
-            loge("${schedule.name} repetitionDate:$repetitionDate")
-//            if (repetitionDate.contains(DateTime.now().simplifiedDataTime())) {
-//                listAllSchedule.add(schedule)
-//            }
+                ScheduleRepetitionRuleUtil.calculate(
+                    schedule.startTime,
+                    finallyTime,
+                    schedule.rrule
+                )
             repetitionDate.forEach {
-                if (it.simplifiedDataTime() == DateTime.now().simplifiedDataTime()){
+                if (it.simplifiedDataTime() == DateTime.now().simplifiedDataTime()) {
                     val newSchedule = schedule.clone() as ScheduleData
                     val toDateTime = toDateTime(newSchedule.startTime)
                     val dataTime = it.withTime(
@@ -101,6 +101,7 @@ object ScheduleDaoUtil {
         //本周最后的时间
         val finallyTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59"
         val startDateBeforeScheduleList = scheduleDao().getOneWeekUndoneScheduleList(finallyTime)
+        loge("startDateBeforeScheduleList ${startDateBeforeScheduleList.size}")
         val scheduleDataList = mutableListOf<ScheduleData>()
         scheduleDataList.addAll(startDateBeforeScheduleList.map { it.scheduleWithParticipantAndLabelToScheduleData() })
         //需要的本周重复日程
@@ -111,7 +112,9 @@ object ScheduleDaoUtil {
                 finallyTime,
                 schedule.rrule
             )
+            loge("repetitionDate:$repetitionDate")
             repetitionDate.forEach {
+                loge("firstDayOfWeek:$firstDayOfWeek,lastDayOfWeek:$lastDayOfWeek nowDateTime:$it")
                 if (it in firstDayOfWeek..lastDayOfWeek) {
                     val newSchedule = schedule.clone() as ScheduleData
                     val toDateTime = toDateTime(newSchedule.startTime)
