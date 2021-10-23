@@ -6,10 +6,12 @@ import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.model.BaseRsp
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
+import com.yyide.chatim.utils.loge
 import okhttp3.RequestBody
 import org.joda.time.DateTime
 import retrofit2.Call
@@ -23,12 +25,12 @@ import retrofit2.Response
  * @description 日程列表视图
  */
 class ScheduleListViewViewModel : ViewModel() {
-    val listViewData:MutableLiveData<List<MonthViewScheduleData>> = MutableLiveData()
+    val listViewData:MutableLiveData<List<ScheduleData>> = MutableLiveData()
     /**
      * 请求列表视图的日程数据 按日分组
      * @param dateTime 需要请求日程列表的时间 月
      */
-    fun scheduleList(dateTime: DateTime,timeAxisDateTime:DateTime?){
+    private fun scheduleList(dateTime: DateTime,timeAxisDateTime:DateTime?):List<MonthViewScheduleData>{
         val map = mutableMapOf<DateTime, MutableList<ScheduleData>>()
         val monthlyList = ScheduleDaoUtil.monthlyList(dateTime,timeAxisDateTime)
         monthlyList.forEach {
@@ -54,7 +56,48 @@ class ScheduleListViewViewModel : ViewModel() {
         if (list.isNotEmpty()){
             list2.add(MonthViewScheduleData(dateTime,list))
         }
-        listViewData.postValue(list2)
+        return list2
+    }
+
+    /**
+     * 获取日程列表数据
+     */
+    fun scheduleDataList(dateTime: DateTime,timeAxisDateTime:DateTime?){
+        val scheduleList = scheduleList(dateTime, timeAxisDateTime)
+        val scheduleDataList = mutableListOf<ScheduleData>()
+        scheduleList.forEach {
+            //月开始
+            val scheduleData = ScheduleData()
+            scheduleData.isMonthHead = true
+            scheduleData.isFirstDayOfMonth = false
+            scheduleData.isTimeAxis = false
+            scheduleData.startTime = it.dateTime.toStringTime()
+            scheduleDataList.add(scheduleData)
+            it.list.forEach {
+                for (scheduleDataIndex in it.list.indices) {
+                    if (scheduleDataIndex == 0){
+                        //日开始
+                        val scheduleData1 = it.list[0]
+                        scheduleData1.isMonthHead = false
+                        scheduleData1.isFirstDayOfMonth = true
+                        scheduleData1.isTimeAxis = false
+                        scheduleDataList.add(scheduleData1)
+                        continue
+                    }
+
+                    val scheduleData1 = it.list[scheduleDataIndex]
+                    scheduleData1.isFirstDayOfMonth = false
+                    scheduleData1.isMonthHead = false
+                    scheduleData1.isTimeAxis = false
+                    scheduleDataList.add(scheduleData1)
+                }
+            }
+        }
+        listViewData.postValue(scheduleDataList)
+        if (scheduleDataList.isNotEmpty()){
+            loge("日程列表月头=========${JSON.toJSONString(scheduleDataList[0])}")
+        }
+        loge("日程列表数据=========${JSON.toJSONString(scheduleDataList)}")
     }
 
 }

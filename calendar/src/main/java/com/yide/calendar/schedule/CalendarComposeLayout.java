@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yide.calendar.CalendarUtils;
 import com.yide.calendar.OnCalendarClickListener;
 import com.yide.calendar.R;
@@ -51,7 +52,7 @@ public class CalendarComposeLayout extends FrameLayout {
     private boolean mIsAutoChangeMonthRow;
     private OnCalendarClickListener mOnCalendarClickListener;
     private ImageView ivShowCalendar;
-    private ScheduleRecyclerView rvScheduleList;
+    private SwipeRecyclerView rvScheduleList;
 
     public CalendarComposeLayout(@NonNull Context context) {
         this(context, null);
@@ -184,6 +185,7 @@ public class CalendarComposeLayout extends FrameLayout {
         }
         if (mOnCalendarClickListener != null) {
             mOnCalendarClickListener.onClickDate(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay);
+            mOnCalendarClickListener.onPageChange(mCurrentSelectYear,mCurrentSelectMonth,mCurrentSelectDay);
         }
     }
     private OnCalendarClickListener mWeekCalendarClickListener = new OnCalendarClickListener() {
@@ -221,6 +223,7 @@ public class CalendarComposeLayout extends FrameLayout {
         }
         if (mOnCalendarClickListener != null) {
             mOnCalendarClickListener.onClickDate(mCurrentSelectYear, mCurrentSelectMonth, mCurrentSelectDay);
+            mOnCalendarClickListener.onPageChange(mCurrentSelectYear,mCurrentSelectMonth,mCurrentSelectDay);
         }
     }
 
@@ -278,7 +281,7 @@ public class CalendarComposeLayout extends FrameLayout {
         return scheduleEventView;
     }
 
-    public ScheduleRecyclerView getRvScheduleList(){
+    public SwipeRecyclerView getRvScheduleList(){
         return rvScheduleList;
     }
 }

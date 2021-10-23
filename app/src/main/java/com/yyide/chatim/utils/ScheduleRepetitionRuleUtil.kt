@@ -4,6 +4,7 @@ import android.text.TextUtils
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.model.schedule.Repetition
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
@@ -22,6 +23,14 @@ object ScheduleRepetitionRuleUtil {
     fun DateTime.simplifiedDataTime(): DateTime {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         return DateTime.parse(this.toString("yyyy-MM-dd ") + "00:00:00", dateTimeFormatter)
+    }
+
+    /**
+     * 简化日期到月
+     */
+    fun DateTime.simplifiedToMonthOfDateTime():DateTime{
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        return DateTime.parse(this.toString("yyyy-MM") + "-01 00:00:00", dateTimeFormatter)
     }
 
     /**

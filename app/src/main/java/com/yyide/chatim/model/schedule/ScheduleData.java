@@ -2,6 +2,7 @@ package com.yyide.chatim.model.schedule;
 
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_EXPIRED_COMPLETED;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_EXPIRED_NOT_COMPLETED;
+import static com.yyide.chatim.model.schedule.Schedule.TYPE_LIST_VIEW_HEAD;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_TIME_AXIS;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_COMPLETED;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_NOT_COMPLETED;
@@ -51,6 +52,8 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     private String dayOfMonth;
     private String promoterName;
     private boolean timeAxis;//日程时间轴
+    private boolean monthHead;//日期头
+    private boolean firstDayOfMonth;//是否是月的第一天
 
     public String getIsRepeat() {
         return isRepeat;
@@ -212,6 +215,14 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
         this.timeAxis = timeAxis;
     }
 
+    public boolean isFirstDayOfMonth() {
+        return firstDayOfMonth;
+    }
+
+    public void setFirstDayOfMonth(boolean firstDayOfMonth) {
+        this.firstDayOfMonth = firstDayOfMonth;
+    }
+
     public String getUpdateType() {
         return updateType;
     }
@@ -252,12 +263,26 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
         this.promoterName = promoterName;
     }
 
+    public boolean isMonthHead() {
+        return monthHead;
+    }
+
+    public void setMonthHead(boolean monthHead) {
+        this.monthHead = monthHead;
+    }
+
     @Override
     public int getItemType() {
+        if (monthHead){
+            //月日期
+            return TYPE_LIST_VIEW_HEAD;
+        }
+
         if (timeAxis) {
             //时间轴
             return TYPE_TIME_AXIS;
         }
+
         if (Objects.equals(status, "1")) {
             if (DateUtils.dateExpired(endTime)) {
                 return TYPE_EXPIRED_COMPLETED;

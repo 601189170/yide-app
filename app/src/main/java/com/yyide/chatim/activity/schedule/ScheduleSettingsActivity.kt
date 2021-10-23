@@ -9,10 +9,13 @@ import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityScheduleSettingsBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.Remind
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.SettingsViewModel
+import org.greenrobot.eventbus.EventBus
 
 class ScheduleSettingsActivity : BaseActivity() {
     lateinit var scheduleSettingsBinding: ActivityScheduleSettingsBinding
@@ -87,6 +90,8 @@ class ScheduleSettingsActivity : BaseActivity() {
             settingsViewModel.getModifySettingsResult().observe(this, {
                 if (it) {
                     ToastUtils.showShort("设置修改成功！")
+                    //设置成功 重新获取数据
+                    EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
                     finish()
                 } else {
                     ToastUtils.showShort("设置修改失败！")

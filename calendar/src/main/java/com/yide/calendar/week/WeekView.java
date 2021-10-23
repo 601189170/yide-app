@@ -232,7 +232,7 @@ public class WeekView extends View {
             DateTime date = mStartDate.plusDays(i);
             int day = date.getDayOfMonth();
             String dayString = String.valueOf(day);
-            Log.e(TAG, "drawThisWeek: dayString="+dayString );
+            //Log.e(TAG, "drawThisWeek: dayString="+dayString );
             int startX = (int) (mColumnSize * i + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
             if (day == mSelDay) {

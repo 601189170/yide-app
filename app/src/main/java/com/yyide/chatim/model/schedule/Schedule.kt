@@ -38,6 +38,8 @@ data class Schedule(
 
 
     companion object {
+        //日程列表头显示月份
+        const val TYPE_LIST_VIEW_HEAD:Int = 0
         const val TYPE_EXPIRED_NOT_COMPLETED: Int = 1
         const val TYPE_EXPIRED_COMPLETED: Int = 2
         const val TYPE_UNEXPIRED_COMPLETED: Int = 3
