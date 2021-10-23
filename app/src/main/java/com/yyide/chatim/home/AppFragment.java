@@ -122,7 +122,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getColor(R.color.colorPrimary));
+        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         onRefresh();
         recyclerViewApp.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

@@ -115,7 +115,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
         String username = SPUtils.getInstance().getString(BaseConstant.LOGINNAME);
         String password = SPUtils.getInstance().getString(BaseConstant.PASSWORD);
         initEdit();
-        userEdit.setText(TextUtils.isEmpty(username) ? "" : username);
+        userEdit.setText(TextUtils.isEmpty(username) ? "" : username); 
         passwordEdit.setText(TextUtils.isEmpty(password) ? "" : password);
         time = new TimeCount(120000, 1000);
         alphaAnimation();

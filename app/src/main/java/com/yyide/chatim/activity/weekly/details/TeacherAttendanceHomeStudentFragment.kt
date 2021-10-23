@@ -84,7 +84,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
             )
             loading()
             viewModel.requestAttendanceStudentDetail(
-                classId,
+                classBean.classesId,
                 teacherId,
                 dateTime.startTime,
                 dateTime.endTime
@@ -94,9 +94,6 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
 
     private fun initView() {
         teacherId = SpData.getIdentityInfo().teacherId
-        if (SpData.getClassInfo() != null) {
-            classId = SpData.getClassInfo().classesId
-        }
         initDate()
         initClassMenu()
         viewModel.teacherAttendanceStudentLiveData.observe(viewLifecycleOwner) {
@@ -153,7 +150,6 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
         }
     }
 
-    private var classId = ""
     private var teacherId = ""
     private var timePosition = -1
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
@@ -213,7 +209,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                         adapterEvent.setClassId(classesId)
                         viewBinding.tvClassName.text =
                             adapterEvent.getItem(index).classesName + "的周报"
-                        classId = adapterEvent.getItem(index).classesId
+                        classBean = adapterEvent.getItem(index)
                         request(dateTime)
                     }
 

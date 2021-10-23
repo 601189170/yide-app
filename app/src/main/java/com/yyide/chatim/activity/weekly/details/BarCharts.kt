@@ -89,14 +89,22 @@ class BarCharts {
         mLegend.formSize = 10f
         // 字体颜色
         mLegend.textColor = Color.parseColor("#909399")
-
         val axisLeft = barChart.axisLeft
         axisLeft.enableGridDashedLine(10f, 10f, 0f)
         axisLeft.textColor = Color.parseColor("#909399")
         axisLeft.textSize = 10f
         axisLeft.axisMinimum = 0f
+        var maxSize = 5f
+        //设置柱子的左侧数值
+        if (barData != null && barData.dataSets != null) {
+            barData.dataSets.forEach { item ->
+                maxSize = item.yMax
+            }
+        }
+        axisLeft.axisMaximum = if (maxSize < 5) 5f else maxSize
         axisLeft.setLabelCount(6, true)
-        axisLeft.valueFormatter = IAxisValueFormatter { value, axis -> "${value.toInt()}"
+        axisLeft.valueFormatter = IAxisValueFormatter { value, axis ->
+            "${value.toInt()}"
         }
         if (isSlither) {
             //当为true时,放大图

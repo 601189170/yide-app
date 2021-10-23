@@ -5,16 +5,15 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ThreadUtils.runOnUiThread
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -268,10 +267,13 @@ class SchoolWeeklyFragment : BaseFragment() {
         BaseQuickAdapter<SchoolHomeStudentAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
         override fun convert(holder: BaseViewHolder, item: SchoolHomeStudentAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            //bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            bind.tvProgress.text = "${item.value}%"
+            if (item.value > 0) {
+                bind.tvProgress.text = "${item.value}%"
+                bind.tvProgress.visibility = View.VISIBLE
+            } else {
+                bind.tvProgress.visibility = View.GONE
+            }
             bind.tvWeek.text = item.name
-            //bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
             WeeklyUtil.setAnimation(
                 bind.progressbar,
                 if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
@@ -290,9 +292,13 @@ class SchoolWeeklyFragment : BaseFragment() {
         BaseQuickAdapter<SchoolHomeTeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
         override fun convert(holder: BaseViewHolder, item: SchoolHomeTeacherAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.tvProgress.text = "${item.value}%"
+            if (item.value > 0) {
+                bind.tvProgress.text = "${item.value}%"
+                bind.tvProgress.visibility = View.VISIBLE
+            } else {
+                bind.tvProgress.visibility = View.GONE
+            }
             bind.tvWeek.text = item.name
-//            bind.progressbar.progress = if (item.value <= 0) 0 else item.value.toInt()
             WeeklyUtil.setAnimation(
                 bind.progressbar,
                 if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
@@ -302,5 +308,6 @@ class SchoolWeeklyFragment : BaseFragment() {
             )
         }
     }
+
 
 }
