@@ -75,7 +75,9 @@
     <string name="meeting_update_title">修改会议</string>
     <string name="meeting_title">会议</string>
     <string name="meeting_history_title">历史会议</string>
-    
+    <string name="meeting_please_input_time">请选择会议时间</string>
+
+
     // 主页Tab相关
     <string name="tab_contact_tab_text">通讯录</string>
     <string name="tab_conversation_tab_text">消息</string>

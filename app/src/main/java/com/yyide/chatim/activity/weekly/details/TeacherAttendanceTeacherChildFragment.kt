@@ -1,12 +1,10 @@
 package com.yyide.chatim.activity.weekly.details
 
-import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.BarData
@@ -21,7 +19,7 @@ import com.yyide.chatim.databinding.FragmentTeacherChildWeeklyAttendanceBinding
 import com.yyide.chatim.model.*
 import com.yyide.chatim.widget.treeview.adapter.SingleLayoutTreeAdapter
 import com.yyide.chatim.widget.treeview.model.TreeNode
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Child
@@ -84,11 +82,7 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
      * @param range Y 轴的数据
      */
     private var color: Array<String> = arrayOf("#919399", "#F66C6C", "#FFC000", "#63DAAB")
-    private fun getBarData(numbers: StudentNumber): BarData? {
-//        val xValues = ArrayList<String>()
-//        for (i in numbers) {
-//            xValues.add("" + (i) + "") // 设置每个柱壮图的文字描述
-//        }
+    private fun getBarData(numbers: StudentNumber): BarData {
         val yValues = ArrayList<BarEntry>()
         val colors = ArrayList<Int>()
         for (i in 0 until 4) {

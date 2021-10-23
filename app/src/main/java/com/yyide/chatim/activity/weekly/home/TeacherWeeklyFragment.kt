@@ -267,9 +267,17 @@ class TeacherWeeklyFragment : BaseFragment() {
         if (attend == null) {
             return
         }
+        spanCount = 3
         viewBinding.attendance.root.visibility = View.VISIBLE
         if (attend != null && attend.classAttend.isEmpty() && attend.teacherAttend.isEmpty()) {
             viewBinding.attendance.root.visibility = View.GONE
+        }
+        if (attend != null && attend.classAttend.isEmpty()) {
+            viewBinding.attendance.hotRecyclerview.visibility = View.GONE
+            viewBinding.attendance.announRoll.visibility = View.GONE
+        } else {
+            viewBinding.attendance.hotRecyclerview.visibility = View.VISIBLE
+            viewBinding.attendance.announRoll.visibility = View.VISIBLE
         }
         viewBinding.attendance.tvWeeklyAttendance.text = attend.attend
         viewBinding.attendance.tvWeeklyHomework.text = attend.course

@@ -38,8 +38,10 @@ public class AttendanceAdapter extends LoopPagerAdapter {
 
     //    -->设置各区块的颜色
     public static final int[] PIE_COLORS2 = {
-            Color.rgb(145, 147, 153), Color.rgb(246, 189, 22)
-            , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
+            Color.rgb(145, 147, 153),
+            Color.rgb(246, 189, 22),
+            Color.rgb(246, 108, 108),
+            Color.rgb(55, 130, 255)
     };
 
     public List<AttendanceCheckRsp.DataBean.AttendancesFormBean> list = new ArrayList<>();
@@ -71,7 +73,11 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         attendanceName.setText(item.getName());
         tv_desc.setText(TextUtils.isEmpty(item.getSubjectName()) ? item.getThingName() : item.getSubjectName());
         qq.setText(item.getAbsence() + " 人");
-        cd.setText(item.getLate() + " 人");
+        if ("1".equals(item.getGoOutStatus())) {
+            cd.setText(item.getLeaveEarly() + " 人");
+        } else {
+            cd.setText(item.getLate() + " 人");
+        }
         qj.setText(item.getLeave() + " 人");
         number.setText(item.getNumber() + " 人");
         int absence = item.getAbsence();
@@ -86,7 +92,7 @@ public class AttendanceAdapter extends LoopPagerAdapter {
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(absence, "缺勤"));
         entries.add(new PieEntry(item.getLeave(), "请假"));
-        entries.add(new PieEntry(item.getLate(), "迟到"));
+        entries.add(new PieEntry("1".equals(item.getGoOutStatus()) ? item.getLeaveEarly() : item.getLate(), "迟到"));
         entries.add(new PieEntry(item.getApplyNum(), "实到"));
         String desc = "1".equals(item.getGoOutStatus()) ? "签退率" : "出勤率";
         piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + desc);

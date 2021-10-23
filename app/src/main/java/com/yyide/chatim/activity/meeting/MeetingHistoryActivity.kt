@@ -68,7 +68,17 @@ class MeetingHistoryActivity : BaseActivity() {
             hideLoading()
             val result = it.getOrNull()
             if (result != null) {
-                adapter.setList(result)
+                if (current == 1) {
+                    adapter.setList(result)
+                } else {
+                    adapter.addData(result)
+                }
+                if (result.size < size) {
+                    //如果不够一页,显示没有更多数据布局
+                    adapter.loadMoreModule.loadMoreEnd()
+                } else {
+                    adapter.loadMoreModule.loadMoreComplete()
+                }
             }
         }
         viewModel.requestMeetingHomeList(size, current)

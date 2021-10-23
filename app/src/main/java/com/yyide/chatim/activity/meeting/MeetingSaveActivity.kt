@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.blankj.utilcode.util.ToastUtils
+import com.huawei.hms.push.utils.DateUtil
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.meeting.viewmodel.MeetingSaveViewModel
 import com.yyide.chatim.activity.schedule.ScheduleAddressActivity
@@ -18,6 +19,7 @@ import com.yyide.chatim.activity.schedule.ScheduleDateIntervalActivity
 import com.yyide.chatim.activity.schedule.ScheduleParticipantActivity
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.ActivityMeetingCreateBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.ParticipantRsp
@@ -27,6 +29,7 @@ import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import org.greenrobot.eventbus.EventBus
+import java.util.*
 
 /**
  * 创建/编辑 会议
@@ -51,8 +54,8 @@ class MeetingSaveActivity : BaseActivity() {
 
         //场地选择
         const val REQUEST_CODE_SITE_SELECT = 101
-        private val CREATE_TYPE = 1
-        private val UPDATE_TYPE = 2
+        private const val CREATE_TYPE = 1
+        private const val UPDATE_TYPE = 2
         fun jumpUpdate(context: Context, id: String) {
             val intent = Intent(context, MeetingSaveActivity::class.java)
             intent.putExtra("type", UPDATE_TYPE)
@@ -138,15 +141,17 @@ class MeetingSaveActivity : BaseActivity() {
             viewBinding.tvSite.setTextColor(resources.getColor(R.color.text_1E1E1E))
             viewBinding.tvSite.text = item.siteName
         }
+        viewModel.participantList.value = item.participant
         viewModel.siteLiveData.value = SiteNameRsp.DataBean(item.siteId, item.siteName, false)
         viewModel.startTimeLiveData.value = item.startTime
         viewModel.endTimeLiveData.value = item.endTime
+        viewModel.allDayLiveData.value = item.isAllDay == "1"
         viewBinding.tvTime.setTextColor(resources.getColor(R.color.text_1E1E1E))
         viewBinding.tvTime.text =
-            DateUtils.formatTime(item.startTime, "", "MM月dd号 HH:mm") + " - " + DateUtils.formatTime(
+            DateUtils.formatTime(item.startTime, "", "MM月dd日 HH:mm") + " - " + DateUtils.formatTime(
                 item.endTime,
                 "",
-                "MM月dd号 HH:mm"
+                "MM月dd日 HH:mm"
             )
     }
 
@@ -189,14 +194,19 @@ class MeetingSaveActivity : BaseActivity() {
                 .post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
         }
+        val startTime = viewModel.startTimeLiveData.value ?: ""
+        val endTime = viewModel.endTimeLiveData.value ?: ""
         when {
             TextUtils.isEmpty(title) -> {
                 ToastUtils.showShort("请输入会议标题")
             }
-            time == "请选择会议时间" -> {
-                ToastUtils.showShort("请选择会议时间")
+            time == getString(R.string.meeting_please_input_time) -> {
+                ToastUtils.showShort(getString(R.string.meeting_please_input_time))
             }
-            viewModel.startTimeLiveData.value == viewModel.endTimeLiveData.value -> {
+            DateUtils.parseTimestamp(startTime, null) >= DateUtils.parseTimestamp(
+                endTime,
+                null
+            ) -> {
                 ToastUtils.showShort("结束时间需大于开始时间")
             }
             else -> {
@@ -211,8 +221,8 @@ class MeetingSaveActivity : BaseActivity() {
                 if (viewModel.participantList.value != null) {
                     scheduleData.participant = viewModel.participantList.value
                 }
-                scheduleData.startTime = viewModel.startTimeLiveData.value
-                scheduleData.endTime = viewModel.endTimeLiveData.value
+                scheduleData.startTime = startTime
+                scheduleData.endTime = endTime
                 scheduleData.type = "3"
                 scheduleData.isAllDay = if (viewModel.allDayLiveData.value == true) "1" else "0"
                 showLoading()
@@ -234,10 +244,10 @@ class MeetingSaveActivity : BaseActivity() {
             viewModel.endTimeLiveData.value = endTime
             viewBinding.tvTime.setTextColor(resources.getColor(R.color.text_1E1E1E))
             viewBinding.tvTime.text =
-                DateUtils.formatTime(startTime, "", "MM月dd号 HH:mm") + " - " + DateUtils.formatTime(
+                DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm") + " - " + DateUtils.formatTime(
                     endTime,
                     "",
-                    "MM月dd号 HH:mm"
+                    "MM月dd日 HH:mm"
                 )
             return
         }

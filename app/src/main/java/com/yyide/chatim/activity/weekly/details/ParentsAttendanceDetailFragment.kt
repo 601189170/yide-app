@@ -210,6 +210,7 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
 
     private var spanCount = 3
     private fun initHotScroll(attendance: List<AttendRate>?) {
+
         adapterHot.setList(null)
         spanCount = if (attendance != null && attendance.size < 3) {
             attendance.size
