@@ -8,6 +8,7 @@ import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
+import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -92,14 +93,22 @@ object ScheduleDaoUtil {
                         0
                     )
                     val toDateTime2 = toDateTime(newSchedule.endTime)
-                    val dataTime2 = it.withTime(
+                    var dataTime2 = it.withTime(
                         toDateTime2.hourOfDay,
                         toDateTime2.minuteOfHour,
                         toDateTime2.secondOfMinute,
                         0
                     )
-                    //loge("dataTime=$dataTime,dataTime2=$dataTime")
-                    //暂时不考虑跨天
+                    //考虑跨天显示
+                    if (toDateTime.simplifiedDataTime() != toDateTime2.simplifiedDataTime()) {
+                        val year = toDateTime2.year - toDateTime.year
+                        val month = toDateTime2.monthOfYear - toDateTime.monthOfYear
+                        val day = toDateTime2.dayOfMonth - toDateTime.dayOfMonth
+                        dataTime2 = dataTime2.plusYears(year)
+                        dataTime2 = dataTime2.plusMonths(month)
+                        dataTime2 = dataTime2.plusDays(day)
+                    }
+
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                     listAllSchedule.add(newSchedule)
@@ -132,9 +141,7 @@ object ScheduleDaoUtil {
                 finallyTime,
                 schedule.rrule
             )
-            loge("repetitionDate:$repetitionDate")
             repetitionDate.forEach {
-                loge("firstDayOfWeek:$firstDayOfWeek,lastDayOfWeek:$lastDayOfWeek nowDateTime:$it")
                 if (it in firstDayOfWeek..lastDayOfWeek) {
                     val newSchedule = schedule.clone() as ScheduleData
                     val toDateTime = toDateTime(newSchedule.startTime)
@@ -145,14 +152,22 @@ object ScheduleDaoUtil {
                         0
                     )
                     val toDateTime2 = toDateTime(newSchedule.endTime)
-                    val dataTime2 = it.withTime(
+                    var dataTime2 = it.withTime(
                         toDateTime2.hourOfDay,
                         toDateTime2.minuteOfHour,
                         toDateTime2.secondOfMinute,
                         0
                     )
-                    //loge("dataTime=$dataTime,dataTime2=$dataTime")
-                    //暂时不考虑跨天
+                    //考虑跨天显示
+                    if (toDateTime.simplifiedDataTime() != toDateTime2.simplifiedDataTime()) {
+                        val year = toDateTime2.year - toDateTime.year
+                        val month = toDateTime2.monthOfYear - toDateTime.monthOfYear
+                        val day = toDateTime2.dayOfMonth - toDateTime.dayOfMonth
+                        dataTime2 = dataTime2.plusYears(year)
+                        dataTime2 = dataTime2.plusMonths(month)
+                        dataTime2 = dataTime2.plusDays(day)
+                    }
+
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                     listAllSchedule.add(newSchedule)
@@ -193,17 +208,24 @@ object ScheduleDaoUtil {
                         0
                     )
                     val toDateTime2 = toDateTime(newSchedule.endTime)
-                    val dataTime2 = it.withTime(
+                    var dataTime2 = it.withTime(
                         toDateTime2.hourOfDay,
                         toDateTime2.minuteOfHour,
                         toDateTime2.secondOfMinute,
                         0
                     )
+                    //考虑跨天显示
+                    if (toDateTime.simplifiedDataTime() != toDateTime2.simplifiedDataTime()) {
+                        val year = toDateTime2.year - toDateTime.year
+                        val month = toDateTime2.monthOfYear - toDateTime.monthOfYear
+                        val day = toDateTime2.dayOfMonth - toDateTime.dayOfMonth
+                        dataTime2 = dataTime2.plusYears(year)
+                        dataTime2 = dataTime2.plusMonths(month)
+                        dataTime2 = dataTime2.plusDays(day)
+                    }
 
-                    //暂时不考虑跨天
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
-                    //loge("$it,$newSchedule")
                     listAllSchedule.add(DayOfMonth(it, newSchedule))
                 }
             }
@@ -313,14 +335,21 @@ object ScheduleDaoUtil {
                             0
                         )
                         val toDateTime2 = toDateTime(newSchedule.endTime)
-                        val dataTime2 = startTimeDate.withTime(
+                        var dataTime2 = startTimeDate.withTime(
                             toDateTime2.hourOfDay,
                             toDateTime2.minuteOfHour,
                             toDateTime2.secondOfMinute,
                             0
                         )
-                        //loge("dataTime=$dataTime,dataTime2=$dataTime")
-                        //暂时不考虑跨天
+                        //考虑跨天显示
+                        if (toDateTime.simplifiedDataTime() != toDateTime2.simplifiedDataTime()) {
+                            val year = toDateTime2.year - toDateTime.year
+                            val month = toDateTime2.monthOfYear - toDateTime.monthOfYear
+                            val day = toDateTime2.dayOfMonth - toDateTime.dayOfMonth
+                            dataTime2 = dataTime2.plusYears(year)
+                            dataTime2 = dataTime2.plusMonths(month)
+                            dataTime2 = dataTime2.plusDays(day)
+                        }
                         newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                         newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                         listAllSchedule.add(newSchedule)
@@ -350,14 +379,22 @@ object ScheduleDaoUtil {
                             0
                         )
                         val toDateTime2 = toDateTime(newSchedule.endTime)
-                        val dataTime2 = it.withTime(
+                        var dataTime2 = it.withTime(
                             toDateTime2.hourOfDay,
                             toDateTime2.minuteOfHour,
                             toDateTime2.secondOfMinute,
                             0
                         )
-                        //loge("dataTime=$dataTime,dataTime2=$dataTime")
-                        //暂时不考虑跨天
+                        //考虑跨天显示
+                        if (toDateTime.simplifiedDataTime() != toDateTime2.simplifiedDataTime()) {
+                            val year = toDateTime2.year - toDateTime.year
+                            val month = toDateTime2.monthOfYear - toDateTime.monthOfYear
+                            val day = toDateTime2.dayOfMonth - toDateTime.dayOfMonth
+                            dataTime2 = dataTime2.plusYears(year)
+                            dataTime2 = dataTime2.plusMonths(month)
+                            dataTime2 = dataTime2.plusDays(day)
+                        }
+
                         newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                         newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                         listAllSchedule.add(newSchedule)
