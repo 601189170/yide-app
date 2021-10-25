@@ -130,7 +130,7 @@ object ScheduleDaoUtil {
         //本周最后的时间
         val finallyTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59"
         val startDateBeforeScheduleList = scheduleDao().getOneWeekUndoneScheduleList(finallyTime)
-        loge("startDateBeforeScheduleList ${startDateBeforeScheduleList.size}")
+        //loge("startDateBeforeScheduleList ${startDateBeforeScheduleList.size}")
         val scheduleDataList = mutableListOf<ScheduleData>()
         scheduleDataList.addAll(startDateBeforeScheduleList.map { it.scheduleWithParticipantAndLabelToScheduleData() })
         //需要的本周重复日程

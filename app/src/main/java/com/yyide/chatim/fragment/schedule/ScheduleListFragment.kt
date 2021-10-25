@@ -40,6 +40,7 @@ import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedToMonthOfDateTime
+import com.yyide.chatim.utils.logd
 import com.yyide.chatim.view.SpaceItemDecoration
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
@@ -165,14 +166,12 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         loge("onClickDate year=$year,month=$month,day=$day")
         scrollToPosition(year, month, day)
         val dateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
-        loge("dateTime=$dateTime")
         scheduleViewModel.curDateTime.value = dateTime
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
         loge("onPageChange year=$year,month=$month,day=$day")
         val dateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
-        loge("dateTime=$dateTime")
         scheduleViewModel.curDateTime.value = dateTime
         val monthDateList = list.filter { it.isMonthHead }.map { ScheduleDaoUtil.toDateTime(it.startTime).simplifiedToMonthOfDateTime()}
         if (!monthDateList.contains(dateTime.simplifiedToMonthOfDateTime())) {
@@ -193,7 +192,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         //定位到指定日期
         val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter)
-        var scrollOuter: Int = 0
+        var scrollOuter: Int = -1
         list.let {
             for (i in 0 until list.size) {
                 val scheduleData = list[i]
@@ -205,23 +204,28 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                 }
             }
         }
-        loge("需要滚动到 scrollOuter=$scrollOuter")
+        loge("需要滚动到 scrollOuter=$scrollOuter,dateTime=$dateTime")
         moveToPosition(scrollOuter, rvScheduleList)
     }
 
     fun moveToPosition(position: Int, recyclerView: RecyclerView?) {
-        if (recyclerView == null) {
+        if (recyclerView == null || position == -1) {
             return
         }
         val firstItem: Int = recyclerView.getChildLayoutPosition(recyclerView.getChildAt(0))
         val lastItem: Int =
             recyclerView.getChildLayoutPosition(recyclerView.getChildAt(recyclerView.getChildCount() - 1))
+        loge("moveToPosition:firstItem=$firstItem,lastItem=$lastItem")
         if (position < firstItem || position > lastItem) {
             //recyclerView.smoothScrollToPosition(position)
-            recyclerView.scrollToPosition(position)
+                logd("scrollToPosition=$position")
+            //recyclerView.scrollToPosition(position)
+            val manager = recyclerView.layoutManager as LinearLayoutManager
+            manager.scrollToPositionWithOffset(position,0)
         } else {
             val movePosition = position - firstItem
             val top: Int = recyclerView.getChildAt(movePosition).getTop()
+            logd("scrollBy=$top")
             //recyclerView.smoothScrollBy(0, top)
             recyclerView.scrollBy(0,top)
         }
