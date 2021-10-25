@@ -88,19 +88,21 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         SelectSchByTeaidRsp.DataBean dataBean = null;
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             if (rsp.data != null && rsp.data.size() > 0) {
+                Calendar c = Calendar.getInstance();
                 for (SelectSchByTeaidRsp.DataBean item : rsp.data) {
                     //开始时间
                     long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
                     //结束时间
-                    long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
-                    Calendar c = Calendar.getInstance();
                     String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
                     int weekDay = c.get(Calendar.DAY_OF_WEEK);
+                    long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
                     long mMillisecond = DateUtils.getWhenPoint(minute);
                     if (weekDay == 1) {//系统日历周日默认==1
                         weekDay = 7;
+                    } else {
+                        weekDay = weekDay - 1;
                     }
-                    if (item.weekTime == (weekDay - 1)) {
+                    if (item.weekTime == weekDay) {
                         if (mMillisecond > toDateTime) {//课后
                             isTable = true;
                         } else if (mMillisecond < fromDataTime) {//课前

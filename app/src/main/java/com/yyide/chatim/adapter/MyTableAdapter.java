@@ -42,9 +42,9 @@ public class MyTableAdapter extends BaseQuickAdapter<SelectSchByTeaidRsp.DataBea
         ImageView dateS = baseViewHolder.getView(R.id.date);
         tool.setText("教具：" + (TextUtils.isEmpty(item.teachTool) ? "暂无教具" : item.teachTool));
         if (item.lessonsSubEntityList != null && item.lessonsSubEntityList.size() > 0) {
-            StringBuffer lessons = new StringBuffer();
+            StringBuilder lessons = new StringBuilder();
             for (int i = 0; i < item.lessonsSubEntityList.size(); i++) {
-                lessons.append(item.lessonsSubEntityList.get(i) + "\n");
+                lessons.append(item.lessonsSubEntityList.get(i)).append("\n");
             }
             homework.setText(lessons.toString());
         } else {
@@ -60,9 +60,12 @@ public class MyTableAdapter extends BaseQuickAdapter<SelectSchByTeaidRsp.DataBea
         String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
         int weekDay = c.get(Calendar.DAY_OF_WEEK);
         long mMillisecond = DateUtils.getWhenPoint(minute);
-        if (item.weekTime > (weekDay - 1)) {//课前
-            dateS.setImageResource(R.drawable.icon_table);
-        } else if (item.weekTime == (weekDay - 1)) {
+        if (weekDay == 1) {//系统日历周日默认==1
+            weekDay = 7;
+        } else {
+            weekDay = weekDay - 1;
+        }
+        if (item.weekTime == weekDay) {
             if (mMillisecond > toDateTime) {//课后
                 dateS.setImageResource(R.drawable.icon_table_un);
             } else if (mMillisecond < fromDataTime) {//课前
@@ -70,9 +73,12 @@ public class MyTableAdapter extends BaseQuickAdapter<SelectSchByTeaidRsp.DataBea
             } else {//正在上课
                 dateS.setImageResource(R.drawable.icon_table);
             }
+        } else if(item.weekTime > weekDay){
+            dateS.setImageResource(R.drawable.icon_table);
         } else {
             dateS.setImageResource(R.drawable.icon_table_un);
         }
+
         className.setText(item.classesName + " \t" + item.subjectName);
         seciton.setText("0".equals(item.section) ? "早读" : "第" + item.section + "节");
         time.setText(item.fromDateTime + "-" + item.toDateTime);

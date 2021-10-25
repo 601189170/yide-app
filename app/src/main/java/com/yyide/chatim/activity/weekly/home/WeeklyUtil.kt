@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON
 import com.tencent.mmkv.MMKV
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.model.WeeklyDateBean
+import java.util.*
 
 object WeeklyUtil {
 
@@ -14,9 +15,17 @@ object WeeklyUtil {
         val list = mutableListOf<String>()
         var desc = ""
         list.addAll(decodeStringSet)
+        val c = Calendar.getInstance()
+        val day = c.get(Calendar.DAY_OF_YEAR)
+        val decodeInt = MMKV.defaultMMKV().decodeInt(MMKVConstant.YD_WEEKLY_DATE_WEEK, 0)
         if (list.size > 0) {
+            MMKV.defaultMMKV().encode(MMKVConstant.YD_WEEKLY_DATE_WEEK, day)
             val random = (0 until list.size).random()
-            desc = list[random]
+            desc = if ((day - decodeInt) > 6) {
+                list[random]
+            } else {
+                list[0]
+            }
         }
         return desc
     }
