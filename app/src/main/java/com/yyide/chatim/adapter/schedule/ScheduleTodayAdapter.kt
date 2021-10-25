@@ -36,7 +36,7 @@ class ScheduleTodayAdapter(data: List<ScheduleData>) :
                 val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
                 holder.setText(
                     R.id.tv_schedule_time_interval,
-                    "$formatTime " +
+                    "$formatTime    " +
                             DateUtils.formatTime(
                                 item.startTime,
                                 "",
@@ -54,7 +54,7 @@ class ScheduleTodayAdapter(data: List<ScheduleData>) :
                 val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
                 holder.setText(
                     R.id.tv_schedule_time_interval,
-                    "$formatTime " +
+                    "$formatTime    " +
                             DateUtils.formatTime(
                                 item.startTime,
                                 "",
@@ -72,7 +72,7 @@ class ScheduleTodayAdapter(data: List<ScheduleData>) :
                 val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
                 holder.setText(
                     R.id.tv_schedule_time_interval,
-                    "$formatTime " +
+                    "$formatTime    " +
                             DateUtils.formatTime(
                                 item.startTime,
                                 "",
@@ -90,7 +90,7 @@ class ScheduleTodayAdapter(data: List<ScheduleData>) :
                 val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
                 holder.setText(
                     R.id.tv_schedule_time_interval,
-                    "$formatTime " +
+                    "$formatTime    " +
                             DateUtils.formatTime(
                                 item.startTime,
                                 "",

@@ -3,11 +3,13 @@ package com.yyide.chatim.activity.schedule
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.ActivityScheduleDateIntervalBinding
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTimeToMinute
 import com.yyide.chatim.utils.loge
 import java.util.concurrent.atomic.AtomicReference
 
@@ -128,6 +130,12 @@ class ScheduleDateIntervalActivity : BaseActivity() {
             val intent = intent
             val startTimeToDateTime = ScheduleDaoUtil.toDateTime(startTime)
             val endTimeToDateTime = ScheduleDaoUtil.toDateTime(endTime)
+
+            if (startTimeToDateTime.simplifiedDataTimeToMinute() >= endTimeToDateTime.simplifiedDataTimeToMinute()){
+                ToastUtils.showShort("开始时间不能大于或等于结束时间")
+                return@setOnClickListener
+            }
+
             if (allDay){
                 startTime = startTimeToDateTime.toString("yyyy-MM-dd ") + "00:00:00"
                 endTime = endTimeToDateTime.toString("yyyy-MM-dd ") + "23:59:59"

@@ -10,6 +10,8 @@ import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.model.schedule.Schedule
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.DisplayUtils
+import com.yyide.chatim.utils.loge
 
 /**
  * 日程列表视图
@@ -56,7 +58,7 @@ class ScheduleListAdapter :
         val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
         holder.setText(
             R.id.tv_schedule_time_interval,
-            "$formatTime " +
+            "$formatTime    " +
                     DateUtils.formatTime(
                         item.startTime,
                         "",
@@ -87,6 +89,12 @@ class ScheduleListAdapter :
             Schedule.TYPE_LIST_VIEW_HEAD -> {
                 val month = DateUtils.formatTime(item.startTime, "", "MM月")
                 holder.setText(R.id.tv_month_head_title, month)
+            }
+            Schedule.TYPE_TIME_AXIS ->{
+                loge("分割线view")
+                val layoutParams = holder.itemView.layoutParams
+                layoutParams.height = DisplayUtils.dip2px(context,10f)
+                holder.itemView.requestLayout()
             }
             else -> {
             }

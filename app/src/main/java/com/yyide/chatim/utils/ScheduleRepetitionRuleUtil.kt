@@ -26,6 +26,14 @@ object ScheduleRepetitionRuleUtil {
     }
 
     /**
+     * 简化时间到分钟 2021-10-15 00:00
+     */
+    fun DateTime.simplifiedDataTimeToMinute(): DateTime {
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        return DateTime.parse(this.toString("yyyy-MM-dd HH:mm") + ":00", dateTimeFormatter)
+    }
+
+    /**
      * 简化日期到月
      */
     fun DateTime.simplifiedToMonthOfDateTime():DateTime{

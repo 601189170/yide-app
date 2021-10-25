@@ -8,6 +8,7 @@ import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTimeToMinute
 import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
 import org.joda.time.DateTime
@@ -43,6 +44,15 @@ object ScheduleDaoUtil {
             nowDateTime.secondOfMinute,
             0
         )
+    }
+
+    /**
+     * 比较两个时间的大小 忽略秒
+     */
+    fun compareDate(startTime: String, endTime: String): Int {
+        val simplifiedDataTimeToMinute1 = toDateTime(startTime).simplifiedDataTimeToMinute()
+        val simplifiedDataTimeToMinute2 = toDateTime(endTime).simplifiedDataTimeToMinute()
+        return simplifiedDataTimeToMinute1.compareTo(simplifiedDataTimeToMinute2)
     }
 
     /**
@@ -230,19 +240,22 @@ object ScheduleDaoUtil {
                 }
             }
         }
-//        timeAxisDateTime?.let {
-//            for (i in 0 until listAllSchedule.size-1){
-//                val dateTime1 = listAllSchedule[i].dateTime.simplifiedDataTime()
-//                val dateTime2 = listAllSchedule[i+1].dateTime.simplifiedDataTime()
-//                if (it>dateTime1 && it<dateTime2){
-//                    loge("----找到时间轴的位置----")
-//                    val scheduleData = ScheduleData()
-//                    scheduleData.isTimeAxis = true
-//                    listAllSchedule.add(i,DayOfMonth(it,scheduleData))
-//                    return@let
-//                }
-//            }
-//        }
+        timeAxisDateTime?.let {
+            for (i in 0 until listAllSchedule.size - 1) {
+                val dateTime1 = listAllSchedule[i].dateTime.simplifiedDataTime()
+                val dateTime2 = listAllSchedule[i + 1].dateTime.simplifiedDataTime()
+                if (i != 0 && i != listAllSchedule.size - 1 && it in dateTime1..dateTime2) {
+                    loge("----找到时间轴的位置----")
+                    val scheduleData = ScheduleData()
+                    scheduleData.isTimeAxis = true
+                    scheduleData.isFirstDayOfMonth = false
+                    scheduleData.isMonthHead = false
+                    scheduleData.startTime = it.toStringTime()
+                    listAllSchedule.add(i, DayOfMonth(it, scheduleData))
+                    return@let
+                }
+            }
+        }
         listAllSchedule.sort()
         return listAllSchedule
     }

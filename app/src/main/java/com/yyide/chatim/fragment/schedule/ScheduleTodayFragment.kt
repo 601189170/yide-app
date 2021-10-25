@@ -137,7 +137,7 @@ class ScheduleTodayFragment : Fragment() {
         fragmentScheduleTodayBinding.rvWeekUndoList.setOnItemMenuClickListener(
             mWeekMenuItemClickListener
         )
-        fragmentScheduleTodayBinding.rvWeekUndoList.addItemDecoration(SpaceItemDecoration(10))
+        fragmentScheduleTodayBinding.rvWeekUndoList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         fragmentScheduleTodayBinding.rvWeekUndoList.adapter = thisWeekScheduleTodayAdapter
         thisWeekScheduleTodayAdapter.setOnItemClickListener { adapter, view, position ->
             loge("本周未完成：$position")
@@ -163,7 +163,7 @@ class ScheduleTodayFragment : Fragment() {
         fragmentScheduleTodayBinding.rvTodayList.setOnItemMenuClickListener(
             mTodayMenuItemClickListener
         )
-        fragmentScheduleTodayBinding.rvTodayList.addItemDecoration(SpaceItemDecoration(10))
+        fragmentScheduleTodayBinding.rvTodayList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         fragmentScheduleTodayBinding.rvTodayList.adapter = todayScheduleTodayAdapter
         todayScheduleTodayAdapter.setOnItemClickListener { adapter, view, position ->
             loge("今日清单：$position")

@@ -70,8 +70,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
 
     //是否显示时间轴
-    private var showTimeAxis: Boolean = true
-    private lateinit var timeAxisDateTime: DateTime
+    private var timeAxisDateTime: DateTime? = null
 
     //当前滚动方向是 0没滚动 1 向下滚动底部 -1向上滚动打顶部
     private var scrollOrientation: Int = 0
@@ -140,7 +139,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         scheduleListAdapter = ScheduleListAdapter()
         rvScheduleList.setSwipeMenuCreator(swipeMenuCreator)
         rvScheduleList.setOnItemMenuClickListener(mMenuItemClickListener)
-        rvScheduleList.addItemDecoration(SpaceItemDecoration(10))
+        rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         rvScheduleList.adapter = scheduleListAdapter
         scheduleListAdapter.setOnItemClickListener { _, _, position ->
             val scheduleData = list[position]
@@ -196,7 +195,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         list.let {
             for (i in 0 until list.size) {
                 val scheduleData = list[i]
-                if (!scheduleData.isMonthHead && ScheduleDaoUtil.toDateTime(scheduleData.startTime)
+                if (!scheduleData.isMonthHead && !scheduleData.isTimeAxis && ScheduleDaoUtil.toDateTime(scheduleData.startTime)
                         .simplifiedDataTime() == dateTime
                 ) {
                     scrollOuter = i
@@ -296,7 +295,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         list.clear()
         curTopDateTime = DateTime.now()
         curBottomDateTime = DateTime.now()
-        timeAxisDateTime = DateTime.now().simplifiedDataTime()
+        //timeAxisDateTime = DateTime.now().simplifiedDataTime()
         scheduleListViewViewModel.scheduleDataList(DateTime.now(), timeAxisDateTime)
     }
 

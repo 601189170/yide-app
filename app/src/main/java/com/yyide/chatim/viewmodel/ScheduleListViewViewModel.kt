@@ -75,9 +75,10 @@ class ScheduleListViewViewModel : ViewModel() {
             scheduleDataList.add(scheduleData)
             it.list.forEach {
                 for (scheduleDataIndex in it.list.indices) {
-                    if (scheduleDataIndex == 0){
+
+                    if ((scheduleDataIndex == 0 && !it.list[0].isTimeAxis) || (scheduleDataIndex == 1 && it.list[0].isTimeAxis)){
                         //日开始
-                        val scheduleData1 = it.list[0]
+                        val scheduleData1 = it.list[scheduleDataIndex]
                         scheduleData1.isMonthHead = false
                         scheduleData1.isFirstDayOfMonth = true
                         scheduleData1.isTimeAxis = false
@@ -88,15 +89,12 @@ class ScheduleListViewViewModel : ViewModel() {
                     val scheduleData1 = it.list[scheduleDataIndex]
                     scheduleData1.isFirstDayOfMonth = false
                     scheduleData1.isMonthHead = false
-                    scheduleData1.isTimeAxis = false
+                    scheduleData1.isTimeAxis = scheduleData1.isTimeAxis
                     scheduleDataList.add(scheduleData1)
                 }
             }
         }
         listViewData.postValue(scheduleDataList)
-        if (scheduleDataList.isNotEmpty()){
-            loge("日程列表月头=========${JSON.toJSONString(scheduleDataList[0])}")
-        }
         loge("日程列表数据=========${JSON.toJSONString(scheduleDataList)}")
     }
 

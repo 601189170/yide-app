@@ -888,6 +888,11 @@ public class DialogUtil {
         });
 
         binding.tvFinish.setOnClickListener(v -> {
+            final int compareDate = ScheduleDaoUtil.INSTANCE.compareDate(dateStart.get(), dateEnd.get());
+            if (compareDate >= 0){
+                ToastUtils.showShort("开始时间不能大于或等于结束时间");
+                return;
+            }
             scheduleEditViewModel.getStartTimeLiveData().setValue(dateStart.get());
             scheduleEditViewModel.getEndTimeLiveData().setValue(dateEnd.get());
             scheduleEditViewModel.getAllDayLiveData().setValue(binding.checkBox.isChecked());
@@ -1076,12 +1081,13 @@ public class DialogUtil {
                 });
             }
         };
-        adapter.setList(labelList);
+        //adapter.setList(labelList);
         binding.rvLabelList.setLayoutManager(new LinearLayoutManager(context));
         binding.rvLabelList.setAdapter(adapter);
         final LabelManageViewModel viewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(LabelManageViewModel.class);
         viewModel.selectLabelList();
         viewModel.getLabelList().observe(lifecycleOwner, dataBeans -> {
+            Log.e(TAG, "showAddLabelDialog: 更新标签数据" );
             labelList.clear();
             labelList.addAll(dataBeans);
             final List<LabelListRsp.DataBean> value = scheduleEditViewModel.getLabelListLiveData().getValue();
