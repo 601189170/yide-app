@@ -7,6 +7,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.compareTo
 import com.yyide.chatim.databinding.ActivityScheduleDateIntervalBinding
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTimeToMinute
@@ -131,7 +132,7 @@ class ScheduleDateIntervalActivity : BaseActivity() {
             val startTimeToDateTime = ScheduleDaoUtil.toDateTime(startTime)
             val endTimeToDateTime = ScheduleDaoUtil.toDateTime(endTime)
 
-            if (startTimeToDateTime.simplifiedDataTimeToMinute() >= endTimeToDateTime.simplifiedDataTimeToMinute()){
+            if (startTime compareTo endTime >= 0) {
                 ToastUtils.showShort("开始时间不能大于或等于结束时间")
                 return@setOnClickListener
             }

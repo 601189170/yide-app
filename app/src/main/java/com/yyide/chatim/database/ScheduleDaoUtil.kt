@@ -56,6 +56,15 @@ object ScheduleDaoUtil {
     }
 
     /**
+     * 比较两个时间的大小 忽略秒
+     */
+    infix fun String.compareTo(date:String): Int{
+        val simplifiedDataTimeToMinute1 = toDateTime(this).simplifiedDataTimeToMinute()
+        val simplifiedDataTimeToMinute2 = toDateTime(date).simplifiedDataTimeToMinute()
+        return simplifiedDataTimeToMinute1.compareTo(simplifiedDataTimeToMinute2)
+    }
+
+    /**
      * 指定时间的最后一天的时间
      */
     fun DateTime.lastTimeOfDay():DateTime{
