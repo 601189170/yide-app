@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONArray
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleAddLabelBinding
@@ -83,9 +84,6 @@ class ScheduleAddLabelActivity : BaseActivity() {
             object :
                 BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_add_label_list) {
                 override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
-                    if (labelList[labelList.lastIndex] === item) {
-                        holder.getView<View>(R.id.v_line).visibility = View.GONE
-                    }
                     holder.setText(R.id.tv_label, item.labelName)
                     val drawable = GradientDrawable()
                     drawable.cornerRadius =
@@ -102,7 +100,7 @@ class ScheduleAddLabelActivity : BaseActivity() {
         adapter.setList(labelList)
         labelManageBinding.cvLabelList.layoutManager = LinearLayoutManager(this)
         labelManageBinding.cvLabelList.adapter = adapter
-
+        labelManageBinding.cvLabelList.addItemDecoration(DefaultItemDecoration(resources.getColor(R.color.default_item_decoration_color)))
         labelManageBinding.clAddLabel.setOnClickListener {
             startActivity(Intent(this, ScheduleLabelCreateActivity::class.java))
         }

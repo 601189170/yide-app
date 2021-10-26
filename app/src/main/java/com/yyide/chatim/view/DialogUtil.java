@@ -38,6 +38,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
@@ -1083,6 +1084,7 @@ public class DialogUtil {
         };
         //adapter.setList(labelList);
         binding.rvLabelList.setLayoutManager(new LinearLayoutManager(context));
+        binding.rvLabelList.addItemDecoration(new DefaultItemDecoration(context.getResources().getColor(R.color.default_item_decoration_color)));
         binding.rvLabelList.setAdapter(adapter);
         final LabelManageViewModel viewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(LabelManageViewModel.class);
         viewModel.selectLabelList();
