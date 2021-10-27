@@ -15,12 +15,15 @@ import com.yanzhenjie.recyclerview.*
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityScheduleLabelManageBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.LabelManageViewModel
+import org.greenrobot.eventbus.EventBus
 
 class ScheduleLabelManageActivity : BaseActivity() {
     lateinit var labelManageBinding: ActivityScheduleLabelManageBinding
@@ -135,6 +138,7 @@ class ScheduleLabelManageActivity : BaseActivity() {
                         .observe(this@ScheduleLabelManageActivity, {
                             if (it) {
                                 labelManageViewModel.selectLabelList()
+                                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
                             }
                         })
                     return@OnItemMenuClickListener

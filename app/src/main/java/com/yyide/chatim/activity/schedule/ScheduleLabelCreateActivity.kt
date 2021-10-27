@@ -12,7 +12,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityScheduleLabelCreateBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.LabelColor
 import com.yyide.chatim.model.schedule.NewLabel
 import com.yyide.chatim.model.schedule.OldLabel
@@ -21,6 +23,7 @@ import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.LabelManageViewModel
 import com.yyide.chatim.widget.CircleFrameLayout
 import com.yyide.chatim.widget.SpaceItemDecoration
+import org.greenrobot.eventbus.EventBus
 
 class ScheduleLabelCreateActivity : BaseActivity() {
     lateinit var labelCreateBinding: ActivityScheduleLabelCreateBinding
@@ -121,6 +124,9 @@ class ScheduleLabelCreateActivity : BaseActivity() {
         }
         labelManageViewModel.getLabelAddOrEditResult().observe(this, {
             if (it) {
+                if (editOps){
+                    EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+                }
                 ToastUtils.showShort(if (editOps) "标签修改成功" else "标签添加成功")
                 finish()
             } else {
