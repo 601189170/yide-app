@@ -112,15 +112,19 @@ class SettingsViewModel : ViewModel() {
                     0 -> {
                         if (remindType1 == 0) {
                             it.isOpen = if (classRemindEnable.value == true) 1 else 0
-                            it.remindTime = classRemindTime.value?:"0"
+                            it.remindTime = classRemindTime.value ?: "0"
                         } else if (remindType1 == 1) {
                             it.isOpen = if (homeworkReleaseRemindEnable.value == true) 1 else 0
-                            it.remindTime = homeworkReleaseRemindTime.value
+                            it.remindTime = homeworkReleaseRemindTime.value ?: "0"
                         }
                     }
                     1 -> {
                         it.isOpen = if (schoolCalendarRemindEnable.value == true) 1 else 0
-                        it.remindTime = schoolCalendarRemindTime.value
+                        it.remindTime = schoolCalendarRemindTime.value ?: "0"
+                    }
+                    4 -> {
+                        it.isOpen = if (conferenceRemindEnable.value == true) 1 else 0
+                        it.remindTime = conferenceRemindTime.value ?: "0"
                     }
                     else -> {
                     }
@@ -160,7 +164,7 @@ class SettingsViewModel : ViewModel() {
                         it.forEach {
                             val remindType = it.remindType
                             val open = it.isOpen == 1
-                            //设置类型【0：课程表，1：校历，2：当前时间线标识，3：历史日程，4：时区】
+                            //设置子集 【0：课程表，1：校历，2：当前时间线标识，3：历史日程，4：会议,5:时区】
                             when (remindType) {
                                 0 -> {
                                     classScheduleEnable.postValue(open)
@@ -180,25 +184,29 @@ class SettingsViewModel : ViewModel() {
                                 else -> {
                                 }
                             }
-                            //设置子集 【0：课程表，1：校历，2：当前时间线标识，3：历史日程，4：时区】
+                            //设置子集 【0：课程表，1：校历，2：当前时间线标识，3：历史日程，4：会议,5:时区】
                             val subList = it.subList
                             subList?.forEach {
                                 val open1 = it.isOpen == 1
                                 val remindType1 = it.remindType
-                                val remindTime = it.remindTime
+                                val remindTime = it.remindTime?:"0"
                                 when (remindType) {
                                     0 -> {
                                         if (remindType1 == 0) {
                                             classRemindEnable.postValue(open1)
-                                            classRemindTime.postValue("$remindTime")
+                                            classRemindTime.postValue(remindTime)
                                         } else if (remindType1 == 1) {
                                             homeworkReleaseRemindEnable.postValue(open1)
-                                            homeworkReleaseRemindTime.postValue("$remindTime")
+                                            homeworkReleaseRemindTime.postValue(remindTime)
                                         }
                                     }
                                     1 -> {
                                         schoolCalendarRemindEnable.postValue(open1)
-                                        schoolCalendarRemindTime.postValue("$remindTime")
+                                        schoolCalendarRemindTime.postValue(remindTime)
+                                    }
+                                    4 -> {
+                                        conferenceRemindEnable.postValue(open1)
+                                        conferenceRemindTime.postValue(remindTime)
                                     }
                                     else -> {
                                     }
