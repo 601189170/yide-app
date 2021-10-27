@@ -27,21 +27,29 @@
             android:id="@+id/btn_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/schedule_setting_icon"
+            android:src="@drawable/schedule_setting_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="@dimen/dp_20"/>
+            android:paddingStart="@dimen/dp_5"
+            android:paddingEnd="@dimen/dp_20"
+            android:paddingTop="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_18"
+            android:background="#F2F7FA"/>
 
         <ImageButton
             android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_18"
-            android:background="@drawable/schedule_search_icon"
+            android:paddingEnd="@dimen/dp_18"
+            android:paddingStart="@dimen/dp_30"
+            android:paddingTop="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_18"
+            android:src="@drawable/schedule_search_icon"
             app:layout_constraintBottom_toBottomOf="@id/btn_setting"
             app:layout_constraintRight_toLeftOf="@id/btn_setting"
-            app:layout_constraintTop_toTopOf="@id/btn_setting" />
+            app:layout_constraintTop_toTopOf="@id/btn_setting"
+            android:background="#F2F7FA"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -308,7 +308,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             val width = DisplayUtils.dip2px(context, 63f)
             val height = ViewGroup.LayoutParams.MATCH_PARENT
             run {
-                if (!list[position].isMonthHead) {
+                if (list.isNotEmpty() && !list[position].isMonthHead) {
                     val modifyItem: SwipeMenuItem =
                         SwipeMenuItem(context).setBackground(R.drawable.selector_blue)
                             //.setImage(R.drawable.ic_action_delete)
