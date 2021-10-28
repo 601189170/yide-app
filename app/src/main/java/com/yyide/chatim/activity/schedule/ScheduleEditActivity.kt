@@ -4,7 +4,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -26,10 +29,7 @@ import com.yyide.chatim.databinding.ActivityScheduleEditBinding
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.model.schedule.Remind.Companion.getList
 import com.yyide.chatim.model.schedule.Remind.Companion.getList2
-import com.yyide.chatim.utils.ColorUtil
-import com.yyide.chatim.utils.DateUtils
-import com.yyide.chatim.utils.DisplayUtils
-import com.yyide.chatim.utils.loge
+import com.yyide.chatim.utils.*
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
@@ -276,6 +276,9 @@ class ScheduleEditActivity : BaseActivity() {
             ToastUtils.showShort("修改日程失败")
             finish()
         })
+
+        //限制输入框字数
+        scheduleEditBinding.edit.filters = arrayOf<InputFilter>(MaxTextLengthFilter(200))
     }
 
     val adapter = object :

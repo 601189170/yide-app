@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.schedule
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
@@ -13,6 +14,7 @@ import com.yyide.chatim.model.schedule.Remind
 import com.yyide.chatim.model.schedule.Repetition
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.MaxTextLengthFilter
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
@@ -105,6 +107,9 @@ class ScheduleTimetableClassActivity : BaseActivity() {
             ToastUtils.showShort("修改课表日程失败")
             finish()
         })
+
+        //限制输入框字数
+        scheduleTimetableBinding.tvRemark.filters = arrayOf<InputFilter>(MaxTextLengthFilter(200))
     }
 
     companion object {
