@@ -171,10 +171,8 @@ class MeetingSaveActivity : BaseActivity() {
         showLoading()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
         }
         viewModel.requestDel(scheduleId)
@@ -188,10 +186,8 @@ class MeetingSaveActivity : BaseActivity() {
         val time = viewBinding.tvTime.text.toString().trim()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
         }
         val startTime = viewModel.startTimeLiveData.value ?: ""

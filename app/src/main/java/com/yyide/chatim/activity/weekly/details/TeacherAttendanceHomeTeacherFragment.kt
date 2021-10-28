@@ -102,7 +102,7 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
             if (null != result) {
                 initHotScroll(result.teacherAttend)
                 initViewpager(result.teacherDetail)
-                if (result.teacherAttend == null && result.teacherDetail == null) {
+                if (result.teacherAttend.isEmpty() && result.teacherDetail.isEmpty()) {
                     viewBinding.cardViewNoData.visibility = View.VISIBLE
                     viewBinding.clTop.visibility = View.GONE
                     viewBinding.slidingTabLayout.visibility = View.GONE

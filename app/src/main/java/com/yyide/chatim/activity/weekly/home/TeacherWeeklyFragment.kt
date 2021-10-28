@@ -58,7 +58,10 @@ class TeacherWeeklyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        classBean = SpData.getClassInfo()
+        classBean = GetUserSchoolRsp.DataBean.FormBean()
+        if (SpData.getClassInfo() != null) {
+            classBean = SpData.getClassInfo()
+        }
         initView()
     }
 
@@ -199,10 +202,10 @@ class TeacherWeeklyFragment : BaseFragment() {
             viewBinding.summary.tvWeeklyShopping.text = summary.expend
         }
 
-        if (summary != null
-            && TextUtils.isEmpty(summary.attend)
-            && TextUtils.isEmpty(summary.expend)
-            && TextUtils.isEmpty(summary.work)
+        if (summary == null || (summary != null
+                    && TextUtils.isEmpty(summary.attend)
+                    && TextUtils.isEmpty(summary.expend)
+                    && TextUtils.isEmpty(summary.work))
         ) {
             viewBinding.summary.root.visibility = View.GONE
         }
@@ -265,6 +268,7 @@ class TeacherWeeklyFragment : BaseFragment() {
     private var spanCount = 3
     private fun setAttendance(attend: WeeklyTeacherAttendance?) {
         if (attend == null) {
+            viewBinding.attendance.root.visibility = View.GONE
             return
         }
         spanCount = 3

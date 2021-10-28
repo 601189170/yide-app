@@ -2,6 +2,11 @@ package com.yyide.chatim.activity.meeting
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -24,8 +29,9 @@ class MeetingHistoryActivity : BaseActivity() {
 
     private lateinit var viewBinding: ActivityMeetingHistoryBinding
     private val viewModel: MeetingHistoryViewModel by viewModels()
-    private val size = 15
+    private val size = 20
     private var current = 1
+    private var searchName = ""
 
     override fun getContentViewID(): Int {
         return R.layout.activity_meeting_history
@@ -40,10 +46,10 @@ class MeetingHistoryActivity : BaseActivity() {
     }
 
     private fun initView() {
+//        viewBinding.top.backLayout.setOnClickListener { finish() }
+//        viewBinding.top.title.text = getString(R.string.meeting_history_title)
         viewBinding.cancel.setOnClickListener { finish() }
-        viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.ivDel.setOnClickListener { viewBinding.edit.text = null }
-        viewBinding.top.title.text = getString(R.string.meeting_history_title)
         viewBinding.recyclerview.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerview.adapter = adapter
         adapter.setEmptyView(R.layout.empty)
@@ -51,7 +57,7 @@ class MeetingHistoryActivity : BaseActivity() {
             adapter.loadMoreModule.isEnableLoadMore = true
             //请求数据
             current++
-            viewModel.requestMeetingHomeList(size, current)
+            viewModel.requestMeetingHomeList(size, current, searchName)
         }
         adapter.loadMoreModule.isAutoLoadMore = true
         //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
@@ -60,6 +66,36 @@ class MeetingHistoryActivity : BaseActivity() {
 //            val item = adapter.getItem(position) as ScheduleData
 //            MeetingCreateUpdateActivity.jumpUpdate(this, item.id)
 //        }
+        viewBinding.edit.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s!!.isEmpty()) {
+                    searchName = ""
+                    current = 1
+                    request()
+                }
+            }
+
+        })
+        viewBinding.edit.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                (viewBinding.edit.context
+                    .getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+                    .hideSoftInputFromWindow(
+                        this@MeetingHistoryActivity.currentFocus?.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                    )
+                searchName = viewBinding.edit.text.toString()
+                request()
+                return@OnEditorActionListener true
+            }
+            false
+        })
     }
 
     private fun request() {
@@ -81,7 +117,7 @@ class MeetingHistoryActivity : BaseActivity() {
                 }
             }
         }
-        viewModel.requestMeetingHomeList(size, current)
+        viewModel.requestMeetingHomeList(size, current, searchName)
     }
 
     private val adapter =

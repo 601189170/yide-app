@@ -211,7 +211,7 @@ class TeacherAttendanceStudentChildFragment : BaseFragment() {
         for (item in datas) {
             val childs = mutableListOf<TreeNode<StudentValue>>()
             val itemChild =
-                StudentValue("", item.type, item.name, "", "", "", "", "", "", "", mutableListOf())
+                StudentValue(item.name, item.type, "", "", mutableListOf())
             val treeNode: TreeNode<StudentValue> = TreeNode(itemChild, -1)
             for (childItem in item.value) {
                 childItem.type = item.type

@@ -1,6 +1,8 @@
 package com.yyide.chatim.activity.weekly.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.os.Bundle
 import android.text.TextUtils
@@ -16,8 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ThreadUtils.runOnUiThread
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
+import com.yyide.chatim.activity.weekly.details.BarCharts
 import com.yyide.chatim.activity.weekly.home.viewmodel.SchoolViewModel
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.DialogWeekMessgeBinding
@@ -26,6 +36,9 @@ import com.yyide.chatim.databinding.ItemWeeklyChartsVerticalBinding
 import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
 import java.math.BigDecimal
+import java.util.ArrayList
+import com.github.mikephil.charting.components.XAxis
+
 
 /**
  *
@@ -187,7 +200,10 @@ class SchoolWeeklyFragment : BaseFragment() {
                     } else {
                         -1
                     }
-                    adapterStudentAttendance.notifyDataSetChanged()
+                    selectTeacherPosition = -1
+//                    val item = adapterStudentAttendance.getItem(position)
+//                    show(view, item.name, "${item.value}")
+//                    adapterStudentAttendance.notifyDataSetChanged()
                 }
             } else {
                 viewBinding.layoutWeeklySchoolAttendance.textView.visibility = View.GONE
@@ -207,7 +223,10 @@ class SchoolWeeklyFragment : BaseFragment() {
                     } else {
                         -1
                     }
-                    adapterTeacherAttendance.notifyDataSetChanged()
+                    selectStudentPosition = -1
+//                    val item = adapterTeacherAttendance.getItem(position)
+//                    show(view, item.name, "${item.value}")
+//                    adapterTeacherAttendance.notifyDataSetChanged()
                 }
             } else {
                 viewBinding.layoutWeeklySchoolAttendance.textView1.visibility = View.GONE
@@ -228,7 +247,6 @@ class SchoolWeeklyFragment : BaseFragment() {
 
     }
 
-    @SuppressLint("ResourceAsColor", "ResourceType")
     private fun show(view: View, desc: String, number: String) {
         val inflate = DialogWeekMessgeBinding.inflate(layoutInflater)
         val popWindow = PopupWindow(
@@ -237,7 +255,7 @@ class SchoolWeeklyFragment : BaseFragment() {
         )
         inflate.tvName.text = desc
         inflate.tvProgress.text = number
-        popWindow.setBackgroundDrawable(context?.getDrawable(android.R.color.transparent))
+        popWindow.setBackgroundDrawable(context?.resources?.getDrawable(android.R.color.transparent))
         popWindow.setOnDismissListener {
             if (selectTeacherPosition > -1) {
                 adapterTeacherAttendance.notifyItemChanged(selectTeacherPosition)
@@ -267,6 +285,11 @@ class SchoolWeeklyFragment : BaseFragment() {
         BaseQuickAdapter<SchoolHomeStudentAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
         override fun convert(holder: BaseViewHolder, item: SchoolHomeStudentAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
+//            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
+//            if (selectStudentPosition == holder.bindingAdapterPosition) {
+//                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+//            }
+//            bind.progressbar.progress = if (item.value > 0 && item.value <= 1) 1 else item.value.toInt()
             if (item.value > 0) {
                 bind.tvProgress.text = "${item.value}%"
                 bind.tvProgress.visibility = View.VISIBLE
@@ -276,10 +299,7 @@ class SchoolWeeklyFragment : BaseFragment() {
             bind.tvWeek.text = item.name
             WeeklyUtil.setAnimation(
                 bind.progressbar,
-                if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
-                    0,
-                    BigDecimal.ROUND_HALF_UP
-                ).toInt()
+                if (item.value > 0 && item.value <= 1) 1 else item.value.toInt()
             )
         }
     }
@@ -292,6 +312,11 @@ class SchoolWeeklyFragment : BaseFragment() {
         BaseQuickAdapter<SchoolHomeTeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
         override fun convert(holder: BaseViewHolder, item: SchoolHomeTeacherAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
+//            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
+//            if (selectTeacherPosition == holder.bindingAdapterPosition) {
+//                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
+//            }
+//            bind.progressbar.progress = if (item.value > 0 && item.value <= 1) 1 else item.value.toInt()
             if (item.value > 0) {
                 bind.tvProgress.text = "${item.value}%"
                 bind.tvProgress.visibility = View.VISIBLE

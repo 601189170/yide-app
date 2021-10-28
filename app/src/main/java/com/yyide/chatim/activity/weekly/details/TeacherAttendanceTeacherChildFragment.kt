@@ -127,7 +127,6 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
             viewBinding.tvLate.isChecked = true
             viewBinding.tvLate.setTextColor(resources.getColor(R.color.white))
             initAttendanceList(detail.abnormalDetails.late)
-
         }
         viewBinding.tvAbsenteeism.setOnClickListener {
             setButton()

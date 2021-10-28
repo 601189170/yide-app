@@ -7,10 +7,10 @@
     android:background="@color/white"
     tools:context=".activity.meeting.MeetingHistoryActivity">
 
-    <include
-        android:id="@+id/top"
-        layout="@layout/title_layout2"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <include-->
+<!--        android:id="@+id/top"-->
+<!--        layout="@layout/title_layout2"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <LinearLayout
         android:id="@+id/ll_search"
@@ -20,7 +20,7 @@
         android:orientation="horizontal"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_10"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -80,18 +80,19 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"
         android:background="#F7F9FA"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/top" />
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/ll_search" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingStart="@dimen/dp_20"
-        android:paddingTop="@dimen/dp_6"
+        android:paddingTop="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_20"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top"
+        app:layout_constraintTop_toBottomOf="@+id/view_line"
         tools:itemCount="6"
         tools:listitem="@layout/item_meeting_home" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

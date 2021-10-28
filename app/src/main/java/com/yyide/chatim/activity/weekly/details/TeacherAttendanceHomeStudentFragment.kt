@@ -82,13 +82,20 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                 "yyyy-MM-dd HH:mm:ss",
                 "MM/dd"
             )
-            loading()
-            viewModel.requestAttendanceStudentDetail(
-                classBean.classesId,
-                teacherId,
-                dateTime.startTime,
-                dateTime.endTime
-            )
+            if (classBean != null && classBean.classesId != null) {
+                loading()
+                viewModel.requestAttendanceStudentDetail(
+                    classBean.classesId,
+                    teacherId,
+                    dateTime.startTime,
+                    dateTime.endTime
+                )
+            } else {
+                viewBinding.clTop.visibility =  View.GONE
+                viewBinding.viewpager.visibility = View.INVISIBLE
+                viewBinding.slidingTabLayout.visibility = View.INVISIBLE
+                viewBinding.cardViewNoData.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -100,6 +107,8 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
             dismiss()
             val result = it.getOrNull()
             if (null != result) {
+                viewBinding.cardViewNoData.visibility = View.GONE
+                viewBinding.clTop.visibility =  View.VISIBLE
                 initHotScroll(result.studentAttend)
                 initViewpager(result.studentDetail)
                 if (result.studentDetail == null && result.studentAttend == null) {
@@ -113,6 +122,9 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                     viewBinding.slidingTabLayout.visibility = View.VISIBLE
                     viewBinding.viewpager.visibility = View.VISIBLE
                 }
+            } else {
+                viewBinding.viewpager.visibility = View.INVISIBLE
+                viewBinding.slidingTabLayout.visibility = View.INVISIBLE
             }
         }
     }
@@ -153,7 +165,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
     private var teacherId = ""
     private var timePosition = -1
     private lateinit var dateTime: WeeklyDateBean.DataBean.TimesBean
-    private var classBean = SpData.getClassInfo()
+    private lateinit var classBean: GetUserSchoolRsp.DataBean.FormBean
     private fun initDate() {
         arguments?.apply {
             dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
@@ -188,7 +200,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
 
     private fun initClassMenu() {
         var classesId = ""
-        if (classBean != null) {
+        if (classBean != null && classBean.classesId != null) {
             viewBinding.tvClassName.text = classBean.classesName + "的周报"
             classesId = classBean.classesId
         }

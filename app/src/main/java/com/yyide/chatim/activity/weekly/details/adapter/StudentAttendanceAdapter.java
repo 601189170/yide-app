@@ -9,9 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.AbnormalDetail;
 import com.yyide.chatim.model.StudentValue;
-import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.widget.treeview.adapter.SingleLayoutTreeAdapter;
 import com.yyide.chatim.widget.treeview.model.TreeNode;
 import com.yyide.chatim.widget.treeview.util.DpUtil;
@@ -38,7 +36,7 @@ public class StudentAttendanceAdapter extends SingleLayoutTreeAdapter<StudentVal
         holder.setText(R.id.tv_student_event, "");
         holder.setText(R.id.tv_status, "");
         holder.setText(R.id.tv_student_name, "");
-        tvName.setText(item.getClockDate());
+        tvName.setText(item.getName());
         if (itemParent.getLevel() == 1) {
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
             if (TextUtils.isEmpty(item.getType())) {
@@ -46,30 +44,25 @@ public class StudentAttendanceAdapter extends SingleLayoutTreeAdapter<StudentVal
             }
             switch (item.getType()) {
                 case "0"://正常
-//                        tvStatus.setText(item.getStatusType());
-//                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
-//                        tvTime.setTextColor(Color.parseColor("#606266"));
                     break;
                 case "1"://缺勤
                     tvStatus.setText("未打卡");
-                    tvEvent.setText(item.getStatusName());
                     break;
                 case "2"://迟到
-                    tvEvent.setText(item.getStatusName());
-                    tvStatus.setText(item.getEquipment());
-                    holder.setText(R.id.tv_student_time, item.getClockTime());
+                    tvEvent.setText(item.getName());
+                    tvStatus.setText(item.getClockName());
+                    holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
                 case "3"://早退
-                    tvStatus.setText(item.getEquipment());
-                    tvEvent.setText(item.getStatusName());
-                    holder.setText(R.id.tv_student_time, item.getClockTime());
+                    tvStatus.setText(item.getClockName());
+                    tvEvent.setText(item.getName());
+                    holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#63DAAB"));
                     break;
                 case "5"://请假
-                    tvEvent.setText("请假");
                     tvStatus.setText("请假时间");
-                    holder.setText(R.id.tv_student_time, item.getLeaveTime());
+                    holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#F6BD16"));
                     break;
             }
@@ -77,7 +70,7 @@ public class StudentAttendanceAdapter extends SingleLayoutTreeAdapter<StudentVal
             constraintLayout.setBackgroundColor(getContext().getResources().getColor(R.color.white));
             tvName.setEms(8);
             tvName.setLines(1);
-            tvName.setText(item.getDetailName());
+            tvName.setText(item.getName());
             tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
         }
         if (!itemParent.isLeaf()) {
