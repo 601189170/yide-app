@@ -12,6 +12,7 @@ import com.yyide.chatim.databinding.ActivityScheduleDateIntervalBinding
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTimeToMinute
 import com.yyide.chatim.utils.loge
+import org.joda.time.DateTime
 import java.util.concurrent.atomic.AtomicReference
 
 class ScheduleDateIntervalActivity : BaseActivity() {
@@ -34,8 +35,13 @@ class ScheduleDateIntervalActivity : BaseActivity() {
             binding.tvTimeStart.visibility = View.GONE
             binding.tvTimeEnd.visibility = View.GONE
         }
-        val startTime = intent.getStringExtra("startTime")
-        val endTime = intent.getStringExtra("endTime")
+        var startTime = intent.getStringExtra("startTime")
+        var endTime = intent.getStringExtra("endTime")
+        if (TextUtils.isEmpty(startTime) || TextUtils.isEmpty(endTime)){
+            val nowDate = DateTime.now()
+            startTime = nowDate.toString("yyyy-MM-dd HH:mm:ss")
+            endTime = nowDate.toString("yyyy-MM-dd ")+"23:59:59"
+        }
         binding.clStartTime.setOnClickListener {
             if (binding.llVLine.visibility == View.GONE) {
                 binding.llVLine.visibility = View.VISIBLE
