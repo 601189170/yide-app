@@ -37,6 +37,7 @@ import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ListViewEvent
 import com.yyide.chatim.adapter.schedule.ScheduleListAdapter
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedToMonthOfDateTime
@@ -341,6 +342,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                 if (menuPosition == 0) {
                     loge("标记为完成")
                     val scheduleData = list[position]
+                    if (!scheduleData.promoterSelf()) {
+                        ToastUtils.showShort("此日程不能修改！")
+                        return@OnItemMenuClickListener
+                    }
                     curModifySchedule = scheduleData
                     scheduleEditViewModel.changeScheduleState(scheduleData)
                     return@OnItemMenuClickListener
@@ -348,6 +353,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                 if (menuPosition == 1) {
                     loge("删除日程")
                     val scheduleData = list[position]
+                    if (!scheduleData.promoterSelf()) {
+                        ToastUtils.showShort("此日程不能删除！")
+                        return@OnItemMenuClickListener
+                    }
                     curModifySchedule = scheduleData
                     scheduleEditViewModel.deleteScheduleById(scheduleData.id)
                     return@OnItemMenuClickListener

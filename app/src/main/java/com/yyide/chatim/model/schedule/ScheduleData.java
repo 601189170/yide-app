@@ -50,10 +50,15 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     private String updateType;
     private String updateDate;
     private String dayOfMonth;
+    //参与人id
+    private String promoter;
     private String promoterName;
-    private boolean timeAxis;//日程时间轴
-    private boolean monthHead;//日期头
-    private boolean firstDayOfMonth;//是否是月的第一天
+    //日程时间轴
+    private boolean timeAxis;
+    //日期头
+    private boolean monthHead;
+    //是否是月的第一天
+    private boolean firstDayOfMonth;
 
     public String getIsRepeat() {
         return isRepeat;
@@ -269,6 +274,14 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
 
     public void setMonthHead(boolean monthHead) {
         this.monthHead = monthHead;
+    }
+
+    public String getPromoter() {
+        return promoter;
+    }
+
+    public void setPromoter(String promoter) {
+        this.promoter = promoter;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.yyide.chatim.viewmodel
 
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
@@ -101,6 +102,7 @@ class ScheduleMangeViewModel : ViewModel() {
             scheduleBean.updateType = it.updateType
             scheduleBean.updateDate = it.updateDate
             scheduleBean.dayOfMonth = it.dayOfMonth
+            scheduleBean.promoter = it.promoter
             scheduleBean.promoterName = it.promoterName
             val participantList = mutableListOf<ParticipantList>()
             it.participant.forEach {
@@ -115,7 +117,10 @@ class ScheduleMangeViewModel : ViewModel() {
                 participantList.add(participant)
             }
             val labelList = mutableListOf<LabelList>()
-            it.label.forEach {
+            it.label.forEach loop@{
+                if (TextUtils.isEmpty(it.labelName)){
+                    return@loop
+                }
                 val label = LabelList()
                 label.id = it.id
                 label.labelName = it.labelName

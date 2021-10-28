@@ -21,6 +21,7 @@ import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.databinding.FragmentScheduleTodayBinding
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DisplayUtils
@@ -281,6 +282,10 @@ class ScheduleTodayFragment : Fragment() {
                 if (menuPosition == 0) {
                     loge("修改")
                     val scheduleData = weekUndoList[position]
+                    if (!scheduleData.promoterSelf()) {
+                        ToastUtils.showShort("此日程不能修改！")
+                        return@OnItemMenuClickListener
+                    }
                     curModifySchedule = scheduleData
                     scheduleEditViewModel.changeScheduleState(scheduleData)
                     return@OnItemMenuClickListener
@@ -288,6 +293,10 @@ class ScheduleTodayFragment : Fragment() {
                 if (menuPosition == 1) {
                     loge("删除")
                     val scheduleData = weekUndoList[position]
+                    if (!scheduleData.promoterSelf()) {
+                        ToastUtils.showShort("此日程不能删除！")
+                        return@OnItemMenuClickListener
+                    }
                     curModifySchedule = scheduleData
                     scheduleEditViewModel.deleteScheduleById(scheduleData.id)
                     return@OnItemMenuClickListener

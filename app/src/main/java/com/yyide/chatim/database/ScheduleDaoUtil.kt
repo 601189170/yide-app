@@ -3,6 +3,7 @@ package com.yyide.chatim.database
 import android.text.TextUtils
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.BaseApplication
+import com.yyide.chatim.SpData
 import com.yyide.chatim.model.schedule.DayOfMonth
 import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.ScheduleData
@@ -81,6 +82,20 @@ object ScheduleDaoUtil {
         }
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         return this.toString(dateTimeFormatter)
+    }
+
+    /**
+     * 判断当前日程是否当前账户创建的
+     */
+    fun ScheduleData.promoterSelf(): Boolean{
+        val userId = SpData.getIdentityInfo().userId
+        if (TextUtils.isEmpty(this.promoter) || TextUtils.isEmpty(userId)){
+            return false
+        }
+        if (this.promoter == userId){
+            return true
+        }
+        return false
     }
 
     /**
