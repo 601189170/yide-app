@@ -161,7 +161,7 @@ class ScheduleEditActivity : BaseActivity() {
             }
             scheduleEditViewModel.remarkLiveData.value = it.remark
 
-            if (TextUtils.isEmpty(it.remark) && TextUtils.isEmpty(it.siteId)){
+            if (TextUtils.isEmpty(it.remark) && TextUtils.isEmpty(it.siteId) && !promoter){
                 scheduleEditBinding.vLine4.visibility = View.GONE
             }
         }
