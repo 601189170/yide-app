@@ -55,18 +55,6 @@ data class StudentValue(
     var name: String,
     @JSONField(name = "type")
     var type: String,
-    @JSONField(name = "detailName")
-    var detailName: String,
-    @JSONField(name = "statusName")
-    var statusName: String,
-    @JSONField(name = "clockDate")
-    var clockDate: String,
-    @JSONField(name = "clockTime")
-    var clockTime: String,
-    @JSONField(name = "leaveTime")
-    var leaveTime: String,
-    @JSONField(name = "equipment")
-    var equipment: String,
     @JSONField(name = "clockName")
     var clockName: String,
     @JSONField(name = "time")

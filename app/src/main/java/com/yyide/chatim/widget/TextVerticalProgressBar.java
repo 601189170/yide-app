@@ -64,10 +64,9 @@ public class TextVerticalProgressBar extends ProgressBar {
         String text = mProgress + "%";
         Rect rect = new Rect();
         mPaint.getTextBounds(text, 0, text.length(), rect);
-        float x = mRealHeight - mPaint.measureText(text);
+        int x = (getWidth() / 2)  - rect.centerX();
         int y = (getHeight() / 2) - rect.centerY();
-        float progressPosX = mRealHeight * ((int) mProgress * 1.0f / getMax());
-        canvas.drawText(text, x, mRealHeight, mPaint);
+        canvas.drawText(text, x, y, mPaint);
     }
 
     private int measureHeight(int measureSpec) {

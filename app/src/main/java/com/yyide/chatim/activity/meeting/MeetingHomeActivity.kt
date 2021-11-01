@@ -61,6 +61,7 @@ class MeetingHomeActivity : BaseActivity() {
         viewBinding.backLayout.setOnClickListener { finish() }
         viewBinding.recyclerviewMeeting.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerviewMeeting.adapter = adapter
+        adapter.setEmptyView(R.layout.empty)
         adapter.setOnItemClickListener { adapter, view, position ->
             val item = adapter.getItem(position) as ScheduleData
             MeetingSaveActivity.jumpUpdate(this, item.id)

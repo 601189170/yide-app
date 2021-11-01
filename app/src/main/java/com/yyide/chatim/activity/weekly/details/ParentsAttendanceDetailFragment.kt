@@ -93,7 +93,7 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
     private fun initView() {
         arguments?.apply {
             studentId = getString("studentId", "")
-            viewBinding.tvClassName.text = getString("studentName", "") + "的周报"
+            viewBinding.tvClassName.text = getString("studentName", "")
             name = getString("studentName", "")
             dateTime = getSerializable("item") as WeeklyDateBean.DataBean.TimesBean
         }
