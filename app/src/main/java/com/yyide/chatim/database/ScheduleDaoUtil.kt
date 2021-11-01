@@ -442,4 +442,13 @@ object ScheduleDaoUtil {
             return scheduleDataList
         }
     }
+
+    /**
+     * 保存日程数据到本地
+     */
+    fun insert(scheduleWithParticipantAndLabel:ScheduleWithParticipantAndLabel){
+        scheduleWithParticipantAndLabel.also {
+            scheduleDao().insert(it.schedule,it.participantList,it.labelList)
+        }
+    }
 }

@@ -1,11 +1,13 @@
 package com.yyide.chatim.viewmodel
 
-import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.BaseApplication
-import com.yyide.chatim.database.*
+import com.yyide.chatim.database.AppDatabase
+import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleWithParticipantAndLabel
+import com.yyide.chatim.database.scheduleDataToScheduleWithParticipantAndLabel
 import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.model.schedule.ScheduleEvent
@@ -73,65 +75,12 @@ class ScheduleMangeViewModel : ViewModel() {
      * 保存日程所有数据到本地数据库
      *
      */
-
     private fun insertScheduleToDb(scheduls: List<ScheduleData>) {
         loge("scheduls ${JSON.toJSONString(scheduls)}")
         ScheduleDaoUtil.clearAll()
         scheduls.forEach {
-            val scheduleId = it.id
-            val scheduleBean = ScheduleBean()
-            scheduleBean.id = it.id
-            scheduleBean.name = it.name
-            scheduleBean.type = it.type
-            scheduleBean.isTop = it.isTop
-            scheduleBean.remark = it.remark
-            scheduleBean.filePath = it.filePath
-            scheduleBean.isRepeat = it.isRepeat
-            scheduleBean.status = it.status
-            if (it.isRepeat != "0"){
-                scheduleBean.rrule = JSON.toJSONString(it.rrule)
-            }
-            scheduleBean.remindType = it.remindType
-            scheduleBean.remindTypeInfo = it.remindTypeInfo
-            scheduleBean.startTime = it.startTime
-            scheduleBean.endTime = it.endTime
-            scheduleBean.iconImg = it.iconImg
-            scheduleBean.isAllDay = it.isAllDay
-            scheduleBean.siteId = it.siteId
-            scheduleBean.siteName = it.siteName
-            scheduleBean.updateType = it.updateType
-            scheduleBean.updateDate = it.updateDate
-            scheduleBean.dayOfMonth = it.dayOfMonth
-            scheduleBean.promoter = it.promoter
-            scheduleBean.promoterName = it.promoterName
-            val participantList = mutableListOf<ParticipantList>()
-            it.participant.forEach {
-                val participant = ParticipantList()
-                participant.id = it.id
-                participant.userId = it.userId
-                participant.scheduleId = scheduleId
-                participant.type = it.type
-                //学生和教职工取值不一
-                participant.realname = it.realname
-                participant.scheduleCreatorId = scheduleId
-                participantList.add(participant)
-            }
-            val labelList = mutableListOf<LabelList>()
-            it.label.forEach loop@{
-                if (TextUtils.isEmpty(it.labelName)){
-                    return@loop
-                }
-                val label = LabelList()
-                label.id = it.id
-                label.labelName = it.labelName
-                label.colorValue = it.colorValue
-                label.scheduleCreatorId = scheduleId
-                labelList.add(label)
-            }
-
             //插入数据到本地数据库
-            AppDatabase.getInstance(BaseApplication.getInstance()).scheduleDao()
-                .insert(scheduleBean, participantList, labelList)
+            ScheduleDaoUtil.insert(it.scheduleDataToScheduleWithParticipantAndLabel())
         }
     }
 }

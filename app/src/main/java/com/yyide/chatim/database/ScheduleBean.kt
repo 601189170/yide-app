@@ -157,7 +157,9 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
         scheduleBean.filePath = it.filePath
         scheduleBean.isRepeat = it.isRepeat
         scheduleBean.status = it.status
-        scheduleBean.rrule = JSON.toJSONString(it.rrule)
+        if (it.isRepeat != "0"){
+            scheduleBean.rrule = JSON.toJSONString(it.rrule)
+        }
         scheduleBean.remindType = it.remindType
         scheduleBean.remindTypeInfo = it.remindTypeInfo
         scheduleBean.startTime = it.startTime
@@ -175,16 +177,19 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
         it.participant.forEach {
             val participant = ParticipantList()
             participant.id = it.id
-            participant.userId = it.id
+            participant.userId = it.userId
             participant.scheduleId = scheduleId
             participant.type = it.type
             //学生和教职工取值不一
-            participant.realname = it.name
+            participant.realname = it.realname
             participant.scheduleCreatorId = scheduleId
             participantList.add(participant)
         }
         val labelList = mutableListOf<LabelList>()
-        it.label.forEach {
+        it.label.forEach loop@{
+            if (TextUtils.isEmpty(it.labelName)){
+                return@loop
+            }
             val label = LabelList()
             label.id = it.id
             label.labelName = it.labelName
