@@ -199,7 +199,7 @@ class TeacherHomeworkFragment : BaseFragment() {
                 viewBind.tvAttendance.text = "${item.value}"
                 viewBind.tvEventName.text = item.name
                 viewBind.viewLine.visibility =
-                    if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE
+                    if (holder.adapterPosition == 0) View.GONE else View.VISIBLE
             }
 
         }
