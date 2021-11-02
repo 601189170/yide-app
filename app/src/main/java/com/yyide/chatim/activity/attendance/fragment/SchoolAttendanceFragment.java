@@ -6,6 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -61,6 +65,11 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
     }
 
     private void initView(AttendanceCheckRsp.DataBean item) {
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            mvpPresenter.attendance("");
+        });
+        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+
         AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
         if (item.schoolPeopleAllForm != null) {
             if (item.schoolPeopleAllForm.size() > index) {
@@ -73,7 +82,11 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
         if ("N".equals(schoolPeopleAllFormBean.getPeopleType())) {
             startFragment(schoolPeopleAllFormBean);
         } else {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean)).commit();
+            int position = 0;
+            if (item.attendancesForm != null) {
+               position = index - item.attendancesForm.size();
+            }
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean, position)).commit();
         }
         mViewBinding.tvAttendanceTitle.setText(schoolPeopleAllFormBean.attName);
         if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
@@ -93,40 +106,53 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
         }
 
         mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-            AttendancePop attendancePop = new AttendancePop(getActivity(), new WheelAdapter() {
-                @Override
-                public int getItemsCount() {
-                    return item.schoolPeopleAllForm.size();
-                }
-
-                @Override
-                public Object getItem(int index) {
-                    return item.schoolPeopleAllForm.get(index).getAttName();
-                }
-
-                @Override
-                public int indexOf(Object o) {
-                    return item.schoolPeopleAllForm.indexOf(o);
-                }
-            }, "");
-            attendancePop.setCurrentItem(mViewBinding.tvAttendanceTitle.getText().toString().trim());
+            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
+            adapterEvent.setList(item.schoolPeopleAllForm);
             attendancePop.setOnSelectListener(index -> {
+                this.index = index;
                 AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
                 mViewBinding.tvAttendanceTitle.setText(bean.attName);
                 if ("N".equals(bean.getPeopleType())) {
                     startFragment(bean);
                 } else {
-                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean)).commit();
+                    int position = 0;
+                    if (item.attendancesForm != null) {
+                        position = index - item.attendancesForm.size();
+                    }
+                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean, position)).commit();
                 }
             });
         });
     }
 
+    private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder>(R.layout.swich_class_item) {
+
+        @Override
+        protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item) {
+            baseViewHolder.setText(R.id.className, item.getAttName());
+            baseViewHolder.getView(R.id.select).setVisibility(index == baseViewHolder.getAdapterPosition() ? View.VISIBLE : View.GONE);
+            if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
+            } else {
+                baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
     private void startFragment(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean) {
+        SchoolTeacherAttendanceFragment teacherAttendanceFragment = SchoolTeacherAttendanceFragment.newInstance(bean);
+        SchoolEventTeacherAttendanceFragment eventTeacherAttendanceFragment = SchoolEventTeacherAttendanceFragment.newInstance(bean);
+        teacherAttendanceFragment.setOnRefreshListener(isRefresh -> {
+            mViewBinding.swipeRefreshLayout.setEnabled(isRefresh);
+        });
+
+        eventTeacherAttendanceFragment.setOnRefreshListener(isRefresh -> {
+            mViewBinding.swipeRefreshLayout.setEnabled(isRefresh);
+        });
         if ("Y".equals(bean.getIdentityType())) {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolTeacherAttendanceFragment.newInstance(bean)).commit();
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), teacherAttendanceFragment).commit();
         } else {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolEventTeacherAttendanceFragment.newInstance(bean)).commit();
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), eventTeacherAttendanceFragment).commit();
         }
     }
 
@@ -137,6 +163,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
 
     @Override
     public void getAttendanceSuccess(AttendanceCheckRsp model) {
+        mViewBinding.swipeRefreshLayout.setRefreshing(false);
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             AttendanceCheckRsp.DataBean data = model.getData();
             if (data != null) {
@@ -177,6 +204,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
 
     @Override
     public void getAttendanceFail(String msg) {
+        mViewBinding.swipeRefreshLayout.setRefreshing(false);
         Log.d(TAG, "getHomeAttendanceFail-->>" + msg);
     }
 

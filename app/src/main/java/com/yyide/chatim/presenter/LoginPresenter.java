@@ -76,6 +76,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         RequestBody body = new FormBody.Builder()
                 .add("validateCode", validateCode)
                 .add("mobile", mobile)
+                .add("version", "2")
                 .build();
         addSubscription(dingApiStores.loginmobile(body), new ApiCallback<LoginRsp>() {
             @Override
@@ -89,7 +90,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             }
 
             @Override
-            public void onFinish() {}
+            public void onFinish() {
+            }
         });
     }
 
@@ -111,7 +113,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             }
 
             @Override
-            public void onFinish() { }
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
         });
     }
 
@@ -134,8 +138,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         });
     }
 
-    public void accountSwitch(){
-//        mvpView.showLoading();
+    public void accountSwitch() {
         addSubscription(dingApiStores.accountSwitch("reg"), new ApiCallback<LoginAccountBean>() {
             @Override
             public void onSuccess(LoginAccountBean model) {

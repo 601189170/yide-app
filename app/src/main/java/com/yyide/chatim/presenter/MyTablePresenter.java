@@ -18,7 +18,7 @@ public class MyTablePresenter extends BasePresenter<MyTableView> {
     }
 
     public void SelectSchByTeaid() {
-//        mvpView.showLoading();
+        mvpView.showLoading();
 //        Map<String,String> map = new HashMap<String, String>();
 //        map.put("classesId",classesId);
 //        RequestBody body= RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));

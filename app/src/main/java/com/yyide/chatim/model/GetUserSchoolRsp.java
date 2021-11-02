@@ -2,10 +2,10 @@ package com.yyide.chatim.model;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
-public class GetUserSchoolRsp {
+public class GetUserSchoolRsp implements Serializable {
 
     /**
      * code : 200
@@ -20,7 +20,7 @@ public class GetUserSchoolRsp {
     public String message;
     public List<DataBean> data;
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * realname : 胡老师
          * username : 14712341234
@@ -79,6 +79,18 @@ public class GetUserSchoolRsp {
             return identity;
         }
 
+        public boolean isSchool() {
+            return TYPE_PRESIDENT.equals(status) || TYPE_ADMIN.equals(status);
+        }
+
+        public boolean isParent() {
+            return TYPE_PARENTS.equals(status);
+        }
+
+        public boolean isTeacherOrCharge() {
+            return TYPE_CLASS_TEACHER.equals(status) || TYPE_TEACHER.equals(status);
+        }
+
         /**
          * 判断当前是否是教职工
          *
@@ -108,28 +120,38 @@ public class GetUserSchoolRsp {
         public List<String> imgList;
         public String birthdayDate;
         public String sex;//1 男 0女
-        public int teacherDepId;
         public String email;
+        public int teacherDepId;
         public Object schedule;
         public Object introduce;
         public String img;
         public List<FormBean> form;
         public boolean isCurrentUser;
+        public int weekNum;
         public String studentName;
 
-        public static class FormBean {
+        public static class FormBean implements Serializable {
             /**
              * classesId : 1985
              * classesName : 小一2021级3班
              * classesTeacher : 胡老师
              * teacherId : 574
              */
-
+            public String studentBirthdayDate;
+            public String studentSex;//1 男 0女
             public String classesId;
             public String classesName;
             public String teacherInd;
+            public String studentEmail;
+            public String studentPhone;
             public String classesTeacher;
             public String teacherId;
+            public String studentPic;
+            public String classesStudentName;
+            public String studentName;
+            public String studentId;
+            public String studentUserId;
+            public String userId;
 
         }
     }

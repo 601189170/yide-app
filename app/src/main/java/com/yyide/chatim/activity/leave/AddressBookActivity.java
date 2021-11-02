@@ -114,7 +114,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
         List<AddressBookRsp.DataBean> allCheckedDepartmentIds = getAllCheckedDepartmentIds2(noticeScopeBeans, new ArrayList<>());
         deptList.addAll(allCheckedDepartmentIds);
         if (deptList.isEmpty()) {
-            ToastUtils.showShort("请选择抄送人");
+            ToastUtils.showShort(R.string.select_copyer_tip);
             return;
         }
         //返回上一页

@@ -15,7 +15,7 @@ import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.newnotice.dialog.NoticeImageDialog
+import com.yyide.chatim.activity.PhotoViewActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticePushDetailBinding
@@ -31,7 +31,8 @@ import org.greenrobot.eventbus.ThreadMode
 /**
  * 模板发布详情
  */
-class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresenter>(), NoticeTemplateGeneralView {
+class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresenter>(),
+    NoticeTemplateGeneralView {
     private var pushDetailBinding: ActivityNoticePushDetailBinding? = null
     private var imgPath: String = ""
     private var isConfirm = false
@@ -60,7 +61,12 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         pushDetailBinding!!.include.tvRight.setText(R.string.notice_preview_title)
         pushDetailBinding!!.include.tvRight.visibility = View.VISIBLE
         pushDetailBinding!!.include.backLayout.setOnClickListener { finish() }
-        pushDetailBinding!!.include.tvRight.setOnClickListener { NoticeImageDialog.showPreView(this, imgPath) }
+        pushDetailBinding!!.include.tvRight.setOnClickListener {
+            PhotoViewActivity.start(
+                this,
+                imgPath
+            )
+        }
         pushDetailBinding!!.switchPush.isChecked = true
         pushDetailBinding!!.switchPush.setOnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
             if (isChecked) {
@@ -71,14 +77,23 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         }
         pushDetailBinding!!.clThing.setOnClickListener { showSelectTime() }
         pushDetailBinding!!.clSelect.setOnClickListener {
-            val intent = Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
+            val intent =
+                Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
             intent.putParcelableArrayListExtra("list", list)
             intent.putExtra("isCheck", isConfirm)
             startActivity(intent)
         }
         pushDetailBinding!!.btnConfirm.setOnClickListener { sendNotice() }
-        val lp = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, (ScreenUtils.getScreenHeight() * 0.6).toInt())
-        lp.setMargins(SizeUtils.dp2px(12f), SizeUtils.dp2px(10f), SizeUtils.dp2px(12f), SizeUtils.dp2px(10f))
+        val lp = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            (ScreenUtils.getScreenHeight() * 0.6).toInt()
+        )
+        lp.setMargins(
+            SizeUtils.dp2px(12f),
+            SizeUtils.dp2px(10f),
+            SizeUtils.dp2px(12f),
+            SizeUtils.dp2px(10f)
+        )
         lp.gravity = Gravity.CENTER
         pushDetailBinding!!.ivImg.layoutParams = lp
 
@@ -137,7 +152,8 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         if (BaseConstant.TYPE_NOTICE_RANGE == messageEvent.code) {
             Log.d("NoticePersonnelFragment", messageEvent.message)
             if (!TextUtils.isEmpty(messageEvent.message)) {
-                val item: NoticeBlankReleaseBean = JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
+                val item: NoticeBlankReleaseBean =
+                    JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
                 isConfirm = item.isConfirm
                 when (messageEvent.type) {
                     "0" -> {
@@ -212,11 +228,13 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         }
 
         if (patriarchNumber > 0) {
-            descNumber.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+            descNumber.append(getString(R.string.notice_patriarch_number, patriarchNumber))
+                .append("、")
         }
 
         if (brandNumber > 0) {
-            descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber)).append("、")
+            descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber))
+                .append("、")
         }
 
         if (!TextUtils.isEmpty(descNumber.toString()) && descNumber.toString().endsWith("、")) {
@@ -248,7 +266,8 @@ class NoticeTemplatePushActivity : BaseMvpActivity<NoticeTemplateGeneralPresente
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
             Handler().postDelayed({
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
-                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
+                EventBus.getDefault()
+                    .post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
                 ToastUtils.showLong(model.msg)
                 finish()
             }, 500)

@@ -77,14 +77,14 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        mvpPresenter.homeAttendance("");
+        mvpPresenter.homeAttendance("", "");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             adapter.setList(null);
-            mvpPresenter.homeAttendance("");
+            mvpPresenter.homeAttendance("", "");
         }
     }
 
@@ -114,10 +114,10 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
                 holder.setText(R.id.tv_desc, item.getThingName());
                 setPieChart(item, piechart);
                 constraintLayout1.setOnClickListener(v -> {
-                    AttendanceActivity.start(getContext(), item.getPeopleType(), holder.getAdapterPosition());
+                    AttendanceActivity.start(getContext(), holder.getAdapterPosition());
                 });
                 piechart.setTouchEnabled(false);
-                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item.getPeopleType(), holder.getAdapterPosition()));
+                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), holder.getAdapterPosition()));
             }
         }
 
@@ -133,7 +133,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             entries.add(new PieEntry(item.getLeave(), "请假"));
             entries.add(new PieEntry(item.getLate(), "迟到"));
             entries.add(new PieEntry(item.getApplyNum(), "实到"));
-            String desc = "1".equals(item.getGoOutStatus()) ? "签退率" : "签到率";
+            String desc = "1".equals(item.getGoOutStatus()) ? "签退率" : "出勤率";
             piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + desc);
             piechart.setCenterTextSize(12);
             PieDataSet dataSet = new PieDataSet(entries, "");
@@ -171,8 +171,9 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
                     schoolBean.setRate(teachers.getRate());
                     schoolBean.setPeopleType(teachers.getPeopleType());
                     schoolBean.setThingName(teachers.getThingName());
+                    schoolBean.setGoOutStatus(teachers.getGoOutStatus());
+                    schoolPeopleAllFormBeanList.add(schoolBean);
                 }
-                schoolPeopleAllFormBeanList.add(schoolBean);
             }
         }
 

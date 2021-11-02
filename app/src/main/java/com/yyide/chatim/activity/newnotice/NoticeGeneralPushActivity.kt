@@ -31,13 +31,15 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
+
 /**
  * DESC 普通通知发布
  * AUTHOR LRZ
  * TIME 2021年6月21日
  * VERSION 1.0
  */
-class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), NoticeBlankReleaseView {
+class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(),
+    NoticeBlankReleaseView {
     private var releaseBinding: ActivityNoticeReleaseBinding? = null
     private var isConfirm = false
     private var isTimer = false
@@ -65,7 +67,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         releaseBinding!!.top.backLayout.setOnClickListener { finish() }
         releaseBinding!!.btnPush.setOnClickListener { pushNotice() }
         releaseBinding!!.clRange.setOnClickListener {
-            val intent = Intent(this, NoticeDesignatedPersonnelActivity::class.java)
+            val intent =
+                Intent(NoticeGeneralActivity@ this, NoticeDesignatedPersonnelActivity::class.java)
             intent.putParcelableArrayListExtra("list", list)
             intent.putExtra("isCheck", isConfirm)
             startActivity(intent)
@@ -85,10 +88,12 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
 //        p.width = ((ScreenUtils.getScreenWidth() * 0.6).toInt())
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         //设置主窗体背景颜色为黑色
-        previewBinding.nestedScrollView.layoutParams.height = ((ScreenUtils.getScreenHeight() * 0.6).toInt())
+        previewBinding.nestedScrollView.layoutParams.height =
+            ((ScreenUtils.getScreenHeight() * 0.6).toInt())
         previewBinding.root.setOnClickListener { v: View? -> dialog.dismiss() }
         previewBinding.tvTitle.text = releaseBinding?.etInputTitle?.text.toString().trim()
-        previewBinding.tvContent.text = "\t " + releaseBinding?.etInputContent?.text.toString().trim()
+        previewBinding.tvContent.text =
+            "\t " + releaseBinding?.etInputContent?.text.toString().trim()
         dialog.window!!.attributes = p //设置生效
         dialog.show()
     }
@@ -100,7 +105,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     @SuppressLint("ClickableViewAccessibility")
     private val touchListener = OnTouchListener { v, event ->
         if (event.action == MotionEvent.ACTION_DOWN
-                || event.action == MotionEvent.ACTION_MOVE) {
+            || event.action == MotionEvent.ACTION_MOVE
+        ) {
             //按下或滑动时请求父节点不拦截子节点
             v.parent.requestDisallowInterceptTouchEvent(true)
         }
@@ -114,7 +120,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     @SuppressLint("ClickableViewAccessibility")
     private fun initListener() {
         releaseBinding!!.switch1.setOnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
-            if (isChecked) releaseBinding!!.clTimingTime.visibility = View.GONE else releaseBinding!!.clTimingTime.visibility = View.VISIBLE
+            if (isChecked) releaseBinding!!.clTimingTime.visibility =
+                View.GONE else releaseBinding!!.clTimingTime.visibility = View.VISIBLE
             if (!isChecked) {
                 timeData = ""
                 releaseBinding!!.tvShowTimedTime.text = ""
@@ -129,7 +136,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
             override fun afterTextChanged(s: Editable) {
                 val s1 = s.toString().trim { it <= ' ' }
                 if (!TextUtils.isEmpty(s1)) {
-                    releaseBinding!!.tvInputTitleNumber.text = getString(R.string.notice_input_title_number, s1.length)
+                    releaseBinding!!.tvInputTitleNumber.text =
+                        getString(R.string.notice_input_title_number, s1.length)
                 }
             }
         })
@@ -140,7 +148,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
             override fun afterTextChanged(s: Editable) {
                 val s1 = s.toString().trim { it <= ' ' }
                 if (!TextUtils.isEmpty(s1)) {
-                    releaseBinding!!.tvInputContentNumber.text = getString(R.string.notice_input_content_number, s1.length)
+                    releaseBinding!!.tvInputContentNumber.text =
+                        getString(R.string.notice_input_content_number, s1.length)
                 }
             }
         })
@@ -154,15 +163,15 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         when {
             TextUtils.isEmpty(etTitle) -> {
                 releaseBinding!!.etInputTitle.error = getString(R.string.notice_input_title)
-                releaseBinding!!.etInputTitle.isFocusable = true
-                releaseBinding!!.etInputTitle.isFocusableInTouchMode = true
-                releaseBinding!!.etInputTitle.requestFocus()
+                releaseBinding!!.etInputTitle.isFocusable = true;
+                releaseBinding!!.etInputTitle.isFocusableInTouchMode = true;
+                releaseBinding!!.etInputTitle.requestFocus();
             }
             TextUtils.isEmpty(etContent) -> {
                 releaseBinding!!.etInputContent.error = getString(R.string.notice_input_content)
-                releaseBinding!!.etInputContent.isFocusable = true
-                releaseBinding!!.etInputContent.isFocusableInTouchMode = true
-                releaseBinding!!.etInputContent.requestFocus()
+                releaseBinding!!.etInputContent.isFocusable = true;
+                releaseBinding!!.etInputContent.isFocusableInTouchMode = true;
+                releaseBinding!!.etInputContent.requestFocus();
             }
             (!releaseBinding!!.switch1.isChecked && TextUtils.isEmpty(timeData)) -> {
                 ToastUtils.showShort(R.string.notice_input_push_time)
@@ -194,7 +203,8 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
     fun event(messageEvent: EventMessage) {
         if (BaseConstant.TYPE_NOTICE_RANGE == messageEvent.code) {
             if (!TextUtils.isEmpty(messageEvent.message)) {
-                val item: NoticeBlankReleaseBean = JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
+                val item: NoticeBlankReleaseBean =
+                    JSON.parseObject(messageEvent.message, NoticeBlankReleaseBean::class.java)
                 isConfirm = item.isConfirm
                 when (messageEvent.type) {
                     "0" -> {
@@ -243,16 +253,16 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
                 }
             }
 
-            item.recordList?.forEach { childItem ->
-                when (childItem.specifieType) {
+            item.recordList?.forEach { item ->
+                when (item.specifieType) {
                     "0" -> {//0教师 1家长 2班牌
-                        teacherNumber += childItem.nums
+                        teacherNumber += item.nums
                     }
                     "1" -> {
-                        patriarchNumber += childItem.nums
+                        patriarchNumber += item.nums
                     }
                     "2", "3" -> {
-                        brandNumber = childItem.nums
+                        brandNumber = item.nums
                     }
                 }
             }
@@ -265,17 +275,19 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         }
         Log.d("NoticePersonnelFragment", "paramsMap：" + JSON.toJSONString(paramsMap))
 
-        val descNumber = StringBuffer()
+        var descNumber = StringBuffer()
         if (teacherNumber > 0) {
             descNumber.append(getString(R.string.notice_teacher_number, teacherNumber)).append("、")
         }
 
         if (patriarchNumber > 0) {
-            descNumber.append(getString(R.string.notice_patriarch_number, patriarchNumber)).append("、")
+            descNumber.append(getString(R.string.notice_patriarch_number, patriarchNumber))
+                .append("、")
         }
 
         if (brandNumber > 0) {
-            descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber)).append("、")
+            descNumber.append(getString(R.string.notice_brand_check_class_number, brandNumber))
+                .append("、")
         }
 
         if (!TextUtils.isEmpty(descNumber.toString()) && descNumber.toString().endsWith("、")) {
@@ -311,12 +323,14 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(), Not
         if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
             Handler().postDelayed({
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
-                EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
-                ToastUtils.showLong(model.msg)
+                EventBus.getDefault()
+                    .post(EventMessage(BaseConstant.TYPE_UPDATE_NOTICE_MY_RELEASE, ""))
+                //ToastUtils.showLong(model.msg)
                 finish()
             }, 500)
         } else {
             releaseBinding!!.btnPush.isEnabled = true
+            ToastUtils.showShort("发布通知公告失败")
         }
     }
 

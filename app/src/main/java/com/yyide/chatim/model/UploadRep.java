@@ -5,6 +5,16 @@ public class UploadRep {
     private int code;
     private String message;
     private String url;
+    private String data;
+
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
 
     public int getCode() {
         return code;

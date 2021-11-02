@@ -25,19 +25,19 @@ public class FaceUploadPresenter extends BasePresenter<FaceUploadView> {
         attachView(view);
     }
 
-    public void updateFaceData(String name, long classId,long depId, String facePath) {
+    public void updateFaceData(String name, String classId,String depId, String studentId,String facePath) {
         Log.e("FaceUploadPresenter", "updateFaceData: name="+name +",classId="+classId+",depId="+depId+",facePath="+facePath);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
-            Map<String, RequestBody> params = new HashMap<>();
-            params.put("name", convertToRequestBody(name));
-            params.put("classId", convertToRequestBody("" + classId));
+            //Map<String, RequestBody> params = new HashMap<>();
+            //params.put("name", convertToRequestBody(name));
+            //params.put("classId", convertToRequestBody("" + classId));
             File file = new File(facePath);
             boolean exists = file.exists();
             Log.e("FaceUploadPresenter", facePath + "数据是否存在: " + exists);
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/png"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-            addSubscription(dingApiStores.toStudentOss(params, part), new ApiCallback<BaseRsp>() {
+            addSubscription(dingApiStores.toStudentOss(studentId, part), new ApiCallback<BaseRsp>() {
                 @Override
                 public void onSuccess(BaseRsp model) {
                     mvpView.faceUploadSuccess(model);
@@ -81,15 +81,15 @@ public class FaceUploadPresenter extends BasePresenter<FaceUploadView> {
         }
     }
 
-    public void getFaceData(String name, long classId,long depId){
+    public void getFaceData(String name, String classId,String depId,String studentId){
         Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId+",depId="+depId);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
             Map<String, Object> params = new HashMap<>();
-            params.put("name",name);
-            params.put("classId",classId);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
-            addSubscription(dingApiStores.getStudentOss(body), new ApiCallback<FaceOssBean>() {
+            //params.put("name",name);
+            //params.put("classId",classId);
+            //RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
+            addSubscription(dingApiStores.getStudentOss(studentId), new ApiCallback<FaceOssBean>() {
                 @Override
                 public void onSuccess(FaceOssBean model) {
                     mvpView.getFaceDataSuccess(model);

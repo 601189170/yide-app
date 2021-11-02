@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="splashActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+<!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+        <!--windowTranslucentNavigation这个属性设置成true，则navigationBarColor设置会失效-->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/ic_launcher</item>
+        <item name="statusBarBackground">@color/white</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--        <item name="android:windowFullscreen">true</item>-->
+        <!--不让windowBackground延申到navigation bar区域-->
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <!--适配Android P刘海屏-->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+
+</resources>

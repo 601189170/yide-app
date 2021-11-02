@@ -1,8 +1,12 @@
 package com.yyide.chatim.presenter;
 
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.BookRsp;
+import com.yyide.chatim.model.BookSearchRsp;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.AppView;
@@ -18,14 +22,15 @@ public class BookSearchPresenter extends BasePresenter<BookSearchView> {
         attachView(view);
     }
 
-    public void getMyAppList(String name){
+    public void bookSearch(String name, String type){
         Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("type", type);
         hashMap.put("name",name);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(hashMap));
         mvpView.showLoading();
-        addSubscription(dingApiStores.selectAllList(body), new ApiCallback<UserInfoRsp>() {
+        addSubscription(dingApiStores.selectAllList(body), new ApiCallback<BookSearchRsp>() {
             @Override
-            public void onSuccess(UserInfoRsp model) {
+            public void onSuccess(BookSearchRsp model) {
                 mvpView.selectUserListSuccess(model);
             }
 

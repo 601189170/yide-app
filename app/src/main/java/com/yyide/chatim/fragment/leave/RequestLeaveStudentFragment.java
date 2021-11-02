@@ -1,6 +1,7 @@
 package com.yyide.chatim.fragment.leave;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,6 +44,7 @@ import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.leave.LeaveCourseSectionAdapter;
 import com.yyide.chatim.adapter.leave.LeaveReasonTagAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.CourseSectionBean;
@@ -52,6 +54,7 @@ import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.presenter.leave.StudentAskLeavePresenter;
 import com.yyide.chatim.utils.ButtonUtils;
+import com.yyide.chatim.utils.DatePickerDialogUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
@@ -63,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -111,12 +115,15 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     private String endTime;
     private String leaveReason = "2";
     private String reason="";
-    private long classesId;
+    private String classesId;
     private List<Long> carbonCopyPeopleId;
     private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList;
     private String classesName;
     private TimePickerDialog mDialogAll;
     private LeaveCourseSectionAdapter leaveCourseSectionAdapter;
+    private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
+    private String studentId;
+    private String studentUserId;
 
     public RequestLeaveStudentFragment() {
         // Required empty public constructor
@@ -213,16 +220,19 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             }
             setCheckAll(isChecked);
         });
-        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-        if (classInfo !=null){
-            classesId = Long.parseLong(classInfo.classesId);
-            classesName = classInfo.classesName;
-        }
-        tv_department.setText(classesName);
+        //初始化班级列表
+        initClassData();
+        initClassView();
+        //tv_department.setText(classesName);
         btn_commit.setAlpha(0.5f);
         btn_commit.setClickable(false);
         //请求审批流程
-        mvpPresenter.getApprover(classesId);
+        if (!TextUtils.isEmpty(classesId)){
+            mvpPresenter.getApprover(classesId);
+        }else {
+            ToastUtils.showShort(R.string.current_user_not_class_not_use_ask_for_leave_tip);
+        }
+
         mvpPresenter.queryLeavePhraseList(1);
 
         editLeaveReason.addTextChangedListener(new TextWatcher() {
@@ -279,17 +289,21 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     public void click(View view) {
         switch (view.getId()) {
             case R.id.cl_start_time:
-                showTime("选择开始时间", startTime,startTimeListener);
+                //showTime(getString(R.string.select_begin_time),startTime,startTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_begin_time),startTime,startTimeListener);
                 break;
             case R.id.cl_end_time:
                 if (TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(startTime)){
-                    showTime("选择结束时间", startTime,endTimeListener);
+                    //showTime(getString(R.string.select_end_time), startTime,endTimeListener);
+                    DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_end_time), startTime,endTimeListener);
                     break;
                 }
-                showTime("选择结束时间", endTime,endTimeListener);
+                //showTime(getString(R.string.select_end_time), startTime,endTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_end_time), startTime,endTimeListener);
                 break;
             case R.id.cl_ask_for_leave_date:
-                showTime("选择请假日期", "",dateTimeListener);
+                //showTime(getString(R.string.select_ask_for_leave_date_tip), "",dateTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_ask_for_leave_date_tip), "",dateTimeListener);
                 break;
             case R.id.btn_commit:
                 if (!ButtonUtils.isFastDoubleClick(R.id.btn_commit)){
@@ -315,24 +329,24 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
          * }
          */
         if (TextUtils.isEmpty(startTime)){
-            ToastUtils.showShort("请选择请假开始时间");
+            ToastUtils.showShort(R.string.select_ask_for_leave_begin_time_tip);
             return;
         }
         if (TextUtils.isEmpty(endTime)){
-            ToastUtils.showShort("请选择请假结束时间");
+            ToastUtils.showShort(R.string.select_ask_for_leave_end_time_tip);
             return;
         }
         if (DateUtils.parseTimestamp(endTime,"")-DateUtils.parseTimestamp(startTime,"")<=0){
-            ToastUtils.showShort("请假结束时间应该大于开始时间");
+            ToastUtils.showShort(R.string.begin_time_not_gt_end_time_tip);
             return;
         }
         reason = editLeaveReason.getText().toString();
         if (TextUtils.isEmpty(reason)){
-            ToastUtils.showShort("请假事由不能为空");
+            ToastUtils.showShort(R.string.ask_for_leave_reason_null_tip);
             return;
         }
 
-        mvpPresenter.addStudentLeave(startTime,endTime,leaveReason,reason,classesId,classesName,carbonCopyPeopleId);
+        mvpPresenter.addStudentLeave(startTime,endTime,leaveReason,reason,classesId,studentId,studentUserId,classesName,carbonCopyPeopleId);
     }
 
 
@@ -355,14 +369,14 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         }
         mDialogAll = new TimePickerDialog.Builder()
                 .setCallBack(onDateSetListener)
-                .setCancelStringId("取消")
-                .setSureStringId("确定")
+                .setCancelStringId(getString(R.string.cancel))
+                .setSureStringId(getString(R.string.confirm))
                 .setTitleStringId(title)
-                .setYearText("年")
-                .setMonthText("月")
-                .setDayText("日")
-                .setHourText("时")
-                .setMinuteText("分")
+                .setYearText(getString(R.string.date_year_yd))
+                .setMonthText(getString(R.string.date_month_yd))
+                .setDayText(getString(R.string.date_day_yd))
+                .setHourText(getString(R.string.time_hour_yd))
+                .setMinuteText(getString(R.string.time_minute_yd))
                 .setCyclic(false)
                 .setMinMillseconds(System.currentTimeMillis()-oneYears)
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
@@ -410,7 +424,11 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
     public void approver(ApproverRsp approverRsp) {
         Log.e(TAG, "approver: " + approverRsp.toString());
         final ApproverRsp.DataBean data = approverRsp.getData();
+        ll_approver_list.removeAllViews();
+        ll_copyer_list.removeAllViews();
         if (approverRsp.getCode() != 200){
+            btn_commit.setAlpha(0.5f);
+            btn_commit.setClickable(false);
             ToastUtils.showShort(approverRsp.getMsg());
             return;
         }
@@ -420,7 +438,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             if (peopleForm == null){
                 btn_commit.setAlpha(0.5f);
                 btn_commit.setClickable(false);
-                ToastUtils.showLong("没有指定审批人，不能使用请假功能！");
+                ToastUtils.showLong(R.string.not_approver_not_ask_for_leave_tip);
                 return;
             }
 
@@ -428,6 +446,8 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             btn_commit.setClickable(true);
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
             final TextView tv_approver_name = view.findViewById(R.id.tv_approver_name);
+            final ImageView approverUserHead = view.findViewById(R.id.iv_user_head);
+            showImage(peopleForm.getImage(),approverUserHead);
             tv_approver_name.setText(peopleForm.getName());
             ll_approver_list.addView(view);
             //超送人
@@ -447,7 +467,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                         showImage(listBean.getImage(),iv_user_head);
                         tv_copyer_name.setText(name);
                         ll_copyer_list.addView(view1);
-                        setViewLayoutParams(view1, StatusBarUtils.dip2px(getContext(),45),0);
+                        //setViewLayoutParams(view1, StatusBarUtils.dip2px(getContext(),45),0);
                     }
                 }
                 //更多
@@ -455,7 +475,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
                     final View view1 = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
                     final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
                     final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
-                    tv_copyer_name.setText("查看全部");
+                    tv_copyer_name.setText(R.string.look_over_all);
                     userHeadImage.setImageResource(R.drawable.icon_read_more);
                     view1.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -533,5 +553,74 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
         lp.width = nWidth;
         lp.height = LinearLayout.LayoutParams.WRAP_CONTENT;
         view.setLayoutParams(lp);
+    }
+
+    /**
+     * 初始化学生所在班级列表，供当前账号用户选择
+     */
+    private void initClassData() {
+        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+        //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+        classList.clear();
+        final String classesStudentName = SpData.getClassesStudentName();
+        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
+            final String studentName = formBean.classesStudentName;
+            final String studentId = formBean.studentId;
+            final String classesId = formBean.classesId;
+            final String studentUserId = formBean.studentUserId;
+            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+            dataBean.setDeptId(studentId);
+            dataBean.setClassId(classesId);
+            dataBean.setDeptName(studentName);
+            dataBean.setStudentUserId(studentUserId);
+            dataBean.setIsDefault(0);
+            if (studentName.equals(classesStudentName)){
+                dataBean.setIsDefault(1);
+                this.studentId = dataBean.getDeptId();
+                this.studentUserId = dataBean.getStudentUserId();
+            }
+            classList.add(dataBean);
+        }
+        if (!classList.isEmpty()) {
+//            final LeaveDeptRsp.DataBean dataBean = classList.get(0);
+//            dataBean.setIsDefault(1);
+//            studentId = dataBean.getDeptId();
+//            studentUserId = dataBean.getStudentUserId();
+        } else {
+            Log.e(TAG, "initClassData: 当前账号没有学生" );
+            tv_department.setVisibility(View.GONE);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initClassView() {
+        final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+        if (classOptional.isPresent()) {
+            final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
+            tv_department.setText(clazzBean.getDeptName());
+            studentId = clazzBean.getDeptId();
+            classesId = clazzBean.getClassId();
+            studentUserId = clazzBean.getStudentUserId();
+            if (classList.size() <= 1) {
+                tv_department.setCompoundDrawables(null, null, null, null);
+            } else {
+                Drawable drawable = getResources().getDrawable(R.drawable.icon_right);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tv_department.setCompoundDrawables(null, null, drawable, null);
+                tv_department.setOnClickListener(v -> {
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 4, classList);
+                            deptSelectPop.setOnCheckedListener((dataBean) -> {
+                                Log.e(TAG, "班级选择: " + dataBean.toString());
+                                tv_department.setText(dataBean.getDeptName());
+                                studentId = dataBean.getDeptId();
+                                classesId = dataBean.getClassId();
+                                studentUserId = dataBean.getStudentUserId();
+                                mvpPresenter.getApprover(TextUtils.isEmpty(classesId)?"0":classesId);
+                            });
+                        }
+                );
+            }
+        }
     }
 }

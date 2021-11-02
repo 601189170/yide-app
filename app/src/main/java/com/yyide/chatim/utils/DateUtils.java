@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+
+
 public class DateUtils {
     private static final String TAG = "DateUtils";
 
@@ -274,6 +276,22 @@ public class DateUtils {
         return simpleDateFormat.format(time);
     }
 
+    public static long formatTime(String time, String source) {
+        if (TextUtils.isEmpty(source)) {
+            source = "yyyy-MM-dd HH:mm:ss";
+        }
+        SimpleDateFormat resourceFormat = new SimpleDateFormat(source);
+        Date date = null;
+        try {
+            date = resourceFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (date != null) {
+            return date.getTime();
+        }
+        return 0;
+    }
     /**
      * 日期转换
      *
@@ -315,6 +333,61 @@ public class DateUtils {
         }
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(target);
         return simpleDateFormat2.format(date);
+    }
+
+
+    public static String formatTime(String time, String source, String target,boolean week){
+        if (TextUtils.isEmpty(time)) {
+            return "";
+        }
+        if (TextUtils.isEmpty(source)) {
+            source = "yyyy-MM-dd HH:mm:ss";
+        }
+        if (TextUtils.isEmpty(target)) {
+            target = "MM月dd日";
+        }
+        if (week){
+            SimpleDateFormat resourceFormat = new SimpleDateFormat(source);
+            Date date = null;
+            try {
+                date = resourceFormat.parse(time);
+                if (date != null){
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(new Date(date.getTime()));
+                    //1是星期日、2是星期一、3是星期二、4是星期三、5是星期四、6是星期五、7是星期六
+                    final int i = cal.get(Calendar.DAY_OF_WEEK);
+                    return formatTime(time, source, target)+" "+getWeek(i);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return formatTime(time, source, target);
+    }
+
+    public static String getWeek(int week){
+        switch (week){
+            case 1:
+                return "周日";
+            case 2:
+                return "周一";
+            case 3:
+                return "周二";
+            case 4:
+                return "周三";
+            case 5:
+                return "周四";
+            case 6:
+                return "周五";
+            case 7:
+                return "周六";
+            case 8:
+                return "周日";
+            default:
+                break;
+
+        }
+        return "";
     }
 
     /**
@@ -399,7 +472,7 @@ public class DateUtils {
      * @param week  当月周数(1-5)
      * @return 该周第一天（周日）
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     public static String[] getFirstDayAndLastDayByMonthWeek(int year, int month, int week) {
         Log.e(TAG, "year=" + year + ",month=" + month + ",week=" + week);
         final Calendar calendar = Calendar.getInstance();
@@ -408,14 +481,26 @@ public class DateUtils {
         calendar.set(Calendar.WEEK_OF_YEAR, week);
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String[] dates = {"", ""};
-        LocalDate inputDate = LocalDate.parse(simpleDateFormat.format(calendar.getTime()));
-        // 所在周开始时间
-        LocalDate beginDayOfWeek = inputDate.with(DayOfWeek.MONDAY);
-        // 所在周结束时间
-        LocalDate endDayOfWeek = inputDate.with(DayOfWeek.SUNDAY);
-        Log.e(TAG, "beginDayOfWeek: " + beginDayOfWeek.toString() + ",endDayOfWeek：" + endDayOfWeek.toString());
-        dates[0] = beginDayOfWeek.getMonthValue() + "." + beginDayOfWeek.getDayOfMonth();
-        dates[1] = endDayOfWeek.getMonthValue() + "." + endDayOfWeek.getDayOfMonth();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDate inputDate = LocalDate.parse(simpleDateFormat.format(calendar.getTime()));
+            // 所在周开始时间
+            LocalDate beginDayOfWeek = inputDate.with(DayOfWeek.MONDAY);
+            // 所在周结束时间
+            LocalDate endDayOfWeek = inputDate.with(DayOfWeek.SUNDAY);
+            Log.e(TAG, "beginDayOfWeek: " + beginDayOfWeek.toString() + ",endDayOfWeek：" + endDayOfWeek.toString());
+            dates[0] = beginDayOfWeek.getMonthValue() + "." + beginDayOfWeek.getDayOfMonth();
+            dates[1] = endDayOfWeek.getMonthValue() + "." + endDayOfWeek.getDayOfMonth();
+        } else {
+            final SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("MM.dd");
+            calendar.setFirstDayOfWeek(Calendar.MONDAY);
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek()); // Monday
+            final String date1 = simpleDateFormat2.format(calendar.getTime());
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + 6); // Sunday
+            final String date2 = simpleDateFormat2.format(calendar.getTime());
+            Log.e(TAG, "getFirstDayAndLastDayByMonthWeek: date1 "+date1+", date2 "+date2 );
+            dates[0] = date1;
+            dates[1] = date2;
+        }
         return dates;
     }
 
@@ -551,5 +636,44 @@ public class DateUtils {
         }
 
         return false;
+    }
+
+    public static boolean dateExpired(String date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            final Date parse = dateFormat.parse(date);
+            if (parse != null){
+                return new Date().getTime() - parse.getTime() >0;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param eq true判断相等 false 判断大小
+     * @param nowDate
+     * @param compareDate
+     * @return
+     */
+    public static boolean compareDate(String nowDate, String compareDate,boolean eq) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        try {
+            Date now = df.parse(nowDate);
+            Date compare = df.parse(compareDate);
+            if (eq){
+                return now.getTime() == compare.getTime();
+            }
+            if (now.before(compare)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

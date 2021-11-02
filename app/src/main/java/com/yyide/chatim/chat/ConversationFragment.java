@@ -1,6 +1,7 @@
 package com.yyide.chatim.chat;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +22,9 @@ import com.tencent.imsdk.v2.V2TIMConversationListener;
 import com.tencent.imsdk.v2.V2TIMConversationResult;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
-import com.tencent.imsdk.v2.V2TIMValueCallback;
+import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
+import com.tencent.qcloud.tim.uikit.component.action.PopActionClickListener;
 import com.tencent.qcloud.tim.uikit.component.action.PopDialogAdapter;
 import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
@@ -34,10 +36,11 @@ import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.BookSearchActivity;
+import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.chat.helper.ConversationLayoutHelper;
 import com.yyide.chatim.chat.menu.Menu;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.ResultBean;
@@ -51,6 +54,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -94,7 +99,9 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         mConversationLayout = mBaseView.findViewById(R.id.conversation_layout);
         // 会话列表面板的默认UI和交互初始化
         mConversationLayout.initDefault();
-        mMenu = new Menu(getActivity(), mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
+        ConversationListLayout conversationList = mConversationLayout.getConversationList();
+        conversationList.showSearchBar(false);
+        //mMenu = new Menu(getActivity(), mConversationLayout.getTitleBar(), Menu.MENU_TYPE_CONVERSATION);
         ConstraintLayout constraintLayout = mBaseView.findViewById(R.id.cl_message);
         LinearLayout ll_search = mBaseView.findViewById(R.id.ll_search);
         constraintLayout.setOnClickListener(view -> {
@@ -104,21 +111,17 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             startActivity(new Intent(getActivity(), BookSearchActivity.class));
         });
 
-        conversationList = mConversationLayout.getConversationList();
-        conversationList.setItemTopTextSize(16); // 设置 item 中 top 文字大小
-        conversationList.setItemBottomTextSize(12);// 设置 item 中 bottom 文字大小
-        conversationList.setItemDateTextSize(10);// 设置 item 中 timeline 文字大小
-        conversationList.setItemAvatarRadius(150); // 设置 adapter item 头像圆角大小
-        conversationList.disableItemUnreadDot(false);// 设置 item 是否不显示未读红点，默认显示
-        // 通过API设置ConversataonLayout各种属性的样例，开发者可以打开注释，体验效果\
-//        ConversationLayoutHelper.customizeConversation(mConversationLayout);
+        this.conversationList = mConversationLayout.getConversationList();
 
-        conversationList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        // 通过API设置ConversataonLayout各种属性的样例，开发者可以打开注释，体验效果\
+        ConversationLayoutHelper.customizeConversation(mConversationLayout);
+        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_REGISTER_UNREAD, ""));
+        this.conversationList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
-                    getMessageList();
+                    //getMessageList();
                 }
             }
         });
@@ -129,12 +132,14 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
             @Override
             public void onNewConversation(List<V2TIMConversation> conversationList) {
                 ConversationManagerKit.getInstance().onRefreshConversation(conversationList);
+                //updateConversation(conversationList, false);
             }
 
             // 3.2 收到会话更新的回调
             @Override
             public void onConversationChanged(List<V2TIMConversation> conversationList) {
                 ConversationManagerKit.getInstance().onRefreshConversation(conversationList);
+                //updateConversation(conversationList, false);
             }
         });
 
@@ -175,7 +180,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     private long nextSeq = 0;
 
     private void getMessageList() {
-        V2TIMManager.getConversationManager().getConversationList(nextSeq, 100, new V2TIMSendCallback<V2TIMConversationResult>() {
+        V2TIMManager.getConversationManager().getConversationList(nextSeq, 1000, new V2TIMSendCallback<V2TIMConversationResult>() {
             @Override
             public void onProgress(int progress) {
 
@@ -188,24 +193,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
             @Override
             public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-                nextSeq = v2TIMConversationResult.getNextSeq();
                 // 拉取成功，更新 UI 会话列表
                 ConversationManagerKit.getInstance().onRefreshConversation(v2TIMConversationResult.getConversationList());
-                if (!v2TIMConversationResult.isFinished()) {
-                    V2TIMManager.getConversationManager().getConversationList(
-                            v2TIMConversationResult.getNextSeq(), 100,
-                            new V2TIMValueCallback<V2TIMConversationResult>() {
-                                @Override
-                                public void onError(int code, String desc) {
-                                }
-
-                                @Override
-                                public void onSuccess(V2TIMConversationResult v2TIMConversationResult) {
-                                    // 拉取成功，更新 UI 会话列表
-                                    ConversationManagerKit.getInstance().onRefreshConversation(v2TIMConversationResult.getConversationList());
-                                }
-                            });
-                }
             }
         });
     }
@@ -225,7 +214,17 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         List<PopMenuAction> conversationPopActions = new ArrayList<PopMenuAction>();
         PopMenuAction action = new PopMenuAction();
         action.setActionName(getResources().getString(R.string.chat_top));
-        action.setActionClickListener((position, data) -> mConversationLayout.setConversationTop(position, (ConversationInfo) data));
+        action.setActionClickListener((position, data) -> mConversationLayout.setConversationTop((ConversationInfo) data, new IUIKitCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                ToastUtil.toastLongMessage(module + ", Error code = " + errCode + ", desc = " + errMsg);
+            }
+        }));
         conversationPopActions.add(action);
         action = new PopMenuAction();
         action.setActionClickListener((position, data) -> mConversationLayout.deleteConversation(position, (ConversationInfo) data));
@@ -239,6 +238,12 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void onStart() {
         super.onStart();
         initView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //MessageNotification.getInstance().cancelNotification();
     }
 
     /**
@@ -302,6 +307,13 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         intent.putExtra(Constants.CHAT_INFO, chatInfo);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         BaseApplication.getInstance().startActivity(intent);
+
+        //打印指定页面路径
+        Intent intent2 = new Intent(getActivity(), ChatActivity.class);
+        intent2.setData(Uri.parse("pushscheme://com.tencent.qcloud/detail"));
+        intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        String intentUri = intent2.toUri(Intent.URI_INTENT_SCHEME);
+        Log.i("ConversationFragment", "intentUri = " + intentUri);
     }
 
     @Override

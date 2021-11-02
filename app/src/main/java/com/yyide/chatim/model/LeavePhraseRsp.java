@@ -2,9 +2,6 @@ package com.yyide.chatim.model;
 
 import java.util.List;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * @Description: 请假短语实体
  * @Author: liu tao
@@ -14,8 +11,7 @@ import lombok.NoArgsConstructor;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-@NoArgsConstructor
-@Data
+
 public class LeavePhraseRsp {
 
     private int code;
@@ -23,11 +19,71 @@ public class LeavePhraseRsp {
     private String msg;
     private List<DataBean> data;
 
-    @NoArgsConstructor
-    @Data
+    public LeavePhraseRsp() {
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public List<DataBean> getData() {
+        return data;
+    }
+
+    public void setData(List<DataBean> data) {
+        this.data = data;
+    }
+
     public static class DataBean {
         private String tag;
         private long id;
         private boolean checked;
+
+        public String getTag() {
+            return tag;
+        }
+
+        public void setTag(String tag) {
+            this.tag = tag;
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public boolean isChecked() {
+            return checked;
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+        }
+
+        public DataBean() {
+        }
     }
 }

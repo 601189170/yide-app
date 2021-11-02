@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F8FC">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingEnd="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_20"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_class_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:drawablePadding="@dimen/dp_4"
+            android:text="全校师生的周报"
+            android:textColor="#ff1e1e1e"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@mipmap/icon_down"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:background="@drawable/bg_conrners_white_12"
+            android:minWidth="@dimen/dp_50"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_class_name">
+
+            <TextView
+                android:id="@+id/tv_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_4"
+                android:drawablePadding="@dimen/dp_4"
+                android:textColor="#ff1e1e1e"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:drawableStartCompat="@mipmap/icon_weekly_left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvCenter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textColor="#ff1e1e1e"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_4"
+                android:drawablePadding="@dimen/dp_4"
+                android:textColor="#ff1e1e1e"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:drawableEndCompat="@mipmap/icon_weekly_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvCenter"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="118dp"
+            android:layout_marginTop="@dimen/dp_15"
+            android:background="@mipmap/icon_weekly_teacher_charge_bg"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_15"
+            app:layout_constraintTop_toBottomOf="@+id/tv_class_name">
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本周统计"
+                android:textColor="#ffffffff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（份）"
+                android:textColor="#B3ffffff"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_desc"
+                app:layout_constraintStart_toEndOf="@+id/tv_desc" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/workRecyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/dp_4"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+                app:spanCount="4"
+                tools:listitem="@layout/item_weekly_attendance" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RadioGroup
+        android:id="@+id/rg_time_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/bg_white_corner_14dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <RadioButton
+            android:id="@+id/rb_according_chart"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_weight="1"
+            android:background="@drawable/ask_for_leave_time_type_selector"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="@string/weekly_homework_chart"
+            android:textColor="@color/black_white_color2"
+            android:textSize="@dimen/text_13" />
+
+        <RadioButton
+            android:id="@+id/rb_according_data"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_weight="1"
+            android:background="@drawable/ask_for_leave_time_type_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/weekly_homework_data"
+            android:textColor="@color/black_white_color2"
+            android:textSize="@dimen/text_13" />
+    </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rg_time_type">
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

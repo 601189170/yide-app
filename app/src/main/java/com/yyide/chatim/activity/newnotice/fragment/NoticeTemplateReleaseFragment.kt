@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckedTextView
-import android.widget.ImageView
 import androidx.annotation.NonNull
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,7 +39,8 @@ import com.yyide.chatim.widget.itemDocoretion.ItemDecorationPowerful
  * Time 2021年6月24日
  * Author lrz
  */
-class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePresenter>(), NoticeReleasedTemplateView, SwipeRefreshLayout.OnRefreshListener {
+class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePresenter>(),
+    NoticeReleasedTemplateView, SwipeRefreshLayout.OnRefreshListener {
     private val TAG = NoticeTemplateReleaseFragment.javaClass.simpleName
     private var pushBinding: FragmentNoticePushBinding? = null
     private var pageNum = 1
@@ -48,8 +48,10 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
     private var checkPosition = 0
     private var messageTemplateTypeId: Long? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         pushBinding = FragmentNoticePushBinding.inflate(layoutInflater)
         return pushBinding!!.root
     }
@@ -71,10 +73,18 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
         //刷新
         pushBinding?.swipeRefreshLayout?.isRefreshing = false
         pushBinding?.swipeRefreshLayout?.setOnRefreshListener(this)
-        context?.resources?.getColor(R.color.colorAccent)?.let { pushBinding?.swipeRefreshLayout?.setColorSchemeColors(it) }
+        context?.resources?.getColor(R.color.colorAccent)
+            ?.let { pushBinding?.swipeRefreshLayout?.setColorSchemeColors(it) }
         //导航TAB 列表 模板发布
-        pushBinding?.tabList?.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        pushBinding?.tabList?.addItemDecoration(ItemDecorationPowerful(ItemDecorationPowerful.HORIZONTAL_DIV, Color.TRANSPARENT, SizeUtils.dp2px(5f)))
+        pushBinding?.tabList?.layoutManager =
+            LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        pushBinding?.tabList?.addItemDecoration(
+            ItemDecorationPowerful(
+                ItemDecorationPowerful.HORIZONTAL_DIV,
+                Color.TRANSPARENT,
+                SizeUtils.dp2px(5f)
+            )
+        )
         pushBinding?.tabList?.adapter = tabAdapter
         tabAdapter.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
             checkPosition = position
@@ -87,12 +97,19 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
 
         val divider: Int = SizeUtils.dp2px(6f)
         //通知模板数据列表
-        pushBinding?.list?.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        pushBinding?.list?.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         //manager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         val gridItemDecoration = object : RecyclerView.ItemDecoration() {
             @Override
-            override fun getItemOffsets(@NonNull outRect: Rect, @NonNull view: View, parent: RecyclerView, @NonNull state: RecyclerView.State) {
-                val layoutParams: StaggeredGridLayoutManager.LayoutParams = view.layoutParams as StaggeredGridLayoutManager.LayoutParams
+            override fun getItemOffsets(
+                @NonNull outRect: Rect,
+                @NonNull view: View,
+                parent: RecyclerView,
+                @NonNull state: RecyclerView.State
+            ) {
+                val layoutParams: StaggeredGridLayoutManager.LayoutParams =
+                    view.layoutParams as StaggeredGridLayoutManager.LayoutParams
                 val spanIndex = layoutParams.spanIndex
                 val position = parent.getChildAdapterPosition(view)
                 outRect.bottom = divider;
@@ -146,8 +163,12 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
     /**
      * 末班发布页面分类
      */
-    private val tabAdapter = object : BaseQuickAdapter<NoticeReleaseTemplateBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_textview) {
-        override fun convert(holder: BaseViewHolder, item: NoticeReleaseTemplateBean.DataBean.RecordsBean) {
+    private val tabAdapter = object :
+        BaseQuickAdapter<NoticeReleaseTemplateBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_textview) {
+        override fun convert(
+            holder: BaseViewHolder,
+            item: NoticeReleaseTemplateBean.DataBean.RecordsBean
+        ) {
             val checkedTextView = holder.getView<CheckedTextView>(R.id.tv_checked_mark)
             checkedTextView.text = item.name
             if (checkPosition == holder.adapterPosition) {
@@ -160,21 +181,37 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
         }
     }
 
-    private val mAdapter = object : BaseQuickAdapter<NoticeReleaseTemplateBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_push), LoadMoreModule {
-        override fun convert(holder: BaseViewHolder, itemBean: NoticeReleaseTemplateBean.DataBean.RecordsBean) {
+    private val mAdapter = object :
+        BaseQuickAdapter<NoticeReleaseTemplateBean.DataBean.RecordsBean, BaseViewHolder>(R.layout.item_notice_push),
+        LoadMoreModule {
+        override fun convert(
+            holder: BaseViewHolder,
+            itemBean: NoticeReleaseTemplateBean.DataBean.RecordsBean
+        ) {
             val pushBinding = ItemNoticePushBinding.bind(holder.itemView)
             pushBinding.tvNoticeTitle.text = itemBean.name
-            if (holder.adapterPosition == 0) {//空白模板
+            if (holder.adapterPosition == 0) {//1空白模板
                 pushBinding.ivNoticeBlank.visibility = View.VISIBLE
                 pushBinding.ivNoticeImg.visibility = View.GONE
-                pushBinding.ivNoticeBlank.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, SizeUtils.dp2px(140f))
+                pushBinding.ivNoticeBlank.layoutParams = ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    SizeUtils.dp2px(140f)
+                )
                 pushBinding.ivNoticeBlank.setImageResource(R.mipmap.icon_notice_add)
-            } else {//1非空白模板
+            } else {//2非空白模板
                 pushBinding.ivNoticeBlank.visibility = View.GONE
                 pushBinding.ivNoticeImg.visibility = View.VISIBLE
                 val height: Double = (ScreenUtils.getScreenHeight() * 0.4)
-                pushBinding.ivNoticeImg.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, height.toInt())
-                GlideUtil.loadImageRadius(context, itemBean.imgpath, pushBinding.ivNoticeImg, SizeUtils.dp2px(2f))
+                pushBinding.ivNoticeImg.layoutParams = ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    height.toInt()
+                )
+                GlideUtil.loadImageRadius(
+                    context,
+                    itemBean.imgpath,
+                    pushBinding.ivNoticeImg,
+                    SizeUtils.dp2px(2f)
+                )
             }
         }
     }
@@ -225,7 +262,12 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
 
     private fun addItem() {
         val item = NoticeReleaseTemplateBean.DataBean.RecordsBean()
-        item.type = 0
+        item.type = 1
+        mAdapter.data.forEachIndexed { index, recordsBean ->
+            if (recordsBean.type == 1) {
+                mAdapter.removeAt(index)
+            }
+        }
         if (mAdapter.itemCount <= 0) {
             mAdapter.addData(item)
         } else {

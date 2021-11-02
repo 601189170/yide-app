@@ -1,20 +1,16 @@
 package com.yyide.chatim.adapter.leave;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.AskForLeaveRecordRsp;
 import com.yyide.chatim.model.LeaveListRsp;
-import com.yyide.chatim.model.NoticeAnnouncementModel;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.FootView;
 
@@ -150,7 +146,7 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_title)
         TextView tv_title;
 
-        @BindView(R.id.tv_time)
+        @BindView(R.id.tv_time_start)
         TextView tv_time;
 
         @BindView(R.id.tv_status)

@@ -42,10 +42,10 @@
         android:visibility="visible"
         />
     <TextView
-        android:id="@+id/tv_time"
+        android:id="@+id/tv_time_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="09:25"
+        android:text=""
         android:textColor="#ff333333"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent"
@@ -54,14 +54,14 @@
         android:layout_marginEnd="54dp"
         />
     <TextView
-        android:id="@+id/tv_date"
+        android:id="@+id/tv_date_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="03.06"
+        android:text=""
         android:textColor="#ff999999"
         android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="@id/tv_time"
-        app:layout_constraintTop_toBottomOf="@id/tv_time"/>
+        app:layout_constraintLeft_toLeftOf="@id/tv_time_start"
+        app:layout_constraintTop_toBottomOf="@id/tv_time_start"/>
     <ImageView
         android:id="@+id/iv_user_head"
         android:layout_width="30dp"
@@ -76,7 +76,7 @@
         android:id="@+id/tv_flow_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="发起申请"
+        android:text="@string/launch_application"
         android:textColor="#ff333333"
         android:textSize="14sp"
         app:layout_constraintLeft_toRightOf="@id/iv_user_head"

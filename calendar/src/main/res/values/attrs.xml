@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="WeekBarView">
+        <attr name="week_text_color" format="color"/>
+        <attr name="week_text_size" format="dimension"/>
+        <attr name="week_start_with_sunday" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="MonthCalendarView">
+        <attr name="month_selected_text_color" format="color"/>
+        <attr name="month_selected_circle_color" format="color"/>
+        <attr name="month_selected_circle_today_color" format="color"/>
+        <attr name="month_normal_text_color" format="color"/>
+        <attr name="month_today_text_color" format="color"/>
+        <attr name="month_lunar_text_color" format="color"/>
+        <attr name="month_hint_circle_color" format="color"/>
+        <attr name="month_holiday_color" format="color"/>
+        <attr name="month_last_or_next_month_text_color" format="color"/>
+        <attr name="month_day_text_size" format="integer"/>
+        <attr name="month_day_lunar_text_size" format="integer"/>
+        <attr name="month_show_task_hint" format="boolean"/>
+        <attr name="month_show_lunar" format="boolean"/>
+        <attr name="month_show_holiday_hint" format="boolean"/>
+        <attr name="month_count" format="integer"/>
+        <attr name="month_week_start_with_sunday" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="WeekCalendarView">
+        <attr name="week_selected_text_color" format="color"/>
+        <attr name="week_selected_circle_color" format="color"/>
+        <attr name="week_selected_circle_today_color" format="color"/>
+        <attr name="week_normal_text_color" format="color"/>
+        <attr name="week_today_text_color" format="color"/>
+        <attr name="week_hint_circle_color" format="color"/>
+        <attr name="week_holiday_color" format="color"/>
+        <attr name="week_lunar_text_color" format="color"/>
+        <attr name="week_day_text_size" format="integer"/>
+        <attr name="week_day_lunar_text_size" format="integer"/>
+        <attr name="week_show_task_hint" format="boolean"/>
+        <attr name="week_show_lunar" format="boolean"/>
+        <attr name="week_show_holiday_hint" format="boolean"/>
+        <attr name="week_count" format="integer"/>
+        <attr name="week_calendar_start_with_sunday" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="ScheduleLayout">
+        <attr name="default_view">
+            <enum name="month" value="0"/>
+            <enum name="week" value="1"/>
+        </attr>
+        <attr name="auto_change_month_row" format="boolean"/>
+        <attr name="schedule_list_start_with_sunday" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="CalendarComposeLayout">
+        <attr name="default_calendar_view">
+            <enum name="month" value="0"/>
+            <enum name="week" value="1"/>
+        </attr>
+        <attr name="schedule_auto_change_month_row" format="boolean"/>
+        <attr name="schedule_calendar_list_start_with_sunday" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="WeekView">
+        <attr name="firstDayOfWeek" format="enum">
+            <enum name="sunday" value="1"/>
+            <enum name="monday" value="2"/>
+            <enum name="tuesday" value="3"/>
+            <enum name="wednesday" value="4"/>
+            <enum name="thursday" value="5"/>
+            <enum name="friday" value="6"/>
+            <enum name="saturday" value="7"/>
+        </attr>
+        <attr name="hourHeight" format="dimension"/>
+        <attr name="minHourHeight" format="dimension"/>
+        <attr name="maxHourHeight" format="dimension"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="eventTextSize" format="dimension"/>
+        <attr name="headerColumnPadding" format="dimension"/>
+        <attr name="headerRowPadding" format="dimension"/>
+        <attr name="columnGap" format="dimension"/>
+        <attr name="headerColumnTextColor" format="color"/>
+        <attr name="noOfVisibleDays" format="integer"/>
+        <attr name="showFirstDayOfWeekFirst" format="boolean"/>
+        <attr name="headerRowBackgroundColor" format="color"/>
+        <attr name="dayBackgroundColor" format="color"/>
+        <attr name="hourSeparatorColor" format="color"/>
+        <attr name="todayBackgroundColor" format="color"/>
+        <attr name="todayHeaderTextColor" format="color"/>
+        <attr name="hourSeparatorHeight" format="dimension"/>
+        <attr name="eventTextColor" format="color"/>
+        <attr name="eventPadding" format="dimension"/>
+        <attr name="headerColumnBackground" format="color"/>
+        <attr name="dayNameLength" format="enum">
+            <enum name="length_short" value="1"/>
+            <enum name="length_long" value="2"/>
+        </attr>
+        <attr name="overlappingEventGap" format="dimension"/>
+        <attr name="eventMarginVertical" format="dimension"/>
+        <attr name="xScrollingSpeed" format="float"/>
+        <attr name="eventCornerRadius" format="dimension"/>
+        <attr name="showDistinctPastFutureColor" format="boolean"/>
+        <attr name="showDistinctWeekendColor" format="boolean"/>
+        <attr name="futureBackgroundColor" format="color"/>
+        <attr name="pastBackgroundColor" format="color"/>
+        <attr name="futureWeekendBackgroundColor" format="color"/>
+        <attr name="pastWeekendBackgroundColor" format="color"/>
+        <attr name="showNowLine" format="boolean"/>
+        <attr name="nowLineColor" format="color"/>
+        <attr name="nowLineThickness" format="dimension"/>
+        <attr name="horizontalFlingEnabled" format="boolean"/>
+        <attr name="verticalFlingEnabled" format="boolean"/>
+        <attr name="allDayEventHeight" format="dimension"/>
+        <attr name="scrollDuration" format="integer"/>
+    </declare-styleable>
+</resources>

@@ -2,117 +2,60 @@ package com.yyide.chatim.model;
 
 public class GetAppVersionResponse {
 
-    /**
-     * version : 0.0.2
-     * updateContent : 1.回归正式版本
-     * updateAddress : www.360.cn
-     * isEnforcement : 0
-     * id : 2
-     * updateTime : 1557283795896
-     * createTime :
-     * createBy :
-     * updateBy :
-     * page :
-     * isDelete : 0
-     */
+    private int code;
+    private Boolean success;
+    private String msg;
+    private DataBean data;
 
-    private String version;
-    private String updateContent;
-    private String updateAddress;
-    private String isEnforcement;
-    private long id;
-    private String updateTime;
-    private String createTime;
-    private String createBy;
-    private String updateBy;
-    private String page;
-    private String isDelete;
-
-    public String getVersion() {
-        return version;
+    public int getCode() {
+        return code;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getUpdateContent() {
-        return updateContent;
+    public Boolean getSuccess() {
+        return success;
     }
 
-    public void setUpdateContent(String updateContent) {
-        this.updateContent = updateContent;
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 
-    public String getUpdateAddress() {
-        return updateAddress;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setUpdateAddress(String updateAddress) {
-        this.updateAddress = updateAddress;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public String getIsEnforcement() {
-        return isEnforcement;
+    public DataBean getData() {
+        return data;
     }
 
-    public void setIsEnforcement(String isEnforcement) {
-        this.isEnforcement = isEnforcement;
+    public void setData(DataBean data) {
+        this.data = data;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
-    }
-
-    public String getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete;
+    public static class DataBean {
+        public String id;
+        public String delInd;
+        public String createdBy;
+        public String createdDateTime;
+        public String updatedBy;
+        public String updatedDateTime;
+        public String versionStamp;
+        public int total;
+        public int size;
+        public int current;
+        public String versionCode;
+        public String versionName;
+        public String versionDesc;
+        public String filePath;
+        public String appName;
+        public int isCompulsory;//1 强制更新 不关闭弹窗
+        public String terminal;
     }
 }

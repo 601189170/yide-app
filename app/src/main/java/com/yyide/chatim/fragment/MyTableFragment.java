@@ -8,12 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PreparesLessonActivity;
@@ -38,12 +43,13 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implements MyTableView {
 
     @BindView(R.id.listview)
-    ListView listview;
+    RecyclerView listview;
     @BindView(R.id.grid)
     GridView grid;
     @BindView(R.id.classlayout)
@@ -52,6 +58,8 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     TextView className;
     @BindView(R.id.tv_week)
     TextView tv_week;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private View mBaseView;
 
     MyTableAdapter adapter;
@@ -61,20 +69,31 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         mBaseView = inflater.inflate(R.layout.layout_mytable_fragmnet, container, false);
         return mBaseView;
+    }
+
+    @OnClick(R.id.tv_week)
+    public void send() {
+        //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        EventBus.getDefault().register(this);
-        adapter = new MyTableAdapter();
+
+        adapter = new MyTableAdapter(R.layout.mytable_item);
+        listview.setLayoutManager(new LinearLayoutManager(getContext()));
         listview.setAdapter(adapter);
-//        List<SelectSchByTeaidRsp.DataBean> list=new ArrayList<>();
+        adapter.setEmptyView(R.layout.empty);
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-        tv_week.setText(TimeUtil.getWeek() + "周");
+        if(SpData.getIdentityInfo().weekNum <= 0){
+            tv_week.setText("");
+        } else {
+            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
+        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
         Date date = new Date(System.currentTimeMillis());
         for (int i = 0; i < timeAdapter.list.size(); i++) {
@@ -87,18 +106,22 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         grid.setOnItemClickListener((parent, view12, position, id) -> {
             timeAdapter.setPosition(position);
             weekDay = position + 1;
-            adapter.notifyData(getTableList(list, position + 1));
+            adapter.setList(getTableList(list, position + 1));
         });
-        listview.setOnItemClickListener((parent, view1, position, id) -> {
+
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
             //处理学生无法点击查看备课
             if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-                SelectSchByTeaidRsp.DataBean item = adapter.getItem(position);
+                SelectSchByTeaidRsp.DataBean item = (SelectSchByTeaidRsp.DataBean) adapter.getItem(position);
                 Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
                 intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
                 intent.putExtra("dataBean", item);
                 startActivity(intent);
             }
         });
+        mSwipeRefreshLayout.setOnRefreshListener(this::getData);
+        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+
         classlayout.setVisibility(View.GONE);
         getData();
     }
@@ -145,15 +168,17 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @Override
     public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaid: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2 && rsp.data != null) {
             list = rsp.data;
-            adapter.notifyData(getTableList(rsp.data, weekDay));
+            adapter.setList(getTableList(list, weekDay));
         }
     }
 
     @Override
     public void SelectSchByTeaidFail(String msg) {
+        mSwipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaidFail: " + JSON.toJSONString(msg));
     }
 }

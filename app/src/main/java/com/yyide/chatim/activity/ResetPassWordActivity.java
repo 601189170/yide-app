@@ -23,8 +23,6 @@ import butterknife.OnClick;
 
 public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresenter> implements ResetPasswordView {
 
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.phone)

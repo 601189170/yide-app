@@ -2,7 +2,6 @@ package com.yyide.chatim.activity.attendance;
 
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -33,6 +32,7 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
         AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item = itemParent.getData();
         TextView tvTime = holder.getView(R.id.tv_student_time);
         TextView tvStatus = holder.getView(R.id.tv_status);
+        TextView tvName = holder.getView(R.id.tv_student_name);
         ConstraintLayout constraintLayout = holder.getView(R.id.cl_bg);
         holder.setText(R.id.tv_student_time, "");
         holder.setText(R.id.tv_student_event, "");
@@ -42,7 +42,7 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
             if (!TextUtils.isEmpty(item.getStatus())) {
                 String node = item.getSection() != 0 ? "\t 第" + TimeUtil.numberToChinese(item.getSection()) + "节\t " + item.getSubjectName() : "\t 早读\t " + item.getSubjectName();
-                holder.setText(R.id.tv_student_name, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "MM-dd") + node);
+                holder.setText(R.id.tv_student_name, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd") + node);
                 switch (item.getStatus()) {
                     case "0"://正常
 //                        tvStatus.setText(item.getStatusType());
@@ -74,7 +74,9 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
             }
         } else {
             constraintLayout.setBackgroundColor(getContext().getResources().getColor(R.color.white));
-            holder.setText(R.id.tv_student_name, !TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名");
+            tvName.setEms(8);
+            tvName.setLines(1);
+            tvName.setText(!TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名");
             holder.setText(R.id.tv_status, item.specialPeople != null ? item.specialPeople.size() + "节" : "0节");
         }
         if (!itemParent.isLeaf()) {
@@ -92,6 +94,6 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
 
     @Override
     protected int getTreeNodeMargin() {
-        return DpUtil.dip2px(getContext(), 20);
+        return DpUtil.dip2px(getContext(), 0);
     }
 }

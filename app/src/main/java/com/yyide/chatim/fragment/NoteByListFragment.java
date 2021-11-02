@@ -203,8 +203,8 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         super.hideLoading();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//    }
 }

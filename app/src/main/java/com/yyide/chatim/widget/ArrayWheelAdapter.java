@@ -44,7 +44,7 @@ public class ArrayWheelAdapter<T> implements WheelAdapter {
     @Override
     public Object getItem(int index) {
         if (index >= 0 && index < items.size()) {
-            return TextUtils.isEmpty(items.get(index).getAlias()) ? items.get(index).getName() : items.get(index).getAlias();
+            return items.get(index).getShowName();
         }
         return "";
     }

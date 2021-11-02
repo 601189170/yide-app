@@ -21,9 +21,11 @@
             android:id="@+id/layout1"
             android:layout_width="match_parent"
             android:layout_height="86dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tv_head_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -38,12 +40,12 @@
                 android:layout_height="50dp"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginEnd="38dp"
-                android:src="@drawable/default_head"
                 android:scaleType="centerCrop"
+                android:src="@drawable/default_head"
                 app:left_bottom_radius="6dp"
+                app:left_top_radius="6dp"
                 app:right_bottom_radius="6dp"
-                app:right_top_radius="6dp"
-                app:left_top_radius="6dp" />
+                app:right_top_radius="6dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -64,8 +66,8 @@
             android:id="@+id/layout2"
             android:layout_width="match_parent"
             android:layout_height="49dp"
-            android:visibility="visible"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -131,9 +133,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:visibility="invisible"
                 android:layout_marginRight="20dp"
-                android:src="@drawable/icon_right" />
+                android:src="@drawable/icon_right"
+                android:visibility="invisible" />
 
         </FrameLayout>
 
@@ -173,13 +175,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:visibility="invisible"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/icon_right" />
+                android:src="@drawable/icon_right"
+                android:visibility="invisible" />
 
         </FrameLayout>
 
         <View
+            android:id="@+id/email_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="20dp"
@@ -197,6 +200,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="21dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="邮箱"
                 android:textColor="#212121"
                 android:textSize="15sp" />
@@ -225,7 +229,8 @@
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:layout_marginTop="10dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -251,6 +256,46 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginEnd="20dp"
+                android:src="@drawable/icon_right" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_patriarch"
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@color/white"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="21dp"
+                android:text="家长头像"
+                android:textColor="#212121"
+                android:textSize="15sp" />
+
+            <com.yyide.chatim.widget.RadiusImageView
+                android:id="@+id/patriarchImg"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginEnd="38dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_head"
+                app:left_bottom_radius="6dp"
+                app:left_top_radius="6dp"
+                app:right_bottom_radius="6dp"
+                app:right_top_radius="6dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
                 android:src="@drawable/icon_right" />
 
         </FrameLayout>

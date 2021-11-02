@@ -3,8 +3,10 @@ package com.yyide.chatim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,6 +14,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.UserNoticeListAdapter;
 import com.yyide.chatim.base.BaseActivity;
@@ -45,8 +48,6 @@ import butterknife.OnClick;
 
 public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> implements UserNoticeView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MessageNoticeActivity";
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.recyclerview)
@@ -94,10 +95,9 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
         userNoticeListAdapter.setOnItemOnClickListener(position -> {
             final UserMsgNoticeRsp.DataBean.RecordsBean recordsBean = list.get(position);
             Log.e(TAG, "initAdapter: " + recordsBean.toString());
-            if (recordsBean != null && "0".equals(recordsBean.getStatus())) {
+            if ("0".equals(recordsBean.getStatus())) {
                 mvpPresenter.updateMyNoticeDetails(recordsBean.getSignId());
-            }
-            if ("2".equals(recordsBean.getIsText())) {
+            } else if ("2".equals(recordsBean.getIsText())) {
                 //不是纯文本，需要跳转详情
                 switch (recordsBean.getAttributeType()) {
                     case "1":
@@ -113,7 +113,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                     default:
                         break;
                 }
-            } else if("1".equals(recordsBean.getIsText())){
+            } else if ("1".equals(recordsBean.getIsText())) {
                 if ("3".equals(recordsBean.getAttributeType())) {
                     //跳转人脸采集
                     startActivity(new Intent(this, FaceCaptureActivity.class));

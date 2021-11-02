@@ -244,18 +244,18 @@ public class StudentHonorRsp {
             }
 
             public static class WorkCommentVosBean {
-                private int id;
-                private Object commentName;
+                private long id;
+                private String commentName;
                 private String comment;
                 private String createdDateTime;
                 private String createdBy;
-                private Object userImg;
+                private String userImg;
 
-                public int getId() {
+                public long getId() {
                     return id;
                 }
 
-                public void setId(int id) {
+                public void setId(long id) {
                     this.id = id;
                 }
 
@@ -263,7 +263,7 @@ public class StudentHonorRsp {
                     return commentName;
                 }
 
-                public void setCommentName(Object commentName) {
+                public void setCommentName(String commentName) {
                     this.commentName = commentName;
                 }
 
@@ -291,11 +291,11 @@ public class StudentHonorRsp {
                     this.createdBy = createdBy;
                 }
 
-                public Object getUserImg() {
+                public String getUserImg() {
                     return userImg;
                 }
 
-                public void setUserImg(Object userImg) {
+                public void setUserImg(String userImg) {
                     this.userImg = userImg;
                 }
             }

@@ -97,11 +97,7 @@ public class TodoMsgFragment extends BaseFragment {
 
             }
         });
-        if (type > 0) {
-            setTab(type);
-        } else {
-            setTab(0);
-        }
+        setTab(type);
     }
 
     @Override
@@ -111,9 +107,7 @@ public class TodoMsgFragment extends BaseFragment {
         if (!hidden) {
             type = getArguments().getInt("type", 0);
             Log.e(TAG, "onHiddenChanged: " + type);
-            if (type != 0) {
-                setTab(type);
-            }
+            setTab(type);
         }
     }
 

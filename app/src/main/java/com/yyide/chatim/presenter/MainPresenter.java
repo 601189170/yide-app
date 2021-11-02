@@ -1,19 +1,29 @@
 package com.yyide.chatim.presenter;
 
 
+import android.text.TextUtils;
+
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.model.GetAppVersionResponse;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SelectUserRsp;
+import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.WeeklyDateBean;
+import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MainView;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
@@ -26,17 +36,57 @@ public class MainPresenter extends BasePresenter<MainView> {
         attachView(view);
     }
 
-    public void getselectUser() {
-        mvpView.showLoading();
-        addSubscription(dingApiStores.getSelectUser(), new ApiCallback<SelectUserRsp>() {
+    public void getVersionInfo() {
+        Map<String, String> map = new HashMap<>();
+        map.put("terminal", "2");//terminal【0：全部，1：IOS，2：Android，3：WEB，4：班牌】
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        addSubscription(dingApiStores.updateVersion(body), new ApiCallback<GetAppVersionResponse>() {
             @Override
-            public void onSuccess(SelectUserRsp model) {
-                mvpView.getData(model);
+            public void onSuccess(GetAppVersionResponse model) {
+                mvpView.getVersionInfo(model);
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getDataFail(msg);
+                mvpView.fail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void copywriter() {
+        addSubscription(dingApiStores.copywriter(), new ApiCallback<WeeklyDescBean>() {
+            @Override
+            public void onSuccess(WeeklyDescBean model) {
+                mvpView.getCopywriter(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.fail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void getWeeklyDate() {
+        addSubscription(dingApiStores.getWeeklyDate(), new ApiCallback<WeeklyDateBean>() {
+            @Override
+            public void onSuccess(WeeklyDateBean model) {
+                mvpView.getWeeklyDate(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.fail(msg);
             }
 
             @Override
@@ -57,7 +107,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.UserLogoutDataFail(msg);
+                mvpView.fail(msg);
             }
 
             @Override
@@ -98,7 +148,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
             @Override
             public void onFailure(String msg) {
-                mvpView.listAllScheduleByTeacherIdDataFail(msg);
+                mvpView.fail(msg);
             }
 
             @Override
@@ -115,22 +165,22 @@ public class MainPresenter extends BasePresenter<MainView> {
         map.put("alias", alias);
         map.put("equipmentType", equipmentType);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
-        addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<ResultBean>() {
-            @Override
-            public void onSuccess(ResultBean model) {
-                mvpView.addUserEquipmentInfo(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.addUserEquipmentInfoFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
+//        addSubscription(dingApiStores.addUserEquipmentInfo(body), new ApiCallback<ResultBean>() {
+//            @Override
+//            public void onSuccess(ResultBean model) {
+//                mvpView.addUserEquipmentInfo(model);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                mvpView.fail(msg);
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                mvpView.hideLoading();
+//            }
+//        });
     }
 
 

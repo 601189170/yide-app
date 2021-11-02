@@ -11,7 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <include
+        android:id="@+id/empty"
+        layout="@layout/empty"
+        android:visibility="gone"/>
+
     <ScrollView
+        android:id="@+id/svContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

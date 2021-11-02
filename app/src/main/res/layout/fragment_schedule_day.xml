@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.schedule.ScheduleDayFragment">
+    <TextView
+        android:id="@+id/tv_tag_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择标签"
+        android:textColor="#ff1e1e1e"
+        android:textSize="15sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:drawableEnd="@drawable/more_tag_icon"
+        android:drawablePadding="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_20"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_label_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:minHeight="@dimen/dp_24"
+        app:layout_constraintHeight_min="@dimen/dp_24"
+        tools:listitem="@layout/item_day_schedule_label_list"/>
+    <include
+        android:id="@+id/top_calendar"
+        layout="@layout/layout_schedule_with_calendar"
+        app:layout_constraintTop_toBottomOf="@id/rv_label_list"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginBottom="100dp"
+        android:src="@drawable/add_schedule_bottom_big_icon"
+        app:backgroundTint="#2C8AFF"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="@dimen/dp_56"
+        app:pressedTranslationZ="@dimen/dp_12"
+        app:rippleColor="#e7d16b"
+        android:contentDescription="add schedule" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

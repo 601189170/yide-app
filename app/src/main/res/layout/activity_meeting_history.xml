@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.meeting.MeetingHistoryActivity">
+
+<!--    <include-->
+<!--        android:id="@+id/top"-->
+<!--        layout="@layout/title_layout2"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <LinearLayout
+        android:id="@+id/ll_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_10"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_35"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_weight="1"
+            android:background="@drawable/border_1dp_radius_18"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/search" />
+
+            <EditText
+                android:id="@+id/edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="搜索"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:textColor="@color/text_333333"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:id="@+id/iv_del"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:paddingStart="@dimen/dp_20"
+                android:src="@drawable/icon_delete_search" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_20"
+            android:text="取消"
+            android:textColor="#2C8AFF"
+            android:textSize="@dimen/text_16"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#F7F9FA"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/ll_search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_line"
+        tools:itemCount="6"
+        tools:listitem="@layout/item_meeting_home" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

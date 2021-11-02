@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/schedule_list_item_bg_shape"
+    android:paddingStart="@dimen/dp_10"
+    android:paddingEnd="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_14"
+    android:paddingBottom="@dimen/dp_14">
+
+    <ImageView
+        android:id="@+id/iv_finish_tag"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        android:src="@drawable/checkbox_unfinished_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
+        app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"/>
+
+    <ImageView
+        android:id="@+id/iv_schedule_type_img"
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_20"
+        app:layout_constraintLeft_toRightOf="@id/iv_finish_tag"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/default_user_icon"
+        android:layout_marginStart="@dimen/dp_10"
+        />
+    <com.yyide.chatim.widget.StrikeThruTextView
+        android:id="@+id/tv_schedule_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开学典礼"
+        android:textColor="#ff999999"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:maxEms="14"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"
+        app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
+        app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"
+        android:layout_marginStart="@dimen/dp_8"
+        />
+
+    <TextView
+        android:id="@+id/tv_schedule_time_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="08:00-09:00"
+        android:textColor="#ff666666"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@id/iv_schedule_type_img"
+        app:layout_constraintTop_toBottomOf="@id/iv_schedule_type_img"
+        android:layout_marginTop="@dimen/dp_10"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

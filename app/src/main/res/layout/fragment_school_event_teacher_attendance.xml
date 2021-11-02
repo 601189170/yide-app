@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:elevation="0dp">
@@ -59,13 +60,13 @@
                         app:layout_constraintTop_toTopOf="@+id/tv_event_name" />
 
                     <TextView
-                        android:id="@+id/textview1"
+                        android:id="@+id/tv_attendance_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="6dp"
                         android:drawableStart="@mipmap/icon_att_sign"
                         android:drawablePadding="@dimen/dp_4"
-                        android:text="签到率:"
+                        android:text="出勤率:"
                         android:textColor="#ffffffff"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toTopOf="@+id/progress"
@@ -81,9 +82,9 @@
                         android:text="0"
                         android:textColor="#ffffde00"
                         android:textSize="24sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textview1"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_attendance_desc"
                         app:layout_constraintEnd_toStartOf="@+id/textView12"
-                        app:layout_constraintTop_toTopOf="@+id/textview1" />
+                        app:layout_constraintTop_toTopOf="@+id/tv_attendance_desc" />
 
                     <TextView
                         android:id="@+id/textView12"
@@ -109,7 +110,7 @@
                         android:id="@+id/tv_absenteeism_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginStart="@dimen/dp_15"
                         android:layout_marginTop="@dimen/dp_16"
                         android:gravity="center"
                         android:text="0"

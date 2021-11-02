@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.appbar.AppBarLayout;
@@ -76,12 +77,14 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     private List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean> leaveEarlyPeople = new ArrayList<>();
     private String currentDate;//当前选择的日期
     private String currentClass;//当前班级
-
+    private String currentStudentId;//当前学生id
+    private int dialogType;
     private boolean identity;//确定是教师还是学生 true是学生  false 是老师
     private boolean eventType;//确实是否是课程考勤 true 事件考勤 false 课程考勤
     private String beginDate;
     private boolean refresh;
     private boolean first = true;
+    private String historyEvent;//上一次选择的事件
     public WeekStatisticsFragment(String type) {
         // Required empty public constructor
         this.type = type;
@@ -117,7 +120,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         Log.e(TAG, "onResume: isWeekStatistics:"+isWeekStatistics +",first:"+first);
         if (first && !isWeekStatistics) {
             first = false;
-            queryAttStatsData(currentClass, currentDate, currentPage);
+            //queryAttStatsData(currentClass, currentDate, currentPage);
         }
     }
 
@@ -180,7 +183,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    //@RequiresApi(api = Build.VERSION_CODES.O)
     private void setWeek(boolean init) {
         Log.e(TAG, "currentWeek"+currentWeek+"week："+week );
         if (!init){
@@ -249,39 +252,61 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         if (page<1){
             page = 1;
         }
-        mvpPresenter.getAttendanceStatsData(classId, searchTime, isWeekStatistics ? "2" : "3",page);
+        mvpPresenter.getAttendanceStatsData(currentStudentId,classId, searchTime, isWeekStatistics ? "2" : "3",page);
     }
 
     private void initClassData() {
-        if (!SpData.getIdentityInfo().staffIdentity()){
-            final String studentName = SpData.getIdentityInfo().studentName;
-            mViewBinding.tvClassName.setText(studentName);
-            return;
+//        if (!SpData.getIdentityInfo().staffIdentity()){
+//            final String studentName = SpData.getIdentityInfo().studentName;
+//            mViewBinding.tvClassName.setText(studentName);
+//            return;
+//        }
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            dialogType = 2;
+        } else {
+            dialogType = 4;
         }
+
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
         final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
+        final String classesStudentName = SpData.getClassesStudentName();
         for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
             final String classesName = formBean.classesName;
+            final String studentName = formBean.classesStudentName;
             final String classesId = formBean.classesId;
+            final String studentId = formBean.studentId;
             final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            dataBean.setDeptId(Long.parseLong(classesId));
-            dataBean.setDeptName(classesName);
-            dataBean.setIsDefault(Objects.equals(classInfo.classesId, classesId) ? 1 : 0);
+            dataBean.setDeptId(studentId);
+            dataBean.setClassId(classesId);
+            dataBean.setIsDefault(0);
+            if (SpData.getIdentityInfo().staffIdentity()) {
+                dataBean.setDeptName(classesName);
+                if (classesName.equals(classesStudentName)){
+                    dataBean.setIsDefault(1);
+                }
+            } else {
+                dataBean.setDeptName(studentName);
+                if (studentName.equals(classesStudentName)){
+                    dataBean.setIsDefault(1);
+                }
+            }
             classList.add(dataBean);
+        }
+        if (classList.isEmpty()) {
+            Log.e(TAG, "initClassData: 当前账号没有学生" );
+            mViewBinding.tvClassName.setVisibility(View.GONE);
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewBinding = FragmentWeekStatisticsBinding.bind(view);
         Log.e(TAG, "onViewCreated: "+type );
-        if ("周统计".equals(type)) {
+        if (getString(R.string.weekly_statistics).equals(type)) {
             isWeekStatistics = true;
-        } else {
-            first = false;
         }
         //确定当前用户身份
         identity = !SpData.getIdentityInfo().staffIdentity();
@@ -315,11 +340,11 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     private void initPeopleListView() {
         mViewBinding.clAttendanceType.setVisibility(View.VISIBLE);
         List<String> listTab = new ArrayList<>();
-        listTab.add("缺勤");
-        listTab.add("迟到");
-        listTab.add("请假");
+        listTab.add(getString(R.string.attendance_absence));
+        listTab.add(getString(R.string.attendance_late));
+        listTab.add(getString(R.string.ask_for_leave));
         if (eventType){
-            listTab.add("早退");
+            listTab.add(getString(R.string.attendance_leave_early));
         }
         mViewBinding.rbLeaveEarly.setVisibility(eventType?View.VISIBLE:View.GONE);
 
@@ -434,10 +459,11 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initClassView() {
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        if (SpData.getIdentityInfo().staffIdentity() && classOptional.isPresent()){
+        if (classOptional.isPresent()){
             final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
             mViewBinding.tvClassName.setText(clazzBean.getDeptName());
-            currentClass = "" + clazzBean.getDeptId();
+            currentClass = clazzBean.getClassId();
+            currentStudentId = clazzBean.getDeptId();
             if (classList.size() <= 1) {
                 mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
             } else {
@@ -446,11 +472,14 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
                 mViewBinding.tvClassName.setOnClickListener(v -> {
-                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 2, classList);
-                            deptSelectPop.setOnCheckedListener((id, dept) -> {
-                                Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
-                                mViewBinding.tvClassName.setText(dept);
-                                currentClass = "" + id;
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), dialogType, classList);
+                            deptSelectPop.setOnCheckedListener((dataBean) -> {
+                                Log.e(TAG, "班级选择: " +dataBean.toString());
+                                mViewBinding.tvClassName.setText(dataBean.getDeptName());
+                                //班级id
+                                currentClass = dataBean.getClassId();
+                                //学生id
+                                currentStudentId = dataBean.getDeptId();
                                 currentPage = 1;
                                 queryAttStatsData(currentClass, currentDate,1);
                             });
@@ -460,7 +489,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initEventView() {
         final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         final LeaveDeptRsp.DataBean dataBean = eventOptional.get();
@@ -477,6 +506,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
                 deptSelectPop.setOnCheckedListener((id, dept) -> {
                     Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
                     mViewBinding.tvAttendanceType.setText(dept);
+                    historyEvent = dept;
                     showData(dept);
                 });
             });
@@ -503,31 +533,58 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             mViewBinding.swipeRefreshLayout.setRefreshing(false);
         }
         if (attendanceWeekStatsRsp.getCode() == 200) {
-            if (attendanceWeekStatsRsp.getData() == null) {
-                showBlank(true);
+            if (attendanceWeekStatsRsp.getData() == null){
+                ToastUtils.showShort(""+attendanceWeekStatsRsp.getMsg());
+            }
+
+            if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getAttendancesForm() == null) {
+                showBlank(false);
+                showData(null);
                 return;
             }
             showBlank(false);
             final List<AttendanceWeekStatsRsp.DataBean.AttendancesFormBean> attendancesForm = attendanceWeekStatsRsp.getData().getAttendancesForm();
             eventList.clear();
             studentsBeanList.clear();
-            for (AttendanceWeekStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesForm) {
+            for (int i = 0; i < attendancesForm.size(); i++) {
+                final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = attendancesForm.get(i);
                 final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean students = attendancesFormBean.getStudents();
                 students.setIdentityType(attendancesFormBean.getIdentityType());
                 studentsBeanList.add(students);
                 //考勤时间类型
                 final String name = students.getName();
                 final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-                dataBean.setIsDefault(0);
+                if (name.equals(historyEvent) || (TextUtils.isEmpty(historyEvent) && i == 0)) {
+                    dataBean.setIsDefault(1);
+                } else {
+                    dataBean.setIsDefault(0);
+                }
                 dataBean.setDeptName(name);
-                dataBean.setDeptId(0);
+                dataBean.setDeptId("0");
                 eventList.add(dataBean);
             }
+//            for (AttendanceWeekStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesForm) {
+//                final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean students = attendancesFormBean.getStudents();
+//                students.setIdentityType(attendancesFormBean.getIdentityType());
+//                studentsBeanList.add(students);
+//                //考勤时间类型
+//                final String name = students.getName();
+//                final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+//                dataBean.setIsDefault(0);
+//                dataBean.setDeptName(name);
+//                dataBean.setDeptId("0");
+//                eventList.add(dataBean);
+//            }
             //设置事件
             if (eventList.size() != 0) {
+                final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+                if (!eventOptional.isPresent()){
+                    eventList.get(0).setIsDefault(1);
+                    historyEvent = eventList.get(0).getDeptName();
+                }
                 mViewBinding.tvAttendanceType.setVisibility(View.VISIBLE);
                 //默认选择第一个事件
-                eventList.get(0).setIsDefault(1);
+                //eventList.get(0).setIsDefault(1);
                 //初始化事件view
                 initEventView();
             } else {
@@ -536,7 +593,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
             //默认选择第一个事件的统计
             if (studentsBeanList.size() != 0) {
-                showData(studentsBeanList.get(0).getName());
+                showData(TextUtils.isEmpty(historyEvent)?studentsBeanList.get(0).getName():historyEvent);
             }else {
                 ToastUtils.showShort("未查询到数据");
                 showData(null);
@@ -544,12 +601,13 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         } else {
             ToastUtils.showShort("服务器异常："+attendanceWeekStatsRsp.getCode()+","+attendanceWeekStatsRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
-            showData(null);
+            //showData(null);
+            showBlank(true);
         }
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void showData(String eventName) {
         //每次更新数据默认选择缺勤rb
         mViewBinding.rgAttendanceType.check(R.id.rb_absence);
@@ -574,7 +632,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
         } else {
             setMonth(true);
         }
-
+        final int goOutStatus = studentsBean.getGoOutStatus();
         //通过identity eventType 判断显示布局
         if (identity && eventType) {
             //学生事件考勤
@@ -599,6 +657,7 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
 
 
             mViewBinding.layoutHeadStudentEvent.tvAttendanceRate.setText(rate);
+            setAttendanceRateTitle(goOutStatus,mViewBinding.layoutHeadStudentEvent.textview1);
             //缺勤人数
             mViewBinding.layoutHeadStudentEvent.tvAbsenceNum.setText(String.valueOf(studentsBean.getAbsence()));
             //请假人数
@@ -687,10 +746,10 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
             mViewBinding.layoutHeadTeacherEvent.getRoot().setVisibility(View.GONE);
             if (isWeekStatistics){
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatistical.setText(getString(R.string.weekly_statistical));
-                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText("周课程数量");
+                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText(R.string.weekly_course_count);
             }else {
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatistical.setText(getString(R.string.monthly_statistical));
-                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText("月课程数量");
+                mViewBinding.layoutHeadTeacherCourse.tvNumberOfCourse.setText(getString(R.string.monthly_course_count));
             }
             if (identity){
                 mViewBinding.layoutHeadTeacherCourse.tvWeeklyStatisticalSubhead.setText(getString(R.string.statistical_time));
@@ -780,5 +839,18 @@ public class WeekStatisticsFragment extends BaseMvpFragment<WeekStatisticsPresen
     public void onRefresh() {
         refresh = true;
         queryAttStatsData(currentClass, currentDate, currentPage);
+    }
+
+    /**
+     * 设置出勤rate的标题
+     * @param goOutStatus
+     * @param textView
+     */
+    private void setAttendanceRateTitle(int goOutStatus, TextView textView){
+        if (goOutStatus == 1){
+            textView.setText(R.string.attendance_sign_out_rate_colon);
+            return;
+        }
+        textView.setText(R.string.attendance_rate_colon);
     }
 }

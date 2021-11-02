@@ -24,7 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import lombok.val;
+
 
 public class AskForLeaveActivity extends BaseActivity {
     @BindView(R.id.title)

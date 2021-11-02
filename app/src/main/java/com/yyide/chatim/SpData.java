@@ -17,6 +17,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -26,13 +28,13 @@ import java.util.List;
 public class SpData {
 
     /*用户信息，登录返回，登录信息版本号*/
-    public static String LOGINDATA = "LOGINDATA";
-    public static String USERPHONE = "USERPHONE";
-    public static String SCHOOLINFO = "SCHOOLINFO";
-    public static String IDENTIY_INFO = "IDENTIY_INFO";
-    public static String USERSIG = "USERSIG";
-    public static String USERNAME = "USERNAME";
-    public static String CLASS_INFO = "CLASS_INFO";
+    public static final String LOGINDATA = "LOGINDATA_NEW";
+    public static final String USERPHONE = "USERPHONE";
+    public static final String SCHOOLINFO = "SCHOOLINFO";
+    public static final String IDENTIY_INFO = "IDENTIY_INFO";
+    public static final String USERSIG = "USERSIG";
+    public static final String USERNAME = "USERNAME";
+    public static final String CLASS_INFO = "CLASS_INFO";
 
     public static LoginRsp User() {
         return JSON.parseObject(SPUtils.getInstance().getString(LOGINDATA, ""), LoginRsp.class);
@@ -52,6 +54,42 @@ public class SpData {
 
     public static GetUserSchoolRsp.DataBean.FormBean getClassInfo() {
         return JSON.parseObject(SPUtils.getInstance().getString(CLASS_INFO, ""), GetUserSchoolRsp.DataBean.FormBean.class);
+    }
+
+    //去重
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> removeList(List<GetUserSchoolRsp.DataBean.FormBean> persons) {
+        Set<GetUserSchoolRsp.DataBean.FormBean> personSet = new TreeSet<>((o1, o2) -> o1.classesId.compareTo(o2.classesId));
+        personSet.addAll(persons);
+        return new ArrayList<>(personSet);
+    }
+
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getClassList() {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
+            return removeList(SpData.getIdentityInfo().form);
+        }
+        return new ArrayList<>();
+    }
+
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getDuplicationClassList() {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
+            return (ArrayList<GetUserSchoolRsp.DataBean.FormBean>) SpData.getIdentityInfo().form;
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * 获取用户信息选择的班级名或者班级学生名
+     *
+     * @return
+     */
+    public static String getClassesStudentName() {
+        if (getClassInfo() == null) {
+            return null;
+        }
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            return getClassInfo().classesName;
+        }
+        return getClassInfo().classesStudentName;
     }
 
     public static String UserSig() {
@@ -76,7 +114,7 @@ public class SpData {
                 GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
                 for (int i = 0; i < rsp.data.size(); i++) {
                     GetUserSchoolRsp.DataBean item = rsp.data.get(i);
-                    if (identityInfo != null && item.userId == identityInfo.userId) {
+                    if (identityInfo != null && item.userId.equals(identityInfo.userId)) {
                         SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(item));
                         setClassesData(item);
                         dataBean = item;
@@ -106,11 +144,24 @@ public class SpData {
      */
     public static void setClassesData(GetUserSchoolRsp.DataBean dataBean) {
         if (dataBean != null && dataBean.form != null && dataBean.form.size() > 0) {//保存班级信息
-            if (SpData.getClassInfo() != null) {//处理切换班级
+            GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+            if (classInfo != null) {//处理切换班级
                 GetUserSchoolRsp.DataBean.FormBean classBean = null;
                 for (GetUserSchoolRsp.DataBean.FormBean item : dataBean.form) {
-                    if (item.classesId.equals(SpData.getClassInfo().classesId)) {
-                        classBean = item;
+                    if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(dataBean.status)) {
+                        //家长默认选择班级
+                        if (!TextUtils.isEmpty(classInfo.classesStudentName)
+                                && classInfo.classesStudentName.equals(item.classesStudentName)) {
+                            classBean = item;
+                            break;
+                        }
+                    } else {
+                        //默认选择班级
+                        if (!TextUtils.isEmpty(SpData.getClassInfo().classesId)
+                                && SpData.getClassInfo().classesId.equals(item.classesId)) {
+                            classBean = item;
+                            break;
+                        }
                     }
                 }
                 SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classBean == null ? dataBean.form.get(0) : classBean));
@@ -119,6 +170,27 @@ public class SpData {
             }
         } else {//处理切换后没有班级的情况
             SPUtils.getInstance().remove(SpData.CLASS_INFO);
+        }
+    }
+
+    /**
+     * 更新本地缓存班级数据
+     *
+     * @param classesInfo
+     */
+    public static void setClassesInfo(GetUserSchoolRsp.DataBean.FormBean classesInfo) {
+        GetUserSchoolRsp.DataBean identityInfo = getIdentityInfo();
+        if (classesInfo != null && identityInfo != null && identityInfo.form != null) {
+            List<GetUserSchoolRsp.DataBean.FormBean> lists = new ArrayList<>();
+            for (GetUserSchoolRsp.DataBean.FormBean classesBean : identityInfo.form) {
+                if (!TextUtils.isEmpty(classesBean.classesStudentName) && classesBean.classesStudentName.equals(classesInfo.classesStudentName)) {
+                    classesBean = classesInfo;
+                }
+                lists.add(classesBean);
+            }
+            identityInfo.form.clear();
+            identityInfo.form.addAll(lists);
+            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(identityInfo));
         }
     }
 }

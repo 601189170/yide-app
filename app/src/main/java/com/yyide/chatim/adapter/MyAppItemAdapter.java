@@ -1,65 +1,39 @@
 package com.yyide.chatim.adapter;
 
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.MyAppListRsp;
 import com.yyide.chatim.utils.GlideUtil;
-import com.yyide.chatim.utils.VHUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2019/3/29.
  */
 
-public class MyAppItemAdapter extends BaseAdapter {
-    //   public List<String> list=new ArrayList<>();
-    public List<MyAppListRsp.DataBean> list = new ArrayList<>();
+public class MyAppItemAdapter extends BaseQuickAdapter<MyAppListRsp.DataBean, BaseViewHolder> {
 
-    @Override
-    public int getCount() {
-        return list != null ? list.size() : 0;
+    public MyAppItemAdapter() {
+        super(R.layout.icon_item);
     }
 
     @Override
-    public MyAppListRsp.DataBean getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
-        if (view == null)
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.icon_item, null, false);
-        ImageView item = VHUtil.ViewHolder.get(view, R.id.item);
-        TextView name = VHUtil.ViewHolder.get(view, R.id.name);
-        MyAppListRsp.DataBean dataBean = getItem(position);
-        if ("editor".equals(getItem(position).getAppType())) {
+    protected void convert(@NonNull BaseViewHolder viewHolder, MyAppListRsp.DataBean dataBea) {
+        ImageView item = viewHolder.getView(R.id.item);
+        TextView name = viewHolder.getView(R.id.name);
+        MyAppListRsp.DataBean dataBean = getItem(viewHolder.getAbsoluteAdapterPosition());
+        if ("editor".equals(getItem(viewHolder.getAbsoluteAdapterPosition()).getAppType())) {
             item.setImageResource(R.drawable.icon_bj);
         } else {
             if (!TextUtils.isEmpty(dataBean.getImg())) {
-                GlideUtil.loadCircleImage(view.getContext(), dataBean.getImg(), item);
+                GlideUtil.loadCircleImage(getContext(), dataBean.getImg(), item);
             }
         }
         name.setText(dataBean.getName());
-        return view;
     }
-
-    public void notifyData(List<MyAppListRsp.DataBean> list) {
-        this.list = list;
-        notifyDataSetChanged();
-    }
-
 }

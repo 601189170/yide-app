@@ -2,9 +2,16 @@
 <resources>
     <color name="colorPrimary">#2C8AFF</color>
     <color name="colorPrimaryDark">#2C8AFF</color>
-    <color name="colorAccent">#2C8AFF</color>
+    <color name="colorAccent">#2196F3</color>
 
-    <color name="theme_bg">#F7FAFC</color>
+    <!--Progress Button-->
+    <color name="cpb_red">#1FC1C3</color>
+    <color name="cpb_red_dark">#F66C6C</color>
+    <color name="cpb_green">#8F81FE</color>
+    <color name="cpb_green_dark">#2C8AFF</color>
+    <color name="cpb_white">@android:color/white</color>
+    <color name="charts_bg">#142C8AFF</color>
+    <color name="theme_bg">#00000000</color>
     <color name="gray">#D8D8D8</color>
     <color name="white">#FFFFFF</color>
     <color name="white10">#50FFFFFF</color>
@@ -103,4 +110,20 @@
     <color name="attendance_time_late">#F66C6C</color>
     <color name="attendance_time_late_early">#F66C6C</color>
     <color name="attendance_time_leave">#F6BD16</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
+
+    <color name="color_FFCCCCCC">#ffcccccc</color>
+    <color name="color_FF666666">#ff666666</color>
+
+    <color name="color_f3f3f3">#F3F3F3</color>
+
+    <color name="red_normal">#FF0000</color>
+    <color name="red_pressed">#FF6666</color>
+    <color name="blue_normal">#2C8AFF</color>
+    <color name="blue_pressed">#2C8AFF</color>
+    <color name="default_item_decoration_color">#EBEBEB</color>
 </resources>

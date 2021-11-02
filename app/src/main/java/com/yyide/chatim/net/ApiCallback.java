@@ -1,9 +1,10 @@
 package com.yyide.chatim.net;
 
 import android.text.TextUtils;
+
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.base.BaseCompositeDisposable;
 import com.yyide.chatim.utils.LogUtil;
+
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -20,8 +21,7 @@ public abstract class ApiCallback<M> implements Observer<M> {
     public abstract void onFailure(String msg);
 
     public abstract void onFinish();
-
-
+    
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
@@ -34,9 +34,10 @@ public abstract class ApiCallback<M> implements Observer<M> {
             if (code == 504) {
                 msg = "网络不给力";
             }
-            if (code == 502 || code == 404) {
+            if (code == 502 || code == 500 || code == 404) {
                 msg = "服务器异常，请稍后再试";
             }
+
         } else {
             msg = e.getMessage();
         }
@@ -51,7 +52,12 @@ public abstract class ApiCallback<M> implements Observer<M> {
 
     @Override
     public void onNext(M model) {
-        onSuccess(model);
+        try {
+            onSuccess(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            onFailure(e.getMessage());
+        }
     }
 
     @Override
@@ -61,7 +67,6 @@ public abstract class ApiCallback<M> implements Observer<M> {
 
     @Override
     public void onSubscribe(@NonNull Disposable d) {
-        //new BasePresenter().addSubscription(d);
-        BaseCompositeDisposable.instance().addSubscription(d);
+//        onDisposable(d);
     }
 }

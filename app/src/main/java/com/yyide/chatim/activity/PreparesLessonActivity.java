@@ -41,7 +41,7 @@ public class PreparesLessonActivity extends BaseMvpActivity<PreparesLessonPresen
     TextView tv_class_name;
     @BindView(R.id.tv_code)
     TextView tv_code;
-    @BindView(R.id.tv_time)
+    @BindView(R.id.tv_time_start)
     TextView tv_time;
     @BindView(R.id.tv_before_class_num)
     TextView tv_before_class_num;

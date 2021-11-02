@@ -11,6 +11,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UserLogoutRsp;
+import com.yyide.chatim.model.WeeklyDescBean;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -24,7 +25,12 @@ public interface HomeFragmentView extends BaseView {
 
     void getUserSchool(GetUserSchoolRsp rsp);
 
+    void uploadFileSuccess(String imgUrl);
+
     void getFail(String rsp);
 
+    void getIndexMyNoticeFail(String rsp);
+
     void getIndexMyNotice(TodoRsp rsp);
+
 }

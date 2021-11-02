@@ -64,17 +64,14 @@
                             android:text="考勤时间 "
                             android:textColor="#ffffffff"
                             android:textSize="13sp"
-                            app:layout_constraintEnd_toStartOf="@+id/textview1"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
                         <TextView
                             android:id="@+id/tv_attendance_time"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/dp_4"
-                            android:ellipsize="end"
-                            android:lines="1"
                             android:textColor="#ffffffff"
                             android:textSize="13sp"
                             app:layout_constraintStart_toEndOf="@+id/textView13"
@@ -87,7 +84,7 @@
                             android:layout_marginEnd="6dp"
                             android:drawableStart="@mipmap/icon_att_sign"
                             android:drawablePadding="@dimen/dp_4"
-                            android:text="签到率:"
+                            android:text="出勤率:"
                             android:textColor="#ffffffff"
                             android:textSize="13sp"
                             app:layout_constraintEnd_toStartOf="@+id/tv_attendance_rate"

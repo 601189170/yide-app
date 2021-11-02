@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/schedule_edit_dialog_bg_shape">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_30"
+        android:text="编辑日程"
+        android:textStyle="bold"
+        android:textColor="#ff1e1e1e"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="取消"
+        android:textStyle="bold"
+        android:textColor="#ff2c8aff"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:text="完成"
+        android:textStyle="bold"
+        android:textColor="#ff2c8aff"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_all_day"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:text="全天"
+            android:textStyle="bold"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@drawable/schedule_switch_checked_selector"
+            android:button="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_date"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/cl_all_day">
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="1dp"
+            android:background="#979797"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/dp_30"
+            app:layout_constraintRight_toLeftOf="@id/v_line"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_date_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09月3号 周五"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/tv_time_start"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_time_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/tv_date_start"
+                app:layout_constraintRight_toRightOf="@id/tv_date_start"
+                app:layout_constraintTop_toBottomOf="@id/tv_date_start" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_30"
+            app:layout_constraintLeft_toRightOf="@id/v_line"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_date_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09月3号 周五"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/tv_time_end"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_time_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24:00"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/tv_date_end"
+                app:layout_constraintRight_toRightOf="@id/tv_date_end"
+                app:layout_constraintTop_toBottomOf="@id/tv_date_end" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_v_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="@id/cl_date"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/v_date_top_mark_left"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:visibility="invisible"
+            android:background="#2C8AFF" />
+        <View
+            android:id="@+id/v_date_top_mark_right"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="#2C8AFF"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+    <com.loper7.date_time_picker.DateTimePicker
+        android:id="@+id/dateTimePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_bg_round_white_5"
+        app:layout="@layout/layout_date_picker_segmentation"
+        app:layout_constraintTop_toBottomOf="@id/cl_date"
+        app:showLabel="true"
+        app:textSize="16sp"
+        android:visibility="gone"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_repetition"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/dp_40"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/dateTimePicker">
+
+        <ImageView
+            android:id="@+id/iv_repetition"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/schedule_repetition_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_repetition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="重复"
+            android:textStyle="bold"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/iv_repetition"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:src="@drawable/schedule_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/v_line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="46dp"
+        android:background="#EBEBEB"
+        app:layout_constraintTop_toBottomOf="@id/cl_repetition" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_remind"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/v_line2">
+
+        <ImageView
+            android:id="@+id/iv_remind"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/schedule_remind_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="提醒"
+            android:textStyle="bold"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/iv_remind"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:src="@drawable/schedule_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

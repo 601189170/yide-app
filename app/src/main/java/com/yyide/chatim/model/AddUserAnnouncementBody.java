@@ -1,6 +1,5 @@
 package com.yyide.chatim.model;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -126,6 +125,14 @@ public class AddUserAnnouncementBody {
 
     public void setClassCardIds(List<String> classCardIds) {
         this.classCardIds = classCardIds;
+    }
+
+    public boolean isTiming() {
+        return isTiming;
+    }
+
+    public void setTiming(boolean timing) {
+        isTiming = timing;
     }
 
     @Override

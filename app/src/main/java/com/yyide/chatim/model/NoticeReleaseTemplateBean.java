@@ -44,7 +44,7 @@ public class NoticeReleaseTemplateBean {
             public int sort;
             public String createdUserId;
             public Object updatedUserId;
-            public int type;//0空白模板 1非空白模板
+            public int type;//1空白模板 2非空白模板
             public List<DetailsBean> details;
 
             public static class DetailsBean {

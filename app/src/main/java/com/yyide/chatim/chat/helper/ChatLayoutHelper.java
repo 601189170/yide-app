@@ -1,31 +1,30 @@
 package com.yyide.chatim.chat.helper;
 
 import android.content.Context;
-import android.view.View;
 
-import com.google.gson.Gson;
-import com.tencent.imsdk.v2.V2TIMCustomElem;
-import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.input.InputLayout;
-import com.tencent.qcloud.tim.uikit.modules.chat.layout.inputmore.InputMoreActionUnit;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.MessageLayout;
-import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.holder.ICustomMessageViewGroup;
-import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.holder.IOnCustomMessageDrawListener;
-import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
-import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
-import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
-import com.yyide.chatim.R;
-import com.yyide.chatim.utils.DemoLog;
 
 public class ChatLayoutHelper {
 
     private static final String TAG = ChatLayoutHelper.class.getSimpleName();
 
     private Context mContext;
+    private String groupId;
 
     public ChatLayoutHelper(Context context) {
         mContext = context;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void customizeMessageLayout(final MessageLayout messageLayout) {
+        if (messageLayout == null) {
+            return;
+        }
     }
 
     public void customizeChatLayout(final ChatLayout layout) {
@@ -50,9 +49,9 @@ public class ChatLayoutHelper {
 //        // 设置默认头像，默认与朋友与自己的头像相同
 //        messageLayout.setAvatar(R.drawable.ic_more_file);
 //        // 设置头像圆角
-//        messageLayout.setAvatarRadius(50);
+        messageLayout.setAvatarRadius(50);
 //        // 设置头像大小
-//        messageLayout.setAvatarSize(new int[]{48, 48});
+        messageLayout.setAvatarSize(new int[]{48, 48});
 //
 //        ////// 设置昵称样式（对方与自己的样式保持一致）//////
 //        messageLayout.setNameFontSize(12);
@@ -88,23 +87,7 @@ public class ChatLayoutHelper {
 //        // 设置提示的字体颜色
 //        messageLayout.setTipsMessageFontColor(0xFF7E848C);
 //
-        // 设置自定义的消息渲染时的回调
-//        messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
 
-        // 设置点击群消息
-//        messageLayout.setIGroupMessageClickListener(new IGroupMessageClickListener() {
-//
-//            @Override
-//            public boolean handleLiveMessage(LiveMessageInfo info, String groupId) {
-//                String selfUserId = ProfileManager.getInstance().getUserModel().userId;
-//                if (String.valueOf(info.anchorId).equals(selfUserId)) {
-//                    createRoom(groupId);
-//                } else {
-//                    checkRoomExist(info);
-//                }
-//                return true;
-//            }
-//        });
 //
 //        // 新增一个PopMenuAction
 //        PopMenuAction action = new PopMenuAction();
@@ -117,8 +100,8 @@ public class ChatLayoutHelper {
 //        });
 //        messageLayout.addPopAction(action);
 //
-//        final MessageLayout.OnItemClickListener l = messageLayout.getOnItemClickListener();
-//        messageLayout.setOnItemClickListener(new MessageLayout.OnItemClickListener() {
+//        final MessageLayout.OnItemLongClickListener l = messageLayout.getOnItemClickListener();
+//        messageLayout.setOnItemClickListener(new MessageLayout.OnItemLongClickListener() {
 //            @Override
 //            public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
 //                l.onMessageLongClick(view, position, messageInfo);
@@ -131,6 +114,7 @@ public class ChatLayoutHelper {
 //                ToastUtil.toastShortMessage("demo中自定义点击头像");
 //            }
 //        });
+
 
         //====== InputLayout使用范例 ======//
         final InputLayout inputLayout = layout.getInputLayout();
@@ -155,95 +139,69 @@ public class ChatLayoutHelper {
 //
 //        // TODO 可以disable更多面板上的各个功能，可以打开下面代码测试
 //        inputLayout.disableCaptureAction(true);
-//        inputLayout.disableSendFileAction(true);
+        inputLayout.disableSendFileAction(true);
 //        inputLayout.disableSendPhotoAction(true);
 //        inputLayout.disableVideoRecordAction(true);
-        inputLayout.enableAudioCall();
-        inputLayout.enableVideoCall();
-
+//        inputLayout.enableAudioCall();
+//        inputLayout.enableVideoCall();
         // TODO 可以自己增加一些功能，可以打开下面代码测试
         // 增加一个欢迎提示富文本
-//        InputMoreActionUnit unit = new InputMoreActionUnit();
-////        unit.setIconResId(R.drawable.custom);
+//        InputMoreActionUnit unit = new InputMoreActionUnit() {};
+//        unit.setIconResId(R.drawable.custom);
 //        unit.setTitleId(R.string.test_custom_action);
-//        unit.setOnClickListener(new View.OnClickListener() {
+//        unit.setOnClickListener(unit.new OnActionClickListener() {
 //            @Override
-//            public void onClick(View v) {
+//            public void onClick() {
 //                Gson gson = new Gson();
 //                CustomHelloMessage customHelloMessage = new CustomHelloMessage();
 //                customHelloMessage.version = TUIKitConstants.version;
-////                customHelloMessage.text = BaseApplication.getInstance().getString(R.string.welcome_tip);
+//                customHelloMessage.text = DemoApplication.instance().getString(R.string.welcome_tip);
 //                customHelloMessage.link = "https://cloud.tencent.com/document/product/269/3794";
 //
 //                String data = gson.toJson(customHelloMessage);
-//                MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
+//                MessageInfo info = MessageInfoUtil.buildCustomMessage(data, customHelloMessage.text, null);
 //                layout.sendMessage(info, false);
 //            }
 //        });
 //        inputLayout.addAction(unit);
     }
 
-    public class CustomMessageDraw implements IOnCustomMessageDrawListener {
+//    public static class CustomInputFragment extends BaseInputFragment {
+//        @Nullable
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+//            View baseView = inflater.inflate(R.layout.test_chat_input_custom_fragment, container, false);
+//            Button btn1 = baseView.findViewById(R.id.test_send_message_btn1);
+//            btn1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ToastUtil.toastShortMessage("自定义的按钮1");
+//                    if (getChatLayout() != null) {
+//                        Gson gson = new Gson();
+//                        CustomHelloMessage customHelloMessage = new CustomHelloMessage();
+//                        String data = gson.toJson(customHelloMessage);
+//                        MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
+//                        getChatLayout().sendMessage(info, false);
+//                    }
+//                }
+//            });
+//            Button btn2 = baseView.findViewById(R.id.test_send_message_btn2);
+//            btn2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ToastUtil.toastShortMessage("自定义的按钮2");
+//                    if (getChatLayout() != null) {
+//                        Gson gson = new Gson();
+//                        CustomHelloMessage customHelloMessage = new CustomHelloMessage();
+//                        String data = gson.toJson(customHelloMessage);
+//                        MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
+//                        getChatLayout().sendMessage(info, false);
+//                    }
+//                }
+//            });
+//            return baseView;
+//        }
+//
+//    }
 
-        /**
-         * 自定义消息渲染时，会调用该方法，本方法实现了自定义消息的创建，以及交互逻辑
-         *
-         * @param parent 自定义消息显示的父View，需要把创建的自定义消息view添加到parent里
-         * @param info   消息的具体信息
-         */
-        @Override
-        public void onDraw(ICustomMessageViewGroup parent, MessageInfo info) {
-            // 获取到自定义消息的json数据
-            if (info.getTimMessage().getElemType() != V2TIMMessage.V2TIM_ELEM_TYPE_CUSTOM) {
-                return;
-            }
-            V2TIMCustomElem elem = info.getTimMessage().getCustomElem();
-            // 自定义的json数据，需要解析成bean实例
-            CustomHelloMessage data = null;
-            try {
-                data = new Gson().fromJson(new String(elem.getData()), CustomHelloMessage.class);
-            } catch (Exception e) {
-                DemoLog.w(TAG, "invalid json: " + new String(elem.getData()) + " " + e.getMessage());
-            }
-            if (data == null) {
-                DemoLog.e(TAG, "No Custom Data: " + new String(elem.getData()));
-            } else if (data.version == TUIKitConstants.JSON_VERSION_1
-                    || (data.version == TUIKitConstants.JSON_VERSION_4 && data.businessID.equals("text_link"))) {
-                //CustomHelloTIMUIController.onDraw(parent, data);
-            } else {
-                DemoLog.w(TAG, "unsupported version: " + data);
-            }
-        }
-    }
-
-//    private static void checkRoomExist(final LiveMessageInfo info) {
-//        RoomManager.getInstance().checkRoomExist(RoomManager.TYPE_GROUP_LIVE, info.roomId, new RoomManager.ActionCallback() {
-//            @Override
-//            public void onSuccess() {
-//                enterRoom(info);
-//            }
-//
-//            @Override
-//            public void onFailed(int code, String msg) {
-//                ToastUtil.toastShortMessage(TUIKitLive.getAppContext().getString(R.string.live_is_over));
-//            }
-//        });
-//    }
-//
-//    private static void createRoom(String groupId) {
-//        LiveRoomAnchorActivity.start(DemoApplication.instance(), groupId);
-//    }
-//
-//    private static void enterRoom(LiveMessageInfo info) {
-//        Intent intent = new Intent(DemoApplication.instance(), LiveRoomAudienceActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.putExtra(RoomManager.ROOM_TITLE, info.roomName);
-//        intent.putExtra(RoomManager.GROUP_ID, info.roomId);
-//        intent.putExtra(RoomManager.USE_CDN_PLAY, false);
-//        intent.putExtra(RoomManager.ANCHOR_ID, info.anchorId);
-//        intent.putExtra(RoomManager.PUSHER_NAME, info.anchorName);
-//        intent.putExtra(RoomManager.COVER_PIC, info.roomCover);
-//        intent.putExtra(RoomManager.PUSHER_AVATAR, info.roomCover);
-//        DemoApplication.instance().startActivity(intent);
-//    }
 }

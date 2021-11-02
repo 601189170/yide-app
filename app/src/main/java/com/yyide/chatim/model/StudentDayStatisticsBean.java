@@ -1,9 +1,5 @@
 package com.yyide.chatim.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 /**
  * @Description: java类作用描述
  * @Author: liu tao
@@ -13,9 +9,7 @@ import lombok.NoArgsConstructor;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class StudentDayStatisticsBean {
     private String time;//考勤时间
     private String eventName;
@@ -23,4 +17,46 @@ public class StudentDayStatisticsBean {
     private int eventStatus;
     //打卡时间
     private String eventTime;
+
+    public StudentDayStatisticsBean(String time, String eventName, int eventStatus, String eventTime) {
+        this.time = time;
+        this.eventName = eventName;
+        this.eventStatus = eventStatus;
+        this.eventTime = eventTime;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public int getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(int eventStatus) {
+        this.eventStatus = eventStatus;
+    }
+
+    public String getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(String eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public StudentDayStatisticsBean() {
+    }
 }

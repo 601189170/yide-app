@@ -46,9 +46,9 @@ public class StatisticsActivity extends BaseActivity {
 
     private void initViewPager() {
         List<String> listTab = new ArrayList<>();
-        listTab.add("日统计");
-        listTab.add("周统计");
-        listTab.add("月统计");
+        listTab.add(getString(R.string.daily_statistics));
+        listTab.add(getString(R.string.weekly_statistics));
+        listTab.add(getString(R.string.monthly_statistics));
         fragments.add(new DayStatisticsFragment());
         fragments.add(new WeekStatisticsFragment(listTab.get(1)));
         fragments.add(new WeekStatisticsFragment(listTab.get(2)));
@@ -67,7 +67,7 @@ public class StatisticsActivity extends BaseActivity {
                 return listTab.isEmpty() ? 0 : listTab.size();
             }
         });
-        new TabLayoutMediator(mViewBinding.tablayout, mViewBinding.viewpager, true, (tab, position) -> {
+        new TabLayoutMediator(mViewBinding.tablayout, mViewBinding.viewpager, true, false,(tab, position) -> {
             //这里需要根据position修改tab的样式和文字等
             Log.e("TAG", "onConfigureTab: "+position );
             tab.setText(listTab.get(position));

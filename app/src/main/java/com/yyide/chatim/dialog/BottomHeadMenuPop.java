@@ -1,7 +1,10 @@
 package com.yyide.chatim.dialog;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,10 +19,15 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.utils.TakePicUtil;
 
+import io.reactivex.rxjava3.disposables.Disposable;
 import okhttp3.OkHttpClient;
 
 
@@ -41,7 +49,6 @@ public class BottomHeadMenuPop extends PopupWindow {
 
     private void init() {
 
-
         final View mView = LayoutInflater.from(context).inflate(R.layout.layout_bottom_head_pop, null);
 
         popupWindow = new PopupWindow(mView, ViewGroup.LayoutParams.MATCH_PARENT,
@@ -53,32 +60,32 @@ public class BottomHeadMenuPop extends PopupWindow {
         TextView s1 = (TextView) mView.findViewById(R.id.s1);
         TextView s2 = (TextView) mView.findViewById(R.id.s2);
         TextView s3 = (TextView) mView.findViewById(R.id.s3);
-        s1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectFromTake();
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+        s1.setOnClickListener(v -> {
+            selectFromTake();
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
-        s2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectFromGallery();
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+
+        bg.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
-        s3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+
+        s2.setOnClickListener(v -> {
+            selectFromGallery();
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
+
+        s3.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
+            }
+        });
+
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(false);
         popupWindow.setBackgroundDrawable(null);
@@ -96,84 +103,89 @@ public class BottomHeadMenuPop extends PopupWindow {
                 return false;
             }
         });
-        bg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
-
+        bg.setOnClickListener(v -> {
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
+
         // 获取当前Activity的window
         Activity activity = (Activity) mView.getContext();
         if (activity != null) {
             //如果设置的值在0 - 1的范围内，则用设置的值，否则用默认值
             mWindow = activity.getWindow();
             WindowManager.LayoutParams params = mWindow.getAttributes();
-            params.alpha = 0.7f;
+            params.alpha = 0.5f;
             mWindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             mWindow.setAttributes(params);
         }
 
-        popupWindow.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                //如果设置了背景变暗，那么在dissmiss的时候需要还原
-                Log.e("TAG", "onDismiss==>: ");
-                if (mWindow != null) {
-                    WindowManager.LayoutParams params = mWindow.getAttributes();
-                    params.alpha = 1.0f;
-                    mWindow.setAttributes(params);
-                }
-                if (popupWindow != null && popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+        popupWindow.setOnDismissListener(() -> {
+            //如果设置了背景变暗，那么在dissmiss的时候需要还原
+            Log.e("TAG", "onDismiss==>: ");
+            if (mWindow != null) {
+                WindowManager.LayoutParams params = mWindow.getAttributes();
+                params.alpha = 1.0f;
+                mWindow.setAttributes(params);
+            }
+            if (popupWindow != null && popupWindow.isShowing()) {
+                popupWindow.dismiss();
             }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
-
-
     }
-
 
     /**
      * 拍取照片不裁切
      */
     private void selectFromTake() {
-//        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//用来打开相机的Intent
-//        if (takePhotoIntent.resolveActivity(context.getPackageManager()) != null) {//这句作用是如果没有相机则该应用不会闪退，要是不加这句则当系统没有相机应用的时候该应用会闪退
-//            context.startActivityForResult(takePhotoIntent, BaseConstant.REQ_CODE);//启动相机
-//        }
-//        TakePicUtil.takePicture(context);
-        TakePicUtil.takePicture(context, true);
-
+        RxPermissions rxPermissions = new RxPermissions((FragmentActivity) context);
+        Disposable mDisposable = rxPermissions.request(Manifest.permission.CAMERA).subscribe(granted -> {
+            if (granted) {
+                TakePicUtil.takePicture(context, true);
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(context)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_camera)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+                            context.startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
+        });
     }
-
 
     /**
      * 打开手机相册
      */
     private void selectFromGallery() {
-//        // TODO Auto-generatedmethod stub
-//        Intent intent = new Intent();
-//        intent.setAction(Intent.ACTION_PICK);//Pick an item fromthe data
-//        intent.setType("image/*");//从所有图片中进行选择
-//        context.startActivityForResult(intent, BaseConstant.SELECT_ORIGINAL_PIC);
-        TakePicUtil.albumPhoto(context, true);
-
-//        Intent intent;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            intent = new Intent(
-//                    Intent.ACTION_PICK,
-//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        } else {
-//            intent = new Intent(
-//                    Intent.ACTION_GET_CONTENT);
-//            intent.setType("image/*");
-//        }
-//        context.startActivityForResult(intent, BaseConstant.SELECT_ORIGINAL_PIC);
+        RxPermissions rxPermissions = new RxPermissions((FragmentActivity) context);
+        Disposable mDisposable = rxPermissions.request(Manifest.permission.CAMERA).subscribe(granted -> {
+            if (granted) {
+                TakePicUtil.albumPhoto(context, true);
+            } else {
+                // 权限被拒绝
+                new AlertDialog.Builder(context)
+                        .setTitle("提示")
+                        .setMessage(R.string.permission_file)
+                        .setPositiveButton("开启", (dialog, which) -> {
+                            Intent localIntent = new Intent();
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
+                            context.startActivity(localIntent);
+                        })
+                        .setNegativeButton("取消", null)
+                        .create().show();
+            }
+        });
     }
 
 }

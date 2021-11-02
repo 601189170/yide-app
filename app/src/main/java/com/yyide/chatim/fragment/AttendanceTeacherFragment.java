@@ -51,7 +51,6 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
     AttendanceAdapter announAdapter;
     IndexAdapter indexAdapter;
     public String TAG = AttendanceTeacherFragment.class.getSimpleName();
-    private boolean isSchool = false;
 
     @Nullable
     @Override
@@ -70,11 +69,9 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
 
     private void getHomeAttendance() {
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
-            isSchool = true;
-            mvpPresenter.homeAttendance("");
+            mvpPresenter.homeAttendance("", "");
         } else {
-            isSchool = true;
-            mvpPresenter.homeAttendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "");
+            mvpPresenter.homeAttendance(SpData.getClassInfo() != null ? SpData.getClassInfo().classesId : "", "");
         }
     }
 
@@ -115,6 +112,7 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
 
     @OnClick({R.id.constraintLayout})
     public void click(View v) {
+//        AttendanceActivity.start(getActivity(), 0);
         startActivity(new Intent(getContext(), StatisticsActivity.class));
     }
 
@@ -138,6 +136,9 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
+            } else {
+                announAdapter.notifyData(new ArrayList<>());
+                indexAdapter.setList(new ArrayList<>());
             }
         }
     }
@@ -155,13 +156,15 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
             }
         }
         announRoll.setAdapter(announAdapter);
-        constraintLayout.setVisibility((schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 0) ? View.GONE : View.VISIBLE);
+        constraintLayout.setVisibility(schoolPeopleAllFormBeanList.size() > 0 ? View.GONE : View.VISIBLE);
         announAdapter.notifyData(dataBean.getAttendancesForm());
         indexAdapter.setList(schoolPeopleAllFormBeanList);
     }
 
     @Override
     public void getAttendanceFail(String msg) {
+        announAdapter.notifyData(new ArrayList<>());
+        indexAdapter.setList(new ArrayList<>());
         Log.e("TAG", "getAttendanceFail==>: " + msg);
     }
 }

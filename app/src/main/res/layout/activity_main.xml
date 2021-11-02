@@ -11,6 +11,11 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:alpha="0.6"
+        android:background="@android:color/darker_gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,70 +27,77 @@
             android:id="@+id/tab1_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
                 android:id="@+id/tab1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab1"
+                android:drawableTop="@drawable/home_tab1"
+                android:text="@string/tab_home"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tab5_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_corrugated">
+
+            <CheckedTextView
+                android:id="@+id/tab5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="首页"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab1"
-                app:layout_constraintRight_toRightOf="@id/tab1"
-                app:layout_constraintTop_toBottomOf="@id/tab1" />
+                android:drawableTop="@drawable/home_tab5"
+                android:gravity="center"
+                android:text="@string/tab_schedule"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tab2_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
                 android:id="@+id/tab2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab2"
+                android:drawableTop="@drawable/home_tab2"
+                android:text="@string/tab_message"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:text="消息"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab2"
-                app:layout_constraintRight_toRightOf="@id/tab2"
-                app:layout_constraintTop_toBottomOf="@id/tab2" />
 
             <com.tencent.qcloud.tim.uikit.component.UnreadCountTextView
                 android:id="@+id/msg_total_unread"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
-                android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="@dimen/dp_2"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:minWidth="18dp"
                 android:minHeight="14dp"
                 android:textColor="#fff"
-                android:textSize="10sp"
+                android:textSize="@dimen/text_10"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="@id/tab2"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -95,58 +107,45 @@
             android:id="@+id/tab3_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
                 android:id="@+id/tab3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab3"
+                android:drawableTop="@drawable/home_tab3"
+                android:text="@string/tab_workbench"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:text="工作台"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab3"
-                app:layout_constraintRight_toRightOf="@id/tab3"
-                app:layout_constraintTop_toBottomOf="@id/tab3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tab4_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
                 android:id="@+id/tab4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_6"
-                android:background="@drawable/home_tab4"
+                android:drawableTop="@drawable/home_tab4"
+                android:gravity="center"
+                android:text="@string/tab_help"
+                android:textSize="@dimen/text_10"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="帮助"
-                android:textColor="#1E232A"
-                android:textSize="10sp"
-                app:layout_constraintLeft_toLeftOf="@id/tab4"
-                app:layout_constraintRight_toRightOf="@id/tab4"
-                app:layout_constraintTop_toBottomOf="@id/tab4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </LinearLayout>

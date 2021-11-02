@@ -1,9 +1,9 @@
 package com.yyide.chatim.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -14,16 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.solver.widgets.analyzer.VerticalWidgetRun;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
-import com.tencent.mmkv.MMKV;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
@@ -43,6 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -77,11 +76,21 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     FrameLayout layout6;
     @BindView(R.id.title)
     TextView title;
+    @BindView(R.id.email_line)
+    View email_line;
+    @BindView(R.id.fl_patriarch)
+    FrameLayout fl_patriarch;
+    @BindView(R.id.patriarchImg)
+    ImageView patriarchImg;
+    @BindView(R.id.tv_head_desc)
+    TextView tvHeadDesc;
 
     private GetUserSchoolRsp.DataBean userInfo;
-    private long classesId;
+    private GetUserSchoolRsp.DataBean.FormBean studentInfo;
+    private String classesId;
     private String realname;
     private long depId;
+    private String studentId;
 
     @Override
     public int getContentViewID() {
@@ -92,13 +101,26 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status)) {
-            title.setText("我的信息");
-        } else {
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             title.setText("学生信息");
+            setStudentInfo();
+        } else {
+            title.setText("我的信息");
+            setUserInfo();
         }
-        initData();
-        classesId = SpData.getIdentityInfo().classesId;
+//        classesId = SpData.getIdentityInfo().classesId;
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+            if (!form.isEmpty()) {
+                final GetUserSchoolRsp.DataBean.FormBean formBean = form.get(0);
+                try {
+                    studentId = formBean.studentId;
+                    classesId = formBean.classesId;
+                } catch (NumberFormatException exception) {
+                    Log.e(TAG, "studentId=" + formBean.studentId);
+                }
+            }
+        }
         realname = SpData.getIdentityInfo().realname;
         depId = SpData.getIdentityInfo().teacherDepId;
         Log.e(TAG, "getFaceData: name=" + realname + ",classId=" + classesId);
@@ -109,7 +131,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         return new UserPresenter(this);
     }
 
-    private void initData() {
+    private void setUserInfo() {
         userInfo = SpData.getIdentityInfo();
         if (userInfo != null) {
             GlideUtil.loadImageHead(this, userInfo.img, img);
@@ -121,10 +143,34 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         }
     }
 
+    private void setStudentInfo() {
+        tvHeadDesc.setText("学生头像");
+        studentInfo = SpData.getClassInfo();
+        userInfo = SpData.getIdentityInfo();
+        fl_patriarch.setVisibility(View.VISIBLE);
+        fl_patriarch.setOnClickListener(v -> {
+            isStudent = true;
+            rxPermission();
+        });
+        if (studentInfo != null) {
+            GlideUtil.loadImageHead(this, studentInfo.studentPic, img);
+            sex.setText(!TextUtils.isEmpty(studentInfo.studentSex) ? ("1".equals(studentInfo.studentSex) ? "男" : "女") : "未设置");
+            phone.setText(!TextUtils.isEmpty(studentInfo.studentPhone) ? studentInfo.studentPhone : "未设置");
+            date.setText(!TextUtils.isEmpty(studentInfo.studentBirthdayDate) ? studentInfo.studentBirthdayDate : "未设置");
+            layout5.setVisibility(View.GONE);
+            email_line.setVisibility(View.GONE);
+            face.setText("未设置");
+        }
+        userInfo = SpData.getIdentityInfo();
+        if (userInfo != null) {
+            GlideUtil.loadImageHead(this, userInfo.img, patriarchImg);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname, classesId, depId);
+        mvpPresenter.getFaceData(realname, classesId, depId, studentId);
     }
 
     @Override
@@ -136,7 +182,13 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1://头像
-                new BottomHeadMenuPop(this);
+                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)
+                        && studentInfo == null) {
+                    ToastUtils.showShort("未绑定学生信息");
+                } else {
+                    isStudent = false;
+                    rxPermission();
+                }
                 break;
             case R.id.layout2://手机号
                 //startActivity(new Intent(this, CheckPhoneActivity.class));
@@ -162,36 +214,13 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 break;
             case R.id.back_layout:
                 finish();
-                break;
             default:
                 break;
         }
     }
 
-    private TimePickerDialog mDialogAll;
-
-    private void showTime() {
-        long tenYears = 10L * 365 * 1000 * 60 * 60 * 24L;
-        long tenYears2 = 50L * 365 * 1000 * 60 * 60 * 24L;
-        mDialogAll = new TimePickerDialog.Builder()
-                .setCallBack(this)
-                .setCancelStringId("取消")
-                .setSureStringId("确定")
-                .setTitleStringId("选择日期")
-                .setYearText("年")
-                .setMonthText("月")
-                .setDayText("日")
-                .setCyclic(false)
-                .setMinMillseconds(System.currentTimeMillis() - tenYears2)
-                .setMaxMillseconds(System.currentTimeMillis() + tenYears)
-                .setCurrentMillseconds(System.currentTimeMillis())
-                .setThemeColor(getResources().getColor(R.color.colorPrimary))
-                .setType(Type.YEAR_MONTH_DAY)
-                .setWheelItemTextNormalColor(getResources().getColor(R.color.text_212121))
-                .setWheelItemTextSelectorColor(getResources().getColor(R.color.colorPrimary))
-                .setWheelItemTextSize(12)
-                .build();
-        mDialogAll.show(getSupportFragmentManager(), "all");
+    private void rxPermission() {
+        new BottomHeadMenuPop(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -230,7 +259,6 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         if (corpFile != null) {
             showPicFileByLuban(corpFile);
         }
-
     }
 
     private void showPicFileByLuban(@NonNull File file) {
@@ -250,7 +278,15 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                     @Override
                     public void onSuccess(File file) {
                         // TODO 压缩成功后调用，返回压缩后的图片文件
-                        mvpPresenter.uploadFile(file);
+                        Long studentId = null;
+                        if (!isStudent) {
+                            if (SpData.getIdentityInfo() != null
+                                    && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)
+                                    && studentInfo != null && !TextUtils.isEmpty(studentInfo.studentId)) {
+                                studentId = Long.parseLong(SpData.getClassInfo().studentId);
+                            }
+                        }
+                        mvpPresenter.uploadFile(file, studentId);
                     }
 
                     @Override
@@ -259,9 +295,9 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                         hideLoading();
                         ToastUtils.showShort("图片压缩失败请重试");
                     }
-                }).launch();
+                }).
+                launch();
     }
-
 
     @Override
     public void showError() {
@@ -294,14 +330,35 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         ToastUtils.showShort(msg);
     }
 
+    private boolean isStudent = false;
+
     @Override
     public void uploadFileSuccess(String imgUrl) {
-        if (userInfo != null) {
-            userInfo.img = imgUrl;
-            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+        if (SpData.getClassInfo() != null
+                && SpData.getIdentityInfo() != null
+                && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            if (isStudent) {//家长身份头像
+                if (userInfo != null) {//设置身份头像
+                    userInfo.img = imgUrl;
+                    SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+                }
+                GlideUtil.loadImageHead(this, imgUrl, patriarchImg);
+                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
+            } else {//学生头像
+                GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+                classInfo.studentPic = imgUrl;
+                SPUtils.getInstance().put(SpData.CLASS_INFO, JSON.toJSONString(classInfo));
+                SpData.setClassesInfo(classInfo);
+                GlideUtil.loadImageHead(this, imgUrl, img);
+            }
+        } else {//除家长身份外其他身份头像
+            if (userInfo != null) {
+                userInfo.img = imgUrl;
+                SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
+            }
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
+            GlideUtil.loadImageHead(this, imgUrl, img);
         }
-        GlideUtil.loadImageHead(this, imgUrl, img);
     }
 
     @Override

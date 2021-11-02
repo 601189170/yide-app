@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.reactivestreams.Subscription;
 
 import butterknife.ButterKnife;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -40,16 +41,23 @@ public class BaseFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    public void showProgressDialog2() {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        dismiss();
+    }
+
+    public void loading() {
         if (loadingTools != null && !getActivity().isFinishing()) {
             loadingTools.showLoading();
         }
     }
 
-    public void dismissProgressDialog2() {
+    public void dismiss() {
         if (loadingTools != null) {
             loadingTools.closeLoading();
         }
     }
+
 
 }

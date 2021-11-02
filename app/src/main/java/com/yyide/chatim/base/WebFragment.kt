@@ -97,7 +97,7 @@ class WebFragment : BaseFragment() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
                 if (SpData.User() != null) {
-                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().token)
+                    //Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().data.token)
                     //mWebView!!.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().token + "')")
                 }
             }

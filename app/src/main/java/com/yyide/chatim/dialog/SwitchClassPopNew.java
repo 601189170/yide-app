@@ -1,6 +1,7 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
+import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -24,6 +25,17 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 
 /**
@@ -71,12 +83,13 @@ public class SwitchClassPopNew extends PopupWindow {
         SwichClassAdapter adapter = new SwichClassAdapter();
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
-            adapter.notifyData(SpData.getIdentityInfo().form);
-            for (int i = 0; i < SpData.getIdentityInfo().form.size(); i++) {
+        ArrayList<GetUserSchoolRsp.DataBean.FormBean> formBeans = SpData.getClassList();
+        if (formBeans.size() > 0) {
+            adapter.notifyData(formBeans);
+            for (int i = 0; i < formBeans.size(); i++) {
                 if (classBean != null
                         && classBean.classesId != null
-                        && classBean.classesId.equals(SpData.getIdentityInfo().form.get(i).classesId)) {
+                        && classBean.classesId.equals(formBeans.get(i).classesId)) {
                     index = i;
                     break;
                 }
@@ -96,11 +109,11 @@ public class SwitchClassPopNew extends PopupWindow {
 //                context.startActivity(intent);
         });
 
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(false);
-        popupWindow.setBackgroundDrawable(null);
-        popupWindow.getContentView().setFocusable(true);
-        popupWindow.getContentView().setFocusableInTouchMode(true);
+//        popupWindow.setFocusable(true);
+//        popupWindow.setOutsideTouchable(false);
+//        popupWindow.setBackgroundDrawable(null);
+//        popupWindow.getContentView().setFocusable(true);
+//        popupWindow.getContentView().setFocusableInTouchMode(true);
         popupWindow.getContentView().setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (popupWindow != null && popupWindow.isShowing()) {
@@ -141,7 +154,5 @@ public class SwitchClassPopNew extends PopupWindow {
             }
         });
         popupWindow.showAtLocation(mView, Gravity.NO_GRAVITY, 0, 0);
-
     }
-
 }

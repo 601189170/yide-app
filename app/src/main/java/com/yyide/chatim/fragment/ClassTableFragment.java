@@ -7,9 +7,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -29,7 +31,6 @@ import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.presenter.ClassTablePresenter;
-import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.view.ClassTableView;
 
 import java.text.SimpleDateFormat;
@@ -57,6 +58,12 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     TextView className;
     @BindView(R.id.tv_week)
     TextView tv_week;
+    @BindView(R.id.classlayout)
+    FrameLayout classlayout;
+    @BindView(R.id.empty)
+    View empty;
+    @BindView(R.id.svContent)
+    ScrollView mScrollView;
     private View mBaseView;
     TableTimeAdapter timeAdapter;
     TableItemAdapter tableItemAdapter;
@@ -64,6 +71,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     int index = -1;
     private List<SelectTableClassesRsp.DataBean> data;
     private GetUserSchoolRsp.DataBean.FormBean classInfo;
+    private SwitchTableClassPop swichTableClassPop;
 
     @Nullable
     @Override
@@ -77,13 +85,17 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         super.onViewCreated(view, savedInstanceState);
         tableItemAdapter = new TableItemAdapter();
         tablegrid.setAdapter(tableItemAdapter);
-        Bundle arguments = getArguments();
         tableSectionAdapter = new TableSectionAdapter();
         listsection.setAdapter(tableSectionAdapter);
-
+        TextView tvDesc = empty.findViewById(R.id.tv_desc);
+        tvDesc.setText("本周暂无课表数据");
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-        tv_week.setText(TimeUtil.getWeek() + "周");
+        if (SpData.getIdentityInfo().weekNum <= 0) {
+            tv_week.setText("");
+        } else {
+            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
+        }
         grid.setOnItemClickListener((parent, view1, position, id) -> {
             timeAdapter.setPosition(position);
             index = position;
@@ -109,6 +121,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         if (classInfo != null) {
             className.setText(classInfo.classesName);
             mvpPresenter.listTimeDataByApp(classInfo.classesId);
+        } else {
+            className.setText("暂无班级");
         }
 
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
@@ -127,19 +141,22 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status) ||
                         GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status) ||
                         GetUserSchoolRsp.DataBean.TYPE_TEACHER.equals(SpData.getIdentityInfo().status))) {
-            SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
-            classPopNew.setOnCheckCallBack(classBean -> {
-                this.classInfo = classBean;
-                className.setText(classBean.classesName);
-                mvpPresenter.listTimeDataByApp(classBean.classesId);
-            });
-
-        } else {
+            if (classInfo != null) {
+                SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
+                classPopNew.setOnCheckCallBack(classBean -> {
+                    this.classInfo = classBean;
+                    className.setText(classBean.classesName);
+                    mvpPresenter.listTimeDataByApp(classBean.classesId);
+                });
+            } else {
+                ToastUtils.showShort("您没有其他班级");
+            }
+        } else {//校长取全校班级列表
             if (data != null && data.size() > 0) {
                 swichTableClassPop = new SwitchTableClassPop(getActivity(), data);
                 swichTableClassPop.setSelectClasses(this);
             } else {
-                ToastUtils.showShort("暂无切换班级");
+                ToastUtils.showShort("您没有其他班级");
             }
         }
     }
@@ -167,6 +184,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             if (rsp.data != null) {
+                empty.setVisibility(View.GONE);
+                mScrollView.setVisibility(View.VISIBLE);
                 String jc = rsp.data.timetableStructure;
                 String s = jc.replaceAll("节课", "");
                 int num = Integer.parseInt(s);
@@ -227,6 +246,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     }
                 }
                 tableSectionAdapter.notifyData(sectionlist);
+            } else {
+                mScrollView.setVisibility(View.GONE);
+                empty.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -234,7 +256,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //创建"第上下午"视图
     private void createLeftTypeView(int selection, int type, int length) {
 
-        int CouseHeight = SizeUtils.dp2px(75) + 1;
+//        int CouseHeight = SizeUtils.dp2px(80) + 1;
+        int CouseHeight = getActivity().getResources().getDimensionPixelOffset(R.dimen.dp_75) + 1;
         int CouseWith = SizeUtils.dp2px(30);
 
         View view = LayoutInflater.from(mActivity).inflate(R.layout.course_card_type2, null);
@@ -273,8 +296,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     public void listTimeDataByAppFail(String msg) {
         Log.d("selectTableClassListSuccess", msg);
     }
-
-    private SwitchTableClassPop swichTableClassPop;
 
     @Override
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {

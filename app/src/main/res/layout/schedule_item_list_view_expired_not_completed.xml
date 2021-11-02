@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="72dp">
+
+    <TextView
+        android:id="@+id/tv_title_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="20日"
+        android:textColor="#ff1e1e1e"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="周五"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/tv_title_day"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_day" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="tv_title_day,tv_title_week" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/schedule_list_item_bg_shape"
+        android:padding="@dimen/dp_10">
+
+        <ImageView
+            android:id="@+id/iv_schedule_type_img"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:src="@drawable/default_user_icon"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_schedule_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:maxEms="14"
+            android:singleLine="true"
+            android:text="开学典礼"
+            android:textColor="#ff999999"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"
+            app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"
+            app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img" />
+
+        <TextView
+            android:id="@+id/tv_schedule_time_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="08:00-09:00"
+            android:textColor="#ff666666"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_schedule_type_img" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

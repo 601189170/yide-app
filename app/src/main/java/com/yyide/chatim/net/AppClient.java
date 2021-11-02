@@ -9,6 +9,7 @@ import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.LoginRsp;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,37 +75,35 @@ public class AppClient {
     }
 
     //cache
-    static Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            CacheControl.Builder cacheBuilder = new CacheControl.Builder();
-            cacheBuilder.maxAge(0, TimeUnit.SECONDS);
-            cacheBuilder.maxStale(365, TimeUnit.DAYS);
-            CacheControl cacheControl = cacheBuilder.build();
+    static Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = chain -> {
+        CacheControl.Builder cacheBuilder = new CacheControl.Builder();
+        cacheBuilder.maxAge(0, TimeUnit.SECONDS);
+        cacheBuilder.maxStale(365, TimeUnit.DAYS);
+        CacheControl cacheControl = cacheBuilder.build();
 
-            Request request = chain.request();
-            if (SpData.User() != null && !TextUtils.isEmpty(SpData.User().getToken())) {
-                Log.e("TAG", "intercept: " + JSON.toJSONString(SpData.User().getToken()));
-                request = request.newBuilder()
-                        .addHeader("Authorization", SpData.User().getToken())
-                        .cacheControl(cacheControl)
-                        .build();
-            }
+        Request request = chain.request();
+        LoginRsp user = SpData.User();
+        if (user != null) {
+            Log.e("TAG", "intercept: " + JSON.toJSONString(user.data.accessToken));
+            request = request.newBuilder()
+                    .addHeader("Authorization", user.data.accessToken)
+                    .cacheControl(cacheControl)
+                    .build();
+        }
 
-            Response originalResponse = chain.proceed(request);
-            if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
-                int maxAge = 0; // read from cache
-                return originalResponse.newBuilder()
-                        .removeHeader("Pragma")
-                        .header("Cache-Control", "public ,max-age=" + maxAge)
-                        .build();
-            } else {
-                int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
-                return originalResponse.newBuilder()
-                        .removeHeader("Pragma")
-                        .header("Cache-Control", "public, only-if-xcached, max-stale=" + maxStale)
-                        .build();
-            }
+        Response originalResponse = chain.proceed(request);
+        if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
+            int maxAge = 0; // read from cache
+            return originalResponse.newBuilder()
+                    .removeHeader("Pragma")
+                    .header("Cache-Control", "public ,max-age=" + maxAge)
+                    .build();
+        } else {
+            int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
+            return originalResponse.newBuilder()
+                    .removeHeader("Pragma")
+                    .header("Cache-Control", "public, only-if-xcached, max-stale=" + maxStale)
+                    .build();
         }
     };
 
@@ -112,7 +111,7 @@ public class AppClient {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            String token = SpData.User().getToken();
+            String token = SpData.User().data.accessToken;
             if (TextUtils.isEmpty(token)) {
                 Request originalRequest = chain.request();
                 return chain.proceed(originalRequest);
@@ -151,19 +150,17 @@ public class AppClient {
                     is = response.body().byteStream();//获取输入流
                     long total = response.body().contentLength();//获取文件大小
                     downloadListener.onStart(total);
-                    if (is != null) {
-                        File file = new File(Utils.getApp().getCacheDir(), version + ".apk");
-                        fos = new FileOutputStream(file);
-                        byte[] buf = new byte[1024];
-                        int ch;
-                        int process = 0;
-                        while ((ch = is.read(buf)) != -1) {
-                            fos.write(buf, 0, ch);
-                            process += ch;
-                            downloadListener.onProgress(process);
-                        }
-                        fos.flush();
+                    File file = new File(Utils.getApp().getCacheDir(), version + ".apk");
+                    fos = new FileOutputStream(file);
+                    byte[] buf = new byte[1024];
+                    int ch;
+                    int process = 0;
+                    while ((ch = is.read(buf)) != -1) {
+                        fos.write(buf, 0, ch);
+                        process += ch;
+                        downloadListener.onProgress(process);
                     }
+                    fos.flush();
                     downloadListener.onSuccess();
                 } catch (Exception e) {
                     downloadListener.onFailure();

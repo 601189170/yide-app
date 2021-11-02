@@ -2,10 +2,6 @@ package com.yyide.chatim.model;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 
 public class NoticeItemBean {
 

@@ -1,30 +1,35 @@
 package com.yyide.chatim.chat;
 
+import static com.tencent.imsdk.v2.V2TIMManager.V2TIM_STATUS_LOGINED;
+
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.tencent.imsdk.v2.V2TIMManager;
+import androidx.annotation.Nullable;
 
+import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
-import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
+import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.chat.helper.IBaseLiveListener;
+import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager;
 import com.yyide.chatim.dialog.ReportPop;
-import com.yyide.chatim.dialog.SwitchClassPopNew;
+import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
-import androidx.annotation.Nullable;
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.tencent.imsdk.v2.V2TIMManager.V2TIM_STATUS_LOGINED;
 
 public class ChatActivity extends BaseActivity {
 
@@ -77,22 +82,42 @@ public class ChatActivity extends BaseActivity {
     private void chat(Intent intent) {
         Bundle bundle = intent.getExtras();
         DemoLog.i(TAG, "bundle: " + bundle + " intent: " + intent);
-//        Log.e(TAG, "chat==>bundle: "+ JSON.toJSONString(bundle));
         if (bundle == null) {
             startSplashActivity(null);
+        }
+        final OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(intent);
+        if (bean != null) {
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) {
+                manager.cancelAll();
+            }
+        }
+
+        if (V2TIMManager.getInstance().getLoginStatus() != V2TIM_STATUS_LOGINED) {
+            startSplashActivity(bundle);
+            finish();
             return;
         }
 
-//        OfflineMessageBean bean = OfflineMessageDispatcher.parseOfflineMessage(intent);
-//        if (bean != null) {
-//            mChatInfo = new ChatInfo();
-//            mChatInfo.setType(bean.chatType);
-//            mChatInfo.setId(bean.sender);
-//            bundle.putSerializable(Constants.CHAT_INFO, mChatInfo);
-//            DemoLog.i(TAG, "offline mChatInfo: " + mChatInfo);
-//        } else {
-        mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
-//        }
+        if (bean != null) {
+            if (bean.action == OfflineMessageBean.REDIRECT_ACTION_CALL) {
+                DemoLog.i(TAG, "offline push  AV CALL . bean: " + bean);
+                startAVCall(bean);
+                finish();
+                return;
+            } else if (bean.action == OfflineMessageBean.REDIRECT_ACTION_CHAT) {
+                mChatInfo = new ChatInfo();
+                mChatInfo.setType(bean.chatType);
+                mChatInfo.setId(bean.sender);
+                mChatInfo.setChatName(bean.nickname);
+                bundle.putSerializable(Constants.CHAT_INFO, mChatInfo);
+                DemoLog.i(TAG, "offline push mChatInfo: " + mChatInfo);
+            }
+        } else {
+            mChatInfo = (ChatInfo) bundle.getSerializable(Constants.CHAT_INFO);
+            DemoLog.i(TAG, "start chatActivity chatInfo: " + mChatInfo);
+        }
+        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE, ""));
         if (mChatInfo != null) {
             title.setText(mChatInfo.getChatName());
         }
@@ -103,8 +128,9 @@ public class ChatActivity extends BaseActivity {
             mChatFragment = new ChatFragment();
             mChatFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.empty_view, mChatFragment).commitAllowingStateLoss();
+            mChatInfo = null;
         } else {
-            startSplashActivity(bundle);
+            finish();
         }
     }
 
@@ -116,4 +142,12 @@ public class ChatActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+
+    private void startAVCall(OfflineMessageBean bean) {
+        IBaseLiveListener baseLiveListener = TUIKitLiveListenerManager.getInstance().getBaseCallListener();
+        if (baseLiveListener != null) {
+            baseLiveListener.handleOfflinePushCall(bean);
+        }
+    }
+
 }

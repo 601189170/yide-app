@@ -60,10 +60,10 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
         holder.tv_date.setText(leaveFlowBean.getDate());
         holder.tv_flow_title.setText(leaveFlowBean.getFlowTitle());
         holder.tv_flow_content.setText(leaveFlowBean.getFlowContent());
-        if (leaveFlowBean.getFlowTitle().contains("已拒绝")){
+        if (leaveFlowBean.getFlowTitle().contains(context.getString(R.string.already_refused))){
             holder.iv_flow_checked.setImageResource(R.drawable.icon_flow_refuse);
         }
-        if (leaveFlowBean.isChecked() && !leaveFlowBean.getFlowTitle().contains("已撤销")) {
+        if (leaveFlowBean.isChecked() && !leaveFlowBean.getFlowTitle().contains(context.getString(R.string.already_undone))) {
             holder.iv_flow_checked.setVisibility(View.VISIBLE);
             holder.v_dot.setVisibility(View.INVISIBLE);
         }else {
@@ -102,10 +102,10 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_time)
+        @BindView(R.id.tv_time_start)
         TextView tv_time;
 
-        @BindView(R.id.tv_date)
+        @BindView(R.id.tv_date_start)
         TextView tv_date;
 
         @BindView(R.id.tv_flow_title)

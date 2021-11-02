@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.adapter.TabRecyAdapter;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.NoteByListFragment;
@@ -33,8 +34,6 @@ import butterknife.OnClick;
 
 public class NoteByListActivity extends BaseActivity {
 
-    @BindView(R.id.back_layout)
-    LinearLayout backLayout;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.content)
@@ -70,15 +69,12 @@ public class NoteByListActivity extends BaseActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         recyclerview.setAdapter(tabRecyAdapter);
-        tabRecyAdapter.setOnItemClickListener(new TabRecyAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (position == 0) {//点击回到一级部门,清除所有回退栈
-                    finish();
-                } else {
-                    listTab = tabRecyAdapter.remove(position + 1);
-                    fragments = remove(position + 1);
-                }
+        tabRecyAdapter.setOnItemClickListener((view, position) -> {
+            if (position == 0) {//点击回到一级部门,清除所有回退栈
+                finish();
+            } else {
+                listTab = tabRecyAdapter.remove(position + 1);
+                fragments = remove(position + 1);
             }
         });
 

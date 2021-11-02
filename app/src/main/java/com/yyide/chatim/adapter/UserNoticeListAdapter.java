@@ -6,26 +6,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.NoticeAnnouncementModel;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
-import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.FootView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -184,7 +178,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_date)
+        @BindView(R.id.tv_date_start)
         TextView tv_date;
 
         @BindView(R.id.tv_title)

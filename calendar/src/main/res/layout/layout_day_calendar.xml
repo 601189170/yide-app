@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.yide.calendar.WeekBarView
+        android:id="@+id/weekBarView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/week_bar_height"
+        app:layout_constraintTop_toTopOf="parent"
+        app:week_start_with_sunday="false"
+        app:week_text_color="@color/week_bar_text_color"
+        app:week_text_size="@dimen/week_bar_text_size" />
+
+    <com.yide.calendar.schedule.ScheduleLayout
+        android:id="@+id/slSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:auto_change_month_row="true"
+        app:default_view="week"
+        app:layout_constraintTop_toBottomOf="@id/weekBarView"
+        app:schedule_list_start_with_sunday="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rlMonthCalendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+                    <com.yide.calendar.month.MonthCalendarView
+                        android:id="@+id/mcvCalendar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/month_calendar_height"
+                        android:background="@color/calendar_bg_color"
+                        android:overScrollMode="never"
+                        app:month_day_text_size="@integer/calendar_text_size"
+                        app:month_holiday_color="@color/select_circle_color"
+                        app:month_selected_circle_color="@color/select_circle_color"
+                        app:month_selected_circle_today_color="@color/select_circle_color"
+                        app:month_show_holiday_hint="false"
+                        app:month_show_lunar="false"
+                        app:month_show_task_hint="false"
+                        app:month_week_start_with_sunday="false" />
+                </RelativeLayout>
+
+                <com.yide.calendar.week.WeekCalendarView
+                    android:id="@+id/wcvCalendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/week_calendar_height"
+                    android:background="@color/calendar_bg_color"
+                    android:overScrollMode="never"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/rlMonthCalendar"
+                    app:week_calendar_start_with_sunday="false"
+                    app:week_day_text_size="@integer/calendar_text_size"
+                    app:week_holiday_color="@color/select_circle_color"
+                    app:week_selected_circle_color="@color/select_circle_color"
+                    app:week_selected_circle_today_color="@color/select_circle_color"
+                    app:week_show_holiday_hint="false"
+                    app:week_show_lunar="false"
+                    app:week_show_task_hint="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlScheduleList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/schedule_content_list_bg_shape">
+                <com.yide.scheduleview.ScheduleEventView
+                    android:id="@+id/sevScheduleEventView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:columnGap="8dp"
+                    app:dayBackgroundColor="#05000000"
+                    app:eventTextColor="@android:color/white"
+                    app:headerColumnBackground="#ffffffff"
+                    app:headerColumnPadding="8dp"
+                    app:headerColumnTextColor="@color/toolbar_text"
+                    app:headerRowBackgroundColor="@color/toolbar"
+                    app:headerRowPadding="12dp"
+                    app:hourHeight="60dp"
+                    app:noOfVisibleDays="1"
+                    app:textSize="12sp"
+                    app:todayBackgroundColor="#ffffffff"
+                    app:todayHeaderTextColor="@color/accent" />
+            </RelativeLayout>
+        </LinearLayout>
+    </com.yide.calendar.schedule.ScheduleLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

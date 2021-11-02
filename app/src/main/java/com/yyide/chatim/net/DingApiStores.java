@@ -1,6 +1,8 @@
 package com.yyide.chatim.net;
 
 
+import com.yyide.chatim.kotlin.network.base.BaseResponse;
+import com.yyide.chatim.model.ActivateRsp;
 import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.AppAddRsp;
@@ -8,8 +10,13 @@ import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
+import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
+import com.yyide.chatim.model.BookRsp;
+import com.yyide.chatim.model.BookSearchRsp;
+import com.yyide.chatim.model.BrandSearchRsp;
+import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
@@ -17,6 +24,7 @@ import com.yyide.chatim.model.DepartmentScopeRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp2;
 import com.yyide.chatim.model.DeviceUpdateRsp;
 import com.yyide.chatim.model.FaceOssBean;
+import com.yyide.chatim.model.GetAppVersionResponse;
 import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.HelpItemRep;
@@ -61,16 +69,30 @@ import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.UserSigRsp;
+import com.yyide.chatim.model.WeeklyDateBean;
+import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
+import com.yyide.chatim.model.schedule.LabelListRsp;
+import com.yyide.chatim.model.schedule.ParticipantRsp;
+import com.yyide.chatim.model.schedule.ScheduleData;
+import com.yyide.chatim.model.schedule.ScheduleListRsp;
+import com.yyide.chatim.model.schedule.Settings;
+import com.yyide.chatim.model.schedule.SiteNameRsp;
+import com.yyide.chatim.model.schedule.StudentGuardianRsp;
+import com.yyide.chatim.model.schedule.TodayListRsp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -82,6 +104,11 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface DingApiStores {
+
+    //获取应用更新接口
+    @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
+    @POST("/backstage/cloud-backstage/app/version/selectVersionByTerminal")
+    Observable<GetAppVersionResponse> updateVersion(@Body RequestBody info);
 
     @GET("/java-painted-screen/api/wechatPaintedScreenManage/selectDeviceOperation")
     Observable<GetStuasRsp> getData();
@@ -144,7 +171,29 @@ public interface DingApiStores {
     //添加用户设备基本信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-system/user/equipment/addUserEquipmentInfo")
-    Observable<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
+    Call<ResultBean> addUserEquipmentInfo(@Body RequestBody info);
+
+    /**
+     * https://api.uat.edu.1d1j.net/management/cloud-system/user/equipment/delUserEquipmentInfo
+     * 删除用户设备
+     *
+     * @param id 删除的id
+     * @return call
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/user/equipment/delUserEquipmentInfo")
+    Call<ResultBean> delUserEquipmentInfo(@Query("id") String id);
+
+    /**
+     * https://api.uat.edu.1d1j.net/management/cloud-system/user/equipment/getUserEquipmentInfoPage
+     * 用户设备列表分页
+     *
+     * @param info
+     * @return call
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/user/equipment/getUserEquipmentInfoPage")
+    Call<ResultBean> getUserEquipmentInfoPage(@Body RequestBody info);
 
     //查询组织架构列表信息 大学组织结构
     @POST("/management/cloud-system/department/listByApp")
@@ -184,8 +233,8 @@ public interface DingApiStores {
 
     //用户头像上传
     @Multipart
-    @POST("/management/cloud-system/user/androidToOss")
-    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info);
+    @POST("/management/cloud-system/user/uploadPic")
+    Observable<UploadRep> uploadImg(@Part MultipartBody.Part info, @Part("studentId") Long studentId);
 
     //扫码登录
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
@@ -381,12 +430,12 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/management/cloud-system/app/teacher/selectAllList
     //通讯录搜索-所有
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/user/list")
-    Observable<UserInfoRsp> selectAllList(@Body RequestBody requestBody);
+    @POST("/management/cloud-system/v1/app/addressBookApp/searchAddressBook")
+    Observable<BookSearchRsp> selectAllList(@Body RequestBody requestBody);
 
     //通讯录搜索-小初高
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system//app/student/list")
+    @POST("/management/cloud-system/app/student/list")
     Observable<TeacherlistRsp> getStudentList(@Body RequestBody requestBody);
 
     //获取首页学生作品
@@ -402,8 +451,8 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
     //上传学生face
     @Multipart
-    @POST("/face/cloud-face/face/toStudentOss")
-    Observable<BaseRsp> toStudentOss(@PartMap Map<String, RequestBody> map, @Part MultipartBody.Part file);
+    @POST("/face/cloud-face/face/toStudentOss/{studentId}")
+    Observable<BaseRsp> toStudentOss(@Path("studentId") String studentId, @Part MultipartBody.Part file);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/toTeacherOss
     //上传教师face
@@ -414,8 +463,8 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/getStudentOss
     //查询学生头像
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/face/cloud-face/face/getStudentOss")
-    Observable<FaceOssBean> getStudentOss(@Body RequestBody requestBody);
+    @POST("/face/cloud-face/face/getStudentOss/{studentId}")
+    Observable<FaceOssBean> getStudentOss(@Path("studentId") String studentId);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/getTeacherOss
     //查询老师头像
@@ -629,4 +678,205 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
     @POST("/management/cloud-system/app/user/reg")
     Observable<ResultBean> register(@Body RequestBody info);
+
+    /**
+     * app获取码验证
+     * https://api.uat.edu.1d1j.net/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByNumber
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/android/appRegistraCode/getRegistrationCodeByNumber")
+    Observable<ClassBrandInfoRsp> getRegistrationCodeByOffice(@Body RequestBody info);
+
+    /**
+     * app注册码绑定
+     * /brand/class-brand-management/android/appRegistraCode/updateRegistrationCodeByCode
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/android/appRegistraCode/updateRegistrationCodeByCode")
+    Observable<BaseRsp> updateRegistrationCodeByCode(@Body RequestBody requestBody);
+
+    /**
+     * 获取班牌列表
+     * https://api.uat.edu.1d1j.net/brand/class-brand-management/app/loginCheck/getClassBrand
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/app/loginCheck/getClassBrand")
+    Observable<BrandSearchRsp> getClassBrand(@Body RequestBody requestBody);
+
+    /**
+     * 二维码扫码接口
+     * https://api.uat.edu.1d1j.net/brand/class-brand-management/app/loginCheck/scan/3c954c?userName=admin
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/brand/class-brand-management/app/loginCheck/scan/{code}")
+    Observable<BaseRsp> qrcodeLoginVerify(@Path("code") String code, @Query("userName") String userName);
+
+    /**
+     * app验证接口
+     * /brand/class-brand-management/Android/Authority/verify
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/brand/class-brand-management/Android/Authority/verify")
+    Call<BaseRsp> brandVerify(@Body RequestBody requestBody);
+
+    /**
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/face/authorize/findActivationCode
+     * 查找激活码
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/face/authorize/findActivationCode")
+    Observable<ActivateRsp> findActivationCode(@Query("macId") String macId);
+
+    /**
+     * 通讯录
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/v1/app/addressBookApp/getAddressBook")
+    Observable<BookRsp> getAddressBook(@Body RequestBody requestBody);
+
+    /**
+     * 查询标签列表
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/selectLabelList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/selectLabelList")
+    Call<LabelListRsp> selectLabelList();
+
+    /**
+     * 新增标签
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/addLabel
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/addLabel")
+    Call<BaseRsp> addLabel(@Body RequestBody requestBody);
+
+    /**
+     * 修改标签
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/editLabel
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/editLabel")
+    Call<BaseRsp> editLabel(@Body RequestBody requestBody);
+
+    /**
+     * 删除标签
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/deleteLabelById/1437700895651627009
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/deleteLabelById/{id}")
+    Call<BaseRsp> deleteLabelById(@Path("id") String id);
+
+    /**
+     * 获取场地信息-one
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getSiteName
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getSiteName")
+    Call<SiteNameRsp> getSiteName();
+
+    /**
+     * 日程新增修改
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/saveSchedule
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/saveSchedule")
+    Call<BaseRsp> saveSchedule(@Body RequestBody requestBody);
+
+    /**
+     * 查询个人设置
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getScheduleSetting
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/app/schedule/getScheduleSetting")
+    Call<Settings> getScheduleSetting();
+
+    /**
+     * 修改添加个人设置
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/saveScheduleSetting
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/saveScheduleSetting")
+    Call<BaseRsp> saveScheduleSetting(@Body RequestBody requestBody);
+
+    /**
+     * 获取教职工人员信息
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getTeacherParticipant
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getTeacherParticipant")
+    Call<ParticipantRsp> getTeacherParticipant(@Query("departmentId") String departmentId);
+
+    /**
+     * 获取【家长/学生】人员信息
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getParticipant
+     * @param type  类型【0：学校名称及学段，1：年级】
+     * @param scope 范围【1：家长，2：学生】
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getParticipant")
+    Call<StudentGuardianRsp> getParticipant(@Query("id") String id,@Query("type") String type,@Query("scope") String scope);
+
+    /**
+     * 获取【本周和今日】日程
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getThisWeekAndTodayList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/getThisWeekAndTodayList")
+    Call<TodayListRsp> getThisWeekAndTodayList();
+
+    /**
+     * 删除日程
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/deleteScheduleById/14
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @DELETE("/management/cloud-system/app/schedule/deleteScheduleById/{id}")
+    Call<BaseRsp> deleteScheduleById(@Path("id") String id);
+
+    /**
+     * 日程搜索
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/searchSchedule
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/searchSchedule")
+    Call<BaseResponse<List<ScheduleData>>> searchSchedule(@Body RequestBody requestBody);
+
+    /**
+     * 日程列表接口 日/月
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/scheduleList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/scheduleList")
+    Call<ScheduleListRsp> scheduleList(@Body RequestBody requestBody);
+
+    /**
+     * 查询所有日程
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/selectAllScheduleList
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/selectAllScheduleList")
+    Call<BaseResponse<List<ScheduleData>>> selectAllScheduleList();
+
+    /**
+     * 更新日程状态
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/changeScheduleState
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/changeScheduleState")
+    Call<BaseRsp> changeScheduleState(@Body RequestBody requestBody);
+
+    /**
+     * 获取周报描述
+     *
+     * @return
+     */
+    @GET("/face/cloud-face/copywriter")
+    Observable<WeeklyDescBean> copywriter();
+
+    /**
+     * 获取周报时间
+     *
+     * @return
+     */
+    @GET("/face/cloud-face/statistic/time")
+    Observable<WeeklyDateBean> getWeeklyDate();
 }

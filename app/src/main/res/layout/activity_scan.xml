@@ -19,7 +19,6 @@
         app:qrcv_borderColor="@color/blue8"
         app:qrcv_borderSize="0.1dp"
         app:qrcv_cornerColor="@color/blue8"
-        app:qrcv_cornerLength="20dp"
         app:qrcv_cornerSize="3dp"
         app:qrcv_isBarcode="false"
         app:qrcv_isOnlyDecodeScanBoxArea="true"

@@ -2,7 +2,6 @@ package com.yyide.chatim.adapter;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -12,20 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.utils.InitPieChart;
 
 import java.util.ArrayList;
 import java.util.List;

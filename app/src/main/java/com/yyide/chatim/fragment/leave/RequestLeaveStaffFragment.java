@@ -49,6 +49,7 @@ import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.utils.ButtonUtils;
+import com.yyide.chatim.utils.DatePickerDialogUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.SpacesItemDecoration;
@@ -57,10 +58,12 @@ import com.yyide.chatim.view.leave.StaffAskLeaveView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -103,7 +106,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String endTime;
     private String leaveReason = "2";
     private String reason="";
-    private long deptId;
+    private String deptId;
     private List<Long> carbonCopyPeopleId = new ArrayList<>();
     private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList = new ArrayList<>();
     private String deptName;
@@ -200,14 +203,17 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     public void click(View view) {
         switch (view.getId()) {
             case R.id.cl_start_time:
-                showTime("选择开始时间",startTime,startTimeListener);
+                //showTime(getString(R.string.select_begin_time),startTime,startTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_begin_time),startTime,startTimeListener);
                 break;
             case R.id.cl_end_time:
                 if (TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(startTime)){
-                    showTime("选择结束时间", startTime,endTimeListener);
+                    //showTime(getString(R.string.select_end_time), startTime,endTimeListener);
+                    DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_end_time), startTime,endTimeListener);
                     break;
                 }
-                showTime("选择结束时间", endTime,endTimeListener);
+                //showTime(getString(R.string.select_end_time), endTime,endTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(),getString(R.string.select_end_time), endTime,endTimeListener);
                 break;
             //请假提交
             case R.id.btn_commit:
@@ -251,20 +257,20 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         //    "deptName":"班主任"
         //}
         if (TextUtils.isEmpty(startTime)){
-            ToastUtils.showShort("请选择请假开始时间");
+            ToastUtils.showShort(R.string.select_ask_for_leave_begin_time_tip);
             return;
         }
         if (TextUtils.isEmpty(endTime)){
-            ToastUtils.showShort("请选择请假结束时间");
+            ToastUtils.showShort(R.string.select_ask_for_leave_end_time_tip);
             return;
         }
         if (DateUtils.parseTimestamp(endTime,"")-DateUtils.parseTimestamp(startTime,"")<=0){
-            ToastUtils.showShort("请假结束时间应该大于开始时间");
+            ToastUtils.showShort(R.string.begin_time_not_gt_end_time_tip);
             return;
         }
         reason = editLeaveReason.getText().toString();
         if (TextUtils.isEmpty(reason)){
-            ToastUtils.showShort("请假事由不能为空");
+            ToastUtils.showShort(R.string.ask_for_leave_reason_null_tip);
             return;
         }
 
@@ -280,14 +286,14 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         }
         mDialogAll = new TimePickerDialog.Builder()
                 .setCallBack(onDateSetListener)
-                .setCancelStringId("取消")
-                .setSureStringId("确定")
+                .setCancelStringId(getString(R.string.cancel))
+                .setSureStringId(getString(R.string.confirm))
                 .setTitleStringId(title)
-                .setYearText("年")
-                .setMonthText("月")
-                .setDayText("日")
-                .setHourText("时")
-                .setMinuteText("分")
+                .setYearText(getString(R.string.date_year_yd))
+                .setMonthText(getString(R.string.date_month_yd))
+                .setDayText(getString(R.string.date_day_yd))
+                .setHourText(getString(R.string.time_hour_yd))
+                .setMinuteText(getString(R.string.time_minute_yd))
                 .setCyclic(false)
                 .setMinMillseconds(System.currentTimeMillis()-oneYears)
                 .setMaxMillseconds(System.currentTimeMillis() + tenYears)
@@ -372,7 +378,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             if (peopleForm == null){
                 btn_commit.setAlpha(0.5f);
                 btn_commit.setClickable(false);
-                ToastUtils.showLong("没有指定审批人，不能使用请假功能！");
+                ToastUtils.showLong(R.string.not_approver_not_ask_for_leave_tip);
                 return;
             }
             btn_commit.setAlpha(1f);
@@ -380,6 +386,8 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             iv_add_staff.setVisibility(View.VISIBLE);
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_approver_head, null);
             final TextView tv_approver_name = view.findViewById(R.id.tv_approver_name);
+            final ImageView approverUserHead = view.findViewById(R.id.iv_user_head);
+            showImage(peopleForm.getImage(),approverUserHead);
             tv_approver_name.setText(peopleForm.getName());
             ll_approver_list.addView(view);
             //超送人
@@ -492,6 +500,9 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     }
 
     private List<AddressBookRsp.DataBean> filterCopyerList(List<AddressBookRsp.DataBean> list) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            list = list.stream().distinct().collect(Collectors.toList());
+        }
         final Iterator<AddressBookRsp.DataBean> iterator = list.iterator();
         while (iterator.hasNext()) {
             final AddressBookRsp.DataBean dataBean = iterator.next();
@@ -517,7 +528,12 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                 final List<AddressBookRsp.DataBean> dataBeans = filterCopyerList(dataBeans1);
                 for (int i = 0; i < dataBeans.size(); i++) {
                     final AddressBookRsp.DataBean dataBean = dataBeans.get(i);
-                    carbonCopyPeopleId.add(dataBean.getTeacherId());
+                    if (carbonCopyPeopleId.contains(dataBean.getTeacherId())) {
+                        Log.e(TAG, "onActivityResult: 去重"+dataBean.getTeacherId());
+                        continue;
+                    } else {
+                        carbonCopyPeopleId.add(dataBean.getTeacherId());
+                    }
                     final ApproverRsp.DataBean.ListBean listBean = new ApproverRsp.DataBean.ListBean();
                     listBean.setImage(dataBean.getImage());
                     listBean.setName(dataBean.getTeacherName());
@@ -531,7 +547,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                         showImage(dataBean.getImage(), iv_user_head);
                         tv_copyer_name.setText(name);
                         ll_copyer_list.addView(view1);
-                        setViewLayoutParams(view1, StatusBarUtils.dip2px(getContext(),45),0);
+                        //setViewLayoutParams(view1, StatusBarUtils.dip2px(getContext(),45),0);
                     }
                 }
 
@@ -552,7 +568,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                     ll_copyer_list.removeView(view1);
                     final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
                     final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
-                    tv_copyer_name.setText("查看全部");
+                    tv_copyer_name.setText(R.string.look_over_all);
                     userHeadImage.setImageResource(R.drawable.icon_read_more);
                     view1.setOnClickListener(v -> {
                         final Intent intent = new Intent(getActivity(), LeaveCarbonCopyPeopleActivity.class);

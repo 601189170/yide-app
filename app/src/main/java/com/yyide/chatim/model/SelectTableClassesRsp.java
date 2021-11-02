@@ -46,12 +46,22 @@ public class SelectTableClassesRsp {
         private String name;
         private long schoolId;
         private String alias;
-        private String showType;
+        private String showType;//	0:展示班级名称、1:展示班级别名、2:如有班级别名，显示年级+班级别名，如“实验7班(初一)
         private long gradeId;
-        private long headmasterId;
-        private long secondHeadmasterId;
+        private String showName;
+        private String headmasterId;
+        private String secondHeadmasterId;
         private String type;
         private List<DataBean> list;
+
+
+        public String getShowName() {
+            return showName;
+        }
+
+        public void setShowName(String showName) {
+            this.showName = showName;
+        }
 
         public long getId() {
             return id;
@@ -173,19 +183,19 @@ public class SelectTableClassesRsp {
             this.gradeId = gradeId;
         }
 
-        public long getHeadmasterId() {
+        public String getHeadmasterId() {
             return headmasterId;
         }
 
-        public void setHeadmasterId(int headmasterId) {
+        public void setHeadmasterId(String headmasterId) {
             this.headmasterId = headmasterId;
         }
 
-        public long getSecondHeadmasterId() {
+        public String getSecondHeadmasterId() {
             return secondHeadmasterId;
         }
 
-        public void setSecondHeadmasterId(long secondHeadmasterId) {
+        public void setSecondHeadmasterId(String secondHeadmasterId) {
             this.secondHeadmasterId = secondHeadmasterId;
         }
 

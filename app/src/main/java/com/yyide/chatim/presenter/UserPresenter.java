@@ -1,6 +1,7 @@
 package com.yyide.chatim.presenter;
 
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -65,7 +66,13 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void uploadFile(File file) {
+    /**
+     * 图片上传
+     *
+     * @param file
+     * @param isStudent
+     */
+    public void uploadFile(File file, Long studentId) {
         if (file == null) {
             return;
         }
@@ -75,12 +82,11 @@ public class UserPresenter extends BasePresenter<UserView> {
         // 创建MultipartBody.Part，用于封装文件数据
         MultipartBody.Part requestImgPart =
                 MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody);
-
-        addSubscription(dingApiStores.uploadImg(requestImgPart), new ApiCallback<UploadRep>() {
+        addSubscription(dingApiStores.uploadImg(requestImgPart, studentId), new ApiCallback<UploadRep>() {
             @Override
             public void onSuccess(UploadRep model) {
                 if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
-                    mvpView.uploadFileSuccess(model.getUrl());
+                    mvpView.uploadFileSuccess(model.getData());
                 } else {
                     mvpView.uploadFileFail(model.getMessage());
                 }
@@ -98,15 +104,15 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void getFaceData(String name, long classId,long depId){
-        Log.e("FaceUploadPresenter", "getFaceData: name="+name +",classId="+classId);
+    public void getFaceData(String name, String classId, long depId, String studentId) {
+        Log.e("FaceUploadPresenter", "getFaceData: name=" + name + ",classId=" + classId);
         mvpView.showLoading();
         if (!SpData.getIdentityInfo().staffIdentity()) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("name",name);
-            params.put("classId",classId);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
-            addSubscription(dingApiStores.getStudentOss(body), new ApiCallback<FaceOssBean>() {
+            // Map<String, Object> params = new HashMap<>();
+            //params.put("name",name);
+            //params.put("classId",classId);
+            //RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
+            addSubscription(dingApiStores.getStudentOss(studentId), new ApiCallback<FaceOssBean>() {
                 @Override
                 public void onSuccess(FaceOssBean model) {
                     mvpView.getFaceDataSuccess(model);
@@ -122,10 +128,10 @@ public class UserPresenter extends BasePresenter<UserView> {
                     mvpView.hideLoading();
                 }
             });
-        }else {
+        } else {
             Map<String, Object> params = new HashMap<>();
-            params.put("name",name);
-            params.put("depId",depId);
+            params.put("name", name);
+            params.put("depId", depId);
             RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
             addSubscription(dingApiStores.getTeacherOss(body), new ApiCallback<FaceOssBean>() {
                 @Override

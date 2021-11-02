@@ -66,14 +66,11 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
         indexAdapter = new IndexAdapter();
         announAdapter = new ClassPhotoAdapter(announRoll);
         announRoll.setHintView(null);
-        announAdapter.setOnItemClickListener(new ClassPhotoAdapter.ItemClickListener() {
-            @Override
-            public void OnItemClickListener() {
+        announAdapter.setOnItemClickListener(() -> {
 //                startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
-                Intent intent = new Intent(view.getContext(), WebViewActivity.class);
-                intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
-                view.getContext().startActivity(intent);
-            }
+            Intent intent = new Intent(view.getContext(), WebViewActivity.class);
+            intent.putExtra("url", BaseConstant.CLASS_PHOTO_URL);
+            view.getContext().startActivity(intent);
         });
         iv_bg.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), WebViewActivity.class);

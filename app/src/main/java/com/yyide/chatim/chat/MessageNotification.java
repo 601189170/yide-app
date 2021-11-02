@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import com.tencent.imsdk.v2.V2TIMConversation;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.imsdk.v2.V2TIMOfflinePushInfo;
-import com.tencent.liteav.model.CallModel;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
@@ -24,6 +23,8 @@ import com.tencent.qcloud.tim.uikit.utils.TUIKitUtils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
+import com.yyide.chatim.chat.helper.IBaseLiveListener;
+import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager;
 import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.DemoLog;
 
@@ -90,10 +91,10 @@ public class MessageNotification {
         }
         mHandler.removeCallbacksAndMessages(null);
 
-        CallModel callModel = CallModel.convert2VideoCallData(msg);
         boolean isDialing = false;
-        if (callModel != null && callModel.action == CallModel.VIDEO_CALL_ACTION_DIALING) {
-            isDialing = true;
+        IBaseLiveListener baseCallListener = TUIKitLiveListenerManager.getInstance().getBaseCallListener();
+        if (baseCallListener != null) {
+            isDialing = baseCallListener.isDialingMessage(msg);
         }
         DemoLog.e(TAG, "isDialing: " + isDialing);
 
@@ -153,7 +154,7 @@ public class MessageNotification {
         // 小米手机需要在设置里面把【云通信IM】的"后台弹出权限"打开才能点击Notification跳转。
         if (isDialing) {
             launch = new Intent(mContext, MainActivity.class);
-            launch.putExtra(Constants.CHAT_INFO, callModel);
+            launch = baseCallListener.putCallExtra(launch, Constants.CHAT_INFO, msg);
             launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         } else {
             ChatInfo chatInfo = new ChatInfo();

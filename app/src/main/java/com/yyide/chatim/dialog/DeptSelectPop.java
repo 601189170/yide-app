@@ -2,6 +2,7 @@ package com.yyide.chatim.dialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,12 +45,19 @@ public class DeptSelectPop extends PopupWindow {
     Window mWindow;
     private List<LeaveDeptRsp.DataBean> dataBeansList;
     private OnCheckedListener onCheckedListener;
+    private OnCheckedListener2 onCheckedListener2;
     public void setOnCheckedListener(OnCheckedListener onCheckedListener) {
         this.onCheckedListener = onCheckedListener;
     }
+    public void setOnCheckedListener(OnCheckedListener2 onCheckedListener2) {
+        this.onCheckedListener2 = onCheckedListener2;
+    }
 
     public interface OnCheckedListener {
-        void onOnCheckedListener(long id, String dept);
+        void onOnCheckedListener(String id, String dept);
+    }
+    public interface OnCheckedListener2{
+        void onOnCheckedListener(LeaveDeptRsp.DataBean dataBean);
     }
 
     /**
@@ -86,6 +94,13 @@ public class DeptSelectPop extends PopupWindow {
             case 3:
                 tvPopTitle.setText("选择考勤事件");
                 break;
+            case 4:
+                tvPopTitle.setText("切换学生");
+                Drawable drawable = context.getResources().getDrawable(R.drawable.swich_person);
+                //设置图片大小，必须设置
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tvPopTitle.setCompoundDrawables(drawable, null, null, null);
+                break;
             default:
                 break;
         }
@@ -118,7 +133,13 @@ public class DeptSelectPop extends PopupWindow {
                 final Optional<LeaveDeptRsp.DataBean> optionalDataBean = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
                 if (optionalDataBean.isPresent()){
                     final LeaveDeptRsp.DataBean dataBean2 = optionalDataBean.get();
-                    onCheckedListener.onOnCheckedListener(dataBean2.getDeptId(),dataBean2.getDeptName());
+                    if (onCheckedListener != null){
+                        onCheckedListener.onOnCheckedListener(dataBean2.getDeptId(),dataBean2.getDeptName());
+                    }
+
+                    if (onCheckedListener2 != null){
+                        onCheckedListener2.onOnCheckedListener(dataBean2);
+                    }
                 }
             }
         });

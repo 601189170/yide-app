@@ -41,6 +41,9 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/caches
+.idea/compiler.xml
+.idea/misc.xml
+
 .idea/libraries
 .gradle
 .DS_Store

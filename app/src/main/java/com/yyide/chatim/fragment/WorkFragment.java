@@ -54,10 +54,14 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
+        getData();
+        initView();
+    }
+
+    private void getData() {
         if (SpData.getClassInfo() != null) {
             mvpPresenter.getWorkInfo(SpData.getClassInfo().classesId);
         }
-        initView();
     }
 
     private void initView() {
@@ -100,9 +104,7 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
         if (model.code == BaseConstant.REQUEST_SUCCES2 && model != null && model.data != null) {
             if (model.data.size() > 0) {
                 List<SelectSchByTeaidRsp.DataBean> dataBeanList = new ArrayList<>();
-                for (SelectSchByTeaidRsp.DataBean item : model.data) {
-                    dataBeanList.add(item);
-                }
+                dataBeanList.addAll(model.data);
                 announAdapter.notifyData(dataBeanList);
                 indexAdapter.setList(dataBeanList);
             } else {
@@ -122,9 +124,9 @@ public class WorkFragment extends BaseMvpFragment<WorkPresenter> implements Work
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", WorkFragment.class.getSimpleName());
-            if (SpData.getClassInfo() != null) {
-                mvpPresenter.getWorkInfo(SpData.getClassInfo().classesId);
-            }
+            getData();
+        } else if (BaseConstant.TYPE_PREPARES_SAVE.equals(messageEvent.getCode())) {
+            getData();
         }
     }
 

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.schedule.ScheduleSettingsActivity">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#F7F7F7"
+        app:layout_constraintTop_toBottomOf="@id/top" />
+
+    <TextView
+        android:id="@+id/tv_class_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="课程表"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/v_line1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line" />
+
+    <CheckBox
+        android:id="@+id/cb_class_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/schedule_switch_checked_selector"
+        android:button="@null"
+        app:layout_constraintBottom_toBottomOf="@id/tv_class_schedule"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_class_schedule" />
+
+    <View
+        android:id="@+id/v_line1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="48dp"
+        android:background="#E4E7ED"
+        app:layout_constraintTop_toBottomOf="@id/v_line" />
+
+    <CheckBox
+        android:id="@+id/cb_class_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="上课提醒"
+        android:textColor="#333333"
+        android:textSize="@dimen/text_16"
+        android:theme="@style/CheckBoxTheme"
+        app:layout_constraintBottom_toTopOf="@id/tv_class_remark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line1" />
+
+    <TextView
+        android:id="@+id/tv_class_remark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginBottom="@dimen/dp_14"
+        android:text="注：日程开始时间为课堂开始时间。"
+        android:textColor="#ff999999"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/v_line2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cb_class_remind" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_class_remind_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/cb_class_remind"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cb_class_remind">
+
+        <ImageView
+            android:id="@+id/iv_class_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:src="@drawable/schedule_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_class_remind_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text="日程开始时"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_class_remind"
+            app:layout_constraintRight_toLeftOf="@id/iv_class_remind"
+            app:layout_constraintTop_toTopOf="@id/iv_class_remind" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:id="@+id/v_line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="68dp"
+        android:background="#EBEBEB"
+        app:layout_constraintTop_toBottomOf="@id/v_line1" />
+
+    <CheckBox
+        android:id="@+id/cb_homework_release_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="作业发布提醒"
+        android:textColor="#333333"
+        android:textSize="@dimen/text_16"
+        android:theme="@style/CheckBoxTheme"
+        app:layout_constraintBottom_toTopOf="@id/tv_homework_release_remark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line2" />
+
+    <TextView
+        android:id="@+id/tv_homework_release_remark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:paddingBottom="@dimen/dp_14"
+        android:text="注：日程开始时间为课堂结束时间。"
+        android:textColor="#ff999999"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/v_line3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cb_homework_release_remind" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_homework_release_remind_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/cb_homework_release_remind"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cb_homework_release_remind">
+
+        <ImageView
+            android:id="@+id/iv_homework_release_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:src="@drawable/schedule_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_homework_release_remind_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text="日程开始时"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_homework_release_remind"
+            app:layout_constraintRight_toLeftOf="@id/iv_homework_release_remind"
+            app:layout_constraintTop_toTopOf="@id/iv_homework_release_remind" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_class_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="cl_homework_release_remind_type,tv_class_remark,cb_class_remind,v_line2,
+tv_homework_release_remark,cb_homework_release_remind,cl_class_remind_type" />
+
+    <View
+        android:id="@+id/v_line3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#F7F7F7"
+        app:layout_constraintTop_toBottomOf="@id/tv_homework_release_remark" />
+
+    <TextView
+        android:id="@+id/tv_school_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="校历"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/v_line4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line3" />
+
+    <CheckBox
+        android:id="@+id/cb_school_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/schedule_switch_checked_selector"
+        android:button="@null"
+        app:layout_constraintBottom_toBottomOf="@id/tv_school_calendar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_school_calendar" />
+
+    <View
+        android:id="@+id/v_line4"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="48dp"
+        android:background="#E4E7ED"
+        app:layout_constraintTop_toBottomOf="@id/v_line3" />
+
+    <CheckBox
+        android:id="@+id/cb_school_calendar_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="校历提醒"
+        android:textColor="#333333"
+        android:textSize="@dimen/text_16"
+        android:theme="@style/CheckBoxTheme"
+        app:layout_constraintBottom_toTopOf="@id/tv_school_calendar_remark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line4" />
+
+    <TextView
+        android:id="@+id/tv_school_calendar_remark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:paddingBottom="@dimen/dp_14"
+        android:text="注：校历的默认提醒时间设置。"
+        android:textColor="#ff999999"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/v_line5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cb_school_calendar_remind" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_school_calendar_remind_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/cb_school_calendar_remind"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cb_school_calendar_remind">
+
+        <ImageView
+            android:id="@+id/iv_school_calendar_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:src="@drawable/schedule_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_school_calendar_remind_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text="日程开始时"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_school_calendar_remind"
+            app:layout_constraintRight_toLeftOf="@id/iv_school_calendar_remind"
+            app:layout_constraintTop_toTopOf="@id/iv_school_calendar_remind" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_school_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="cl_school_calendar_remind_type,tv_school_calendar_remark,cb_school_calendar_remind" />
+
+    <View
+        android:id="@+id/v_line5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#F7F7F7"
+        app:layout_constraintTop_toBottomOf="@id/tv_school_calendar_remark" />
+
+    <TextView
+        android:id="@+id/tv_conference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="会议"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/v_line6"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line5" />
+
+    <CheckBox
+        android:id="@+id/cb_conference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/schedule_switch_checked_selector"
+        android:button="@null"
+        app:layout_constraintBottom_toBottomOf="@id/tv_conference"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_conference" />
+
+    <View
+        android:id="@+id/v_line6"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="48dp"
+        android:background="#E4E7ED"
+        app:layout_constraintTop_toBottomOf="@id/v_line5" />
+
+    <CheckBox
+        android:id="@+id/cb_conference_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="会议提醒"
+        android:textColor="#333333"
+        android:textSize="@dimen/text_16"
+        android:theme="@style/CheckBoxTheme"
+        app:layout_constraintBottom_toTopOf="@id/tv_conference_remark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line6" />
+
+    <TextView
+        android:id="@+id/tv_conference_remark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:paddingBottom="@dimen/dp_14"
+        android:text="注：未设置提醒时的默认提醒时间设置。"
+        android:textColor="#ff999999"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/v_line7"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cb_conference_remind" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_conference_remind_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/cb_conference_remind"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cb_conference_remind">
+
+        <ImageView
+            android:id="@+id/iv_conference_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:src="@drawable/schedule_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_conference_remind_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:text="日程开始时"
+            android:textColor="#ff333333"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_conference_remind"
+            app:layout_constraintRight_toLeftOf="@id/iv_conference_remind"
+            app:layout_constraintTop_toTopOf="@id/iv_conference_remind" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_conference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="cb_conference_remind,
+tv_conference_remark,cl_conference_remind_type" />
+
+    <View
+        android:id="@+id/v_line7"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="#F7F7F7"
+        app:layout_constraintTop_toBottomOf="@id/tv_conference_remark" />
+
+    <TextView
+        android:id="@+id/tv_show_timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="显示当前时间线标识"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/v_line8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line7" />
+
+    <CheckBox
+        android:id="@+id/cb_show_timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/schedule_switch_checked_selector"
+        android:button="@null"
+        app:layout_constraintBottom_toBottomOf="@id/tv_show_timeline"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_show_timeline" />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_show_timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tv_show_timeline,cb_show_timeline,v_line8"/>
+    <View
+        android:id="@+id/v_line8"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="48dp"
+        android:background="#E4E7ED"
+        app:layout_constraintTop_toBottomOf="@id/v_line7" />
+
+    <TextView
+        android:id="@+id/tv_show_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="显示历史日程"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/v_line9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line8" />
+
+    <CheckBox
+        android:id="@+id/cb_show_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/schedule_switch_checked_selector"
+        android:button="@null"
+        app:layout_constraintBottom_toBottomOf="@id/tv_show_history"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_show_history" />
+
+    <View
+        android:id="@+id/v_line9"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:layout_marginTop="48dp"
+        android:background="#F7F7F7"
+        app:layout_constraintTop_toBottomOf="@id/v_line8" />
+
+    <TextView
+        android:id="@+id/tv_gmt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_14"
+        android:text="当前时区"
+        android:textColor="#ff333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_line9" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:text="GTM+8"
+        android:textColor="#ff666666"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_gmt"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_gmt" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,20 +30,24 @@ public class BaseConstant {
     public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
     /*账号*/
-    public static String LOGINNAME = "LOGINNAME";
+    public static final String LOGINNAME = "LOGINNAME";
 
     /*密码*/
-    public static String PASSWORD = "PASSWORD";
+    public static final String PASSWORD = "PASSWORD";
 
     //第一次打开app
-    public static String FIRST_OPEN_APP = "firstOpenApp";
+    public static final String FIRST_OPEN_APP = "firstOpenApp";
+
+    public static final String CHAT_INFO = "chatInfo";
 
     /**
      * 请求ip==>baseUrl
      */
-    public static final String API_SERVER_URL_UAT = "http://192.168.3.147:8888";//Dev 环境
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.154:8888";//Dev 环境
+//        public static final String API_SERVER_URL_UAT = "http://192.168.3.108:8888";//Dev 环境
+
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-//    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
+    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
 
     //Http访问地址
     public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
@@ -74,19 +78,12 @@ public class BaseConstant {
     public static final String PRIVACY_URL = "https://file.1d1j.cn/privacyPolicy.html";
 
     public static final String AGREEMENT_URL = "https://file.1d1j.cn/serviceAgreement.html";
-    /**
-     * request Code 从相册选择照片不裁切
-     **/
-    public final static int SELECT_ORIGINAL_PIC = 126;
-    /**
-     * request Code 拍取照片不裁切
-     **/
-    public final static int REQ_CODE = 127;
 
     public final static String JG_ALIAS_NAME = "aliasName";
-    public final static String JG_SEQUENCE = "sequence";
 
     public static final String SP_PRIVACY = "sp_privacy";
+
+    public static final String LOGIN_VERSION_CODE = "login_version_code";
 
     /**
      * EventBus 常量
@@ -95,10 +92,16 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_USER_EMAIL = "type_update_user_email";
     public static final String TYPE_UPDATE_USER_SEX = "type_update_user_sex";
     public static final String TYPE_SELECT_MESSAGE_TODO = "type_select_message_todo";
+    public static final String TYPE_UPDATE_MESSAGE_TODO = "type_update_message_todo";
+    public static final String TYPE_HOME_CHECK_SCHEDULE = "type_home_check_schedule";
+    public static final String TYPE_MEETING_UPDATE_LIST = "type_meeting_update_list";
+
     public static final String TYPE_MAIN = "type_main";
+    public static final String TYPE_MESSAGE = "type_message";
     public static final String TYPE_IM_LOGIN = "type_im_login";
     public static final String TYPE_MESSAGE_UPDATE = "type_message_update";
     public static final String TYPE_UPDATE_HOME = "type_update_home";
+    public static final String TYPE_REGISTER_UNREAD = "type_register_unread";
     public static final String TYPE_HOME_CHECK_IDENTITY = "type_home_check_identity";
     public static final String TYPE_UPDATE_NOTICE_TAB = "type_update_notice_tab";
     public static final String TYPE_UPDATE_REMOTE_NOTICE = "type_update_remote_notice";
@@ -118,5 +121,5 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_APP_MANAGER = "type_update_app_manager";
     public static final String TYPE_UPDATE_APP = "type_update_app";
     public static final String TYPE_UPDATE_NOTICE_MY_RELEASE = "type_update_notice_my_release";
-
+    public static final String TYPE_UPDATE_SCHEDULE_LIST_DATA = "type_update_schedule_list_data";
 }

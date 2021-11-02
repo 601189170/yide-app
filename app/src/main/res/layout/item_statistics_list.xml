@@ -14,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
-        android:text="张大大"
         android:textColor="#ff606266"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"

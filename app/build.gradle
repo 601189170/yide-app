@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.huawei.agconnect'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.aliyun.ams.emas-services'
-
+apply plugin: 'kotlin-kapt'
 android {
 
     signingConfigs {
@@ -29,8 +29,8 @@ android {
         applicationId "com.yyide.chatim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 101
-        versionName "1.0.1"
+        versionCode 108
+        versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -39,30 +39,6 @@ android {
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
 
-        manifestPlaceholders = [
-                //              Master Secret    e2cfe288703428279f01ecb0
-                JPUSH_PKGNAME : "com.yyide.chatim",
-                JPUSH_APPKEY  : "143ab02bc474008f39f26f97", //极光开发平台上注册的包名对应的appkey.
-                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
-                //meizu_config_start
-                MEIZU_APPKEY  : "MZ-魅族的APPKEY",
-                MEIZU_APPID   : "MZ-魅族的APPID",
-                //meizu_config_end
-                //xiaomi_config_start
-                XIAOMI_APPID  : "MI-2882303761519922795",
-                XIAOMI_APPKEY : "MI-5201992213795",
-                //xiaomi_config_end
-                //oppo_config_start
-                OPPO_APPKEY   : "OP-b73f1a5b44af4e2d9a7200b15a521808",
-                OPPO_APPID    : "OP-30531663",
-                OPPO_APPSECRET: "OP-13ee3e7c24cd43af91242879d555c747",
-                //oppo_config_end
-                //vivo_config_start
-                VIVO_APPKEY   : "vivo的APPKEY",
-                VIVO_APPID    : "vivo的APPID",
-                //vivo_config_end
-
-        ]
         signingConfig signingConfigs.release
     }
 
@@ -74,9 +50,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders = [alibaba_appkey: "333472407", alibaba_appsecret: "df808fe4266141bdb471e9b5519c101c"]
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [alibaba_appkey: "333499175", alibaba_appsecret: "4f418b018eb4431d8ecebfc74f019fa0"]
         }
     }
 
@@ -97,16 +77,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    buildToolsVersion '30.0.3'
-//    // 在MobSDK的扩展中注册SMSSDK的相关信息
-//    MobSDK {
-//        appKey "19aa2f667f410"
-//        appSecret "c73e7cd6726d6853309ba4f4baaa2c1b"
-//        SMSSDK {}
-//    }
-//    MobSDK {
-//        fp true //严格模式
-//    }
 
     lintOptions {
         abortOnError false
@@ -114,6 +84,9 @@ android {
 
     buildFeatures {
         viewBinding = true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     //多渠道打包
@@ -161,20 +134,26 @@ static def generateTime() {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
     debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
 
-    testImplementation 'junit:junit:4.13.2'
+//    testImplementation 'junit:junit:4.13.2'butterknife
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //autoSize 适配框架
+    implementation 'me.jessyan:autosize:1.2.1'
     //tabLayout
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     //万能适配器
@@ -189,7 +168,7 @@ dependencies {
     //——OptionsPickerView 选项选择器，支持一，二，三级选项选择，并且可以设置是否联动
     implementation 'com.contrarywind:wheelview:4.1.0'
     implementation 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
     //添加此行
     implementation 'com.android.support:multidex:1.0.3'
     // Optional, if you use support library fragments:
@@ -207,11 +186,17 @@ dependencies {
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.5-jitpack'
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86_64:v8.1.5-jitpack'
 
+    //日期时间选择
+    implementation 'com.github.loperSeven:DateTimePicker:0.3.3'
+
     //Utils
     implementation 'com.blankj:utilcode:1.30.6'
 
     //对话框
     implementation 'com.github.SheHuan:NiceDialog:1.1.9'
+
+    //activity侧滑
+    implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
 
     //zipfile
     implementation 'top.zibin:Luban:1.1.8'
@@ -227,9 +212,7 @@ dependencies {
     // 基础依赖包，必须要依赖
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'com.google.android:flexbox:1.0.0'
-//    implementation 'com.tencent.imsdk:tuikit-live:5.1.56'
-    implementation 'com.tencent.imsdk:tuikit:5.1.56'
+    implementation 'com.google.android:flexbox:2.0.1'
 
     implementation 'cn.bingoogolapple:bga-qrcode-zbar:1.3.6'
 //    implementation 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
@@ -240,7 +223,6 @@ dependencies {
     implementation 'com.github.paradoxie:AutoVerticalTextview:0.1'
     //noinspection GradleCompatible
     implementation 'com.android.support:design:25.2.0'
-
     implementation 'com.tencent:mmkv-static:1.0.24'
 //    //implementation 'com.github.yalantis:ucrop:2.2.6'
     implementation 'com.kevin:crop:1.0.2'
@@ -248,8 +230,8 @@ dependencies {
     implementation 'com.github.tbruyelle:rxpermissions:0.12'
 
     //lombok
-    compileOnly 'org.projectlombok:lombok:1.18.16'
-    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+//    compileOnly 'org.projectlombok:lombok:1.18.16'
+//    annotationProcessor 'org.projectlombok:lombok:1.18.16'
     //Alibaba Java Coding Guidelines    
     compileOnly 'com.alibaba.p3c.idea:p3c-common:1.0.0'
 
@@ -263,7 +245,10 @@ dependencies {
     //华为依赖
     implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.4.0'
     //小米依赖
-    implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.4.0'
+//    implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.4.0'
+    implementation ('com.aliyun.ams:alicloud-android-third-push-xiaomi:3.4.0'){
+        exclude(group: 'com.xiaomi.mipush.sdk', module: 'mipush')
+    }
     //OPPO依赖
     implementation 'com.aliyun.ams:alicloud-android-third-push-oppo:3.4.0'
     //vivo依赖
@@ -272,5 +257,27 @@ dependencies {
     implementation 'com.aliyun.ams:alicloud-android-third-push-meizu:3.4.0'
     //谷歌依赖
     implementation 'com.aliyun.ams:alicloud-android-third-push-fcm:3.4.0'
+
+    //腾讯IM 离线推送配置
+    //小米
+    implementation 'com.tencent.tpns:xiaomi:1.2.1.2-release'
+    //华为
+//    implementation 'com.tencent.tpns:huawei:1.2.1.2-release'
+//    implementation 'com.huawei.hms:push:5.0.2.300'
+//    //魅族
+//    implementation 'com.tencent.tpns:meizu:1.2.1.2-release'
+//    //oppo
+//    implementation 'com.tencent.tpns:oppo:1.2.1.2-release'
+//    //vivo
+//    implementation 'com.tencent.tpns:vivo:1.2.1.2-release'
+    //日历
+    api project(":calendar")
+    implementation project(":tuikit")
+    implementation project(":tuikit-live")
+
+    //数据库
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }
 

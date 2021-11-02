@@ -32,20 +32,17 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- 8.0应用安装权限 -->
-<!--    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />-->
-
+    <!-- <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> -->
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 腾讯IM推送配置 -->
     <!-- ********OPPO 推送 start******** -->
     <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
     <uses-permission android:name="com.heytap.mcs.permission.RECIEVE_MCS_MESSAGE" /> <!-- ********OPPO 推送 end******** -->
-<!--    <uses-feature android:name="android.hardware.Camera" />-->
-<!--    <uses-feature android:name="android.hardware.camera.autofocus" /> &lt;!&ndash; ********华为推送权限设置******** &ndash;&gt;-->
+    <!-- <uses-feature android:name="android.hardware.Camera" /> -->
+    <!-- <uses-feature android:name="android.hardware.camera.autofocus" /> &lt;!&ndash; ********华为推送权限设置******** &ndash;&gt; -->
     <permission
         android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+        android:protectionLevel="signatureOrSystem" /> <!-- <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" /> -->
     <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.PROCESS_PUSH_MSG" /> <!-- ********小米推送权限设置******** -->
     <permission
         android:name="com.tencent.qcloud.tim.tuikit.permission.MIPUSH_RECEIVE"
@@ -66,28 +63,74 @@
         android:name="com.tencent.qcloud.tim.tuikit.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.C2D_MESSAGE" />
-
-    <!-- 阿里云推送相关权限 -->
+    <uses-permission android:name="com.tencent.qcloud.tim.tuikit.permission.C2D_MESSAGE" /> <!-- 阿里云推送相关权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.REORDER_TASKS"/>
-
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application
         android:name=".BaseApplication"
+        android:allowBackup="false"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:icon="@mipmap/ic_launcher_logo"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/NoTitleFullscreen"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        android:allowBackup="false"
-        tools:replace="android:allowBackup"
-        tools:targetApi="p">
+        tools:replace="android:allowBackup">
+        <activity
+            android:name=".activity.meeting.MeetingHistoryActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.meeting.MeetingSaveActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.meeting.MeetingHomeActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.weekly.WeeklyDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.weekly.WeeklyHomeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PushSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="375" />
+        <meta-data
+            android:name="design_height_in_dp"
+            android:value="812" />
+
+        <activity
+            android:name=".activity.schedule.ScheduleSearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.book.BookPatriarchDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.book.BookStudentDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.book.BookTeacherDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.book.NewBookActivity"
+            android:screenOrientation="portrait" /> <!-- 如果您项目中的所有页面都只需要以高或宽中的一个作为基准进行适配的话, 那就只需要填写高或宽中的一个设计图尺寸即可 -->
         <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait" />
@@ -161,7 +204,9 @@
             android:name=".activity.PreparesLessonActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.BookSearchActivity" />
+        <activity
+            android:name=".activity.book.BookSearchActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ScanLoginActivity"
             android:screenOrientation="portrait"
@@ -242,14 +287,15 @@
         <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
         <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
         <!-- since 3.3.0 接收JPush相关事件 -->
-       <!-- <receiver android:name=".jiguang.PushMessageReceiver">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+        <!--
+ <receiver android:name=".jiguang.PushMessageReceiver">
+             <intent-filter>
+                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
 
-                <category android:name="com.yyide.chatim" />
-            </intent-filter>
-        </receiver>-->
-
+                 <category android:name="com.yyide.chatim" />
+             </intent-filter>
+         </receiver>
+        -->
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait"
@@ -261,7 +307,7 @@
 
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
-        </activity>
+        </activity> <!-- android:theme="@style/splashActivityTheme" -->
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
@@ -365,7 +411,6 @@
             android:name=".ScanActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".activity.notice.NoticeConfirmDetailActivity"
             android:screenOrientation="portrait" />
@@ -398,29 +443,28 @@
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- *********极光推送 start********* -->
         <activity
             android:name=".activity.PhotoViewActivity"
-            android:screenOrientation="portrait" />
-
-<!--        <receiver-->
-<!--            android:name="cn.jpush.android.service.PushReceiver"-->
-<!--            android:enabled="true"-->
-<!--            tools:node="replace">-->
-<!--            <intent-filter android:priority="1000">-->
-<!--                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />-->
-<!--                &lt;!&ndash; Required  显示通知栏 &ndash;&gt;-->
-<!--                <category android:name="${applicationId}" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.USER_PRESENT" />-->
-<!--                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-<!--            </intent-filter>-->
-<!--            &lt;!&ndash; Optional &ndash;&gt;-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.PACKAGE_ADDED" />-->
-<!--                <action android:name="android.intent.action.PACKAGE_REMOVED" />-->
-
-<!--                <data android:scheme="package" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; *********极光推送 end********* &ndash;&gt;-->
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" /> <!-- <receiver -->
+        <!-- android:name="cn.jpush.android.service.PushReceiver" -->
+        <!-- android:enabled="true" -->
+        <!-- tools:node="replace"> -->
+        <!-- <intent-filter android:priority="1000"> -->
+        <!-- <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" /> -->
+        <!-- &lt;!&ndash; Required  显示通知栏 &ndash;&gt; -->
+        <!-- <category android:name="${applicationId}" /> -->
+        <!-- </intent-filter> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.USER_PRESENT" /> -->
+        <!-- <action android:name="android.net.conn.CONNECTIVITY_CHANGE" /> -->
+        <!-- </intent-filter> -->
+        <!-- &lt;!&ndash; Optional &ndash;&gt; -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.PACKAGE_ADDED" /> -->
+        <!-- <action android:name="android.intent.action.PACKAGE_REMOVED" /> -->
+        <!-- <data android:scheme="package" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> &lt;!&ndash; *********极光推送 end********* &ndash;&gt; -->
         <!-- 腾讯IM 配置 -->
         <!-- ********小米推送service和receiver设置start******** -->
         <service
@@ -452,55 +496,53 @@
         <receiver
             android:name="com.xiaomi.push.service.receivers.PingReceiver"
             android:exported="false"
-            android:process=":pushservice"
-            tools:replace="android:process">
+            android:process=":pushservice">
             <intent-filter>
                 <action android:name="com.xiaomi.push.PING_TIMER" />
             </intent-filter>
         </receiver> <!-- 自实现小米推送的接收广播 -->
-<!--        <receiver-->
-<!--            android:name="com.tencent.qcloud.tim.demo.thirdpush.XiaomiMsgReceiver"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />-->
-<!--            </intent-filter>-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.xiaomi.mipush.ERROR" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; ********小米推送service和receiver设置end******** &ndash;&gt;-->
+        <receiver
+            android:name=".thirdpush.XiaomiMsgReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR" />
+            </intent-filter>
+        </receiver> <!-- ********小米推送service和receiver设置end******** -->
         <!-- ********华为推送设置start******** -->
-<!--        <service-->
-<!--            android:name="com.tencent.qcloud.tim.demo.thirdpush.HUAWEIHmsMessageService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <service
+            android:name=".thirdpush.HUAWEIHmsMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="104330887"
-            tools:replace="android:value" /> <!-- ********华为推送设置end******** -->
+            android:value="appid=104330887" /> <!-- ********华为推送设置end******** -->
         <!-- ********魅族推送设置start******** -->
-<!--        <receiver android:name="com.tencent.qcloud.tim.demo.thirdpush.MEIZUPushReceiver">-->
-<!--            <intent-filter>-->
+        <receiver android:name=".thirdpush.MEIZUPushReceiver">
+            <intent-filter>
 
-<!--                &lt;!&ndash; 接收push消息 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.flyme.push.intent.MESSAGE" />-->
-<!--                &lt;!&ndash; 接收register消息 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />-->
-<!--                &lt;!&ndash; 接收unregister消息 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />-->
-<!--                &lt;!&ndash; 兼容低版本Flyme3推送服务配置 &ndash;&gt;-->
-<!--                <action android:name="com.meizu.c2dm.intent.REGISTRATION" />-->
-<!--                <action android:name="com.meizu.c2dm.intent.RECEIVE" />-->
+                <!-- 接收push消息 -->
+                <action android:name="com.meizu.flyme.push.intent.MESSAGE" />
+                <!-- 接收register消息 -->
+                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK" />
+                <!-- 接收unregister消息 -->
+                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK" />
+                <!-- 兼容低版本Flyme3推送服务配置 -->
+                <action android:name="com.meizu.c2dm.intent.REGISTRATION" />
+                <action android:name="com.meizu.c2dm.intent.RECEIVE" />
 
-<!--                <category android:name="com.tencent.qcloud.tim.demo.thirdpush" />-->
-<!--            </intent-filter>-->
-<!--        </receiver> &lt;!&ndash; ********魅族推送设置end******** &ndash;&gt;-->
+                <category android:name="com.tencent.qcloud.tim.demo.thirdpush" />
+            </intent-filter>
+        </receiver> <!-- ********魅族推送设置end******** -->
         <!-- ********vivo推送设置start******** -->
         <service
             android:name="com.vivo.push.sdk.service.CommandClientService"
@@ -511,13 +553,13 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- push应用定义消息receiver声明 -->
-<!--        <receiver android:name="com.tencent.qcloud.tim.demo.thirdpush.VIVOPushMessageReceiverImpl">-->
-<!--            <intent-filter>-->
+        <receiver android:name=".thirdpush.VIVOPushMessageReceiverImpl">
+            <intent-filter>
 
-<!--                &lt;!&ndash; 接收push消息 &ndash;&gt;-->
-<!--                <action android:name="com.vivo.pushclient.action.RECEIVE" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
+                <!-- 接收push消息 -->
+                <action android:name="com.vivo.pushclient.action.RECEIVE" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.vivo.push.api_key"
@@ -542,12 +584,15 @@
                 <action android:name="com.heytap.mcs.action.RECEIVE_MCS_MESSAGE" />
                 <action android:name="com.heytap.msp.push.RECEIVE_MCS_MESSAGE" />
             </intent-filter>
-        </service>
-
-        <!--阿里云推送-->
-        <meta-data android:name="com.alibaba.app.appkey" android:value="333472407"/>
-        <meta-data android:name="com.alibaba.app.appsecret" android:value="df808fe4266141bdb471e9b5519c101c"/>
-        <!-- 消息接收监听器 （用户可自主扩展） -->
+        </service> <!-- 兼容Q版本 -->
+        <!-- ********OPPO 推送 end******** -->
+        <!-- 阿里云推送 测试 appkey = 333472407  appsecret = df808fe4266141bdb471e9b5519c101c -->
+        <meta-data
+            android:name="com.alibaba.app.appkey"
+            android:value="${alibaba_appkey}" />
+        <meta-data
+            android:name="com.alibaba.app.appsecret"
+            android:value="${alibaba_appsecret}" /> <!-- 消息接收监听器 （用户可自主扩展） -->
         <receiver
             android:name=".alipush.MyMessageReceiver"
             android:exported="false"> <!-- 为保证receiver安全，建议设置不可导出，如需对其他应用开放可通过android：permission进行限制 -->
@@ -562,8 +607,64 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.GuidePageActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.GuidePageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PopupPushActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.scancode.BindingEquipmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.scancode.ConfirmLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.scancode.ConfirmSuccessActivity"
+            android:screenOrientation="portrait" />
+        <!-- 日程编辑 -->
+        <activity
+            android:name=".activity.schedule.ScheduleEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleRemindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleRepetitionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleLabelCreateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleLabelManageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleDateIntervalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleAddLabelActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleCustomRepetitionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleParticipantActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleSettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.schedule.ScheduleTimetableClassActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

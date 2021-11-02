@@ -69,12 +69,9 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         super.onViewCreated(view, savedInstanceState);
 //        mvpPresenter.getMyData();
         EventBus.getDefault().register(this);
-        tablelayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, TableActivity.class);
-                startActivity(intent);
-            }
+        tablelayout.setOnClickListener(v -> {
+            Intent intent = new Intent(mActivity, TableActivity.class);
+            startActivity(intent);
         });
         getData();
     }
@@ -91,22 +88,29 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         SelectSchByTeaidRsp.DataBean dataBean = null;
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             if (rsp.data != null && rsp.data.size() > 0) {
+                Calendar c = Calendar.getInstance();
                 for (SelectSchByTeaidRsp.DataBean item : rsp.data) {
                     //开始时间
                     long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
                     //结束时间
-                    long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
-                    Calendar c = Calendar.getInstance();
                     String minute = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
                     int weekDay = c.get(Calendar.DAY_OF_WEEK);
+                    long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
                     long mMillisecond = DateUtils.getWhenPoint(minute);
-                    if (item.weekTime == (weekDay - 1)) {
+                    if (weekDay == 1) {//系统日历周日默认==1
+                        weekDay = 7;
+                    } else {
+                        weekDay = weekDay - 1;
+                    }
+                    if (item.weekTime == weekDay) {
                         if (mMillisecond > toDateTime) {//课后
                             isTable = true;
                         } else if (mMillisecond < fromDataTime) {//课前
                             dataBean = item;
+                            table_next.setText("下一节");
                             break;
                         } else {//正在上课
+                            table_next.setText("本节课");
                             dataBean = item;
                             break;
                         }
@@ -135,7 +139,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
-        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
+        if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())
+                || BaseConstant.TYPE_PREPARES_SAVE.equals(messageEvent.getCode())) {
             Log.d("HomeRefresh", TableFragment.class.getSimpleName());
             getData();
         }
@@ -145,6 +150,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             if (SpData.getClassInfo() != null) {
                 mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
+            } else {
+                setDefaultView("今日无课");
             }
         } else {
             mvpPresenter.SelectSchByTeaid();
@@ -160,7 +167,6 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
-        table_next.setText("下一节");
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
         tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
         table_next.setVisibility(View.VISIBLE);

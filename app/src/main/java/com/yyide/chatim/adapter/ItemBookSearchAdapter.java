@@ -1,34 +1,32 @@
 package com.yyide.chatim.adapter;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.ToastUtils;
-import com.tbruyelle.rxpermissions3.RxPermissions;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.PersonInfoActivity;
-import com.yyide.chatim.model.TeacherlistRsp;
-import com.yyide.chatim.model.UserInfoRsp;
-import com.yyide.chatim.utils.StringUtils;
-
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.book.BookPatriarchDetailActivity;
+import com.yyide.chatim.activity.book.BookStudentDetailActivity;
+import com.yyide.chatim.activity.book.BookTeacherDetailActivity;
+import com.yyide.chatim.databinding.ItemBookSearchBinding;
+import com.yyide.chatim.databinding.ItemNewBookGuardianBinding;
+import com.yyide.chatim.databinding.ItemNewBookGuardianSearchBinding;
+import com.yyide.chatim.databinding.ItemNewBookStudentBinding;
+import com.yyide.chatim.databinding.ItemNewBookStudentSearchBinding;
+import com.yyide.chatim.model.BookGuardianItem;
+import com.yyide.chatim.model.BookSearchStudent;
+import com.yyide.chatim.model.BookStudentItem;
+import com.yyide.chatim.model.BookTeacherItem;
+import com.yyide.chatim.model.Parent;
+import com.yyide.chatim.model.Student;
+import com.yyide.chatim.model.Teacher;
+import com.yyide.chatim.utils.GlideUtil;
 
 /**
  * @Description: 通讯录搜索adapter
@@ -39,90 +37,97 @@ import butterknife.ButterKnife;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class ItemBookSearchAdapter extends RecyclerView.Adapter<ItemBookSearchAdapter.ViewHolder> {
-    private Context context;
-    private List<UserInfoRsp.DataBean> data;
+public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, BaseViewHolder> {
+    private int ITEM_TYPE_TEACHER = 0;
+    private int ITEM_TYPE_STUDENT = 1;
 
-    public ItemBookSearchAdapter(Context context, List<UserInfoRsp.DataBean> data) {
-        this.context = context;
-        this.data = data;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_book_search, parent, false);
-        return new ViewHolder(view);
+    public ItemBookSearchAdapter() {
+        addItemType(ITEM_TYPE_TEACHER, R.layout.item_book_search);
+        addItemType(ITEM_TYPE_STUDENT, R.layout.item_new_book_student_search);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        UserInfoRsp.DataBean bean = data.get(position);
-        holder.tv_realName.setText(StringUtils.subString(bean.getName(), 2));
-        holder.tv_name.setText(bean.getName());
-        if ("1".equals(bean.getUserType())) {
-            holder.tv_classname.setText(bean.getDepartmentName());
+    protected void convert(@NonNull BaseViewHolder holder, Teacher teacher) {
+        if (holder.getItemViewType() == ITEM_TYPE_STUDENT) {
+            Student student = teacher.getStudent();
+            ItemNewBookStudentSearchBinding bind = ItemNewBookStudentSearchBinding.bind(holder.itemView);
+            bind.tvName.setText(TextUtils.isEmpty(student.getName()) ? "未知姓名" : student.getName() + "（" + student.getTypeName() + "）");
+            GlideUtil.loadImageHead(
+                    getContext(),
+                    student.getFaceInformation(),
+                    bind.img
+            );
+            GuardianAdapter guardianAdapter = new GuardianAdapter();
+            bind.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            bind.recyclerView.setAdapter(guardianAdapter);
+            guardianAdapter.setList(student.getParentList());
+            guardianAdapter.setOnItemClickListener((adapter, view, position1) -> {
+                Parent item1 = guardianAdapter.getItem(position1);
+                BookGuardianItem guardianItem = new BookGuardianItem(
+                        item1.getName(),
+                        item1.getId(),
+                        item1.getPhone(),
+                        item1.getUserId(),
+                        item1.getRelation(),
+                        item1.getWorkUnit(),
+                        item1.getFaceInformation(),
+                        item1.getSingleParent()
+                );
+                BookPatriarchDetailActivity.start(getContext(), guardianItem);
+            });
+            holder.itemView.setOnClickListener(v -> {
+                BookSearchStudent item = student.getList();
+                BookStudentItem studentItem = new BookStudentItem(item.getId(),
+                        item.getName(),
+                        item.getPhone(),
+                        item.getClassName(),
+                        item.getUserId(),
+                        item.getPrimaryGuardianPhone(),
+                        item.getDeputyGuardianPhone(),
+                        item.getSex(),
+                        item.getAddress(),
+                        item.getFaceInformation(),
+                        item.isOwnChild(),
+                        null);
+                BookStudentDetailActivity.start(getContext(), studentItem);
+            });
         } else {
-            holder.tv_classname.setText(bean.getClassesName());
-        }
-        if (!TextUtils.isEmpty(bean.getPhone())) {
-            holder.iv_call.setVisibility(View.VISIBLE);
-        } else {
-            holder.iv_call.setVisibility(View.GONE);
-        }
-        holder.iv_call.setOnClickListener(v -> {
-            // 已经获取权限打电话
-            if (!TextUtils.isEmpty(bean.getPhone())) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                Uri data = Uri.parse("tel:" + bean.getPhone());
-                intent.setData(data);
-                context.startActivity(intent);
+            ItemBookSearchBinding bind = ItemBookSearchBinding.bind(holder.itemView);
+            GlideUtil.loadImageHead(getContext(), teacher.getFaceInformation(), bind.ivHead);
+            if (!SpData.getIdentityInfo().staffIdentity() && teacher.getList() != null) {
+                bind.tvName.setText(teacher.getName() + " (" + teacher.getList().getTeachingSubjects() + ")");
             } else {
-                ToastUtils.showShort("手机号为空，无法波打电话");
+                bind.tvName.setText(teacher.getName() + " (" + teacher.getTypeName() + ")");
             }
-        });
-        holder.iv_user_detail.setOnClickListener(v -> {
-            TeacherlistRsp.DataBean.RecordsBean recordsBean = new TeacherlistRsp.DataBean.RecordsBean();
-            recordsBean.name = bean.getName();
-            recordsBean.phone = bean.getPhone();
-            recordsBean.email = bean.getEmail();
-            recordsBean.sex = bean.getSex();
-            recordsBean.classesName = bean.getClassesName();
-            recordsBean.subjects = bean.getSubjects();
-            recordsBean.primaryGuardianPhone = bean.getPrimaryGuardianPhone();
-            recordsBean.deputyGuardianPhone = bean.getDeputyGuardianPhone();
-            recordsBean.userType = bean.getUserType();
 
-            //去详情页
-            Intent intent = new Intent();
-            intent.putExtra("data", JSON.toJSONString(recordsBean));
-            intent.setClass(context, PersonInfoActivity.class);
-            context.startActivity(intent);
-        });
+            holder.itemView.setOnClickListener(v -> {
+                BookTeacherItem teacherItem1 = teacher.getList();
+                BookTeacherItem teacherItem = new BookTeacherItem(
+                        teacherItem1.getName(),
+                        teacherItem1.getSex(),
+                        teacherItem1.getPhone(),
+                        teacherItem1.getUserId(),
+                        teacherItem1.getEmail(),
+                        teacherItem1.getSubjectName(),
+                        teacherItem1.getTeachingSubjects(),
+                        teacherItem1.getFaceInformation(),
+                        teacherItem1.getWhitelist());
+                BookTeacherDetailActivity.start(getContext(), teacherItem);
+            });
+        }
     }
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
+    class GuardianAdapter extends
+            BaseQuickAdapter<Parent, BaseViewHolder> {
+        public GuardianAdapter() {
+            super(R.layout.item_new_book_guardian_search);
+        }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.tv_realName)
-        TextView tv_realName;//显示图片
-        @BindView(R.id.iv_user_detail)
-        ImageView iv_user_detail;
-        @BindView(R.id.iv_call)
-        ImageView iv_call;
-
-        @BindView(R.id.tv_name)
-        TextView tv_name;
-
-        @BindView(R.id.tv_classname)
-        TextView tv_classname;
-
-        public ViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        @Override
+        protected void convert(@NonNull BaseViewHolder baseViewHolder, Parent item) {
+            ItemNewBookGuardianSearchBinding bind = ItemNewBookGuardianSearchBinding.bind(baseViewHolder.itemView);
+            bind.tvName.setText(item.getName());
+            bind.tvGuardianName.setText(item.getRelationType());
         }
     }
 }

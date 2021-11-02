@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F7FA"
+    tools:context=".fragment.schedule.ScheduleFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/cl_top_tab">
+        <TextView
+            android:id="@+id/tv_current_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:text="2021年9月"
+            android:textColor="#1E1E1E"
+            android:textSize="@dimen/text_15"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/schedule_setting_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingStart="@dimen/dp_5"
+            android:paddingEnd="@dimen/dp_20"
+            android:paddingTop="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_18"
+            android:background="#F2F7FA"/>
+
+        <ImageButton
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/dp_18"
+            android:paddingStart="@dimen/dp_30"
+            android:paddingTop="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_18"
+            android:src="@drawable/schedule_search_icon"
+            app:layout_constraintBottom_toBottomOf="@id/btn_setting"
+            app:layout_constraintRight_toLeftOf="@id/btn_setting"
+            app:layout_constraintTop_toTopOf="@id/btn_setting"
+            android:background="#F2F7FA"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_top_tab"
+        app:layout_constraintWidth_default="wrap"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

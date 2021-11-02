@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="335dp"
+    android:layout_height="623dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/schedule_edit_dialog_bg_shape">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_30"
+        android:text="自定义重复"
+        android:textColor="#ff1e1e1e"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:text="取消"
+        android:textStyle="bold"
+        android:textColor="#ff2c8aff"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:text="完成"
+        android:textStyle="bold"
+        android:textColor="#ff2c8aff"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="@dimen/dp_40"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        app:layout_constraintTop_toBottomOf="@id/v_line">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
+                android:id="@+id/scroll_picker_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
+                android:id="@+id/scroll_picker_number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
+                android:id="@+id/scroll_picker_unit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_week_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_dialog_week_custom_repetition"
+        tools:itemCount="3"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        android:visibility="gone"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_month_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_dialog_week_custom_repetition"
+        tools:itemCount="7"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

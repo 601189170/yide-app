@@ -42,7 +42,7 @@ public class StaffAskLeavePresenter extends BasePresenter<StaffAskLeaveView> {
         });
     }
 
-    public void getApprover(long classIdOrdeptId) {
+    public void getApprover(String classIdOrdeptId) {
         final HashMap<String, Object> map = new HashMap<>(1);
         map.put("classIdOrdeptId", classIdOrdeptId);
         mvpView.showLoading();
@@ -99,7 +99,7 @@ public class StaffAskLeavePresenter extends BasePresenter<StaffAskLeaveView> {
      * @param carbonCopyPeopleIds
      */
     public void addTeacherLeave(String startTime, String endTime, String leaveReason, String reason,
-                                long deptId, String deptName, List<Long> carbonCopyPeopleIds) {
+                                String deptId, String deptName, List<Long> carbonCopyPeopleIds) {
         final HashMap<String, Object> map = new HashMap<>(7);
         map.put("startTime", startTime);
         map.put("endTime", endTime);

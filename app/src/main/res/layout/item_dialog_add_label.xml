@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/tv_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="工作"
+        android:textColor="#ffffffff"
+        android:textSize="16sp"
+        android:background="#19ADF8"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4"
+        android:paddingStart="@dimen/dp_6"
+        android:paddingEnd="@dimen/dp_6"
+        android:singleLine="true"
+        android:maxEms="10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@drawable/schedule_add_label_selector"
+        android:button="@null"
+        android:clickable="false"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,13 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +46,16 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         return fragment;
     }
 
+    public interface OnRefreshListener {
+        void onRefreshListener(boolean isRefresh);
+    }
+
+    private SchoolEventTeacherAttendanceFragment.OnRefreshListener mOnRefreshListener;
+
+    public void setOnRefreshListener(SchoolEventTeacherAttendanceFragment.OnRefreshListener mOnRefreshListener) {
+        this.mOnRefreshListener = mOnRefreshListener;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +79,11 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
 
     private void initView() {
         mViewBinding.constraintLayout.setVisibility(View.GONE);
-
+        mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (mOnRefreshListener != null) {
+                mOnRefreshListener.onRefreshListener(verticalOffset >= 0);
+            }
+        });
         mViewBinding.tvAbsenteeism.setOnClickListener(this);
         mViewBinding.tvLeave.setOnClickListener(this);
         mViewBinding.tvLate.setOnClickListener(this);
@@ -76,7 +92,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         setData();
     }
 
-    private List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> dataToBind = new ArrayList<>();
+    private final List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> dataToBind = new ArrayList<>();
 
     @SuppressLint("SetTextI18n")
     private void setData() {
@@ -87,7 +103,8 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             mViewBinding.tvAttendanceRate.setText(teachers.getRate());
             if (!TextUtils.isEmpty(teachers.getRate())) {
                 try {
-                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
+//                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
+                    setAnimation(mViewBinding.progress, Double.valueOf(teachers.getRate()).intValue());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -95,10 +112,10 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             mViewBinding.tvLateNum.setText(teachers.getLate() + "");
 //            mViewBinding.tvLateName.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
 //            mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
-
+//            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "出勤率");
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
-            mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
+            //mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
             dataToBind.addAll(convertDataToTreeNode(teachers.getAbsencePeople()));
             adapter = new AttendanceSchoolTeacherAdapter(R.layout.item_attendance_school_teacher, dataToBind, teachers.goOutStatus);
             mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -121,6 +138,12 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
                 }
             });
         }
+    }
+
+    private void setAnimation(final ProgressBar view, final int mProgressBar) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
+        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     private List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> convertDataToTreeNode(List<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean> datas) {
@@ -155,19 +178,19 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
                 mViewBinding.tvAbsenteeism.setChecked(true);
                 mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
                 adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getAbsencePeople()) : null);
-                mViewBinding.tvNum.setText((teachers != null ? teachers.getAbsencePeople().size() : 0) + "人");
+                //mViewBinding.tvNum.setText((teachers != null ? teachers.getAbsencePeople().size() : 0) + "人");
                 break;
             case R.id.tv_leave:
                 mViewBinding.tvLeave.setChecked(true);
                 mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.white));
                 adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLeavePeople()) : null);
-                mViewBinding.tvNum.setText((teachers != null ? teachers.getLeavePeople().size() : 0) + "人");
+                //mViewBinding.tvNum.setText((teachers != null ? teachers.getLeavePeople().size() : 0) + "人");
                 break;
             case R.id.tv_late:
                 mViewBinding.tvLate.setChecked(true);
                 mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
                 adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLatePeople()) : null);
-                mViewBinding.tvNum.setText((teachers != null ? teachers.getLatePeople().size() : 0) + "人");
+                //mViewBinding.tvNum.setText((teachers != null ? teachers.getLatePeople().size() : 0) + "人");
                 break;
         }
     }

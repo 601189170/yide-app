@@ -30,33 +30,30 @@ public class SingleLayoutTreeAdapter<T extends NodeId> extends BaseQuickAdapter<
     public SingleLayoutTreeAdapter(int layoutResId, @Nullable final List<TreeNode<T>> dataToBind) {
         super(layoutResId, dataToBind);
 
-        setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                TreeNode<T> node = dataToBind.get(position);
-                if (!node.isLeaf()) {
-                    List<TreeNode<T>> children = TreeDataUtils.getNodeChildren(node);
+        setOnItemClickListener((adapter, view, position) -> {
+            TreeNode<T> node = dataToBind.get(position);
+            if (!node.isLeaf()) {
+                List<TreeNode<T>> children = TreeDataUtils.getNodeChildren(node);
 
-                    if (node.isExpand()) {
-                        dataToBind.removeAll(children);
-                        node.setExpand(false);
-                        notifyItemRangeRemoved(position + 1, children.size());
-                    } else {
-                        dataToBind.addAll(position + 1, children);
-                        node.setExpand(true);
-                        notifyItemRangeInserted(position + 1, children.size());
-                    }
-
-                    if (onTreeClickedListener != null) {
-                        onTreeClickedListener.onNodeClicked(view, node, position);
-                    }
+                if (node.isExpand()) {
+                    dataToBind.removeAll(children);
+                    node.setExpand(false);
+                    notifyItemRangeRemoved(position + 1, children.size());
                 } else {
-                    if (onTreeClickedListener != null) {
-                        onTreeClickedListener.onLeafClicked(view, node, position);
-                    }
+                    dataToBind.addAll(position + 1, children);
+                    node.setExpand(true);
+                    notifyItemRangeInserted(position + 1, children.size());
                 }
 
+                if (onTreeClickedListener != null) {
+                    onTreeClickedListener.onNodeClicked(view, node, position);
+                }
+            } else {
+                if (onTreeClickedListener != null) {
+                    onTreeClickedListener.onLeafClicked(view, node, position);
+                }
             }
+
         });
     }
 
