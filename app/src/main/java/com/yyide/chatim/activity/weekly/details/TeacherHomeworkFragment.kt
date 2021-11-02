@@ -10,7 +10,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
-import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentTeacherHomeworkWeeklyBinding
@@ -18,7 +17,6 @@ import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
 import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.GetUserSchoolRsp
 import com.yyide.chatim.model.SchoolHomeAttend
-import com.yyide.chatim.model.SchoolHomeWork
 import com.yyide.chatim.model.WeeklyDateBean
 import com.yyide.chatim.utils.DateUtils
 
