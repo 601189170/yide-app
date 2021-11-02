@@ -23,20 +23,19 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentFamilyHeadBinding;
 import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.presenter.AttendanceCheckPresenter;
+import com.yyide.chatim.model.AttendanceRsp;
+import com.yyide.chatim.presenter.AttendanceHomePresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.AttendanceCheckView;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * desc 家长视角查看考勤
  * time 2021年5月31日15:52:14
  * other lrz
  */
-public class ParentsStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener {
+public class ParentsStudentAttendanceFragment extends BaseMvpFragment<AttendanceHomePresenter> implements AttendanceCheckView, View.OnClickListener {
 
     private FragmentFamilyHeadBinding mViewBinding;
     private String TAG = ParentsStudentAttendanceFragment.class.getSimpleName();
@@ -77,17 +76,8 @@ public class ParentsStudentAttendanceFragment extends BaseMvpFragment<Attendance
         mViewBinding.recyclerview.setAdapter(adapter);
     }
 
-    private void setDataView(AttendanceCheckRsp.DataBean item) {
-        List<AttendanceCheckRsp.DataBean.AttendancesFormBean> attendancesForm = item.getAttendancesForm();
-        adapter.setList(attendancesForm);
-//        if (attendancesForm != null && attendancesForm.size() > 0) {
-//            if (attendancesForm.size() < index) {
-//                index = 0;
-//            }
-//            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = attendancesForm.get(index).getStudents();
-//            mViewBinding.tvAttendanceType.setText(students.getName());
-//        }
-//        mViewBinding.tvClassName.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+    private void setDataView(AttendanceRsp.DataBean item) {
+        adapter.setList(item.getStudentAttendanceList());
     }
 
     BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean, BaseViewHolder>(R.layout.item_attendance_family_head) {
@@ -146,8 +136,8 @@ public class ParentsStudentAttendanceFragment extends BaseMvpFragment<Attendance
     };
 
     @Override
-    protected AttendanceCheckPresenter createPresenter() {
-        return new AttendanceCheckPresenter(this);
+    protected AttendanceHomePresenter createPresenter() {
+        return new AttendanceHomePresenter(this);
     }
 
     @Override
@@ -156,9 +146,9 @@ public class ParentsStudentAttendanceFragment extends BaseMvpFragment<Attendance
     }
 
     @Override
-    public void getAttendanceSuccess(AttendanceCheckRsp model) {
+    public void getAttendanceSuccess(AttendanceRsp model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
-            AttendanceCheckRsp.DataBean data = model.getData();
+            AttendanceRsp.DataBean data = model.getData();
             if (data != null) {
                 setDataView(data);
             }

@@ -32,6 +32,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentAttendanceSchoolBinding;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.AttendancePresenter;
 import com.yyide.chatim.utils.InitPieChart;
@@ -103,15 +104,15 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
     };
 
-    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder>(R.layout.item_attendance_school) {
+    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.item_attendance_school) {
 
         @Override
-        protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item) {
+        protected void convert(@NotNull BaseViewHolder holder, AttendanceRsp.DataBean.AttendanceListBean item) {
             ConstraintLayout constraintLayout1 = holder.getView(R.id.constraintLayout1);
             PieChart piechart = holder.getView(R.id.piechart);
             if (item != null) {
-                holder.setText(R.id.tv_attendance_type, item.getAttName());
-                holder.setText(R.id.tv_desc, item.getThingName());
+                holder.setText(R.id.tv_attendance_type, item.getTheme());
+                holder.setText(R.id.tv_desc, item.getEventName());
                 setPieChart(item, piechart);
                 constraintLayout1.setOnClickListener(v -> {
                     AttendanceActivity.start(getContext(), holder.getAdapterPosition());
@@ -121,21 +122,17 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
             }
         }
 
-        private void setPieChart(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item, PieChart piechart) {
+        private void setPieChart(AttendanceRsp.DataBean.AttendanceListBean item, PieChart piechart) {
             InitPieChart.InitPieChart(((Activity) getContext()), piechart);
             List<PieEntry> entries = new ArrayList<>();
-            int absence = item.getAbsence();
-            int leave = item.getLeave();
-            int late = item.getLate();
-            int applyNum = item.getApplyNum();
-            absence = (absence + late + applyNum + leave) > 0 ? absence : 1;
-            entries.add(new PieEntry(absence, "缺勤"));
+            entries.add(new PieEntry(item.getAbsenteeism(), "缺勤"));
             entries.add(new PieEntry(item.getLeave(), "请假"));
             entries.add(new PieEntry(item.getLate(), "迟到"));
-            entries.add(new PieEntry(item.getApplyNum(), "实到"));
-            String desc = "1".equals(item.getGoOutStatus()) ? "签退率" : "出勤率";
-            piechart.setCenterText((TextUtils.isEmpty(item.getRate()) ? 0 : item.getRate()) + "%\n" + desc);
-            piechart.setCenterTextSize(12);
+            entries.add(new PieEntry(Float.parseFloat(item.getSignInOutRate()), "实到"));
+
+            String desc = "1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率";//0 签到 1签退
+            piechart.setCenterText(item.getSignInOutRate() + "%\n" + desc);
+            piechart.setCenterTextSize(11);
             PieDataSet dataSet = new PieDataSet(entries, "");
             dataSet.setSliceSpace(0);//设置饼块之间的间隔
             dataSet.setColors(PIE_COLORS2);//设置饼块的颜色
@@ -147,7 +144,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     };
 
     @Override
-    public void getAttendanceSuccess(AttendanceCheckRsp model) {
+    public void getAttendanceSuccess(AttendanceRsp model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
@@ -155,40 +152,15 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         }
     }
 
-    private void setData(AttendanceCheckRsp.DataBean dataBean) {
-        List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllFormBeanList = new ArrayList<>();
-        if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
-            for (AttendanceCheckRsp.DataBean.AttendancesFormBean item : dataBean.getAttendancesForm()) {
-                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
-                AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers = item.getTeachers();
-                if (teachers != null) {
-                    schoolBean.setAbsence(teachers.getAbsence());
-                    schoolBean.setApplyNum(teachers.getApplyNum());
-                    schoolBean.setAttName(teachers.getName());
-                    schoolBean.setLate(teachers.getLate());
-                    schoolBean.setLeave(teachers.getLeave());
-                    schoolBean.setNumber(teachers.getNumber());
-                    schoolBean.setRate(teachers.getRate());
-                    schoolBean.setPeopleType(teachers.getPeopleType());
-                    schoolBean.setThingName(teachers.getThingName());
-                    schoolBean.setGoOutStatus(teachers.getGoOutStatus());
-                    schoolPeopleAllFormBeanList.add(schoolBean);
-                }
-            }
-        }
-
-        if (dataBean.getSchoolPeopleAllForm() != null) {
-            schoolPeopleAllFormBeanList.addAll(schoolPeopleAllFormBeanList.size(), dataBean.getSchoolPeopleAllForm());
-        }
-
+    private void setData(AttendanceRsp.DataBean dataBean) {
         //处理数组大于大于一个的时候用网格布局
-        if (schoolPeopleAllFormBeanList != null && schoolPeopleAllFormBeanList.size() > 1) {
+        if (dataBean.getHeadmasterAttendanceList() != null && dataBean.getHeadmasterAttendanceList().size() > 1) {
             mViewBinding.recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else {
             mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
         mViewBinding.recyclerview.setAdapter(adapter);
-        adapter.setList(schoolPeopleAllFormBeanList);
+        adapter.setList(dataBean.getHeadmasterAttendanceList());
     }
 
     @Override

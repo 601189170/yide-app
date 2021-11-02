@@ -21,13 +21,13 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
-import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentAttendanceBinding;
 import com.yyide.chatim.dialog.AttendancePop;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.presenter.AttendanceCheckPresenter;
+import com.yyide.chatim.presenter.AttendanceHomePresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.AttendanceCheckView;
 
@@ -40,7 +40,7 @@ import java.util.List;
  * time 2021年5月31日15:52:14
  * other lrz
  */
-public class TeacherStudentAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class TeacherStudentAttendanceFragment extends BaseMvpFragment<AttendanceHomePresenter> implements AttendanceCheckView, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private AttendanceCheckRsp.DataBean.AttendancesFormBean.Students itemStudents;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentAttendanceBinding mViewBinding;
@@ -78,8 +78,8 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     }
 
     @Override
-    protected AttendanceCheckPresenter createPresenter() {
-        return new AttendanceCheckPresenter(this);
+    protected AttendanceHomePresenter createPresenter() {
+        return new AttendanceHomePresenter(this);
     }
 
     private void getAttendance() {
@@ -343,15 +343,20 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         }
     };
 
+//    @Override
+//    public void getAttendanceSuccess(AttendanceCheckRsp model) {
+//        mViewBinding.swipeRefreshLayout.setRefreshing(false);
+//        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+//            AttendanceCheckRsp.DataBean data = model.getData();
+//            if (data != null) {
+//                setDataView(data);
+//            }
+//        }
+//    }
+
     @Override
-    public void getAttendanceSuccess(AttendanceCheckRsp model) {
-        mViewBinding.swipeRefreshLayout.setRefreshing(false);
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
-            AttendanceCheckRsp.DataBean data = model.getData();
-            if (data != null) {
-                setDataView(data);
-            }
-        }
+    public void getAttendanceSuccess(AttendanceRsp model) {
+
     }
 
     @Override

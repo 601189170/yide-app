@@ -23,6 +23,7 @@ import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.AttendancePresenter;
@@ -136,7 +137,7 @@ public class AttendancePatriarchFragment extends BaseMvpFragment<AttendancePrese
     }
 
     @Override
-    public void getAttendanceSuccess(AttendanceCheckRsp model) {
+    public void getAttendanceSuccess(AttendanceRsp model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
@@ -144,9 +145,9 @@ public class AttendancePatriarchFragment extends BaseMvpFragment<AttendancePrese
         }
     }
 
-    private void setData(AttendanceCheckRsp.DataBean dataBean) {
-        if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
-            List<AttendanceCheckRsp.DataBean.AttendancesFormBean> attendancesForm = dataBean.getAttendancesForm();
+    private void setData(AttendanceRsp.DataBean dataBean) {
+        if (dataBean.getStudentAttendanceList() != null && dataBean.getStudentAttendanceList().size() > 0) {
+            List<AttendanceRsp.DataBean.AttendanceListBean> attendancesForm = dataBean.getStudentAttendanceList();
             announRoll.setAdapter(announAdapter);
             constraintLayout.setVisibility((attendancesForm != null && attendancesForm.size() > 0) ? View.GONE : View.VISIBLE);
             announAdapter.notifyData(attendancesForm);

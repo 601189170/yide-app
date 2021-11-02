@@ -159,7 +159,6 @@ class TeacherHomeworkFragment : BaseFragment() {
                         //classId = adapterEvent.getItem(index).classesId
                         //requestTeacher(dateTime)
                     }
-
                 }
             } else {
                 viewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(

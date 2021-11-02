@@ -15,8 +15,7 @@ import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.LoopPagerAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.attendance.StatisticsActivity;
-import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.model.AttendanceRsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +26,13 @@ import java.util.List;
 
 public class AttendanceParentsAdapter extends LoopPagerAdapter {
 
-    public List<AttendanceCheckRsp.DataBean.AttendancesFormBean> list = new ArrayList<>();
+    public List<AttendanceRsp.DataBean.AttendanceListBean> list = new ArrayList<>();
 
     public AttendanceParentsAdapter(RollPagerView viewPager) {
         super(viewPager);
     }
 
-    private AttendanceCheckRsp.DataBean.AttendancesFormBean getItem(int position) {
+    private AttendanceRsp.DataBean.AttendanceListBean getItem(int position) {
         return list.get(position);
     }
 
@@ -41,22 +40,21 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
     @Override
     public View getView(ViewGroup container, final int position) {
         View view = LayoutInflater.from(container.getContext()).inflate(R.layout.item_attendance_parents, null);
-        AttendanceCheckRsp.DataBean.AttendancesFormBean item = list.get(position);
-        if (item != null && item.getStudents() != null) {
-            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students students = item.getStudents();
+        AttendanceRsp.DataBean.AttendanceListBean item = list.get(position);
+        if (item != null) {
             TextView attendanceName = view.findViewById(R.id.tv_attendance_type);
             TextView tv_desc = view.findViewById(R.id.tv_desc);
             TextView tv_attendance_time = view.findViewById(R.id.tv_attendance_time);
             TextView tv_attendance_status = view.findViewById(R.id.tv_attendance_status);
             ImageView img = view.findViewById(R.id.img);
-            attendanceName.setText(students.getName());
-            tv_desc.setText(TextUtils.isEmpty(students.getSubjectName()) ? students.getThingName() : students.getSubjectName());
-            if (!TextUtils.isEmpty(students.getType())) {
-                switch (students.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
+            attendanceName.setText(item.getTheme());
+            tv_desc.setText(item.getEventName());
+            if (!TextUtils.isEmpty(item.getType())) {
+                switch (item.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
                     case "0":
                     case "2":
                     case "3":
-                        tv_attendance_time.setText("打卡时间：" + DateUtils.formatTime(students.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        tv_attendance_time.setText("打卡时间：" + item.getSignInTime());
                         img.setImageResource(R.mipmap.icon_home_attendance_normal);
                         tv_attendance_status.setTextColor(Color.parseColor("#2C8AFF"));
                         tv_attendance_status.setText("已打卡");
@@ -68,7 +66,6 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
                         tv_attendance_status.setText("未打卡");
                         break;
                     default:
-                        //tv_attendance_time.setText("未打卡");
                         break;
                 }
             }
@@ -85,7 +82,7 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
         return list != null ? list.size() : 0;
     }
 
-    public void notifyData(List<AttendanceCheckRsp.DataBean.AttendancesFormBean> list) {
+    public void notifyData(List<AttendanceRsp.DataBean.AttendanceListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }

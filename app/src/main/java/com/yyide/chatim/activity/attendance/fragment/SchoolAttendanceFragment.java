@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.contrarywind.adapter.WheelAdapter;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
@@ -18,7 +17,9 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentSchoolAttendanceBinding;
 import com.yyide.chatim.dialog.AttendancePop;
 import com.yyide.chatim.model.AttendanceCheckRsp;
-import com.yyide.chatim.presenter.AttendanceCheckPresenter;
+import com.yyide.chatim.model.AttendanceRsp;
+import com.yyide.chatim.presenter.AttendanceHomePresenter;
+import com.yyide.chatim.presenter.AttendanceTwoPresenter;
 import com.yyide.chatim.view.AttendanceCheckView;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.List;
  * time 2021年5月31日15:52:14
  * other lrz
  */
-public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPresenter> implements AttendanceCheckView {
+public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPresenter> implements AttendanceCheckView {
 
     private FragmentSchoolAttendanceBinding mViewBinding;
     private String TAG = SchoolAttendanceFragment.class.getSimpleName();
@@ -64,65 +65,65 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
         mvpPresenter.attendance("");
     }
 
-    private void initView(AttendanceCheckRsp.DataBean item) {
-        mViewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            mvpPresenter.attendance("");
-        });
-        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-
-        AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolPeopleAllFormBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
-        if (item.schoolPeopleAllForm != null) {
-            if (item.schoolPeopleAllForm.size() > index) {
-                schoolPeopleAllFormBean = item.schoolPeopleAllForm.get(index);
-            } else {
-                schoolPeopleAllFormBean = item.schoolPeopleAllForm.get(0);
-            }
-        }
-
-        if ("N".equals(schoolPeopleAllFormBean.getPeopleType())) {
-            startFragment(schoolPeopleAllFormBean);
-        } else {
-            int position = 0;
-            if (item.attendancesForm != null) {
-               position = index - item.attendancesForm.size();
-            }
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean, position)).commit();
-        }
-        mViewBinding.tvAttendanceTitle.setText(schoolPeopleAllFormBean.attName);
-        if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
-            mViewBinding.tvClassName.setClickable(true);
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-        } else {
-            mViewBinding.tvClassName.setClickable(false);
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
-        }
-
-        if (item.schoolPeopleAllForm != null && item.schoolPeopleAllForm.size() > 1) {
-            mViewBinding.tvAttendanceTitle.setClickable(true);
-            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-        } else {
-            mViewBinding.tvAttendanceTitle.setClickable(false);
-            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        }
-
-        mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
-            adapterEvent.setList(item.schoolPeopleAllForm);
-            attendancePop.setOnSelectListener(index -> {
-                this.index = index;
-                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
-                mViewBinding.tvAttendanceTitle.setText(bean.attName);
-                if ("N".equals(bean.getPeopleType())) {
-                    startFragment(bean);
-                } else {
-                    int position = 0;
-                    if (item.attendancesForm != null) {
-                        position = index - item.attendancesForm.size();
-                    }
-                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean, position)).commit();
-                }
-            });
-        });
+    private void initView(AttendanceRsp.DataBean item) {
+//        mViewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
+//            mvpPresenter.attendance("");
+//        });
+//        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+//
+//        AttendanceRsp.DataBean.AttendanceListBean schoolPeopleAllFormBean = new AttendanceRsp.DataBean.AttendanceListBean();
+//        if (item.getHeadmasterAttendanceList() != null) {
+//            if (item.getHeadmasterAttendanceList().size() > index) {
+//                schoolPeopleAllFormBean = item.getHeadmasterAttendanceList().get(index);
+//            } else {
+//                schoolPeopleAllFormBean = item.getHeadmasterAttendanceList().get(0);
+//            }
+//        }
+//        //1 学生 2 教职工
+//        if ("N".equals(schoolPeopleAllFormBean.getPeopleType())) {
+//            startFragment(schoolPeopleAllFormBean);
+//        } else {
+//            int position = 0;
+//            if (item.attendancesForm != null) {
+//               position = index - item.attendancesForm.size();
+//            }
+//            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean, position)).commit();
+//        }
+//        mViewBinding.tvAttendanceTitle.setText(schoolPeopleAllFormBean.getTheme());
+//        if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
+//            mViewBinding.tvClassName.setClickable(true);
+//            mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+//        } else {
+//            mViewBinding.tvClassName.setClickable(false);
+//            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+//        }
+//
+//        if (item.schoolPeopleAllForm != null && item.schoolPeopleAllForm.size() > 1) {
+//            mViewBinding.tvAttendanceTitle.setClickable(true);
+//            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+//        } else {
+//            mViewBinding.tvAttendanceTitle.setClickable(false);
+//            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+//        }
+//
+//        mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
+//            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
+//            adapterEvent.setList(item.schoolPeopleAllForm);
+//            attendancePop.setOnSelectListener(index -> {
+//                this.index = index;
+//                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
+//                mViewBinding.tvAttendanceTitle.setText(bean.attName);
+//                if ("N".equals(bean.getPeopleType())) {
+//                    startFragment(bean);
+//                } else {
+//                    int position = 0;
+//                    if (item.attendancesForm != null) {
+//                        position = index - item.attendancesForm.size();
+//                    }
+//                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean, position)).commit();
+//                }
+//            });
+//        });
     }
 
     private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder>(R.layout.swich_class_item) {
@@ -157,49 +158,19 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceCheckPre
     }
 
     @Override
-    protected AttendanceCheckPresenter createPresenter() {
-        return new AttendanceCheckPresenter(this);
+    protected AttendanceTwoPresenter createPresenter() {
+        return new AttendanceTwoPresenter(this);
     }
 
     @Override
-    public void getAttendanceSuccess(AttendanceCheckRsp model) {
+    public void getAttendanceSuccess(AttendanceRsp model) {
         mViewBinding.swipeRefreshLayout.setRefreshing(false);
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
-            AttendanceCheckRsp.DataBean data = model.getData();
+            AttendanceRsp.DataBean data = model.getData();
             if (data != null) {
-                setListData(data);
+                initView(data);
             }
         }
-    }
-
-    private void setListData(AttendanceCheckRsp.DataBean dataBean) {
-        List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllFormBeanList = new ArrayList<>();
-        if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
-            for (AttendanceCheckRsp.DataBean.AttendancesFormBean item : dataBean.getAttendancesForm()) {
-                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
-                AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers = item.getTeachers();
-                if (teachers != null) {
-                    schoolBean.setAbsence(teachers.getAbsence());
-                    schoolBean.setApplyNum(teachers.getApplyNum());
-                    schoolBean.setAttName(teachers.getName());
-                    schoolBean.setLate(teachers.getLate());
-                    schoolBean.setLeave(teachers.getLeave());
-                    schoolBean.setNumber(teachers.getNumber());
-                    schoolBean.setThingName(teachers.getThingName());
-                    schoolBean.setRequiredTime(teachers.getRequiredTime());
-                    schoolBean.setIdentityType(item.getIdentityType());
-                    schoolBean.setRate(teachers.getRate());
-                    schoolBean.setPeopleType(item.getPeopleType());
-                    schoolBean.setTeachers(teachers);
-                }
-                schoolPeopleAllFormBeanList.add(schoolBean);
-            }
-        }
-        if (dataBean.getSchoolPeopleAllForm() != null) {
-            schoolPeopleAllFormBeanList.addAll(schoolPeopleAllFormBeanList.size(), dataBean.getSchoolPeopleAllForm());
-        }
-        dataBean.schoolPeopleAllForm = schoolPeopleAllFormBeanList;
-        initView(dataBean);
     }
 
     @Override

@@ -16,6 +16,11 @@ import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityAttendanceBinding;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 
+/**
+ * 校长查看全校考勤
+ * update 2021年11月2日
+ * author LRZ
+ */
 public class AttendanceActivity extends BaseActivity {
 
     private ActivityAttendanceBinding mViewBinding;
@@ -57,13 +62,6 @@ public class AttendanceActivity extends BaseActivity {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
-            //校长考情展示
-//            if ("N".equals(type)) {
-//                fragmentTransaction.replace(R.id.fl_content, SchoolTeacherAttendanceFragment.newInstance(index));
-//            } else {
-//                fragmentTransaction.replace(R.id.fl_content, SchoolStudentAttendanceFragment.newInstance(index));
-//            }
-
             fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(index));
         } else {
             //教师教职工 考情详情

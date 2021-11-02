@@ -10,6 +10,7 @@ import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
@@ -554,10 +555,15 @@ public interface DingApiStores {
     @GET("/message/cloud-message/user/notice/updateMyNoticeDetails")
     Observable<ResultBean> updateMyNoticeDetails(@QueryMap HashMap<String, Object> map);
 
-    //首页考勤 老师视角的课堂考勤
+    //首页考勤 token识别身份 校长-教师-家长
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/face/cloud-face/attendance/viewAttendance")
-    Observable<AttendanceCheckRsp> viewAttendance(@Body RequestBody requestBody);
+    @POST("/face/cloud-face/attendance/index/app/v2/queryAppIndexAttendanceDataByIdentity")
+    Observable<AttendanceRsp> viewAttendance(@Body RequestBody requestBody);
+
+    //二级页面 校长查看 教师-家长
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/two/app/v2/queryAppPrincipalTwoAttendanceData")
+    Observable<AttendanceRsp> schoolTwoAttendance(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/management/cloud-system/notice/scope/app/v1/queryDeptMemberByDeptId
     //查询部门所属成员

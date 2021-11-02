@@ -23,6 +23,7 @@ import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.AttendancePresenter;
@@ -132,7 +133,7 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
     }
 
     @Override
-    public void getAttendanceSuccess(AttendanceCheckRsp model) {
+    public void getAttendanceSuccess(AttendanceRsp model) {
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
@@ -143,22 +144,11 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
         }
     }
 
-    private void setData(AttendanceCheckRsp.DataBean dataBean) {
-        List<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean> schoolPeopleAllFormBeanList = new ArrayList<>();
-        if (dataBean.getAttendancesForm() != null && dataBean.getAttendancesForm().size() > 0) {
-            for (AttendanceCheckRsp.DataBean.AttendancesFormBean itemBean : dataBean.getAttendancesForm()) {
-                AttendanceCheckRsp.DataBean.AttendancesFormBean.Students item = itemBean.getStudents();
-                if (itemBean.getStudents() != null) {
-                    AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean schoolBean = new AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean();
-                    schoolBean.setStudents(item);
-                    schoolPeopleAllFormBeanList.add(schoolBean);
-                }
-            }
-        }
+    private void setData(AttendanceRsp.DataBean dataBean) {
         announRoll.setAdapter(announAdapter);
-        constraintLayout.setVisibility(schoolPeopleAllFormBeanList.size() > 0 ? View.GONE : View.VISIBLE);
-        announAdapter.notifyData(dataBean.getAttendancesForm());
-        indexAdapter.setList(schoolPeopleAllFormBeanList);
+        constraintLayout.setVisibility(dataBean.getClassroomTeacherAttendanceList().size() > 0 ? View.GONE : View.VISIBLE);
+        announAdapter.notifyData(dataBean.getClassroomTeacherAttendanceList());
+        indexAdapter.setList(dataBean.getClassroomTeacherAttendanceList());
     }
 
     @Override
