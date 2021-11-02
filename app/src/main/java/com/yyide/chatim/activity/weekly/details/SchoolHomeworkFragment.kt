@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.weekly.details
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -90,14 +91,14 @@ class SchoolHomeworkFragment : BaseFragment() {
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         viewBinding.layoutCharts.recyclerview.adapter =
             adapterAttendance
-        val datas1 = mutableListOf<SchoolAttendance>()
-        datas1.add(SchoolAttendance("语文", 50.3))
-        datas1.add(SchoolAttendance("数学", 30.3))
-        datas1.add(SchoolAttendance("英语", 40.3))
-        datas1.add(SchoolAttendance("物理", 50.3))
-        datas1.add(SchoolAttendance("化学", 25.3))
-        datas1.add(SchoolAttendance("历史", 20.3))
-        datas1.add(SchoolAttendance("政治", 35.3))
+        val datas1 = mutableListOf<SchoolHomeAttend>()
+//        datas1.add(SchoolHomeAttend("语文", 50.3, 50.3))
+//        datas1.add(SchoolHomeAttend("数学", 30.3, 50.3))
+//        datas1.add(SchoolHomeAttend("英语", 40.3, 50.3))
+//        datas1.add(SchoolHomeAttend("物理", 50.3, 50.3))
+//        datas1.add(SchoolHomeAttend("化学", 25.3, 50.3))
+//        datas1.add(SchoolHomeAttend("历史", 20.3, 50.3))
+//        datas1.add(SchoolHomeAttend("政治", 35.3, 50.3))
         adapterAttendance.setList(datas1)
     }
 
@@ -325,16 +326,16 @@ class SchoolHomeworkFragment : BaseFragment() {
      * 全校各年级成绩
      */
     private val adapterAttendance = object :
-        BaseQuickAdapter<SchoolAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
-        override fun convert(holder: BaseViewHolder, item: SchoolAttendance) {
+        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
+        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            if (item.value > 0) {
-                bind.tvProgress.text = "${item.value}%"
+            if (!TextUtils.isEmpty(item.value)) {
+                bind.tvProgress.text = "${item.value}"
             }
             bind.tvWeek.text = item.name
             WeeklyUtil.setAnimation(
                 bind.progressbar,
-                if (item.value <= 0) 0 else item.value.toInt()
+                item.value.toInt()
             )
         }
     }

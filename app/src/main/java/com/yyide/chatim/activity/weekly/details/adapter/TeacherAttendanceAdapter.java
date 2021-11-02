@@ -39,13 +39,13 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
         holder.setText(R.id.tv_student_event, "");
         holder.setText(R.id.tv_status, "");
         holder.setText(R.id.tv_student_name, "");
-        tvName.setText(item.getClockDate() + " " + item.getDetailName());
-        tvStatus.setText(item.getStatusName());
+        tvStatus.setText(item.getClockName());
         if (itemParent.getLevel() == 1) {
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
             if (TextUtils.isEmpty(item.getType())) {
                 return;
             }
+            tvName.setText(item.getName());
             switch (item.getType()) {
                 case "0"://正常
 //                        tvStatus.setText(item.getStatusType());
@@ -54,24 +54,25 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
                     break;
                 case "1"://缺勤
                     tvStatus.setText("未打卡");
-                    tvEvent.setText(item.getStatusName());
+                    tvEvent.setText(item.getClockName());
                     break;
                 case "3"://早退
-                    tvEvent.setText(item.getStatusName());
-                    tvStatus.setText(item.getEquipment());
-                    holder.setText(R.id.tv_student_time, item.getClockTime());
+                    tvName.setText(item.getName());
+                    tvStatus.setText(item.getClockName());
+                    holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#63DAAB"));
                     break;
                 case "2"://迟到
-                    tvEvent.setText(item.getStatusName());
-                    tvStatus.setText(item.getEquipment());
-                    holder.setText(R.id.tv_student_time, item.getClockTime());
+                    tvName.setText(item.getName());
+                    tvStatus.setText(item.getClockName());
+                    holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
                 case "5"://请假
+                    tvName.setText(item.getName());
                     tvStatus.setText("请假");
                     holder.setText(R.id.tv_student_event, "请假时间");
-                    holder.setText(R.id.tv_student_time, item.getLeaveTime());
+                    holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#F6BD16"));
                     break;
             }
@@ -79,7 +80,7 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
             constraintLayout.setBackgroundColor(getContext().getResources().getColor(R.color.white));
             tvName.setEms(8);
             tvName.setLines(1);
-            tvName.setText(!TextUtils.isEmpty(item.getDetailName()) ? item.getDetailName() : "未知姓名");
+            tvName.setText(!TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名");
             tvStatus.setText(getContext().getString(R.string.attendance_bout, itemParent.getChildren() != null ? itemParent.getChildren().size() : 0));
         }
         if (!itemParent.isLeaf()) {

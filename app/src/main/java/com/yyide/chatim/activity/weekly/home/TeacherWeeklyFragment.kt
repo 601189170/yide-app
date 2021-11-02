@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
+import com.yyide.chatim.activity.weekly.details.BarCharts
 import com.yyide.chatim.activity.weekly.details.adapter.ClassAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.HotAdapter
 import com.yyide.chatim.activity.weekly.home.viewmodel.TeacherViewModel
@@ -323,6 +324,13 @@ class TeacherWeeklyFragment : BaseFragment() {
             show(view, item.name, "${item.value}%")
         }
         adapterAttendance.setList(attend.teacherAttend)
+        val mBarCharts = BarCharts()
+        mBarCharts.showBarChart2(
+            viewBinding.attendance.layoutCharts.barChart,
+            mBarCharts.getBarData(attend.teacherAttend),
+            attend.teacherAttend,
+            true
+        )
     }
 
     private fun initHotScroll(attendance: List<List<WeeklyTeacherClassAttendance>>) {
@@ -453,23 +461,23 @@ class TeacherWeeklyFragment : BaseFragment() {
      */
     private var selectPosition = -1
     private val adapterAttendance = object :
-        BaseQuickAdapter<WeeklyTeacherTeacherAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: WeeklyTeacherTeacherAttend) {
+        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
+        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
             if (selectPosition == holder.bindingAdapterPosition) {
                 bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
             } else {
-                if (item.value <= 0) {
+                if (!TextUtils.isEmpty(item.value)) {
                     bind.tvProgress.visibility = View.GONE
                 }
-                bind.tvProgress.text = "${item.value}%"
+                bind.tvProgress.text = "${item.value}"
                 bind.tvWeek.text = item.name
                 WeeklyUtil.setAnimation(
                     bind.progressbar,
-                    if (item.value <= 0) 0 else BigDecimal(item.value).setScale(
+                    BigDecimal(item.value).setScale(
                         0,
-                        BigDecimal.ROUND_HALF_UP
+                        BigDecimal.ROUND_UP
                     ).toInt()
                 )
             }

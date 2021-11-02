@@ -13,9 +13,9 @@ data class SchoolWeeklyData(
 
 data class SchoolHomeAttendance(
     @JSONField(name = "studentAttend")
-    var studentAttend: List<SchoolHomeStudentAttend>?,
+    var studentAttend: List<SchoolHomeAttend>?,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<SchoolHomeTeacherAttend>?
+    var teacherAttend: List<SchoolHomeAttend>?
 )
 
 data class SchoolHomeSummary(
@@ -33,16 +33,11 @@ class SchoolHomeWork(
     var value: String
 )
 
-data class SchoolHomeStudentAttend(
+data class SchoolHomeAttend(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "value")
-    var value: Double
-)
-
-data class SchoolHomeTeacherAttend(
-    @JSONField(name = "name")
-    var name: String,
-    @JSONField(name = "value")
-    var value: Double
+    var value: String,
+    @JSONField(name = "rate")
+    var rate: Double
 )

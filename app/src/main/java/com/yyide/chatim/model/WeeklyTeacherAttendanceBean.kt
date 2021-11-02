@@ -30,34 +30,26 @@ data class WeeklyTeacherDetail(
 
 data class AbnormalDetail(
     @JSONField(name = "absenteeism")
-    var absenteeism: ValueChild,
+    var absenteeism: List<ValueChild>,
     @JSONField(name = "late")
-    var late: ValueChild,
+    var late: List<ValueChild>,
     @JSONField(name = "leave")
-    var leave: ValueChild,
+    var leave: List<ValueChild>,
     @JSONField(name = "LeaveEarly")
-    var LeaveEarly: ValueChild
+    var LeaveEarly: List<ValueChild>
 ) : Serializable
 
 data class ValueChild(
-    @JSONField(name = "clockDate")
-    var clockDate: String,
-    @JSONField(name = "detailName")
-    var detailName: String,
-    @JSONField(name = "statusName")
-    var statusName: String,
-    @JSONField(name = "clockTime")
-    var clockTime: String,
-    @JSONField(name = "leaveTime ")
-    var leaveTime: String,
-    @JSONField(name = "equipment")
-    var equipment: String,
+    @JSONField(name = "clockName")
+    var clockName: String?,
+    @JSONField(name = "time")
+    var time: String?,
     @JSONField(name = "name")
-    var name: String,
+    var name: String?,
     @JSONField(name = "type")
-    var type: String,
+    var type: String?,
     @JSONField(name = "value")
-    var value: List<ValueChild>
+    var value: List<ValueChild>?
 ) : Serializable, NodeId {
     override fun getId(): String {
         return ""
