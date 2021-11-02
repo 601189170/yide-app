@@ -5,16 +5,9 @@ import java.io.Serializable
 
 data class SchoolWeeklyTeacherBean(
     @JSONField(name = "attend")
-    var attend: List<SchoolAttendance>,
+    var attend: List<SchoolHomeAttend>,
     @JSONField(name = "detail")
     var detail: List<Detail>
-) : Serializable
-
-data class SchoolAttendance(
-    @JSONField(name = "name")
-    var name: String,
-    @JSONField(name = "value")
-    var value: Double
 ) : Serializable
 
 data class Detail(
@@ -25,9 +18,9 @@ data class Detail(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<TeacherAttendance>,
+    var teacherAttend: List<SchoolHomeAttend>,
     @JSONField(name = "studentAttend")
-    var studentAttend: List<SchoolAttendance>
+    var studentAttend: List<SchoolHomeAttend>
 ) : Serializable
 
 data class DeptAttend(
@@ -37,11 +30,4 @@ data class DeptAttend(
     var name: String,
     @JSONField(name = "thisWeek")
     var thisWeek: Double
-) : Serializable
-
-data class TeacherAttendance(
-    @JSONField(name = "name")
-    var name: String,
-    @JSONField(name = "rate")
-    var rate: Double
 ) : Serializable

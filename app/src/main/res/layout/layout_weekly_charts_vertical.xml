@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent">
 
         <View
@@ -145,11 +145,18 @@
         android:layout_height="163dp"
         android:layout_marginStart="@dimen/dp_30"
         android:nestedScrollingEnabled="false"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="7"
         tools:itemCount="7"
         tools:listitem="@layout/item_weekly_charts_vertical" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

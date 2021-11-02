@@ -64,7 +64,11 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
                 getString(R.string.weekly_desc_name, getString("tabTitle", ""))
             viewBinding.tvAbsenteeism.isChecked = true
             viewBinding.tvAbsenteeism.setTextColor(resources.getColor(R.color.white))
-            initAttendanceList(detail.abnormalDetails.absenteeism)
+            if (detail.abnormalDetails.absenteeism != null && detail.abnormalDetails.absenteeism.isNotEmpty()) {
+                initAttendanceList(detail.abnormalDetails.absenteeism[0])
+            } else {
+                initAttendanceList(ValueChild("", "", "", "", null))
+            }
             initBarCharts(detail.numbers)
         }
         initClick()
@@ -126,25 +130,41 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
             setButton()
             viewBinding.tvLate.isChecked = true
             viewBinding.tvLate.setTextColor(resources.getColor(R.color.white))
-            initAttendanceList(detail.abnormalDetails.late)
+            if (detail.abnormalDetails.late != null && detail.abnormalDetails.late.isNotEmpty()) {
+                initAttendanceList(detail.abnormalDetails.late[0])
+            } else {
+                initAttendanceList(ValueChild("", "", "", "", null))
+            }
         }
         viewBinding.tvAbsenteeism.setOnClickListener {
             setButton()
             viewBinding.tvAbsenteeism.isChecked = true
             viewBinding.tvAbsenteeism.setTextColor(resources.getColor(R.color.white))
-            initAttendanceList(detail.abnormalDetails.absenteeism)
+            if (detail.abnormalDetails.absenteeism != null && detail.abnormalDetails.absenteeism.isNotEmpty()) {
+                initAttendanceList(detail.abnormalDetails.absenteeism[0])
+            } else {
+                initAttendanceList(ValueChild("", "", "", "", null))
+            }
         }
         viewBinding.tvLeave.setOnClickListener {
             setButton()
             viewBinding.tvLeave.setTextColor(resources.getColor(R.color.white))
             viewBinding.tvLeave.isChecked = true
-            initAttendanceList(detail.abnormalDetails.leave)
+            if (detail.abnormalDetails.leave != null && detail.abnormalDetails.leave.isNotEmpty()) {
+                initAttendanceList(detail.abnormalDetails.leave[0])
+            } else {
+                initAttendanceList(ValueChild("", "", "", "", null))
+            }
         }
         viewBinding.tvEarly.setOnClickListener {
             setButton()
             viewBinding.tvEarly.setTextColor(resources.getColor(R.color.white))
             viewBinding.tvEarly.isChecked = true
-            initAttendanceList(detail.abnormalDetails.LeaveEarly)
+            if (detail.abnormalDetails.LeaveEarly != null && detail.abnormalDetails.LeaveEarly.isNotEmpty()) {
+                initAttendanceList(detail.abnormalDetails.LeaveEarly[0])
+            } else {
+                initAttendanceList(ValueChild("", "", "", "", null))
+            }
         }
     }
 
@@ -201,14 +221,14 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
     private fun convertDataToTreeNode(
         data: ValueChild
     ): List<TreeNode<ValueChild>> {
-        if (data == null) {
+        if (data.value == null) {
             return mutableListOf()
         }
         val nodes: MutableList<TreeNode<ValueChild>> = ArrayList()
         val childs = mutableListOf<TreeNode<ValueChild>>()
-        val item = ValueChild("", data.name, "", "", "", "", "", data.type, mutableListOf())
+        val item = ValueChild(data.clockName, data.time, data.name, data.type, mutableListOf())
         val treeNode: TreeNode<ValueChild> = TreeNode(item, -1)
-        for (childItem in data.value) {
+        for (childItem in data.value!!) {
             childItem.type = data.type
             val child: TreeNode<ValueChild> = TreeNode(childItem, -1)
             child.parent = treeNode

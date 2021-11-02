@@ -21,7 +21,7 @@ import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.*
 import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.Detail
-import com.yyide.chatim.model.SchoolAttendance
+import com.yyide.chatim.model.SchoolHomeAttend
 import com.yyide.chatim.model.SchoolWeeklyTeacherBean
 import com.yyide.chatim.model.WeeklyDateBean
 import com.yyide.chatim.utils.DateUtils
@@ -62,8 +62,10 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
     }
 
     private fun initView() {
+        viewBinding.appBarLayout.visibility = View.INVISIBLE
         viewModel.schoolStudentAttendanceLiveData.observe(viewLifecycleOwner) {
             dismiss()
+            viewBinding.appBarLayout.visibility = View.VISIBLE
             val result = it.getOrNull()
             if (null != result) {
                 setWeekly(result)
@@ -162,7 +164,7 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
         initViewPager(result.detail)
     }
 
-    private fun initHotScroll(attendance: List<List<SchoolAttendance>>) {
+    private fun initHotScroll(attendance: List<List<SchoolHomeAttend>>) {
         val viewList = mutableListOf<View>()
         attendance.forEachIndexed { index, schoolAttendance ->
             viewList.add(attendanceBanner(attendance[index]))
@@ -253,17 +255,17 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
         }
     }
 
-    private fun attendanceBanner(attendance: List<SchoolAttendance>): View {
+    private fun attendanceBanner(attendance: List<SchoolHomeAttend>): View {
         val view = ItemHBinding.inflate(layoutInflater)
         view.attendanceRecyclerview.layoutManager = GridLayoutManager(activity, spanCount)
         val adapterAttendance = object :
-            BaseQuickAdapter<SchoolAttendance, BaseViewHolder>(R.layout.item_weekly_attendance) {
-            override fun convert(holder: BaseViewHolder, item: SchoolAttendance) {
+            BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_attendance) {
+            override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
                 val bind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
                 bind.viewLine.visibility =
                     if (holder.bindingAdapterPosition == 0) View.GONE else View.VISIBLE
                 bind.tvEventName.text = item.name
-                bind.tvAttendance.text = "${item.value}%"
+                bind.tvAttendance.text = "${item.value}"
             }
         }
         view.attendanceRecyclerview.adapter = adapterAttendance

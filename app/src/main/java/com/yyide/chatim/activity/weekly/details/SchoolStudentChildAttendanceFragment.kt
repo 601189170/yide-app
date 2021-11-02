@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.weekly.details
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +18,7 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.yyide.chatim.R
@@ -28,7 +27,8 @@ import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.databinding.*
 import com.yyide.chatim.model.DeptAttend
 import com.yyide.chatim.model.Detail
-import com.yyide.chatim.model.SchoolAttendance
+import com.yyide.chatim.model.SchoolHomeAttend
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -70,17 +70,7 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         viewBinding.layoutCharts.recyclerview.adapter =
             adapterAttendance
 
-//        adapterAttendance.setOnItemClickListener { adapter, view, position ->
-//            selectPosition = if (selectPosition != position) {
-//                position
-//            } else {
-//                -1
-//            }
-//            adapterAttendance.notifyDataSetChanged()
-//            val item = adapterAttendance.getItem(position)
-//            //show(view, item.name, "${item.value}%")
-//        }
-        var studentAttendances = mutableListOf<SchoolAttendance>()
+        var studentAttendances = mutableListOf<SchoolHomeAttend>()
         var subjects = mutableListOf<DeptAttend>()
         arguments?.apply {
             val detail = getSerializable("item") as Detail
@@ -88,10 +78,17 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
                 getString(R.string.weekly_school_student_desc, getString("tabTitle", ""))
             viewBinding.tvAttend.text =
                 getString(R.string.weekly_school_student_attend, getString("tabTitle", ""))
-            studentAttendances = detail.studentAttend as MutableList<SchoolAttendance>
+            studentAttendances = detail.studentAttend as MutableList<SchoolHomeAttend>
             subjects = detail.gradeAttend as MutableList<DeptAttend>
         }
         adapterAttendance.setList(studentAttendances)
+        val mBarCharts = BarCharts()
+        mBarCharts.showBarChart2(
+            viewBinding.layoutCharts.barChart,
+            mBarCharts.getBarData(studentAttendances),
+            studentAttendances,
+            true
+        )
         initLineCharts(subjects)
     }
 
@@ -280,17 +277,19 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
      */
     private var selectPosition = -1
     private val adapterAttendance = object :
-        BaseQuickAdapter<SchoolAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
-        override fun convert(holder: BaseViewHolder, item: SchoolAttendance) {
+        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
+        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            if (item.value > 0) {
+            if (!TextUtils.isEmpty(item.value)) {
                 bind.tvProgress.text = "${item.value}%"
+                WeeklyUtil.setAnimation(
+                    bind.progressbar,
+                    BigDecimal(item.value).setScale(
+                        0, BigDecimal.ROUND_UP
+                    ).toInt()
+                )
             }
             bind.tvWeek.text = item.name
-            WeeklyUtil.setAnimation(
-                bind.progressbar,
-                if (item.value <= 0) 0 else item.value.toInt()
-            )
         }
     }
 

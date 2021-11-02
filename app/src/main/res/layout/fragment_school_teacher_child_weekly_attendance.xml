@@ -32,14 +32,13 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/dp_12"
-                    android:paddingEnd="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_10">
 
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_12"
                         android:layout_marginTop="12dp"
                         android:textColor="#ff1e1e1e"
                         android:textSize="15sp"

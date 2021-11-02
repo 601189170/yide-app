@@ -160,11 +160,11 @@
                             android:id="@+id/layout_weekly_homework_summary"
                             layout="@layout/layout_weekly_homework_summary" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="20dp" />
+<!--                        <View-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="20dp" />-->
 
-                        <include layout="@layout/layout_xz" />
+<!--                        <include layout="@layout/layout_xz" />-->
 
                     </LinearLayout>
 

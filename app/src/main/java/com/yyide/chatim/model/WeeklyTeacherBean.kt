@@ -23,7 +23,7 @@ data class WeeklyTeacherAttendance(
     @JSONField(name = "course")
     var course: String,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<WeeklyTeacherTeacherAttend>
+    var teacherAttend: List<SchoolHomeAttend>
 )
 
 class WeeklyTeacherExpend
@@ -44,11 +44,4 @@ data class WeeklyTeacherClassAttendance(
     var name: String,
     @JSONField(name = "value")
     var value: String
-)
-
-data class WeeklyTeacherTeacherAttend(
-    @JSONField(name = "name")
-    var name: String,
-    @JSONField(name = "value")
-    var value: Double
 )

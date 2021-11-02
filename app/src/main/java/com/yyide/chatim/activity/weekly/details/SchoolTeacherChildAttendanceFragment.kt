@@ -16,7 +16,7 @@ import com.yyide.chatim.databinding.ItemWeeklyChartsVerticalBinding
 import com.yyide.chatim.databinding.ItemWeeklyProgressHBinding
 import com.yyide.chatim.model.DeptAttend
 import com.yyide.chatim.model.Detail
-import com.yyide.chatim.model.TeacherAttendance
+import com.yyide.chatim.model.SchoolHomeAttend
 
 /**
  *
@@ -62,16 +62,23 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
         viewBinding.recyclerviewDept.adapter =
             adapterAttendanceDept
 
-        var teacherAttends = mutableListOf<TeacherAttendance>()
+        var teacherAttends = mutableListOf<SchoolHomeAttend>()
         var deptattends = mutableListOf<DeptAttend>()
         arguments?.apply {
             val detail = getSerializable("item") as Detail
-            teacherAttends = detail.teacherAttend as MutableList<TeacherAttendance>
+            teacherAttends = detail.teacherAttend as MutableList<SchoolHomeAttend>
             deptattends = detail.deptAttend as MutableList<DeptAttend>
             viewBinding.textView.text = "全校教职工每天${getString("tabTitle", "")}考勤率"
             viewBinding.tvFaculty.text = "教职工各部门${getString("tabTitle", "")}考勤率"
         }
         adapterAttendance.setList(teacherAttends)
+        val mBarCharts = BarCharts()
+        mBarCharts.showBarChart2(
+            viewBinding.layoutCharts.barChart,
+            mBarCharts.getBarData(teacherAttends),
+            teacherAttends,
+            true
+        )
         adapterAttendanceDept.setList(deptattends)
     }
 
@@ -79,8 +86,8 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
      * 考勤数据
      */
     private val adapterAttendance = object :
-        BaseQuickAdapter<TeacherAttendance, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
-        override fun convert(holder: BaseViewHolder, item: TeacherAttendance) {
+        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
+        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
             val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
             if (item.rate > 0) {
                 bind.tvProgress.text = "${item.rate}%"

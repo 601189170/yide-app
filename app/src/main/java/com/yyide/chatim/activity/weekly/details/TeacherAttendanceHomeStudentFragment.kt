@@ -103,9 +103,11 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
         teacherId = SpData.getIdentityInfo().teacherId
         initDate()
         initClassMenu()
+        viewBinding.appBarLayout.visibility = View.INVISIBLE
         viewModel.teacherAttendanceStudentLiveData.observe(viewLifecycleOwner) {
             dismiss()
             val result = it.getOrNull()
+            viewBinding.appBarLayout.visibility = View.VISIBLE
             if (null != result) {
                 viewBinding.cardViewNoData.visibility = View.GONE
                 viewBinding.clTop.visibility =  View.VISIBLE
@@ -123,8 +125,10 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                     viewBinding.viewpager.visibility = View.VISIBLE
                 }
             } else {
-                viewBinding.viewpager.visibility = View.INVISIBLE
-                viewBinding.slidingTabLayout.visibility = View.INVISIBLE
+                viewBinding.cardViewNoData.visibility = View.VISIBLE
+                viewBinding.clTop.visibility = View.GONE
+                viewBinding.slidingTabLayout.visibility = View.GONE
+                viewBinding.viewpager.visibility = View.GONE
             }
         }
     }
