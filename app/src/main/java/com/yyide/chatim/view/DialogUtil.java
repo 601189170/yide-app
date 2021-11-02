@@ -611,8 +611,8 @@ public class DialogUtil {
         view.getLocationOnScreen(location);//获取在整个屏幕内的绝对坐标
         final int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
         final int right = view.getRight();
-        lp.x = widthPixels - DisplayUtils.dip2px(context, 160f) - (widthPixels - right); //对 dialog 设置 x 轴坐标
-        lp.y = location[1] + view.getHeight() * 2 - notificationBar; //对dialog设置y轴坐标
+        lp.x = widthPixels - DisplayUtils.dip2px(context, 160f) - (widthPixels - right) -DisplayUtils.dip2px(context, 20f); //对 dialog 设置 x 轴坐标
+        lp.y = location[1] + view.getHeight() / 2;// - notificationBar; //对dialog设置y轴坐标
 
         lp.width = DisplayUtils.dip2px(context, 160f);
         lp.height = DisplayUtils.dip2px(context, 244f);
