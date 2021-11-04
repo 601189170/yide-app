@@ -1,6 +1,5 @@
-package com.yyide.chatim.activity.attendance.fragment;
+package com.yyide.chatim.fragment.attendance.v2;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -16,51 +15,46 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.alibaba.fastjson.JSON;
 import com.beiing.weekcalendar.WeekCalendar;
 import com.beiing.weekcalendar.listener.GetViewHelper;
 import com.beiing.weekcalendar.utils.CalendarUtil;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.attendance.StatisticsDetailActivity;
-import com.yyide.chatim.adapter.attendance.DayStatisticsListAdapter;
-import com.yyide.chatim.adapter.attendance.StudentDayStatisticsListAdapter;
+import com.yyide.chatim.adapter.attendance.v2.StudentDayStatisticsListAdapter;
+import com.yyide.chatim.adapter.attendance.v2.TeacherDayStatisticsListAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
-import com.yyide.chatim.model.AttendanceDayStatsRsp;
-import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
-import com.yyide.chatim.presenter.attendance.DayStatisticsPresenter;
+import com.yyide.chatim.model.attendance.StudentAttendanceDayRsp;
+import com.yyide.chatim.presenter.attendance.v2.StudentDayStatisticsPresenter;
 import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.view.attendace.DayStatisticsView;
+import com.yyide.chatim.view.attendace.v2.StudentDayStatisticsView;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link DayStatisticsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * @author liu tao
+ * @version v2
+ * @date 2021/11/4 9:10
+ * @description 家长查看学生日统计考勤数据
  */
-public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresenter> implements DayStatisticsView, SwipeRefreshLayout.OnRefreshListener {
-    private static final String TAG = DayStatisticsFragment.class.getSimpleName();
+public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStatisticsPresenter> implements StudentDayStatisticsView, SwipeRefreshLayout.OnRefreshListener {
+    private static final String TAG = StudentDayStatisticsFragment.class.getSimpleName();
     private List<DateTime> eventDates;
-    private final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> data = new ArrayList<>();
-    private final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean> attendancesFormBeanList = new ArrayList<>();
-
     private FragmentDayStatisticsBinding mViewBinding;
     private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
     private List<LeaveDeptRsp.DataBean> eventList = new ArrayList<>();
@@ -71,25 +65,25 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     private String currentClassName;//当前班级
     private String currentEvent;//当前事件
     private String historyEvent;//上一次选择的事件
-    private DayStatisticsListAdapter dayStatisticsListAdapter;
-    private StudentDayStatisticsListAdapter studentDayStatisticsListAdapter;
+    private StudentDayStatisticsListAdapter dayStatisticsListAdapter;
     private boolean refresh;
 
-    public DayStatisticsFragment() {
+    //存储事件类型
+    private List<StudentAttendanceDayRsp.DataBean.ClassroomTeacherAttendanceListBean> classroomTeacherAttendanceList = new ArrayList<>();
+    //课程考勤列表
+    private List<StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean> courseBasicVoForm = new ArrayList<>();
+    //事件考勤列表 多个考勤类型
+    private List<StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean> eventBasicVoList = new ArrayList<>();
+
+    private List<StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean> data = new ArrayList<>();
+
+    public StudentDayStatisticsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WeekStatisticsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DayStatisticsFragment newInstance(String param1, String param2) {
-        DayStatisticsFragment fragment = new DayStatisticsFragment();
+
+    public static StudentDayStatisticsFragment newInstance(String param1, String param2) {
+        StudentDayStatisticsFragment fragment = new StudentDayStatisticsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -98,10 +92,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -112,18 +103,12 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     }
 
     private void initClassData() {
-//        if (!SpData.getIdentityInfo().staffIdentity()) {
-//            final String studentName = SpData.getIdentityInfo().studentName;
-//            mViewBinding.tvClassName.setText(studentName);
-//            return;
-//        }
         if (SpData.getIdentityInfo().staffIdentity()) {
             dialogType = 2;
         } else {
             dialogType = 4;
         }
         final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
-        //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
         classList.clear();
         final String classesStudentName = SpData.getClassesStudentName();
         for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
@@ -137,12 +122,12 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
             dataBean.setIsDefault(0);
             if (SpData.getIdentityInfo().staffIdentity()) {
                 dataBean.setDeptName(classesName);
-                if (classesName.equals(classesStudentName)){
+                if (classesName.equals(classesStudentName)) {
                     dataBean.setIsDefault(1);
                 }
             } else {
                 dataBean.setDeptName(studentName);
-                if (studentName.equals(classesStudentName)){
+                if (studentName.equals(classesStudentName)) {
                     dataBean.setIsDefault(1);
                 }
             }
@@ -150,7 +135,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         }
 
         if (classList.isEmpty()) {
-            Log.e(TAG, "initClassData: 当前账号没有学生" );
+            Log.e(TAG, "initClassData: 当前账号没有学生");
             mViewBinding.tvClassName.setVisibility(View.GONE);
         }
     }
@@ -171,7 +156,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         String time = DateUtils.switchTime(new Date(), "yyyy-MM-dd");
         final String time1 = DateUtils.formatTime(time, "yyyy-MM-dd", "MM月");
         mViewBinding.tvCurrentDate.setText(time1);
-        currentDate = DateUtils.formatTime(time,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");
+        currentDate = DateUtils.formatTime(time, "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss");
         final WeekCalendar weekCalendar = view.findViewById(R.id.week_calendar);
         weekCalendar.setGetViewHelper(new GetViewHelper() {
             @Override
@@ -226,45 +211,17 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
             final String time2 = DateUtils.formatTime(text, "yyyy-MM-dd", "MM月");
             this.mViewBinding.tvCurrentDate.setText(time2);
             Log.e(TAG, "onDateSelect: " + text);
-            currentDate = DateUtils.formatTime(text,"yyyy-MM-dd","yyyy-MM-dd HH:mm:ss");;
-            queryAttStatsData(currentClass,currentDate);
+            currentDate = DateUtils.formatTime(text, "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss");
+            queryAttStatsData(currentClass, currentDate);
         });
 
         RecyclerView recyclerview = view.findViewById(R.id.recyclerview);
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            //统计-日-班主任和教师视角
-            dayStatisticsListAdapter = new DayStatisticsListAdapter(getContext(), data);
-            recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerview.setAdapter(dayStatisticsListAdapter);
-            dayStatisticsListAdapter.setOnClickedListener(position -> {
-                //进入考勤详情页
-                //final AttendanceStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = data.get(position);
-                AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBeanData = null;
-                for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesFormBeanList) {
-                        if (currentEvent.equals(attendancesFormBean.getAttNameA())){
-                            attendancesFormBeanData = attendancesFormBean;
-                            break;
-                        }
-                }
-                if (attendancesFormBeanData == null){
-                    return;
-                }
-                final String jsonString = JSON.toJSONString(attendancesFormBeanData);
-                Log.e(TAG, "进入考勤详情页: "+jsonString );
-                final Intent intent = new Intent(getActivity(), StatisticsDetailActivity.class);
-                intent.putExtra("data",jsonString);
-                intent.putExtra("position",position);
-                intent.putExtra("currentClass",currentClassName);
-                startActivity(intent);
-            });
-        } else {
-            //统计-日-家长视角
-            studentDayStatisticsListAdapter = new StudentDayStatisticsListAdapter(getActivity(), data);
-            recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerview.setAdapter(studentDayStatisticsListAdapter);
-        }
+        //统计-日-学生家长视角
+        dayStatisticsListAdapter = new StudentDayStatisticsListAdapter(getContext(), data);
+        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerview.setAdapter(dayStatisticsListAdapter);
         //请求数据
-        queryAttStatsData(currentClass,currentDate);
+        queryAttStatsData(currentClass, currentDate);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -293,7 +250,7 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
                                 //学生id
                                 currentStudentId = dataBean.getDeptId();
                                 currentClassName = dataBean.getDeptName();
-                                queryAttStatsData(currentClass,currentDate);
+                                queryAttStatsData(currentClass, currentDate);
                             });
                         }
                 );
@@ -301,13 +258,23 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         }
     }
 
-    private void queryAttStatsData(String classId,String searchTime){
-        mvpPresenter.getAttendanceStatsData(currentStudentId,classId,searchTime,"1");
+    /**
+     * 查询日考勤统计数据
+     *
+     * @param classId
+     * @param date    拆分为 startTime, endTime
+     */
+    private void queryAttStatsData(String classId, String date) {
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        final DateTime dateTime = DateTime.parse(date, dateTimeFormatter);
+        String startTime = dateTime.toString("yyyy-MM-dd ") + "00:00:00";
+        String endTime = dateTime.toString("yyyy-MM-dd ") + "23:59:59";
+        mvpPresenter.queryAppStudentAttendanceDay(classId,currentStudentId ,startTime, endTime);
     }
 
     @Override
-    protected DayStatisticsPresenter createPresenter() {
-        return new DayStatisticsPresenter(this);
+    protected StudentDayStatisticsPresenter createPresenter() {
+        return new StudentDayStatisticsPresenter(this);
     }
 
     @Override
@@ -316,35 +283,42 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         mViewBinding = null;
     }
 
-    private void showBlank(boolean show){
-        mViewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
+    private void showBlank(boolean show) {
+        mViewBinding.blankPage.setVisibility(show ? View.VISIBLE : View.GONE);
         //mViewBinding.recyclerview.setVisibility(show?View.GONE:View.VISIBLE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void attendanceStatisticsSuccess(AttendanceDayStatsRsp attendanceWeekStatsRsp) {
-        Log.e(TAG, "attendanceStatisticsSuccess: " + attendanceWeekStatsRsp.toString());
-        if (refresh){
+    public void attendanceStatisticsSuccess(StudentAttendanceDayRsp studentAttendanceDayRsp) {
+        Log.e(TAG, "attendanceStatisticsSuccess: " + studentAttendanceDayRsp.toString());
+        if (refresh) {
             refresh = false;
             mViewBinding.swipeRefreshLayout.setRefreshing(false);
         }
-        if (attendanceWeekStatsRsp.getCode() == 200){
-            if (attendanceWeekStatsRsp.getData() == null){
-                ToastUtils.showShort(""+attendanceWeekStatsRsp.getMsg());
+        if (studentAttendanceDayRsp.getCode() == 200) {
+            if (studentAttendanceDayRsp.getData() == null) {
+                ToastUtils.showShort("" + studentAttendanceDayRsp.getMsg());
             }
-            attendancesFormBeanList.clear();
             data.clear();
-            if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getAttendancesForm() == null) {
+            classroomTeacherAttendanceList.clear();
+            courseBasicVoForm.clear();
+            eventBasicVoList.clear();
+
+            if (studentAttendanceDayRsp.getData() == null || studentAttendanceDayRsp.getData().getClassroomTeacherAttendanceList() == null) {
                 mViewBinding.tvAttendanceType.setVisibility(View.GONE);
                 showBlank(true);
                 notifyAdapter();
                 return;
             }
+            final List<StudentAttendanceDayRsp.DataBean.ClassroomTeacherAttendanceListBean> classroomTeacherAttendanceList = studentAttendanceDayRsp.getData().getClassroomTeacherAttendanceList();
+            this.classroomTeacherAttendanceList.addAll(classroomTeacherAttendanceList);
+            final StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean appStudentDailyStatisticalForm = studentAttendanceDayRsp.getData().getAppStudentDailyStatisticalForm();
+            final List<StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean> eventList = appStudentDailyStatisticalForm.getEventList();
+            final List<StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean> courseFormList = appStudentDailyStatisticalForm.getCourseFormList();
 
-            final List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean> attendancesForm = attendanceWeekStatsRsp.getData().getAttendancesForm();
-            if (attendancesForm == null || attendancesForm.isEmpty()){
-                eventList.clear();
+            if ((eventList == null || eventList.isEmpty()) && (courseFormList == null || courseFormList.isEmpty())) {
+                this.eventList.clear();
                 currentEvent = "";
                 mViewBinding.tvAttendanceType.setText("");
                 mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, null, null);
@@ -352,40 +326,40 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
                 return;
             }
             showBlank(false);
-            attendancesFormBeanList.addAll(attendancesForm);
-//            currentEvent = attendancesFormBeanList.get(0).getAttNameA();
-//            data.addAll(attendancesFormBeanList.get(0).getStudentLists());
-//            //更新布局
-//            if (SpData.getIdentityInfo().staffIdentity()) {
-//                dayStatisticsListAdapter.notifyDataSetChanged();
-//            }else {
-//                studentDayStatisticsListAdapter.notifyDataSetChanged();
-//            }
+            if (eventList != null) {
+                this.eventBasicVoList.addAll(eventList);
+            }
+            if (courseFormList != null) {
+                this.courseBasicVoForm.addAll(courseFormList);
+            }
             initEventData();
         } else {
-            ToastUtils.showShort("服务器异常："+attendanceWeekStatsRsp.getCode()+","+attendanceWeekStatsRsp.getMsg());
+            ToastUtils.showShort("服务器异常：" + studentAttendanceDayRsp.getCode() + "," + studentAttendanceDayRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
-            //showData(null);
+            data.clear();
+            classroomTeacherAttendanceList.clear();
+            courseBasicVoForm.clear();
+            eventBasicVoList.clear();
+            notifyAdapter();
             showBlank(true);
         }
     }
 
 
-    private void showData(String eventName){
-        List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> studentListsBean = null;
-        for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean : attendancesFormBeanList) {
-            if (attendancesFormBean.getAttNameA().equals(eventName)) {
-                studentListsBean = attendancesFormBean.getStudentLists();
-                break;
-            }
-        }
-
-        if (studentListsBean == null){
-            Log.e(TAG, "showData: data is null");
+    private void showData(String eventName) {
+        if (eventName.equals("课程考勤") && !courseBasicVoForm.isEmpty()) {
+            data.clear();
+            data.addAll(courseBasicVoForm);
+            //更新布局
+            notifyAdapter();
             return;
         }
         data.clear();
-        data.addAll(studentListsBean);
+        for (StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean eventBasicVoListBean : eventBasicVoList) {
+            if (eventBasicVoListBean.getTheme().equals(eventName)) {
+                data.add(eventBasicVoListBean);
+            }
+        }
         //更新布局
         notifyAdapter();
     }
@@ -393,30 +367,43 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initEventData() {
         eventList.clear();
-        for (int i = 0; i < attendancesFormBeanList.size(); i++) {
-            final AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = attendancesFormBeanList.get(i);
+        for (int i = 0; i < classroomTeacherAttendanceList.size(); i++) {
+            final StudentAttendanceDayRsp.DataBean.ClassroomTeacherAttendanceListBean classroomTeacherAttendanceListBean = classroomTeacherAttendanceList.get(i);
             final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            if (attendancesFormBean.getAttNameA().equals(historyEvent) || (TextUtils.isEmpty(historyEvent) && i == 0)) {
+            if (classroomTeacherAttendanceListBean.getTheme().equals(historyEvent) || (TextUtils.isEmpty(historyEvent) && i == 0)) {
                 dataBean.setIsDefault(1);
-                currentEvent = attendancesFormBeanList.get(i).getAttNameA();
-                data.addAll(attendancesFormBeanList.get(i).getStudentLists());
+                currentEvent = classroomTeacherAttendanceListBean.getTheme();
+                if (classroomTeacherAttendanceListBean.getType() == 2) {
+                    data.addAll(courseBasicVoForm);
+                } else {
+                    for (StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean eventBasicVoListBean : eventBasicVoList) {
+                        if (eventBasicVoListBean.getServerId().equals(classroomTeacherAttendanceListBean.getServerId())) {
+                            data.add(eventBasicVoListBean);
+                        }
+                    }
+                }
                 //更新布局
                 notifyAdapter();
             } else {
                 dataBean.setIsDefault(0);
             }
             //dataBean.setIsDefault(i == 0 ? 1 : 0);
-            dataBean.setDeptName(attendancesFormBean.getAttNameA());
-            dataBean.setDeptId(i + "100");
+            dataBean.setDeptName(classroomTeacherAttendanceListBean.getTheme());
+            final String serverId = classroomTeacherAttendanceListBean.getServerId();
+            final int type = classroomTeacherAttendanceListBean.getType();
+            dataBean.setDeptId(serverId);
+            dataBean.setType(type + "");
             eventList.add(dataBean);
         }
+
+
         final Optional<LeaveDeptRsp.DataBean> optional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        if (!optional.isPresent()){
+        if (!optional.isPresent()) {
             eventList.get(0).setIsDefault(1);
-            currentEvent = attendancesFormBeanList.get(0).getAttNameA();
-            data.addAll(attendancesFormBeanList.get(0).getStudentLists());
+            currentEvent = classroomTeacherAttendanceList.get(0).getTheme();
+            //data.addAll(attendancesFormBeanList.get(0).getStudentLists());
             //更新布局
-            notifyAdapter();
+            //notifyAdapter();
         }
 
         final Optional<LeaveDeptRsp.DataBean> eventOptional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
@@ -444,17 +431,13 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     }
 
     private void notifyAdapter() {
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            dayStatisticsListAdapter.notifyDataSetChanged();
-        } else {
-            studentDayStatisticsListAdapter.notifyDataSetChanged();
-        }
+        dayStatisticsListAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void attendanceStatisticsFail(String msg) {
         Log.e(TAG, "attendanceStatisticsFail: " + msg);
-        if (refresh){
+        if (refresh) {
             refresh = false;
             mViewBinding.swipeRefreshLayout.setRefreshing(false);
         }
@@ -468,6 +451,6 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
     @Override
     public void onRefresh() {
         refresh = true;
-        queryAttStatsData(currentClass,currentDate);
+        queryAttStatsData(currentClass, currentDate);
     }
 }
