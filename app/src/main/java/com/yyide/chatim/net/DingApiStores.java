@@ -18,7 +18,6 @@ import com.yyide.chatim.model.BookRsp;
 import com.yyide.chatim.model.BookSearchRsp;
 import com.yyide.chatim.model.BrandSearchRsp;
 import com.yyide.chatim.model.ClassBrandInfoRsp;
-import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.ConfirmDetailRsp;
 import com.yyide.chatim.model.DepartmentScopeRsp;
@@ -56,6 +55,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
+import com.yyide.chatim.model.attendance.StudentAttendanceDayRsp;
 import com.yyide.chatim.model.StudentHonorRsp;
 import com.yyide.chatim.model.StudentScopeRsp;
 import com.yyide.chatim.model.TeacherlistRsp;
@@ -72,6 +72,9 @@ import com.yyide.chatim.model.UserNoticeRsp;
 import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.model.WeeklyDateBean;
 import com.yyide.chatim.model.WeeklyDescBean;
+import com.yyide.chatim.model.attendance.StudentAttendanceWeekMonthRsp;
+import com.yyide.chatim.model.attendance.TeacherAttendanceDayRsp;
+import com.yyide.chatim.model.attendance.TeacherAttendanceWeekMonthRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
@@ -94,7 +97,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -604,6 +606,46 @@ public interface DingApiStores {
     @POST("/face/cloud-face/attendance/viewAttStatistics")
     Observable<AttendanceWeekStatsRsp> viewAttWeekMonthStatistics(@Body RequestBody requestBody);
 
+    /**
+     * 家长查看学生日统计考勤数据
+     * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/two/app/v2/queryAppStudentTwoAttendanceData
+     * @param requestBody
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/two/app/v2/queryAppStudentTwoAttendanceData")
+    Observable<StudentAttendanceDayRsp> queryAppStudentAttendanceDay(@Body RequestBody requestBody);
+
+    /**
+     * 家长查看学生周、月考勤数据
+     * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/two/app/v2/queryAppStudentTwoAttendanceData
+     * @param requestBody
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/two/app/v2/queryAppStudentTwoAttendanceData")
+    Observable<StudentAttendanceWeekMonthRsp> queryAppStudentAttendanceWeekMonth(@Body RequestBody requestBody);
+
+    /**
+     * 班主任或任课老师查看日统计信息
+     * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/three/app/v2/queryAppTeacherThreeAttendanceData
+     * @param requestBody
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/three/app/v2/queryAppTeacherThreeAttendanceData")
+    Observable<TeacherAttendanceDayRsp> queryAppTeacherThreeAttendanceDay(@Body RequestBody requestBody);
+
+    /**
+     * 班主任或任课老师查看周、月统计信息
+     * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/three/app/v2/queryAppTeacherThreeAttendanceData
+     * @param requestBody
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/three/app/v2/queryAppTeacherThreeAttendanceData")
+    Observable<TeacherAttendanceWeekMonthRsp> queryAppTeacherThreeAttendanceWeekMonth(@Body RequestBody requestBody);
+
     //查询我发布的通知公告列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/message/cloud-message/app/message/publish/list")
@@ -826,13 +868,12 @@ public interface DingApiStores {
     /**
      * 获取【家长/学生】人员信息
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getParticipant
-     *
      * @param type  类型【0：学校名称及学段，1：年级】
      * @param scope 范围【1：家长，2：学生】
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/getParticipant")
-    Call<StudentGuardianRsp> getParticipant(@Query("id") String id, @Query("type") String type, @Query("scope") String scope);
+    Call<StudentGuardianRsp> getParticipant(@Query("id") String id,@Query("type") String type,@Query("scope") String scope);
 
     /**
      * 获取【本周和今日】日程

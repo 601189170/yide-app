@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity.attendance.fragment;
+package com.yyide.chatim.fragment.attendance;
 
 import android.os.Bundle;
 
@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.adapter.attendance.DayStatisticsDetailListAdapter;
 import com.yyide.chatim.adapter.attendance.StudentWeekStatisticsListAdapter;
 import com.yyide.chatim.adapter.attendance.WeekStatisticsListAdapter;
 import com.yyide.chatim.databinding.FragmentStatisticsListBinding;

@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity.attendance.fragment;
+package com.yyide.chatim.fragment.attendance;
 
 import android.os.Build;
 import android.os.Bundle;

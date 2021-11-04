@@ -8,13 +8,17 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.attendance.fragment.DayStatisticsFragment;
-import com.yyide.chatim.activity.attendance.fragment.WeekStatisticsFragment;
+import com.yyide.chatim.SpData;
+import com.yyide.chatim.fragment.attendance.DayStatisticsFragment;
+import com.yyide.chatim.fragment.attendance.WeekStatisticsFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityStatisticsBinding;
+import com.yyide.chatim.fragment.attendance.v2.StudentDayStatisticsFragment;
+import com.yyide.chatim.fragment.attendance.v2.StudentWeekStatisticsFragment;
+import com.yyide.chatim.fragment.attendance.v2.TeacherDayStatisticsFragment;
+import com.yyide.chatim.fragment.attendance.v2.TeacherWeekStatisticsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +53,18 @@ public class StatisticsActivity extends BaseActivity {
         listTab.add(getString(R.string.daily_statistics));
         listTab.add(getString(R.string.weekly_statistics));
         listTab.add(getString(R.string.monthly_statistics));
-        fragments.add(new DayStatisticsFragment());
-        fragments.add(new WeekStatisticsFragment(listTab.get(1)));
-        fragments.add(new WeekStatisticsFragment(listTab.get(2)));
-
+//        fragments.add(new DayStatisticsFragment());
+//        fragments.add(new WeekStatisticsFragment(listTab.get(1)));
+//        fragments.add(new WeekStatisticsFragment(listTab.get(2)));
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            fragments.add(new TeacherDayStatisticsFragment());
+            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(1)));
+            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(2)));
+        } else {
+            fragments.add(new StudentDayStatisticsFragment());
+            fragments.add(new StudentWeekStatisticsFragment(listTab.get(1)));
+            fragments.add(new StudentWeekStatisticsFragment(listTab.get(2)));
+        }
         mViewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewBinding.viewpager.setUserInputEnabled(false);
         mViewBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {

@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity.attendance;
+package com.yyide.chatim.activity.attendance.v2;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +14,8 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.fragment.attendance.StatisticsListDetailFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityStatisticsDetailBinding;
-import com.yyide.chatim.model.AttendanceDayStatsRsp;
+import com.yyide.chatim.fragment.attendance.v2.TeacherStatisticsListDetailFragment;
+import com.yyide.chatim.model.attendance.TeacherAttendanceDayRsp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +25,10 @@ import java.util.List;
  * @date 2021-06-19
  * 考勤统计详情页
  */
-public class StatisticsDetailActivity extends BaseActivity {
-    private static final String TAG = StatisticsDetailActivity.class.getSimpleName();
+public class TeacherStatisticsDetailActivity extends BaseActivity {
+    private static final String TAG = TeacherStatisticsDetailActivity.class.getSimpleName();
     private ActivityStatisticsDetailBinding mViewBinding;
-    private AttendanceDayStatsRsp.DataBean.AttendancesFormBean attendancesFormBean = null;
-    private List<AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean> studentLists = new ArrayList<>();
+    private List<TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean> attendancesFormBean = new ArrayList<>();;
     private final List<Fragment> fragments = new ArrayList<>();
     private final List<String> listTab = new ArrayList<>();
     private String currentClass;
@@ -49,7 +49,7 @@ public class StatisticsDetailActivity extends BaseActivity {
         currentClass = getIntent().getStringExtra("currentClass");
         mViewBinding.tvEventClass.setText(currentClass);
         Log.e(TAG, "onCreate: "+data );
-        attendancesFormBean = JSON.parseObject(data, AttendanceDayStatsRsp.DataBean.AttendancesFormBean.class);
+        attendancesFormBean = JSON.parseArray(data, TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean.class);
         initView();
         initViewPager();
     }
@@ -65,31 +65,18 @@ public class StatisticsDetailActivity extends BaseActivity {
         if (attendancesFormBean == null){
             return;
         }
-        final String attNameA = attendancesFormBean.getAttNameA();
+        final String attNameA = attendancesFormBean.get(0).getTheme();
         mViewBinding.tvEventName.setText(attNameA);
-        studentLists = attendancesFormBean.getStudentLists();
-        for (AttendanceDayStatsRsp.DataBean.AttendancesFormBean.StudentListsBean studentListsBean : studentLists) {
-            final String identityType = attendancesFormBean.getIdentityType();
-            String name = "";
-            if ("N".equals(identityType)){
-                name = studentListsBean.getThingName();
-                Log.e(TAG, "tab name: "+name );
-                listTab.add(name);
-            }else {
-                name = studentListsBean.getSubjectName();
-                Log.e(TAG, "tab name: "+name );
-                listTab.add(name);
-            }
-            final StatisticsListDetailFragment statisticsListDetailFragment = StatisticsListDetailFragment.newInstance(name);
-            statisticsListDetailFragment.setData(studentListsBean);
+        for (TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean eventBasicVoListBean : attendancesFormBean) {
+            final String eventName = eventBasicVoListBean.getEventName();
+            listTab.add(eventName);
+            final TeacherStatisticsListDetailFragment statisticsListDetailFragment = TeacherStatisticsListDetailFragment.newInstance(eventName);
+            statisticsListDetailFragment.setData(eventBasicVoListBean);
             fragments.add(statisticsListDetailFragment);
         }
 
-
-
         Log.e(TAG, "tab list : "+JSON.toJSONString(listTab) );
         mViewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-//        mViewBinding.viewpager.setUserInputEnabled(false);
         mViewBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
