@@ -233,6 +233,7 @@ class MeetingSaveActivity : BaseActivity() {
                 scheduleData.type = "3"
                 scheduleData.isAllDay = if (viewModel.allDayLiveData.value == true) "1" else "0"
                 showLoading()
+                viewBinding.btnConfirm.isClickable = false
                 viewModel.requestMeetingSave(scheduleData)
             }
         }

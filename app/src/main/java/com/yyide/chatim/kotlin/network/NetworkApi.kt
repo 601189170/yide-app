@@ -110,7 +110,7 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
      */
     suspend fun requestMeetingList(requestBody: RequestBody) =
         getResult {
-            service.requestMeetingHistoryList(requestBody)
+            service.requestMeetingList(requestBody)
         }
 
     /**
