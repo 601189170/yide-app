@@ -14,12 +14,13 @@ class MeetingHistoryViewModel : BaseViewModel() {
 
     val meetingHistoryLiveData = MutableLiveData<Result<List<ScheduleData>>>()
 
-    fun requestMeetingHomeList(size: Int, current: Int, name : String) {
+    fun requestMeetingHomeList(size: Int, current: Int, name: String, timeType: Int) {
         viewModelScope.launch {
             val map = mutableMapOf<String, Any>()
             map["size"] = size
             map["current"] = current
             map["name"] = name
+            map["timeType"] = timeType
             val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
             val result = NetworkApi.requestMeetingList(body)
             meetingHistoryLiveData.value = result
