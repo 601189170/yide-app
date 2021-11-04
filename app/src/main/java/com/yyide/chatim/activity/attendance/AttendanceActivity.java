@@ -66,7 +66,7 @@ public class AttendanceActivity extends BaseActivity {
             fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(item));
         } else {
             //教师教职工 考情详情
-            fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(0));
+            fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(item));
         }
         fragmentTransaction.commit();
     }

@@ -105,11 +105,40 @@ public class AttendanceRsp implements Serializable {
     }
 
     public static class TeacherCourseFormBean implements Serializable {
+        @SerializedName(value = "headmasterAttendanceList1", alternate = {"headmasterAttendanceList", "classroomTeacherAttendanceList"})
         private List<DataBean.AttendanceListBean> headmasterAttendanceList;
+        @SerializedName(value = "baseInfo1", alternate = {"classCourseBasicForm", "baseInfo"})
         private DataBean.AttendanceListBean baseInfo;
         private List<TeacherItemBean> absenteeismList;
         private List<TeacherItemBean> leaveList;
         private List<TeacherItemBean> lateList;
+        private List<TeacherItemBean> allRollList;
+        private List<TeacherItemBean> normalList;
+        private List<DataBean.AttendanceListBean> classInfoForms;
+
+        public List<TeacherItemBean> getAllRollList() {
+            return allRollList;
+        }
+
+        public void setAllRollList(List<TeacherItemBean> allRollList) {
+            this.allRollList = allRollList;
+        }
+
+        public List<TeacherItemBean> getNormalList() {
+            return normalList;
+        }
+
+        public void setNormalList(List<TeacherItemBean> normalList) {
+            this.normalList = normalList;
+        }
+
+        public List<DataBean.AttendanceListBean> getClassInfoForms() {
+            return classInfoForms;
+        }
+
+        public void setClassInfoForms(List<DataBean.AttendanceListBean> classInfoForms) {
+            this.classInfoForms = classInfoForms;
+        }
 
         public List<DataBean.AttendanceListBean> getHeadmasterAttendanceList() {
             return headmasterAttendanceList;
@@ -156,8 +185,53 @@ public class AttendanceRsp implements Serializable {
         private String userName;
         private String userId;
         private int sectionNumber;
+        private String signInTime;
+        private String clockName;
+        private String startTime;
+        private String endTime;
         private String attendanceType;
+        private String attendanceSignInOut;
         private List<CourseInfoFormListBean> courseInfoFormList;
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+
+        public String getAttendanceSignInOut() {
+            return attendanceSignInOut;
+        }
+
+        public void setAttendanceSignInOut(String attendanceSignInOut) {
+            this.attendanceSignInOut = attendanceSignInOut;
+        }
+
+        public void setStartTime(String startTime) {
+            this.startTime = startTime;
+        }
+
+        public void setEndTime(String endTime) {
+            this.endTime = endTime;
+        }
+
+        public String getSignInTime() {
+            return signInTime;
+        }
+
+        public void setSignInTime(String signInTime) {
+            this.signInTime = signInTime;
+        }
+
+        public String getClockName() {
+            return clockName;
+        }
+
+        public void setClockName(String clockName) {
+            this.clockName = clockName;
+        }
 
         public String getUserName() {
             return userName;
@@ -335,12 +409,13 @@ public class AttendanceRsp implements Serializable {
         private List<AttendanceListBean> classroomTeacherAttendanceList;
         private List<AttendanceListBean> studentAttendanceList;
         private List<AttendanceListBean> headmasterAttendanceList;
-        private DataBean.AttendanceListBean attendanceAppNumberForm;
-        private List<DataBean.AttendanceListBean> gradeInfoList;
-        private List<DataBean.AttendanceListBean> eventAttendanceList;
-        @SerializedName(value = "studentCourseFormBean", alternate = "studentEventForm")
+        private AttendanceListBean attendanceAppNumberForm;
+        private List<AttendanceListBean> gradeInfoList;
+        private List<AttendanceListBean> eventAttendanceList;
+        private List<AttendanceListBean> courseAttendanceList;
+        @SerializedName(value = "studentCourseFormBean1", alternate = {"studentEventForm", "studentCourseForm"})
         private StudentCourseFormBean studentCourseFormBean;
-        @SerializedName(value = "teacherCourseForm", alternate = "teacherEventForm")
+        @SerializedName(value = "teacherCourseForm1", alternate = {"teacherEventForm", "teacherCourseForm", "attendanceCourseForm"})
         private TeacherCourseFormBean teacherCourseForm;
 
         public TeacherCourseFormBean getTeacherCourseForm() {
@@ -361,6 +436,14 @@ public class AttendanceRsp implements Serializable {
 
         public void setGradeInfoList(List<AttendanceListBean> gradeInfoList) {
             this.gradeInfoList = gradeInfoList;
+        }
+
+        public List<AttendanceListBean> getCourseAttendanceList() {
+            return courseAttendanceList;
+        }
+
+        public void setCourseAttendanceList(List<AttendanceListBean> courseAttendanceList) {
+            this.courseAttendanceList = courseAttendanceList;
         }
 
         public List<AttendanceListBean> getEventAttendanceList() {
@@ -425,6 +508,33 @@ public class AttendanceRsp implements Serializable {
             private String signInTime;
             private String gradeName;
             private long gradeId;
+            private String className;
+            private String classId;
+            private String courseTime;
+
+            public String getClassId() {
+                return classId;
+            }
+
+            public void setClassId(String classId) {
+                this.classId = classId;
+            }
+
+            public String getCourseTime() {
+                return courseTime;
+            }
+
+            public void setCourseTime(String courseTime) {
+                this.courseTime = courseTime;
+            }
+
+            public String getClassName() {
+                return className;
+            }
+
+            public void setClassName(String className) {
+                this.className = className;
+            }
 
             public String getGradeName() {
                 return gradeName;

@@ -62,11 +62,8 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
     }
 
     private void initView(AttendanceRsp.DataBean item) {
-        mViewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            request();
-        });
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener(this::request);
         mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-
         //1 学生 2 教职工
         if ("2".equals(attendanceRequestBean.getPeopleType())) {
             startFragment(attendanceRequestBean, item);

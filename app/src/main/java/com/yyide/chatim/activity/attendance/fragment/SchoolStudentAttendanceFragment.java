@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * desc 校长考情学生
+ * desc 校长查看学生考勤: 课堂 事件
  * time 2021年5月31日15:52:14
  * other lrz
  */
@@ -34,6 +34,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
     private FragmentSchoolMasterAttendanceBinding mViewBinding;
     private String TAG = SchoolStudentAttendanceFragment.class.getSimpleName();
     private AttendanceRsp.DataBean dataBean;
+    private AttendanceRsp.DataBean.AttendanceListBean itemStudents;
 
     public static SchoolStudentAttendanceFragment newInstance(AttendanceRsp.DataBean dataBean) {
         SchoolStudentAttendanceFragment fragment = new SchoolStudentAttendanceFragment();
@@ -67,6 +68,12 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         adapter.setOnItemClickListener((adapter, view1, position) ->
         {
             AttendanceRsp.DataBean.AttendanceListBean gradeListBean = (AttendanceRsp.DataBean.AttendanceListBean) adapter.getItem(position);
+            if (itemStudents != null) {
+                gradeListBean.setType(itemStudents.getType());
+                gradeListBean.setAttendanceTimeId(itemStudents.getAttendanceTimeId());
+                gradeListBean.setServerId(itemStudents.getServerId());
+                gradeListBean.setAttendanceSignInOut(itemStudents.getAttendanceSignInOut());
+            }
             AttendanceClassStudentActivity.start(getContext(), gradeListBean);
         });
         setDataView();
@@ -76,7 +83,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         if (dataBean != null) {
             AttendanceRsp.StudentCourseFormBean courseFormBean = dataBean.getStudentCourseFormBean();
             if (courseFormBean != null) {
-                AttendanceRsp.DataBean.AttendanceListBean itemStudents = dataBean.getStudentCourseFormBean().getBaseInfo();
+                itemStudents = dataBean.getStudentCourseFormBean().getBaseInfo();
                 if (itemStudents != null) {
                     mViewBinding.clContent.setVisibility(View.VISIBLE);
                     mViewBinding.tvEventName.setText(itemStudents.getTheme());
@@ -97,6 +104,16 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                     adapter.setList(courseFormBean.getAttendanceAppGradeInfoFormList());
                 }
             }
+            //获取选中的年级事件
+            List<AttendanceRsp.DataBean.AttendanceListBean> headmasterAttendanceList = dataBean.getHeadmasterAttendanceList();
+            if (headmasterAttendanceList != null) {
+                for (AttendanceRsp.DataBean.AttendanceListBean item : headmasterAttendanceList) {
+                    if (item.getGradeId() == itemStudents.getGradeId()) {
+                        itemStudents = item;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -106,10 +123,10 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         animator.start();
     }
 
-    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.item_school) {
+    private BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder> adapter = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.item_school) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceRsp.DataBean.AttendanceListBean item) {
-            holder.setText(R.id.tv_event_name, item.getTheme())
+            holder.setText(R.id.tv_event_name, item.getGradeName())
                     .setText(R.id.tv_attendance_rate, item.getSignInOutRate())
                     .setText(R.id.tv_normal_num, item.getNormal() + "")
                     .setText(R.id.tv_absence, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤")

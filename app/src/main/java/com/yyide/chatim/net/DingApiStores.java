@@ -570,6 +570,11 @@ public interface DingApiStores {
     @POST("/face/cloud-face/attendance/three/app/v2/queryAppPrincipalThreeAttendanceData")
     Observable<AttendanceRsp> schoolClassesAttendance(@Body RequestBody requestBody);
 
+    //二级页面 教职工 查看学生
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/two/app/v2/queryAppTeacherTwoAttendanceData")
+    Observable<AttendanceRsp> teacherAttendance(@Body RequestBody requestBody);
+
     //https://api.uat.edu.1d1j.net/management/cloud-system/notice/scope/app/v1/queryDeptMemberByDeptId
     //查询部门所属成员
     @Headers({"Content-Type: application/json", "Accept: application/json"})

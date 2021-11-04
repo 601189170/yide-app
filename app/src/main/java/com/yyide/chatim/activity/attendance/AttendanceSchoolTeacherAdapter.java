@@ -41,7 +41,7 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
             if (!TextUtils.isEmpty(item.getAttendanceType())) {
                 //0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
-                holder.setText(R.id.tv_student_name, item.getCourseInfo());
+                holder.setText(R.id.tv_student_name, item.getCourseInfo() + " " + item.getCourseName());
                 switch (item.getAttendanceType()) {
                     case "0"://正常
 //                        tvStatus.setText(item.getStatusType());
@@ -65,11 +65,11 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
                         break;
                     case "5"://请假
                         //tvStatus.setText(item.getStatusType());
-//                        String startTime = DateUtils.formatTime(item.getLeaveStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-//                        String endTime = DateUtils.formatTime(item.getLeaveEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                        String startTime = DateUtils.formatTime(item.getLeaveStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                        String endTime = DateUtils.formatTime(item.getLeaveEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
 //                        holder.setText(R.id.tv_student_event, "请假时间");
-//                        tvTime.setText(startTime + "-" + endTime);
-//                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
+                        tvTime.setText(startTime + "-" + endTime);
+                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
                         break;
                 }
             }

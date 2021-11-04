@@ -69,7 +69,9 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         viewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         viewBinding.clContent.setVisibility(View.GONE);
         gradeBean = (AttendanceRsp.DataBean.AttendanceListBean) getIntent().getSerializableExtra("gradeBean");
-        mvpPresenter.getMyAppList(gradeBean);
+        if (gradeBean != null) {
+            mvpPresenter.getMyAppList(gradeBean);
+        }
     }
 
     @Override
@@ -96,14 +98,16 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
                 attendancePop.setOnSelectListener(position -> {
                     gradeBean = dataBean.getGradeInfoList().get(position);
                     gradeId = gradeBean.getGradeId();
-                    setData();
+                    setData(gradeBean);
                 });
             });
+            adapter.setList(dataBean.getCourseAttendanceList());
+            setData(dataBean.getAttendanceAppNumberForm());
         }
 
     }
 
-    private final BaseQuickAdapter adapterEvent = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.swich_class_item) {
+    private final BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.swich_class_item) {
 
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceRsp.DataBean.AttendanceListBean item) {
@@ -117,27 +121,26 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         }
     };
 
-    private void setData() {
+    private void setData(AttendanceRsp.DataBean.AttendanceListBean item) {
         viewBinding.clContent.setVisibility(View.VISIBLE);
-        viewBinding.tvAttendanceTitle.setText(gradeBean.getGradeName());
-        viewBinding.tvEventName.setText(gradeBean.getGradeName() + "(人)");
-        viewBinding.tvAttendanceRate.setText(gradeBean.getSignInOutRate());
-        if (!TextUtils.isEmpty(gradeBean.getSignInOutRate())) {
+        viewBinding.tvAttendanceTitle.setText(item.getTheme());
+        viewBinding.tvEventName.setText(item.getTheme() + "(人)");
+        viewBinding.tvAttendanceRate.setText(item.getSignInOutRate());
+        if (!TextUtils.isEmpty(item.getSignInOutRate())) {
             try {
-                setAnimation(viewBinding.progress, Integer.parseInt(gradeBean.getSignInOutRate()));
+                setAnimation(viewBinding.progress, Integer.parseInt(item.getSignInOutRate()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
 //            viewBinding.tvNumber.setText("(" + gradeListBean.getNumber() + "人)");
-        viewBinding.tvLateNum.setText(gradeBean.getLate() + "");
-        viewBinding.tvLeaveNum.setText(gradeBean.getLeave() + "");
-        viewBinding.tvAbsenteeismNum.setText(gradeBean.getAbsenteeism() + "");
-        viewBinding.tvLeaveTitle.setText("1".equals(gradeBean.getAttendanceSignInOut()) ? "早退" : "迟到");
-        viewBinding.tvSign.setText("1".equals(gradeBean.getAttendanceSignInOut()) ? "签退率" : "出勤率");
-        viewBinding.tvAbsenceDesc.setText("1".equals(gradeBean.getAttendanceSignInOut()) ? "未签退" : "缺勤");
-//        adapter.setList(remove(gradeBean.getClassForm()));
+        viewBinding.tvLateNum.setText(item.getLate() + "");
+        viewBinding.tvLeaveNum.setText(item.getLeave() + "");
+        viewBinding.tvAbsenteeismNum.setText(item.getAbsenteeism() + "");
+        viewBinding.tvLeaveTitle.setText("1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");
+        viewBinding.tvSign.setText("1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率");
+        viewBinding.tvAbsenceDesc.setText("1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
     }
 
     private void setAnimation(final ProgressBar view, final int mProgressBar) {
@@ -150,7 +153,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     private final BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder> adapter = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.item_school) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceRsp.DataBean.AttendanceListBean item) {
-            holder.setText(R.id.tv_event_name, item.getGradeName())
+            holder.setText(R.id.tv_event_name, item.getClassName())
                     .setText(R.id.tv_attendance_rate, item.getSignInOutRate())
                     .setText(R.id.tv_sign, "1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率")
                     .setText(R.id.tv_normal_num, item.getNormal() + "")
@@ -171,7 +174,6 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
             if (model.getData() != null) {
                 setDataView(model.getData());
-                setData();
             }
         }
     }
