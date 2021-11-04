@@ -565,6 +565,11 @@ public interface DingApiStores {
     @POST("/face/cloud-face/attendance/two/app/v2/queryAppPrincipalTwoAttendanceData")
     Observable<AttendanceRsp> schoolTwoAttendance(@Body RequestBody requestBody);
 
+    //三级页面 校长查看 班级
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/face/cloud-face/attendance/three/app/v2/queryAppPrincipalThreeAttendanceData")
+    Observable<AttendanceRsp> schoolClassesAttendance(@Body RequestBody requestBody);
+
     //https://api.uat.edu.1d1j.net/management/cloud-system/notice/scope/app/v1/queryDeptMemberByDeptId
     //查询部门所属成员
     @Headers({"Content-Type: application/json", "Accept: application/json"})
@@ -815,12 +820,13 @@ public interface DingApiStores {
     /**
      * 获取【家长/学生】人员信息
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getParticipant
+     *
      * @param type  类型【0：学校名称及学段，1：年级】
      * @param scope 范围【1：家长，2：学生】
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/getParticipant")
-    Call<StudentGuardianRsp> getParticipant(@Query("id") String id,@Query("type") String type,@Query("scope") String scope);
+    Call<StudentGuardianRsp> getParticipant(@Query("id") String id, @Query("type") String type, @Query("scope") String scope);
 
     /**
      * 获取【本周和今日】日程

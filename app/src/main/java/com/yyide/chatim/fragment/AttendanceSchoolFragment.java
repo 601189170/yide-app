@@ -78,7 +78,6 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-        mvpPresenter.homeAttendance("", "");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -95,7 +94,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     }
 
     private void initView() {
-
+        mvpPresenter.homeAttendance("", "");
     }
 
     //    -->设置各区块的颜色
@@ -115,20 +114,20 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
                 holder.setText(R.id.tv_desc, item.getEventName());
                 setPieChart(item, piechart);
                 constraintLayout1.setOnClickListener(v -> {
-                    AttendanceActivity.start(getContext(), holder.getAdapterPosition());
+                    AttendanceActivity.start(getContext(), item);
                 });
                 piechart.setTouchEnabled(false);
-                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), holder.getAdapterPosition()));
+                piechart.setOnClickListener(v -> AttendanceActivity.start(getContext(), item));
             }
         }
 
         private void setPieChart(AttendanceRsp.DataBean.AttendanceListBean item, PieChart piechart) {
             InitPieChart.InitPieChart(((Activity) getContext()), piechart);
             List<PieEntry> entries = new ArrayList<>();
-            entries.add(new PieEntry(item.getAbsenteeism(), "缺勤"));
+            entries.add(new PieEntry(item.getAbsenteeism() > 0 ? item.getAbsenteeism() : 1, "缺勤"));
             entries.add(new PieEntry(item.getLeave(), "请假"));
             entries.add(new PieEntry(item.getLate(), "迟到"));
-            entries.add(new PieEntry(Float.parseFloat(item.getSignInOutRate()), "实到"));
+            entries.add(new PieEntry(item.getNormal(), "实到"));
 
             String desc = "1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率";//0 签到 1签退
             piechart.setCenterText(item.getSignInOutRate() + "%\n" + desc);

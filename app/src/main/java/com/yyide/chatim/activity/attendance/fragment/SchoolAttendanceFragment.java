@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.attendance.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +17,9 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentSchoolAttendanceBinding;
 import com.yyide.chatim.dialog.AttendancePop;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceRsp;
-import com.yyide.chatim.presenter.AttendanceHomePresenter;
 import com.yyide.chatim.presenter.AttendanceTwoPresenter;
 import com.yyide.chatim.view.AttendanceCheckView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * desc 校长考情学生
@@ -34,12 +30,12 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
 
     private FragmentSchoolAttendanceBinding mViewBinding;
     private String TAG = SchoolAttendanceFragment.class.getSimpleName();
-    private int index;
+    private AttendanceRsp.DataBean.AttendanceListBean attendanceRequestBean = new AttendanceRsp.DataBean.AttendanceListBean();
 
-    public static SchoolAttendanceFragment newInstance(int index) {
+    public static SchoolAttendanceFragment newInstance(AttendanceRsp.DataBean.AttendanceListBean item) {
         SchoolAttendanceFragment fragment = new SchoolAttendanceFragment();
         Bundle args = new Bundle();
-        args.putInt("index", index);
+        args.putSerializable("item", item);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +44,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            index = getArguments().getInt("index");
+            attendanceRequestBean = (AttendanceRsp.DataBean.AttendanceListBean) getArguments().getSerializable("item");
         }
     }
 
@@ -62,76 +58,70 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mvpPresenter.attendance("");
+        request();
     }
 
     private void initView(AttendanceRsp.DataBean item) {
-//        mViewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-//            mvpPresenter.attendance("");
-//        });
-//        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-//
-//        AttendanceRsp.DataBean.AttendanceListBean schoolPeopleAllFormBean = new AttendanceRsp.DataBean.AttendanceListBean();
-//        if (item.getHeadmasterAttendanceList() != null) {
-//            if (item.getHeadmasterAttendanceList().size() > index) {
-//                schoolPeopleAllFormBean = item.getHeadmasterAttendanceList().get(index);
-//            } else {
-//                schoolPeopleAllFormBean = item.getHeadmasterAttendanceList().get(0);
-//            }
-//        }
-//        //1 学生 2 教职工
-//        if ("N".equals(schoolPeopleAllFormBean.getPeopleType())) {
-//            startFragment(schoolPeopleAllFormBean);
-//        } else {
-//            int position = 0;
-//            if (item.attendancesForm != null) {
-//               position = index - item.attendancesForm.size();
-//            }
-//            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(schoolPeopleAllFormBean, position)).commit();
-//        }
-//        mViewBinding.tvAttendanceTitle.setText(schoolPeopleAllFormBean.getTheme());
-//        if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
-//            mViewBinding.tvClassName.setClickable(true);
-//            mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-//        } else {
-//            mViewBinding.tvClassName.setClickable(false);
-//            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
-//        }
-//
-//        if (item.schoolPeopleAllForm != null && item.schoolPeopleAllForm.size() > 1) {
-//            mViewBinding.tvAttendanceTitle.setClickable(true);
-//            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-//        } else {
-//            mViewBinding.tvAttendanceTitle.setClickable(false);
-//            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-//        }
-//
-//        mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
-//            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
-//            adapterEvent.setList(item.schoolPeopleAllForm);
-//            attendancePop.setOnSelectListener(index -> {
-//                this.index = index;
-//                AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean = item.schoolPeopleAllForm.get(index);
-//                mViewBinding.tvAttendanceTitle.setText(bean.attName);
-//                if ("N".equals(bean.getPeopleType())) {
-//                    startFragment(bean);
-//                } else {
-//                    int position = 0;
-//                    if (item.attendancesForm != null) {
-//                        position = index - item.attendancesForm.size();
-//                    }
-//                    getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(bean, position)).commit();
-//                }
-//            });
-//        });
+        mViewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            request();
+        });
+        mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+
+        //1 学生 2 教职工
+        if ("2".equals(attendanceRequestBean.getPeopleType())) {
+            startFragment(attendanceRequestBean, item);
+        } else {
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(item)).commit();
+        }
+        mViewBinding.tvAttendanceTitle.setText(attendanceRequestBean.getTheme());
+        if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
+            mViewBinding.tvClassName.setClickable(true);
+            mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+        } else {
+            mViewBinding.tvClassName.setClickable(false);
+            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+        }
+
+        if (item.getHeadmasterAttendanceList() != null && item.getHeadmasterAttendanceList().size() > 1) {
+            mViewBinding.tvAttendanceTitle.setClickable(true);
+            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+        } else {
+            mViewBinding.tvAttendanceTitle.setClickable(false);
+            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
+
+        mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
+            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
+            adapterEvent.setList(item.getHeadmasterAttendanceList());
+            attendancePop.setOnSelectListener(index -> {
+                attendanceRequestBean = item.getHeadmasterAttendanceList().get(index);
+                mViewBinding.tvAttendanceTitle.setText(attendanceRequestBean.getTheme());
+                request();
+            });
+        });
     }
 
-    private final BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean, BaseViewHolder>(R.layout.swich_class_item) {
+    private void request() {
+        if (attendanceRequestBean == null) {
+            attendanceRequestBean = new AttendanceRsp.DataBean.AttendanceListBean();
+        }
+        mvpPresenter.attendance(attendanceRequestBean);
+    }
+
+    private final BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.swich_class_item) {
 
         @Override
-        protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean item) {
-            baseViewHolder.setText(R.id.className, item.getAttName());
-            baseViewHolder.getView(R.id.select).setVisibility(index == baseViewHolder.getAdapterPosition() ? View.VISIBLE : View.GONE);
+        protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceRsp.DataBean.AttendanceListBean item) {
+            baseViewHolder.setText(R.id.className, item.getTheme());
+            if (attendanceRequestBean != null
+                    && !TextUtils.isEmpty(attendanceRequestBean.getType())
+                    && attendanceRequestBean.getType().equals(item.getType())
+                    && !TextUtils.isEmpty(attendanceRequestBean.getTheme())
+                    && attendanceRequestBean.getTheme().equals(item.getTheme())) {
+                baseViewHolder.getView(R.id.select).setVisibility(View.VISIBLE);
+            } else {
+                baseViewHolder.getView(R.id.select).setVisibility(View.GONE);
+            }
             if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {
@@ -140,9 +130,9 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
         }
     };
 
-    private void startFragment(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean bean) {
-        SchoolTeacherAttendanceFragment teacherAttendanceFragment = SchoolTeacherAttendanceFragment.newInstance(bean);
-        SchoolEventTeacherAttendanceFragment eventTeacherAttendanceFragment = SchoolEventTeacherAttendanceFragment.newInstance(bean);
+    private void startFragment(AttendanceRsp.DataBean.AttendanceListBean bean, AttendanceRsp.DataBean dataBean) {
+        SchoolTeacherAttendanceFragment teacherAttendanceFragment = SchoolTeacherAttendanceFragment.newInstance(dataBean);
+        SchoolEventTeacherAttendanceFragment eventTeacherAttendanceFragment = SchoolEventTeacherAttendanceFragment.newInstance(dataBean);
         teacherAttendanceFragment.setOnRefreshListener(isRefresh -> {
             mViewBinding.swipeRefreshLayout.setEnabled(isRefresh);
         });
@@ -150,7 +140,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
         eventTeacherAttendanceFragment.setOnRefreshListener(isRefresh -> {
             mViewBinding.swipeRefreshLayout.setEnabled(isRefresh);
         });
-        if ("Y".equals(bean.getIdentityType())) {
+        if (attendanceRequestBean != null && "2".equals(bean.getType())) {
             getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), teacherAttendanceFragment).commit();
         } else {
             getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), eventTeacherAttendanceFragment).commit();

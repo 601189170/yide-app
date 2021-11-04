@@ -14,6 +14,7 @@ import com.yyide.chatim.activity.attendance.fragment.SchoolAttendanceFragment;
 import com.yyide.chatim.activity.attendance.fragment.TeacherStudentAttendanceFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityAttendanceBinding;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 
 /**
@@ -26,9 +27,9 @@ public class AttendanceActivity extends BaseActivity {
     private ActivityAttendanceBinding mViewBinding;
     private String TAG = AttendanceActivity.class.getSimpleName();
 
-    public static void start(Context context, int index) {
+    public static void start(Context context, AttendanceRsp.DataBean.AttendanceListBean item) {
         Intent intent = new Intent(context, AttendanceActivity.class);
-        intent.putExtra("index", index);
+        intent.putExtra("item", item);
         context.startActivity(intent);
     }
 
@@ -47,7 +48,7 @@ public class AttendanceActivity extends BaseActivity {
 
     private void initView() {
 //        String type = getIntent().getStringExtra("type");
-        int index = getIntent().getIntExtra("index", 0);
+        AttendanceRsp.DataBean.AttendanceListBean item = (AttendanceRsp.DataBean.AttendanceListBean) getIntent().getSerializableExtra("item");
         mViewBinding.top.title.setText(R.string.attendance_title);
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {
             mViewBinding.top.tvRight.setVisibility(View.GONE);
@@ -62,10 +63,10 @@ public class AttendanceActivity extends BaseActivity {
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
-            fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(index));
+            fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(item));
         } else {
             //教师教职工 考情详情
-            fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(index));
+            fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(0));
         }
         fragmentTransaction.commit();
     }

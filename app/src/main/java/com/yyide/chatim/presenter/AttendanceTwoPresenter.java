@@ -7,8 +7,6 @@ import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.AttendanceCheckView;
 
-import java.util.HashMap;
-
 import okhttp3.RequestBody;
 
 public class AttendanceTwoPresenter extends BasePresenter<AttendanceCheckView> {
@@ -16,12 +14,10 @@ public class AttendanceTwoPresenter extends BasePresenter<AttendanceCheckView> {
         attachView(view);
     }
 
-    public void attendance(String classId) {
+    public void attendance(AttendanceRsp.DataBean.AttendanceListBean attendanceRequestBean) {
         mvpView.showLoading();
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("classId", classId);//班级ID
-        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
-        addSubscription(dingApiStores.viewAttendance(body), new ApiCallback<AttendanceRsp>() {
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(attendanceRequestBean));
+        addSubscription(dingApiStores.schoolTwoAttendance(body), new ApiCallback<AttendanceRsp>() {
             @Override
             public void onSuccess(AttendanceRsp model) {
                 mvpView.getAttendanceSuccess(model);

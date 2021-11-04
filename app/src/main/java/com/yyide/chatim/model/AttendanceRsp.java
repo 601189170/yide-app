@@ -1,7 +1,12 @@
 package com.yyide.chatim.model;
 
+import com.google.gson.annotations.SerializedName;
+import com.yyide.chatim.widget.treeview.model.NodeId;
+
 import java.io.Serializable;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 public class AttendanceRsp implements Serializable {
 
@@ -9,6 +14,10 @@ public class AttendanceRsp implements Serializable {
     private boolean success;
     private String msg;
     private DataBean data;
+    private String userName;
+    private String userId;
+    private int sectionNumber;
+    private List<CourseInfoFormListBean> courseInfoFormList;
 
     public int getCode() {
         return code;
@@ -42,6 +51,38 @@ public class AttendanceRsp implements Serializable {
         this.data = data;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public int getSectionNumber() {
+        return sectionNumber;
+    }
+
+    public void setSectionNumber(int sectionNumber) {
+        this.sectionNumber = sectionNumber;
+    }
+
+    public List<CourseInfoFormListBean> getCourseInfoFormList() {
+        return courseInfoFormList;
+    }
+
+    public void setCourseInfoFormList(List<CourseInfoFormListBean> courseInfoFormList) {
+        this.courseInfoFormList = courseInfoFormList;
+    }
+
     public static class StudentCourseFormBean implements Serializable {
         private List<DataBean.AttendanceListBean> attendanceAppGradeInfoFormList;
         private DataBean.AttendanceListBean baseInfo;
@@ -63,11 +104,276 @@ public class AttendanceRsp implements Serializable {
         }
     }
 
+    public static class TeacherCourseFormBean implements Serializable {
+        private List<DataBean.AttendanceListBean> headmasterAttendanceList;
+        private DataBean.AttendanceListBean baseInfo;
+        private List<TeacherItemBean> absenteeismList;
+        private List<TeacherItemBean> leaveList;
+        private List<TeacherItemBean> lateList;
+
+        public List<DataBean.AttendanceListBean> getHeadmasterAttendanceList() {
+            return headmasterAttendanceList;
+        }
+
+        public void setHeadmasterAttendanceList(List<DataBean.AttendanceListBean> headmasterAttendanceList) {
+            this.headmasterAttendanceList = headmasterAttendanceList;
+        }
+
+        public DataBean.AttendanceListBean getBaseInfo() {
+            return baseInfo;
+        }
+
+        public void setBaseInfo(DataBean.AttendanceListBean baseInfo) {
+            this.baseInfo = baseInfo;
+        }
+
+        public List<TeacherItemBean> getAbsenteeismList() {
+            return absenteeismList;
+        }
+
+        public void setAbsenteeismList(List<TeacherItemBean> absenteeismList) {
+            this.absenteeismList = absenteeismList;
+        }
+
+        public List<TeacherItemBean> getLeaveList() {
+            return leaveList;
+        }
+
+        public void setLeaveList(List<TeacherItemBean> leaveList) {
+            this.leaveList = leaveList;
+        }
+
+        public List<TeacherItemBean> getLateList() {
+            return lateList;
+        }
+
+        public void setLateList(List<TeacherItemBean> lateList) {
+            this.lateList = lateList;
+        }
+    }
+
+    public static class TeacherItemBean implements Serializable {
+        private String userName;
+        private String userId;
+        private int sectionNumber;
+        private String attendanceType;
+        private List<CourseInfoFormListBean> courseInfoFormList;
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public int getSectionNumber() {
+            return sectionNumber;
+        }
+
+        public void setSectionNumber(int sectionNumber) {
+            this.sectionNumber = sectionNumber;
+        }
+
+        public List<CourseInfoFormListBean> getCourseInfoFormList() {
+            return courseInfoFormList;
+        }
+
+        public void setCourseInfoFormList(List<CourseInfoFormListBean> courseInfoFormList) {
+            this.courseInfoFormList = courseInfoFormList;
+        }
+
+        public String getAttendanceType() {
+            return attendanceType;
+        }
+
+        public void setAttendanceType(String attendanceType) {
+            this.attendanceType = attendanceType;
+        }
+
+        public static class CourseInfoFormListBean implements NodeId {
+            private String section;
+            private String timeFrame;
+            private String attendanceType;
+            private String courseInfo;
+            private String currentTime;
+            private String courseName;
+            private String courseEndTime;
+            private String courseStartTime;
+            private String clockName;
+            /**
+             * 签到时间
+             */
+            private String signInTime;
+            /**
+             * 请假开始时间
+             */
+            private String leaveStartTime;
+            /**
+             * 请假结束时间
+             */
+            private String leaveEndTime;
+
+
+            public String getClockName() {
+                return clockName;
+            }
+
+            public void setClockName(String clockName) {
+                this.clockName = clockName;
+            }
+
+            public String getLeaveStartTime() {
+                return leaveStartTime;
+            }
+
+            public String getSignInTime() {
+                return signInTime;
+            }
+
+            public void setSignInTime(String signInTime) {
+                this.signInTime = signInTime;
+            }
+
+            public void setLeaveStartTime(String leaveStartTime) {
+                this.leaveStartTime = leaveStartTime;
+            }
+
+            public String getLeaveEndTime() {
+                return leaveEndTime;
+            }
+
+            public void setLeaveEndTime(String leaveEndTime) {
+                this.leaveEndTime = leaveEndTime;
+            }
+
+            public String getSection() {
+                return section;
+            }
+
+            public void setSection(String section) {
+                this.section = section;
+            }
+
+            public String getTimeFrame() {
+                return timeFrame;
+            }
+
+            public void setTimeFrame(String timeFrame) {
+                this.timeFrame = timeFrame;
+            }
+
+            public String getAttendanceType() {
+                return attendanceType;
+            }
+
+            public void setAttendanceType(String attendanceType) {
+                this.attendanceType = attendanceType;
+            }
+
+            public String getCourseInfo() {
+                return courseInfo;
+            }
+
+            public void setCourseInfo(String courseInfo) {
+                this.courseInfo = courseInfo;
+            }
+
+            public String getCurrentTime() {
+                return currentTime;
+            }
+
+            public void setCurrentTime(String currentTime) {
+                this.currentTime = currentTime;
+            }
+
+            public String getCourseName() {
+                return courseName;
+            }
+
+            public void setCourseName(String courseName) {
+                this.courseName = courseName;
+            }
+
+            public String getCourseEndTime() {
+                return courseEndTime;
+            }
+
+            public void setCourseEndTime(String courseEndTime) {
+                this.courseEndTime = courseEndTime;
+            }
+
+            public String getCourseStartTime() {
+                return courseStartTime;
+            }
+
+            public void setCourseStartTime(String courseStartTime) {
+                this.courseStartTime = courseStartTime;
+            }
+
+            @Override
+            public String getId() {
+                return "";
+            }
+
+            @Override
+            public String getPId() {
+                return "";
+            }
+        }
+    }
+
     public static class DataBean implements Serializable {
         private List<AttendanceListBean> classroomTeacherAttendanceList;
         private List<AttendanceListBean> studentAttendanceList;
         private List<AttendanceListBean> headmasterAttendanceList;
+        private DataBean.AttendanceListBean attendanceAppNumberForm;
+        private List<DataBean.AttendanceListBean> gradeInfoList;
+        private List<DataBean.AttendanceListBean> eventAttendanceList;
+        @SerializedName(value = "studentCourseFormBean", alternate = "studentEventForm")
         private StudentCourseFormBean studentCourseFormBean;
+        @SerializedName(value = "teacherCourseForm", alternate = "teacherEventForm")
+        private TeacherCourseFormBean teacherCourseForm;
+
+        public TeacherCourseFormBean getTeacherCourseForm() {
+            return teacherCourseForm;
+        }
+
+        public AttendanceListBean getAttendanceAppNumberForm() {
+            return attendanceAppNumberForm;
+        }
+
+        public void setAttendanceAppNumberForm(AttendanceListBean attendanceAppNumberForm) {
+            this.attendanceAppNumberForm = attendanceAppNumberForm;
+        }
+
+        public List<AttendanceListBean> getGradeInfoList() {
+            return gradeInfoList;
+        }
+
+        public void setGradeInfoList(List<AttendanceListBean> gradeInfoList) {
+            this.gradeInfoList = gradeInfoList;
+        }
+
+        public List<AttendanceListBean> getEventAttendanceList() {
+            return eventAttendanceList;
+        }
+
+        public void setEventAttendanceList(List<AttendanceListBean> eventAttendanceList) {
+            this.eventAttendanceList = eventAttendanceList;
+        }
+
+        public void setTeacherCourseForm(TeacherCourseFormBean teacherCourseForm) {
+            this.teacherCourseForm = teacherCourseForm;
+        }
 
         public List<AttendanceListBean> getHeadmasterAttendanceList() {
             return headmasterAttendanceList;
@@ -108,7 +414,7 @@ public class AttendanceRsp implements Serializable {
             private String signInOutRate;
             private String serverId;
             private String peopleType;
-            private String type;
+            private String type;//	事件类型 1 事件考勤 2 课程考勤
             private int normal;
             private int late;
             private int early;
@@ -117,6 +423,24 @@ public class AttendanceRsp implements Serializable {
             private int totalNumber;
             private String attendanceTimeId;
             private String signInTime;
+            private String gradeName;
+            private long gradeId;
+
+            public String getGradeName() {
+                return gradeName;
+            }
+
+            public long getGradeId() {
+                return gradeId;
+            }
+
+            public void setGradeId(long gradeId) {
+                this.gradeId = gradeId;
+            }
+
+            public void setGradeName(String gradeName) {
+                this.gradeName = gradeName;
+            }
 
             public String getSignInTime() {
                 return signInTime;
@@ -237,6 +561,81 @@ public class AttendanceRsp implements Serializable {
             public void setAttendanceTimeId(String attendanceTimeId) {
                 this.attendanceTimeId = attendanceTimeId;
             }
+        }
+    }
+
+    public static class CourseInfoFormListBean {
+        private String section;
+        private String timeFrame;
+        private String attendanceType;
+        private String courseInfo;
+        private String currentTime;
+        private String courseName;
+        private String courseEndTime;
+        private String courseStartTime;
+
+        public String getSection() {
+            return section;
+        }
+
+        public void setSection(String section) {
+            this.section = section;
+        }
+
+        public String getTimeFrame() {
+            return timeFrame;
+        }
+
+        public void setTimeFrame(String timeFrame) {
+            this.timeFrame = timeFrame;
+        }
+
+        public String getAttendanceType() {
+            return attendanceType;
+        }
+
+        public void setAttendanceType(String attendanceType) {
+            this.attendanceType = attendanceType;
+        }
+
+        public String getCourseInfo() {
+            return courseInfo;
+        }
+
+        public void setCourseInfo(String courseInfo) {
+            this.courseInfo = courseInfo;
+        }
+
+        public String getCurrentTime() {
+            return currentTime;
+        }
+
+        public void setCurrentTime(String currentTime) {
+            this.currentTime = currentTime;
+        }
+
+        public String getCourseName() {
+            return courseName;
+        }
+
+        public void setCourseName(String courseName) {
+            this.courseName = courseName;
+        }
+
+        public String getCourseEndTime() {
+            return courseEndTime;
+        }
+
+        public void setCourseEndTime(String courseEndTime) {
+            this.courseEndTime = courseEndTime;
+        }
+
+        public String getCourseStartTime() {
+            return courseStartTime;
+        }
+
+        public void setCourseStartTime(String courseStartTime) {
+            this.courseStartTime = courseStartTime;
         }
     }
 }

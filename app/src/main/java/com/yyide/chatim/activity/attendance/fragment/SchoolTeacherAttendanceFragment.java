@@ -18,6 +18,7 @@ import com.yyide.chatim.activity.attendance.AttendanceSchoolTeacherAdapter;
 import com.yyide.chatim.base.BaseFragment;
 import com.yyide.chatim.databinding.FragmentSchoolTeacherAttendanceBinding;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.widget.treeview.adapter.SingleLayoutTreeAdapter;
 import com.yyide.chatim.widget.treeview.model.TreeNode;
 
@@ -32,13 +33,14 @@ import java.util.Map;
  * other lrz
  */
 public class SchoolTeacherAttendanceFragment extends BaseFragment implements View.OnClickListener {
-    private AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean itemTeachersBean;
-    private AttendanceCheckRsp.DataBean.AttendancesFormBean.TeachersBean teachers;
+    private AttendanceRsp.DataBean itemTeachersBean;
+    private AttendanceRsp.DataBean.AttendanceListBean teachers;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentSchoolTeacherAttendanceBinding mViewBinding;
     private AttendanceSchoolTeacherAdapter adapter;
+    private AttendanceRsp.TeacherCourseFormBean teacherCourseForm;
 
-    public static SchoolTeacherAttendanceFragment newInstance(AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean teachersBean) {
+    public static SchoolTeacherAttendanceFragment newInstance(AttendanceRsp.DataBean teachersBean) {
         SchoolTeacherAttendanceFragment fragment = new SchoolTeacherAttendanceFragment();
         Bundle args = new Bundle();
         args.putSerializable("teachersBean", teachersBean);
@@ -60,7 +62,7 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            itemTeachersBean = (AttendanceCheckRsp.DataBean.SchoolPeopleAllFormBean) getArguments().getSerializable("teachersBean");
+            itemTeachersBean = (AttendanceRsp.DataBean) getArguments().getSerializable("teachersBean");
         }
     }
 
@@ -92,51 +94,56 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         setData();
     }
 
-    private final List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> dataToBind = new ArrayList<>();
+    private final List<TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> dataToBind = new ArrayList<>();
 
     @SuppressLint("SetTextI18n")
     private void setData() {
-        if (itemTeachersBean != null && itemTeachersBean.getTeachers() != null) {
-            teachers = itemTeachersBean.getTeachers();
-            mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            mViewBinding.tvEventName.setText(TextUtils.isEmpty(teachers.getThingName()) ? teachers.getName() : teachers.getThingName());
-            mViewBinding.tvAttendanceRate.setText(teachers.getRate());
-            if (!TextUtils.isEmpty(teachers.getRate())) {
-                try {
-//                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
-                    setAnimation(mViewBinding.progress, Double.valueOf(teachers.getRate()).intValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (itemTeachersBean != null) {
+            teacherCourseForm = itemTeachersBean.getTeacherCourseForm();
+            if (teacherCourseForm != null) {
+                teachers = itemTeachersBean.getTeacherCourseForm().getBaseInfo();
+                if (teachers != null) {
+                    mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
+                    mViewBinding.tvEventName.setText(teachers.getTheme());
+                    mViewBinding.tvAttendanceRate.setText(teachers.getSignInOutRate());
+                    if (!TextUtils.isEmpty(teachers.getSignInOutRate())) {
+                        try {
+                            //                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
+                            setAnimation(mViewBinding.progress, Double.valueOf(teachers.getSignInOutRate()).intValue());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    mViewBinding.tvLateNum.setText(teachers.getLate() + "");
+//                    mViewBinding.tvLateName.setText("1".equals(teachers.getAttendanceSignInOut()) ? "早退" : "迟到");
+//                    mViewBinding.tvLate.setText("1".equals(teachers.getAttendanceSignInOut()) ? "早退" : "迟到");
+//                    mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getAttendanceSignInOut()) ? "签退率" : "出勤率");
+                    mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
+                    mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsenteeism() + "");
+                    //mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
+                    dataToBind.addAll(convertDataToTreeNode(teacherCourseForm.getAbsenteeismList()));
+                    adapter = new AttendanceSchoolTeacherAdapter(R.layout.item_attendance_school_teacher, dataToBind);
+                    mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+                    mViewBinding.recyclerview.setAdapter(adapter);
+                    adapter.setEmptyView(R.layout.empty_top);
+                    adapter.setOnTreeClickedListener(new SingleLayoutTreeAdapter.OnTreeClickedListener() {
+                        @Override
+                        public void onNodeClicked(View view, TreeNode node, int position) {
+                            TextView tvStatus = view.findViewById(R.id.tv_status);
+                            if (node.isExpand()) {
+                                tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_up), null);
+                            } else {
+                                tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_down), null);
+                            }
+                        }
+
+                        @Override
+                        public void onLeafClicked(View view, TreeNode node, int position) {
+
+                        }
+                    });
                 }
             }
-            mViewBinding.tvLateNum.setText(teachers.getLate() + "");
-//            mViewBinding.tvLateName.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
-//            mViewBinding.tvLate.setText("1".equals(teachers.getGoOutStatus()) ? "早退" : "迟到");
-//            mViewBinding.tvAttendanceDesc.setText("1".equals(teachers.getGoOutStatus()) ? "签退率" : "出勤率");
-            mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
-            mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsence() + "");
-            //mViewBinding.tvNum.setText((teachers.getAbsencePeople() != null ? teachers.getAbsencePeople().size() : 0) + "人");
-            dataToBind.addAll(convertDataToTreeNode(teachers.getAbsencePeople()));
-            adapter = new AttendanceSchoolTeacherAdapter(R.layout.item_attendance_school_teacher, dataToBind, teachers.goOutStatus);
-            mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-            mViewBinding.recyclerview.setAdapter(adapter);
-            adapter.setEmptyView(R.layout.empty_top);
-            adapter.setOnTreeClickedListener(new SingleLayoutTreeAdapter.OnTreeClickedListener() {
-                @Override
-                public void onNodeClicked(View view, TreeNode node, int position) {
-                    TextView tvStatus = view.findViewById(R.id.tv_status);
-                    if (node.isExpand()) {
-                        tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_up), null);
-                    } else {
-                        tvStatus.setCompoundDrawablesWithIntrinsicBounds(null, null, getContext().getResources().getDrawable(R.mipmap.icon_down), null);
-                    }
-                }
-
-                @Override
-                public void onLeafClicked(View view, TreeNode node, int position) {
-
-                }
-            });
         }
     }
 
@@ -146,14 +153,17 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
         animator.start();
     }
 
-    private List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> convertDataToTreeNode(List<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean> datas) {
-        List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> nodes = new ArrayList<>();
-        Map<String, TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> map = new HashMap();
+    private List<TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> convertDataToTreeNode(List<AttendanceRsp.TeacherItemBean> datas) {
+        List<TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> nodes = new ArrayList<>();
+        Map<String, TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> map = new HashMap();
         for (int i = 0; i < datas.size(); i++) {
-            List<TreeNode<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean>> childs = new ArrayList<>();
-            AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean peopleBean = datas.get(i);
-            TreeNode treeNode = new TreeNode(peopleBean, -1);
-            for (AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean childItem : peopleBean.getSpecialPeople()) {
+            List<TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> childs = new ArrayList<>();
+            AttendanceRsp.TeacherItemBean peopleBean = datas.get(i);
+            AttendanceRsp.TeacherItemBean.CourseInfoFormListBean cfb = new AttendanceRsp.TeacherItemBean.CourseInfoFormListBean();
+            cfb.setCourseName(peopleBean.getUserName());
+            cfb.setSection(peopleBean.getSectionNumber() + "");
+            TreeNode treeNode = new TreeNode(cfb, -1);
+            for (AttendanceRsp.TeacherItemBean.CourseInfoFormListBean childItem : peopleBean.getCourseInfoFormList()) {
                 TreeNode child = new TreeNode<>(childItem, -1);
                 child.setParent(treeNode);
                 childs.add(child);
@@ -177,19 +187,19 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             case R.id.tv_absenteeism:
                 mViewBinding.tvAbsenteeism.setChecked(true);
                 mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getAbsencePeople()) : null);
+                adapter.setList(teacherCourseForm != null ? convertDataToTreeNode(teacherCourseForm.getAbsenteeismList()) : null);
                 //mViewBinding.tvNum.setText((teachers != null ? teachers.getAbsencePeople().size() : 0) + "人");
                 break;
             case R.id.tv_leave:
                 mViewBinding.tvLeave.setChecked(true);
                 mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLeavePeople()) : null);
+                adapter.setList(teacherCourseForm != null ? convertDataToTreeNode(teacherCourseForm.getLeaveList()) : null);
                 //mViewBinding.tvNum.setText((teachers != null ? teachers.getLeavePeople().size() : 0) + "人");
                 break;
             case R.id.tv_late:
                 mViewBinding.tvLate.setChecked(true);
                 mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(teachers != null ? convertDataToTreeNode(teachers.getLatePeople()) : null);
+                adapter.setList(teacherCourseForm != null ? convertDataToTreeNode(teacherCourseForm.getLateList()) : null);
                 //mViewBinding.tvNum.setText((teachers != null ? teachers.getLatePeople().size() : 0) + "人");
                 break;
         }

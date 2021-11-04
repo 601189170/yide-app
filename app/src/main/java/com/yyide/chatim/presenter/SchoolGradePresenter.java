@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.AttendanceCheckRsp;
+import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.SchoolGradeView;
@@ -17,14 +18,12 @@ public class SchoolGradePresenter extends BasePresenter<SchoolGradeView> {
         attachView(view);
     }
 
-    public void getMyAppList() {
+    public void getMyAppList(AttendanceRsp.DataBean.AttendanceListBean request) {
         mvpView.showLoading();
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("classId", "");//班级ID
-        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
-        addSubscription(dingApiStores.viewAttendance(body), new ApiCallback<AttendanceCheckRsp>() {
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(request));
+        addSubscription(dingApiStores.schoolClassesAttendance(body), new ApiCallback<AttendanceRsp>() {
             @Override
-            public void onSuccess(AttendanceCheckRsp model) {
+            public void onSuccess(AttendanceRsp model) {
                 mvpView.getGradeListSuccess(model);
             }
 
