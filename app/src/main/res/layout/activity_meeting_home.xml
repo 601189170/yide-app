@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_15"
-                    android:text="今日"
+                    android:text="会议列表"
                     android:textColor="#ff1e1e1e"
                     android:textSize="20sp"
                     android:textStyle="bold"

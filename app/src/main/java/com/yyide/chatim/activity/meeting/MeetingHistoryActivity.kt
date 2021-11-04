@@ -57,7 +57,7 @@ class MeetingHistoryActivity : BaseActivity() {
             adapter.loadMoreModule.isEnableLoadMore = true
             //请求数据
             current++
-            viewModel.requestMeetingHomeList(size, current, searchName)
+            viewModel.requestMeetingHomeList(size, current, searchName, 0)
         }
         adapter.loadMoreModule.isAutoLoadMore = true
         //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
@@ -66,7 +66,7 @@ class MeetingHistoryActivity : BaseActivity() {
 //            val item = adapter.getItem(position) as ScheduleData
 //            MeetingCreateUpdateActivity.jumpUpdate(this, item.id)
 //        }
-        viewBinding.edit.addTextChangedListener(object: TextWatcher{
+        viewBinding.edit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -117,7 +117,7 @@ class MeetingHistoryActivity : BaseActivity() {
                 }
             }
         }
-        viewModel.requestMeetingHomeList(size, current, searchName)
+        viewModel.requestMeetingHomeList(size, current, searchName, 0)
     }
 
     private val adapter =
@@ -130,11 +130,11 @@ class MeetingHistoryActivity : BaseActivity() {
                 viewBind.tvTime.text = DateUtils.formatTime(
                     item.startTime,
                     "",
-                    "HH:mm"
-                ) + "-" + DateUtils.formatTime(
+                    "yyyy-MM-dd HH:mm"
+                ) + " - " + DateUtils.formatTime(
                     item.endTime,
                     "",
-                    "HH:mm"
+                    "yyyy-MM-dd HH:mm"
                 )
             }
         }

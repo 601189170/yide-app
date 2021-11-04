@@ -127,7 +127,7 @@ interface INetworkService {
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("/management/cloud-system/app/schedule/meetingList")
-    suspend fun requestMeetingHistoryList(@Body requestBody: RequestBody): BaseResponse<List<ScheduleData>>
+    suspend fun requestMeetingList(@Body requestBody: RequestBody): BaseResponse<List<ScheduleData>>
 
     /**
      * 查看会议详情

@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONArray
 import com.blankj.utilcode.util.ToastUtils
 import com.huawei.hms.push.utils.DateUtil
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.meeting.viewmodel.MeetingSaveViewModel
 import com.yyide.chatim.activity.schedule.ScheduleAddressActivity
 import com.yyide.chatim.activity.schedule.ScheduleDateIntervalActivity
@@ -132,6 +133,14 @@ class MeetingSaveActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setData(item: ScheduleData) {
+        if (item.promoter != SpData.getIdentityInfo().userId) {
+            viewBinding.btnConfirm.visibility = View.GONE
+            viewBinding.tvParticipant.isClickable = false
+            viewBinding.tvSite.isClickable = false
+            viewBinding.clTime.isClickable = false
+            viewBinding.etMeetingTitle.isFocusable = false
+            viewBinding.top.ivRight.visibility = View.GONE
+        }
         viewBinding.etMeetingTitle.text = Editable.Factory.getInstance().newEditable(item.name)
         if (item.participant != null) {
             viewBinding.tvParticipant.setTextColor(resources.getColor(R.color.text_1E1E1E))
@@ -171,7 +180,8 @@ class MeetingSaveActivity : BaseActivity() {
         showLoading()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
         }
@@ -186,7 +196,8 @@ class MeetingSaveActivity : BaseActivity() {
         val time = viewBinding.tvTime.text.toString().trim()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
         }
@@ -222,6 +233,7 @@ class MeetingSaveActivity : BaseActivity() {
                 scheduleData.type = "3"
                 scheduleData.isAllDay = if (viewModel.allDayLiveData.value == true) "1" else "0"
                 showLoading()
+                viewBinding.btnConfirm.isClickable = false
                 viewModel.requestMeetingSave(scheduleData)
             }
         }

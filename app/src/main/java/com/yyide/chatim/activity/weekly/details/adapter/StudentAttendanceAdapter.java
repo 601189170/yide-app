@@ -49,14 +49,12 @@ public class StudentAttendanceAdapter extends SingleLayoutTreeAdapter<StudentVal
                     tvStatus.setText("未打卡");
                     break;
                 case "2"://迟到
-                    tvEvent.setText(item.getName());
                     tvStatus.setText(item.getClockName());
                     holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
                 case "3"://早退
                     tvStatus.setText(item.getClockName());
-                    tvEvent.setText(item.getName());
                     holder.setText(R.id.tv_student_time, item.getTime());
                     tvTime.setTextColor(Color.parseColor("#63DAAB"));
                     break;

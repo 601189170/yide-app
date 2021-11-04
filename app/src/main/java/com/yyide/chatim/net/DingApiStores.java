@@ -77,6 +77,7 @@ import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.ScheduleData;
+import com.yyide.chatim.model.schedule.ScheduleDataRsp;
 import com.yyide.chatim.model.schedule.ScheduleListRsp;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
@@ -871,7 +872,7 @@ public interface DingApiStores {
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/selectAllScheduleList")
-    Call<BaseResponse<List<ScheduleData>>> selectAllScheduleList();
+    Call<ScheduleDataRsp> selectAllScheduleList();
 
     /**
      * 更新日程状态

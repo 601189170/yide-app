@@ -10,6 +10,7 @@ import com.yyide.chatim.database.ScheduleWithParticipantAndLabel
 import com.yyide.chatim.database.scheduleDataToScheduleWithParticipantAndLabel
 import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.schedule.ScheduleData
+import com.yyide.chatim.model.schedule.ScheduleDataRsp
 import com.yyide.chatim.model.schedule.ScheduleEvent
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
@@ -39,24 +40,24 @@ class ScheduleMangeViewModel : ViewModel() {
     }
     fun getAllScheduleList() {
         apiStores.selectAllScheduleList()
-            .enqueue(object : Callback<BaseResponse<List<ScheduleData>>> {
+            .enqueue(object : Callback<ScheduleDataRsp> {
                 override fun onResponse(
-                    call: Call<BaseResponse<List<ScheduleData>>>,
-                    response: Response<BaseResponse<List<ScheduleData>>>
+                    call: Call<ScheduleDataRsp>,
+                    response: Response<ScheduleDataRsp>
                 ) {
                     val body = response.body()
                     loge("onResponse $body")
                     if (body != null && body.code == 200 && body.data != null) {
                         //查询日程成功 并保存
                         requestAllScheduleResult.postValue(true)
-                        insertScheduleToDb(body.data)
+                        insertScheduleToDb(body.data.scheduleList)
                         EventBus.getDefault().post(ScheduleEvent(ScheduleEvent.NEW_TYPE,true))
                         return
                     }
                     requestAllScheduleResult.postValue(false)
                 }
 
-                override fun onFailure(call: Call<BaseResponse<List<ScheduleData>>>, t: Throwable) {
+                override fun onFailure(call: Call<ScheduleDataRsp>, t: Throwable) {
                     loge("onFailure ${t.localizedMessage}")
                     requestAllScheduleResult.postValue(false)
                 }
@@ -75,10 +76,10 @@ class ScheduleMangeViewModel : ViewModel() {
      * 保存日程所有数据到本地数据库
      *
      */
-    private fun insertScheduleToDb(scheduls: List<ScheduleData>) {
+    private fun insertScheduleToDb(scheduls: List<ScheduleData>?) {
         loge("scheduls ${JSON.toJSONString(scheduls)}")
         ScheduleDaoUtil.clearAll()
-        scheduls.forEach {
+        scheduls?.forEach {
             //插入数据到本地数据库
             ScheduleDaoUtil.insert(it.scheduleDataToScheduleWithParticipantAndLabel())
         }
