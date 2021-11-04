@@ -168,7 +168,7 @@ class TeacherAttendanceStudentChildFragment : BaseFragment() {
     private val dataToBind = mutableListOf<TreeNode<StudentValue>>()
     private fun initAttendanceList(datas: List<StudentValue>) {
         dataToBind.clear()
-        if (datas.isNotEmpty()) {
+        if (datas != null) {
             dataToBind.addAll(convertDataToTreeNode(datas))
         }
         val adapter =

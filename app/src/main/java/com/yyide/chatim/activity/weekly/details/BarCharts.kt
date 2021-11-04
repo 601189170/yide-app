@@ -134,7 +134,7 @@ class BarCharts {
                 maxSize = item.yMax
             }
         }
-        axisLeft.axisMaximum = if (maxSize < 10) 10f else maxSize + 100
+        axisLeft.axisMaximum = if (maxSize < 10) 10f else maxSize + 50
         axisLeft.setLabelCount(6, true)
         axisLeft.valueFormatter = IAxisValueFormatter { value, axis ->
             "${value.toInt()}"
