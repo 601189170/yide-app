@@ -107,13 +107,14 @@ public class AttendanceRsp implements Serializable {
     public static class TeacherCourseFormBean implements Serializable {
         @SerializedName(value = "headmasterAttendanceList1", alternate = {"headmasterAttendanceList", "classroomTeacherAttendanceList"})
         private List<DataBean.AttendanceListBean> headmasterAttendanceList;
-        @SerializedName(value = "baseInfo1", alternate = {"classCourseBasicForm", "baseInfo"})
+        @SerializedName(value = "baseInfo1", alternate = {"classCourseBasicForm", "baseInfo", "eventBasicForm"})
         private DataBean.AttendanceListBean baseInfo;
         private List<TeacherItemBean> absenteeismList;
         private List<TeacherItemBean> leaveList;
         private List<TeacherItemBean> lateList;
         private List<TeacherItemBean> allRollList;
         private List<TeacherItemBean> normalList;
+        private List<TeacherItemBean> earlyList;
         private List<DataBean.AttendanceListBean> classInfoForms;
 
         public List<TeacherItemBean> getAllRollList() {
@@ -130,6 +131,14 @@ public class AttendanceRsp implements Serializable {
 
         public void setNormalList(List<TeacherItemBean> normalList) {
             this.normalList = normalList;
+        }
+
+        public List<TeacherItemBean> getEarlyList() {
+            return earlyList;
+        }
+
+        public void setEarlyList(List<TeacherItemBean> earlyList) {
+            this.earlyList = earlyList;
         }
 
         public List<DataBean.AttendanceListBean> getClassInfoForms() {
@@ -415,7 +424,7 @@ public class AttendanceRsp implements Serializable {
         private List<AttendanceListBean> courseAttendanceList;
         @SerializedName(value = "studentCourseFormBean1", alternate = {"studentEventForm", "studentCourseForm"})
         private StudentCourseFormBean studentCourseFormBean;
-        @SerializedName(value = "teacherCourseForm1", alternate = {"teacherEventForm", "teacherCourseForm", "attendanceCourseForm"})
+        @SerializedName(value = "teacherCourseForm1", alternate = {"teacherEventForm", "teacherCourseForm", "attendanceCourseForm", "attendanceEventForm"})
         private TeacherCourseFormBean teacherCourseForm;
 
         public TeacherCourseFormBean getTeacherCourseForm() {

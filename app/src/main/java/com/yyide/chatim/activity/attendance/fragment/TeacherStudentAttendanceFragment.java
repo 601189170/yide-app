@@ -86,7 +86,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     private void getAttendance() {
         if (itemParams != null) {
-            mvpPresenter.attendance(classesId, itemParams.getServerId(), itemParams.getType());
+            mvpPresenter.attendance(classesId, itemParams.getServerId(), itemParams.getType(), itemParams.getAttendanceTimeId());
         }
     }
 
@@ -136,7 +136,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             case R.id.tv_late:
                 mViewBinding.tvLate.setChecked(true);
                 mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
-                adapter.setList(itemStudents.getLateList());
+                if (itemStudents != null) {
+                    adapter.setList("1".equals(itemParams.getAttendanceSignInOut()) ? itemStudents.getEarlyList() : itemStudents.getLateList());
+                }
                 break;
             case R.id.tv_normal:
                 mViewBinding.tvNormal.setChecked(true);
@@ -172,13 +174,13 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 getAttendance();
             });
         });
-        if (item != null && item.getTeacherCourseForm() != null) {
-            AttendanceRsp.TeacherCourseFormBean teacherCourseForm = item.getTeacherCourseForm();
+        if (item != null) {
+            itemStudents = item.getTeacherCourseForm();
             mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
                 AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
-                adapterEvent.setList(teacherCourseForm.getHeadmasterAttendanceList());
+                adapterEvent.setList(item.getClassroomTeacherAttendanceList());
                 attendancePop.setOnSelectListener(index -> {
-                    itemParams = teacherCourseForm.getHeadmasterAttendanceList().get(index);
+                    itemParams = item.getClassroomTeacherAttendanceList().get(index);
                     getAttendance();
                 });
             });
@@ -193,14 +195,16 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 }
             }
 
-            if (teacherCourseForm.getHeadmasterAttendanceList() != null && teacherCourseForm.getHeadmasterAttendanceList().size() > 1) {
+            if (item.getClassroomTeacherAttendanceList() != null && item.getClassroomTeacherAttendanceList().size() > 1) {
                 mViewBinding.tvAttendanceTitle.setClickable(true);
                 mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
             } else {
                 mViewBinding.tvAttendanceTitle.setClickable(false);
                 mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
-            setData(teacherCourseForm.getBaseInfo());
+            if (item.getTeacherCourseForm() != null) {
+                setData(item.getTeacherCourseForm().getBaseInfo());
+            }
         }
     }
 
@@ -224,8 +228,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceRsp.DataBean.AttendanceListBean item) {
             baseViewHolder.setText(R.id.className, item.getTheme());
-            if (item.getAttendanceTimeId().equals(item.getAttendanceTimeId())
-                    && item.getServerId().equals(item.getServerId())) {
+            if (itemParams != null
+                    && itemParams.getAttendanceTimeId().equals(item.getAttendanceTimeId())
+                    && itemParams.getServerId().equals(item.getServerId())) {
                 baseViewHolder.getView(R.id.select).setVisibility(View.VISIBLE);
             } else {
                 baseViewHolder.getView(R.id.select).setVisibility(View.GONE);
@@ -245,7 +250,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         if (item != null) {
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
             mViewBinding.tvAttendanceTitle.setText(item.getTheme());
-            mViewBinding.tvDesc.setText(item.getEventName());
+            mViewBinding.tvDesc.setText(TextUtils.isEmpty(item.getEventName()) ? item.getTheme() : item.getEventName());
             mViewBinding.tvAttendanceTime.setText(item.getCourseTime());
 
             mViewBinding.tvSign.setText("1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率");
@@ -256,7 +261,6 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.tvAttendanceRate.setText(item.getSignInOutRate());
             if (!TextUtils.isEmpty(item.getSignInOutRate())) {
                 try {
-//                    mViewBinding.progress.setProgress(Double.valueOf(itemStudents.getRate()).intValue());
                     setAnimation(mViewBinding.progress, Double.valueOf(item.getSignInOutRate()).intValue());
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -313,6 +317,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "1"://缺勤
+                    case "6":
                         holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
                         break;
                     case "3"://早退
@@ -334,6 +339,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         holder.setText(R.id.tv_student_event, "请假时间");
                         holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
                         tvTime.setTextColor(Color.parseColor("#F6BD16"));
+                        break;
+                    case "4":
+                        //无效打卡
                         break;
                 }
             }

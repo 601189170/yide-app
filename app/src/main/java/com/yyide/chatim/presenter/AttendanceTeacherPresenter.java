@@ -16,12 +16,13 @@ public class AttendanceTeacherPresenter extends BasePresenter<AttendanceCheckVie
         attachView(view);
     }
 
-    public void attendance(String classId, String serverId, String type) {
+    public void attendance(String classId, String serverId, String type, String attendanceId) {
         mvpView.showLoading();
         HashMap<String, Object> map = new HashMap<>();
         map.put("classId", classId);//班级ID
-        map.put("serverId", classId);//事件ID
-        map.put("type", classId);//类型
+        map.put("serverId", serverId);//事件ID
+        map.put("type", type);//类型
+        map.put("attendanceTimeId", attendanceId);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         addSubscription(dingApiStores.teacherAttendance(body), new ApiCallback<AttendanceRsp>() {
             @Override
