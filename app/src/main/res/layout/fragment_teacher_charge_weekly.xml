@@ -144,6 +144,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:visibility="visible"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <include
@@ -160,17 +161,18 @@
 
                         <include
                             android:id="@+id/homework"
-                            layout="@layout/layout_weekly_homework" />
+                            layout="@layout/layout_weekly_homework"
+                            android:visibility="gone" />
 
-<!--                        <View-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="20dp" />-->
+                        <!--                        <View-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="20dp" />-->
 
-<!--                        <include layout="@layout/layout_xz" />-->
+                        <!--                        <include layout="@layout/layout_xz" />-->
                     </LinearLayout>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardView_no_data"
+                        android:id="@+id/cardView_no_data1"
                         android:layout_width="match_parent"
                         android:layout_height="400dp"
                         android:layout_marginStart="@dimen/dp_12"

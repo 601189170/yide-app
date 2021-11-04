@@ -134,7 +134,7 @@ class MeetingHistoryActivity : BaseActivity() {
                 ) + "-" + DateUtils.formatTime(
                     item.endTime,
                     "",
-                    "HH:mm"
+                    "yyyy-MM-dd HH:mm:ss"
                 )
             }
         }

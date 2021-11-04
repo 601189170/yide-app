@@ -72,13 +72,18 @@ class TeacherWeeklyFragment : BaseFragment() {
             val result = it.getOrNull()
             if (null != result) {
                 viewBinding.clContent.visibility = View.VISIBLE
-                viewBinding.cardViewNoData.visibility = View.GONE
+                viewBinding.cardViewNoData1.visibility = View.GONE
                 viewBinding.attendance.tvAttendDesc.text = result.rank
                 setSummary(result.summary)
                 setAttendance(result.attend)
+                if(result.summary == null && result.attend == null){
+                    viewBinding.clContent.visibility = View.GONE
+                    viewBinding.cardViewNoData1.visibility = View.VISIBLE
+                }
+
             } else {//接口返回空的情况处理
-//                viewBinding.clContent.visibility = View.GONE
-//                viewBinding.cardViewNoData.visibility = View.VISIBLE
+                viewBinding.clContent.visibility = View.GONE
+                viewBinding.cardViewNoData1.visibility = View.VISIBLE
             }
         }
         viewBinding.attendance.cardView.setOnClickListener {
@@ -107,7 +112,7 @@ class TeacherWeeklyFragment : BaseFragment() {
 
         initClassMenu()
         initDate()
-        initHomework()
+//        initHomework()
     }
 
     private var classId = ""

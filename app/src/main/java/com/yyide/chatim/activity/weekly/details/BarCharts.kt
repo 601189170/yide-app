@@ -127,14 +127,14 @@ class BarCharts {
         axisLeft.textColor = Color.parseColor("#909399")
         axisLeft.textSize = 10f
         axisLeft.axisMinimum = 0f
-        var maxSize = 5f
+        var maxSize = 10f
         //设置柱子的左侧数值
         if (barData != null && barData.dataSets != null) {
             barData.dataSets.forEach { item ->
                 maxSize = item.yMax
             }
         }
-        axisLeft.axisMaximum = if (maxSize < 5) 5f else maxSize
+        axisLeft.axisMaximum = if (maxSize < 10) 10f else maxSize + 100
         axisLeft.setLabelCount(6, true)
         axisLeft.valueFormatter = IAxisValueFormatter { value, axis ->
             "${value.toInt()}"
