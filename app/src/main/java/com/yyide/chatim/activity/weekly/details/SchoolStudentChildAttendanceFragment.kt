@@ -1,19 +1,12 @@
 package com.yyide.chatim.activity.weekly.details
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import com.blankj.utilcode.util.SizeUtils
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
@@ -23,13 +16,12 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.details.view.LineChartMarkView
-import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.databinding.*
 import com.yyide.chatim.model.DeptAttend
 import com.yyide.chatim.model.Detail
 import com.yyide.chatim.model.SchoolHomeAttend
-import java.math.BigDecimal
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  *
@@ -65,12 +57,7 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
     }
 
     private fun initView() {
-        viewBinding.layoutCharts.recyclerview.layoutManager =
-            GridLayoutManager(activity, 7)
-        viewBinding.layoutCharts.recyclerview.adapter =
-            adapterAttendance
-
-        var studentAttendances = mutableListOf<SchoolHomeAttend>()
+        var studentAttendances = ArrayList<SchoolHomeAttend>()
         var subjects = mutableListOf<DeptAttend>()
         arguments?.apply {
             val detail = getSerializable("item") as Detail
@@ -78,10 +65,9 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
                 getString(R.string.weekly_school_student_desc, getString("tabTitle", ""))
             viewBinding.tvAttend.text =
                 getString(R.string.weekly_school_student_attend, getString("tabTitle", ""))
-            studentAttendances = detail.studentAttend as MutableList<SchoolHomeAttend>
+            studentAttendances = detail.studentAttend as ArrayList<SchoolHomeAttend>
             subjects = detail.gradeAttend as MutableList<DeptAttend>
         }
-        adapterAttendance.setList(studentAttendances)
         val mBarCharts = BarCharts()
         mBarCharts.showBarChart2(
             viewBinding.layoutCharts.barChart,
@@ -90,32 +76,6 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
             true
         )
         initLineCharts(subjects)
-    }
-
-    @SuppressLint("ResourceAsColor", "ResourceType")
-    private fun show(view: View, desc: String, number: String) {
-        val inflate = DialogWeekMessgeBinding.inflate(layoutInflater)
-        val popWindow = PopupWindow(
-            inflate.root,
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
-        )
-        inflate.tvName.text = desc
-        inflate.tvProgress.text = number
-        popWindow.setBackgroundDrawable(context?.getDrawable(android.R.color.transparent))
-        popWindow.setOnDismissListener {
-            adapterAttendance.notifyItemChanged(selectPosition)
-            selectPosition = -1
-        }
-        //获取需要在其上方显示的控件的位置信息
-        val location = IntArray(2)
-        view.getLocationOnScreen(location)
-        //在控件上方显示
-        popWindow.showAtLocation(
-            view,
-            Gravity.NO_GRAVITY,
-            (location[0]) - inflate.root.width / 2,
-            location[1] - inflate.root.height
-        )
     }
 
     private fun initLineCharts(subjects: List<DeptAttend>) {
@@ -270,27 +230,6 @@ class SchoolStudentChildAttendanceFragment : Fragment() {
         mv.chartView = viewBinding.lineChart
         viewBinding.lineChart.marker = mv
         viewBinding.lineChart.invalidate()
-    }
-
-    /**
-     * 考勤数据
-     */
-    private var selectPosition = -1
-    private val adapterAttendance = object :
-        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
-        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
-            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            if (!TextUtils.isEmpty(item.value)) {
-                bind.tvProgress.text = "${item.value}%"
-                WeeklyUtil.setAnimation(
-                    bind.progressbar,
-                    BigDecimal(item.value).setScale(
-                        0, BigDecimal.ROUND_UP
-                    ).toInt()
-                )
-            }
-            bind.tvWeek.text = item.name
-        }
     }
 
 }

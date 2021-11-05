@@ -76,7 +76,7 @@ class TeacherWeeklyFragment : BaseFragment() {
                 viewBinding.attendance.tvAttendDesc.text = result.rank
                 setSummary(result.summary)
                 setAttendance(result.attend)
-                if(result.summary == null && result.attend == null){
+                if (result.summary == null && result.attend == null) {
                     viewBinding.clContent.visibility = View.GONE
                     viewBinding.cardViewNoData1.visibility = View.VISIBLE
                 }
@@ -307,28 +307,13 @@ class TeacherWeeklyFragment : BaseFragment() {
         }
         if (hotList != null && hotList.size > 1) {
             adapterHot.setList(hotList)
+        } else {
+            adapterHot.setList(null)
         }
         if (splitList != null && splitList.isNotEmpty()) {
             initHotScroll(splitList)
         }
 
-        //我的考勤
-        viewBinding.attendance.layoutCharts.recyclerview.layoutManager =
-            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        viewBinding.attendance.layoutCharts.recyclerview.adapter =
-            adapterAttendance
-
-        adapterAttendance.setOnItemClickListener { adapter, view, position ->
-            selectPosition = if (selectPosition != position) {
-                position
-            } else {
-                -1
-            }
-            adapterAttendance.notifyDataSetChanged()
-            val item = adapterAttendance.getItem(position)
-            show(view, item.name, "${item.value}%")
-        }
-        adapterAttendance.setList(attend.teacherAttend)
         val mBarCharts = BarCharts()
         mBarCharts.showBarChart2(
             viewBinding.attendance.layoutCharts.barChart,
@@ -390,32 +375,6 @@ class TeacherWeeklyFragment : BaseFragment() {
         return result
     }
 
-    @SuppressLint("ResourceAsColor", "ResourceType")
-    private fun show(view: View, desc: String, number: String) {
-        val inflate = DialogWeekMessgeBinding.inflate(layoutInflater)
-        val popWindow = PopupWindow(
-            inflate.root,
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
-        )
-        inflate.tvName.text = desc
-        inflate.tvProgress.text = number
-        popWindow.setBackgroundDrawable(context?.getDrawable(android.R.color.transparent))
-        popWindow.setOnDismissListener {
-            adapterAttendance.notifyItemChanged(selectPosition)
-            selectPosition = -1
-        }
-        //获取需要在其上方显示的控件的位置信息
-        val location = IntArray(2)
-        view.getLocationOnScreen(location)
-        //在控件上方显示
-        popWindow.showAtLocation(
-            view,
-            Gravity.NO_GRAVITY,
-            (location[0]) - inflate.root.width / 2,
-            location[1] - inflate.root.height
-        )
-    }
-
     private var hotIndex = 0
     private val adapterHot = object :
         BaseQuickAdapter<Int, BaseViewHolder>(R.layout.item_hot) {
@@ -460,32 +419,5 @@ class TeacherWeeklyFragment : BaseFragment() {
         attendanceBannerAdapter.setList(attendance)
         return view.root
     }
-
-    /**
-     * 考勤数据
-     */
-    private var selectPosition = -1
-    private val adapterAttendance = object :
-        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
-            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-            if (selectPosition == holder.bindingAdapterPosition) {
-                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
-            } else {
-                if (!TextUtils.isEmpty(item.value)) {
-                    bind.tvProgress.visibility = View.GONE
-                }
-                bind.tvProgress.text = "${item.value}"
-                bind.tvWeek.text = item.name
-                WeeklyUtil.setAnimation(
-                    bind.progressbar,
-                    BigDecimal(item.value).setScale(
-                        0,
-                        BigDecimal.ROUND_UP
-                    ).toInt()
-                )
-            }
-        }
-    }
+    
 }

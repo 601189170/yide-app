@@ -52,26 +52,22 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
     }
 
     private fun initView() {
-        //教职工出入校考勤统计
-        viewBinding.layoutCharts.recyclerview.layoutManager = GridLayoutManager(activity, 7)
-        viewBinding.layoutCharts.recyclerview.adapter =
-            adapterAttendance
-
         //教职工周统计横版
         viewBinding.recyclerviewDept.layoutManager = LinearLayoutManager(activity)
         viewBinding.recyclerviewDept.adapter =
             adapterAttendanceDept
 
-        var teacherAttends = mutableListOf<SchoolHomeAttend>()
+        var teacherAttends = ArrayList<SchoolHomeAttend>()
         var deptattends = mutableListOf<DeptAttend>()
         arguments?.apply {
             val detail = getSerializable("item") as Detail
-            teacherAttends = detail.teacherAttend as MutableList<SchoolHomeAttend>
+            teacherAttends = detail.teacherAttend as ArrayList<SchoolHomeAttend>
             deptattends = detail.deptAttend as MutableList<DeptAttend>
             viewBinding.textView.text = "全校教职工每天${getString("tabTitle", "")}考勤率"
             viewBinding.tvFaculty.text = "教职工各部门${getString("tabTitle", "")}考勤率"
         }
-        adapterAttendance.setList(teacherAttends)
+
+        //教职工出入校考勤统计
         val mBarCharts = BarCharts()
         mBarCharts.showBarChart2(
             viewBinding.layoutCharts.barChart,
@@ -81,22 +77,7 @@ class SchoolTeacherChildAttendanceFragment : BaseFragment() {
         )
         adapterAttendanceDept.setList(deptattends)
     }
-
-    /**
-     * 考勤数据
-     */
-    private val adapterAttendance = object :
-        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_school_attendance) {
-        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
-            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-            if (item.rate > 0) {
-                bind.tvProgress.text = "${item.rate}%"
-            }
-            bind.tvWeek.text = item.name
-            WeeklyUtil.setAnimation(bind.progressbar, if (item.rate <= 0) 0 else item.rate.toInt())
-        }
-    }
-
+    
     /**
      * 考勤数据
      */

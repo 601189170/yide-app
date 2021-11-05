@@ -130,7 +130,6 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     public void onResume() {
         super.onResume();
-        GSYVideoManager.onResume();
     }
 
     @Override
@@ -139,7 +138,6 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         if (adapter != null) {
             adapter.stop();
         }
-        GSYVideoManager.onPause();
     }
 
     @Override

@@ -184,22 +184,6 @@ class SchoolWeeklyFragment : BaseFragment() {
             viewBinding.layoutWeeklySchoolAttendance.layoutCharts.root.visibility = View.VISIBLE
             //学生考勤
             if (attend.studentAttend != null) {
-                viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.layoutManager =
-                    LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-                viewBinding.layoutWeeklySchoolAttendance.layoutCharts.recyclerview.adapter =
-                    adapterStudentAttendance
-                adapterStudentAttendance.setList(attend.studentAttend)
-                adapterStudentAttendance.setOnItemClickListener { adapter, view, position ->
-                    selectStudentPosition = if (selectStudentPosition != position) {
-                        position
-                    } else {
-                        -1
-                    }
-                    selectTeacherPosition = -1
-//                    val item = adapterStudentAttendance.getItem(position)
-//                    show(view, item.name, "${item.value}")
-//                    adapterStudentAttendance.notifyDataSetChanged()
-                }
 
                 val mBarCharts = BarCharts()
                 mBarCharts.showBarChart2(
@@ -215,19 +199,6 @@ class SchoolWeeklyFragment : BaseFragment() {
 
             //教师考勤
             if (attend.teacherAttend != null) {
-                viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.layoutManager =
-                    LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-                viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.recyclerview.adapter =
-                    adapterTeacherAttendance
-                adapterTeacherAttendance.setList(attend.teacherAttend)
-                adapterTeacherAttendance.setOnItemClickListener { adapter, view, position ->
-                    selectTeacherPosition = if (selectTeacherPosition != position) {
-                        position
-                    } else {
-                        -1
-                    }
-                    selectStudentPosition = -1
-                }
                 val mBarCharts = BarCharts()
                 mBarCharts.showBarChart2(
                     viewBinding.layoutWeeklySchoolAttendance.layoutCharts2.barChart,
@@ -253,96 +224,5 @@ class SchoolWeeklyFragment : BaseFragment() {
     private fun setWorkView(work: SchoolHomeWork?) {
 
     }
-
-    private fun show(view: View, desc: String, number: String) {
-        val inflate = DialogWeekMessgeBinding.inflate(layoutInflater)
-        val popWindow = PopupWindow(
-            inflate.root,
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
-        )
-        inflate.tvName.text = desc
-        inflate.tvProgress.text = number
-        popWindow.setBackgroundDrawable(context?.resources?.getDrawable(android.R.color.transparent))
-        popWindow.setOnDismissListener {
-            if (selectTeacherPosition > -1) {
-                adapterTeacherAttendance.notifyItemChanged(selectTeacherPosition)
-                selectTeacherPosition = -1
-            } else if (selectStudentPosition > -1) {
-                adapterStudentAttendance.notifyItemChanged(selectStudentPosition)
-                selectStudentPosition = -1
-            }
-        }
-        //获取需要在其上方显示的控件的位置信息
-        val location = IntArray(2)
-        view.getLocationOnScreen(location)
-        //在控件上方显示
-        popWindow.showAtLocation(
-            view,
-            Gravity.NO_GRAVITY,
-            (location[0]) - inflate.root.width / 2,
-            location[1] - inflate.root.height
-        )
-    }
-
-    /**
-     * 学生考勤数据
-     */
-    private var selectStudentPosition = -1
-    private val adapterStudentAttendance = object :
-        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
-            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-//            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-//            if (selectStudentPosition == holder.bindingAdapterPosition) {
-//                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
-//            }
-//            bind.progressbar.progress = if (item.value > 0 && item.value <= 1) 1 else item.value.toInt()
-            if (!TextUtils.isEmpty(item.value)) {
-                bind.tvProgress.text = "${item.value}%"
-                bind.tvProgress.visibility = View.VISIBLE
-                WeeklyUtil.setAnimation(
-                    bind.progressbar,
-                    BigDecimal(item.value).setScale(
-                        0,
-                        BigDecimal.ROUND_UP
-                    ).toInt()
-                )
-            } else {
-                bind.tvProgress.visibility = View.GONE
-            }
-            bind.tvWeek.text = item.name
-        }
-    }
-
-    /**
-     * 教师考勤数据
-     */
-    private var selectTeacherPosition = -1
-    private val adapterTeacherAttendance = object :
-        BaseQuickAdapter<SchoolHomeAttend, BaseViewHolder>(R.layout.item_weekly_charts_vertical) {
-        override fun convert(holder: BaseViewHolder, item: SchoolHomeAttend) {
-            val bind = ItemWeeklyChartsVerticalBinding.bind(holder.itemView)
-//            bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.transparent))
-//            if (selectTeacherPosition == holder.bindingAdapterPosition) {
-//                bind.constraintLayout.setBackgroundColor(context.resources.getColor(R.color.charts_bg))
-//            }
-//            bind.progressbar.progress = if (item.value > 0 && item.value <= 1) 1 else item.value.toInt()
-            if (!TextUtils.isEmpty(item.value)) {
-                bind.tvProgress.text = "${item.value}%"
-                bind.tvProgress.visibility = View.VISIBLE
-                WeeklyUtil.setAnimation(
-                    bind.progressbar,
-                    BigDecimal(item.value).setScale(
-                        0,
-                        BigDecimal.ROUND_UP
-                    ).toInt()
-                )
-            } else {
-                bind.tvProgress.visibility = View.GONE
-            }
-            bind.tvWeek.text = item.name
-        }
-    }
-
 
 }

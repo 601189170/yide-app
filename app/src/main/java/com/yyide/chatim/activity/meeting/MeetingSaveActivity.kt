@@ -1,12 +1,14 @@
 package com.yyide.chatim.activity.meeting
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -42,6 +44,7 @@ class MeetingSaveActivity : BaseActivity() {
     private lateinit var viewBinding: ActivityMeetingCreateBinding
     private val viewModel: MeetingSaveViewModel by viewModels()
     private var id = ""
+    private var resultCode = 0
     override fun getContentViewID(): Int {
         return R.layout.activity_meeting_create
     }
@@ -110,13 +113,16 @@ class MeetingSaveActivity : BaseActivity() {
         viewBinding.tvSite.setOnClickListener {
             val intent = Intent(this, ScheduleAddressActivity::class.java)
             intent.putExtra("data", JSON.toJSONString(viewModel.siteLiveData.value))
-            startActivityForResult(intent, REQUEST_CODE_SITE_SELECT)
+            startActivity.launch(intent)
+            resultCode = REQUEST_CODE_SITE_SELECT
         }
         //选择参与人
         viewBinding.tvParticipant.setOnClickListener {
             val intent = Intent(this, ScheduleParticipantActivity::class.java)
             intent.putExtra("data", JSON.toJSONString(viewModel.participantList.value))
-            startActivityForResult(intent, REQUEST_CODE_PARTICIPANT_SELECT)
+            startActivity.launch(intent)
+            resultCode = REQUEST_CODE_PARTICIPANT_SELECT
+
         }
         viewBinding.clTime.setOnClickListener {
             val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
@@ -126,7 +132,8 @@ class MeetingSaveActivity : BaseActivity() {
             intent.putExtra("allDay", allDay)
             intent.putExtra("startTime", startTime)
             intent.putExtra("endTime", endTime)
-            startActivityForResult(intent, REQUEST_CODE_DATE_SELECT)
+            startActivity.launch(intent)
+            resultCode = REQUEST_CODE_DATE_SELECT
         }
 
     }
@@ -240,52 +247,53 @@ class MeetingSaveActivity : BaseActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        //选择日期
-        if (requestCode == REQUEST_CODE_DATE_SELECT && resultCode == RESULT_OK && data != null) {
-            val allDay = data.getBooleanExtra("allDay", false)
-            val startTime = data.getStringExtra("startTime")
-            val endTime = data.getStringExtra("endTime")
-            viewModel.allDayLiveData.value = allDay
-            viewModel.startTimeLiveData.value = startTime
-            viewModel.endTimeLiveData.value = endTime
-            viewBinding.tvTime.setTextColor(resources.getColor(R.color.text_1E1E1E))
-            viewBinding.tvTime.text =
-                DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm") + " - " + DateUtils.formatTime(
-                    endTime,
-                    "",
-                    "MM月dd日 HH:mm"
-                )
-            return
+    private val startActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            //此处是跳转的result回调方法
+            if (it.data != null && it.resultCode == Activity.RESULT_OK) {
+                when (resultCode) {//选择日期
+                    REQUEST_CODE_DATE_SELECT -> {
+                        val allDay = it.data!!.getBooleanExtra("allDay", false)
+                        val startTime = it.data!!.getStringExtra("startTime")
+                        val endTime = it.data!!.getStringExtra("endTime")
+                        viewModel.allDayLiveData.value = allDay
+                        viewModel.startTimeLiveData.value = startTime
+                        viewModel.endTimeLiveData.value = endTime
+                        viewBinding.tvTime.setTextColor(resources.getColor(R.color.text_1E1E1E))
+                        viewBinding.tvTime.text =
+                            DateUtils.formatTime(
+                                startTime,
+                                "",
+                                "MM月dd日 HH:mm"
+                            ) + " - " + DateUtils.formatTime(
+                                endTime,
+                                "",
+                                "MM月dd日 HH:mm"
+                            )
+                    }
+                    REQUEST_CODE_PARTICIPANT_SELECT -> {//选择参与人
+                        val stringExtra = it.data!!.getStringExtra("data")
+                        loge("onActivityResult:$stringExtra")
+                        val list = JSONArray.parseArray(
+                            stringExtra,
+                            ParticipantRsp.DataBean.ParticipantListBean::class.java
+                        )
+                        viewBinding.tvParticipant.setTextColor(resources.getColor(R.color.text_1E1E1E))
+                        viewBinding.tvParticipant.text = splitString(list)
+                        viewModel.participantList.value = list
+                    }
+                    REQUEST_CODE_SITE_SELECT -> {//选择场地
+                        val stringExtra = it.data!!.getStringExtra("address")
+                        loge("onActivityResult:$stringExtra")
+                        val siteNameBean: SiteNameRsp.DataBean =
+                            JSON.parseObject(stringExtra, SiteNameRsp.DataBean::class.java)
+                        viewBinding.tvSite.setTextColor(resources.getColor(R.color.text_1E1E1E))
+                        viewBinding.tvSite.text = siteNameBean.name
+                        viewModel.siteLiveData.value = siteNameBean
+                    }
+                }
+            }
         }
-
-        //选择参与人
-        if (requestCode == REQUEST_CODE_PARTICIPANT_SELECT && resultCode == RESULT_OK && data != null) {
-            val stringExtra = data.getStringExtra("data")
-            loge("onActivityResult:$stringExtra")
-            val list = JSONArray.parseArray(
-                stringExtra,
-                ParticipantRsp.DataBean.ParticipantListBean::class.java
-            )
-            viewBinding.tvParticipant.setTextColor(resources.getColor(R.color.text_1E1E1E))
-            viewBinding.tvParticipant.text = splitString(list)
-            viewModel.participantList.value = list
-            return
-        }
-
-        //选择场地
-        if (requestCode == REQUEST_CODE_SITE_SELECT && resultCode == RESULT_OK && data != null) {
-            val stringExtra = data.getStringExtra("address")
-            loge("onActivityResult:$stringExtra")
-            val siteNameBean: SiteNameRsp.DataBean =
-                JSON.parseObject(stringExtra, SiteNameRsp.DataBean::class.java)
-            viewBinding.tvSite.setTextColor(resources.getColor(R.color.text_1E1E1E))
-            viewBinding.tvSite.text = siteNameBean.name
-            viewModel.siteLiveData.value = siteNameBean
-            return
-        }
-    }
 
     private fun splitString(list: List<ParticipantRsp.DataBean.ParticipantListBean>): String {
         val sb = StringBuffer()

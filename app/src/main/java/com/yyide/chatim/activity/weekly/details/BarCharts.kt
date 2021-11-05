@@ -20,11 +20,20 @@ class BarCharts {
     /**
      * 这个方法是初始化数据的
      */
-    fun getBarData(numbers: List<SchoolHomeAttend>?): BarData {
+    fun getBarData(numbers: ArrayList<SchoolHomeAttend>?): BarData {
         val yValues = ArrayList<BarEntry>()
         val colors = ArrayList<Int>()
+        if (numbers != null && numbers.size > 0 && numbers.size < 2) {
+            numbers.add(SchoolHomeAttend("", "0", 0.0))
+            numbers.add(SchoolHomeAttend("", "0", 0.0))
+        }
         numbers?.forEachIndexed { index, item ->
-            yValues.add(BarEntry(index.toFloat(), if(item.value != null) item.value.toFloat() else 0f))
+            yValues.add(
+                BarEntry(
+                    index.toFloat(),
+                    if (item.value != null) item.value.toFloat() else 0f
+                )
+            )
             colors.add(Color.parseColor("#2C8AFF"))
         }
         // y轴的数据集合
@@ -134,7 +143,7 @@ class BarCharts {
                 maxSize = item.yMax
             }
         }
-        axisLeft.axisMaximum = if (maxSize < 10) 10f else maxSize + 50
+        axisLeft.axisMaximum = if (maxSize <= 5) 10f else maxSize + 50
         axisLeft.setLabelCount(6, true)
         axisLeft.valueFormatter = IAxisValueFormatter { value, axis ->
             "${value.toInt()}"
@@ -290,6 +299,7 @@ class BarCharts {
                 barChart.animateY(1000)
             }
         }
+        barChart.invalidate()
     }
 
 }

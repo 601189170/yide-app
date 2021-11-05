@@ -18,9 +18,9 @@ data class Detail(
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<SchoolHomeAttend>,
+    var teacherAttend: ArrayList<SchoolHomeAttend>,
     @JSONField(name = "studentAttend")
-    var studentAttend: List<SchoolHomeAttend>
+    var studentAttend: ArrayList<SchoolHomeAttend>
 ) : Serializable
 
 data class DeptAttend(

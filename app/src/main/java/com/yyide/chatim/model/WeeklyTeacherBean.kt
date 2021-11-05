@@ -23,7 +23,7 @@ data class WeeklyTeacherAttendance(
     @JSONField(name = "course")
     var course: String,
     @JSONField(name = "teacherAttend")
-    var teacherAttend: List<SchoolHomeAttend>
+    var teacherAttend: ArrayList<SchoolHomeAttend>
 )
 
 class WeeklyTeacherExpend

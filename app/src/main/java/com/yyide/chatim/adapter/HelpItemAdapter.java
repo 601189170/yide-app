@@ -85,15 +85,15 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 break;
             case 2:
                 holder.setText(R.id.title, (holder.getAdapterPosition() + 1) + "." + itemBean.getName());
-                YDVideo videoView1 = holder.getView(R.id.videoView);
-                videoView = videoView1;
+                videoView = holder.getView(R.id.videoView);
+
                 //音频焦点冲突时是否释放
 //                videoView.setReleaseWhenLossAudio(false);
-                videoView1.setOnFullscreenButtonClick(() -> {
-                    videoView1.startWindowFullscreen(getContext(), false, true);
+                videoView.setOnFullscreenButtonClick(() -> {
+                    videoView.startWindowFullscreen(getContext(), false, true);
                 });
                 //全屏动画
-                videoView1.setShowFullAnimation(true);
+                videoView.setShowFullAnimation(true);
                 //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
                 //增加封面
                 ImageView imageView = new ImageView(holder.itemView.getContext());
@@ -107,7 +107,7 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
 //                        .load(itemBean.getVideo())
 //                        .into(imageView);
 //                videoView1.setThumbImageView(imageView);
-                videoView1.setUp(itemBean.getVideo(), true, "");
+                videoView.setUp(itemBean.getVideo(), true, "");
                 break;
         }
     }
