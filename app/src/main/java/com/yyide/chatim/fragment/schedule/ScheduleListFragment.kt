@@ -109,6 +109,12 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             }
             scheduleListAdapter.setList(list)
         })
+        //重置更新列表时调用，和向上加载，向下加载区分开来
+        scheduleListViewViewModel.updateListViewData.observe(requireActivity()){
+            list.clear()
+            list.addAll(it)
+            scheduleListAdapter.setList(list)
+        }
         //删除监听
         scheduleEditViewModel.deleteResult.observe(requireActivity(), {
             if (it) {
@@ -297,7 +303,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         curTopDateTime = DateTime.now()
         curBottomDateTime = DateTime.now()
         //timeAxisDateTime = DateTime.now().simplifiedDataTime()
-        scheduleListViewViewModel.scheduleDataList(DateTime.now(), timeAxisDateTime)
+        scheduleListViewViewModel.scheduleDataList(DateTime.now(), timeAxisDateTime,false)
     }
 
     private val swipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {

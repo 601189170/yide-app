@@ -26,6 +26,8 @@ import retrofit2.Response
  */
 class ScheduleListViewViewModel : ViewModel() {
     val listViewData:MutableLiveData<List<ScheduleData>> = MutableLiveData()
+    //更新日程列表时
+    val updateListViewData:MutableLiveData<List<ScheduleData>> = MutableLiveData()
     /**
      * 请求列表视图的日程数据 按日分组
      * @param dateTime 需要请求日程列表的时间 月
@@ -62,7 +64,7 @@ class ScheduleListViewViewModel : ViewModel() {
     /**
      * 获取日程列表数据
      */
-    fun scheduleDataList(dateTime: DateTime,timeAxisDateTime:DateTime?){
+    fun scheduleDataList(dateTime: DateTime,timeAxisDateTime:DateTime?,loadMore:Boolean = true){
         val scheduleList = scheduleList(dateTime, timeAxisDateTime)
         val scheduleDataList = mutableListOf<ScheduleData>()
         scheduleList.forEach {
@@ -94,8 +96,14 @@ class ScheduleListViewViewModel : ViewModel() {
                 }
             }
         }
-        listViewData.postValue(scheduleDataList)
+
         loge("日程列表数据=========${JSON.toJSONString(scheduleDataList)}")
+        if (loadMore) {
+            listViewData.postValue(scheduleDataList)
+        } else {
+            updateListViewData.postValue(scheduleDataList)
+        }
+
     }
 
 }
