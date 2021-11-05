@@ -128,6 +128,7 @@ class TeacherAttendanceHomeTeacherFragment : BaseFragment() {
         if (detailList != null && detailList.isNotEmpty()) {
             viewBinding.slidingTabLayout.visibility = View.VISIBLE
             viewBinding.viewpager.visibility = View.VISIBLE
+            viewBinding.viewpager.offscreenPageLimit = detailList.size
             viewBinding.viewpager.adapter = object :
                 FragmentStatePagerAdapter(
                     childFragmentManager,

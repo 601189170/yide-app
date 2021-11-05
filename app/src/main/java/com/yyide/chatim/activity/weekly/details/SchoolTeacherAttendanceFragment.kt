@@ -118,6 +118,7 @@ class SchoolTeacherAttendanceFragment : BaseFragment() {
             mTitles.add(item.name)
         }
         //需要动态数据设置该tab
+        viewBinding.viewpager.offscreenPageLimit = events.size
         viewBinding.viewpager.adapter = object :
             FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {

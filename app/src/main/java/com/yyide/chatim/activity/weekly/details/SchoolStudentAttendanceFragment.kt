@@ -219,6 +219,7 @@ class SchoolStudentAttendanceFragment : BaseFragment() {
         for (item in attendance) {
             mTitles.add(item.name)
         }
+        viewBinding.viewpager.offscreenPageLimit = attendance.size
         //需要动态数据设置该tab
         viewBinding.viewpager.adapter = object :
             FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

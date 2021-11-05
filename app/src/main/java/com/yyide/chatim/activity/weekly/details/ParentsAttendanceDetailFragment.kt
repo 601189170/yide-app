@@ -111,6 +111,7 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
 
     private fun initViewpager(detailList: List<AttendDetail>?) {
         if (detailList != null) {
+            viewBinding.viewpager.offscreenPageLimit = detailList.size
             viewBinding.viewpager.adapter = object :
                 FragmentStatePagerAdapter(
                     childFragmentManager,
