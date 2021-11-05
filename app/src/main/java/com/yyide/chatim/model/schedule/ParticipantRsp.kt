@@ -1,5 +1,7 @@
 package com.yyide.chatim.model.schedule
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * @author liu tao
  * @date 2021/9/28 13:35
@@ -21,7 +23,8 @@ data class ParticipantRsp(
             var userId:String?=null,
             var name: String? = null,
             var realname: String? = null,
-            var status:String? = null,
+            //var status:String? = null,
+            @SerializedName("status")
             var myType:String? = null,
             var type: String? = null,
             var department:Boolean = false,

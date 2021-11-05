@@ -131,7 +131,6 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
             participant.realname = it.realname
             participant.userId = it.userId
             participant.myType = it.status
-            participant.status = it.status
             participantList.add(participant)
         }
         scheduleData.participant = participantList

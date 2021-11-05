@@ -60,8 +60,6 @@ class StaffParticipantViewModel : ViewModel() {
                         it.forEach {
                             it.name = it.realname
                             it.realname = it.realname
-                            it.status = it.status
-                            it.myType = it.status
                         }
                     }
                     responseResult.postValue(data)
@@ -109,8 +107,6 @@ class StaffParticipantViewModel : ViewModel() {
                         participantListBean.userId = it.userId
                         participantListBean.name = it.realname
                         participantListBean.realname = it.realname
-                        participantListBean.status = it.status
-                        participantListBean.myType = it.status
                         //participantListBean.userName = it.realname
                         participantListBean.department = false
                         participantListBean.checked = false
