@@ -265,6 +265,14 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
      * @param date    拆分为 startTime, endTime
      */
     private void queryAttStatsData(String classId, String date) {
+        if (TextUtils.isEmpty(classId) || TextUtils.isEmpty(currentStudentId)) {
+            ToastUtils.showShort("当前账号没有班级，不能查询考勤数据！");
+            if (refresh) {
+                refresh = false;
+                mViewBinding.swipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
         final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         final DateTime dateTime = DateTime.parse(date, dateTimeFormatter);
         String startTime = dateTime.toString("yyyy-MM-dd ") + "00:00:00";
@@ -334,7 +342,7 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
             }
             initEventData();
         } else {
-            ToastUtils.showShort("服务器异常：" + studentAttendanceDayRsp.getCode() + "," + studentAttendanceDayRsp.getMsg());
+            ToastUtils.showShort("温馨提示：" + studentAttendanceDayRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
             data.clear();
             classroomTeacherAttendanceList.clear();

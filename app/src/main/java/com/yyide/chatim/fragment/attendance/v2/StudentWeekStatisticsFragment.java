@@ -254,6 +254,14 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
      */
     private void queryAttStatsData() {
         Log.e(TAG, "请求考勤统计数据: currentClass=" + currentClass + ", currentStudentId=" + currentStudentId + ",startTime=" + startTime + ",endTime=" + endTime);
+        if (TextUtils.isEmpty(currentClass) || TextUtils.isEmpty(currentStudentId)) {
+            ToastUtils.showShort("当前账号没有班级，不能查询考勤数据！");
+            if (refresh) {
+                refresh = false;
+                mViewBinding.swipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
         mvpPresenter.queryAppStudentAttendanceWeekMonth(currentClass, currentStudentId, startTime, endTime);
     }
 
@@ -443,7 +451,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                                 currentClass = dataBean.getClassId();
                                 //学生id
                                 currentStudentId = dataBean.getDeptId();
-                                resetDate();
+                                //resetDate();
                                 queryAttStatsData();
                             });
                         }
@@ -563,7 +571,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 showData(null);
             }
         } else {
-            ToastUtils.showShort("服务器异常：" + attendanceWeekStatsRsp.getCode() + "," + attendanceWeekStatsRsp.getMsg());
+            ToastUtils.showShort("温馨提示：" + attendanceWeekStatsRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
             //showData(null);
             showBlank(true);
@@ -785,7 +793,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     @Override
     public void onRefresh() {
         refresh = true;
-        resetDate();
+        //resetDate();
         queryAttStatsData();
     }
 
@@ -793,7 +801,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
         final DateTime now = DateTime.now();
         if (isWeekStatistics) {
             //val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
-            final DateTime firstDayOfWeek = now.minusDays(now.getDayOfWeek() % 7);
+            final DateTime firstDayOfWeek = now.minusDays(now.getDayOfWeek() % 7 -1);
             final DateTime lastDayOfWeek = firstDayOfWeek.plusDays(6);
             startTime = firstDayOfWeek.toString("yyyy-MM-dd ") + "00:00:00";
             endTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59";

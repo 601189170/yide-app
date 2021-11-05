@@ -255,6 +255,14 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
      */
     private void queryAttStatsData() {
         Log.e(TAG, "请求考勤统计数据: currentClass=" + currentClass + ", currentStudentId=" + currentStudentId + ",startTime=" + startTime + ",endTime=" + endTime);
+        if (TextUtils.isEmpty(currentClass)){
+            ToastUtils.showShort("当前账号没有班级，不能查询考勤数据！");
+            if (refresh) {
+                refresh = false;
+                mViewBinding.swipeRefreshLayout.setRefreshing(false);
+            }
+            return;
+        }
         mvpPresenter.queryAppTeacherThreeAttendanceWeekMonth(currentClass, startTime, endTime);
     }
 
@@ -444,7 +452,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
                                 currentClass = dataBean.getClassId();
                                 //学生id
                                 currentStudentId = dataBean.getDeptId();
-                                resetDate();
+                                //resetDate();
                                 queryAttStatsData();
                             });
                         }
@@ -563,7 +571,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
                 showData(null);
             }
         } else {
-            ToastUtils.showShort("服务器异常：" + attendanceWeekStatsRsp.getCode() + "," + attendanceWeekStatsRsp.getMsg());
+            ToastUtils.showShort("温馨提示：" + attendanceWeekStatsRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
             //showData(null);
             showBlank(true);
@@ -751,7 +759,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
     @Override
     public void onRefresh() {
         refresh = true;
-        resetDate();
+        //resetDate();
         queryAttStatsData();
     }
 
@@ -759,7 +767,8 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
         final DateTime now = DateTime.now();
         if (isWeekStatistics) {
             //val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
-            final DateTime firstDayOfWeek = now.minusDays(now.getDayOfWeek() % 7);
+            //mStartDate.minusDays(mStartDate.getDayOfWeek() % DAYS_OF_WEEK -1);
+            final DateTime firstDayOfWeek = now.minusDays(now.getDayOfWeek() % 7 -1);
             final DateTime lastDayOfWeek = firstDayOfWeek.plusDays(6);
             startTime = firstDayOfWeek.toString("yyyy-MM-dd ") + "00:00:00";
             endTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59";

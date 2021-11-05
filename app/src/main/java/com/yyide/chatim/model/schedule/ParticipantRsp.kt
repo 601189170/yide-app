@@ -21,6 +21,8 @@ data class ParticipantRsp(
             var userId:String?=null,
             var name: String? = null,
             var realname: String? = null,
+            var status:String? = null,
+            var myType:String? = null,
             var type: String? = null,
             var department:Boolean = false,
             var checked:Boolean = false

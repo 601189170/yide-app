@@ -15,7 +15,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
  */
 @Database(
     entities = [ScheduleBean::class, LabelList::class, ParticipantList::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -31,7 +31,7 @@ abstract class AppDatabase : RoomDatabase() {
                     "schedule.db" //数据库名称
                 ).allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
                     .build()
             }
             return instance as AppDatabase
@@ -43,5 +43,12 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE schedule ADD COLUMN promoter varchar(20) DEFAULT NULL")
             }
         }
+
+        val MIGRATION_2_3 = object :Migration(2,3){
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE participant ADD COLUMN status varchar(2) DEFAULT NULL")
+            }
+        }
+
     }
 }

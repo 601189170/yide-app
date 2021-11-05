@@ -72,7 +72,8 @@ data class ParticipantList(
     var scheduleId: String? = null,
     var type: String? = null,
     var realname: String? = null,
-    var scheduleCreatorId: String? = null
+    var scheduleCreatorId: String? = null,
+    var status:String? = null
 ) {
     @Ignore
     constructor() : this(0)
@@ -129,6 +130,8 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
             //学生和教职工取值不一
             participant.realname = it.realname
             participant.userId = it.userId
+            participant.myType = it.status
+            participant.status = it.status
             participantList.add(participant)
         }
         scheduleData.participant = participantList
@@ -183,6 +186,7 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
             //学生和教职工取值不一
             participant.realname = it.realname
             participant.scheduleCreatorId = scheduleId
+            participant.status = it.myType
             participantList.add(participant)
         }
         val labelList = mutableListOf<LabelList>()

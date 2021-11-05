@@ -122,7 +122,7 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                         baseViewHolder.setText(R.id.tv_event_time,date2);
                         baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late_early));
                         break;
-                    case "4":
+                    case "5":
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_ask_for_leave));
                         baseViewHolder.setVisible(R.id.tv_attendance_status,false);
                         baseViewHolder.setVisible(R.id.gp_event_time,true);
