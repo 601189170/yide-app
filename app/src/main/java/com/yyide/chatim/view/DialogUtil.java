@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -69,6 +70,7 @@ import com.yyide.chatim.model.schedule.WeekBean;
 import com.yyide.chatim.utils.ColorUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
+import com.yyide.chatim.utils.MaxTextLengthFilter;
 import com.yyide.chatim.viewmodel.LabelManageViewModel;
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel;
 import com.yyide.chatim.widget.CircleFrameLayout;
@@ -943,7 +945,9 @@ public class DialogUtil {
             scheduleEditViewModel.getStartTimeLiveData().setValue(date.toString("yyyy-MM-dd HH:mm:ss"));
             scheduleEditViewModel.getEndTimeLiveData().setValue(date.toString("yyyy-MM-dd ")+"23:59:59");
         }
-
+        //arrayOf<InputFilter>(MaxTextLengthFilter(100))
+        final InputFilter[] inputFilter = {new MaxTextLengthFilter(100)};
+        editView.setFilters(inputFilter);
         tvDate.setText(time);
         finished.setOnClickListener(v -> {
             if (TextUtils.isEmpty(editView.getText().toString())) {

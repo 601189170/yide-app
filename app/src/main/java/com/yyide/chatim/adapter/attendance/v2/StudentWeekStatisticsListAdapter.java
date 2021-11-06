@@ -106,6 +106,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
                 break;
             case "1":
+            case "6":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_clock_in));
