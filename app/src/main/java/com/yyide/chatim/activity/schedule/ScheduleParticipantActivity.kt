@@ -149,8 +149,8 @@ class ScheduleParticipantActivity : BaseActivity() {
 
         //日程搜索
         scheduleParticipantBinding.clSearch.setOnClickListener {
-            //val intent = Intent(this, ScheduleParticipantSearchActivity::class.java)
-            //participantSearchResultHandler.launch(intent)
+            val intent = Intent(this, ScheduleParticipantSearchActivity::class.java)
+            participantSearchResultHandler.launch(intent)
         }
 
     }

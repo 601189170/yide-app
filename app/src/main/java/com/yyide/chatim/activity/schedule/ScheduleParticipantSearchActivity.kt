@@ -2,21 +2,17 @@ package com.yyide.chatim.activity.schedule
 
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.book.BookSearchActivity
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleParticipantSearchBinding
 import com.yyide.chatim.model.schedule.ParticipantRsp
@@ -55,7 +51,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         }
         staffAdapter.setList(list)
 
-        for (i in 1 until 6){
+        for (i in 1 until 6) {
             val participantListBean = ParticipantRsp.DataBean.ParticipantListBean()
             participantListBean.name = "王小二$i"
             val parentlist = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean.Parents>()
@@ -103,33 +99,61 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         }
 
         scheduleParticipantSearchBinding.tvStaff.setOnClickListener {
-            if (staffOpen){
-                val drawable = resources.getDrawable(R.drawable.schedule_fold_up_icon,null)
-                drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-                scheduleParticipantSearchBinding.tvStaff.setCompoundDrawables(drawable,null,null,null)
+            if (staffOpen) {
+                val drawable =
+                    ContextCompat.getDrawable(this, R.drawable.schedule_fold_up_icon)?.apply {
+                        setBounds(0, 0, minimumWidth, minimumHeight)
+                    }
+                scheduleParticipantSearchBinding.tvStaff.setCompoundDrawables(
+                    drawable,
+                    null,
+                    null,
+                    null
+                )
                 scheduleParticipantSearchBinding.rvStaff.visibility = View.GONE
                 staffOpen = false
                 return@setOnClickListener
             }
-            val drawable = resources.getDrawable(R.drawable.schedule_fold_down_icon,null)
-            drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-            scheduleParticipantSearchBinding.tvStaff.setCompoundDrawables(drawable,null,null,null)
+            val drawable =
+                ContextCompat.getDrawable(this, R.drawable.schedule_fold_down_icon)?.apply {
+                    setBounds(0, 0, minimumWidth, minimumHeight)
+                }
+            scheduleParticipantSearchBinding.tvStaff.setCompoundDrawables(
+                drawable,
+                null,
+                null,
+                null
+            )
             scheduleParticipantSearchBinding.rvStaff.visibility = View.VISIBLE
             staffOpen = true
         }
 
         scheduleParticipantSearchBinding.tvStudent.setOnClickListener {
-            if (studentOpen){
-                val drawable = resources.getDrawable(R.drawable.schedule_fold_up_icon,null)
-                drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-                scheduleParticipantSearchBinding.tvStudent.setCompoundDrawables(drawable,null,null,null)
+            if (studentOpen) {
+                val drawable =
+                    ContextCompat.getDrawable(this, R.drawable.schedule_fold_up_icon)?.apply {
+                        setBounds(0, 0, minimumWidth, minimumHeight)
+                    }
+                scheduleParticipantSearchBinding.tvStudent.setCompoundDrawables(
+                    drawable,
+                    null,
+                    null,
+                    null
+                )
                 scheduleParticipantSearchBinding.rvStudent.visibility = View.GONE
                 studentOpen = false
                 return@setOnClickListener
             }
-            val drawable = resources.getDrawable(R.drawable.schedule_fold_down_icon,null)
-            drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
-            scheduleParticipantSearchBinding.tvStudent.setCompoundDrawables(drawable,null,null,null)
+            val drawable =
+                ContextCompat.getDrawable(this, R.drawable.schedule_fold_down_icon)?.apply {
+                    setBounds(0, 0, minimumWidth, minimumHeight)
+                }
+            scheduleParticipantSearchBinding.tvStudent.setCompoundDrawables(
+                drawable,
+                null,
+                null,
+                null
+            )
             scheduleParticipantSearchBinding.rvStudent.visibility = View.VISIBLE
             studentOpen = true
         }
@@ -139,7 +163,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         scheduleParticipantSearchBinding.rvStaff.adapter = staffAdapter
 
         staffAdapter.setOnItemClickListener { _, _, position ->
-           loge("选择教职工：${list[position].name}")
+            loge("选择教职工：${list[position].name}")
             list[position].checked = !list[position].checked
             staffAdapter.setList(list)
         }
@@ -185,7 +209,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
             item: ParticipantRsp.DataBean.ParticipantListBean.Parents
         ) {
             holder.setText(R.id.tv_name, item.name)
-            holder.setText(R.id.tv_guardian_name,item.status)
+            holder.setText(R.id.tv_guardian_name, item.status)
             holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
             holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
         }
