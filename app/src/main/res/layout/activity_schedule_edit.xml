@@ -366,6 +366,7 @@
                     android:id="@+id/rv_label_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="140dp"
                     android:paddingStart="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_18"
                     android:paddingEnd="@dimen/dp_20"
