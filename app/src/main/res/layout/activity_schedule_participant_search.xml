@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.schedule.ScheduleAddressActivity">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#F7F9FA"
+        app:layout_constraintTop_toBottomOf="@id/top">
+
+        <EditText
+            android:id="@+id/edit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_35"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:background="@drawable/schedule_participant_search_edit_bg_shape"
+            android:gravity="center_vertical"
+            android:hint="搜索参与人"
+            android:imeOptions="actionSearch"
+            android:maxEms="20"
+            android:paddingStart="36dp"
+            android:singleLine="true"
+            android:textColor="#333333"
+            android:textSize="@dimen/text_13"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_12"
+            android:layout_height="@dimen/dp_12"
+            android:layout_marginStart="@dimen/dp_17"
+            android:src="@drawable/schedule_participant_search_icon"
+            app:layout_constraintBottom_toBottomOf="@id/edit"
+            app:layout_constraintLeft_toLeftOf="@id/edit"
+            app:layout_constraintTop_toTopOf="@id/edit" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_search_want_seek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="你可能想找"
+        android:textColor="#ff999999"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_search" />
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="#E4E7ED"
+        app:layout_constraintTop_toBottomOf="@id/tv_search_want_seek" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="144dp"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_staff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:drawableStart="@drawable/schedule_fold_down_icon"
+                android:drawablePadding="@dimen/dp_28"
+                android:text="教职工"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_staff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_20"
+                app:layout_constraintTop_toBottomOf="@id/tv_staff"
+                tools:listitem="@layout/item_participant_list" />
+
+            <View
+                android:id="@+id/v_line1"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#F5F8FC"
+                app:layout_constraintTop_toBottomOf="@id/rv_staff" />
+
+            <TextView
+                android:id="@+id/tv_student"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:drawableStart="@drawable/schedule_fold_down_icon"
+                android:drawablePadding="@dimen/dp_28"
+                android:text="家长"
+                android:textColor="#ff333333"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/v_line1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_student"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_20"
+                app:layout_constraintTop_toBottomOf="@id/tv_student"
+                tools:listitem="@layout/item_participant_search_student_list" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

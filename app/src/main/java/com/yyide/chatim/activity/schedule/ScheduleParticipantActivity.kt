@@ -1,7 +1,10 @@
 package com.yyide.chatim.activity.schedule
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -144,7 +147,23 @@ class ScheduleParticipantActivity : BaseActivity() {
             finish()
         }
 
+        //日程搜索
+        scheduleParticipantBinding.clSearch.setOnClickListener {
+            //val intent = Intent(this, ScheduleParticipantSearchActivity::class.java)
+            //participantSearchResultHandler.launch(intent)
+        }
+
     }
+
+    /**
+     * 参与人搜索结果
+     */
+    private val participantSearchResultHandler =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+
+            }
+        }
 
     override fun getContentViewID(): Int = R.layout.activity_schedule_participant
 }

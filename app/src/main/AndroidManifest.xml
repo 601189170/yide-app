@@ -669,6 +669,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.schedule.ScheduleTimetableClassActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.schedule.ScheduleParticipantSearchActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

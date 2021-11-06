@@ -53,7 +53,7 @@ class ScheduleTodayFragment : Fragment() {
     private lateinit var todayScheduleTodayAdapter: ScheduleTodayAdapter
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
     private var curModifySchedule: ScheduleData? = null
-    private var todayOpen = false
+    private var todayOpen = true
     private var weekOpen = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
