@@ -2,14 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="49dp">
+    android:layout_height="49dp"
+    android:paddingStart="@dimen/dp_20"
+    android:paddingEnd="0dp">
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
         android:theme="@style/CheckBoxTheme"
+        android:clickable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -18,29 +20,21 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_20"
-        android:text="某某某某"
+        android:text="某某某"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:maxEms="15"
+        android:gravity="center_vertical"
         android:textColor="#ff333333"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/checkBox"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/dp_20"/>
 
-    <TextView
-        android:id="@+id/tv_guardian_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_12"
-        android:background="@drawable/participant_parent_of_student_bg_shape"
-        android:paddingStart="@dimen/dp_10"
-        android:paddingTop="@dimen/dp_2"
-        android:paddingEnd="@dimen/dp_10"
-        android:paddingBottom="@dimen/dp_2"
-        android:text="父亲"
-        android:textColor="#ff2c8aff"
-        android:textSize="13sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/tv_name"
-        app:layout_constraintLeft_toRightOf="@id/tv_name"
-        app:layout_constraintTop_toTopOf="@id/tv_name" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E4E7ED"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

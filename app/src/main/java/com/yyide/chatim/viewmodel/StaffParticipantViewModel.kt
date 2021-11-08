@@ -1,12 +1,19 @@
 package com.yyide.chatim.viewmodel
 
+import android.text.TextUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.ToastUtils
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.schedule.ParticipantRsp
+import com.yyide.chatim.model.schedule.SearchParticipantRsp
 import com.yyide.chatim.model.schedule.StudentGuardianRsp
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
+import com.yyide.chatim.utils.loge
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -131,6 +138,55 @@ class StaffParticipantViewModel : ViewModel() {
                 responseResult.postValue(null)
             }
 
+        })
+    }
+
+    //教职工搜索列表
+    val teacherList: MutableLiveData<List<SearchParticipantRsp.DataBean.TeacherListBean>> by lazy {
+        MutableLiveData<List<SearchParticipantRsp.DataBean.TeacherListBean>>()
+    }
+
+    //家长搜索列表
+    val studentList: MutableLiveData<List<SearchParticipantRsp.DataBean.StudentListBean>> by lazy {
+        MutableLiveData<List<SearchParticipantRsp.DataBean.StudentListBean>>()
+    }
+
+    /**
+     * 查询参与人
+     */
+    fun searchParticipant(keyword: String) {
+        val parameterMap = mutableMapOf<String, String>()
+        parameterMap.put("name", keyword)
+        val toJSONString = JSON.toJSONString(parameterMap)
+        val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
+        apiStores.searchParticipant(requestBody).enqueue(object : Callback<SearchParticipantRsp> {
+            override fun onResponse(
+                call: Call<SearchParticipantRsp>,
+                response: Response<SearchParticipantRsp>
+            ) {
+                val body = response.body()
+                loge("查询参与人结果：$body")
+                if (body != null && body.code == 200 && body.data != null) {
+                    //查询参与人成功
+                    body.data?.let {
+                        teacherList.postValue(it.teacherList?: listOf())
+                        studentList.postValue(it.studentList?: listOf())
+                    }
+                    return
+                }
+                teacherList.postValue(null)
+                studentList.postValue(null)
+                if (!TextUtils.isEmpty(body?.msg)) {
+                    ToastUtils.showShort(body?.msg)
+                }
+            }
+
+            override fun onFailure(call: Call<SearchParticipantRsp>, t: Throwable) {
+                loge("查询参与人结果：${t.localizedMessage}")
+                teacherList.postValue(null)
+                studentList.postValue(null)
+                ToastUtils.showShort("查询失败")
+            }
         })
     }
 }

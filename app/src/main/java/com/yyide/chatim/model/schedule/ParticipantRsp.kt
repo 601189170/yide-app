@@ -28,14 +28,7 @@ data class ParticipantRsp(
             var myType:String? = null,
             var type: String? = null,
             var department:Boolean = false,
-            var checked:Boolean = false,
-            var parents:List<Parents>?=null
-        ) {
-            data class Parents(
-                var name: String? = null,
-                var status:String? = null,
-                var checked: Boolean = false
-            )
-        }
+            var checked:Boolean = false
+        )
     }
 }

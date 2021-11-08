@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.schedule
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -161,7 +162,26 @@ class ScheduleParticipantActivity : BaseActivity() {
     private val participantSearchResultHandler =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-
+                val stringExtra = it.data?.getStringExtra("data")
+                loge("参与人搜索结果:$stringExtra")
+                if (!TextUtils.isEmpty(stringExtra)) {
+                    val participantDataList = JSONArray.parseArray(
+                        stringExtra,
+                        ParticipantRsp.DataBean.ParticipantListBean::class.java
+                    )
+                    if (participantDataList != null && participantDataList.isNotEmpty()) {
+                        val curStaffParticipantList =
+                            participantSharedViewModel.curStaffParticipantList.value
+                                ?: mutableListOf()
+                        participantDataList.forEach { data ->
+                            if (curStaffParticipantList.find { it.realname == data.realname } == null) {
+                                curStaffParticipantList.add(data)
+                            }
+                        }
+                        participantSharedViewModel.curStaffParticipantList.value =
+                            curStaffParticipantList
+                    }
+                }
             }
         }
 

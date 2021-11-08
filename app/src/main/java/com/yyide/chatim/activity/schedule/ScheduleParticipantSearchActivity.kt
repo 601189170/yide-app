@@ -6,9 +6,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.CheckBox
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -16,7 +18,10 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleParticipantSearchBinding
 import com.yyide.chatim.model.schedule.ParticipantRsp
+import com.yyide.chatim.model.schedule.SearchParticipantRsp
+import com.yyide.chatim.model.schedule.toParticipantListBean
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.viewmodel.StaffParticipantViewModel
 
 /**
  * @author liu tao
@@ -25,8 +30,10 @@ import com.yyide.chatim.utils.loge
  */
 class ScheduleParticipantSearchActivity : BaseActivity() {
     lateinit var scheduleParticipantSearchBinding: ActivityScheduleParticipantSearchBinding
-    val list = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
-    val list2 = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
+    private val staffParticipantViewModel: StaffParticipantViewModel by viewModels()
+    var teacherList = mutableListOf<SearchParticipantRsp.DataBean.TeacherListBean>()
+    var studentList = mutableListOf<SearchParticipantRsp.DataBean.StudentListBean>()
+
     private var staffOpen = true
     private var studentOpen = true
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,37 +43,38 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         setContentView(scheduleParticipantSearchBinding.root)
         initView()
         initData()
-
     }
 
     private fun initData() {
-        for (i in 1 until 8) {
-            val participantListBean = ParticipantRsp.DataBean.ParticipantListBean()
-            participantListBean.name = "张三(数学组)--$i"
-            participantListBean.realname = "张三(数学组)--$i"
-            participantListBean.id = "$i"
-            participantListBean.userId = "24232$i"
-            participantListBean.checked = false
-            list.add(participantListBean)
+        //教职工列表
+        staffParticipantViewModel.teacherList.observe(this) {
+            if (it == null || it.isEmpty()) {
+                teacherList.clear()
+                staffAdapter.setList(teacherList)
+                scheduleParticipantSearchBinding.gpStaff.visibility = View.GONE
+                return@observe
+            }
+            teacherList.clear()
+            teacherList.addAll(it)
+            staffAdapter.setList(teacherList)
+            scheduleParticipantSearchBinding.gpStaff.visibility = View.VISIBLE
         }
-        staffAdapter.setList(list)
-
-        for (i in 1 until 6) {
-            val participantListBean = ParticipantRsp.DataBean.ParticipantListBean()
-            participantListBean.name = "王小二$i"
-            val parentlist = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean.Parents>()
-            val parents1 = ParticipantRsp.DataBean.ParticipantListBean.Parents()
-            parents1.name = "张洪阳"
-            parents1.status = "父亲"
-            parentlist.add(parents1)
-            val parents2 = ParticipantRsp.DataBean.ParticipantListBean.Parents()
-            parents2.name = "李丽华"
-            parents2.status = "妈妈"
-            parentlist.add(parents2)
-            participantListBean.parents = parentlist
-            list2.add(participantListBean)
+        //家长列表
+        staffParticipantViewModel.studentList.observe(this) {
+            if (it == null || it.isEmpty()) {
+                studentList.clear()
+                scheduleParticipantSearchBinding.gpStudent.visibility = View.GONE
+                scheduleParticipantSearchBinding.vLine1.visibility = View.GONE
+                studentAdapter.setList(studentList)
+                return@observe
+            }
+            studentList.clear()
+            studentList.addAll(it)
+            studentAdapter.setList(studentList)
+            scheduleParticipantSearchBinding.gpStudent.visibility = View.VISIBLE
+            scheduleParticipantSearchBinding.vLine1.visibility =
+                if (teacherList.isEmpty()) View.GONE else View.VISIBLE
         }
-        studentAdapter.setList(list2)
     }
 
     private fun initView() {
@@ -78,6 +86,19 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         scheduleParticipantSearchBinding.top.tvRight.text = "确定"
         scheduleParticipantSearchBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         scheduleParticipantSearchBinding.top.tvRight.setOnClickListener {
+            //选中的参与人列表
+            val participantList = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
+            val participantTeacherList = teacherList.filter { it.checked }.map { it.toParticipantListBean() }
+            participantList.addAll(participantTeacherList)
+
+            studentList.forEach {
+                val participantStudentList = it.guardians.filter{it.checked}.map { it.toParticipantListBean() }
+                participantList.addAll(participantStudentList)
+            }
+            loge("选中的参与人列表：$participantList")
+            val intent = intent
+            intent.putExtra("data",JSON.toJSONString(participantList))
+            setResult(RESULT_OK,intent)
             finish()
         }
 
@@ -94,6 +115,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
                     ToastUtils.showShort("请输入关键词内容")
                 }
                 //搜索参与人
+                staffParticipantViewModel.searchParticipant(keyWord)
             }
             false
         }
@@ -163,9 +185,9 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         scheduleParticipantSearchBinding.rvStaff.adapter = staffAdapter
 
         staffAdapter.setOnItemClickListener { _, _, position ->
-            loge("选择教职工：${list[position].name}")
-            list[position].checked = !list[position].checked
-            staffAdapter.setList(list)
+            loge("选择教职工：${teacherList[position].name}")
+            teacherList[position].checked = !teacherList[position].checked
+            staffAdapter.setList(teacherList)
         }
 
         //初始化学生列表
@@ -177,41 +199,51 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
     override fun getContentViewID(): Int = R.layout.activity_schedule_participant_search
 
     private val staffAdapter = object :
-        BaseQuickAdapter<ParticipantRsp.DataBean.ParticipantListBean, BaseViewHolder>(R.layout.item_participant_list) {
+        BaseQuickAdapter<SearchParticipantRsp.DataBean.TeacherListBean, BaseViewHolder>(R.layout.item_participant_search_list) {
         override fun convert(
             holder: BaseViewHolder,
-            item: ParticipantRsp.DataBean.ParticipantListBean
+            item: SearchParticipantRsp.DataBean.TeacherListBean
         ) {
-            holder.setText(R.id.tv_name, item.name)
+            holder.setText(R.id.tv_name, "${item.name} (${item.departmentName})")
             holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
             holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
         }
     }
 
     private val studentAdapter = object :
-        BaseQuickAdapter<ParticipantRsp.DataBean.ParticipantListBean, BaseViewHolder>(R.layout.item_participant_search_student_list) {
+        BaseQuickAdapter<SearchParticipantRsp.DataBean.StudentListBean, BaseViewHolder>(R.layout.item_participant_search_student_list) {
         override fun convert(
             holder: BaseViewHolder,
-            item: ParticipantRsp.DataBean.ParticipantListBean
+            item: SearchParticipantRsp.DataBean.StudentListBean
         ) {
-            holder.setText(R.id.tv_student_name, item.name)
+            holder.setText(R.id.tv_student_name, "${item.name} (${item.classesName})")
             val recyclerView = holder.getView<RecyclerView>(R.id.rv_parent_of_student)
             recyclerView.layoutManager = LinearLayoutManager(this@ScheduleParticipantSearchActivity)
+            val parentsAdapter = object :
+                BaseQuickAdapter<SearchParticipantRsp.DataBean.StudentListBean.GuardiansBean, BaseViewHolder>(
+                    R.layout.item_participant_parent_of_student_list
+                ) {
+                override fun convert(
+                    holder: BaseViewHolder,
+                    item: SearchParticipantRsp.DataBean.StudentListBean.GuardiansBean
+                ) {
+                    holder.setText(R.id.tv_name, item.guardianName)
+                    holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
+                    holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
+//                    holder.itemView.setOnClickListener {
+//                        item.checked = !item.checked
+//                        holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
+//                    }
+                }
+            }
+            val guardians = item.guardians
             recyclerView.adapter = parentsAdapter
-            parentsAdapter.setList(item.parents)
-        }
-    }
+            parentsAdapter.setList(guardians)
 
-    private val parentsAdapter = object :
-        BaseQuickAdapter<ParticipantRsp.DataBean.ParticipantListBean.Parents, BaseViewHolder>(R.layout.item_participant_parent_of_student_list) {
-        override fun convert(
-            holder: BaseViewHolder,
-            item: ParticipantRsp.DataBean.ParticipantListBean.Parents
-        ) {
-            holder.setText(R.id.tv_name, item.name)
-            holder.setText(R.id.tv_guardian_name, item.status)
-            holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
-            holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
+            parentsAdapter.setOnItemClickListener { _, _, position ->
+                guardians[position].checked = !guardians[position].checked
+                parentsAdapter.setList(guardians)
+            }
         }
     }
 }

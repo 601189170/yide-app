@@ -82,6 +82,7 @@ import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.ScheduleData;
 import com.yyide.chatim.model.schedule.ScheduleDataRsp;
 import com.yyide.chatim.model.schedule.ScheduleListRsp;
+import com.yyide.chatim.model.schedule.SearchParticipantRsp;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
 import com.yyide.chatim.model.schedule.StudentGuardianRsp;
@@ -874,6 +875,15 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/getParticipant")
     Call<StudentGuardianRsp> getParticipant(@Query("id") String id,@Query("type") String type,@Query("scope") String scope);
+
+
+    /**
+     * 搜索参与人
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/searchParticipant
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/schedule/searchParticipant")
+    Call<SearchParticipantRsp> searchParticipant(@Body RequestBody requestBody);
 
     /**
      * 获取【本周和今日】日程
