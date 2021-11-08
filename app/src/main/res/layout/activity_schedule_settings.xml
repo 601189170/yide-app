@@ -178,14 +178,29 @@
             app:layout_constraintTop_toTopOf="@id/iv_homework_release_remind" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/gp_class_schedule"
+        android:id="@+id/gp_class_schedule_homework_release"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="cl_homework_release_remind_type,tv_class_remark,cb_class_remind,v_line2,
-tv_homework_release_remark,cb_homework_release_remind,cl_class_remind_type" />
+        app:constraint_referenced_ids="cl_homework_release_remind_type,
+cb_homework_release_remind,tv_homework_release_remark" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_class_schedule_class_remind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="cb_class_remind,cl_class_remind_type,
+        tv_class_remark,v_line2" />
+
+<!--    <androidx.constraintlayout.widget.Group-->
+<!--        android:id="@+id/gp_class_schedule"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:visibility="visible"-->
+<!--        app:constraint_referenced_ids="cl_homework_release_remind_type,tv_class_remark,cb_class_remind,v_line2,-->
+<!--tv_homework_release_remark,cb_homework_release_remind,cl_class_remind_type" />-->
 
     <View
         android:id="@+id/v_line3"

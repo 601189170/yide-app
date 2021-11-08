@@ -19,6 +19,8 @@
             android:text=""
             android:textColor="#ff606266"
             android:textSize="15sp"
+            android:singleLine="true"
+            android:maxEms="4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

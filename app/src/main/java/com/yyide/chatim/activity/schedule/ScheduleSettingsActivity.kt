@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityScheduleSettingsBinding
@@ -36,9 +37,15 @@ class ScheduleSettingsActivity : BaseActivity() {
         loge("---updateSettings: 更新日程设置---")
         val classScheduleEnable = settingsViewModel.classScheduleEnable.value ?: false
         scheduleSettingsBinding.cbClassSchedule.isChecked = classScheduleEnable
-        scheduleSettingsBinding.gpClassSchedule.visibility =
-            if (classScheduleEnable) View.VISIBLE else View.GONE
-        scheduleSettingsBinding.gpClassSchedule.requestLayout()
+        if (classScheduleEnable){
+            showClassSchedule(true)
+        }else{
+            showClassSchedule(false)
+        }
+        scheduleSettingsBinding.gpClassScheduleClassRemind.requestLayout()
+        scheduleSettingsBinding.gpClassScheduleHomeworkRelease.requestLayout()
+        //scheduleSettingsBinding.gpClassSchedule.visibility = if (classScheduleEnable) View.VISIBLE else View.GONE
+        //scheduleSettingsBinding.gpClassSchedule.requestLayout()
         val schoolCalendarEnable = settingsViewModel.schoolCalendarEnable.value ?: false
         scheduleSettingsBinding.cbSchoolCalendar.isChecked = schoolCalendarEnable
         scheduleSettingsBinding.gpSchoolCalendar.visibility =
@@ -98,12 +105,15 @@ class ScheduleSettingsActivity : BaseActivity() {
                 }
             })
         }
+        showClassSchedule(true)
         scheduleSettingsBinding.cbClassSchedule.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                scheduleSettingsBinding.gpClassSchedule.visibility = View.VISIBLE
+                //scheduleSettingsBinding.gpClassSchedule.visibility = View.VISIBLE
+                showClassSchedule(true)
                 scheduleSettingsBinding.vLine1.visibility = View.VISIBLE
             } else {
-                scheduleSettingsBinding.gpClassSchedule.visibility = View.GONE
+                //scheduleSettingsBinding.gpClassSchedule.visibility = View.GONE
+                showClassSchedule(false)
                 scheduleSettingsBinding.vLine1.visibility = View.INVISIBLE
             }
             scheduleSettingsBinding.cbClassRemind.isChecked = isChecked
@@ -196,6 +206,21 @@ class ScheduleSettingsActivity : BaseActivity() {
             startActivityForResult(intent, REQUEST_CODE_CONFERENCE_REMIND_SELECT)
         }
 
+    }
+
+    private fun showClassSchedule(show: Boolean) {
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            scheduleSettingsBinding.gpClassScheduleClassRemind.visibility =
+                if (show) View.VISIBLE else View.GONE
+            scheduleSettingsBinding.gpClassScheduleHomeworkRelease.visibility =
+                if (show) View.VISIBLE else View.GONE
+            scheduleSettingsBinding.vLine2.visibility = if (show) View.VISIBLE else View.GONE
+        } else {
+            scheduleSettingsBinding.gpClassScheduleClassRemind.visibility =
+                if (show) View.VISIBLE else View.GONE
+            scheduleSettingsBinding.gpClassScheduleHomeworkRelease.visibility = View.GONE
+            scheduleSettingsBinding.vLine2.visibility = if (show) View.INVISIBLE else View.GONE
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
