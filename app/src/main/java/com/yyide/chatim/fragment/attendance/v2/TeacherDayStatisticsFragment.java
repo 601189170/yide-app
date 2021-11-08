@@ -85,16 +85,9 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
 
     private List<TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean> data = new ArrayList<>();
 
-    public TeacherDayStatisticsFragment() {
+    public TeacherDayStatisticsFragment(String theme) {
         // Required empty public constructor
-    }
-
-
-    public static TeacherDayStatisticsFragment newInstance(String param1, String param2) {
-        TeacherDayStatisticsFragment fragment = new TeacherDayStatisticsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        this.historyEvent = theme;
     }
 
     @Override

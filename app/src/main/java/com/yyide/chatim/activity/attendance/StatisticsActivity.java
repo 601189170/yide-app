@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.attendance;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -49,21 +50,23 @@ public class StatisticsActivity extends BaseActivity {
     }
 
     private void initViewPager() {
+        final String theme = getIntent().getStringExtra("theme");
         List<String> listTab = new ArrayList<>();
         listTab.add(getString(R.string.daily_statistics));
         listTab.add(getString(R.string.weekly_statistics));
         listTab.add(getString(R.string.monthly_statistics));
+        // 旧接口方案
 //        fragments.add(new DayStatisticsFragment());
 //        fragments.add(new WeekStatisticsFragment(listTab.get(1)));
 //        fragments.add(new WeekStatisticsFragment(listTab.get(2)));
         if (SpData.getIdentityInfo().staffIdentity()) {
-            fragments.add(new TeacherDayStatisticsFragment());
-            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(1)));
-            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(2)));
+            fragments.add(new TeacherDayStatisticsFragment(theme));
+            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(1), theme));
+            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(2), theme));
         } else {
-            fragments.add(new StudentDayStatisticsFragment());
-            fragments.add(new StudentWeekStatisticsFragment(listTab.get(1)));
-            fragments.add(new StudentWeekStatisticsFragment(listTab.get(2)));
+            fragments.add(new StudentDayStatisticsFragment(theme));
+            fragments.add(new StudentWeekStatisticsFragment(listTab.get(1), theme));
+            fragments.add(new StudentWeekStatisticsFragment(listTab.get(2), theme));
         }
         mViewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewBinding.viewpager.setUserInputEnabled(false);

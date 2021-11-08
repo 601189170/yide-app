@@ -77,16 +77,9 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
 
     private List<StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean> data = new ArrayList<>();
 
-    public StudentDayStatisticsFragment() {
+    public StudentDayStatisticsFragment(String theme) {
         // Required empty public constructor
-    }
-
-
-    public static StudentDayStatisticsFragment newInstance(String param1, String param2) {
-        StudentDayStatisticsFragment fragment = new StudentDayStatisticsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        this.historyEvent = theme;
     }
 
     @Override

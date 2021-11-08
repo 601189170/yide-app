@@ -87,18 +87,10 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     private String startTime;
     private String endTime;
 
-    public StudentWeekStatisticsFragment(String type) {
+    public StudentWeekStatisticsFragment(String type,String theme) {
         // Required empty public constructor
         this.type = type;
-    }
-
-
-    public static StudentWeekStatisticsFragment newInstance(String type) {
-        StudentWeekStatisticsFragment fragment = new StudentWeekStatisticsFragment("");
-        Bundle args = new Bundle();
-        args.putString(ARG_TYPE, type);
-        fragment.setArguments(args);
-        return fragment;
+        this.historyEvent = theme;
     }
 
     @Override
