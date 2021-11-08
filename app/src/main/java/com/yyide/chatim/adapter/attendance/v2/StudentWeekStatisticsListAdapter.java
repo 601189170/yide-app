@@ -111,7 +111,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_clock_in));
                 break;
-            case "4":
+            case "5":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);
                 holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
                 //holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_ask_for_leave));
