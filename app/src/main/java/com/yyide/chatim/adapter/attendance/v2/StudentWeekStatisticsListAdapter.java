@@ -60,8 +60,10 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
         String date = DateUtils.formatTime(weekStatisticsBean.getRequiredTime(), null, "MM.dd");
         if (!TextUtils.isEmpty(weekStatisticsBean.getSortName())) {
             holder.viewBinding.tvName.setText(date + " " + weekStatisticsBean.getSortName());
-        } else {
+        } else if (!TextUtils.isEmpty(weekStatisticsBean.getCourseInfo())) {
             holder.viewBinding.tvName.setText(date + " " + weekStatisticsBean.getCourseInfo());
+        } else {
+            holder.viewBinding.tvName.setText(date + " " + weekStatisticsBean.getEventName());
         }
         final String status = weekStatisticsBean.getAttendanceType();
         //0正常、1缺勤、2迟到/3早退,4请假）
