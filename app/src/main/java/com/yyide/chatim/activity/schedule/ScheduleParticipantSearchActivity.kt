@@ -123,7 +123,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         scheduleParticipantSearchBinding.tvStaff.setOnClickListener {
             if (staffOpen) {
                 val drawable =
-                    ContextCompat.getDrawable(this, R.drawable.schedule_fold_up_icon)?.apply {
+                    ContextCompat.getDrawable(this, R.drawable.schedule_participant_fold_up_icon)?.apply {
                         setBounds(0, 0, minimumWidth, minimumHeight)
                     }
                 scheduleParticipantSearchBinding.tvStaff.setCompoundDrawables(
@@ -137,7 +137,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
                 return@setOnClickListener
             }
             val drawable =
-                ContextCompat.getDrawable(this, R.drawable.schedule_fold_down_icon)?.apply {
+                ContextCompat.getDrawable(this, R.drawable.schedule_participant_fold_down_icon)?.apply {
                     setBounds(0, 0, minimumWidth, minimumHeight)
                 }
             scheduleParticipantSearchBinding.tvStaff.setCompoundDrawables(
@@ -153,7 +153,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         scheduleParticipantSearchBinding.tvStudent.setOnClickListener {
             if (studentOpen) {
                 val drawable =
-                    ContextCompat.getDrawable(this, R.drawable.schedule_fold_up_icon)?.apply {
+                    ContextCompat.getDrawable(this, R.drawable.schedule_participant_fold_up_icon)?.apply {
                         setBounds(0, 0, minimumWidth, minimumHeight)
                     }
                 scheduleParticipantSearchBinding.tvStudent.setCompoundDrawables(
@@ -167,7 +167,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
                 return@setOnClickListener
             }
             val drawable =
-                ContextCompat.getDrawable(this, R.drawable.schedule_fold_down_icon)?.apply {
+                ContextCompat.getDrawable(this, R.drawable.schedule_participant_fold_down_icon)?.apply {
                     setBounds(0, 0, minimumWidth, minimumHeight)
                 }
             scheduleParticipantSearchBinding.tvStudent.setCompoundDrawables(
