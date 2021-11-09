@@ -78,7 +78,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 } else {
                     holder.viewBinding.tvEventTimeTitle.setText(weekStatisticsBean.getClockName());
                 }
-                final String time = DateUtils.formatTime(weekStatisticsBean.getRequiredTime(), null, "HH:mm");
+                final String time = DateUtils.formatTime(weekStatisticsBean.getSignInTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_normal));
                 break;
@@ -90,7 +90,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 } else {
                     holder.viewBinding.tvEventTimeTitle.setText(weekStatisticsBean.getClockName());
                 }
-                final String time1 = DateUtils.formatTime(weekStatisticsBean.getRequiredTime(), null, "HH:mm");
+                final String time1 = DateUtils.formatTime(weekStatisticsBean.getSignInTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time1);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late));
                 break;
@@ -103,7 +103,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 } else {
                     holder.viewBinding.tvEventTimeTitle.setText(weekStatisticsBean.getClockName());
                 }
-                final String time2 = DateUtils.formatTime(weekStatisticsBean.getRequiredTime(), null, "HH:mm");
+                final String time2 = DateUtils.formatTime(weekStatisticsBean.getSignInTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time2);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
                 break;
