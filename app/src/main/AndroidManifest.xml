@@ -568,11 +568,11 @@
         <meta-data
             android:name="com.vivo.push.api_key"
             android:value="b750b6b5cb37b1d289a1aeb8f62a0a20"
-            tools:replace="android:value" />
+             />
         <meta-data
             android:name="com.vivo.push.app_id"
             android:value="105495198"
-            tools:replace="android:value" /> <!-- ********vivo推送设置end******** -->
+            /> <!-- ********vivo推送设置end******** -->
         <!-- ********OPPO 推送 start******** -->
         <service
             android:name="com.heytap.msp.push.service.CompatibleDataMessageCallbackService"

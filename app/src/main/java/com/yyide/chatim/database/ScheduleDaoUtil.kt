@@ -146,6 +146,18 @@ object ScheduleDaoUtil {
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                     listAllSchedule.add(newSchedule)
+                } else if (it.simplifiedDataTime() < DateTime.now().simplifiedDataTime()) {
+                    //计算不是今日的日程(今日之前)，跨天是否在今日显示
+                    logd("---计算不是今日的日程(今日之前)，跨天是否在今日显示--")
+                    loge(
+                        "dataTime=${it}, schedule=[name=${schedule.name}, date=${schedule.startTime} <-> ${schedule.endTime}]"
+                    )
+                    val startTime = toDateTime(schedule.startTime)
+                    val endTime = toDateTime(schedule.endTime)
+                    val now = DateTime.now().simplifiedDataTime()
+                    if (now in startTime..endTime) {
+                        listAllSchedule.add(schedule)
+                    }
                 }
             }
         }
