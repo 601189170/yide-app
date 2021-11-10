@@ -9,6 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
         android:text=""
+        android:singleLine="true"
+        android:maxEms="7"
         android:textColor="#1E1E1E"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
