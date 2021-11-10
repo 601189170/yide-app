@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yanzhenjie.recyclerview.*
+import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
@@ -24,6 +25,9 @@ import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.databinding.FragmentScheduleTodayBinding
 import com.yyide.chatim.model.schedule.*
+import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_CLASS_SCHEDULE
+import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_CONFERENCE
+import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_SCHEDULE
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
@@ -134,7 +138,7 @@ class ScheduleTodayFragment : Fragment() {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         fragmentScheduleTodayBinding.rvWeekUndoList.layoutManager = linearLayoutManager
         thisWeekScheduleTodayAdapter = ScheduleTodayAdapter(weekUndoList)
-        fragmentScheduleTodayBinding.rvWeekUndoList.setSwipeMenuCreator(swipeMenuCreator)
+        fragmentScheduleTodayBinding.rvWeekUndoList.setSwipeMenuCreator(mWeekSwipeMenuCreator)
         fragmentScheduleTodayBinding.rvWeekUndoList.setOnItemMenuClickListener(
             mWeekMenuItemClickListener
         )
@@ -160,7 +164,7 @@ class ScheduleTodayFragment : Fragment() {
         linearLayoutManager2.orientation = LinearLayoutManager.VERTICAL
         fragmentScheduleTodayBinding.rvTodayList.layoutManager = linearLayoutManager2
         todayScheduleTodayAdapter = ScheduleTodayAdapter(todayList)
-        fragmentScheduleTodayBinding.rvTodayList.setSwipeMenuCreator(swipeMenuCreator)
+        fragmentScheduleTodayBinding.rvTodayList.setSwipeMenuCreator(mTodaySwipeMenuCreator)
         fragmentScheduleTodayBinding.rvTodayList.setOnItemMenuClickListener(
             mTodayMenuItemClickListener
         )
@@ -242,30 +246,73 @@ class ScheduleTodayFragment : Fragment() {
         todayScheduleViewModel.getTodayScheduleList()
     }
 
-    private val swipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {
+    val width = DisplayUtils.dip2px(BaseApplication.getInstance(), 63f)
+    val height = ViewGroup.LayoutParams.MATCH_PARENT
+    private val markCompletedMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_blue)
+            //.setImage(R.drawable.ic_action_delete)
+            .setText("标为\n完成")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
+    private val delMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_red)
+            .setText("删除")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
+    private val mTodaySwipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {
         override fun onCreateMenu(
             swipeLeftMenu: SwipeMenu,
             swipeRightMenu: SwipeMenu,
             position: Int
         ) {
-            val width = DisplayUtils.dip2px(context, 63f)
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
-            run {
-                val modifyItem: SwipeMenuItem =
-                    SwipeMenuItem(context).setBackground(R.drawable.selector_blue)
-                        //.setImage(R.drawable.ic_action_delete)
-                        .setText("标为\n完成")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height)
-                swipeRightMenu.addMenuItem(modifyItem) // 添加菜单到右侧。
-                val delItem: SwipeMenuItem =
-                    SwipeMenuItem(context).setBackground(R.drawable.selector_red)
-                        .setText("删除")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height)
-                swipeRightMenu.addMenuItem(delItem) // 添加菜单到右侧。
+            loge("position: $position")
+            val scheduleData = todayList[position]
+            ////日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
+            val type = scheduleData.type
+            val promoterSelf = scheduleData.promoterSelf()
+            if (promoterSelf){
+                run {
+                    when(type.toInt()){
+                        SCHEDULE_TYPE_SCHEDULE->{
+                            swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                        SCHEDULE_TYPE_CONFERENCE->{
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private val mWeekSwipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {
+        override fun onCreateMenu(
+            swipeLeftMenu: SwipeMenu,
+            swipeRightMenu: SwipeMenu,
+            position: Int
+        ) {
+            loge("position: $position")
+            val scheduleData = weekUndoList[position]
+            ////日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
+            val type = scheduleData.type
+            val promoterSelf = scheduleData.promoterSelf()
+            if (promoterSelf){
+                run {
+                    when(type.toInt()){
+                        SCHEDULE_TYPE_SCHEDULE->{
+                            swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                        SCHEDULE_TYPE_CONFERENCE->{
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                    }
+                }
             }
         }
     }
@@ -279,27 +326,31 @@ class ScheduleTodayFragment : Fragment() {
             val direction = menuBridge.direction // 左侧还是右侧菜单。
             val menuPosition = menuBridge.position // 菜单在RecyclerView的Item中的Position。
             if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
-                if (menuPosition == 0) {
-                    loge("修改")
-                    val scheduleData = weekUndoList[position]
-                    if (!scheduleData.promoterSelf()) {
-                        ToastUtils.showShort("此日程不能修改！")
-                        return@OnItemMenuClickListener
+                val scheduleData = weekUndoList[position]
+                val type = scheduleData.type
+                when(type.toInt()){
+                    SCHEDULE_TYPE_SCHEDULE->{
+                        if (menuPosition == 0) {
+                            loge("修改")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.changeScheduleState(scheduleData)
+                            return@OnItemMenuClickListener
+                        }
+                        if (menuPosition == 1) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
                     }
-                    curModifySchedule = scheduleData
-                    scheduleEditViewModel.changeScheduleState(scheduleData)
-                    return@OnItemMenuClickListener
-                }
-                if (menuPosition == 1) {
-                    loge("删除")
-                    val scheduleData = weekUndoList[position]
-                    if (!scheduleData.promoterSelf()) {
-                        ToastUtils.showShort("此日程不能删除！")
-                        return@OnItemMenuClickListener
+                    SCHEDULE_TYPE_CONFERENCE->{
+                        if (menuPosition == 0) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
                     }
-                    curModifySchedule = scheduleData
-                    scheduleEditViewModel.deleteScheduleById(scheduleData.id)
-                    return@OnItemMenuClickListener
                 }
 
             } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
@@ -313,19 +364,31 @@ class ScheduleTodayFragment : Fragment() {
             val direction = menuBridge.direction // 左侧还是右侧菜单。
             val menuPosition = menuBridge.position // 菜单在RecyclerView的Item中的Position。
             if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
-                if (menuPosition == 0) {
-                    loge("修改")
-                    val scheduleData = todayList[position]
-                    curModifySchedule = scheduleData
-                    scheduleEditViewModel.changeScheduleState(scheduleData)
-                    return@OnItemMenuClickListener
-                }
-                if (menuPosition == 1) {
-                    loge("删除")
-                    val scheduleData = todayList[position]
-                    curModifySchedule = scheduleData
-                    scheduleEditViewModel.deleteScheduleById(scheduleData.id)
-                    return@OnItemMenuClickListener
+                val scheduleData = todayList[position]
+                val type = scheduleData.type
+                when(type.toInt()){
+                    SCHEDULE_TYPE_SCHEDULE->{
+                        if (menuPosition == 0) {
+                            loge("修改")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.changeScheduleState(scheduleData)
+                            return@OnItemMenuClickListener
+                        }
+                        if (menuPosition == 1) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
+                    }
+                    SCHEDULE_TYPE_CONFERENCE->{
+                        if (menuPosition == 0) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
+                    }
                 }
 
             } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {

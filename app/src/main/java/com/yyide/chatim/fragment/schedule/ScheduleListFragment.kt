@@ -22,6 +22,7 @@ import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.schedule.CalendarComposeLayout
 import com.yide.calendar.schedule.ScheduleLayout
 import com.yide.calendar.schedule.ScheduleRecyclerView
+import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
 import com.yyide.chatim.adapter.schedule.ScheduleListOuterAdapter
 import com.yyide.chatim.databinding.FragmentScheduleListBinding
@@ -306,31 +307,48 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         scheduleListViewViewModel.scheduleDataList(DateTime.now(), timeAxisDateTime,false)
     }
 
+    val width = DisplayUtils.dip2px(BaseApplication.getInstance(), 63f)
+    val height = ViewGroup.LayoutParams.MATCH_PARENT
+    private val markCompletedMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_blue)
+            //.setImage(R.drawable.ic_action_delete)
+            .setText("标为\n完成")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
+    private val delMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_red)
+            .setText("删除")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
     private val swipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {
         override fun onCreateMenu(
             swipeLeftMenu: SwipeMenu,
             swipeRightMenu: SwipeMenu,
             position: Int
         ) {
-            val width = DisplayUtils.dip2px(context, 63f)
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
             run {
                 if (list.isNotEmpty() && !list[position].isMonthHead) {
-                    val modifyItem: SwipeMenuItem =
-                        SwipeMenuItem(context).setBackground(R.drawable.selector_blue)
-                            //.setImage(R.drawable.ic_action_delete)
-                            .setText("标为\n完成")
-                            .setTextColor(Color.WHITE)
-                            .setWidth(width)
-                            .setHeight(height)
-                    swipeRightMenu.addMenuItem(modifyItem) // 添加菜单到右侧。
-                    val delItem: SwipeMenuItem =
-                        SwipeMenuItem(context).setBackground(R.drawable.selector_red)
-                            .setText("删除")
-                            .setTextColor(Color.WHITE)
-                            .setWidth(width)
-                            .setHeight(height)
-                    swipeRightMenu.addMenuItem(delItem) // 添加菜单到右侧。
+                    val scheduleData = list[position]
+                    ////日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
+                    val type = scheduleData.type
+                    val promoterSelf = scheduleData.promoterSelf()
+                    if (promoterSelf) {
+                        run {
+                            when (type.toInt()) {
+                                Schedule.SCHEDULE_TYPE_SCHEDULE -> {
+                                    swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                                    swipeRightMenu.addMenuItem(delMenuItem)
+                                }
+                                Schedule.SCHEDULE_TYPE_CONFERENCE -> {
+                                    swipeRightMenu.addMenuItem(delMenuItem)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -345,27 +363,31 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             val direction = menuBridge.direction // 左侧还是右侧菜单。
             val menuPosition = menuBridge.position // 菜单在RecyclerView的Item中的Position。
             if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
-                if (menuPosition == 0) {
-                    loge("标记为完成")
-                    val scheduleData = list[position]
-                    if (!scheduleData.promoterSelf()) {
-                        ToastUtils.showShort("此日程不能修改！")
-                        return@OnItemMenuClickListener
+                val scheduleData = list[position]
+                val type = scheduleData.type
+                when(type.toInt()){
+                    Schedule.SCHEDULE_TYPE_SCHEDULE ->{
+                        if (menuPosition == 0) {
+                            loge("修改")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.changeScheduleState(scheduleData)
+                            return@OnItemMenuClickListener
+                        }
+                        if (menuPosition == 1) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
                     }
-                    curModifySchedule = scheduleData
-                    scheduleEditViewModel.changeScheduleState(scheduleData)
-                    return@OnItemMenuClickListener
-                }
-                if (menuPosition == 1) {
-                    loge("删除日程")
-                    val scheduleData = list[position]
-                    if (!scheduleData.promoterSelf()) {
-                        ToastUtils.showShort("此日程不能删除！")
-                        return@OnItemMenuClickListener
+                    Schedule.SCHEDULE_TYPE_CONFERENCE ->{
+                        if (menuPosition == 0) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
                     }
-                    curModifySchedule = scheduleData
-                    scheduleEditViewModel.deleteScheduleById(scheduleData.id)
-                    return@OnItemMenuClickListener
                 }
 
             } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
