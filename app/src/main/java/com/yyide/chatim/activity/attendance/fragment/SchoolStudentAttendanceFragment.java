@@ -35,11 +35,13 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
     private String TAG = SchoolStudentAttendanceFragment.class.getSimpleName();
     private AttendanceRsp.DataBean dataBean;
     private AttendanceRsp.DataBean.AttendanceListBean itemStudents;
+    private AttendanceRsp.DataBean.AttendanceListBean eventItem;
 
-    public static SchoolStudentAttendanceFragment newInstance(AttendanceRsp.DataBean dataBean) {
+    public static SchoolStudentAttendanceFragment newInstance(AttendanceRsp.DataBean dataBean, AttendanceRsp.DataBean.AttendanceListBean eventItem) {
         SchoolStudentAttendanceFragment fragment = new SchoolStudentAttendanceFragment();
         Bundle args = new Bundle();
         args.putSerializable("dataBean", dataBean);
+        args.putSerializable("eventItem", eventItem);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,6 +51,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             dataBean = (AttendanceRsp.DataBean) getArguments().getSerializable("dataBean");
+            eventItem = (AttendanceRsp.DataBean.AttendanceListBean) getArguments().getSerializable("eventItem");
         }
     }
 
@@ -68,11 +71,11 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
         adapter.setOnItemClickListener((adapter, view1, position) ->
         {
             AttendanceRsp.DataBean.AttendanceListBean gradeListBean = (AttendanceRsp.DataBean.AttendanceListBean) adapter.getItem(position);
-            if (itemStudents != null) {
-                gradeListBean.setType(itemStudents.getType());
-                gradeListBean.setAttendanceTimeId(itemStudents.getAttendanceTimeId());
-                gradeListBean.setServerId(itemStudents.getServerId());
-                gradeListBean.setAttendanceSignInOut(itemStudents.getAttendanceSignInOut());
+            if (eventItem != null) {
+                gradeListBean.setType(eventItem.getType());
+                gradeListBean.setAttendanceTimeId(eventItem.getAttendanceTimeId());
+                gradeListBean.setServerId(eventItem.getServerId());
+                gradeListBean.setAttendanceSignInOut(eventItem.getAttendanceSignInOut());
             }
             AttendanceClassStudentActivity.start(getContext(), gradeListBean);
         });
@@ -86,7 +89,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                 itemStudents = dataBean.getStudentCourseFormBean().getBaseInfo();
                 if (itemStudents != null) {
                     mViewBinding.clContent.setVisibility(View.VISIBLE);
-                    mViewBinding.tvEventName.setText(itemStudents.getTheme());
+                    mViewBinding.tvEventName.setText(itemStudents.getEventName());
                     mViewBinding.tvAttendanceRate.setText(itemStudents.getSignInOutRate());
                     if (!TextUtils.isEmpty(itemStudents.getSignInOutRate())) {
                         try {
@@ -99,19 +102,9 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                     mViewBinding.tvAbsenceTitle.setText("1".equals(itemStudents.getAttendanceSignInOut()) ? "未签退" : "缺勤");
                     mViewBinding.tvLateNum.setText(("1".equals(itemStudents.getAttendanceSignInOut()) ? itemStudents.getEarly() : itemStudents.getLate()) + "");
                     mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
-                    mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAttendanceSignInOut() + "");
+                    mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsenteeism() + "");
                     mViewBinding.tvLate.setText("1".equals(itemStudents.getAttendanceSignInOut()) ? "早退" : "迟到");
                     adapter.setList(courseFormBean.getAttendanceAppGradeInfoFormList());
-                }
-            }
-            //获取选中的年级事件
-            List<AttendanceRsp.DataBean.AttendanceListBean> headmasterAttendanceList = dataBean.getHeadmasterAttendanceList();
-            if (headmasterAttendanceList != null) {
-                for (AttendanceRsp.DataBean.AttendanceListBean item : headmasterAttendanceList) {
-                    if (item.getGradeId() == itemStudents.getGradeId()) {
-                        itemStudents = item;
-                        break;
-                    }
                 }
             }
         }

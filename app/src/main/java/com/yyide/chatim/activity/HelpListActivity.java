@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.HelpItemAdapter;
@@ -48,6 +45,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GSYVideoManager.releaseAllVideos();
         initAdapter();
     }
 
@@ -74,6 +72,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
         type = getIntent().getStringExtra("helpType");
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HelpItemAdapter(null);
+        //adapter = new RecyclerNormalAdapter(this, null);
         recyclerview.setAdapter(adapter);
 //        adapter.addFooterView();
         adapter.setEmptyView(R.layout.empty);
@@ -130,14 +129,13 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     public void onResume() {
         super.onResume();
+        GSYVideoManager.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (adapter != null) {
-            adapter.stop();
-        }
+        GSYVideoManager.onPause();
     }
 
     @Override

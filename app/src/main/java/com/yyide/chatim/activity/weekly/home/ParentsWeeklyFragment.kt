@@ -71,6 +71,7 @@ open class ParentsWeeklyFragment : BaseFragment() {
         if (classInfo != null && !TextUtils.isEmpty(classInfo.studentId)) {
             studentId = classInfo.studentId
         }
+        viewBinding.clContent.visibility = View.GONE
         viewModel.parentsLiveData.observe(viewLifecycleOwner) {
             dismiss()
             val result = it.getOrNull()

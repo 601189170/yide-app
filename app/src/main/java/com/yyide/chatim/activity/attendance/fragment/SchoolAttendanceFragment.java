@@ -68,7 +68,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
         if ("2".equals(attendanceRequestBean.getPeopleType())) {
             startFragment(attendanceRequestBean, item);
         } else {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(item)).commit();
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(item, attendanceRequestBean)).commit();
         }
         mViewBinding.tvAttendanceTitle.setText(attendanceRequestBean.getTheme());
         if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
@@ -119,7 +119,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
             } else {
                 baseViewHolder.getView(R.id.select).setVisibility(View.GONE);
             }
-            if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
+            if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAbsoluteAdapterPosition()) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);

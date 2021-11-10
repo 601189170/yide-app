@@ -172,6 +172,7 @@
     <string name="attendance_time_format">%d次</string>
     <string name="month">%d月</string>
     <string name="week">%s - %s</string>
+    <string name="attendance_event_desc"><b><font color="#FFFFFF" size="40px">%s</font><font color='#999999' size="20px">(人)</font></b></string>
 
     <!--//考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
     <string name="attendance_normal">正常</string>

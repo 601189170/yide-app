@@ -4,7 +4,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,20 +19,11 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.databinding.ActivityAttendanceClassStudentBinding;
 import com.yyide.chatim.dialog.AttendancePop;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceRsp;
-import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.presenter.SchoolGradePresenter;
 import com.yyide.chatim.view.SchoolGradeView;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradePresenter> implements SchoolGradeView {
 
@@ -41,6 +31,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     private AttendanceRsp.DataBean.AttendanceListBean gradeBean;
     private String TAG = AttendanceClassStudentActivity.class.getSimpleName();
     private long gradeId;
+    private String type;
 
     @Override
     public int getContentViewID() {
@@ -62,14 +53,21 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         viewBinding.top.backLayout.setOnClickListener(v -> finish());
         viewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         viewBinding.recyclerview.setAdapter(adapter);
-
+        adapter.setEmptyView(R.layout.empty);
         viewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            mvpPresenter.getMyAppList(gradeBean);
+            request();
         });
         viewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         viewBinding.clContent.setVisibility(View.GONE);
         gradeBean = (AttendanceRsp.DataBean.AttendanceListBean) getIntent().getSerializableExtra("gradeBean");
+        request();
+    }
+
+    private void request() {
         if (gradeBean != null) {
+            if (!TextUtils.isEmpty(type)) {
+                gradeBean.setType(type);
+            }
             mvpPresenter.getMyAppList(gradeBean);
         }
     }
@@ -81,6 +79,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
 
     private void setDataView(AttendanceRsp.DataBean dataBean) {
         gradeId = gradeBean.getGradeId();
+        type = gradeBean.getType();
         if (dataBean != null) {
             if (dataBean.getGradeInfoList() != null
                     && dataBean.getGradeInfoList().size() > 0) {
@@ -98,13 +97,46 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
                 attendancePop.setOnSelectListener(position -> {
                     gradeBean = dataBean.getGradeInfoList().get(position);
                     gradeId = gradeBean.getGradeId();
-                    setData(gradeBean);
+                    request();
                 });
             });
             adapter.setList(dataBean.getCourseAttendanceList());
             setData(dataBean.getAttendanceAppNumberForm());
         }
+    }
 
+    private void setData(AttendanceRsp.DataBean.AttendanceListBean item) {
+        if (item != null) {
+            viewBinding.constraintLayout.setVisibility(View.VISIBLE);
+            viewBinding.clContent.setVisibility(View.VISIBLE);
+            viewBinding.tvAttendanceTitle.setText(item.getTheme());
+            if (gradeBean != null) {
+                viewBinding.tvEventName.setText(gradeBean.getGradeName());
+            }
+            viewBinding.tvAttendanceRate.setText(item.getSignInOutRate());
+            if (!TextUtils.isEmpty(item.getSignInOutRate())) {
+                try {
+                    setAnimation(viewBinding.progress, Double.valueOf(item.getSignInOutRate()).intValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            //            viewBinding.tvNumber.setText("(" + gradeListBean.getNumber() + "人)");
+            viewBinding.tvLateNum.setText(item.getLate() + "");
+            viewBinding.tvLeaveNum.setText(item.getLeave() + "");
+            viewBinding.tvAbsenteeismNum.setText(item.getAbsenteeism() + "");
+            viewBinding.tvLeaveTitle.setText("1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");
+            viewBinding.tvSign.setText("1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率");
+            viewBinding.tvAbsenceDesc.setText("1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
+        } else {
+            viewBinding.constraintLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void setAnimation(final ProgressBar view, final int mProgressBar) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
+        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
+        animator.start();
     }
 
     private final BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder> adapterEvent = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.swich_class_item) {
@@ -120,35 +152,6 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
             }
         }
     };
-
-    private void setData(AttendanceRsp.DataBean.AttendanceListBean item) {
-        viewBinding.clContent.setVisibility(View.VISIBLE);
-        viewBinding.tvAttendanceTitle.setText(item.getTheme());
-        viewBinding.tvEventName.setText(item.getTheme() + "(人)");
-        viewBinding.tvAttendanceRate.setText(item.getSignInOutRate());
-        if (!TextUtils.isEmpty(item.getSignInOutRate())) {
-            try {
-                setAnimation(viewBinding.progress, Integer.parseInt(item.getSignInOutRate()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-//            viewBinding.tvNumber.setText("(" + gradeListBean.getNumber() + "人)");
-        viewBinding.tvLateNum.setText(item.getLate() + "");
-        viewBinding.tvLeaveNum.setText(item.getLeave() + "");
-        viewBinding.tvAbsenteeismNum.setText(item.getAbsenteeism() + "");
-        viewBinding.tvLeaveTitle.setText("1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");
-        viewBinding.tvSign.setText("1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率");
-        viewBinding.tvAbsenceDesc.setText("1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
-    }
-
-    private void setAnimation(final ProgressBar view, final int mProgressBar) {
-        ValueAnimator animator = ValueAnimator.ofInt(0, mProgressBar).setDuration(800);
-        animator.addUpdateListener(valueAnimator -> view.setProgress((int) valueAnimator.getAnimatedValue()));
-        animator.start();
-    }
-
 
     private final BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder> adapter = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.item_school) {
         @Override

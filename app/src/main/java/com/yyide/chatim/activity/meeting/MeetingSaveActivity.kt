@@ -23,6 +23,7 @@ import com.yyide.chatim.activity.schedule.ScheduleParticipantActivity
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityMeetingCreateBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.ParticipantRsp
@@ -81,9 +82,27 @@ class MeetingSaveActivity : BaseActivity() {
         initView()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initView() {
         val type = intent.getIntExtra("type", -1)
         viewBinding.top.title.text = getString(R.string.meeting_create_title)
+        val defaultTwoTimeListOfDateTime = ScheduleDaoUtil.defaultTwoTimeListOfDateTime()
+        if (defaultTwoTimeListOfDateTime.size == 2) {
+            val startTime = defaultTwoTimeListOfDateTime[0].toStringTime()
+            val endTime = defaultTwoTimeListOfDateTime[1].toStringTime()
+            viewModel.startTimeLiveData.value = startTime
+            viewModel.endTimeLiveData.value = endTime
+        }
+        viewBinding.tvTime.text =
+            DateUtils.formatTime(
+                viewModel.startTimeLiveData.value,
+                "",
+                "MM月dd日 HH:mm"
+            ) + " - " + DateUtils.formatTime(
+                viewModel.endTimeLiveData.value,
+                "",
+                "MM月dd日 HH:mm"
+            )
         if (type == UPDATE_TYPE) {
             id = intent.getStringExtra("id")
             viewModel.scheduleId.value = id

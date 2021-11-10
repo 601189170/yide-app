@@ -204,6 +204,8 @@ public class SwitchIdentityPop extends PopupWindow {
                 if (bean.code == BaseConstant.REQUEST_SUCCES2) {
                     //存储登录信息
                     SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+                    //更新日程缓存
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""));
                     getUserSchool();
                 } else {
                     ToastUtils.showShort(bean.msg);

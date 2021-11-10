@@ -18,6 +18,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.details.adapter.ParentsAttendanceAdapter
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentParentsChildWeeklyAttendanceBinding
@@ -51,11 +52,10 @@ class ParentsAttendanceChildFragment : BaseFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(detail: AttendDetail, studentName: String, title: String) =
+        fun newInstance(detail: AttendDetail, title: String) =
             ParentsAttendanceChildFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable("item", detail)
-                    putString("studentName", studentName)
                     putString("tabTitle", title)
                 }
             }
@@ -222,6 +222,9 @@ class ParentsAttendanceChildFragment : BaseFragment() {
     ): List<TreeNode<AttendItem>> {
         val nodes: MutableList<TreeNode<AttendItem>> = ArrayList()
         val childs = mutableListOf<TreeNode<AttendItem>>()
+        if(SpData.getClassInfo() != null){
+            studentName = SpData.getClassInfo().studentName
+        }
         val item = AttendItem(studentName, 1, "", "", datas)
         val treeNode: TreeNode<AttendItem> = TreeNode(item, -1)
         if (datas != null) {
