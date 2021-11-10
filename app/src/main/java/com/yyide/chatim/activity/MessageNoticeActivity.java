@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
+import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
 import com.yyide.chatim.adapter.UserNoticeListAdapter;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -121,6 +122,8 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                     //其他消息显示文本详情
                     MessageDetailActivity.start(this, recordsBean);
                 }
+            } else if ("3".equals(recordsBean.getStatus())) {//周报
+                startActivity(new Intent(mActivity, WeeklyHomeActivity.class));
             }
         });
     }

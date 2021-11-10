@@ -19,7 +19,6 @@ import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleAddLabelBinding
-import com.yyide.chatim.databinding.ActivityScheduleLabelManageBinding
 import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DisplayUtils

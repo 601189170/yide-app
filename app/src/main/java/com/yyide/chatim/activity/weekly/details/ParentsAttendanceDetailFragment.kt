@@ -120,7 +120,6 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
                 override fun getItem(position: Int): Fragment {
                     return ParentsAttendanceChildFragment.newInstance(
                         detailList[position],
-                        name,
                         detailList[position].name
                     )
                 }

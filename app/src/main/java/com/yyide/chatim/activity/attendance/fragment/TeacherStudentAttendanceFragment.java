@@ -228,9 +228,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceRsp.DataBean.AttendanceListBean item) {
             baseViewHolder.setText(R.id.className, item.getTheme());
-            if (itemParams != null
-                    && itemParams.getAttendanceTimeId().equals(item.getAttendanceTimeId())
-                    && itemParams.getServerId().equals(item.getServerId())) {
+            if (itemParams != null && itemParams.getServerId().equals(item.getServerId())) {
                 baseViewHolder.getView(R.id.select).setVisibility(View.VISIBLE);
             } else {
                 baseViewHolder.getView(R.id.select).setVisibility(View.GONE);
@@ -251,7 +249,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
             mViewBinding.tvAttendanceTitle.setText(item.getTheme());
             mViewBinding.tvDesc.setText(TextUtils.isEmpty(item.getEventName()) ? item.getTheme() : item.getEventName());
-            mViewBinding.tvAttendanceTime.setText(item.getCourseTime());
+            mViewBinding.tvAttendanceTime.setText(item.getType().equals("1") ? DateUtils.formatTime(item.getEventTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm") : DateUtils.formatTime(item.getCourseTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
 
             mViewBinding.tvSign.setText("1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率");
             mViewBinding.tvLateName.setText("1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");
@@ -317,8 +315,10 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "1"://缺勤
+                        holder.setText(R.id.tv_status, "缺勤");
+                        break;
                     case "6":
-                        holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
+                        holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "未签到");
                         break;
                     case "3"://早退
                         holder.setText(R.id.tv_status, "早退");

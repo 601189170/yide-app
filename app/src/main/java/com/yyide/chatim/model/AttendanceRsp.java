@@ -292,6 +292,7 @@ public class AttendanceRsp implements Serializable {
             private String courseEndTime;
             private String courseStartTime;
             private String clockName;
+            private String attendanceSignInOut;
             /**
              * 签到时间
              */
@@ -305,6 +306,13 @@ public class AttendanceRsp implements Serializable {
              */
             private String leaveEndTime;
 
+            public String getAttendanceSignInOut() {
+                return attendanceSignInOut;
+            }
+
+            public void setAttendanceSignInOut(String attendanceSignInOut) {
+                this.attendanceSignInOut = attendanceSignInOut;
+            }
 
             public String getClockName() {
                 return clockName;
@@ -420,7 +428,7 @@ public class AttendanceRsp implements Serializable {
         private List<AttendanceListBean> headmasterAttendanceList;
         private AttendanceListBean attendanceAppNumberForm;
         private List<AttendanceListBean> gradeInfoList;
-        private List<AttendanceListBean> eventAttendanceList;
+        @SerializedName(value = "courseAttendanceList1", alternate = {"eventAttendanceList", "courseAttendanceList"})
         private List<AttendanceListBean> courseAttendanceList;
         @SerializedName(value = "studentCourseFormBean1", alternate = {"studentEventForm", "studentCourseForm"})
         private StudentCourseFormBean studentCourseFormBean;
@@ -453,14 +461,6 @@ public class AttendanceRsp implements Serializable {
 
         public void setCourseAttendanceList(List<AttendanceListBean> courseAttendanceList) {
             this.courseAttendanceList = courseAttendanceList;
-        }
-
-        public List<AttendanceListBean> getEventAttendanceList() {
-            return eventAttendanceList;
-        }
-
-        public void setEventAttendanceList(List<AttendanceListBean> eventAttendanceList) {
-            this.eventAttendanceList = eventAttendanceList;
         }
 
         public void setTeacherCourseForm(TeacherCourseFormBean teacherCourseForm) {
@@ -502,11 +502,12 @@ public class AttendanceRsp implements Serializable {
         public static class AttendanceListBean implements Serializable {
             private String theme;
             private String eventName;
-            private String attendanceSignInOut;
+            private String attendanceSignInOut;//0 签到 1签退
             private String signInOutRate;
             private String serverId;
             private String peopleType;
             private String type;//	事件类型 1 事件考勤 2 课程考勤
+            private String attendanceType;
             private int normal;
             private int late;
             private int early;
@@ -520,6 +521,23 @@ public class AttendanceRsp implements Serializable {
             private String className;
             private String classId;
             private String courseTime;
+            private String eventTime;
+
+            public String getEventTime() {
+                return eventTime;
+            }
+
+            public void setEventTime(String eventTime) {
+                this.eventTime = eventTime;
+            }
+
+            public String getAttendanceType() {
+                return attendanceType;
+            }
+
+            public void setAttendanceType(String attendanceType) {
+                this.attendanceType = attendanceType;
+            }
 
             public String getClassId() {
                 return classId;

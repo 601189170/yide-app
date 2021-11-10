@@ -221,20 +221,19 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
     private fun convertDataToTreeNode(
         data: ValueChild
     ): List<TreeNode<ValueChild>> {
-        if (data.value == null) {
-            return mutableListOf()
-        }
         val nodes: MutableList<TreeNode<ValueChild>> = ArrayList()
         val childs = mutableListOf<TreeNode<ValueChild>>()
         val item = ValueChild(data.clockName, data.time, data.name, data.type, mutableListOf())
         val treeNode: TreeNode<ValueChild> = TreeNode(item, -1)
-        for (childItem in data.value!!) {
-            childItem.type = data.type
-            val child: TreeNode<ValueChild> = TreeNode(childItem, -1)
-            child.parent = treeNode
-            childs.add(child)
+        if (data.value != null) {
+            for (childItem in data.value!!) {
+                childItem.type = data.type
+                val child: TreeNode<ValueChild> = TreeNode(childItem, -1)
+                child.parent = treeNode
+                childs.add(child)
+            }
+            treeNode.children = childs
         }
-        treeNode.children = childs
         nodes.add(treeNode)
         return nodes
     }

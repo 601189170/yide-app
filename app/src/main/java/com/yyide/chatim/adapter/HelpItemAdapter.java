@@ -1,57 +1,30 @@
 package com.yyide.chatim.adapter;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
 import android.text.Html;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.blankj.utilcode.util.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.HelpItemRep;
-import com.yyide.chatim.view.YDVideo;
+import com.yyide.chatim.view.SampleCoverVideo;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Records.HelpItemBean, BaseViewHolder> implements LoadMoreModule {
-    private YDVideo videoView;
-
-    public void stop() {
-        if (videoView != null) {
-            videoView.onPause();
-        }
-    }
+    public final static String TAG = "RecyclerView2List";
 
     public HelpItemAdapter(List<HelpItemRep.Records.HelpItemBean> data) {
         super(data);
@@ -64,67 +37,78 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
     protected void convert(@NotNull BaseViewHolder holder, HelpItemRep.Records.HelpItemBean itemBean) {
         switch (holder.getItemViewType()) {
             case 1:
-                holder.setText(R.id.title, (holder.getAdapterPosition() + 1) + "." + itemBean.getName())
+                holder.setText(R.id.title, (holder.getAbsoluteAdapterPosition() + 1) + "." + itemBean.getName())
                         .setText(R.id.info, Html.fromHtml(itemBean.getMessage(), Html.FROM_HTML_MODE_COMPACT, source -> {
                             new Thread(() -> {
                                 mDrawable.addLevel(0, 0, getContext().getResources().getDrawable(R.mipmap.ic_launcher_logo));
                                 mDrawable.setBounds(0, 0, 0, 0);
-//                                Bitmap bitmap;
-//                                try {
-//                                    bitmap = BitmapFactory.decodeStream(new URL(source).openStream());
-//                                    Message msg = handler.obtainMessage();
-//                                    msg.what = 1123;
-//                                    msg.obj = bitmap;
-//                                    handler.sendMessage(msg);
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
                             }).start();
                             return mDrawable;
                         }, null));
                 break;
             case 2:
-                holder.setText(R.id.title, (holder.getAdapterPosition() + 1) + "." + itemBean.getName());
-                videoView = holder.getView(R.id.videoView);
+                GSYVideoOptionBuilder gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
+                SampleCoverVideo gsyVideoPlayer = holder.getView(R.id.videoView);
+                holder.setText(R.id.title, (holder.getAbsoluteAdapterPosition() + 1) + "." + itemBean.getName());
+                Map<String, String> header = new HashMap<>();
+                header.put("ee", "33");
+                //防止错位，离开释放
+                //gsyVideoPlayer.initUIState();
+                gsyVideoOptionBuilder
+                        .setIsTouchWiget(false)
+                        //.setThumbImageView(imageView)
+                        .setUrl(itemBean.getVideo())
+                        .setVideoTitle(itemBean.getName())
+                        .setCacheWithPlay(false)
+                        .setRotateViewAuto(true)
+                        .setLockLand(true)
+                        .setPlayTag(TAG)
+                        .setMapHeadData(header)
+                        .setShowFullAnimation(true)
+                        .setNeedLockFull(true)
+                        .setPlayPosition(holder.getAbsoluteAdapterPosition())
+                        .setVideoAllCallBack(new GSYSampleCallBack() {
+                            @Override
+                            public void onPrepared(String url, Object... objects) {
+                                super.onPrepared(url, objects);
+                                if (!gsyVideoPlayer.isIfCurrentIsFullscreen()) {
+                                    //静音
+//                        GSYVideoManager.instance().setNeedMute(true);
+                                }
+                            }
 
-                //音频焦点冲突时是否释放
-//                videoView.setReleaseWhenLossAudio(false);
-                videoView.setOnFullscreenButtonClick(() -> {
-                    videoView.startWindowFullscreen(getContext(), false, true);
-                });
-                //全屏动画
-                videoView.setShowFullAnimation(true);
-                //是否根据视频尺寸，自动选择竖屏全屏或者横屏全屏
-                //增加封面
-                ImageView imageView = new ImageView(holder.itemView.getContext());
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                Glide.with(getContext())
-//                        .setDefaultRequestOptions(
-//                                new RequestOptions()
-//                                        .frame(0)
-//                                        .centerCrop()
-//                        )
-//                        .load(itemBean.getVideo())
-//                        .into(imageView);
-//                videoView1.setThumbImageView(imageView);
-                videoView.setUp(itemBean.getVideo(), true, "");
+                            @Override
+                            public void onQuitFullscreen(String url, Object... objects) {
+                                super.onQuitFullscreen(url, objects);
+                                //全屏不静音
+//                    GSYVideoManager.instance().setNeedMute(true);
+                            }
+
+                            @Override
+                            public void onEnterFullscreen(String url, Object... objects) {
+                                super.onEnterFullscreen(url, objects);
+                                //GSYVideoManager.instance().setNeedMute(false);
+                                gsyVideoPlayer.getCurrentPlayer().getTitleTextView().setText((String) objects[0]);
+                            }
+                        }).build(gsyVideoPlayer);
+
+                //增加title
+                gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
+
+                //设置返回键
+                gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
+                //设置全屏按键功能
+                gsyVideoPlayer.getFullscreenButton().setOnClickListener(v -> resolveFullBtn(gsyVideoPlayer));
                 break;
         }
     }
 
-    private final LevelListDrawable mDrawable = new LevelListDrawable();
+    /**
+     * 全屏幕按键处理
+     */
+    private void resolveFullBtn(final StandardGSYVideoPlayer standardGSYVideoPlayer) {
+        standardGSYVideoPlayer.startWindowFullscreen(getContext(), true, true);
+    }
 
-//    // 注意啦，这么写Handler是会造成内存泄漏的，实际项目中不要这么直接用。
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            if (msg.what == 1123) { // 使用1123仅仅是因为在11月23号写的
-////                Bitmap bitmap = (Bitmap)msg.obj;
-////                BitmapDrawable drawable = new BitmapDrawable(null, bitmap);
-////                mDrawable.addLevel(1, 1, drawable);
-////                mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
-////                mDrawable.setLevel(1);
-//            }
-//        }
-//    };
+    private final LevelListDrawable mDrawable = new LevelListDrawable();
 }

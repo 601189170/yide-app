@@ -49,8 +49,10 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
 //                        tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "1"://缺勤
+                        tvStatus.setText("缺勤");
+                        break;
                     case "6":
-                        tvStatus.setText("未打卡");
+                        holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "未签到");
                         break;
                     case "2"://迟到
                         holder.setText(R.id.tv_student_event, item.getClockName());

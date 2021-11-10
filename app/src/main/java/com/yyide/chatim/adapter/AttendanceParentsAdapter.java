@@ -19,7 +19,7 @@ import com.yyide.chatim.model.AttendanceRsp;
 
 import java.util.ArrayList;
 import java.util.List;
- 
+
 /**
  * Created by Hao on 2017/11/29.
  */
@@ -49,8 +49,8 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
             ImageView img = view.findViewById(R.id.img);
             attendanceName.setText(item.getTheme());
             tv_desc.setText(item.getEventName());
-            if (!TextUtils.isEmpty(item.getType())) {
-                switch (item.getType()) {//（0正常、1缺勤、2迟到/3早退,4无效打卡）
+            if (!TextUtils.isEmpty(item.getAttendanceType())) {
+                switch (item.getAttendanceType()) {//	考勤类型 0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
                     case "0":
                     case "2":
                     case "3":
@@ -61,6 +61,8 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
                         break;
                     case "1":
                     case "4":
+                    case "5":
+                    case "6":
                         tv_attendance_status.setTextColor(Color.parseColor("#919399"));
                         img.setImageResource(R.mipmap.icon_home_attendance_absenteeism);
                         tv_attendance_status.setText("未打卡");
@@ -71,6 +73,7 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
             }
             view.setOnClickListener(v -> {
                 Intent intent = new Intent(container.getContext(), StatisticsActivity.class);
+                intent.putExtra("theme", item.getTheme());
                 container.getContext().startActivity(intent);
             });
         }

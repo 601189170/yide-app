@@ -198,5 +198,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
                 tools:listitem="@layout/item_school" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

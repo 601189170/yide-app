@@ -165,7 +165,7 @@ public class UserMsgNoticeRsp implements Serializable{
             private long userId;
             private long id;
             private long signId;
-            private Object remakeData;
+            private String remakeData;
             private String firstData;
             private long callId;
             private String attributeType;
@@ -213,11 +213,11 @@ public class UserMsgNoticeRsp implements Serializable{
                 this.signId = signId;
             }
 
-            public Object getRemakeData() {
+            public String getRemakeData() {
                 return remakeData;
             }
 
-            public void setRemakeData(Object remakeData) {
+            public void setRemakeData(String remakeData) {
                 this.remakeData = remakeData;
             }
 

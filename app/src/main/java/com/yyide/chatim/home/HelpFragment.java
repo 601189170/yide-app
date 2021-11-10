@@ -1,25 +1,14 @@
 package com.yyide.chatim.home;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.HelpInfoActivity;
@@ -29,17 +18,12 @@ import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.HelpItemRep;
 import com.yyide.chatim.presenter.HelpPresenter;
 import com.yyide.chatim.view.HelpView;
-import com.yyide.chatim.view.YDVideo;
 
-import org.jetbrains.annotations.NotNull;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,7 +42,6 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
     FrameLayout tab2;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
     private View mBaseView;
     private HelpItemAdapter adapter;
 
@@ -92,7 +75,8 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
     }
 
     private void initAdapter() {
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerview.setLayoutManager(linearLayoutManager);
         adapter = new HelpItemAdapter(null);
         recyclerview.setAdapter(adapter);
         adapter.setEmptyView(R.layout.empty);
@@ -102,6 +86,37 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
                 Intent intent = new Intent(mActivity, HelpInfoActivity.class);
                 intent.putExtra("itemBean", itemBean);
                 startActivity(intent);
+            }
+        });
+        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int firstVisibleItem, lastVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals(adapter.TAG)
+                            && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        //是否全屏
+                        if (!GSYVideoManager.isFullState(getActivity())) {
+                            GSYVideoManager.releaseAllVideos();
+                            adapter.notifyItemChanged(position);
+                        }
+                    }
+                }
             }
         });
     }
@@ -119,7 +134,6 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
                 break;
         }
     }
-
 
     @Override
     public void showLoading() {
@@ -139,20 +153,30 @@ public class HelpFragment extends BaseMvpFragment<HelpPresenter> implements Help
         }
     }
 
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        if (adapter != null && hidden) {
-//            adapter.stop();
-//        }
-//    }
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (adapter != null && hidden) {
+            GSYVideoManager.onPause();
+        }
+    }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (adapter != null) {
-            adapter.stop();
-        }
+//        GSYVideoManager.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //GSYVideoManager.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
     }
 
     @Override

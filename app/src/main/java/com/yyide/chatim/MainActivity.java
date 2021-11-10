@@ -476,6 +476,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         Log.i(TAG, "onResume");
         isForeground = true;
         super.onResume();
+        GSYVideoManager.onResume();
         if (mCallModel != null) {
             TRTCAVCallImpl impl = (TRTCAVCallImpl) TRTCAVCallImpl.sharedInstance(BaseApplication.getInstance());
             impl.stopCall();
@@ -489,7 +490,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     info.getInviteID(), info.getInviter(), info.getGroupID(), info.getInviteeList(), info.getData());
             mCallModel = null;
         }
-        GSYVideoManager.onResume();
         handleOfflinePush();
     }
 

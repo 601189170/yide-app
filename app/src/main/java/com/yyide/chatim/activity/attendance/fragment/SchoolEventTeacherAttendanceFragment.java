@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SchoolEventTeacherAttendanceFragment extends BaseFragment implements View.OnClickListener {
     private AttendanceRsp.DataBean itemTeachersBean;
+    private AttendanceRsp.TeacherCourseFormBean teacherCourseForm;
     private String TAG = AttendanceActivity.class.getSimpleName();
     private FragmentSchoolEventTeacherAttendanceBinding mViewBinding;
     private AttendanceRsp.DataBean.AttendanceListBean teachers = new AttendanceRsp.DataBean.AttendanceListBean();
@@ -115,7 +116,6 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
                 }
             }
             mViewBinding.tvLateNum.setText(teachers.getLate() + "");
-
             mViewBinding.tvLateNum.setText(("1".equals(teachers.getAttendanceSignInOut()) ? teachers.getEarly() : teachers.getLate()) + "");
             mViewBinding.tvLateName.setText("1".equals(teachers.getAttendanceSignInOut()) ? "早退" : "迟到");
             mViewBinding.tvLate.setText("1".equals(teachers.getAttendanceSignInOut()) ? "早退" : "迟到");
@@ -125,7 +125,8 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
 
             mViewBinding.tvLeaveNum.setText(teachers.getLeave() + "");
             mViewBinding.tvAbsenteeismNum.setText(teachers.getAbsenteeism() + "");
-            //adapter.setList(teachers.getPeople());
+            teacherCourseForm = itemTeachersBean.getTeacherCourseForm();
+            adapter.setList(teacherCourseForm != null ? teacherCourseForm.getAllRollList() : null);
         }
     }
 
@@ -147,84 +148,84 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
         mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.text_1E1E1E));
         mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.text_1E1E1E));
         mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.text_1E1E1E));
-//        switch (v.getId()) {
-//            case R.id.tv_all:
-//                mViewBinding.tvAll.setChecked(true);
-//                mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
-//                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getPeople() : null);
-//                break;
-//            case R.id.tv_absenteeism:
-//                mViewBinding.tvAbsenteeism.setChecked(true);
-//                mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
-//                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getAbsencePeople() : null);
-//                break;
-//            case R.id.tv_leave:
-//                mViewBinding.tvLeave.setChecked(true);
-//                mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.white));
-//                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getLeavePeople() : null);
-//                break;
-//            case R.id.tv_late:
-//                mViewBinding.tvLate.setChecked(true);
-//                mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
-//                if (itemTeachersBean != null) {
-//                    if ("1".equals(itemTeachersBean.getTeachers().getGoOutStatus())) {
-//                        adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getLeaveEarlyPeople() : null);
-//                    } else {
-//                        adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getLatePeople() : null);
-//                    }
-//                } else {
-//                    adapter.setList(null);
-//                }
-//                break;
-//            case R.id.tv_normal:
-//                mViewBinding.tvNormal.setChecked(true);
-//                mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.white));
-//                adapter.setList(itemTeachersBean.getTeachers() != null ? itemTeachersBean.getTeachers().getApplyPeople() : null);
-//                break;
-//        }
+        switch (v.getId()) {
+            case R.id.tv_all:
+                mViewBinding.tvAll.setChecked(true);
+                mViewBinding.tvAll.setTextColor(getResources().getColor(R.color.white));
+                adapter.setList(teacherCourseForm != null ? teacherCourseForm.getAllRollList() : null);
+                break;
+            case R.id.tv_absenteeism:
+                mViewBinding.tvAbsenteeism.setChecked(true);
+                mViewBinding.tvAbsenteeism.setTextColor(getResources().getColor(R.color.white));
+                adapter.setList(teacherCourseForm != null ? teacherCourseForm.getAbsenteeismList() : null);
+                break;
+            case R.id.tv_leave:
+                mViewBinding.tvLeave.setChecked(true);
+                mViewBinding.tvLeave.setTextColor(getResources().getColor(R.color.white));
+                adapter.setList(teacherCourseForm != null ? teacherCourseForm.getLeaveList() : null);
+                break;
+            case R.id.tv_late:
+                mViewBinding.tvLate.setChecked(true);
+                mViewBinding.tvLate.setTextColor(getResources().getColor(R.color.white));
+                if (itemTeachersBean != null) {
+                    if ("1".equals(teachers.getAttendanceSignInOut())) {
+                        adapter.setList(teacherCourseForm != null ? teacherCourseForm.getEarlyList() : null);
+                    } else {
+                        adapter.setList(teacherCourseForm != null ? teacherCourseForm.getLateList() : null);
+                    }
+                } else {
+                    adapter.setList(null);
+                }
+                break;
+            case R.id.tv_normal:
+                mViewBinding.tvNormal.setChecked(true);
+                mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.white));
+                adapter.setList(teacherCourseForm != null ? teacherCourseForm.getNormalList() : null);
+                break;
+        }
     }
 
-    private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean, BaseViewHolder>(R.layout.item_attendance_school_event_teacher) {
+    private BaseQuickAdapter<AttendanceRsp.TeacherItemBean, BaseViewHolder> adapter = new BaseQuickAdapter<AttendanceRsp.TeacherItemBean, BaseViewHolder>(R.layout.item_attendance_school_event_teacher) {
         @Override
-        protected void convert(@NotNull BaseViewHolder holder, AttendanceCheckRsp.DataBean.AttendancesFormBean.Students.PeopleBean item) {
-            holder.setText(R.id.tv_student_name, item.getName());
+        protected void convert(@NotNull BaseViewHolder holder, AttendanceRsp.TeacherItemBean item) {
 
-            holder.setText(R.id.tv_student_name, !TextUtils.isEmpty(item.getName()) ? item.getName() : "未知姓名");
+            holder.setText(R.id.tv_student_name, !TextUtils.isEmpty(item.getUserName()) ? item.getUserName() : "未知姓名");
             TextView tvTime = holder.getView(R.id.tv_student_time);
             TextView tvStatus = holder.getView(R.id.tv_status);
-            ConstraintLayout constraintLayout = holder.getView(R.id.cl_bg);
-
             holder.setText(R.id.tv_student_time, "");
             holder.setText(R.id.tv_student_event, "");
             holder.setText(R.id.tv_status, "");
-            if (!TextUtils.isEmpty(item.getStatus())) {
-                switch (item.getStatus()) {
+            //考勤类型 0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
+            if (!TextUtils.isEmpty(item.getAttendanceType())) {
+                switch (item.getAttendanceType()) {
                     case "0"://正常
-                        holder.setText(R.id.tv_status, item.getStatusType());
-                        holder.setText(R.id.tv_student_event, item.getDeviceName());
-                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        holder.setText(R.id.tv_status, "正常");
+                        holder.setText(R.id.tv_student_event, item.getClockName());
+                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getSignInTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
+                    case "6":
+                        holder.setText(R.id.tv_status, "1".equals(teachers.getAttendanceSignInOut()) ? "未签退" : "未签到");
+                        break;
                     case "1"://缺勤
-                        holder.setText(R.id.tv_status, "1".equals(teachers.getAttendanceSignInOut()) ? "未签退" : "缺勤");
+                        holder.setText(R.id.tv_status, "缺勤");
                         break;
                     case "3"://早退
-                        holder.setText(R.id.tv_status, item.getStatusType());
-                        holder.setText(R.id.tv_student_event, item.getDeviceName());
-                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        holder.setText(R.id.tv_status, "早退");
+                        holder.setText(R.id.tv_student_event, item.getClockName());
+                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getSignInTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvTime.setTextColor(Color.parseColor("#63DAAB"));
                         break;
                     case "2"://迟到
-//                    holder.setText(R.id.tv_status, item.getStatusType());
-                        holder.setText(R.id.tv_status, "0".equals(teachers.getAttendanceSignInOut()) ? "迟到" : "早退");
-                        holder.setText(R.id.tv_student_event, item.getDeviceName());
-                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        holder.setText(R.id.tv_status, "1".equals(teachers.getAttendanceSignInOut()) ? "迟到" : "早退");
+                        holder.setText(R.id.tv_student_event, item.getClockName());
+                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getSignInTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvTime.setTextColor(Color.parseColor("#F66C6C"));
                         break;
-                    case "4":
-                        holder.setText(R.id.tv_status, item.getStatusType());
-                        String startTime = DateUtils.formatTime(item.getStartDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-                        String endTime = DateUtils.formatTime(item.getEndDate(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                    case "5":
+                        holder.setText(R.id.tv_status, "请假");
+                        String startTime = DateUtils.formatTime(item.getStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                        String endTime = DateUtils.formatTime(item.getEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         holder.setText(R.id.tv_student_event, "请假时间");
                         holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
                         tvTime.setTextColor(Color.parseColor("#F6BD16"));

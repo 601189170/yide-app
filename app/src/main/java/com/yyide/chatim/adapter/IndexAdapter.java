@@ -30,7 +30,7 @@ public class IndexAdapter extends BaseQuickAdapter<Object, BaseViewHolder> {
     protected void convert(@NotNull BaseViewHolder holder, Object item) {
         TextView item1 = holder.getView(R.id.item1);
         TextView item2 = holder.getView(R.id.item2);
-        if (holder.getAdapterPosition() == index) {
+        if (holder.getAbsoluteAdapterPosition() == index) {
             item1.setVisibility(View.GONE);
             item2.setVisibility(View.VISIBLE);
         } else {
