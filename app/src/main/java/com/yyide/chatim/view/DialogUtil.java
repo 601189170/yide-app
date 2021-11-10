@@ -64,6 +64,7 @@ import com.yyide.chatim.model.schedule.MonthBean;
 import com.yyide.chatim.model.schedule.NewLabel;
 import com.yyide.chatim.model.schedule.Remind;
 import com.yyide.chatim.model.schedule.Repetition;
+import com.yyide.chatim.model.schedule.RepetitionDataBean;
 import com.yyide.chatim.model.schedule.Schedule;
 import com.yyide.chatim.model.schedule.ScheduleData;
 import com.yyide.chatim.model.schedule.WeekBean;
@@ -75,6 +76,7 @@ import com.yyide.chatim.viewmodel.LabelManageViewModel;
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel;
 import com.yyide.chatim.widget.CircleFrameLayout;
 import com.yyide.chatim.widget.SpaceItemDecoration;
+import com.yyide.chatim.widget.WheelView;
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
 import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 
@@ -314,28 +316,23 @@ public class DialogUtil {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void showCustomRepetitionScheduleDialog(Context context, ScheduleEditViewModel scheduleEditViewModel) {
-        List<String> list = new ArrayList<>();
-        list.add("每");
-        List<String> list2 = new ArrayList<>();
-        for (int i = 0; i < 31; i++) {
-            list2.add("" + (i + 1));
-        }
-        List<String> list22 = new ArrayList<>();
-        for (int i = 0; i < 72; i++) {
-            list22.add(""+(i+1));
-        }
-        List<String> list23 = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            list23.add(""+(i+1));
-        }
         List<WeekBean> weekList = WeekBean.Companion.getList();
         final List<MonthBean> monthList = MonthBean.Companion.getList();
+        AtomicReference<String> number = new AtomicReference<>();
+        AtomicReference<String> unit = new AtomicReference<>();
         final Repetition repetition = scheduleEditViewModel.getRepetitionLiveData().getValue();
         Log.e(TAG, "showCustomRepetitionScheduleDialog: "+JSON.toJSONString(repetition) );
-        if (repetition != null && repetition.getRule() != null && !repetition.getRule().isEmpty()){
+        unit.set("天");
+        number.set("1");
+        if (repetition != null && repetition.getRule() != null && !repetition.getRule().isEmpty()) {
             final Map<String, Object> repetitionRule = repetition.getRule();
             final String freq = (String) repetitionRule.get("freq");
-            if ("weekly".equals(freq) || "WEEKLY".equals(freq)){
+            final String interval = (String) repetitionRule.get("interval");
+            number.set(interval);
+            if ("daily".equals(freq) || "DAILY".equals(freq)) {
+                unit.set("天");
+            } else if ("weekly".equals(freq) || "WEEKLY".equals(freq)) {
+                unit.set("周");
                 final String byweekday = (String) repetitionRule.get("byweekday");
                 final String[] byweekdayList = byweekday.replace("[", "").replace("]", "").split(",");
                 final List<String> stringList = new ArrayList<>();
@@ -345,9 +342,8 @@ public class DialogUtil {
                 for (WeekBean weekBean : weekList) {
                     weekBean.setChecked(stringList.contains(weekBean.getShortname()));
                 }
-            }
-
-            if ("monthly".equals(freq) || "MONTHLY".equals(freq)){
+            } else if ("monthly".equals(freq) || "MONTHLY".equals(freq)) {
+                unit.set("月");
                 final String bymonthday = (String) repetitionRule.get("bymonthday");
                 final String[] bymonthdayList = bymonthday.replace("[", "").replace("]", "").split(",");
                 final List<String> stringList = new ArrayList<>();
@@ -359,47 +355,61 @@ public class DialogUtil {
                 }
             }
         }
-        List<String> list3 = new ArrayList<>();
-        list3.add("天");
-        list3.add("月");
-        list3.add("周");
-        AtomicReference<String> number = new AtomicReference<>();
-        AtomicReference<String> unit = new AtomicReference<>();
+
         DialogScheduleCustomRepetitionBinding binding = DialogScheduleCustomRepetitionBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
-        ScrollPickerView scrollPickerView = binding.scrollPickerView;
-        scrollPickerView.setLayoutManager(new LinearLayoutManager(context));
-        scrollPickerView.setAdapter(getScrollPickerAdapter(context, list, null));
+        List<String> list = new ArrayList<>();
+        list.add("每");
 
-        ScrollPickerView scrollPickerNumber = binding.scrollPickerNumber;
-        scrollPickerNumber.setLayoutManager(new LinearLayoutManager(context));
-        scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list2, number::set));
-
-        ScrollPickerView scrollPickerUnit = binding.scrollPickerUnit;
-        scrollPickerUnit.setLayoutManager(new LinearLayoutManager(context));
-        final ScrollPickerAdapter scrollPickerUnitAdapter = getScrollPickerAdapter(context, list3, text -> {
-            if (text.equals(unit.get())){
-                return;
+        final List<RepetitionDataBean> repetitionDataBeanList = RepetitionDataBean.Companion.getList();
+        final List<String> listunit = repetitionDataBeanList.stream().map(RepetitionDataBean::getUnit).collect(Collectors.toList());
+        final int unitIndex = RepetitionDataBean.Companion.getUnitIndex(unit.get(), repetitionDataBeanList);
+        binding.eachWv.setData(list);
+        binding.eachWv.setDefault(0);
+        binding.unitWv.setData(listunit);
+        binding.unitWv.setDefault(unitIndex);
+        binding.unitWv.setOnSelectListener(new WheelView.OnSelectListener() {
+            @Override
+            public void endSelect(int id, String text) {
+                unit.set(text);
+                final List<String> numberList = RepetitionDataBean.Companion.getNumberList(text,repetitionDataBeanList);
+                binding.numberWv.setData(numberList);
+                binding.numberWv.setDefault(0);
+                if ("月".equals(text)) {
+                    binding.rvMonthList.setVisibility(View.VISIBLE);
+                    binding.rvWeekList.setVisibility(View.GONE);
+                } else if ("周".equals(text)) {
+                    binding.rvMonthList.setVisibility(View.GONE);
+                    binding.rvWeekList.setVisibility(View.VISIBLE);
+                } else {
+                    binding.rvMonthList.setVisibility(View.GONE);
+                    binding.rvWeekList.setVisibility(View.GONE);
+                }
             }
-            unit.set(text);
-            if ("天".equals(text)){
-                scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list2, number::set));
-                binding.rvWeekList.setVisibility(View.GONE);
-                binding.rvMonthList.setVisibility(View.GONE);
-            }else if("月".equals(text)){
-                scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list23, number::set));
-                binding.rvWeekList.setVisibility(View.GONE);
-                binding.rvMonthList.setVisibility(View.VISIBLE);
-            }else if ("周".equals(text)){
-                scrollPickerNumber.setAdapter(getScrollPickerAdapter(context, list22, number::set));
-                binding.rvWeekList.setVisibility(View.VISIBLE);
-                binding.rvMonthList.setVisibility(View.GONE);
+
+            @Override
+            public void selecting(int id, String text) {
+
             }
         });
-        scrollPickerUnit.setAdapter(scrollPickerUnitAdapter);
 
+        final List<String> numberlist = repetitionDataBeanList.get(unitIndex).getNumber();
+        final int numberIndex = Integer.parseInt(number.get()) -1;
+        binding.numberWv.setData(numberlist);
+        binding.numberWv.setDefault(numberIndex);
+        binding.numberWv.setOnSelectListener(new WheelView.OnSelectListener() {
+            @Override
+            public void endSelect(int id, String text) {
+                number.set(text);
+            }
+
+            @Override
+            public void selecting(int id, String text) {
+
+            }
+        });
 
         binding.rvWeekList.setLayoutManager(new GridLayoutManager(context,3));
         BaseQuickAdapter adapter = new BaseQuickAdapter<WeekBean,BaseViewHolder>(R.layout.item_dialog_week_custom_repetition){
@@ -435,11 +445,22 @@ public class DialogUtil {
         binding.rvMonthList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f),7));
         binding.rvMonthList.setAdapter(quickAdapter);
 
+        if ("月".equals(unit.get())) {
+            binding.rvMonthList.setVisibility(View.VISIBLE);
+            binding.rvWeekList.setVisibility(View.GONE);
+        } else if ("周".equals(unit.get())) {
+            binding.rvMonthList.setVisibility(View.GONE);
+            binding.rvWeekList.setVisibility(View.VISIBLE);
+        } else {
+            binding.rvMonthList.setVisibility(View.GONE);
+            binding.rvWeekList.setVisibility(View.GONE);
+        }
+
         binding.tvCancel.setOnClickListener(v -> {
             mDialog.dismiss();
         });
         binding.tvFinish.setOnClickListener(v -> {
-            Map<String,Object> rule = new HashMap();
+            Map<String,Object> rule = new HashMap<String,Object>();
             final String unitStr = unit.get();
             final String numberStr = number.get();
             if ("天".equals(unitStr)) {

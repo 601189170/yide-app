@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="335dp"
     android:layout_height="623dp"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/schedule_edit_dialog_bg_shape">
 
     <TextView
@@ -25,9 +25,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
         android:text="取消"
-        android:textStyle="bold"
         android:textColor="#ff2c8aff"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_title" />
@@ -38,9 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_20"
         android:text="完成"
-        android:textStyle="bold"
         android:textColor="#ff2c8aff"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_title" />
@@ -63,63 +63,76 @@
         android:paddingEnd="@dimen/dp_10"
         app:layout_constraintTop_toBottomOf="@id/v_line">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.yyide.chatim.widget.WheelView
+            android:id="@+id/each_wv"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:itemNumber="3"
+            app:lineColorWv="#F7F9FA"
+            app:lineHeight="1.5dp"
+            app:maskHeight="48dp"
+            app:noEmpty="true"
+            app:normalTextColor="#333333"
+            app:normalTextSize="16sp"
+            app:selectedTextColor="#2C8AFF"
+            app:selectedTextSize="18sp"
+            app:unitHeight="50dp" />
 
-            <com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
-                android:id="@+id/scroll_picker_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintLeft_toLeftOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.yyide.chatim.widget.WheelView
+            android:id="@+id/number_wv"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:itemNumber="3"
+            app:lineColorWv="#F7F9FA"
+            app:lineHeight="1.5dp"
+            app:maskHeight="48dp"
+            app:noEmpty="true"
+            app:normalTextColor="#333333"
+            app:normalTextSize="16sp"
+            app:selectedTextColor="#2C8AFF"
+            app:selectedTextSize="18sp"
+            app:unitHeight="50dp" />
 
-            <com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
-                android:id="@+id/scroll_picker_number"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.yyide.chatim.widget.WheelView
+            android:id="@+id/unit_wv"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
-                android:id="@+id/scroll_picker_unit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:itemNumber="3"
+            app:lineColorWv="#F7F9FA"
+            app:lineHeight="1.5dp"
+            app:maskHeight="48dp"
+            app:noEmpty="true"
+            app:normalTextColor="#333333"
+            app:normalTextSize="16sp"
+            app:selectedTextColor="#2C8AFF"
+            app:selectedTextSize="18sp"
+            app:unitHeight="50dp" />
 
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_week_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_dialog_week_custom_repetition"
-        tools:itemCount="3"
         android:layout_marginStart="3dp"
         android:layout_marginEnd="3dp"
         android:visibility="gone"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_dialog_week_custom_repetition" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_month_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_dialog_week_custom_repetition"
-        tools:itemCount="7"
         android:layout_marginStart="3dp"
         android:layout_marginEnd="3dp"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:itemCount="7"
+        android:visibility="gone"
+        tools:listitem="@layout/item_dialog_week_custom_repetition" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

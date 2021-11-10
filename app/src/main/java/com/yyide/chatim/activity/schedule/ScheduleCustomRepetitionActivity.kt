@@ -14,23 +14,20 @@ import com.yyide.chatim.database.ScheduleBean
 import com.yyide.chatim.database.jsonToMap
 import com.yyide.chatim.databinding.ActivityScheduleCustomRepetitionBinding
 import com.yyide.chatim.model.schedule.MonthBean
+import com.yyide.chatim.model.schedule.RepetitionDataBean
 import com.yyide.chatim.model.schedule.WeekBean
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.widget.SpaceItemDecoration
+import com.yyide.chatim.widget.WheelView
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter.ScrollPickerAdapterBuilder
 import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.ArrayList
 
 class ScheduleCustomRepetitionActivity : BaseActivity() {
-    val list: MutableList<String> = ArrayList()
-
-    val list2: MutableList<String> = ArrayList()
-    val list22: MutableList<String> = ArrayList()
-    val list23: MutableList<String> = ArrayList()
-    val list3: MutableList<String> = ArrayList()
     var jsonToMap = mutableMapOf<String, Any?>()
     var number = AtomicReference<String>()
     var unit = AtomicReference<String>()
@@ -46,30 +43,24 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
     private fun initData() {
         val stringExtra = intent.getStringExtra("rule")
         jsonToMap = jsonToMap(stringExtra ?: "")
-        loge("jsonToMap ${jsonToMap}")
+        loge("stringExtra ${stringExtra}")
         //{byweekday=[MO, TU, WE, FR], freq=weekly, interval=1}
         //{bymonthday=[1, 2, 3, 4, 5, 6], freq=monthly, interval=1}
-        list.add("每")
-        for (i in 0..30) {
-            list2.add("" + (i + 1))
-        }
-        for (i in 0..71) {
-            list22.add("" + (i + 1))
-        }
-        for (i in 0..11) {
-            list23.add("" + (i + 1))
-        }
-        list3.add("天")
-        list3.add("月")
-        list3.add("周")
     }
 
     private fun initView() {
         val weekList = WeekBean.getList()
         val monthList = MonthBean.getList()
+        val repetitionDataBeanList = RepetitionDataBean.getList()
         val freq = jsonToMap["freq"]
-        val interval = jsonToMap["interval"]?.toString()?:"1"
+        val interval = jsonToMap["interval"]?.toString() ?: "1"
+        number.set(interval)
+        if (freq == "daily" || freq == "DAILY"){
+            unit.set("天")
+        }
+
         if (freq == "weekly" || freq == "WEEKLY") {
+            unit.set("周")
             var byweekday: List<String>
             try {
                 byweekday = JSON.parseArray(jsonToMap["byweekday"]?.toString(), String::class.java)
@@ -87,6 +78,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         }
 
         if (freq == "monthly" || freq == "MONTHLY") {
+            unit.set("月")
             var bymonthday: List<String>
             try {
                 bymonthday =
@@ -116,7 +108,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         scheduleRepetitionBinding.top.tvRight.setOnClickListener {
             val unitStr = unit.get()
             val numberStr = number.get()
-            var rule = mutableMapOf<String, Any>()
+            val rule = mutableMapOf<String, Any>()
             if (unitStr == "天") {
                 //rule = "每${numberStr}天"
                 //rule = "{\"freq\": \"daily\",\"interval\": \"${numberStr}\"}"
@@ -162,39 +154,55 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
             setResult(RESULT_OK, intent)
             finish()
         }
-
-        val scrollPickerView: ScrollPickerView = scheduleRepetitionBinding.scrollPickerView
-        scrollPickerView.layoutManager = LinearLayoutManager(this)
-        scrollPickerView.adapter = getScrollPickerAdapter(list) {}
-
-
-        val scrollPickerNumber: ScrollPickerView = scheduleRepetitionBinding.scrollPickerNumber
-        scrollPickerNumber.layoutManager = LinearLayoutManager(this)
-        scrollPickerNumber.adapter = getScrollPickerAdapter(list2, number::set)
-
-        val scrollPickerUnit: ScrollPickerView = scheduleRepetitionBinding.scrollPickerUnit
-        scrollPickerUnit.layoutManager = LinearLayoutManager(this)
-        val scrollPickerUnitAdapter = getScrollPickerAdapter(list3) {
-
-            if (unit.get() == it) {
-                return@getScrollPickerAdapter
+        val listunit = repetitionDataBeanList.map { it.unit }
+        val list = listOf("每")
+        val unitIndex = RepetitionDataBean.getUnitIndex(unit.toString(), repetitionDataBeanList)
+        scheduleRepetitionBinding.eachWv.setData(list)
+        scheduleRepetitionBinding.eachWv.setDefault(0)
+        scheduleRepetitionBinding.unitWv.setData(listunit)
+        scheduleRepetitionBinding.unitWv.setDefault(unitIndex)
+        scheduleRepetitionBinding.numberWv.setOnSelectListener(object : WheelView.OnSelectListener {
+            override fun endSelect(id: Int, text: String?) {
+                loge("endSelect id=$id,text=$text")
+                number.set(text)
             }
-            unit.set(it)
-            if ("天" == it) {
-                scrollPickerNumber.adapter = getScrollPickerAdapter(list2, number::set)
-                scheduleRepetitionBinding.rvWeekList.setVisibility(View.GONE)
-                scheduleRepetitionBinding.rvMonthList.setVisibility(View.GONE)
-            } else if ("月" == it) {
-                scrollPickerNumber.adapter = getScrollPickerAdapter(list23, number::set)
-                scheduleRepetitionBinding.rvWeekList.setVisibility(View.GONE)
-                scheduleRepetitionBinding.rvMonthList.setVisibility(View.VISIBLE)
-            } else if ("周" == it) {
-                scrollPickerNumber.adapter = getScrollPickerAdapter(list22, number::set)
-                scheduleRepetitionBinding.rvWeekList.setVisibility(View.VISIBLE)
-                scheduleRepetitionBinding.rvMonthList.setVisibility(View.GONE)
+
+            override fun selecting(id: Int, text: String?) {
+                loge("selecting id=$id,text=$text")
             }
-        }
-        scrollPickerUnit.adapter = scrollPickerUnitAdapter
+        })
+        val numberlist = repetitionDataBeanList.get(unitIndex).number
+        scheduleRepetitionBinding.numberWv.setData(numberlist as ArrayList<String>?)
+        val numberIndex = (number.toString().toInt()?:1) -1
+        scheduleRepetitionBinding.numberWv.setDefault(numberIndex)
+        scheduleRepetitionBinding.unitWv.setOnSelectListener(object : WheelView.OnSelectListener {
+            override fun endSelect(id: Int, text: String?) {
+                loge("endSelect id=$id,text=$text")
+                unit.set(text)
+                text?.also {
+                    val numberList = RepetitionDataBean.getNumberList(it, repetitionDataBeanList)
+                    scheduleRepetitionBinding.numberWv.setData(numberList)
+                    scheduleRepetitionBinding.numberWv.setDefault(0)
+
+                    if (it == "月") {
+                        scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
+                        scheduleRepetitionBinding.rvMonthList.visibility = View.VISIBLE
+                    } else if (it == "周") {
+                        scheduleRepetitionBinding.rvWeekList.visibility = View.VISIBLE
+                        scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+                    } else {
+                        scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
+                        scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun selecting(id: Int, text: String?) {
+                loge("selecting id=$id,text=$text")
+            }
+
+        })
+
 
         scheduleRepetitionBinding.rvWeekList.setLayoutManager(GridLayoutManager(this, 3))
         val adapter: BaseQuickAdapter<WeekBean, BaseViewHolder> = object :
@@ -240,24 +248,17 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
             )
         )
         scheduleRepetitionBinding.rvMonthList.setAdapter(quickAdapter)
-    }
-
-    private fun getScrollPickerAdapter(
-        numberList: List<String>,
-        listener: (String) -> Unit
-    ): ScrollPickerAdapter<*> {
-        val builder2 = ScrollPickerAdapterBuilder<String>(this)
-            .setDataList(numberList)
-            .selectedItemOffset(1)
-            .visibleItemNumber(3)
-            .setDivideLineColor("#F2F7FA")
-            .setItemViewProvider(null)
-            .setOnScrolledListener { v: View ->
-                val text = v.tag as String
-                loge("onSelectedItemClicked: $text")
-                listener(text)
-            }
-        return builder2.build()
+        loge("unit:${unit.get()}")
+        if (unit.get() == "月") {
+            scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
+            scheduleRepetitionBinding.rvMonthList.visibility = View.VISIBLE
+        } else if (unit.get() == "周") {
+            scheduleRepetitionBinding.rvWeekList.visibility = View.VISIBLE
+            scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+        } else {
+            scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
+            scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+        }
     }
 
     override fun getContentViewID(): Int = R.layout.activity_schedule_custom_repetition
