@@ -21,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.fragment.attendance.StatisticsListFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentWeekStatisticsBinding;
@@ -54,10 +55,10 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     //当前界面类型 周统计 月统计
     private String type;
     //月
-    private int month;
+    private DateTime month;
     //最小月限制
     private int minMonth;
-    private int currentMonth;
+    private DateTime currentMonth;
     //周
     private int week;
     private int currentWeek;
@@ -82,7 +83,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     private boolean refresh;
     private boolean first = true;
     private String historyEvent;//上一次选择的事件
-    private String beginDate = "2021-01-01 00:00:00";
+    private String beginDate = "2000-01-01 00:00:00";
     //请求数据需要的时间
     private String startTime;
     private String endTime;
@@ -121,7 +122,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     private void setMonth(boolean init) {
         Log.e(TAG, "currentMonth" + currentMonth + "month：" + month);
         if (!init) {
-            if (month > currentMonth || month < 1) {
+            if (month.compareTo(currentMonth) > 0) {
                 Log.e(TAG, "setMonth: 不能查询未来的事件或者超过时间范围的事件");
                 return;
             }
@@ -136,12 +137,11 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
 
             if (currentMonth == month) {
                 mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.INVISIBLE);
-            } else if (month == 1) {
-                mViewBinding.layoutHeadStudentEvent.ivLeft.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.VISIBLE);
             }
-            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(String.format(getActivity().getString(R.string.month), month));
+            final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy-MM");
+            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(time);
         } else if (!identity && eventType) {
             //教师事件考勤
             if (DateUtils.minMonth(beginDate, month)) {
@@ -151,12 +151,11 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             }
             if (currentMonth == month) {
                 mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.INVISIBLE);
-            } else if (month == 1) {
-                mViewBinding.layoutHeadTeacherEvent.ivLeft.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.VISIBLE);
             }
-            mViewBinding.layoutHeadTeacherEvent.tvWeek.setText(String.format(getActivity().getString(R.string.month), month));
+            final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy-MM");
+            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(time);
         } else {
             if (DateUtils.minMonth(beginDate, month)) {
                 mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
@@ -165,17 +164,16 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             }
             if (currentMonth == month) {
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.INVISIBLE);
-            } else if (month == 1) {
-                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.VISIBLE);
             }
-            mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(String.format(getActivity().getString(R.string.month), month));
+            final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy-MM");
+            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(time);
         }
         if (!init) {
-            final DateTime dateTime = DateTime.now().withMonthOfYear(month);
-            startTime = dateTime.dayOfMonth().withMinimumValue().toString("yyyy-MM-dd ") + "00:00:00";
-            endTime = dateTime.dayOfMonth().withMaximumValue().toString("yyyy-MM-dd ") + "23:59:59";
+            //final DateTime dateTime = DateTime.now().withMonthOfYear(month);
+            startTime = month.dayOfMonth().withMinimumValue().toString("yyyy-MM-dd ") + "00:00:00";
+            endTime = month.dayOfMonth().withMaximumValue().toString("yyyy-MM-dd ") + "23:59:59";
             queryAttStatsData();
         }
     }
@@ -325,7 +323,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             Log.e(TAG, "calendar: " + calendar);
             final int i = calendar.get(Calendar.MONTH);
             Log.e(TAG, "月: " + i);
-            month = i + 1;
+            month = DateTime.now();
             currentMonth = month;
             setMonth(false);
         }
@@ -635,7 +633,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                     week--;
                     setWeek(false);
                 } else {
-                    month--;
+                    //month--;
+                    month = month.minusMonths(1);
                     setMonth(false);
                 }
             });
@@ -645,7 +644,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                     week++;
                     setWeek(false);
                 } else {
-                    month++;
+                    //month++;
+                    month = month.plusMonths(1);
                     setMonth(false);
                 }
 
@@ -678,7 +678,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                     week--;
                     setWeek(false);
                 } else {
-                    month--;
+                    //month--;
+                    month = month.minusMonths(1);
                     setMonth(false);
                 }
             });
@@ -688,7 +689,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                     week++;
                     setWeek(false);
                 } else {
-                    month++;
+                    //month++;
+                    month = month.plusMonths(1);
                     setMonth(false);
                 }
 
@@ -726,7 +728,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                     week--;
                     setWeek(false);
                 } else {
-                    month--;
+                    //month--;
+                    month = month.minusMonths(1);
                     setMonth(false);
                 }
             });
@@ -736,7 +739,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                     week++;
                     setWeek(false);
                 } else {
-                    month++;
+                    //month++;
+                    month.plusMonths(1);
                     setMonth(false);
                 }
 

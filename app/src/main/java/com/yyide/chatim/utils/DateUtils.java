@@ -9,8 +9,11 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 
 import net.sf.saxon.functions.Data;
+
+import org.joda.time.DateTime;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -602,6 +605,10 @@ public class DateUtils {
             return false;
         }
         return false;
+    }
+
+    public static boolean minMonth(String beginData, DateTime currentMonth){
+        return ScheduleDaoUtil.INSTANCE.toDateTime(beginData).compareTo(currentMonth) > 0;
     }
 
     /**
