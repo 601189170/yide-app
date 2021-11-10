@@ -960,12 +960,20 @@ public class DialogUtil {
         Dialog mDialog = new Dialog(context, R.style.inputDialog);
         mDialog.setContentView(rootView);
         final ScheduleEditViewModel scheduleEditViewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(ScheduleEditViewModel.class);
-        String time = DateUtils.formatTime(DateUtils.switchTime(new Date()), "", "MM月dd日 HH:mm");
-        if (date != null){
-            time = date.toString("MM月dd日 MM月dd日 HH:mm");
-            scheduleEditViewModel.getStartTimeLiveData().setValue(date.toString("yyyy-MM-dd HH:mm:ss"));
-            scheduleEditViewModel.getEndTimeLiveData().setValue(date.toString("yyyy-MM-dd ")+"23:59:59");
+        //String time = DateUtils.formatTime(DateUtils.switchTime(new Date()), "", "MM月dd日 HH:mm");
+        if (date == null){
+            date = DateTime.now();
+            //time = date.toString("MM月dd日 MM月dd日 HH:mm");
+            //scheduleEditViewModel.getStartTimeLiveData().setValue(date.toString("yyyy-MM-dd HH:mm:ss"));
+            //scheduleEditViewModel.getEndTimeLiveData().setValue(date.toString("yyyy-MM-dd ")+"23:59:59");
+
         }
+        final List<DateTime> dateTimes = ScheduleDaoUtil.INSTANCE.defaultTwoTimeListOfDateTime(date);
+        final DateTime time1 = dateTimes.get(0);
+        final DateTime time2 = dateTimes.get(1);
+        scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1,"yyyy-MM-dd HH:mm:ss"));
+        scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2,"yyyy-MM-dd HH:mm:ss"));
+        String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1,"MM月dd日 HH:mm");
         //arrayOf<InputFilter>(MaxTextLengthFilter(100))
         final InputFilter[] inputFilter = {new MaxTextLengthFilter(100)};
         editView.setFilters(inputFilter);

@@ -85,6 +85,35 @@ object ScheduleDaoUtil {
     }
 
     /**
+     * 获取一个指定时间的默认开始时间和结束时间，
+     * 根据产品需求  处理规则为  取当前时间的 半个小时整数
+     * 比如  15：20  取值  15：30 - 14：00
+     * 15：40 取值  16：00 - 16：30
+     * 23: 40  取值   日期+1  0：00 -  0：30
+     * @return 返回一个开始时间与结束时间相差半小时的日时间段
+     */
+    fun defaultTwoTimeListOfDateTime(dateTime: DateTime = DateTime.now()): List<DateTime> {
+        val interval = 30
+        val maxMinute = 60
+        val minuteOfHour = dateTime.minuteOfHour
+        if (minuteOfHour < interval) {
+            val startTime = dateTime.minusMinutes(minuteOfHour).plusMinutes(interval)
+            val endTime = startTime.plusMinutes(interval)
+            return listOf(
+                startTime.simplifiedDataTimeToMinute(),
+                endTime.simplifiedDataTimeToMinute()
+            )
+        } else {
+            val startTime = dateTime.plusMinutes(maxMinute - minuteOfHour)
+            val endTime = startTime.plusMinutes(interval)
+            return listOf(
+                startTime.simplifiedDataTimeToMinute(),
+                endTime.simplifiedDataTimeToMinute()
+            )
+        }
+    }
+
+    /**
      * 判断当前日程是否当前账户创建的
      */
     fun ScheduleData.promoterSelf(): Boolean{

@@ -8,6 +8,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.compareTo
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityScheduleDateIntervalBinding
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTimeToMinute
@@ -38,9 +39,14 @@ class ScheduleDateIntervalActivity : BaseActivity() {
         var startTime = intent.getStringExtra("startTime")
         var endTime = intent.getStringExtra("endTime")
         if (TextUtils.isEmpty(startTime) || TextUtils.isEmpty(endTime)){
-            val nowDate = DateTime.now()
-            startTime = nowDate.toString("yyyy-MM-dd HH:mm:ss")
-            endTime = nowDate.toString("yyyy-MM-dd ")+"23:59:59"
+            //val nowDate = DateTime.now()
+            //startTime = nowDate.toString("yyyy-MM-dd HH:mm:ss")
+            //endTime = nowDate.toString("yyyy-MM-dd ")+"23:59:59"
+            val defaultTwoTimeListOfDateTime = ScheduleDaoUtil.defaultTwoTimeListOfDateTime()
+            if (defaultTwoTimeListOfDateTime.size == 2) {
+                startTime = defaultTwoTimeListOfDateTime[0].toStringTime()
+                endTime = defaultTwoTimeListOfDateTime[1].toStringTime()
+            }
         }
         binding.clStartTime.setOnClickListener {
             if (binding.llVLine.visibility == View.GONE) {
