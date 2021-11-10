@@ -53,9 +53,14 @@ public class TeacherDayStatisticsListAdapter extends RecyclerView.Adapter<Teache
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean dayStatisticsBean = data.get(position);
         holder.binding.tvEventName.setText(dayStatisticsBean.getEventName());
+        if (dayStatisticsBean.getType() == 2) {
+            final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), DateUtils.formatTime(dayStatisticsBean.getCourseTime(), "", "HH:mm"));
+            holder.binding.tvAttendanceTime.setText(attendanceTime);
+        } else {
+            final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), DateUtils.formatTime(dayStatisticsBean.getRequiredTime(), "", "HH:mm"));
+            holder.binding.tvAttendanceTime.setText(attendanceTime);
+        }
 
-        final String attendanceTime = String.format(context.getString(R.string.attendance_time_text), DateUtils.formatTime(dayStatisticsBean.getCourseTime(),"","HH:mm"));
-        holder.binding.tvAttendanceTime.setText(attendanceTime);
         holder.binding.tvAttendanceRate.setText(dayStatisticsBean.getSignInOutRate());
         holder.binding.tvDueNum.setText(String.valueOf(dayStatisticsBean.getTotalNumber()));
         holder.binding.tvNormalNum.setText(String.valueOf(dayStatisticsBean.getNormal()));
