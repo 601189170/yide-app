@@ -35,7 +35,7 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:textColor="#222222"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
 
             <TextView
                 android:id="@+id/seciton"
@@ -44,7 +44,7 @@
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:textColor="#222222"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
 
             <TextView
                 android:id="@+id/time"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
                 android:textColor="#2C8AFF"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,7 +74,7 @@
                 android:layout_marginStart="@dimen/dp_10"
                 android:text="教具："
                 android:textColor="#333333"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
         </LinearLayout>
 
         <LinearLayout
@@ -96,7 +96,7 @@
                 android:layout_marginStart="@dimen/dp_10"
                 android:text="作业："
                 android:textColor="#333333"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
 
             <TextView
                 android:id="@+id/tv_homework"
@@ -106,7 +106,7 @@
                 android:lines="4"
                 android:ellipsize="end"
                 android:textColor="#333333"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
         </LinearLayout>
 
         <LinearLayout
@@ -133,7 +133,7 @@
                 android:ellipsize="end"
                 android:text="暂无提醒"
                 android:textColor="#999999"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
         </LinearLayout>
 
     </LinearLayout>

@@ -82,7 +82,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="正常"
             android:textColor="#ff909399"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintRight_toLeftOf="@id/vertical_line2"
@@ -117,7 +117,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="缺勤"
             android:textColor="#ff909399"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/vertical_line2"
             app:layout_constraintRight_toLeftOf="@id/vertical_line3" />
@@ -151,7 +151,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="请假"
             android:textColor="#ff909399"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@id/vertical_line3" />
@@ -185,7 +185,7 @@
         <!--            android:layout_marginTop="@dimen/dp_10"-->
         <!--            android:text="迟到"-->
         <!--            android:textColor="#ff909399"-->
-        <!--            android:textSize="14sp"-->
+        <!--            android:textSize="@dimen/text_14"-->
         <!--            app:layout_constraintBottom_toBottomOf="parent"-->
         <!--            app:layout_constraintLeft_toRightOf="@id/vertical_line4"-->
         <!--            app:layout_constraintRight_toRightOf="parent" />-->

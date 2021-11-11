@@ -49,7 +49,7 @@
                             android:layout_marginTop="20dp"
                             android:text="@string/app_commonly_title"
                             android:textColor="#333333"
-                            android:textSize="15sp"
+                            android:textSize="@dimen/text_15"
                             android:textStyle="bold" />
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -114,7 +114,7 @@
                                     android:layout_marginLeft="5dp"
                                     android:text="管理"
                                     android:textColor="#222222"
-                                    android:textSize="14sp" />
+                                    android:textSize="@dimen/text_14" />
                             </LinearLayout>
                         </FrameLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>

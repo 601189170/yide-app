@@ -10,7 +10,7 @@
         android:text="工作"
         android:textStyle="bold"
         android:textColor="#ffffffff"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         android:background="#19ADF8"
         android:paddingTop="@dimen/dp_4"
         android:paddingBottom="@dimen/dp_4"

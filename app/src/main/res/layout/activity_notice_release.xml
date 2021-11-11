@@ -241,7 +241,7 @@
                     android:layout_marginEnd="@dimen/dp_20"
                     android:drawablePadding="@dimen/dp_4"
                     android:textColor="#ff666666"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@id/tv_notice_time"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_notice_time"

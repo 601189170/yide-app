@@ -3,6 +3,8 @@ package com.yyide.chatim.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -60,6 +62,19 @@ public abstract class BaseActivity extends AppCompatActivity {
             //logout(BaseApplication.getInstance());
         }
     };
+
+    /**
+     * 字体不跟随系统变化
+     * @return
+     */
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
 
     public abstract int getContentViewID();
 
@@ -169,7 +184,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         hideLoading();
         loading = null;
         mActivity = null;
-        if(mDisposable != null && !mDisposable.isDisposed()){
+        if (mDisposable != null && !mDisposable.isDisposed()) {
             mDisposable.dispose();
         }
         super.onDestroy();

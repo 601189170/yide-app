@@ -24,7 +24,7 @@
         android:layout_marginEnd="@dimen/dp_10"
         android:text="在短短一周的时间里，你的整体表现在短短一周的时间里，你的整体表现在短短一周的时间里，你的整体表现"
         android:textColor="#ff1e1e1e"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view"
         app:layout_constraintTop_toTopOf="parent" />

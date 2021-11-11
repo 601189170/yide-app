@@ -39,7 +39,7 @@
                     android:layout_marginTop="@dimen/dp_12"
                     android:drawablePadding="@dimen/dp_4"
                     android:textColor="#ff1e1e1e"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     android:textStyle="bold"
                     app:drawableEndCompat="@mipmap/icon_down"
                     app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:text="-"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/text_15"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +153,7 @@
             app:tl_tab_space_equal="false"
             app:tl_textSelectColor="#303133"
             app:tl_textUnselectColor="#909399"
-            app:tl_textsize="16sp" />
+            app:tl_textsize="@dimen/text_16" />
 
         <View
             android:layout_width="match_parent"

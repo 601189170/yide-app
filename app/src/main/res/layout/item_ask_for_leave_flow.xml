@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="#ff333333"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="@dimen/dp_20"
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="#ff999999"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_12"
         app:layout_constraintLeft_toLeftOf="@id/tv_time_start"
         app:layout_constraintTop_toBottomOf="@id/tv_time_start"/>
     <ImageView
@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:text="@string/launch_application"
         android:textColor="#ff333333"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_14"
         app:layout_constraintLeft_toRightOf="@id/iv_user_head"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/dp_20"
@@ -92,7 +92,7 @@
         android:maxEms="10"
         android:singleLine="true"
         android:textColor="#ff999999"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_14"
         app:layout_constraintLeft_toLeftOf="@id/tv_flow_title"
         app:layout_constraintTop_toBottomOf="@id/tv_flow_title"
         />

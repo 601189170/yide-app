@@ -32,7 +32,7 @@
                 android:layout_marginStart="21dp"
                 android:text="头像"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_15" />
 
             <com.yyide.chatim.widget.RadiusImageView
                 android:id="@+id/img"
@@ -76,7 +76,7 @@
                 android:layout_marginLeft="21dp"
                 android:text="手机"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_15" />
 
             <TextView
                 android:id="@+id/phone"
@@ -86,7 +86,7 @@
                 android:layout_marginRight="38dp"
                 android:text="未设置"
                 android:textColor="#666666"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -117,7 +117,7 @@
                 android:layout_marginLeft="21dp"
                 android:text="性别"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_15" />
 
             <TextView
                 android:id="@+id/sex"
@@ -127,7 +127,7 @@
                 android:layout_marginRight="38dp"
                 android:text="未设置"
                 android:textColor="#666666"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -159,7 +159,7 @@
                 android:layout_marginStart="21dp"
                 android:text="生日"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_15" />
 
             <TextView
                 android:id="@+id/date"
@@ -169,7 +169,7 @@
                 android:layout_marginEnd="38dp"
                 android:text="未设置"
                 android:textColor="#666666"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -203,7 +203,7 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:text="邮箱"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_15" />
 
             <TextView
                 android:id="@+id/tv_email"
@@ -213,7 +213,7 @@
                 android:layout_marginEnd="38dp"
                 android:text="未设置"
                 android:textColor="#666666"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -239,7 +239,7 @@
                 android:layout_marginStart="21dp"
                 android:text="人脸采集"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_15" />
 
             <TextView
                 android:id="@+id/face"
@@ -249,7 +249,7 @@
                 android:layout_marginRight="38dp"
                 android:text="未设置"
                 android:textColor="#666666"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -276,7 +276,7 @@
                 android:layout_marginStart="21dp"
                 android:text="家长头像"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="@dimen/text_15" />
 
             <com.yyide.chatim.widget.RadiusImageView
                 android:id="@+id/patriarchImg"

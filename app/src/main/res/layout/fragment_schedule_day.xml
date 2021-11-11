@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="选择标签"
         android:textColor="#ff1e1e1e"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:drawableEnd="@drawable/more_tag_icon"

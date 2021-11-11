@@ -18,7 +18,7 @@
             android:layout_marginTop="20dp"
             android:text="教学工作"
             android:textColor="#333333"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_15"
             android:textStyle="bold" />
 
         <com.yyide.chatim.widget.MyGridView

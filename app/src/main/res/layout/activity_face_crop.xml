@@ -31,7 +31,7 @@
         android:layout_marginStart="@dimen/dp_4"
         android:text="人脸信息用于学校考勤,在校门闸机、宿舍、教室等场所使用"
         android:textColor="#ff999999"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_12"
         app:layout_constraintBottom_toBottomOf="@id/iv_tip_icon"
         app:layout_constraintLeft_toRightOf="@id/iv_tip_icon"
         app:layout_constraintTop_toTopOf="@id/iv_tip_icon" />

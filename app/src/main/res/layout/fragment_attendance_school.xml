@@ -15,6 +15,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
+        android:minHeight="300dp"
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +37,7 @@
                 android:paddingStart="@dimen/dp_10"
                 android:text="@string/home_attendance"
                 android:textColor="#1E232A"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

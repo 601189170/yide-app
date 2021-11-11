@@ -50,7 +50,7 @@
                 android:layout_marginStart="@dimen/dp_8"
                 android:text="全校共布置作业总数600份，平均每天每班"
                 android:textColor="#ff1e1e1e"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_14"
                 app:layout_constraintBottom_toBottomOf="@+id/view"
                 app:layout_constraintStart_toEndOf="@+id/view"
                 app:layout_constraintTop_toTopOf="@+id/view" />

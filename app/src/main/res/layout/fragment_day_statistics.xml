@@ -39,7 +39,7 @@
                         android:layout_marginStart="@dimen/dp_12"
                         android:text="@string/daily_statistic"
                         android:textColor="#ff909399"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         android:layout_marginTop="@dimen/dp_16"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -51,7 +51,7 @@
                         android:layout_marginStart="@dimen/dp_10"
                         android:text="05月"
                         android:textColor="#ff606266"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintBottom_toBottomOf="@id/tv_statistics_title"
                         app:layout_constraintLeft_toRightOf="@id/tv_statistics_title"
                         app:layout_constraintTop_toTopOf="@id/tv_statistics_title" />
@@ -131,7 +131,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/monday"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -140,7 +140,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/tuesday"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -149,7 +149,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/wednesday"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -158,7 +158,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/thursday"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -167,7 +167,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/friday"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -176,7 +176,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/saturday"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -185,7 +185,7 @@
                         android:gravity="center_horizontal"
                         android:text="@string/sunday"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_14" />
                 </LinearLayout>
 
                 <com.beiing.weekcalendar.WeekCalendar

@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.attendance;
 
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -52,7 +53,7 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
                         tvStatus.setText("缺勤");
                         break;
                     case "6":
-                        holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "未签到");
+                        holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "缺勤" : "未签到");
                         break;
                     case "2"://迟到
                         holder.setText(R.id.tv_student_event, item.getClockName());
@@ -62,14 +63,15 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
                     case "3"://早退
 //                        tvStatus.setText(item.getStatusType());
                         holder.setText(R.id.tv_student_event, item.getClockName());
-                        holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getSignInTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
+                        tvTime.setGravity(Gravity.RIGHT);
                         tvTime.setTextColor(Color.parseColor("#63DAAB"));
+                        tvTime.setText(DateUtils.formatTime(item.getSignInTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         break;
                     case "5"://请假
                         //tvStatus.setText(item.getStatusType());
                         String startTime = DateUtils.formatTime(item.getLeaveStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         String endTime = DateUtils.formatTime(item.getLeaveEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-//                        holder.setText(R.id.tv_student_event, "请假时间");
+                        holder.setText(R.id.tv_student_event, "请假时间");
                         tvTime.setText(startTime + "-" + endTime);
                         tvTime.setTextColor(Color.parseColor("#F6BD16"));
                         break;

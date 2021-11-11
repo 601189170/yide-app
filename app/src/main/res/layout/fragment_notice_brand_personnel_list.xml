@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:text="@string/select_all"
             android:textColor="@color/text_333333"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_15"
             android:theme="@style/CheckBoxTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

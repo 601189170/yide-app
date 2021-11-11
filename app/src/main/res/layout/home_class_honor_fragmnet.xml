@@ -38,7 +38,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="班级相册"
                 android:textColor="#1E232A"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:textStyle="bold" />
         </LinearLayout>
 

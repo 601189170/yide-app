@@ -32,7 +32,7 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:textColor="#333333"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_12" />
 
         </FrameLayout>
 

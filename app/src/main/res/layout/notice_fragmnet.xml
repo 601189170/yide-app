@@ -32,7 +32,7 @@
                 android:layout_marginLeft="11dp"
                 android:text="通知公告"
                 android:textColor="@color/white"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:textStyle="bold" />
 
             <TextView
@@ -64,7 +64,7 @@
             android:singleLine="true"
             android:text=""
             android:textColor="#ff232629"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             android:visibility="gone" />
 
         <TextView

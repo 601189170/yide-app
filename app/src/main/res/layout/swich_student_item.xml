@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_212121"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_16" />
 
             <TextView
                 android:id="@+id/name"
@@ -28,7 +28,7 @@
                 android:layout_marginStart="@dimen/dp_15"
                 android:text="班主任"
                 android:textColor="@color/blue11"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 android:visibility="invisible" />
         </LinearLayout>
 

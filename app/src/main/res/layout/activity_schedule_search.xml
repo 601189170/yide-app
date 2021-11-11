@@ -99,7 +99,7 @@
         android:drawablePadding="@dimen/dp_10"
         android:text="2021-09"
         android:textColor="#ff1e1e1e"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         app:drawableEndCompat="@mipmap/icon_down"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_line" />

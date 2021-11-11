@@ -88,7 +88,7 @@
                         android:layout_marginTop="20dp"
                         android:text="我的应用"
                         android:textColor="#333333"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/text_15"
                         android:textStyle="bold" />
 
                     <com.yyide.chatim.widget.MyGridView

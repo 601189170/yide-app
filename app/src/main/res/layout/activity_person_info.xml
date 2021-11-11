@@ -57,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#212121"
-                        android:textSize="15sp" />
+                        android:textSize="@dimen/text_15" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_24"
                             android:textColor="#212121"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -109,7 +109,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textColor="#212121"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -151,7 +151,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#212121"
-                                android:textSize="15sp" />
+                                android:textSize="@dimen/text_15" />
 
                             <TextView
                                 android:id="@+id/set"
@@ -220,7 +220,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="#212121"
-                                    android:textSize="15sp" />
+                                    android:textSize="@dimen/text_15" />
 
                                 <TextView
                                     android:id="@+id/set_master"
@@ -290,7 +290,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="#212121"
-                                    android:textSize="15sp" />
+                                    android:textSize="@dimen/text_15" />
 
                                 <TextView
                                     android:id="@+id/set_vice"
@@ -350,7 +350,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
                     </LinearLayout>
 
                     <View
@@ -388,7 +388,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
                     </LinearLayout>
 
                     <View
@@ -425,7 +425,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
                     </LinearLayout>
 
                     <View
@@ -462,7 +462,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="@dimen/dp_10"
                             android:textColor="#212121"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
                     </LinearLayout>
 
                     <View
@@ -499,7 +499,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textColor="#212121"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

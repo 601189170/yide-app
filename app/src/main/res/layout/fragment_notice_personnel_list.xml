@@ -43,7 +43,7 @@
             android:layout_marginTop="@dimen/dp_15"
             android:text="是否需要确认"
             android:textColor="#ff333333"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,7 +69,7 @@
             android:layout_marginBottom="@dimen/dp_6"
             android:text="@string/select_all"
             android:textColor="@color/text_333333"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_15"
             android:theme="@style/CheckBoxTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView17"

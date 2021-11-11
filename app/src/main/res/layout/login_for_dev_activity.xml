@@ -41,7 +41,7 @@
                     android:layout_marginTop="45dp"
                     android:text="账号"
                     android:textColor="#ff222222"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -96,7 +96,7 @@
                         android:layout_marginTop="15dp"
                         android:text="验证码"
                         android:textColor="#ff222222"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_16"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -148,7 +148,7 @@
                         android:layout_marginTop="15dp"
                         android:text="密码"
                         android:textColor="#ff222222"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_16"
                         android:textStyle="bold" />
 
                     <LinearLayout

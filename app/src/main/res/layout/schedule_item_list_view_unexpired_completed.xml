@@ -11,7 +11,7 @@
         android:layout_marginTop="@dimen/dp_10"
         android:text="20日"
         android:textColor="#ff1e1e1e"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="周五"
         android:textColor="#ff333333"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/tv_title_day"
         app:layout_constraintTop_toBottomOf="@id/tv_title_day" />
@@ -70,7 +70,7 @@
             android:singleLine="true"
             android:text="开学典礼"
             android:textColor="#ff999999"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"
             app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"
@@ -83,7 +83,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="08:00-09:00"
             android:textColor="#ff666666"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             app:layout_constraintLeft_toLeftOf="@id/iv_schedule_type_img"
             app:layout_constraintTop_toBottomOf="@id/iv_schedule_type_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>

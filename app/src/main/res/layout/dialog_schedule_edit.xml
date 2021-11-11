@@ -26,7 +26,7 @@
         android:text="取消"
         android:textStyle="bold"
         android:textColor="#ff2c8aff"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_title" />
@@ -39,7 +39,7 @@
         android:text="完成"
         android:textStyle="bold"
         android:textColor="#ff2c8aff"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_title" />
@@ -59,7 +59,7 @@
             android:text="全天"
             android:textStyle="bold"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:text="09月3号 周五"
                 android:textColor="#ff333333"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/tv_time_start"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:text="00:00"
                 android:textColor="#ff333333"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/tv_date_start"
@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:text="09月3号 周五"
                 android:textColor="#ff333333"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/tv_time_end"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:text="24:00"
                 android:textColor="#ff333333"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/tv_date_end"
@@ -197,7 +197,7 @@
         app:layout="@layout/layout_date_picker_segmentation"
         app:layout_constraintTop_toBottomOf="@id/cl_date"
         app:showLabel="true"
-        app:textSize="16sp"
+        app:textSize="@dimen/text_16"
         android:visibility="gone"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -226,7 +226,7 @@
             android:text="重复"
             android:textStyle="bold"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_repetition"
             app:layout_constraintTop_toTopOf="parent" />
@@ -274,7 +274,7 @@
             android:text="提醒"
             android:textStyle="bold"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_remind"
             app:layout_constraintTop_toTopOf="parent" />

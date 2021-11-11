@@ -32,7 +32,7 @@
                     android:layout_marginTop="12dp"
                     android:text="@string/weekly_desc_name"
                     android:textColor="#ff1e1e1e"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

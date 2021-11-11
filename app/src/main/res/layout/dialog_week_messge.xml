@@ -24,7 +24,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="课堂"
             android:textColor="#ff303133"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_12"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="62%"
             android:textColor="#ff2c8aff"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_12"
             app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintStart_toStartOf="@+id/tv_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />

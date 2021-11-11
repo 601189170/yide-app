@@ -46,7 +46,7 @@
             android:lines="1"
             android:text="打球"
             android:textColor="#ff1e1e1e"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/uv_icon"
             app:layout_constraintEnd_toEndOf="parent"

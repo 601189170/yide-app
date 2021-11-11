@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:textColor="#ff1e1e1e"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_16"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -118,7 +118,7 @@
                     android:layout_marginTop="@dimen/dp_16"
                     android:text="@string/notice_people"
                     android:textColor="#ff333333"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -150,7 +150,7 @@
                     android:layout_marginBottom="@dimen/dp_16"
                     android:text="@string/notice_time"
                     android:textColor="#ff333333"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view_line" />

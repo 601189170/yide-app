@@ -17,7 +17,7 @@
         android:ems="4"
         android:ellipsize="end"
         android:lines="1"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +51,7 @@
         android:layout_marginEnd="@dimen/dp_20"
         android:drawablePadding="6dp"
         android:textColor="#ff1e1e1e"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
