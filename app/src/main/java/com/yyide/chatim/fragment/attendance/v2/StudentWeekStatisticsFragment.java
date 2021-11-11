@@ -135,7 +135,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 mViewBinding.layoutHeadStudentEvent.ivLeft.setVisibility(View.VISIBLE);
             }
 
-            if (currentMonth == month) {
+            if (month.compareTo(currentMonth) >= 0) {
                 mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.VISIBLE);
@@ -149,7 +149,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             } else {
                 mViewBinding.layoutHeadTeacherEvent.ivLeft.setVisibility(View.VISIBLE);
             }
-            if (currentMonth == month) {
+            if (month.compareTo(currentMonth) >= 0) {
                 mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.VISIBLE);
@@ -162,7 +162,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             } else {
                 mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
             }
-            if (currentMonth == month) {
+            if (month.compareTo(currentMonth) >= 0) {
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.VISIBLE);
