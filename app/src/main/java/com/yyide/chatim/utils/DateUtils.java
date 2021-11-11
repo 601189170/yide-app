@@ -607,10 +607,13 @@ public class DateUtils {
         return false;
     }
 
-    public static boolean minMonth(String beginData, DateTime currentMonth){
-        return ScheduleDaoUtil.INSTANCE.toDateTime(beginData).compareTo(currentMonth) > 0;
+    public static boolean minMonth(String beginDate, DateTime currentMonth){
+        return ScheduleDaoUtil.INSTANCE.toDateTime(beginDate).compareTo(currentMonth) > 0;
     }
 
+    public static boolean minWeek(String beginDate, DateTime currentMinWeekDate){
+        return ScheduleDaoUtil.INSTANCE.toDateTime(beginDate).compareTo(currentMinWeekDate) > 0;
+    }
     /**
      * 判断beginDate是否是最小的时间限制
      *
