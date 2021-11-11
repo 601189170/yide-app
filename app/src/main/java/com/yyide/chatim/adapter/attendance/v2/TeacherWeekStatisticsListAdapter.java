@@ -22,6 +22,7 @@ import com.yyide.chatim.utils.DateUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Description: 考勤>周统计
@@ -76,7 +77,15 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                     baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getSortName());
                 } else {
                     String date = DateUtils.formatTime(dataBean.getCourseStartTime(), null, "MM.dd");
-                    baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
+                    if (Objects.equals(dataBean.getAttendanceType(), "1") || "6".equals(dataBean.getAttendanceType())) {
+                        baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
+                        baseViewHolder.setVisible(R.id.tv_course_name,true);
+                        baseViewHolder.setText(R.id.tv_course_name,dataBean.getCourseName());
+                    } else {
+                        baseViewHolder.setVisible(R.id.tv_course_name,false);
+                        baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
+                    }
+
                 }
 
                 String status = dataBean.getAttendanceType();
