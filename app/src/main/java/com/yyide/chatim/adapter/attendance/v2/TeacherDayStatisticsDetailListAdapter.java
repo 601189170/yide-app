@@ -115,7 +115,7 @@ public class TeacherDayStatisticsDetailListAdapter extends RecyclerView.Adapter<
                 final String data2 = DateUtils.formatTime(dayStatisticsBean.getLeaveEndTime(), null, "MM.dd HH:mm");
                 holder.viewBinding.tvEventTime.setText(data1 + "-" + data2);
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_leave));
-                holder.viewBinding.tvName.setText(dayStatisticsBean.getUserId());
+                holder.viewBinding.tvName.setText(dayStatisticsBean.getUserName());
                 break;
             default:
                 break;

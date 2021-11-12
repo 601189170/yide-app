@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yanzhenjie.recyclerview.*
@@ -21,9 +22,11 @@ import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.databinding.FragmentScheduleTodayBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_CLASS_SCHEDULE
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_CONFERENCE
@@ -47,7 +50,7 @@ import org.joda.time.DateTime
  * @date 2021/9/18 16:149
  * @description 日程/今日
  */
-class ScheduleTodayFragment : Fragment() {
+class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var fragmentScheduleTodayBinding: FragmentScheduleTodayBinding
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val todayScheduleViewModel: TodayScheduleViewModel by viewModels()
@@ -59,6 +62,7 @@ class ScheduleTodayFragment : Fragment() {
     private var curModifySchedule: ScheduleData? = null
     private var todayOpen = true
     private var weekOpen = true
+    private var refresh = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -185,14 +189,26 @@ class ScheduleTodayFragment : Fragment() {
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }
+
+        fragmentScheduleTodayBinding.swipeRefreshLayout.setOnRefreshListener(this)
+        fragmentScheduleTodayBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
 
     fun initData() {
+        scheduleViewModel.requestAllScheduleResult.observe(requireActivity()){
+            loge("刷新数据列表 $it")
+            updateData()
+        }
+
         todayScheduleViewModel.getThisWeekUndoList().observe(requireActivity(), {
             it?.let {
                 weekUndoList.clear()
                 weekUndoList.addAll(it)
                 thisWeekScheduleTodayAdapter.setList(weekUndoList)
+            }
+            if (refresh){
+                refresh = false
+                fragmentScheduleTodayBinding.swipeRefreshLayout.isRefreshing = false
             }
         })
         todayScheduleViewModel.getTodayList().observe(requireActivity(), {
@@ -200,6 +216,10 @@ class ScheduleTodayFragment : Fragment() {
                 todayList.clear()
                 todayList.addAll(it)
                 todayScheduleTodayAdapter.setList(todayList)
+            }
+            if (refresh){
+                refresh = false
+                fragmentScheduleTodayBinding.swipeRefreshLayout.isRefreshing = false
             }
         })
         //删除监听
@@ -411,4 +431,9 @@ class ScheduleTodayFragment : Fragment() {
                 loge("list第$position; 左侧菜单第$menuPosition")
             }
         }
+
+    override fun onRefresh() {
+        refresh = true
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+    }
 }

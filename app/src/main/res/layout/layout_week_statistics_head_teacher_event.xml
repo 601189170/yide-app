@@ -27,6 +27,7 @@
         android:text="（人次）"
         android:textColor="#ffffffff"
         android:textSize="13sp"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_weekly_statistical"
         app:layout_constraintLeft_toRightOf="@id/tv_weekly_statistical" />
 

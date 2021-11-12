@@ -9,13 +9,16 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.month.MonthCalendarView
 import com.yyide.chatim.R
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil.dateTimeJointNowTime
 import com.yyide.chatim.databinding.FragmentScheduleMonthBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
@@ -34,7 +37,8 @@ import org.joda.time.DateTime
  * @date 2021/9/7 14:19
  * @description 日程/月
  */
-class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
+class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
+    SwipeRefreshLayout.OnRefreshListener {
     lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonthBinding
     private var list = mutableListOf<ScheduleOuter>()
     private var mcvCalendar: MonthCalendarView? = null
@@ -45,6 +49,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
     private val scheduleMonthViewModel:ScheduleMonthViewModel by viewModels()
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val hints = mutableListOf<HintCircle>()
+    private var refresh = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,8 +82,17 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
                     addTaskHint(hintCircle)
                 }
             }
+            if (refresh){
+                refresh = false
+                fragmentScheduleMonthBinding.swipeRefreshLayout.isRefreshing = false
+            }
         })
         scheduleMonthViewModel.scheduleList(DateTime.now())
+
+        scheduleViewModel.requestAllScheduleResult.observe(requireActivity()){
+            loge("刷新数据列表 $it")
+            updateData()
+        }
         //addTaskHint(HintCircle(5, 3))
         //addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
     }
@@ -113,6 +127,9 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
             DialogUtil.showAddScheduleDialog(context, this,curDateTime.dateTimeJointNowTime())
         }
         mcvCalendar?.setOnCalendarClickListener(this)
+
+        fragmentScheduleMonthBinding.swipeRefreshLayout.setOnRefreshListener(this)
+        fragmentScheduleMonthBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
 
     private fun initData() {
@@ -227,5 +244,10 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener {
         if (mcvCalendar!!.currentMonthView != null) {
             mcvCalendar!!.currentMonthView.invalidate()
         }
+    }
+
+    override fun onRefresh() {
+        refresh = true
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
     }
 }

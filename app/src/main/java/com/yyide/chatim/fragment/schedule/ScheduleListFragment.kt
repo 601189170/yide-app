@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yanzhenjie.recyclerview.*
@@ -37,8 +38,10 @@ import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ListViewEvent
 import com.yyide.chatim.adapter.schedule.ScheduleListAdapter
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedToMonthOfDateTime
@@ -58,7 +61,8 @@ import org.joda.time.format.DateTimeFormatter
  * @date 2021/9/7 14:19
  * @description 日程/列表
  */
-class ScheduleListFragment : Fragment(), OnCalendarClickListener {
+class ScheduleListFragment : Fragment(), OnCalendarClickListener,
+    SwipeRefreshLayout.OnRefreshListener {
     lateinit var fragmentScheduleListBinding: FragmentScheduleListBinding
     private val scheduleListViewViewModel: ScheduleListViewViewModel by viewModels()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
@@ -70,7 +74,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
     private lateinit var curBottomDateTime: DateTime
     private lateinit var curTopDateTime: DateTime
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
-
+    private var refresh = false
     //是否显示时间轴
     private var timeAxisDateTime: DateTime? = null
 
@@ -100,6 +104,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
         }
 
         scheduleListViewViewModel.listViewData.observe(requireActivity(), {
+            if (refresh){
+                refresh = false
+                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
+            }
             if (it.isEmpty()) {
                 return@observe
             }
@@ -115,6 +123,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             list.clear()
             list.addAll(it)
             scheduleListAdapter.setList(list)
+            if (refresh){
+                refresh = false
+                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
+            }
         }
         //删除监听
         scheduleEditViewModel.deleteResult.observe(requireActivity(), {
@@ -135,6 +147,13 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                 ToastUtils.showShort("日程修改失败")
             }
         })
+        scheduleViewModel.requestAllScheduleResult.observe(requireActivity()){
+            loge("刷新数据列表 $it")
+            updateDate()
+        }
+
+        fragmentScheduleListBinding.swipeRefreshLayout.setOnRefreshListener(this)
+        fragmentScheduleListBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
 
     private fun initScheduleList() {
@@ -406,4 +425,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                 loge("list第$position; 左侧菜单第$menuPosition")
             }
         }
+
+    override fun onRefresh() {
+        refresh = true
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+    }
 }

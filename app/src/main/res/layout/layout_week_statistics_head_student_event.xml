@@ -25,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="（人次）"
+        android:visibility="gone"
         android:textColor="#ffffffff"
         android:textSize="13sp"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_weekly_statistical"
