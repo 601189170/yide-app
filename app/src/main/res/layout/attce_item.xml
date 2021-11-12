@@ -15,7 +15,7 @@
         android:background="@drawable/home_attendance_bg"
         android:padding="@dimen/dp_5"
         android:textColor="#ff1e1e1e"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,7 +47,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="缺勤"
                 android:textColor="#909399"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
 
             <TextView
                 android:id="@+id/qq"
@@ -77,7 +77,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="请假"
                 android:textColor="#909399"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
 
             <TextView
                 android:id="@+id/qj"
@@ -108,7 +108,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="迟到"
                 android:textColor="#909399"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
 
             <TextView
                 android:id="@+id/cd"
@@ -137,7 +137,7 @@
                 android:layout_marginLeft="5dp"
                 android:text="应到"
                 android:textColor="#909399"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
 
             <TextView
                 android:id="@+id/tv_attendance_number"

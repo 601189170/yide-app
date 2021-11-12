@@ -51,7 +51,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="班主任可发送班级通知公告"
                     android:textColor="#212121"
-                    android:textSize="15sp" />
+                    android:textSize="@dimen/text_15" />
 
                 <CheckedTextView
                     android:layout_width="wrap_content"

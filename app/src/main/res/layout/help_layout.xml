@@ -64,7 +64,7 @@
                         android:layout_marginTop="49dp"
                         android:text="入门产品功能教学，轻松操作快速上手"
                         android:textColor="#183764"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/text_12" />
 
                 </FrameLayout>
 
@@ -98,7 +98,7 @@
                         android:layout_marginTop="49dp"
                         android:text="场景进阶解决方案，深度掌握产品应用"
                         android:textColor="#7A3133"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/text_12" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -139,7 +139,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="常见问题"
                         android:textColor="#222222"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_16"
                         android:textStyle="bold" />
                 </LinearLayout>
 

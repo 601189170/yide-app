@@ -2,6 +2,8 @@ package com.yyide.chatim.base;
 
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 

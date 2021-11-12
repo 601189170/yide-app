@@ -43,7 +43,7 @@
                 android:drawablePadding="@dimen/dp_6"
                 android:gravity="center"
                 android:text="切换班级"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 app:drawableStartCompat="@drawable/swich_class"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +67,7 @@
                 android:gravity="center"
                 android:text="取消"
                 android:textColor="@color/blue11"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_16" />
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

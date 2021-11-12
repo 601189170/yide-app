@@ -34,7 +34,7 @@
             android:layout_marginTop="@dimen/dp_12"
             android:paddingStart="72dp"
             android:paddingEnd="72dp"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:text="删除通知公告并将其他相关信息一并删除"
             android:layout_centerHorizontal="true"/>
     </RelativeLayout>

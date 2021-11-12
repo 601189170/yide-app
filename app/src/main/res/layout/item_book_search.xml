@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_14"
         android:textColor="#ff333333"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/ivHead"
         app:layout_constraintLeft_toRightOf="@id/ivHead"

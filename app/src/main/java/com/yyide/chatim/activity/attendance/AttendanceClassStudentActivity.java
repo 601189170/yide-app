@@ -82,7 +82,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         type = gradeBean.getType();
         if (dataBean != null) {
             if (dataBean.getGradeInfoList() != null
-                    && dataBean.getGradeInfoList().size() > 0) {
+                    && dataBean.getGradeInfoList().size() > 1) {
                 viewBinding.tvAttendanceTitle.setClickable(true);
                 viewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
             } else {
@@ -122,7 +122,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
                 }
             }
             //            viewBinding.tvNumber.setText("(" + gradeListBean.getNumber() + "人)");
-            viewBinding.tvLateNum.setText(item.getLate() + "");
+            viewBinding.tvLateNum.setText(("1".equals(item.getAttendanceSignInOut()) ? item.getEarly() : item.getLate()) + "");
             viewBinding.tvLeaveNum.setText(item.getLeave() + "");
             viewBinding.tvAbsenteeismNum.setText(item.getAbsenteeism() + "");
             viewBinding.tvLeaveTitle.setText("1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");

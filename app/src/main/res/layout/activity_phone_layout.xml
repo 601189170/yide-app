@@ -49,7 +49,7 @@
 
         <TextView
             android:text="更换手机号"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:gravity="center"
             android:textColor="@color/white"
             android:background="@drawable/bg_blue"

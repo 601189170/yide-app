@@ -58,7 +58,7 @@
                 android:gravity="center"
                 android:text="确定"
                 android:textColor="@color/blue11"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="选择班级"
                 android:textColor="#ff212121"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
                 android:gravity="center"
                 android:text="取消"
                 android:textColor="@color/blue11"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

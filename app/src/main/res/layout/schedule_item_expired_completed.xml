@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:text="开学典礼"
         android:textColor="#ff999999"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         android:ellipsize="end"
         android:singleLine="true"
         android:maxEms="14"

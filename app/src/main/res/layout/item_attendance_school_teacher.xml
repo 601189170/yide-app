@@ -13,9 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_15"
-        android:text="物理"
         android:textColor="#ff606266"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,21 +22,20 @@
         android:id="@+id/tv_student_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_10"
         android:textSize="13sp"
-        app:layout_constraintStart_toEndOf="@+id/tv_student_name"
+        app:layout_constraintEnd_toStartOf="@+id/tv_student_time"
         app:layout_constraintTop_toTopOf="@+id/tv_student_time" />
 
     <TextView
         android:id="@+id/tv_student_time"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_10"
         android:textColor="#F6BD16"
         android:textSize="13sp"
         app:layout_constraintEnd_toStartOf="@+id/tv_status"
-        app:layout_constraintStart_toEndOf="@+id/tv_student_event"
         app:layout_constraintTop_toTopOf="@+id/tv_status" />
 
     <TextView
@@ -48,7 +46,7 @@
         android:layout_marginEnd="@dimen/dp_20"
         android:drawablePadding="6dp"
         android:textColor="#ff1e1e1e"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

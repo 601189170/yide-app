@@ -38,7 +38,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:text="全校教师的周报"
                 android:textColor="#ff1e1e1e"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:text="-"
                     android:textColor="#ff1e1e1e"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -150,7 +150,7 @@
             app:tl_tab_space_equal="true"
             app:tl_textSelectColor="#303133"
             app:tl_textUnselectColor="#909399"
-            app:tl_textsize="16sp" />
+            app:tl_textsize="@dimen/text_16" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

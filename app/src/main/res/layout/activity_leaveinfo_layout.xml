@@ -37,13 +37,13 @@
             <TextView
                 android:id="@+id/name"
                 android:textColor="#333333"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
                 android:id="@+id/time"
                 android:textColor="#999999"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_12"
 
 
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
         </LinearLayout>
         <TextView
             android:text="审批中"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
 
             android:textColor="#333333"
             android:layout_gravity="right|center_vertical"
@@ -71,7 +71,7 @@
         android:layout_height="216dp">
 
         <TextView
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             android:textColor="#999999"
             android:text="所在部门"
             android:layout_marginTop="20dp"
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textColor="#333333"
             android:text="某某某提交的请假"
             android:layout_marginTop="12dp"
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             android:textColor="#999999"
             android:text="请假时间"
             android:layout_marginTop="15dp"
@@ -107,14 +107,14 @@
             android:background="@drawable/bg_corners_gray_22"
             android:gravity="center"
             android:textColor="#333333"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             android:layout_height="wrap_content" />
         <TextView
             android:text="至"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:textColor="#333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
@@ -124,7 +124,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="#333333"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             android:layout_height="wrap_content" />
     </LinearLayout>
         <TextView
@@ -132,7 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp" />
         <TextView
-            android:textSize="14sp"
+            android:textSize="@dimen/text_14"
             android:textColor="#999999"
             android:text="请假事由"
 
@@ -140,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textColor="#333333"
             android:text="家里有急事需要处理，请一天假"
             android:layout_marginTop="12dp"
@@ -186,7 +186,7 @@
         <TextView
             android:gravity="center"
             android:text="拒绝"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textColor="#212121"
             android:background="@drawable/bg_corners_gray_20"
             android:layout_width="0dp"
@@ -200,7 +200,7 @@
             android:text="同意"
             android:gravity="center"
 
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textColor="@color/white"
             android:background="@drawable/bg_corners_blue_20"
             android:layout_width="0dp"

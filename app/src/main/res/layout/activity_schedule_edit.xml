@@ -56,7 +56,7 @@
                     android:paddingEnd="90dp"
                     android:text="语文初三10班"
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/iv_schedule_icon"
@@ -101,7 +101,7 @@
                     android:layout_marginStart="@dimen/dp_10"
                     android:text="09月3号 10:00"
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/iv_date"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -123,7 +123,7 @@
                     android:layout_marginStart="@dimen/dp_10"
                     android:text="09月3号 10:00"
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/v_line3"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -171,7 +171,7 @@
                     android:layout_marginStart="@dimen/dp_10"
                     android:text="不重复"
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/iv_repetition"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -220,7 +220,7 @@
                     android:layout_marginStart="@dimen/dp_10"
                     android:text="日程开始时"
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/iv_remind"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -259,7 +259,7 @@
                     android:singleLine="true"
                     android:text="添加参与人"
                     android:textColor="#ff999999"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -287,7 +287,7 @@
                     android:layout_marginStart="@dimen/dp_20"
                     android:text="添加地点"
                     android:textColor="#ff999999"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -315,7 +315,7 @@
                     android:layout_marginStart="@dimen/dp_20"
                     android:text="添加附件"
                     android:textColor="#ff999999"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

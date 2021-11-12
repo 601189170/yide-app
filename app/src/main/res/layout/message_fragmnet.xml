@@ -40,7 +40,7 @@
                 android:layout_marginStart="7dp"
                 android:text="通讯录"
                 android:textColor="#222222"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_14" />
         </LinearLayout>
     </FrameLayout>
 

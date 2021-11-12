@@ -60,7 +60,7 @@
             android:minHeight="0dp"
             android:text="@string/privacy_exit"
             android:textColor="#C7C4C4"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textStyle="bold" />
 
         <View
@@ -78,7 +78,7 @@
             android:minHeight="0dp"
             android:text="@string/privacy_agree"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textStyle="bold" />
 
     </LinearLayout>

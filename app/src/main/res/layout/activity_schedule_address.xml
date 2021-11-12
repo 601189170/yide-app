@@ -26,7 +26,7 @@
             android:text="无"
             android:textStyle="bold"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

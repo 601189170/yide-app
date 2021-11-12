@@ -249,7 +249,7 @@ dependencies {
     implementation 'com.aliyun.ams:alicloud-android-third-push-huawei:3.4.0'
     //小米依赖
 //    implementation 'com.aliyun.ams:alicloud-android-third-push-xiaomi:3.4.0'
-    implementation ('com.aliyun.ams:alicloud-android-third-push-xiaomi:3.4.0'){
+    implementation('com.aliyun.ams:alicloud-android-third-push-xiaomi:3.4.0') {
         exclude(group: 'com.xiaomi.mipush.sdk', module: 'mipush')
     }
     //OPPO依赖

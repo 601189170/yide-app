@@ -1,5 +1,7 @@
 package com.yyide.chatim.model.attendance
 
+import com.google.gson.annotations.SerializedName
+
 /**
  *
  * @author liu tao

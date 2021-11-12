@@ -104,11 +104,10 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
                 teachers = itemTeachersBean.getTeacherCourseForm().getBaseInfo();
                 if (teachers != null) {
                     mViewBinding.constraintLayout.setVisibility(View.VISIBLE);
-                    mViewBinding.tvEventName.setText(teachers.getEventName());
+                    mViewBinding.tvEventName.setText(!TextUtils.isEmpty(teachers.getEventName()) ? teachers.getEventName() : teachers.getTheme());
                     mViewBinding.tvAttendanceRate.setText(teachers.getSignInOutRate());
                     if (!TextUtils.isEmpty(teachers.getSignInOutRate())) {
                         try {
-                            //                    mViewBinding.progress.setProgress(Double.valueOf(teachers.getRate()).intValue());
                             setAnimation(mViewBinding.progress, Double.valueOf(teachers.getSignInOutRate()).intValue());
                         } catch (Exception e) {
                             e.printStackTrace();

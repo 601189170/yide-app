@@ -42,7 +42,7 @@
                     android:maxEms="13"
                     android:singleLine="true"
                     android:textColor="#ff333333"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,7 +53,7 @@
                     android:layout_marginTop="@dimen/dp_5"
                     android:text=""
                     android:textColor="#ff999999"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintLeft_toLeftOf="@id/tv_leave_title"
                     app:layout_constraintTop_toBottomOf="@id/tv_leave_title" />
 
@@ -68,7 +68,7 @@
                     android:paddingEnd="@dimen/dp_12"
                     android:paddingBottom="@dimen/dp_4"
                     android:textColor="#ff333333"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -90,7 +90,7 @@
                     android:layout_marginTop="@dimen/dp_20"
                     android:text="@string/in_department"
                     android:textColor="#ff999999"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,7 +101,7 @@
                     android:layout_marginTop="@dimen/dp_12"
                     android:text=""
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintLeft_toLeftOf="@id/tv_department"
                     app:layout_constraintTop_toBottomOf="@id/tv_department" />
 
@@ -112,7 +112,7 @@
                     android:layout_marginTop="25dp"
                     android:text="@string/ask_for_leave_time"
                     android:textColor="#ff999999"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintLeft_toLeftOf="@id/tv_department"
                     app:layout_constraintTop_toBottomOf="@id/tv_department_name" />
 
@@ -128,7 +128,7 @@
                     android:paddingBottom="@dimen/dp_5"
                     android:text=""
                     android:textColor="#ff333333"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintLeft_toLeftOf="@id/tv_department"
                     app:layout_constraintTop_toBottomOf="@id/tv_time_interval" />
 
@@ -139,7 +139,7 @@
                     android:layout_marginStart="@dimen/dp_8"
                     android:text="@string/to"
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintBottom_toBottomOf="@id/tv_start_time"
                     app:layout_constraintLeft_toRightOf="@id/tv_start_time"
                     app:layout_constraintTop_toTopOf="@id/tv_start_time" />
@@ -156,7 +156,7 @@
                     android:paddingBottom="@dimen/dp_5"
                     android:text=""
                     android:textColor="#ff333333"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toBottomOf="@id/tv_start_time"
                     app:layout_constraintLeft_toRightOf="@id/tv_time_to"
                     app:layout_constraintTop_toTopOf="@id/tv_start_time" />
@@ -168,7 +168,7 @@
                     android:layout_marginTop="@dimen/dp_20"
                     android:text="@string/reason_for_leave"
                     android:textColor="#ff999999"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintLeft_toLeftOf="@id/tv_department"
                     app:layout_constraintTop_toBottomOf="@id/tv_start_time" />
 
@@ -180,7 +180,7 @@
                     android:paddingBottom="@dimen/dp_20"
                     android:text=""
                     android:textColor="#ff333333"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     android:paddingStart="@dimen/dp_20"
                     android:paddingEnd="@dimen/dp_20"
                     app:layout_constraintLeft_toLeftOf="@id/tv_reason_for_leave"
@@ -279,7 +279,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/carbon_copy_people"
                         android:textColor="#ff333333"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintLeft_toRightOf="@id/iv_user_head"
                         app:layout_constraintTop_toTopOf="@id/iv_user_head"
                         app:layout_constraintBottom_toTopOf="@id/tv_flow_content"
@@ -291,7 +291,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/carbon_copy_people_text"
                         android:textColor="#ff999999"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintLeft_toLeftOf="@id/tv_flow_title"
                         app:layout_constraintTop_toBottomOf="@id/tv_flow_title"
                         app:layout_constraintBottom_toBottomOf="@id/iv_user_head"

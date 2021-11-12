@@ -19,7 +19,7 @@
         app:tl_tab_space_equal="true"
         app:tl_textSelectColor="#303133"
         app:tl_textUnselectColor="#909399"
-        app:tl_textsize="16sp" />
+        app:tl_textsize="@dimen/text_16" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"

@@ -13,7 +13,7 @@
         android:layout_marginTop="@dimen/dp_18"
         android:text="张大大（一年级三班）"
         android:textColor="#ff333333"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

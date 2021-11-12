@@ -38,7 +38,7 @@
                     android:layout_marginLeft="@dimen/dp_12"
                     android:text="切换班级"
                     android:textColor="@color/text_212121"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_16" />
             </LinearLayout>
 
             <View
@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:text="取消"
                 android:textColor="@color/blue11"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_16" />
         </FrameLayout>
 
 

@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:text=":"
         android:textColor="#999999"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/np_datetime_minute"
         app:layout_constraintStart_toEndOf="@+id/np_datetime_hour"
@@ -103,7 +103,7 @@
     <!--        app:layout_constraintEnd_toStartOf="@+id/np_datetime_second"-->
     <!--        app:layout_constraintTop_toTopOf="parent"-->
     <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        android:textSize="16sp"-->
+    <!--        android:textSize="@dimen/text_16"-->
     <!--        android:textColor="#999999"-->
     <!--        android:text=":"/>-->
     <!--    <com.loper7.date_time_picker.number_picker.NumberPicker-->

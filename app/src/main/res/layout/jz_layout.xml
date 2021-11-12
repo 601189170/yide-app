@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
     <TextView
         android:textColor="#2C8AFF"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_14"
         android:text="家长请假"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
@@ -27,7 +27,7 @@
 
             <TextView
                 android:text="由班主任审批"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:layout_gravity="center_vertical"
                 android:textColor="#212121"
                 android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
             android:layout_height="50dp">
             <TextView
                 android:text="指定人员审批"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:layout_gravity="center_vertical"
                 android:textColor="#212121"
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             android:layout_height="50dp">
             <TextView
                 android:text="抄送给任课老师"
-                android:textSize="15sp"
+                android:textSize="@dimen/text_15"
                 android:layout_gravity="center_vertical"
                 android:textColor="#212121"
                 android:layout_width="wrap_content"

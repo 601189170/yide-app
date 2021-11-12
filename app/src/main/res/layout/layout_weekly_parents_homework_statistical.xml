@@ -54,7 +54,7 @@
                     android:layout_marginStart="@dimen/dp_12"
                     android:text="作业统计"
                     android:textColor="#8CFFFFFF"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:text="提交反馈的作业数"
                     android:textColor="#ff000000"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:text="20"
                     android:textColor="#ff909399"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/progress"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/progress" />
@@ -167,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:text="5"
                     android:textColor="#ff909399"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/progress2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/progress2" />
@@ -179,7 +179,7 @@
                     android:layout_marginTop="@dimen/dp_20"
                     android:text="反馈的结果"
                     android:textColor="#ff000000"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_15"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textview15" />
@@ -231,7 +231,7 @@
                     android:layout_marginEnd="@dimen/dp_8"
                     android:text="很简单"
                     android:textColor="#909399"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_simple"
                     app:layout_constraintEnd_toStartOf="@+id/tv_simple"
                     app:layout_constraintTop_toTopOf="@+id/tv_simple" />
@@ -244,7 +244,7 @@
                     android:layout_marginEnd="@dimen/dp_40"
                     android:text="32"
                     android:textColor="@color/text_1E1E1E"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/piechart2" />
 
@@ -264,7 +264,7 @@
                     android:layout_marginStart="@dimen/dp_4"
                     android:text="未完成"
                     android:textColor="#909399"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/view11"
                     app:layout_constraintStart_toEndOf="@+id/view11"
                     app:layout_constraintTop_toTopOf="@+id/view11" />
@@ -275,7 +275,7 @@
                     android:layout_height="wrap_content"
                     android:text="32"
                     android:textColor="@color/text_1E1E1E"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/textView22"
                     app:layout_constraintEnd_toEndOf="@+id/tv_complete"
                     app:layout_constraintTop_toTopOf="@+id/textView22" />
@@ -317,7 +317,7 @@
                     android:layout_marginEnd="@dimen/dp_8"
                     android:text="已完成"
                     android:textColor="#909399"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_complete"
                     app:layout_constraintEnd_toStartOf="@+id/tv_complete"
                     app:layout_constraintTop_toTopOf="@+id/tv_complete" />
@@ -330,7 +330,7 @@
                     android:layout_marginEnd="@dimen/dp_40"
                     android:text="32"
                     android:textColor="#ff000000"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/piechart" />
 
@@ -350,7 +350,7 @@
                     android:layout_marginStart="@dimen/dp_4"
                     android:text="一般"
                     android:textColor="#909399"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_general"
                     app:layout_constraintStart_toEndOf="@+id/view12"
                     app:layout_constraintTop_toTopOf="@+id/tv_general" />
@@ -362,7 +362,7 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:text="32"
                     android:textColor="@color/text_1E1E1E"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintEnd_toEndOf="@+id/tv_simple"
                     app:layout_constraintTop_toBottomOf="@+id/tv_simple" />
 
@@ -382,7 +382,7 @@
                     android:layout_marginStart="@dimen/dp_4"
                     android:text="有难度"
                     android:textColor="#909399"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_have_difficulty"
                     app:layout_constraintStart_toEndOf="@+id/view13"
                     app:layout_constraintTop_toTopOf="@+id/tv_have_difficulty" />
@@ -394,7 +394,7 @@
                     android:layout_marginTop="@dimen/dp_10"
                     android:text="32"
                     android:textColor="@color/text_1E1E1E"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/text_12"
                     app:layout_constraintEnd_toEndOf="@+id/tv_simple"
                     app:layout_constraintTop_toBottomOf="@+id/tv_general" />
             </androidx.constraintlayout.widget.ConstraintLayout>

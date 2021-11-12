@@ -1,5 +1,7 @@
 package com.tencent.qcloud.tim.uikit.base;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -26,4 +28,5 @@ public class BaseActvity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(vis);
         }
     }
+
 }

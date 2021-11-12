@@ -62,7 +62,7 @@
                             android:gravity="center"
                             android:text="事务日程"
                             android:textColor="@color/schedule_filter_bg_text_color_selector"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_15" />
 
                         <CheckBox
                             android:id="@+id/cb_school_calendar"
@@ -138,7 +138,7 @@
                         android:gravity="center"
                         android:text="未完成"
                         android:textColor="@color/schedule_filter_bg_text_color_selector"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/text_15"
                         app:layout_constraintStart_toStartOf="@+id/tv_status"
                         app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
@@ -253,7 +253,7 @@
                     android:gravity="center"
                     android:text="重置"
                     android:textColor="#ff2c8aff"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintEnd_toStartOf="@+id/tv_confirm"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
@@ -267,7 +267,7 @@
                     android:gravity="center"
                     android:text="确定"
                     android:textColor="#ffffffff"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_reset"
                     app:layout_constraintTop_toTopOf="parent" />

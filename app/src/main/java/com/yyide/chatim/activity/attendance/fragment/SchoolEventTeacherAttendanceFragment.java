@@ -205,7 +205,7 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
                         tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "6":
-                        holder.setText(R.id.tv_status, "1".equals(teachers.getAttendanceSignInOut()) ? "未签退" : "未签到");
+                        holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "未签到");
                         break;
                     case "1"://缺勤
                         holder.setText(R.id.tv_status, "缺勤");
@@ -217,7 +217,7 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
                         tvTime.setTextColor(Color.parseColor("#63DAAB"));
                         break;
                     case "2"://迟到
-                        holder.setText(R.id.tv_status, "1".equals(teachers.getAttendanceSignInOut()) ? "迟到" : "早退");
+                        holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");
                         holder.setText(R.id.tv_student_event, item.getClockName());
                         holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getSignInTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvTime.setTextColor(Color.parseColor("#F66C6C"));

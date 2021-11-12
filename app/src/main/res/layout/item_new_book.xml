@@ -32,7 +32,7 @@
             android:layout_marginStart="@dimen/dp_10"
             android:drawablePadding="@dimen/dp_20"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/ivUnfold"
             app:layout_constraintStart_toEndOf="@+id/ivUnfold"

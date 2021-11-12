@@ -14,7 +14,7 @@
         android:gravity="center_vertical"
         android:text="某"
         android:textColor="#ff333333"
-        android:textSize="15sp"
+        android:textSize="@dimen/text_15"
         android:singleLine="true"
         android:maxEms="5"
         app:layout_constraintLeft_toLeftOf="parent"

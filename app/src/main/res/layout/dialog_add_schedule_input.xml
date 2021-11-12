@@ -41,7 +41,7 @@
         android:layout_marginStart="@dimen/dp_6"
         android:text="9月3日 22:00"
         android:textColor="#ff333333"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintBottom_toBottomOf="@id/iv_time"
         app:layout_constraintLeft_toRightOf="@id/iv_time"
         app:layout_constraintTop_toTopOf="@id/iv_time" />
@@ -63,7 +63,7 @@
         android:layout_marginStart="@dimen/dp_4"
         android:text="标签"
         android:textColor="#ff333333"
-        android:textSize="16sp"
+        android:textSize="@dimen/text_16"
         app:layout_constraintBottom_toBottomOf="@id/iv_label"
         app:layout_constraintLeft_toRightOf="@id/iv_label"
         app:layout_constraintTop_toTopOf="@id/iv_label"/>

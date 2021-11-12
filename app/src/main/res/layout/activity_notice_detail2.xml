@@ -70,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_20"
                             android:textColor="#ff1e1e1e"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_16"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -83,7 +83,7 @@
                             android:layout_marginBottom="10dp"
                             android:minHeight="350dp"
                             android:textColor="#ff7b7b7b"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/text_14"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
                         android:layout_marginTop="@dimen/dp_16"
                         android:text="发布方式"
                         android:textColor="#ff333333"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/text_15"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -117,7 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/dp_16"
                         android:textColor="#ff666666"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintEnd_toStartOf="@+id/tv_push_desc"
                         app:layout_constraintTop_toTopOf="@+id/tv_push_way" />
 
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/dp_16"
                         android:textColor="#ff666666"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/tv_push_way" />
 
@@ -159,7 +159,7 @@
                         android:layout_marginBottom="@dimen/dp_14"
                         android:text="通知范围"
                         android:textColor="#ff333333"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/text_15"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -172,7 +172,7 @@
                         android:drawableEnd="@drawable/ic_baseline_more_horiz_24"
                         android:gravity="right"
                         android:textColor="#ff666666"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView15"
                         app:layout_constraintTop_toTopOf="@+id/textView15" />
@@ -204,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:text="已读/未读"
                         android:textColor="#ff333333"
-                        android:textSize="15sp"
+                        android:textSize="@dimen/text_15"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -218,7 +218,7 @@
                         android:drawablePadding="@dimen/dp_4"
                         android:gravity="center"
                         android:textColor="#ff666666"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

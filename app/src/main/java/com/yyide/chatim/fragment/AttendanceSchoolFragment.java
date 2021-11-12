@@ -2,10 +2,12 @@ package com.yyide.chatim.fragment;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -83,7 +85,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
-            adapter.setList(null);
+//            adapter.setList(null);
             mvpPresenter.homeAttendance("", "");
         }
     }
@@ -94,13 +96,19 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
     }
 
     private void initView() {
+        mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mViewBinding.recyclerview.setAdapter(adapter);
+        adapter.setEmptyView(R.layout.empty);
         mvpPresenter.homeAttendance("", "");
     }
 
     //    -->设置各区块的颜色
     public static final int[] PIE_COLORS2 = {
-            Color.rgb(145, 147, 153), Color.rgb(246, 189, 22)
-            , Color.rgb(246, 108, 108), Color.rgb(55, 130, 255)
+            Color.argb(200, 145, 147, 153),
+            Color.argb(200, 246, 189, 22),
+            Color.argb(200, 246, 108, 108),
+            Color.argb(200, 61, 189, 134),
+            Color.argb(200, 44, 138, 255)
     };
 
     private BaseQuickAdapter adapter = new BaseQuickAdapter<AttendanceRsp.DataBean.AttendanceListBean, BaseViewHolder>(R.layout.item_attendance_school) {
@@ -124,13 +132,20 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         private void setPieChart(AttendanceRsp.DataBean.AttendanceListBean item, PieChart piechart) {
             InitPieChart.InitPieChart(((Activity) getContext()), piechart);
             List<PieEntry> entries = new ArrayList<>();
-            entries.add(new PieEntry(item.getAbsenteeism() > 0 ? item.getAbsenteeism() : 1, "缺勤"));
+            int absence = item.getAbsenteeism();
+            int leave = item.getLeave();
+            int late = item.getLate();
+            int applyNum = item.getNormal();
+            int early = item.getEarly();
+            absence = (absence + late + applyNum + leave + early) > 0 ? absence : 1;
+            entries.add(new PieEntry(absence, "缺勤"));
             entries.add(new PieEntry(item.getLeave(), "请假"));
             entries.add(new PieEntry(item.getLate(), "迟到"));
+            entries.add(new PieEntry(item.getEarly(), "早退"));
             entries.add(new PieEntry(item.getNormal(), "实到"));
 
             String desc = "1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率";//0 签到 1签退
-            piechart.setCenterText(item.getSignInOutRate() + "%\n" + desc);
+            piechart.setCenterText((TextUtils.isEmpty(item.getSignInOutRate()) ? 0 : item.getSignInOutRate()) + "%\n" + desc);
             piechart.setCenterTextSize(11);
             PieDataSet dataSet = new PieDataSet(entries, "");
             dataSet.setSliceSpace(0);//设置饼块之间的间隔
@@ -147,6 +162,8 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
+            } else {
+                adapter.setList(new ArrayList<>());
             }
         }
     }
@@ -155,16 +172,14 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
         //处理数组大于大于一个的时候用网格布局
         if (dataBean.getHeadmasterAttendanceList() != null && dataBean.getHeadmasterAttendanceList().size() > 1) {
             mViewBinding.recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        } else {
-            mViewBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
-        mViewBinding.recyclerview.setAdapter(adapter);
         adapter.setList(dataBean.getHeadmasterAttendanceList());
     }
 
     @Override
     public void getAttendanceFail(String msg) {
         Log.e("TAG", "getAttendanceFail==>: " + msg);
+        adapter.setList(new ArrayList<>());
     }
 
     @Override

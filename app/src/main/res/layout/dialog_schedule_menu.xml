@@ -29,7 +29,7 @@
             android:layout_marginStart="@dimen/dp_10"
             android:text="今日清单"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_today_list"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +60,7 @@
             android:layout_marginStart="@dimen/dp_10"
             android:text="日视图"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_day_view"
             app:layout_constraintTop_toTopOf="parent" />
@@ -90,7 +90,7 @@
             android:layout_marginStart="@dimen/dp_10"
             android:text="月视图"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_month_view"
             app:layout_constraintTop_toTopOf="parent" />
@@ -120,7 +120,7 @@
             android:layout_marginStart="@dimen/dp_10"
             android:text="列表视图"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_list_view"
             app:layout_constraintTop_toTopOf="parent" />
@@ -157,7 +157,7 @@
             android:layout_marginStart="@dimen/dp_10"
             android:text="标签"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_label"
             app:layout_constraintTop_toTopOf="parent" />
@@ -187,7 +187,7 @@
             android:layout_marginStart="@dimen/dp_10"
             android:text="设置"
             android:textColor="#ff333333"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_setting"
             app:layout_constraintTop_toTopOf="parent" />
