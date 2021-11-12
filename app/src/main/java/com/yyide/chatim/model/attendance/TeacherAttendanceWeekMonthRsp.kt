@@ -64,7 +64,8 @@ data class TeacherAttendanceWeekMonthRsp(
                     var courseStartTime: String? = null,
                     var sectionOrder: String? = null,
                     var leaveStartTime: String? = null,
-                    var leaveEndTime: String? = null
+                    var leaveEndTime: String? = null,
+                    var attendanceSignInOut: String? = null
                 )
             }
         }

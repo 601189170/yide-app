@@ -108,10 +108,19 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
                 break;
             case "1":
+                holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
+                holder.viewBinding.gpEventTime.setVisibility(View.GONE);
+                holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_absence));
+                break;
             case "6":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
-                holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_clock_in));
+                final String attendanceSignInOut = weekStatisticsBean.getAttendanceSignInOut();
+                if ("1".equals(attendanceSignInOut)) {
+                    holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_logout));
+                } else {
+                    holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_sign_in));
+                }
                 break;
             case "5":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);

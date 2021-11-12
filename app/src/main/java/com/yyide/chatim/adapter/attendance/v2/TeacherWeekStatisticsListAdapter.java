@@ -103,9 +103,18 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_normal));
                         break;
                     case "1":
-                    case "6":
                         baseViewHolder.setVisible(R.id.tv_attendance_status,true);
-                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_no_clock_in));
+                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_absence));
+                        baseViewHolder.setVisible(R.id.gp_event_time,false);
+                        break;
+                    case "6":
+                        final String attendanceSignInOut = dataBean.getAttendanceSignInOut();
+                        if ("1".equals(attendanceSignInOut)) {
+                            baseViewHolder.setText(R.id.tv_attendance_status, context.getString(R.string.attendance_no_logout));
+                        } else {
+                            baseViewHolder.setText(R.id.tv_attendance_status, context.getString(R.string.attendance_no_sign_in));
+                        }
+                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
                         baseViewHolder.setVisible(R.id.gp_event_time,false);
                         break;
                     case "2":

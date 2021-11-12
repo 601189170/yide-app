@@ -53,7 +53,8 @@ data class StudentAttendanceWeekMonthRsp(
                     val courseStartTime: String? = null,
                     val sectionOrder: String? = null,
                     var leaveStartTime: String? = null,
-                    var leaveEndTime: String? = null
+                    var leaveEndTime: String? = null,
+                    var attendanceSignInOut: String? = null
                 )
             }
         }
