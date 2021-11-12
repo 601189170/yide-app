@@ -31,6 +31,7 @@
                     android:paddingTop="60dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_top"
                         android:layout_width="match_parent"
                         android:layout_height="185dp"
                         android:layout_marginStart="@dimen/dp_10"
@@ -290,6 +291,7 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_corners_white_10"

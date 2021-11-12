@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.weekly.details
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.details.adapter.TeacherAttendanceAdapter
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentTeacherChildWeeklyAttendanceBinding
@@ -223,7 +225,9 @@ class TeacherAttendanceTeacherChildFragment : BaseFragment() {
     ): List<TreeNode<ValueChild>> {
         val nodes: MutableList<TreeNode<ValueChild>> = ArrayList()
         val childs = mutableListOf<TreeNode<ValueChild>>()
-        val item = ValueChild(data.clockName, data.time, data.name, data.type, mutableListOf())
+        val name =
+            if (!TextUtils.isEmpty(data.clockName)) data.clockName else SpData.getIdentityInfo().realname
+        val item = ValueChild(data.clockName, data.time, name, data.type, mutableListOf())
         val treeNode: TreeNode<ValueChild> = TreeNode(item, -1)
         if (data.value != null) {
             for (childItem in data.value!!) {

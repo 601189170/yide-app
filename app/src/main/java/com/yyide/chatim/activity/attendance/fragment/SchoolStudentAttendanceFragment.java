@@ -122,8 +122,6 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
             holder.setText(R.id.tv_event_name, item.getGradeName())
                     .setText(R.id.tv_attendance_rate, item.getSignInOutRate())
                     .setText(R.id.tv_normal_num, item.getNormal() + "")
-                    .setText(R.id.tv_absence, "1".equals(eventItem.getAttendanceSignInOut()) ? "未签退" : "缺勤")
-                    .setText(R.id.tv_sign, "1".equals(eventItem.getAttendanceSignInOut()) ? "签退率" : "出勤率")
                     .setText(R.id.tv_absence_num, item.getAbsenteeism() + "")
                     .setText(R.id.tv_ask_for_leave_num, item.getLeave() + "");
             if (eventItem != null) {
