@@ -204,6 +204,18 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             }
             if (item.getTeacherCourseForm() != null) {
                 setData(item.getTeacherCourseForm().getBaseInfo());
+            } else {
+                adapter.setList(null);
+                mViewBinding.progress.setProgress(0);
+                mViewBinding.tvAttendanceTitle.setText("");
+                mViewBinding.tvDesc.setText("");
+                mViewBinding.tvAttendanceTime.setText("");
+                mViewBinding.tvAttendanceRate.setText("0");
+                mViewBinding.tvBeTo.setText("0");
+                mViewBinding.tvLateNum.setText("0");
+                mViewBinding.tvLeaveNum.setText("0");
+                mViewBinding.tvNormalNum.setText("0");
+                mViewBinding.tvAbsenteeismNum.setText("0");
             }
         }
     }
@@ -214,7 +226,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, GetUserSchoolRsp.DataBean.FormBean item) {
             baseViewHolder.setText(R.id.className, item.classesName);
-            if (adapterClass.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
+            if (adapterClass.getItemCount() - 1 == baseViewHolder.getAbsoluteAdapterPosition()) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);
@@ -309,7 +321,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             if (!TextUtils.isEmpty(item.getAttendanceType())) {
                 switch (item.getAttendanceType()) {
                     case "0"://正常
-//                        holder.setText(R.id.tv_status, item.getStatusType());
+                        holder.setText(R.id.tv_status, "正常");
                         holder.setText(R.id.tv_student_event, item.getClockName());
                         holder.setText(R.id.tv_student_time, DateUtils.formatTime(item.getSignInTime(), "yyyy-MM-dd HH:mm:ss", "HH:mm"));
                         tvTime.setTextColor(Color.parseColor("#606266"));
@@ -334,8 +346,8 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         break;
                     case "5"://请假
                         holder.setText(R.id.tv_status, "请假");
-                        String startTime = DateUtils.formatTime(item.getStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-                        String endTime = DateUtils.formatTime(item.getEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                        String startTime = DateUtils.formatTime(item.getLeaveStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
+                        String endTime = DateUtils.formatTime(item.getLeaveEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         holder.setText(R.id.tv_student_event, "请假时间");
                         holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
                         tvTime.setTextColor(Color.parseColor("#F6BD16"));

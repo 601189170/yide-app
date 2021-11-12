@@ -197,6 +197,8 @@ public class AttendanceRsp implements Serializable {
         private String signInTime;
         private String clockName;
         private String startTime;
+        private String leaveStartTime;
+        private String leaveEndTime;
         private String endTime;
         private String attendanceType;
         private String attendanceSignInOut;
@@ -204,6 +206,22 @@ public class AttendanceRsp implements Serializable {
 
         public String getStartTime() {
             return startTime;
+        }
+
+        public String getLeaveStartTime() {
+            return leaveStartTime;
+        }
+
+        public void setLeaveStartTime(String leaveStartTime) {
+            this.leaveStartTime = leaveStartTime;
+        }
+
+        public String getLeaveEndTime() {
+            return leaveEndTime;
+        }
+
+        public void setLeaveEndTime(String leaveEndTime) {
+            this.leaveEndTime = leaveEndTime;
         }
 
         public String getEndTime() {
