@@ -75,6 +75,9 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                 if (!TextUtils.isEmpty(dataBean.getSortName())) {
                     String date = DateUtils.formatTime(dataBean.getRequiredTime(), null, "MM.dd");
                     baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getSortName());
+                } else if(TextUtils.isEmpty(dataBean.getSortName()) && !TextUtils.isEmpty(dataBean.getEventName())){
+                    String date = DateUtils.formatTime(dataBean.getRequiredTime(), null, "MM.dd");
+                    baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getEventName());
                 } else {
                     String date = DateUtils.formatTime(dataBean.getCourseStartTime(), null, "MM.dd");
                     if (Objects.equals(dataBean.getAttendanceType(), "1") || "6".equals(dataBean.getAttendanceType())) {
