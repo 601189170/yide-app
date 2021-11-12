@@ -72,6 +72,7 @@ import com.yyide.chatim.utils.ColorUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
 import com.yyide.chatim.utils.MaxTextLengthFilter;
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil;
 import com.yyide.chatim.viewmodel.LabelManageViewModel;
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel;
 import com.yyide.chatim.widget.CircleFrameLayout;
@@ -337,7 +338,7 @@ public class DialogUtil {
                 final String[] byweekdayList = byweekday.replace("[", "").replace("]", "").split(",");
                 final List<String> stringList = new ArrayList<>();
                 for (String s : byweekdayList) {
-                    stringList.add(s.trim());
+                    stringList.add(s.trim().replace("\"",""));
                 }
                 for (WeekBean weekBean : weekList) {
                     weekBean.setChecked(stringList.contains(weekBean.getShortname()));
@@ -348,7 +349,7 @@ public class DialogUtil {
                 final String[] bymonthdayList = bymonthday.replace("[", "").replace("]", "").split(",");
                 final List<String> stringList = new ArrayList<>();
                 for (String s : bymonthdayList) {
-                    stringList.add(s.trim());
+                    stringList.add(s.trim().replace("\"",""));
                 }
                 for (MonthBean monthBean : monthList) {
                     monthBean.setChecked(stringList.contains(monthBean.getTitle()));
@@ -647,7 +648,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showRepetitionScheduleDialog(Context context, ScheduleEditViewModel scheduleEditViewModel) {
+    public static void showRepetitionScheduleDialog(Context context, LifecycleOwner lifecycleOwner,ScheduleEditViewModel scheduleEditViewModel) {
         DialogScheduleRepetitionBinding binding = DialogScheduleRepetitionBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -662,6 +663,12 @@ public class DialogUtil {
                 binding.ivNotRemind.setImageResource(R.drawable.schedule_remind_selected_icon);
             }
         }
+        scheduleEditViewModel.getRepetitionLiveData().observe(lifecycleOwner, repetition -> {
+            if (repetition.getCode() == 8){
+                String rule = ScheduleRepetitionRuleUtil.INSTANCE.ruleToString(JSON.toJSONString(repetition.getRule()));
+                binding.tvCustomRule.setText(rule);
+            }
+        });
 
         BaseQuickAdapter adapter = new BaseQuickAdapter<Repetition, BaseViewHolder>(R.layout.item_dialog_schedule_remind_list) {
 
@@ -798,7 +805,7 @@ public class DialogUtil {
             showRemindScheduleDialog(context,scheduleEditViewModel,binding.checkBox.isChecked()?list2:list);
         });
         binding.clRepetition.setOnClickListener(v -> {
-            showRepetitionScheduleDialog(context,scheduleEditViewModel);
+            showRepetitionScheduleDialog(context,lifecycleOwner,scheduleEditViewModel);
         });
         binding.clStartTime.setOnClickListener(v -> {
             if (binding.llVLine.getVisibility() == View.GONE) {
@@ -931,6 +938,11 @@ public class DialogUtil {
         });
         scheduleEditViewModel.getRepetitionLiveData().observe(lifecycleOwner, repetition -> {
             binding.tvRepetition.setText(repetition.getTitle());
+            if (repetition.getCode() == 8){
+                String rule = ScheduleRepetitionRuleUtil.INSTANCE.ruleToString(JSON.toJSONString(repetition.getRule()));
+                binding.tvRepetition.setText("重复");
+                binding.tvCustomRule.setText(rule);
+            }
         });
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.CENTER);

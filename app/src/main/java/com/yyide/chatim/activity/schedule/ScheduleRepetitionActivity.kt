@@ -14,6 +14,7 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleRepetitionBinding
 import com.yyide.chatim.model.schedule.Repetition
 import com.yyide.chatim.model.schedule.Repetition.Companion.getList
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.loge
 
 class ScheduleRepetitionActivity : BaseActivity() {
@@ -42,6 +43,9 @@ class ScheduleRepetitionActivity : BaseActivity() {
             }
             list.filter { it.checked }.ifEmpty {
                 //自定义重复
+                if (rule != null) {
+                    scheduleRepetitionBinding.tvCustomRule.text = ScheduleRepetitionRuleUtil.ruleToString(JSON.toJSONString(rule))
+                }
                 scheduleRepetitionBinding.ivNotRemind.setImageResource(R.drawable.schedule_remind_selected_icon)
             }
         }
@@ -111,6 +115,7 @@ class ScheduleRepetitionActivity : BaseActivity() {
                     it.checked = false
                 }
                 adapter.setList(list)
+                scheduleRepetitionBinding.tvCustomRule.text = ScheduleRepetitionRuleUtil.ruleToString(rule)
                 scheduleRepetitionBinding.ivNotRemind.setImageResource(R.drawable.schedule_remind_selected_icon)
             }
         }

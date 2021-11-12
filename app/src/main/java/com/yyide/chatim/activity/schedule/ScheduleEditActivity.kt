@@ -98,7 +98,9 @@ class ScheduleEditActivity : BaseActivity() {
                 }
             }
             if (it.rrule != null && it.isRepeat == "8") {
-                scheduleEditBinding.tvRepetition.text = "自定义重复"
+                //scheduleEditBinding.tvRepetition.text = "自定义重复"
+                scheduleEditBinding.tvRepetition.text =
+                    ScheduleRepetitionRuleUtil.ruleToString(JSON.toJSONString(it.rrule))
                 val repetition = Repetition(8,"", true, it.rrule)
                 scheduleEditViewModel.repetitionLiveData.value = repetition
                 sourceRepetitionRule = repetition
@@ -438,7 +440,12 @@ class ScheduleEditActivity : BaseActivity() {
             val stringExtra = data.getStringExtra("data")
             val repetition = JSON.parseObject(stringExtra, Repetition::class.java)
             loge("title=${repetition.title},rule=${repetition.rule}")
-            scheduleEditBinding.tvRepetition.text = repetition.title
+            if (repetition.code == 8) {
+                scheduleEditBinding.tvRepetition.text =
+                    ScheduleRepetitionRuleUtil.ruleToString(JSON.toJSONString(repetition.rule))
+            } else {
+                scheduleEditBinding.tvRepetition.text = repetition.title
+            }
             scheduleEditViewModel.repetitionLiveData.value = repetition
             return
         }

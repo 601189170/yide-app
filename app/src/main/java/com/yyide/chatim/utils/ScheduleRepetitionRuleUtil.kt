@@ -36,7 +36,7 @@ object ScheduleRepetitionRuleUtil {
     /**
      * 简化日期到月
      */
-    fun DateTime.simplifiedToMonthOfDateTime():DateTime{
+    fun DateTime.simplifiedToMonthOfDateTime(): DateTime {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         return DateTime.parse(this.toString("yyyy-MM") + "-01 00:00:00", dateTimeFormatter)
     }
@@ -101,7 +101,8 @@ object ScheduleRepetitionRuleUtil {
                 byweekday = JSON.parseArray(rule["byweekday"]?.toString(), String::class.java)
             } catch (e: Exception) {
                 loge("${rule["byweekday"]}解析报错：${e.localizedMessage}")
-                byweekday = rule["byweekday"].toString().replace("[","").replace("]","").split(",")
+                byweekday =
+                    rule["byweekday"].toString().replace("[", "").replace("]", "").split(",")
             }
 
         }
@@ -110,7 +111,8 @@ object ScheduleRepetitionRuleUtil {
                 bymonthday = JSON.parseArray(rule["bymonthday"]?.toString(), String::class.java)
             } catch (e: Exception) {
                 loge("${rule["bymonthday"]}解析报错：${e.localizedMessage}")
-                bymonthday = rule["bymonthday"].toString().replace("[","").replace("]","").split(",")
+                bymonthday =
+                    rule["bymonthday"].toString().replace("[", "").replace("]", "").split(",")
             }
         }
 
@@ -173,7 +175,7 @@ object ScheduleRepetitionRuleUtil {
         while (true) {
             if (nowDateTime < endDate) {
                 if (byweekday.isNullOrEmpty()) {
-                    if (until >= startDate){
+                    if (until >= startDate) {
                         repetitionDate.add(nowDateTime)
                     }
                 } else {
@@ -252,7 +254,7 @@ object ScheduleRepetitionRuleUtil {
         while (true) {
             if (nowDateTime < endDate) {
                 if (bymonthday.isNullOrEmpty()) {
-                    if (until >= startDate){
+                    if (until >= startDate) {
                         repetitionDate.add(nowDateTime)
                     }
                 } else {
@@ -296,5 +298,83 @@ object ScheduleRepetitionRuleUtil {
         }
         return repetitionDate
 
+    }
+
+    /**
+     * {"freq": "daily","interval": "1"}
+     * {"freq": "monthly","interval": "1","bymonthday":"[1,2,3,5]"}
+     * 星期 MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)
+     * {"freq": "weekly","interval": "1","byday":"MO,TU,WE,TH,FR"}
+     */
+    fun ruleToString(ruleString: String): String {
+        val rule: Map<String, Any> =
+            JSON.parseObject(ruleString, Map::class.java) as Map<String, Any>
+        val freq = rule["freq"]
+        val interval = rule["interval"]?.toString()?.toInt() ?: 1
+        logd(JSON.toJSONString(rule))
+        var byweekday = listOf<String>()
+        var bymonthday = listOf<String>()
+        if (rule["byweekday"] != null) {
+            try {
+                byweekday = JSON.parseArray(rule["byweekday"]?.toString(), String::class.java)
+            } catch (e: Exception) {
+                loge("${rule["byweekday"]}解析报错：${e.localizedMessage}")
+                byweekday =
+                    rule["byweekday"].toString().replace("[", "").replace("]", "").split(",")
+            }
+
+        }
+        if (rule["bymonthday"] != null) {
+            try {
+                bymonthday = JSON.parseArray(rule["bymonthday"]?.toString(), String::class.java)
+            } catch (e: Exception) {
+                loge("${rule["bymonthday"]}解析报错：${e.localizedMessage}")
+                bymonthday =
+                    rule["bymonthday"].toString().replace("[", "").replace("]", "").split(",")
+            }
+        }
+        when (freq) {
+            "daily", "DAILY" -> {
+                if (interval == 1) return "每天"
+                if (interval > 1) return "每${interval}天"
+            }
+            "weekly", "WEEKLY" -> {
+                //星期 MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)
+                val weekday = StringBuffer()
+                for (week in byweekday) {
+                    when (week) {
+                        "MO" -> weekday.append("周一，")
+                        "TU" -> weekday.append("周二，")
+                        "WE" -> weekday.append("周三，")
+                        "TH" -> weekday.append("周四，")
+                        "FR" -> weekday.append("周五，")
+                        "SA" -> weekday.append("周六，")
+                        "SU" -> weekday.append("周日")
+                    }
+                }
+
+                if (interval == 1) {
+                    return "每周的${weekday}"
+                }
+                return "每${interval}周的${weekday}"
+            }
+            "monthly", "MONTHLY" -> {
+                val monthday = bymonthday.map { it + "日" }.toString().replace("[", "").replace("]", "")
+                if (interval == 1) {
+                    return "每月的${monthday}"
+                }
+                return "每${interval}月的${monthday}"
+            }
+            "yearly", "YEARLY" -> {
+                if (interval == 1) {
+                    return "每年"
+                }
+                return "每${interval}年"
+            }
+            else -> {
+                return ruleString
+            }
+        }
+        return ruleString
     }
 }
