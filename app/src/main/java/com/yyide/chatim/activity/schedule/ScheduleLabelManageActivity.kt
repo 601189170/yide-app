@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -35,6 +36,7 @@ class ScheduleLabelManageActivity : BaseActivity() {
         setContentView(labelManageBinding.root)
         initView()
         labelManageViewModel.getLabelList().observe(this, Observer {
+            labelManageBinding.blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             if (it.isEmpty()) {
                 loge("没有数据")
             }

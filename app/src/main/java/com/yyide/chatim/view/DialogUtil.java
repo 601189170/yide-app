@@ -471,11 +471,11 @@ public class DialogUtil {
             } else if ("月".equals(unitStr)) {
                 final List<MonthBean> collect = monthList.stream().filter(MonthBean::getChecked).collect(Collectors.toList());
                 if (!collect.isEmpty()) {
-                    String bymonthday = collect.stream().map(MonthBean::getTitle).collect(Collectors.toList()).toString();
+                    List<String> bymonthday = collect.stream().map(MonthBean::getTitle).collect(Collectors.toList());
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\",\"bymonthday\":\"" + bymonthday + "\"}";
                     rule.put("freq","monthly");
                     rule.put("interval",numberStr);
-                    rule.put("bymonthday",bymonthday);
+                    rule.put("bymonthday",JSON.toJSONString(bymonthday));
 
                 } else {
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\"}";
@@ -486,11 +486,11 @@ public class DialogUtil {
             } else if ("周".equals(unitStr)) {
                 final List<WeekBean> collect = weekList.stream().filter(WeekBean::getChecked).collect(Collectors.toList());
                 if (!collect.isEmpty()) {
-                    String byweekday = collect.stream().map(WeekBean::getShortname).collect(Collectors.toList()).toString();
+                    List<String> byweekday = collect.stream().map(WeekBean::getShortname).collect(Collectors.toList());
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\",\"byweekday\":\"" + byweekday + "\"}";
                     rule.put("freq","weekly");
                     rule.put("interval",numberStr);
-                    rule.put("byweekday",byweekday);
+                    rule.put("byweekday",JSON.toJSONString(byweekday));
                 } else {
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\"}";
                     rule.put("freq","weekly");

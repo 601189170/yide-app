@@ -121,11 +121,11 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 if (selectMonth.isNotEmpty()) {
                     val bymonthday =
                         selectMonth.map { it.title }
-                            .toString()//.replace("[", "").replace("]", "")
+                            //.toString()//.replace("[", "").replace("]", "")
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\",\"bymonthday\":\"${bymonthday}\"}"
                     rule["freq"] = "monthly"
                     rule["interval"] = numberStr
-                    rule["bymonthday"] = bymonthday
+                    rule["bymonthday"] = JSON.toJSONString(bymonthday)
 
                 } else {
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"${numberStr}\"}"
@@ -137,11 +137,11 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 if (selectWeek.isNotEmpty()) {
                     val byweekday =
                         selectWeek.map { it.shortname }
-                            .toString()//.replace("[", "").replace("]", "")
+                            //.toString()//.replace("[", "").replace("]", "")
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\",\"byweekday\":\"${byweekday}\"}"
                     rule["freq"] = "weekly"
                     rule["interval"] = numberStr
-                    rule["byweekday"] = byweekday
+                    rule["byweekday"] = JSON.toJSONString(byweekday)
                 } else {
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"${numberStr}\"}"
                     rule["freq"] = "weekly"

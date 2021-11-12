@@ -38,6 +38,7 @@ class ScheduleAddLabelActivity : BaseActivity() {
         val stringExtra = intent.getStringExtra("labelList")
         val labelListSource = JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
         labelManageViewModel.getLabelList().observe(this, Observer {
+            labelManageBinding.blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             if (it.isEmpty()) {
                 loge("没有数据")
                 return@Observer

@@ -47,4 +47,15 @@
         app:layout_constraintTop_toBottomOf="@id/cl_add_label"
         tools:listitem="@layout/item_label_manage_list"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/blank_page"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/cl_add_label"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <include layout="@layout/layout_blank_page" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
