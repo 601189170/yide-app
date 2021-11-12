@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
@@ -53,6 +54,7 @@ public class CalendarComposeLayout extends FrameLayout {
     private OnCalendarClickListener mOnCalendarClickListener;
     private ImageView ivShowCalendar;
     private SwipeRecyclerView rvScheduleList;
+    private ConstraintLayout blankPage;
 
     public CalendarComposeLayout(@NonNull Context context) {
         this(context, null);
@@ -106,6 +108,7 @@ public class CalendarComposeLayout extends FrameLayout {
         scheduleEventView = findViewById(R.id.scheduleEventView);
         ivShowCalendar = findViewById(R.id.iv_show_calendar);
         rvScheduleList = findViewById(R.id.rvScheduleList);
+        blankPage = findViewById(R.id.blank_page);
         final RelativeLayout rlShowCalendar = findViewById(R.id.rlShowCalendar);
         bindingMonthAndWeekCalendar();
         Log.e(TAG, "onFinishInflate: " );
@@ -283,5 +286,9 @@ public class CalendarComposeLayout extends FrameLayout {
 
     public SwipeRecyclerView getRvScheduleList(){
         return rvScheduleList;
+    }
+
+    public ConstraintLayout getBlankPage(){
+        return blankPage;
     }
 }

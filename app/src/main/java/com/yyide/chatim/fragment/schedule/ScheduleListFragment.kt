@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -67,6 +68,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     private val scheduleListViewViewModel: ScheduleListViewViewModel by viewModels()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
     private lateinit var rvScheduleList: SwipeRecyclerView
+    private lateinit var blankPage: ConstraintLayout
     private lateinit var calendarComposeLayout: CalendarComposeLayout
     private var list = mutableListOf<ScheduleData>()
     private var first: Boolean = true
@@ -95,6 +97,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         EventBus.getDefault().register(this)
         calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
         rvScheduleList = calendarComposeLayout.rvScheduleList
+        blankPage = calendarComposeLayout.blankPage
         calendarComposeLayout.setOnCalendarClickListener(this)
         initScheduleList()
         initData()
@@ -127,6 +130,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                 refresh = false
                 fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
             }
+
+            blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
         //删除监听
         scheduleEditViewModel.deleteResult.observe(requireActivity(), {

@@ -99,6 +99,15 @@
                     android:overScrollMode="never"
                     android:paddingTop="6dp"
                     android:paddingStart="20dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/blank_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <include layout="@layout/layout_blank_page" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </RelativeLayout>
         </LinearLayout>
     </com.yide.calendar.schedule.CalendarComposeLayout>

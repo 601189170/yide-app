@@ -38,6 +38,7 @@ import com.yyide.chatim.activity.RegisterActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.LoginRsp;
@@ -360,6 +361,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     @Override
     public void getUserSchool(GetUserSchoolRsp rsp) {
         SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+        ScheduleDaoUtil.INSTANCE.clearAll();
         if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
             //登陆成功保存账号密码
             SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());

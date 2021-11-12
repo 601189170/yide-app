@@ -200,23 +200,28 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             updateData()
         }
 
-        todayScheduleViewModel.getThisWeekUndoList().observe(requireActivity(), {
-            it?.let {
-                weekUndoList.clear()
-                weekUndoList.addAll(it)
-                thisWeekScheduleTodayAdapter.setList(weekUndoList)
-            }
-            if (refresh){
-                refresh = false
-                fragmentScheduleTodayBinding.swipeRefreshLayout.isRefreshing = false
-            }
-        })
         todayScheduleViewModel.getTodayList().observe(requireActivity(), {
-            it?.let {
+            val todayList1 = it.todayList
+            val thisWeekUndoList = it.thisWeekUndoList
+            todayList1?.let {
                 todayList.clear()
                 todayList.addAll(it)
                 todayScheduleTodayAdapter.setList(todayList)
             }
+            thisWeekUndoList?.let {
+                weekUndoList.clear()
+                weekUndoList.addAll(it)
+                thisWeekScheduleTodayAdapter.setList(weekUndoList)
+            }
+
+            if ((todayList1 == null || todayList1.isEmpty()) && (thisWeekUndoList == null || thisWeekUndoList.isEmpty())) {
+                fragmentScheduleTodayBinding.blankPage.visibility = View.VISIBLE
+                fragmentScheduleTodayBinding.nestedScrollView.visibility = View.GONE
+            } else {
+                fragmentScheduleTodayBinding.blankPage.visibility = View.GONE
+                fragmentScheduleTodayBinding.nestedScrollView.visibility = View.VISIBLE
+            }
+
             if (refresh){
                 refresh = false
                 fragmentScheduleTodayBinding.swipeRefreshLayout.isRefreshing = false
@@ -262,7 +267,6 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun updateData() {
-        todayScheduleViewModel.getThisWeekScheduleList()
         todayScheduleViewModel.getTodayScheduleList()
     }
 
