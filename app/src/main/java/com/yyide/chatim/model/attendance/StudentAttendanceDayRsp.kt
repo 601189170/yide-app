@@ -1,5 +1,7 @@
 package com.yyide.chatim.model.attendance
 
+import com.google.gson.annotations.SerializedName
+
 /**
  * @author liu tao
  * @date 2021/11/3 10:16
@@ -28,6 +30,7 @@ data class StudentAttendanceDayRsp(
                 var attendanceType: String? = null,
                 var attendanceSignOut: String? = null,
                 var requiredTime: String? = null,
+                @SerializedName("url")
                 var path: String? = null,
                 var signTime: String? = null,
                 var serverId: String? = null,

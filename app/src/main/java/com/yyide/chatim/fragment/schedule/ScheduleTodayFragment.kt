@@ -214,7 +214,7 @@ class ScheduleTodayFragment : Fragment() {
             if (it) {
                 ToastUtils.showShort("日程修改成功")
                 ScheduleDaoUtil.changeScheduleState(
-                    curModifySchedule?.id ?: "","1"
+                    curModifySchedule?.id ?: "",curModifySchedule?.status?:""
                 )
                 updateData()
             } else {
@@ -256,6 +256,14 @@ class ScheduleTodayFragment : Fragment() {
             .setWidth(width)
             .setHeight(height)
 
+    private val markUnCompletedMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_orange)
+            //.setImage(R.drawable.ic_action_delete)
+            .setText("标为\n未完成")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
     private val delMenuItem: SwipeMenuItem =
         SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_red)
             .setText("删除")
@@ -278,7 +286,11 @@ class ScheduleTodayFragment : Fragment() {
                 run {
                     when(type.toInt()){
                         SCHEDULE_TYPE_SCHEDULE->{
-                            swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            if (scheduleData.status == "1") {
+                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+                            } else {
+                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            }
                             swipeRightMenu.addMenuItem(delMenuItem)
                         }
                         SCHEDULE_TYPE_CONFERENCE->{
@@ -305,7 +317,11 @@ class ScheduleTodayFragment : Fragment() {
                 run {
                     when(type.toInt()){
                         SCHEDULE_TYPE_SCHEDULE->{
-                            swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            if (scheduleData.status == "1") {
+                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+                            } else {
+                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            }
                             swipeRightMenu.addMenuItem(delMenuItem)
                         }
                         SCHEDULE_TYPE_CONFERENCE->{

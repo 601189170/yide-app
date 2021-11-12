@@ -121,9 +121,11 @@
 
     <color name="color_f3f3f3">#F3F3F3</color>
 
-    <color name="red_normal">#FF0000</color>
-    <color name="red_pressed">#FF6666</color>
+    <color name="red_normal">#FF6964</color>
+    <color name="red_pressed">#FF6964</color>
     <color name="blue_normal">#2C8AFF</color>
     <color name="blue_pressed">#2C8AFF</color>
+    <color name="orange_normal">#FF9E6B</color>
+    <color name="orange_pressed">#FF9E6B</color>
     <color name="default_item_decoration_color">#EBEBEB</color>
 </resources>

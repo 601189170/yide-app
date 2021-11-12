@@ -1,5 +1,7 @@
 package com.yyide.chatim.model.schedule
 
+import com.alibaba.fastjson.JSON
+
 /**
  *
  * @author liu tao
@@ -23,7 +25,7 @@ data class Repetition(
             val rule1 = mutableMapOf<String,Any>()
             rule1["freq"] = "weekly"
             rule1["interval"] = "1"
-            rule1["byweekday"] = listOf("MO","TU","WE","TH","FR").toString()
+            rule1["byweekday"] = JSON.toJSONString(listOf("MO","TU","WE","TH","FR"))
             remindList.add(Repetition(5,"每个工作日（周一到周五）", false,rule1))
             //{"freq": "daily","interval": "1"}
             val rule2 = mutableMapOf<String,Any>()

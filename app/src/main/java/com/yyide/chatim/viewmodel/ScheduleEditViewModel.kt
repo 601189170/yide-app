@@ -214,7 +214,11 @@ class ScheduleEditViewModel : ViewModel() {
      * 修改日程状态
      */
     fun changeScheduleState(scheduleData: ScheduleData){
-        scheduleData.status = "1"
+        if (scheduleData.status == "1") {
+            scheduleData.status = "0"
+        } else {
+            scheduleData.status = "1"
+        }
         val toJSONString = JSON.toJSONString(scheduleData)
         val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
         dingApiStores.changeScheduleState(requestBody).enqueue(object :Callback<BaseRsp>{

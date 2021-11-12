@@ -39,6 +39,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -578,7 +579,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
         mViewBinding.rgAttendanceType.check(R.id.rb_absence);
         StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean = null;
         for (StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean1 : studentsBeanList) {
-            if (weeksMonthListBean1.getTheme().equals(eventName)) {
+            if (Objects.equals(weeksMonthListBean1.getTheme(), eventName)) {
                 weeksMonthListBean = weeksMonthListBean1;
                 break;
             }

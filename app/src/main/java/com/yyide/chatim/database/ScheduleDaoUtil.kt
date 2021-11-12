@@ -357,6 +357,9 @@ object ScheduleDaoUtil {
      * 修改日程完成状态
      */
     fun changeScheduleState(id: String, status: String) {
+        if (id.isEmpty() || status.isEmpty()){
+            return
+        }
         scheduleDao().changeScheduleState(id, status)
     }
 

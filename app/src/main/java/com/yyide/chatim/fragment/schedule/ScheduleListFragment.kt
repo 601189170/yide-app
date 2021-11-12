@@ -128,7 +128,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             if (it) {
                 ToastUtils.showShort("日程修改成功")
                 ScheduleDaoUtil.changeScheduleState(
-                    curModifySchedule?.id ?: "", "1"
+                    curModifySchedule?.id ?: "", curModifySchedule?.status?:""
                 )
                 updateDate()
             } else {
@@ -324,6 +324,14 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
             .setWidth(width)
             .setHeight(height)
 
+    private val markUnCompletedMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_orange)
+            //.setImage(R.drawable.ic_action_delete)
+            .setText("标为\n未完成")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
     private val swipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {
         override fun onCreateMenu(
             swipeLeftMenu: SwipeMenu,
@@ -340,7 +348,11 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener {
                         run {
                             when (type.toInt()) {
                                 Schedule.SCHEDULE_TYPE_SCHEDULE -> {
-                                    swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                                    if (scheduleData.status == "1") {
+                                        swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+                                    } else {
+                                        swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                                    }
                                     swipeRightMenu.addMenuItem(delMenuItem)
                                 }
                                 Schedule.SCHEDULE_TYPE_CONFERENCE -> {
