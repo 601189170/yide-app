@@ -105,7 +105,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 }
                 final String time2 = DateUtils.formatTime(weekStatisticsBean.getSignInTime(), null, "HH:mm");
                 holder.viewBinding.tvEventTime.setText(time2);
-                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_late_early));
+                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_leave_early));
                 break;
             case "1":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
