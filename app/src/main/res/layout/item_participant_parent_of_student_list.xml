@@ -39,7 +39,7 @@
         android:text="父亲"
         android:textColor="#ff2c8aff"
         android:textSize="13sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/tv_name"
         app:layout_constraintLeft_toRightOf="@id/tv_name"
         app:layout_constraintTop_toTopOf="@id/tv_name" />

@@ -3,6 +3,7 @@ package com.yyide.chatim.adapter.schedule
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.Group
+import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -44,27 +45,53 @@ class ScheduleListAdapter :
      * 相同的布局设置
      */
     fun commonConvert(holder: BaseViewHolder, item: ScheduleData) {
-        if (item.isFirstDayOfMonth) {
-            holder.getView<Group>(R.id.group_day).visibility = View.VISIBLE
-            val dateTime = ScheduleDaoUtil.toDateTime(item.startTime)
-            val day = dateTime.dayOfMonth
-            val week = dateTime.dayOfWeek + 1
-            holder.setText(R.id.tv_title_day, "${day}日")
-            holder.setText(R.id.tv_title_week, DateUtils.getWeek(week))
-        } else {
-            holder.getView<Group>(R.id.group_day).visibility = View.INVISIBLE
-        }
+        loge("ScheduleData ${JSON.toJSONString(item)}")
         holder.setText(R.id.tv_schedule_name, item.name)
-        val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
-        holder.setText(
-            R.id.tv_schedule_time_interval,
-            "$formatTime    " +
-                    DateUtils.formatTime(
-                        item.startTime,
-                        "",
-                        "HH:mm"
-                    ) + "-" + DateUtils.formatTime(item.endTime, "", "HH:mm")
-        )
+
+        if (item.moreDay == 1) {
+            if (item.isFirstDayOfMonth) {
+                holder.getView<Group>(R.id.group_day).visibility = View.VISIBLE
+                val dateTime = ScheduleDaoUtil.toDateTime(item.moreDayStartTime)
+                val day = dateTime.dayOfMonth
+                val week = dateTime.dayOfWeek + 1
+                holder.setText(R.id.tv_title_day, "${day}日")
+                holder.setText(R.id.tv_title_week, DateUtils.getWeek(week))
+            } else {
+                holder.getView<Group>(R.id.group_day).visibility = View.INVISIBLE
+            }
+            val formatTime = DateUtils.formatTime(item.moreDayStartTime, "", "", true)
+            holder.setText(
+                R.id.tv_schedule_time_interval,
+                "$formatTime    " +
+                        DateUtils.formatTime(
+                            item.moreDayStartTime,
+                            "",
+                            "HH:mm"
+                        ) + "-" + DateUtils.formatTime(item.moreDayEndTime, "", "HH:mm")
+            )
+        } else {
+            if (item.isFirstDayOfMonth) {
+                holder.getView<Group>(R.id.group_day).visibility = View.VISIBLE
+                val dateTime = ScheduleDaoUtil.toDateTime(item.startTime)
+                val day = dateTime.dayOfMonth
+                val week = dateTime.dayOfWeek + 1
+                holder.setText(R.id.tv_title_day, "${day}日")
+                holder.setText(R.id.tv_title_week, DateUtils.getWeek(week))
+            } else {
+                holder.getView<Group>(R.id.group_day).visibility = View.INVISIBLE
+            }
+            val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
+            holder.setText(
+                R.id.tv_schedule_time_interval,
+                "$formatTime    " +
+                        DateUtils.formatTime(
+                            item.startTime,
+                            "",
+                            "HH:mm"
+                        ) + "-" + DateUtils.formatTime(item.endTime, "", "HH:mm")
+            )
+        }
+
         loadImage(
             item.type.toInt(),
             DateUtils.dateExpired(item.endTime),

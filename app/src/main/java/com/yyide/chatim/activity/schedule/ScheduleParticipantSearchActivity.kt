@@ -230,6 +230,8 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
                     holder.setText(R.id.tv_name, item.guardianName)
                     holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
                     holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
+
+                    holder.setText(R.id.tv_guardian_name,guardianName(item.relation))
 //                    holder.itemView.setOnClickListener {
 //                        item.checked = !item.checked
 //                        holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
@@ -245,5 +247,35 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
                 parentsAdapter.setList(guardians)
             }
         }
+    }
+
+    fun guardianName(relation:Int):String{
+        //0.父亲1.母亲2.爷爷3.奶奶4.外公5.外婆，6其他
+        when (relation) {
+            0 -> {
+                return "父亲"
+            }
+            1 -> {
+                return "母亲"
+            }
+            2 -> {
+                return "爷爷"
+            }
+            3 -> {
+                return "奶奶"
+            }
+            4 -> {
+                return "外公"
+            }
+            5 -> {
+                return "外婆"
+            }
+            6 -> {
+                return "其他"
+            }
+            else -> {
+            }
+        }
+        return "其他"
     }
 }

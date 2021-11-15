@@ -180,19 +180,21 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 loge("endSelect id=$id,text=$text")
                 unit.set(text)
                 text?.also {
-                    val numberList = RepetitionDataBean.getNumberList(it, repetitionDataBeanList)
-                    scheduleRepetitionBinding.numberWv.setData(numberList)
-                    scheduleRepetitionBinding.numberWv.setDefault(0)
+                    this@ScheduleCustomRepetitionActivity.runOnUiThread {
+                        val numberList = RepetitionDataBean.getNumberList(it, repetitionDataBeanList)
+                        scheduleRepetitionBinding.numberWv.setData(numberList)
+                        scheduleRepetitionBinding.numberWv.setDefault(0)
 
-                    if (it == "月") {
-                        scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
-                        scheduleRepetitionBinding.rvMonthList.visibility = View.VISIBLE
-                    } else if (it == "周") {
-                        scheduleRepetitionBinding.rvWeekList.visibility = View.VISIBLE
-                        scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
-                    } else {
-                        scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
-                        scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+                        if (it == "月") {
+                            scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
+                            scheduleRepetitionBinding.rvMonthList.visibility = View.VISIBLE
+                        } else if (it == "周") {
+                            scheduleRepetitionBinding.rvWeekList.visibility = View.VISIBLE
+                            scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+                        } else {
+                            scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
+                            scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+                        }
                     }
                 }
             }

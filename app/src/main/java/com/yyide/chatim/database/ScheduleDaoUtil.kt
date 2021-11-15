@@ -13,6 +13,7 @@ import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTimeToMin
 import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
 import org.joda.time.DateTime
+import org.joda.time.Days
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import java.util.*
@@ -59,7 +60,7 @@ object ScheduleDaoUtil {
     /**
      * 比较两个时间的大小 忽略秒
      */
-    infix fun String.compareTo(date:String): Int{
+    infix fun String.compareTo(date: String): Int {
         val simplifiedDataTimeToMinute1 = toDateTime(this).simplifiedDataTimeToMinute()
         val simplifiedDataTimeToMinute2 = toDateTime(date).simplifiedDataTimeToMinute()
         return simplifiedDataTimeToMinute1.compareTo(simplifiedDataTimeToMinute2)
@@ -68,7 +69,7 @@ object ScheduleDaoUtil {
     /**
      * 指定时间的最后一天的时间
      */
-    fun DateTime.lastTimeOfDay():DateTime{
+    fun DateTime.lastTimeOfDay(): DateTime {
         return toDateTime(this.toString("yyyy-MM-dd ") + "23:59:59")
     }
 
@@ -116,12 +117,12 @@ object ScheduleDaoUtil {
     /**
      * 判断当前日程是否当前账户创建的
      */
-    fun ScheduleData.promoterSelf(): Boolean{
+    fun ScheduleData.promoterSelf(): Boolean {
         val userId = SpData.getIdentityInfo().userId
-        if (TextUtils.isEmpty(this.promoter) || TextUtils.isEmpty(userId)){
+        if (TextUtils.isEmpty(this.promoter) || TextUtils.isEmpty(userId)) {
             return false
         }
-        if (this.promoter == userId){
+        if (this.promoter == userId) {
             return true
         }
         return false
@@ -133,6 +134,7 @@ object ScheduleDaoUtil {
     fun todayList(): List<ScheduleData> {
         //今日最后的时间
         val finallyTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+        val finallyDateTime = toDateTime(finallyTime)
         val startDateBeforeScheduleList = scheduleDao().getStartDateBeforeScheduleList(finallyTime)
         val scheduleDataList = mutableListOf<ScheduleData>()
         scheduleDataList.addAll(startDateBeforeScheduleList.map { it.scheduleWithParticipantAndLabelToScheduleData() })
@@ -174,6 +176,9 @@ object ScheduleDaoUtil {
 
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                    newSchedule.moreDay = 0
+                    newSchedule.moreDayStartTime = newSchedule.startTime
+                    newSchedule.moreDayEndTime = newSchedule.endTime
                     listAllSchedule.add(newSchedule)
                 } else if (it.simplifiedDataTime() < DateTime.now().simplifiedDataTime()) {
                     //计算不是今日的日程(今日之前)，跨天是否在今日显示
@@ -185,12 +190,69 @@ object ScheduleDaoUtil {
                     val endTime = toDateTime(schedule.endTime)
                     val now = DateTime.now().simplifiedDataTime()
                     if (now in startTime..endTime) {
+                        schedule.moreDay = 1
+                        schedule.moreDayStartTime = schedule.startTime
+                        schedule.moreDayEndTime = schedule.endTime
                         listAllSchedule.add(schedule)
                     }
                 }
             }
         }
-        return listAllSchedule
+        listAllSchedule.sort()
+        //计算跨天日程并切分时间段
+        val listAllSchedule2 = mutableListOf<ScheduleData>()
+        for (scheduleData in listAllSchedule) {
+            val startTime = toDateTime(scheduleData.startTime)
+            val endTime = toDateTime(scheduleData.endTime)
+            if (startTime.simplifiedDataTime() == endTime.simplifiedDataTime()) {
+                //不是跨天的日程
+                scheduleData.moreDay = 0
+                scheduleData.moreDayStartTime = scheduleData.startTime
+                scheduleData.moreDayEndTime = scheduleData.endTime
+                listAllSchedule2.add(scheduleData)
+            } else {
+                //跨天的日程
+                val daysBetween = Days.daysBetween(startTime, endTime).days
+                loge("$startTime,$endTime 跨天的日程跨天${daysBetween}")
+                for (index in 0..daysBetween) {
+                    if (index == 0) {
+                        //第一天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        scheduleData1.moreDayStartTime = scheduleData1.startTime
+                        scheduleData1.moreDayEndTime =
+                            toDateTime(scheduleData1.startTime).simplifiedDataTime()
+                                .toStringTime("yyyy-MM-dd ") + "23:59:59"
+                        listAllSchedule2.add(scheduleData1)
+                    } else if (index == daysBetween) {
+                        //最后一天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        scheduleData1.moreDayStartTime =
+                            toDateTime(scheduleData1.endTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
+                        scheduleData1.moreDayEndTime = scheduleData1.endTime
+                        if (toDateTime(scheduleData1.endTime).simplifiedDataTime() <= finallyDateTime) {
+                            listAllSchedule2.add(scheduleData1)
+                        }
+                    } else {
+                        //中间的天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        val allDay =
+                            toDateTime(scheduleData1.startTime).simplifiedDataTime().plusDays(index)
+                        scheduleData1.moreDayStartTime =
+                            allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
+                        scheduleData1.moreDayEndTime =
+                            allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
+                        if (allDay.simplifiedDataTime() <= finallyDateTime) {
+                            listAllSchedule2.add(scheduleData1)
+                        }
+                    }
+                }
+            }
+        }
+        listAllSchedule2.sort()
+        return listAllSchedule2
     }
 
     /**
@@ -245,6 +307,9 @@ object ScheduleDaoUtil {
 
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                    newSchedule.moreDay = 0
+                    newSchedule.moreDayStartTime = newSchedule.startTime
+                    newSchedule.moreDayEndTime = newSchedule.endTime
                     listAllSchedule.add(newSchedule)
                 } else {
                     logd("---计算不是本周的日程(今日之前)，跨天是否在今日显示--")
@@ -253,13 +318,69 @@ object ScheduleDaoUtil {
                     )
                     val startTime = toDateTime(schedule.startTime).simplifiedDataTime()
                     val endTime = toDateTime(schedule.endTime).simplifiedDataTime()
-                    if ((startTime >= firstDayOfWeek && startTime<lastDayOfWeek) || (startTime<=firstDayOfWeek && endTime>firstDayOfWeek)){
+                    if ((startTime >= firstDayOfWeek && startTime < lastDayOfWeek) || (startTime <= firstDayOfWeek && endTime > firstDayOfWeek)) {
+                        schedule.moreDay = 1
+                        schedule.moreDayStartTime = schedule.startTime
+                        schedule.moreDayEndTime = schedule.endTime
                         listAllSchedule.add(schedule)
                     }
                 }
             }
         }
         listAllSchedule.sort()
+        //计算跨天日程并切分时间段
+        val listAllSchedule2 = mutableListOf<ScheduleData>()
+        for (scheduleData in listAllSchedule) {
+            val startTime = toDateTime(scheduleData.startTime)
+            val endTime = toDateTime(scheduleData.endTime)
+            if (startTime.simplifiedDataTime() == endTime.simplifiedDataTime()) {
+                //不是跨天的日程
+                scheduleData.moreDay = 0
+                scheduleData.moreDayStartTime = scheduleData.startTime
+                scheduleData.moreDayEndTime = scheduleData.endTime
+                listAllSchedule2.add(scheduleData)
+            } else {
+                //跨天的日程
+                val daysBetween = Days.daysBetween(startTime, endTime).days
+                loge("$startTime,$endTime 跨天的日程跨天${daysBetween}")
+                for (index in 0..daysBetween) {
+                    if (index == 0) {
+                        //第一天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        scheduleData1.moreDayStartTime = scheduleData1.startTime
+                        scheduleData1.moreDayEndTime =
+                            toDateTime(scheduleData1.startTime).simplifiedDataTime()
+                                .toStringTime("yyyy-MM-dd ") + "23:59:59"
+                        listAllSchedule2.add(scheduleData1)
+                    } else if (index == daysBetween) {
+                        //最后一天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        scheduleData1.moreDayStartTime =
+                            toDateTime(scheduleData1.endTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
+                        scheduleData1.moreDayEndTime = scheduleData1.endTime
+                        if (toDateTime(scheduleData1.endTime).simplifiedDataTime() <= lastDayOfWeek) {
+                            listAllSchedule2.add(scheduleData1)
+                        }
+                    } else {
+                        //中间的天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        val allDay =
+                            toDateTime(scheduleData1.startTime).simplifiedDataTime().plusDays(index)
+                        scheduleData1.moreDayStartTime =
+                            allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
+                        scheduleData1.moreDayEndTime =
+                            allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
+                        if (allDay.simplifiedDataTime() <= lastDayOfWeek) {
+                            listAllSchedule2.add(scheduleData1)
+                        }
+                    }
+                }
+            }
+        }
+        listAllSchedule2.sort()
         return listAllSchedule
     }
 
@@ -315,24 +436,82 @@ object ScheduleDaoUtil {
                 }
             }
         }
+        loge("listAllSchedule size ${listAllSchedule.size}")
+        //计算跨天日程并切分时间段
+        val listAllSchedule2 = mutableListOf<DayOfMonth>()
+        for (dayOfMonth in listAllSchedule) {
+            val dateTime = dayOfMonth.dateTime
+            val scheduleData = dayOfMonth.scheduleData
+            val startTime = toDateTime(scheduleData.startTime)
+            val endTime = toDateTime(scheduleData.endTime)
+            if (startTime.simplifiedDataTime() == endTime.simplifiedDataTime()) {
+                //不是跨天的日程
+                scheduleData.moreDay = 0
+                scheduleData.moreDayStartTime = scheduleData.startTime
+                scheduleData.moreDayEndTime = scheduleData.endTime
+                listAllSchedule2.add(dayOfMonth)
+            } else {
+                //跨天的日程
+                val daysBetween = Days.daysBetween(startTime, endTime).days
+                loge("$startTime,$endTime 跨天的日程跨天${daysBetween}")
+                for (index in 0..daysBetween) {
+                    if (index == 0) {
+                        //第一天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        scheduleData1.moreDayStartTime = scheduleData1.startTime
+                        scheduleData1.moreDayEndTime =
+                            toDateTime(scheduleData1.startTime).simplifiedDataTime()
+                                .toStringTime("yyyy-MM-dd ") + "23:59:59"
+                        listAllSchedule2.add(DayOfMonth(dateTime, scheduleData1))
+                    } else if (index == daysBetween) {
+                        //最后一天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        scheduleData1.moreDayStartTime =
+                            toDateTime(scheduleData1.endTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
+                        scheduleData1.moreDayEndTime = scheduleData1.endTime
+                        listAllSchedule2.add(
+                            DayOfMonth(
+                                toDateTime(scheduleData1.endTime).simplifiedDataTime(),
+                                scheduleData1
+                            )
+                        )
+                    } else {
+                        //中间的天
+                        val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDay = 1
+                        val allDay =
+                            toDateTime(scheduleData1.startTime).simplifiedDataTime().plusDays(index)
+                        scheduleData1.moreDayStartTime =
+                            allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
+                        scheduleData1.moreDayEndTime =
+                            allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
+                        listAllSchedule2.add(DayOfMonth(allDay.simplifiedDataTime(), scheduleData1))
+                    }
+                }
+                //listAllSchedule2.add(it)
+            }
+        }
+        listAllSchedule2.sort()
         timeAxisDateTime?.let {
-            for (i in 0 until listAllSchedule.size - 1) {
-                val dateTime1 = listAllSchedule[i].dateTime.simplifiedDataTime()
-                val dateTime2 = listAllSchedule[i + 1].dateTime.simplifiedDataTime()
-                if (i != 0 && i != listAllSchedule.size - 1 && it in dateTime1..dateTime2) {
+            for (i in 0 until listAllSchedule2.size - 1) {
+                val dateTime1 = listAllSchedule2[i].dateTime.simplifiedDataTime()
+                val dateTime2 = listAllSchedule2[i + 1].dateTime.simplifiedDataTime()
+                if (i != 0 && i != listAllSchedule2.size - 1 && it in dateTime1..dateTime2) {
                     loge("----找到时间轴的位置----")
                     val scheduleData = ScheduleData()
                     scheduleData.isTimeAxis = true
                     scheduleData.isFirstDayOfMonth = false
                     scheduleData.isMonthHead = false
                     scheduleData.startTime = it.toStringTime()
-                    listAllSchedule.add(i, DayOfMonth(it, scheduleData))
+                    listAllSchedule2.add(i, DayOfMonth(it, scheduleData))
                     return@let
                 }
             }
         }
-        listAllSchedule.sort()
-        return listAllSchedule
+        listAllSchedule2.sort()
+        return listAllSchedule2
     }
 
     /**
@@ -357,7 +536,7 @@ object ScheduleDaoUtil {
      * 修改日程完成状态
      */
     fun changeScheduleState(id: String, status: String) {
-        if (id.isEmpty() || status.isEmpty()){
+        if (id.isEmpty() || status.isEmpty()) {
             return
         }
         scheduleDao().changeScheduleState(id, status)
@@ -500,9 +679,9 @@ object ScheduleDaoUtil {
     /**
      * 保存日程数据到本地
      */
-    fun insert(scheduleWithParticipantAndLabel:ScheduleWithParticipantAndLabel){
+    fun insert(scheduleWithParticipantAndLabel: ScheduleWithParticipantAndLabel) {
         scheduleWithParticipantAndLabel.also {
-            scheduleDao().insert(it.schedule,it.participantList,it.labelList)
+            scheduleDao().insert(it.schedule, it.participantList, it.labelList)
         }
     }
 }

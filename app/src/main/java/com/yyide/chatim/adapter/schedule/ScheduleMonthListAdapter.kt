@@ -32,16 +32,30 @@ class ScheduleMonthListAdapter: BaseQuickAdapter<ScheduleData, BaseViewHolder>(R
             else -> {
             }
         }
-        val startDate: String = schedule.startTime
-        val endDate: String = schedule.endTime
-        baseViewHolder.setText(
-            R.id.tv_date,
-            DateUtils.formatTime(
-                startDate,
-                "",
-                "HH:mm"
-            ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
-        )
+        if (schedule.moreDay == 1){
+            val startDate: String = schedule.moreDayStartTime
+            val endDate: String = schedule.moreDayEndTime
+            baseViewHolder.setText(
+                R.id.tv_date,
+                DateUtils.formatTime(
+                    startDate,
+                    "",
+                    "HH:mm"
+                ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
+            )
+        }else{
+            val startDate: String = schedule.startTime
+            val endDate: String = schedule.endTime
+            baseViewHolder.setText(
+                R.id.tv_date,
+                DateUtils.formatTime(
+                    startDate,
+                    "",
+                    "HH:mm"
+                ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
+            )
+        }
+
         //设置日程标签的背景
         val label = schedule.label
         if (label.isNotEmpty()) {
