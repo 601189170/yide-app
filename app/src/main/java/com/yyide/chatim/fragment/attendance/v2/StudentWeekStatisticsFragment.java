@@ -21,12 +21,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.database.ScheduleDaoUtil;
-import com.yyide.chatim.fragment.attendance.StatisticsListFragment;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.databinding.FragmentWeekStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
-import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.attendance.StudentAttendanceWeekMonthRsp;
@@ -84,15 +82,19 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     private boolean refresh;
     private boolean first = true;
     private String historyEvent;//上一次选择的事件
+    private String historyEventId;//上一次选择的事件
+    private String historyEventType;//上一次选择的事件
     private String beginDate = "2000-01-01 00:00:00";
     //请求数据需要的时间
     private String startTime;
     private String endTime;
 
-    public StudentWeekStatisticsFragment(String type,String theme) {
+    public StudentWeekStatisticsFragment(String type,String theme,String serverId,String eventType) {
         // Required empty public constructor
         this.type = type;
         this.historyEvent = theme;
+        this.historyEventId = serverId;
+        this.historyEventType = eventType;
     }
 
     @Override
@@ -438,8 +440,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
                 mViewBinding.tvClassName.setOnClickListener(v -> {
                             final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), dialogType, classList);
-                            deptSelectPop.setOnCheckedListener((dataBean) -> {
-                                Log.e(TAG, "班级选择: " + dataBean.toString());
+                            deptSelectPop.setOnCheckedListener(dataBean -> {
+                                Log.e(TAG, "班级选择: " + dataBean);
                                 mViewBinding.tvClassName.setText(dataBean.getDeptName());
                                 //班级id
                                 currentClass = dataBean.getClassId();
@@ -468,11 +470,13 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, drawable, null);
             mViewBinding.tvAttendanceType.setOnClickListener(v -> {
                 final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 3, eventList);
-                deptSelectPop.setOnCheckedListener((id, dept) -> {
-                    Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
-                    mViewBinding.tvAttendanceType.setText(dept);
-                    historyEvent = dept;
-                    showData(dept);
+                deptSelectPop.setOnCheckedListener(dataBean1 -> {
+                    Log.e(TAG, "事件选择: id=" + dataBean1.getDeptId() + ", dept=" + dataBean1.getDeptName());
+                    mViewBinding.tvAttendanceType.setText(dataBean1.getDeptName());
+                    historyEvent = dataBean1.getDeptName();
+                    historyEventId = dataBean1.getDeptId();
+                    historyEventType = dataBean1.getType();
+                    showData(dataBean1.getDeptId(), dataBean1.getType());
                 });
             });
         }
@@ -504,7 +508,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
 
             if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getClassroomTeacherAttendanceList() == null) {
                 showBlank(false);
-                showData(null);
+                showData(null,null);
                 return;
             }
             showBlank(false);
@@ -526,6 +530,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 }
                 dataBean.setDeptName(name);
                 dataBean.setDeptId(serverId);
+                dataBean.setType(classroomTeacherAttendanceListBean.getType()+"");
                 eventList.add(dataBean);
                 if (classroomTeacherAttendanceListBean.getType() == 2) {
                     if (weeksMonthStatisticalCourseForm != null) {
@@ -547,6 +552,8 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 if (!eventOptional.isPresent()) {
                     eventList.get(0).setIsDefault(1);
                     historyEvent = eventList.get(0).getDeptName();
+                    historyEventType = eventList.get(0).getType();
+                    historyEventId = eventList.get(0).getDeptId();
                 }
                 mViewBinding.tvAttendanceType.setVisibility(View.VISIBLE);
                 //默认选择第一个事件
@@ -559,10 +566,12 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
 
             //默认选择第一个事件的统计
             if (studentsBeanList.size() != 0) {
-                showData(TextUtils.isEmpty(historyEvent) ? studentsBeanList.get(0).getTheme() : historyEvent);
+                final StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean = studentsBeanList.get(0);
+                //showData(weeksMonthListBean.getServerId(),weeksMonthListBean.getType()+"");
+                showData(TextUtils.isEmpty(historyEventId)?weeksMonthListBean.getServerId():historyEventId,TextUtils.isEmpty(historyEventType)?weeksMonthListBean.getType()+"":historyEventType);
             } else {
                 ToastUtils.showShort("未查询到数据");
-                showData(null);
+                showData(null,null);
             }
         } else {
             ToastUtils.showShort("温馨提示：" + attendanceWeekStatsRsp.getMsg());
@@ -574,12 +583,20 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void showData(String eventName) {
+    private void showData(String serverId,String type) {
+        Log.e(TAG, "showData: serverId="+serverId+", type="+type );
         //每次更新数据默认选择缺勤rb
         mViewBinding.rgAttendanceType.check(R.id.rb_absence);
         StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean = null;
         for (StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean1 : studentsBeanList) {
-            if (Objects.equals(weeksMonthListBean1.getTheme(), eventName)) {
+            if ("2".equals(type) && weeksMonthListBean1.getType() == 2){
+                weeksMonthListBean = weeksMonthListBean1;
+                break;
+            }
+            if ("2".equals(type)){
+                continue;
+            }
+            if (Objects.equals(weeksMonthListBean1.getServerId(), serverId)) {
                 weeksMonthListBean = weeksMonthListBean1;
                 break;
             }

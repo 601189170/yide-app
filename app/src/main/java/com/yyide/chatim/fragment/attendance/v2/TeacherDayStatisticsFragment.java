@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -28,21 +27,16 @@ import com.beiing.weekcalendar.utils.CalendarUtil;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.attendance.StatisticsDetailActivity;
 import com.yyide.chatim.activity.attendance.v2.TeacherStatisticsDetailActivity;
-import com.yyide.chatim.adapter.attendance.DayStatisticsListAdapter;
 import com.yyide.chatim.adapter.attendance.v2.TeacherDayStatisticsListAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
-import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.attendance.TeacherAttendanceDayRsp;
-import com.yyide.chatim.presenter.attendance.DayStatisticsPresenter;
 import com.yyide.chatim.presenter.attendance.v2.TeacherDayStatisticsPresenter;
 import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.view.attendace.DayStatisticsView;
 import com.yyide.chatim.view.attendace.v2.TeacherDayStatisticsView;
 
 import org.joda.time.DateTime;
@@ -52,6 +46,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -254,7 +249,7 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
                 mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
                 mViewBinding.tvClassName.setOnClickListener(v -> {
                             final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), dialogType, classList);
-                            deptSelectPop.setOnCheckedListener((dataBean) -> {
+                            deptSelectPop.setOnCheckedListener(dataBean -> {
                                 Log.e(TAG, "班级选择:" + dataBean.toString());
                                 mViewBinding.tvClassName.setText(dataBean.getDeptName());
                                 //班级id
@@ -366,8 +361,8 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
     }
 
 
-    private void showData(String eventName) {
-        if (eventName.equals("课程考勤") && !courseBasicVoForm.isEmpty()) {
+    private void showData(String serverId,String type) {
+        if ("2".equals(type) && !courseBasicVoForm.isEmpty()) {
             data.clear();
             data.addAll(courseBasicVoForm);
             //更新布局
@@ -376,8 +371,9 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
         }
         data.clear();
         for (TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean eventBasicVoListBean : eventBasicVoList) {
-            if (eventBasicVoListBean.getTheme().equals(eventName)) {
+            if (Objects.equals(eventBasicVoListBean.getServerId(), serverId)) {
                 data.add(eventBasicVoListBean);
+                break;
             }
         }
         //更新布局
@@ -439,12 +435,12 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
             mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, drawable, null);
             mViewBinding.tvAttendanceType.setOnClickListener(v -> {
                 final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 3, eventList);
-                deptSelectPop.setOnCheckedListener((id, dept) -> {
-                    Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
-                    mViewBinding.tvAttendanceType.setText(dept);
-                    currentEvent = dept;
-                    historyEvent = dept;
-                    showData(dept);
+                deptSelectPop.setOnCheckedListener(dataBean1 -> {
+                    Log.e(TAG, "事件选择: id=" + dataBean1.getDeptId() + ", dept=" + dataBean1.getDeptName());
+                    mViewBinding.tvAttendanceType.setText(dataBean1.getDeptName());
+                    currentEvent = dataBean1.getDeptName();
+                    historyEvent = dataBean1.getDeptName();
+                    showData(dataBean1.getDeptId(), dataBean1.getType()+"");
                 });
             });
         }

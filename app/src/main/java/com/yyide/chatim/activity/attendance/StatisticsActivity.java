@@ -50,7 +50,16 @@ public class StatisticsActivity extends BaseActivity {
     }
 
     private void initViewPager() {
-        final String theme = getIntent().getStringExtra("theme");
+        String theme = getIntent().getStringExtra("theme");
+        String serverId = getIntent().getStringExtra("serverId");
+        String type = getIntent().getStringExtra("type");
+
+        if (TextUtils.isEmpty(type)) {
+            theme = "";
+            serverId = "";
+            type = "";
+        }
+
         List<String> listTab = new ArrayList<>();
         listTab.add(getString(R.string.daily_statistics));
         listTab.add(getString(R.string.weekly_statistics));
@@ -61,12 +70,12 @@ public class StatisticsActivity extends BaseActivity {
 //        fragments.add(new WeekStatisticsFragment(listTab.get(2)));
         if (SpData.getIdentityInfo().staffIdentity()) {
             fragments.add(new TeacherDayStatisticsFragment(theme));
-            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(1), theme));
-            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(2), theme));
+            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(1), theme,serverId,type));
+            fragments.add(new TeacherWeekStatisticsFragment(listTab.get(2), theme,serverId,type));
         } else {
             fragments.add(new StudentDayStatisticsFragment(theme));
-            fragments.add(new StudentWeekStatisticsFragment(listTab.get(1), theme));
-            fragments.add(new StudentWeekStatisticsFragment(listTab.get(2), theme));
+            fragments.add(new StudentWeekStatisticsFragment(listTab.get(1), theme,serverId,type));
+            fragments.add(new StudentWeekStatisticsFragment(listTab.get(2), theme,serverId,type));
         }
         mViewBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewBinding.viewpager.setUserInputEnabled(false);

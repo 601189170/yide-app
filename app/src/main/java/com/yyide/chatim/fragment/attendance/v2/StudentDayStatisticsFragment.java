@@ -26,7 +26,6 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.attendance.v2.StudentDayStatisticsListAdapter;
-import com.yyide.chatim.adapter.attendance.v2.TeacherDayStatisticsListAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
@@ -44,6 +43,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -235,7 +235,7 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
                 mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
                 mViewBinding.tvClassName.setOnClickListener(v -> {
                             final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), dialogType, classList);
-                            deptSelectPop.setOnCheckedListener((dataBean) -> {
+                            deptSelectPop.setOnCheckedListener(dataBean -> {
                                 Log.e(TAG, "班级选择:" + dataBean.toString());
                                 mViewBinding.tvClassName.setText(dataBean.getDeptName());
                                 //班级id
@@ -347,8 +347,8 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
     }
 
 
-    private void showData(String eventName) {
-        if (eventName.equals("课程考勤") && !courseBasicVoForm.isEmpty()) {
+    private void showData(String serverId,String type) {
+        if ("2".equals(type) && !courseBasicVoForm.isEmpty()) {
             data.clear();
             data.addAll(courseBasicVoForm);
             //更新布局
@@ -357,8 +357,9 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
         }
         data.clear();
         for (StudentAttendanceDayRsp.DataBean.AppStudentDailyStatisticalFormBean.EventFormListBean eventBasicVoListBean : eventBasicVoList) {
-            if (eventBasicVoListBean.getTheme().equals(eventName)) {
+            if (Objects.equals(eventBasicVoListBean.getServerId(), serverId)) {
                 data.add(eventBasicVoListBean);
+                break;
             }
         }
         //更新布局
@@ -420,12 +421,12 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
             mViewBinding.tvAttendanceType.setCompoundDrawables(null, null, drawable, null);
             mViewBinding.tvAttendanceType.setOnClickListener(v -> {
                 final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 3, eventList);
-                deptSelectPop.setOnCheckedListener((id, dept) -> {
-                    Log.e(TAG, "事件选择: id=" + id + ", dept=" + dept);
-                    mViewBinding.tvAttendanceType.setText(dept);
-                    currentEvent = dept;
-                    historyEvent = dept;
-                    showData(dept);
+                deptSelectPop.setOnCheckedListener(dataBean1 -> {
+                    Log.e(TAG, "事件选择: id=" + dataBean1.getDeptId() + ", dept=" + dataBean1.getDeptName());
+                    mViewBinding.tvAttendanceType.setText(dataBean1.getDeptName());
+                    currentEvent = dataBean1.getDeptName();
+                    historyEvent = dataBean1.getDeptName();
+                    showData(dataBean1.getDeptId(), dataBean1.getType());
                 });
             });
         }

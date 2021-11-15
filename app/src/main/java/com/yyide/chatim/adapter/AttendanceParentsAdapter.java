@@ -74,6 +74,8 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
             view.setOnClickListener(v -> {
                 Intent intent = new Intent(container.getContext(), StatisticsActivity.class);
                 intent.putExtra("theme", item.getTheme());
+                intent.putExtra("type",item.getType());
+                intent.putExtra("serverId",item.getServerId());
                 container.getContext().startActivity(intent);
             });
         }
