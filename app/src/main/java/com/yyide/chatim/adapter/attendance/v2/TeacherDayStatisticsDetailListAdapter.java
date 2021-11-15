@@ -102,8 +102,18 @@ public class TeacherDayStatisticsDetailListAdapter extends RecyclerView.Adapter<
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_leave_early));
                 break;
             case "1":
-            case "6":
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_absence));
+                holder.viewBinding.gpEventTime.setVisibility(View.GONE);
+                holder.viewBinding.tvName.setText(dayStatisticsBean.getUserName());
+                break;
+            case "6":
+                final String goOutStatus1 = dayStatisticsBean.getAttendanceSignInOut();
+                if ("1".equals(goOutStatus1)) {
+                    holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_logout));
+                } else {
+                    holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_sign_in));
+                }
+                //holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_absence));
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
                 holder.viewBinding.tvName.setText(dayStatisticsBean.getUserName());
                 break;

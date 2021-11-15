@@ -51,7 +51,8 @@ data class TeacherAttendanceDayRsp(
                 var clockName:String? = null,
                 var signInTime:String? = null,
                 var leaveStartTime: String? = null,
-                var leaveEndTime: String? = null
+                var leaveEndTime: String? = null,
+                var attendanceSignInOut: String? = null
             )
         }
     }
