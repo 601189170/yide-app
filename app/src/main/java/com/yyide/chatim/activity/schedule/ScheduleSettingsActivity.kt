@@ -48,9 +48,9 @@ class ScheduleSettingsActivity : BaseActivity() {
         //scheduleSettingsBinding.gpClassSchedule.requestLayout()
         val schoolCalendarEnable = settingsViewModel.schoolCalendarEnable.value ?: false
         scheduleSettingsBinding.cbSchoolCalendar.isChecked = schoolCalendarEnable
-        scheduleSettingsBinding.gpSchoolCalendar.visibility =
-            if (schoolCalendarEnable) View.VISIBLE else View.GONE
-        scheduleSettingsBinding.gpSchoolCalendar.requestLayout()
+//        scheduleSettingsBinding.gpSchoolCalendar.visibility =
+//            if (schoolCalendarEnable) View.VISIBLE else View.GONE
+//        scheduleSettingsBinding.gpSchoolCalendar.requestLayout()
         val conferenceEnable = settingsViewModel.conferenceEnable.value ?: false
         scheduleSettingsBinding.cbConference.isChecked = conferenceEnable
         scheduleSettingsBinding.gpConference.visibility =
@@ -122,21 +122,21 @@ class ScheduleSettingsActivity : BaseActivity() {
             settingsViewModel.classRemindEnable.postValue(isChecked)
             settingsViewModel.homeworkReleaseRemindEnable.postValue(isChecked)
         }
-        scheduleSettingsBinding.cbSchoolCalendar.isChecked = true
-        scheduleSettingsBinding.gpSchoolCalendar.visibility = View.VISIBLE
-        scheduleSettingsBinding.gpSchoolCalendar.requestLayout()
-        scheduleSettingsBinding.cbSchoolCalendar.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                scheduleSettingsBinding.gpSchoolCalendar.visibility = View.VISIBLE
-                scheduleSettingsBinding.vLine4.visibility = View.VISIBLE
-            } else {
-                scheduleSettingsBinding.gpSchoolCalendar.visibility = View.GONE
-                scheduleSettingsBinding.vLine4.visibility = View.INVISIBLE
-            }
-            scheduleSettingsBinding.cbSchoolCalendarRemind.isChecked = isChecked
-            settingsViewModel.schoolCalendarEnable.postValue(isChecked)
-            settingsViewModel.schoolCalendarRemindEnable.postValue(isChecked)
-        }
+//        scheduleSettingsBinding.cbSchoolCalendar.isChecked = true
+//        scheduleSettingsBinding.gpSchoolCalendar.visibility = View.VISIBLE
+//        scheduleSettingsBinding.gpSchoolCalendar.requestLayout()
+//        scheduleSettingsBinding.cbSchoolCalendar.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                scheduleSettingsBinding.gpSchoolCalendar.visibility = View.VISIBLE
+//                scheduleSettingsBinding.vLine4.visibility = View.VISIBLE
+//            } else {
+//                scheduleSettingsBinding.gpSchoolCalendar.visibility = View.GONE
+//                scheduleSettingsBinding.vLine4.visibility = View.INVISIBLE
+//            }
+//            scheduleSettingsBinding.cbSchoolCalendarRemind.isChecked = isChecked
+//            settingsViewModel.schoolCalendarEnable.postValue(isChecked)
+//            settingsViewModel.schoolCalendarRemindEnable.postValue(isChecked)
+//        }
 
         scheduleSettingsBinding.cbConference.isChecked = true
         scheduleSettingsBinding.gpConference.visibility = View.GONE
