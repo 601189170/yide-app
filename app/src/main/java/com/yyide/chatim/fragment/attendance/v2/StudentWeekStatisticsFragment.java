@@ -156,7 +156,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.VISIBLE);
             }
             final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy.MM");
-            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(time);
+            mViewBinding.layoutHeadTeacherEvent.tvWeek.setText(time);
         } else {
             if (DateUtils.minMonth(beginDate, month)) {
                 mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
@@ -169,7 +169,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.VISIBLE);
             }
             final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy.MM");
-            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(time);
+            mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(time);
         }
         if (!init) {
             //final DateTime dateTime = DateTime.now().withMonthOfYear(month);
@@ -203,7 +203,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
         final String monthWeek1 = lastDayOfWeek.toString("MM.dd");
         Log.e(TAG, "startTime= " + startTime + "endTime = " + endTime);
         if (identity && eventType) {
-            if (currentWeek == week) {
+            if (week.compareTo(currentWeek) >= 0) {
                 mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.VISIBLE);
@@ -211,7 +211,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             }
             mViewBinding.layoutHeadStudentEvent.tvWeek.setText(String.format(format1, monthWeek0, monthWeek1));
         } else if (!identity && eventType) {
-            if (currentWeek == week) {
+            if (week.compareTo(currentWeek) >= 0) {
                 mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.VISIBLE);
@@ -219,13 +219,13 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             }
             mViewBinding.layoutHeadTeacherEvent.tvWeek.setText(String.format(format1, monthWeek0, monthWeek1));
         } else {
-            if (currentWeek == week) {
+            if (week.compareTo(currentWeek) >= 0) {
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.INVISIBLE);
             } else {
                 mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.VISIBLE);
                 //mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
             }
-            if (DateUtils.minWeek(beginDate, monthWeek0)) {
+            if (DateUtils.minWeek(beginDate, week)) {
                 mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
                 final String minDate = DateUtils.formatTime(beginDate, null, "MM.dd");
                 mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(String.format(format1, minDate, monthWeek1));
@@ -750,7 +750,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                     setWeek(false);
                 } else {
                     //month++;
-                    month.plusMonths(1);
+                    month = month.plusMonths(1);
                     setMonth(false);
                 }
 

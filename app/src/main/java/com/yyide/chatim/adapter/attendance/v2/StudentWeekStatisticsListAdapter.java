@@ -62,8 +62,15 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
             holder.viewBinding.tvName.setText(date + " " + weekStatisticsBean.getSortName());
         } else if (!TextUtils.isEmpty(weekStatisticsBean.getCourseInfo())) {
             holder.viewBinding.tvName.setText(date + " " + weekStatisticsBean.getCourseInfo());
+            if (!TextUtils.isEmpty(weekStatisticsBean.getCourseName())){
+                holder.viewBinding.tvCourseName.setVisibility(View.VISIBLE);
+                holder.viewBinding.tvCourseName.setText(weekStatisticsBean.getCourseName());
+            }else {
+                holder.viewBinding.tvCourseName.setVisibility(View.GONE);
+            }
         } else {
             holder.viewBinding.tvName.setText(date + " " + weekStatisticsBean.getEventName());
+            holder.viewBinding.tvCourseName.setVisibility(View.GONE);
         }
         final String status = weekStatisticsBean.getAttendanceType();
         //0正常、1缺勤、2迟到/3早退,4请假）
