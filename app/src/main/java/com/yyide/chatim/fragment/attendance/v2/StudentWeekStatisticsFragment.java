@@ -647,7 +647,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 //向右选择日期
                 if (isWeekStatistics) {
                     //week++;
-                    month = month.minusMonths(1);
+                    week = week.minusMonths(1);
                     setWeek(false);
                 } else {
                     //month++;
@@ -694,7 +694,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 //向右选择日期
                 if (isWeekStatistics) {
                     //week++;
-                    month = month.minusMonths(1);
+                    week = week.minusMonths(1);
                     setWeek(false);
                 } else {
                     //month++;
