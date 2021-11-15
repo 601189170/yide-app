@@ -135,12 +135,14 @@ class ScheduleEditActivity : BaseActivity() {
             scheduleEditViewModel.labelListLiveData.value = labelList
             //参与人participant
             scheduleEditViewModel.participantList.value = it.participant
-            if (it.participant.isEmpty()) {
-                scheduleEditBinding.clParticipant.visibility =
-                    if (promoter) View.VISIBLE else View.GONE
-            } else {
-                scheduleEditBinding.clParticipant.visibility = View.VISIBLE
-                showSelectedParticipant(it.participant)
+            if (SpData.getIdentityInfo().staffIdentity()) {
+                if (it.participant.isEmpty()) {
+                    scheduleEditBinding.clParticipant.visibility =
+                        if (promoter) View.VISIBLE else View.GONE
+                } else {
+                    scheduleEditBinding.clParticipant.visibility = View.VISIBLE
+                    showSelectedParticipant(it.participant)
+                }
             }
 
             //地址 siteId
