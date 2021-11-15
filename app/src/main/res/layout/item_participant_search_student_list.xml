@@ -9,7 +9,7 @@
         android:id="@+id/tv_student_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_35"
+        android:layout_marginStart="@dimen/dp_50"
         android:layout_marginTop="@dimen/dp_18"
         android:text="张大大（一年级三班）"
         android:textColor="#ff333333"
