@@ -42,6 +42,9 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     private String remindTypeInfo;
     private String startTime;
     private String endTime;
+    private String moreDayStartTime;
+    private String moreDayEndTime;
+    private int moreDay;
     private String iconImg;
     private String isAllDay;
     private List<LabelListRsp.DataBean> label;
@@ -284,6 +287,30 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
         this.promoter = promoter;
     }
 
+    public String getMoreDayStartTime() {
+        return moreDayStartTime;
+    }
+
+    public void setMoreDayStartTime(String moreDayStartTime) {
+        this.moreDayStartTime = moreDayStartTime;
+    }
+
+    public String getMoreDayEndTime() {
+        return moreDayEndTime;
+    }
+
+    public void setMoreDayEndTime(String moreDayEndTime) {
+        this.moreDayEndTime = moreDayEndTime;
+    }
+
+    public int getMoreDay() {
+        return moreDay;
+    }
+
+    public void setMoreDay(int moreDay) {
+        this.moreDay = moreDay;
+    }
+
     @Override
     public int getItemType() {
         if (monthHead){
@@ -316,8 +343,17 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
 
     @Override
     public int compareTo(ScheduleData other) {
-        final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(this.startTime);
-        final DateTime dateTime1 = ScheduleDaoUtil.INSTANCE.toDateTime(other.startTime);
-        return dateTime.compareTo(dateTime1);
+        final DateTime dateTime1 = ScheduleDaoUtil.INSTANCE.toDateTime(this.startTime);
+        final DateTime dateTimeOther1 = ScheduleDaoUtil.INSTANCE.toDateTime(other.startTime);
+        final DateTime dateTime2 = ScheduleDaoUtil.INSTANCE.toDateTime(this.moreDayStartTime);
+        final DateTime dateTimeOther2 = ScheduleDaoUtil.INSTANCE.toDateTime(other.moreDayStartTime);
+        if (dateTime1.compareTo(dateTime2) > 0) {
+            return 1;
+        }
+
+        if (dateTime1.compareTo(dateTime2) <= 0) {
+            return dateTimeOther1.compareTo(dateTimeOther2);
+        }
+        return dateTime1.compareTo(dateTime2);
     }
 }
