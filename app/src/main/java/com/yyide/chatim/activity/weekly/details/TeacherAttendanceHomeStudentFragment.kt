@@ -91,7 +91,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                     dateTime.endTime
                 )
             } else {
-                viewBinding.clTop.visibility =  View.GONE
+                viewBinding.clTop.visibility = View.GONE
                 viewBinding.viewpager.visibility = View.INVISIBLE
                 viewBinding.slidingTabLayout.visibility = View.INVISIBLE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
@@ -105,15 +105,18 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
         initClassMenu()
         viewBinding.appBarLayout.visibility = View.INVISIBLE
         viewModel.teacherAttendanceStudentLiveData.observe(viewLifecycleOwner) {
-            dismiss()
             val result = it.getOrNull()
             viewBinding.appBarLayout.visibility = View.VISIBLE
             if (null != result) {
                 viewBinding.cardViewNoData.visibility = View.GONE
-                viewBinding.clTop.visibility =  View.VISIBLE
+                viewBinding.clTop.visibility = View.VISIBLE
                 initHotScroll(result.studentAttend)
                 initViewpager(result.studentDetail)
-                if (result.studentDetail == null && result.studentAttend == null) {
+                if (result.studentDetail != null
+                    && result.studentAttend != null
+                    && result.studentDetail.isEmpty()
+                    && result.studentAttend.isEmpty()
+                ) {
                     viewBinding.cardViewNoData.visibility = View.VISIBLE
                     viewBinding.clTop.visibility = View.GONE
                     viewBinding.slidingTabLayout.visibility = View.GONE
@@ -130,6 +133,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
                 viewBinding.slidingTabLayout.visibility = View.GONE
                 viewBinding.viewpager.visibility = View.GONE
             }
+            dismiss()
         }
     }
 

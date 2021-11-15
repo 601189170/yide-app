@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.weekly.details.adapter;
 
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -69,11 +70,11 @@ public class TeacherAttendanceAdapter extends SingleLayoutTreeAdapter<ValueChild
                     tvTime.setTextColor(Color.parseColor("#F66C6C"));
                     break;
                 case "5"://请假
-                    tvName.setText(item.getName());
-                    tvStatus.setText("请假");
-                    holder.setText(R.id.tv_student_event, "请假时间");
-                    holder.setText(R.id.tv_student_time, item.getTime());
-                    tvTime.setTextColor(Color.parseColor("#F6BD16"));
+                    holder.getView(R.id.constraintLayout).setVisibility(View.GONE);
+                    holder.getView(R.id.layout_leave).setVisibility(View.VISIBLE);
+                    holder.setText(R.id.tv_leave_name, item.getName());
+                    holder.setText(R.id.tv_leave_event, "请假时间");
+                    holder.setText(R.id.tv_leave_time, item.getTime());
                     break;
             }
         } else {

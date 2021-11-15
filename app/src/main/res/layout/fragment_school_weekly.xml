@@ -158,6 +158,7 @@
 
                         <include
                             android:id="@+id/layout_weekly_homework_summary"
+                            android:visibility="gone"
                             layout="@layout/layout_weekly_homework_summary" />
 
 <!--                        <View-->

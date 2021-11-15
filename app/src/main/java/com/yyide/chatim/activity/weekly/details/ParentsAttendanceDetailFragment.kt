@@ -105,6 +105,21 @@ class ParentsAttendanceDetailFragment : BaseFragment() {
             if (null != result) {
                 initHotScroll(result.attendRate)
                 initViewpager(result.attendDetail)
+                if (result.attendRate != null
+                    && result.attendDetail != null
+                    && result.attendRate.isEmpty()
+                    && result.attendDetail.isEmpty()
+                ) {
+                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+                    viewBinding.clTop.visibility = View.GONE
+                    viewBinding.slidingTabLayout.visibility = View.GONE
+                    viewBinding.viewpager.visibility = View.GONE
+                } else {
+                    viewBinding.cardViewNoData.visibility = View.GONE
+                    viewBinding.clTop.visibility = View.VISIBLE
+                    viewBinding.slidingTabLayout.visibility = View.VISIBLE
+                    viewBinding.viewpager.visibility = View.VISIBLE
+                }
             }
         }
     }

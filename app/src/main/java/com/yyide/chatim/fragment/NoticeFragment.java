@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
 import com.yyide.chatim.activity.notice.NoticeDetailActivity;
@@ -66,6 +68,8 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
         });
         if (getArguments() != null && "school".equals(getArguments().getString("type"))) {
             ll_notice.setBackgroundResource(R.mipmap.icon_notice_home_long_bg);
+            notice_time.setGravity(Gravity.RIGHT);
+            tv_notice_author.setGravity(Gravity.RIGHT);
         }
     }
 

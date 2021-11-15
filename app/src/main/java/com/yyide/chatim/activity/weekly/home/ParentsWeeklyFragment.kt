@@ -97,16 +97,17 @@ open class ParentsWeeklyFragment : BaseFragment() {
                 if (result.eval != null) {
                     setTeacherComments(result.eval)
                 }
-                //处理整体数据为空的情况
-//                if (result.attend.isEmpty() && (result.summary != null
-//                            && TextUtils.isEmpty(result.summary!!.attend)
-//                            && TextUtils.isEmpty(result.summary!!.expend)
-//                            && TextUtils.isEmpty(result.summary!!.work))
-//                    && result.eval != null && TextUtils.isEmpty(result.eval!!.body)
-//                ) {
-//                    viewBinding.clContent.visibility = View.GONE
-//                    viewBinding.cardViewNoData.visibility = View.VISIBLE
-//                }
+
+                if (!viewBinding.attendance.clAttend.isShown
+                    && !viewBinding.summary.root.isShown
+                    && !viewBinding.comments.root.isShown
+                ) {
+                    viewBinding.attendance.root.visibility = View.GONE
+                    viewBinding.cardViewNoData.visibility = View.VISIBLE
+                } else {
+                    viewBinding.attendance.root.visibility = View.VISIBLE
+                    viewBinding.cardViewNoData.visibility = View.GONE
+                }
             } else {//接口返回空的情况处理
                 viewBinding.clContent.visibility = View.GONE
                 viewBinding.cardViewNoData.visibility = View.VISIBLE
@@ -123,6 +124,18 @@ open class ParentsWeeklyFragment : BaseFragment() {
                 classInfo
             )
         }
+
+        viewBinding.comments.root.setOnClickListener {
+            WeeklyDetailsActivity.jump(
+                mActivity,
+                WeeklyDetailsActivity.PARENT_ATTENDANCE_TYPE,
+                studentId,
+                viewBinding.tvEvent.text.toString().trim(),
+                dateTime,
+                classInfo
+            )
+        }
+
         //作业统计
         initStatistical()
         //教师评语

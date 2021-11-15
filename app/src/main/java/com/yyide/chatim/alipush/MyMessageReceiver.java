@@ -26,6 +26,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.newnotice.NoticeConfirmDetailActivity;
+import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
@@ -103,6 +104,8 @@ public class MyMessageReceiver extends MessageReceiver {
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 } else if ("5".equals(pushModel.getPushType())) {
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
+                } else if ("7".equals(pushModel.getPushType())) {
+                    context.startActivity(new Intent(context, WeeklyHomeActivity.class));
                 } else {
                     //其他统一跳到首页
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));

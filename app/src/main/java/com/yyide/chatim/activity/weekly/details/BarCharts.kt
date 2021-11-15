@@ -66,7 +66,9 @@ class BarCharts {
         barChart.setDrawGridBackground(true)
         //设置双击缩放功能
         barChart.isDoubleTapToZoomEnabled = false
-
+        //禁止点击柱状图（每个柱子）
+        barChart.isHighlightPerTapEnabled = false
+        barChart.isClickable = false
         //设置规模Y启用
         barChart.isScaleYEnabled = false
         //设置规模X启用
@@ -197,7 +199,8 @@ class BarCharts {
         barChart.setDrawGridBackground(true)
         //设置双击缩放功能
         barChart.isDoubleTapToZoomEnabled = false
-
+        //禁止点击柱状图（每个柱子）
+        barChart.isHighlightPerTapEnabled = false
         //设置规模Y启用
         barChart.isScaleYEnabled = false
         //设置规模X启用
@@ -294,7 +297,7 @@ class BarCharts {
                 // 为了使 柱状图成为可滑动的,将水平方向 放大 2.5倍
                 barChart.invalidate()
                 val mMatrix = Matrix()
-                mMatrix.postScale(1.2f, 1f)
+                mMatrix.postScale(2f, 1f)
                 barChart.viewPortHandler.refresh(mMatrix, barChart, false)
                 barChart.animateY(1000)
             }

@@ -3,46 +3,35 @@ package com.yyide.chatim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.yyide.chatim.R;
-import com.yyide.chatim.activity.attendance.StatisticsActivity;
-import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
-import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
-import com.yyide.chatim.adapter.UserNoticeListAdapter;
-import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.model.AgentInformationRsp;
-import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.HelpRsp;
-import com.yyide.chatim.model.ResultBean;
-import com.yyide.chatim.model.UserMsgNoticeRsp;
-import com.yyide.chatim.model.UserNoticeRsp;
-import com.yyide.chatim.presenter.UserNoticePresenter;
-import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.utils.StatusBarUtils;
-import com.yyide.chatim.view.SpacesItemDecoration;
-import com.yyide.chatim.view.UserNoticeView;
-
-import org.greenrobot.eventbus.EventBus;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.blankj.utilcode.util.ToastUtils;
+import com.yyide.chatim.R;
+import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
+import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
+import com.yyide.chatim.adapter.UserNoticeListAdapter;
+import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.model.EventMessage;
+import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.model.UserMsgNoticeRsp;
+import com.yyide.chatim.presenter.UserNoticePresenter;
+import com.yyide.chatim.utils.StatusBarUtils;
+import com.yyide.chatim.view.SpacesItemDecoration;
+import com.yyide.chatim.view.UserNoticeView;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -96,9 +85,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
         userNoticeListAdapter.setOnItemOnClickListener(position -> {
             final UserMsgNoticeRsp.DataBean.RecordsBean recordsBean = list.get(position);
             Log.e(TAG, "initAdapter: " + recordsBean.toString());
-            if ("0".equals(recordsBean.getStatus())) {
-                mvpPresenter.updateMyNoticeDetails(recordsBean.getSignId());
-            } else if ("2".equals(recordsBean.getIsText())) {
+            if ("2".equals(recordsBean.getIsText())) {
                 //不是纯文本，需要跳转详情
                 switch (recordsBean.getAttributeType()) {
                     case "1":
@@ -122,8 +109,8 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                     //其他消息显示文本详情
                     MessageDetailActivity.start(this, recordsBean);
                 }
-            } else if ("3".equals(recordsBean.getStatus())) {//周报
-                startActivity(new Intent(mActivity, WeeklyHomeActivity.class));
+            } else if ("2".equals(recordsBean.getJumpTarget())) {
+                startActivity(new Intent(this, WeeklyHomeActivity.class));
             }
         });
     }

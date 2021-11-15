@@ -188,10 +188,9 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
     private BaseQuickAdapter<AttendanceRsp.TeacherItemBean, BaseViewHolder> adapter = new BaseQuickAdapter<AttendanceRsp.TeacherItemBean, BaseViewHolder>(R.layout.item_attendance_school_event_teacher) {
         @Override
         protected void convert(@NotNull BaseViewHolder holder, AttendanceRsp.TeacherItemBean item) {
-
             holder.setText(R.id.tv_student_name, !TextUtils.isEmpty(item.getUserName()) ? item.getUserName() : "未知姓名");
             TextView tvTime = holder.getView(R.id.tv_student_time);
-            TextView tvStatus = holder.getView(R.id.tv_status);
+            TextView tvName = holder.getView(R.id.tv_student_name);
             holder.setText(R.id.tv_student_time, "");
             holder.setText(R.id.tv_student_event, "");
             holder.setText(R.id.tv_status, "");

@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.attendance;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;

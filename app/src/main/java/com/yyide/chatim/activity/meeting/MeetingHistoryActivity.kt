@@ -130,11 +130,11 @@ class MeetingHistoryActivity : BaseActivity() {
                 viewBind.tvTime.text = DateUtils.formatTime(
                     item.startTime,
                     "",
-                    "yyyy-MM-dd HH:mm"
+                    "yyyy.MM.dd HH:mm"
                 ) + " - " + DateUtils.formatTime(
                     item.endTime,
                     "",
-                    "yyyy-MM-dd HH:mm"
+                    "yyyy.MM.dd HH:mm"
                 )
             }
         }

@@ -168,10 +168,19 @@ public class UserMsgNoticeRsp implements Serializable{
             private String remakeData;
             private String firstData;
             private long callId;
+            private String jumpTarget;
             private String attributeType;
             private String isText;//是否纯文本 1 是 2不是
             private String status;//读取状态 1 已读/同意 0未读 2拒绝 3 撤消
             private String sendTime;
+
+            public String getJumpTarget() {
+                return jumpTarget;
+            }
+
+            public void setJumpTarget(String jumpTarget) {
+                this.jumpTarget = jumpTarget;
+            }
 
             public String getTitle() {
                 return title;

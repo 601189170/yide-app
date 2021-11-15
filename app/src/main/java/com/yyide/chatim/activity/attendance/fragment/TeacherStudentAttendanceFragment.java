@@ -345,12 +345,13 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         tvTime.setTextColor(Color.parseColor("#F66C6C"));
                         break;
                     case "5"://请假
-                        holder.setText(R.id.tv_status, "请假");
+                        holder.getView(R.id.constraintLayout).setVisibility(View.GONE);
+                        holder.getView(R.id.layout_leave).setVisibility(View.VISIBLE);
+                        holder.setText(R.id.tv_leave_status, "请假");
                         String startTime = DateUtils.formatTime(item.getLeaveStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         String endTime = DateUtils.formatTime(item.getLeaveEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-                        holder.setText(R.id.tv_student_event, "请假时间");
-                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
-                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
+                        holder.setText(R.id.tv_leave_event, "请假时间");
+                        holder.setText(R.id.tv_leave_time, startTime + "-" + endTime);
                         break;
                     case "4":
                         //无效打卡

@@ -1,5 +1,7 @@
 package com.yyide.chatim.activity.weekly
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
@@ -15,6 +17,15 @@ import com.yyide.chatim.databinding.ActivityWeeklyHomeBinding
 class WeeklyHomeActivity : BaseActivity() {
 
     private lateinit var viewBinding: ActivityWeeklyHomeBinding
+
+    companion object {
+        fun jump(context: Context, startTime: String, endTime: String) {
+            val intent = Intent(context, WeeklyHomeActivity::class.java)
+            intent.putExtra("startTime", startTime)
+            intent.putExtra("endTime", endTime)
+            context.startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
