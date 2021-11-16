@@ -79,6 +79,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
             case "0":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
                 holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
+                holder.viewBinding.gpLeaveEventTime.setVisibility(View.GONE);
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_normal));
                 if (TextUtils.isEmpty(weekStatisticsBean.getClockName())) {
                     holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_event_name));
@@ -90,8 +91,9 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_normal));
                 break;
             case "2":
-                holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);
                 holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
+                holder.viewBinding.gpLeaveEventTime.setVisibility(View.GONE);
+                holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);
                 if (TextUtils.isEmpty(weekStatisticsBean.getClockName())) {
                     holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_event_name));
                 } else {
@@ -104,6 +106,7 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
             case "3":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);
                 holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
+                holder.viewBinding.gpLeaveEventTime.setVisibility(View.GONE);
 
                 if (TextUtils.isEmpty(weekStatisticsBean.getClockName())) {
                     holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_event_name));
@@ -117,11 +120,13 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
             case "1":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
+                holder.viewBinding.gpLeaveEventTime.setVisibility(View.GONE);
                 holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_absence));
                 break;
             case "6":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.VISIBLE);
                 holder.viewBinding.gpEventTime.setVisibility(View.GONE);
+                holder.viewBinding.gpLeaveEventTime.setVisibility(View.GONE);
                 final String attendanceSignInOut = weekStatisticsBean.getAttendanceSignInOut();
                 if ("1".equals(attendanceSignInOut)) {
                     holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_no_logout));
@@ -131,13 +136,14 @@ public class StudentWeekStatisticsListAdapter extends RecyclerView.Adapter<Stude
                 break;
             case "5":
                 holder.viewBinding.tvAttendanceStatus.setVisibility(View.GONE);
-                holder.viewBinding.gpEventTime.setVisibility(View.VISIBLE);
+                holder.viewBinding.gpEventTime.setVisibility(View.GONE);
+                holder.viewBinding.gpLeaveEventTime.setVisibility(View.VISIBLE);
                 //holder.viewBinding.tvAttendanceStatus.setText(context.getString(R.string.attendance_ask_for_leave));
-                holder.viewBinding.tvEventTimeTitle.setText(context.getString(R.string.attendance_leave_time));
+                holder.viewBinding.tvLeaveEventTimeTitle.setText(context.getString(R.string.attendance_leave_time));
                 final String data1 = DateUtils.formatTime(weekStatisticsBean.getLeaveStartTime(), null, "MM.dd HH:mm");
                 final String data2 = DateUtils.formatTime(weekStatisticsBean.getLeaveEndTime(), null, "MM.dd HH:mm");
-                holder.viewBinding.tvEventTime.setText(data1 + "-" + data2);
-                holder.viewBinding.tvEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_leave));
+                holder.viewBinding.tvLeaveEventTime.setText(data1 + "-" + data2);
+                holder.viewBinding.tvLeaveEventTime.setTextColor(context.getResources().getColor(R.color.attendance_time_leave));
                 break;
             default:
                 break;

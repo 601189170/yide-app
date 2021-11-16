@@ -85,8 +85,9 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                         baseViewHolder.setVisible(R.id.tv_course_name,true);
                         baseViewHolder.setText(R.id.tv_course_name,dataBean.getCourseName());
                     } else {
-                        baseViewHolder.setVisible(R.id.tv_course_name,false);
+                        baseViewHolder.setVisible(R.id.tv_course_name,true);
                         baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
+                        baseViewHolder.setText(R.id.tv_course_name,dataBean.getCourseName());
                     }
 
                 }
@@ -101,11 +102,14 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                     case "0":
                         baseViewHolder.setVisible(R.id.tv_attendance_status,true);
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_normal));
+                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
                         break;
                     case "1":
                         baseViewHolder.setVisible(R.id.tv_attendance_status,true);
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_absence));
-                        baseViewHolder.setVisible(R.id.gp_event_time,false);
+                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
                         break;
                     case "6":
                         final String attendanceSignInOut = dataBean.getAttendanceSignInOut();
@@ -115,12 +119,14 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                             baseViewHolder.setText(R.id.tv_attendance_status, context.getString(R.string.attendance_no_sign_in));
                         }
                         baseViewHolder.setVisible(R.id.tv_attendance_status,true);
-                        baseViewHolder.setVisible(R.id.gp_event_time,false);
+                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
                         break;
                     case "2":
+                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.VISIBLE);
+                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
                         baseViewHolder.setVisible(R.id.tv_attendance_status,false);
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_late));
-                        baseViewHolder.setVisible(R.id.gp_event_time,true);
                         if (!TextUtils.isEmpty(dataBean.getClockName())){
                             baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getClockName());
                         }else {
@@ -131,9 +137,10 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                         baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late));
                         break;
                     case "3":
+                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.VISIBLE);
+                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
                         baseViewHolder.setVisible(R.id.tv_attendance_status,false);
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_leave_early));
-                        baseViewHolder.setVisible(R.id.gp_event_time,true);
                         if (!TextUtils.isEmpty(dataBean.getClockName())){
                             baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getClockName());
                         }else {
@@ -144,20 +151,21 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                         baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_leave_early));
                         break;
                     case "5":
+                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.VISIBLE);
                         baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_ask_for_leave));
                         baseViewHolder.setVisible(R.id.tv_attendance_status,false);
-                        baseViewHolder.setVisible(R.id.gp_event_time,true);
-                        baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_leave_time));
-                        baseViewHolder.setText(R.id.tv_event_time,"");
-                        baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_leave));
+                        baseViewHolder.setText(R.id.tv_leave_event_time_title,context.getString(R.string.attendance_leave_time));
+                        baseViewHolder.setTextColor(R.id.tv_leave_event_time,context.getResources().getColor(R.color.attendance_time_leave));
                         final String data1 = DateUtils.formatTime(dataBean.getLeaveStartTime(), null, "MM.dd HH:mm");
                         final String data2 = DateUtils.formatTime(dataBean.getLeaveEndTime(), null, "MM.dd HH:mm");
-                        baseViewHolder.setText(R.id.tv_event_time,data1+"-"+data2);
+                        baseViewHolder.setText(R.id.tv_leave_event_time,data1+"-"+data2);
                         break;
 
                     default:
                         baseViewHolder.setVisible(R.id.tv_attendance_status,false);
-                        baseViewHolder.setVisible(R.id.gp_event_time,false);
+                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
                         break;
                 }
             }

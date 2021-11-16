@@ -10,32 +10,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
-        android:text=""
+        android:text="11.15 下午第4节课"
         android:singleLine="true"
         android:maxEms="8"
         android:textColor="#1E1E1E"
         android:textSize="@dimen/text_15"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_event_time_title"/>
+        app:layout_constraintBottom_toTopOf="@id/tv_leave_event_time_title"/>
     <TextView
         android:id="@+id/tv_course_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="英语"
         android:textColor="#1E1E1E"
         android:textSize="15sp"
         android:maxEms="8"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintLeft_toRightOf="@id/tv_name"
         app:layout_constraintTop_toTopOf="@id/tv_name"
         android:layout_marginStart="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="@id/tv_name"/>
     <TextView
-        android:id="@+id/tv_event_time_title"
+        android:id="@+id/tv_leave_event_time_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="请假时间"
         android:textColor="#ff606266"
         android:textSize="13sp"
         app:layout_constraintLeft_toLeftOf="@id/tv_name"
@@ -45,25 +45,59 @@
         android:layout_marginBottom="@dimen/dp_10"
         />
     <TextView
-        android:id="@+id/tv_event_time"
+        android:id="@+id/tv_leave_event_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="11.16 08:00-11.23 08::00"
         android:textColor="#ff606266"
         android:textSize="13sp"
         android:layout_marginStart="@dimen/dp_20"
-        app:layout_constraintLeft_toRightOf="@id/tv_event_time_title"
-        app:layout_constraintTop_toTopOf="@id/tv_event_time_title"
-        app:layout_constraintBottom_toBottomOf="@id/tv_event_time_title"
+        app:layout_constraintLeft_toRightOf="@id/tv_leave_event_time_title"
+        app:layout_constraintTop_toTopOf="@id/tv_leave_event_time_title"
+        app:layout_constraintBottom_toBottomOf="@id/tv_leave_event_time_title"
         android:layout_marginEnd="@dimen/dp_20"
         />
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/gp_leave_event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tv_leave_event_time_title,tv_leave_event_time"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/tv_event_time_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请假时间"
+        android:textColor="#ff606266"
+        android:textSize="13sp"
+        app:layout_constraintRight_toLeftOf="@id/tv_event_time"
+        app:layout_constraintTop_toTopOf="@id/tv_event_time"
+        app:layout_constraintBottom_toBottomOf="@id/tv_event_time"
+        android:layout_marginTop="@dimen/dp_5"
+        />
+    <TextView
+        android:id="@+id/tv_event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="11.16 08:00-11.23 08::00"
+        android:textColor="#ff606266"
+        android:textSize="13sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="@dimen/dp_20"
+        />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/gp_event_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="tv_event_time_title,tv_event_time"
-        android:visibility="visible"
+        android:visibility="gone"
         />
+
     <TextView
         android:id="@+id/tv_attendance_status"
         android:layout_width="wrap_content"
