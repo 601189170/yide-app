@@ -88,7 +88,7 @@ object ScheduleRepetitionRuleUtil {
         logd(JSON.toJSONString(rule))
         loge("startDate=$startDate <<->> endDate=$endDate")
         logd("dtstart= $dtstart <<->> until=$until")
-        var untilDateTime: DateTime = startDate
+        var untilDateTime: DateTime = endDate
         until?.also {
             untilDateTime = ScheduleDaoUtil.toDateTime(until)
         }
@@ -149,7 +149,7 @@ object ScheduleRepetitionRuleUtil {
         var nowDateTime = startDate
         //repetitionDate.add(nowDateTime)
         while (true) {
-            if (nowDateTime < endDate && until >= startDate) {
+            if (nowDateTime < endDate && until >= nowDateTime) {
                 repetitionDate.add(nowDateTime)
             } else {
                 break
@@ -175,7 +175,7 @@ object ScheduleRepetitionRuleUtil {
         while (true) {
             if (nowDateTime < endDate) {
                 if (byweekday.isNullOrEmpty()) {
-                    if (until >= startDate) {
+                    if (until >= nowDateTime) {
                         repetitionDate.add(nowDateTime)
                     }
                 } else {
@@ -185,43 +185,43 @@ object ScheduleRepetitionRuleUtil {
                         when (it.trim()) {
                             "SU" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(0)
-                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
+                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= nowDateTime) {
                                     repetitionDate.add(dayOfWeek)
                                 }
                             }
                             "MO" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(1)
-                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
+                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= nowDateTime) {
                                     repetitionDate.add(dayOfWeek)
                                 }
                             }
                             "TU" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(2)
-                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
+                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= nowDateTime) {
                                     repetitionDate.add(dayOfWeek)
                                 }
                             }
                             "WE" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(3)
-                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
+                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= nowDateTime) {
                                     repetitionDate.add(dayOfWeek)
                                 }
                             }
                             "TH" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(4)
-                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
+                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= nowDateTime) {
                                     repetitionDate.add(dayOfWeek)
                                 }
                             }
                             "FR" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(5)
-                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
+                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= nowDateTime) {
                                     repetitionDate.add(dayOfWeek)
                                 }
                             }
                             "SA" -> {
                                 val dayOfWeek = firstDayOfWeek.plusDays(6)
-                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= startDate) {
+                                if (dayOfWeek >= startDate && dayOfWeek < endDate && until >= nowDateTime) {
                                     repetitionDate.add(dayOfWeek)
                                 }
                             }
@@ -254,7 +254,7 @@ object ScheduleRepetitionRuleUtil {
         while (true) {
             if (nowDateTime < endDate) {
                 if (bymonthday.isNullOrEmpty()) {
-                    if (until >= startDate) {
+                    if (until >= nowDateTime) {
                         repetitionDate.add(nowDateTime)
                     }
                 } else {
@@ -263,7 +263,7 @@ object ScheduleRepetitionRuleUtil {
                     val firstDayOfMonth = nowDateTime.minusDays(nowDateTime.dayOfMonth - 1)
                     bymonthday.forEach {
                         val dayOfMonth = firstDayOfMonth.plusDays(it.toInt() - 1)
-                        if (dayOfMonth >= startDate && dayOfMonth < endDate && until >= startDate) {
+                        if (dayOfMonth >= startDate && dayOfMonth < endDate && until >= nowDateTime) {
                             repetitionDate.add(dayOfMonth)
                         }
                     }
@@ -289,7 +289,7 @@ object ScheduleRepetitionRuleUtil {
         val repetitionDate = mutableListOf<DateTime>()
         var nowDateTime = startDate
         while (true) {
-            if (nowDateTime < endDate && until >= startDate) {
+            if (nowDateTime < endDate && until >= nowDateTime) {
                 repetitionDate.add(nowDateTime)
             } else {
                 break
