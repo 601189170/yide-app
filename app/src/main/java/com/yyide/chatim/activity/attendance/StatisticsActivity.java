@@ -69,11 +69,11 @@ public class StatisticsActivity extends BaseActivity {
 //        fragments.add(new WeekStatisticsFragment(listTab.get(1)));
 //        fragments.add(new WeekStatisticsFragment(listTab.get(2)));
         if (SpData.getIdentityInfo().staffIdentity()) {
-            fragments.add(new TeacherDayStatisticsFragment(theme));
+            fragments.add(new TeacherDayStatisticsFragment(theme,serverId,type));
             fragments.add(new TeacherWeekStatisticsFragment(listTab.get(1), theme,serverId,type));
             fragments.add(new TeacherWeekStatisticsFragment(listTab.get(2), theme,serverId,type));
         } else {
-            fragments.add(new StudentDayStatisticsFragment(theme));
+            fragments.add(new StudentDayStatisticsFragment(theme,serverId,type));
             fragments.add(new StudentWeekStatisticsFragment(listTab.get(1), theme,serverId,type));
             fragments.add(new StudentWeekStatisticsFragment(listTab.get(2), theme,serverId,type));
         }

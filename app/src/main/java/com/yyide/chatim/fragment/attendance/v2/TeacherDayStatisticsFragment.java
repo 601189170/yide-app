@@ -68,6 +68,8 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
     private String currentClassName;//当前班级
     private String currentEvent;//当前事件
     private String historyEvent;//上一次选择的事件
+    private String historyEventId;//上一次选择的事件
+    private String historyEventType;//上一次选择的事件
     private TeacherDayStatisticsListAdapter dayStatisticsListAdapter;
     private boolean refresh;
 
@@ -80,9 +82,11 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
 
     private List<TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean> data = new ArrayList<>();
 
-    public TeacherDayStatisticsFragment(String theme) {
+    public TeacherDayStatisticsFragment(String theme,String serverId,String eventType) {
         // Required empty public constructor
         this.historyEvent = theme;
+        this.historyEventId = serverId;
+        this.historyEventType = eventType;
     }
 
     @Override
@@ -373,7 +377,6 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
         for (TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean eventBasicVoListBean : eventBasicVoList) {
             if (Objects.equals(eventBasicVoListBean.getServerId(), serverId)) {
                 data.add(eventBasicVoListBean);
-                break;
             }
         }
         //更新布局
@@ -440,6 +443,8 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
                     mViewBinding.tvAttendanceType.setText(dataBean1.getDeptName());
                     currentEvent = dataBean1.getDeptName();
                     historyEvent = dataBean1.getDeptName();
+                    historyEventType = dataBean1.getType();
+                    historyEventId = dataBean1.getDeptId();
                     showData(dataBean1.getDeptId(), dataBean1.getType()+"");
                 });
             });
