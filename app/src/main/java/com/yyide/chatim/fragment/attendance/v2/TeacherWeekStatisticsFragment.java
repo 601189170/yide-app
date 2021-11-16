@@ -575,7 +575,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
                 showData(null,null);
             }
         } else {
-            ToastUtils.showShort("温馨提示：" + attendanceWeekStatsRsp.getMsg());
+            //ToastUtils.showShort("温馨提示：" + attendanceWeekStatsRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
             //showData(null);
             showBlank(true);

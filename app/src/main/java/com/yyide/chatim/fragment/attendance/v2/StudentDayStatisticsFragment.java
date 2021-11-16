@@ -339,7 +339,7 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
             }
             initEventData();
         } else {
-            ToastUtils.showShort("温馨提示：" + studentAttendanceDayRsp.getMsg());
+            //ToastUtils.showShort("温馨提示：" + studentAttendanceDayRsp.getMsg());
             mViewBinding.tvAttendanceType.setVisibility(View.GONE);
             data.clear();
             classroomTeacherAttendanceList.clear();
@@ -405,7 +405,12 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
         final Optional<LeaveDeptRsp.DataBean> optional = eventList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         if (!optional.isPresent()) {
             eventList.get(0).setIsDefault(1);
-            currentEvent = classroomTeacherAttendanceList.get(0).getTheme();
+            final StudentAttendanceDayRsp.DataBean.ClassroomTeacherAttendanceListBean classroomTeacherAttendanceListBean = classroomTeacherAttendanceList.get(0);
+            currentEvent = classroomTeacherAttendanceListBean.getTheme();
+            historyEvent = currentEvent;
+            historyEventId = classroomTeacherAttendanceListBean.getServerId();
+            historyEventType = classroomTeacherAttendanceListBean.getType()+"";
+            showData(historyEventId,historyEventType);
             //data.addAll(attendancesFormBeanList.get(0).getStudentLists());
             //更新布局
             //notifyAdapter();
