@@ -37,28 +37,28 @@ class ScheduleSearchViewModel : ViewModel() {
      * 搜索日程
      */
     fun searchSchedule(filterTagCollect: FilterTagCollect) {
-        searchLocalSchedule(filterTagCollect)
+        //searchLocalSchedule(filterTagCollect)
         val toJSONString = JSON.toJSONString(filterTagCollect)
         loge("搜索日程：$toJSONString")
-//        val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
-//        apiStores.searchSchedule(requestBody)
-//            .enqueue(object : Callback<BaseResponse<List<ScheduleData>>> {
-//                override fun onResponse(
-//                    call: Call<BaseResponse<List<ScheduleData>>>,
-//                    response: Response<BaseResponse<List<ScheduleData>>>
-//                ) {
-//                    val body = response.body()
-//                    if (body != null && body.code == 200 && body.data != null) {
-//                        scheduleSearchResultList.postValue(body.data ?: listOf())
-//                        return
-//                    }
-//                    scheduleSearchResultList.postValue(listOf())
-//                }
-//
-//                override fun onFailure(call: Call<BaseResponse<List<ScheduleData>>>, t: Throwable) {
-//                    scheduleSearchResultList.postValue(listOf())
-//                }
-//            })
+        val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
+        apiStores.searchSchedule(requestBody)
+            .enqueue(object : Callback<BaseResponse<List<ScheduleData>>> {
+                override fun onResponse(
+                    call: Call<BaseResponse<List<ScheduleData>>>,
+                    response: Response<BaseResponse<List<ScheduleData>>>
+                ) {
+                    val body = response.body()
+                    if (body != null && body.code == 200 && body.data != null) {
+                        scheduleSearchResultList.postValue(body.data ?: listOf())
+                        return
+                    }
+                    scheduleSearchResultList.postValue(listOf())
+                }
+
+                override fun onFailure(call: Call<BaseResponse<List<ScheduleData>>>, t: Throwable) {
+                    scheduleSearchResultList.postValue(listOf())
+                }
+            })
     }
 
     /**

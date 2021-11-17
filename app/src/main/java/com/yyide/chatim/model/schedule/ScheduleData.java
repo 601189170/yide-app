@@ -345,6 +345,10 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     public int compareTo(ScheduleData other) {
         final DateTime dateTime1 = ScheduleDaoUtil.INSTANCE.toDateTime(this.startTime);
         final DateTime dateTimeOther1 = ScheduleDaoUtil.INSTANCE.toDateTime(other.startTime);
+        if (other.moreDayStartTime == null || this.moreDayEndTime == null) {
+            return dateTime1.compareTo(dateTimeOther1);
+        }
+
         final DateTime dateTime2 = ScheduleDaoUtil.INSTANCE.toDateTime(this.moreDayStartTime);
         final DateTime dateTimeOther2 = ScheduleDaoUtil.INSTANCE.toDateTime(other.moreDayStartTime);
         if (dateTime1.compareTo(dateTime2) > 0) {
