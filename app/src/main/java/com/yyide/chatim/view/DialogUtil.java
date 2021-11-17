@@ -1003,6 +1003,11 @@ public class DialogUtil {
 
         scheduleEditViewModel.getStartTimeLiveData().observe(lifecycleOwner, dateTime -> {
             Log.e(TAG, "showAddScheduleDialog: 日期已修改" );
+            if (Objects.equals(scheduleEditViewModel.getAllDayLiveData().getValue(), true)) {
+                String startTime = DateUtils.formatTime(dateTime, "", "MM月dd日");
+                tvDate.setText(startTime);
+                return;
+            }
             String startTime = DateUtils.formatTime(dateTime, "", "MM月dd日 HH:mm");
             tvDate.setText(startTime);
         });
