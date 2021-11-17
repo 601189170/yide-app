@@ -607,7 +607,12 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
         }
 
         //事件考勤 or 课程考勤
-        eventType = weeksMonthListBean.getType() != 2;
+        if (TextUtils.isEmpty(type)) {
+            eventType = weeksMonthListBean.getType() != 2;
+        } else {
+            eventType = !Objects.equals(type, "2");
+        }
+
         if (isWeekStatistics) {
             setWeek(true);
         } else {
