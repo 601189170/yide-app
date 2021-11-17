@@ -49,6 +49,7 @@ class ScheduleSearchActivity : BaseActivity() {
     private lateinit var scheduleSearchResultListAdapter: ScheduleTodayAdapter
     private val searchHistoryList = mutableListOf<String>()
     private var userId: String? = null
+    private val mmkv = MMKV.defaultMMKV()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityScheduleSearchBinding.inflate(layoutInflater)
@@ -247,7 +248,7 @@ class ScheduleSearchActivity : BaseActivity() {
     private fun initSearchHistory() {
         searchHistoryList.clear()
         val userId = SpData.getIdentityInfo().userId
-        val decodeString = MMKV.defaultMMKV().decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
+        val decodeString = mmkv.decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
         if (!TextUtils.isEmpty(decodeString)) {
             try {
                 val searchHistoryBeanList: List<ScheduleSearchHistoryBean> =
@@ -293,7 +294,7 @@ class ScheduleSearchActivity : BaseActivity() {
      * 清空搜索历史
      */
     private fun clearHistory() {
-        val decodeString = MMKV.defaultMMKV().decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
+        val decodeString = mmkv.decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
         if (!TextUtils.isEmpty(decodeString)) {
             try {
                 val searchHistoryBeanList: List<ScheduleSearchHistoryBean> =
@@ -302,16 +303,15 @@ class ScheduleSearchActivity : BaseActivity() {
                     searchHistoryBeanList.forEach {
                         if (it.userId == userId) {
                             it.historyList.clear()
-                            MMKV.defaultMMKV().encode(
-                                MMKVConstant.YD_SCHEDULE_HISTORY,
-                                JSON.toJSONString(searchHistoryBeanList)
-                            )
+                            mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
                             return@forEach
                         }
                     }
                 }
             } catch (e: Exception) {
                 loge("" + e.localizedMessage)
+                val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
+                mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
             }
         }
         historyAdapter.setList(null)
@@ -375,16 +375,22 @@ class ScheduleSearchActivity : BaseActivity() {
      * 保存搜索历史
      */
     private fun saveHistory(keyWord: String) {
-        searchHistoryList.add(keyWord)
-        historyAdapter.setList(searchHistoryList)
-        val decodeString = MMKV.defaultMMKV().decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
+        if (!searchHistoryList.contains(keyWord)){
+            searchHistoryList.add(keyWord)
+            historyAdapter.setList(searchHistoryList)
+        }
+        if (searchHistoryList.isEmpty()) {
+            viewBinding.clSearchHistory.visibility = View.GONE
+        } else {
+            viewBinding.clSearchHistory.visibility = View.VISIBLE
+        }
+        val decodeString = mmkv.decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
         if (TextUtils.isEmpty(decodeString)) {
             val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
             val historyList = mutableListOf<String>()
             historyList.add(keyWord)
             searchHistoryBeanList.add(ScheduleSearchHistoryBean("", historyList))
-            MMKV.defaultMMKV()
-                .encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
+            mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
         } else {
             try {
                 val searchHistoryBeanList: List<ScheduleSearchHistoryBean> =
@@ -393,11 +399,13 @@ class ScheduleSearchActivity : BaseActivity() {
                     searchHistoryBeanList.forEach {
                         if (it.userId == SpData.getIdentityInfo().userId) {
                             val historyList = it.historyList
-                            historyList.add(keyWord)
-                            MMKV.defaultMMKV().encode(
-                                MMKVConstant.YD_SCHEDULE_HISTORY,
-                                JSON.toJSONString(searchHistoryBeanList)
-                            )
+                            if (!historyList.contains(keyWord)){
+                                historyList.add(keyWord)
+                                mmkv.encode(
+                                    MMKVConstant.YD_SCHEDULE_HISTORY,
+                                    JSON.toJSONString(searchHistoryBeanList)
+                                )
+                            }
                             return@forEach
                         }
                     }
@@ -405,14 +413,16 @@ class ScheduleSearchActivity : BaseActivity() {
                     val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
                     val historyList = mutableListOf<String>()
                     historyList.add(keyWord)
-                    searchHistoryBeanList.add(ScheduleSearchHistoryBean("", historyList))
-                    MMKV.defaultMMKV().encode(
-                        MMKVConstant.YD_SCHEDULE_HISTORY,
-                        JSON.toJSONString(searchHistoryBeanList)
-                    )
+                    searchHistoryBeanList.add(ScheduleSearchHistoryBean(userId, historyList))
+                    mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
                 }
             } catch (e: Exception) {
                 loge("" + e.localizedMessage)
+                val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
+                val historyList = mutableListOf<String>()
+                historyList.add(keyWord)
+                searchHistoryBeanList.add(ScheduleSearchHistoryBean(userId, historyList))
+                mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
             }
         }
     }
