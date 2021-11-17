@@ -11,6 +11,8 @@ import com.yyide.chatim.model.BaseRsp
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedToMonthOfDateTime
 import com.yyide.chatim.utils.loge
 import okhttp3.RequestBody
 import org.joda.time.DateTime
@@ -56,7 +58,29 @@ class ScheduleListViewViewModel : ViewModel() {
         }
         val list2 = mutableListOf<MonthViewScheduleData>()
         if (list.isNotEmpty()){
-            list2.add(MonthViewScheduleData(dateTime,list))
+            //list可能跨几个月，需要按月分组
+            val mapMonth = mutableMapOf<String,MutableList<DayViewScheduleData>>()
+            list.forEach {
+                val dateTimeKey = it.dateTime.simplifiedToMonthOfDateTime().toStringTime()
+                if (mapMonth.containsKey(dateTimeKey)) {
+                    if (mapMonth[dateTimeKey] == null) {
+                        val mutableListOf = mutableListOf<DayViewScheduleData>()
+                        mutableListOf.add(it)
+                        mapMonth[dateTimeKey] = mutableListOf
+                    } else {
+                        mapMonth[dateTimeKey]?.add(it)
+                    }
+                } else {
+                    val mutableListOf = mutableListOf<DayViewScheduleData>()
+                    mutableListOf.add(it)
+                    mapMonth[dateTimeKey] = mutableListOf
+                }
+            }
+
+            mapMonth.keys.forEach {
+                val simplifiedDataTime = ScheduleDaoUtil.toDateTime(it).simplifiedToMonthOfDateTime()
+                list2.add(MonthViewScheduleData(simplifiedDataTime,mapMonth[it]?: mutableListOf()))
+            }
         }
         return list2
     }
