@@ -130,6 +130,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                 refresh = false
 //                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
             }
+           scheduleViewModel.curDateTime.value?.also {
+                scrollToPosition(it.year,it.monthOfYear-1,it.dayOfMonth)
+            }
 
             blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
