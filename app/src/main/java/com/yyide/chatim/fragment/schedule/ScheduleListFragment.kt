@@ -109,7 +109,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         scheduleListViewViewModel.listViewData.observe(requireActivity(), {
             if (refresh){
                 refresh = false
-                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
+//                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
             }
             if (it.isEmpty()) {
                 return@observe
@@ -128,7 +128,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             scheduleListAdapter.setList(list)
             if (refresh){
                 refresh = false
-                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
+//                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
             }
 
             blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
@@ -157,8 +157,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             updateDate()
         }
 
-        fragmentScheduleListBinding.swipeRefreshLayout.setOnRefreshListener(this)
-        fragmentScheduleListBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+//        fragmentScheduleListBinding.swipeRefreshLayout.setOnRefreshListener(this)
+//        fragmentScheduleListBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
 
     private fun initScheduleList() {
