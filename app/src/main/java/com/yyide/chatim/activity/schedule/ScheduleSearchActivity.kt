@@ -24,6 +24,7 @@ import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.MMKVConstant
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityScheduleSearchBinding
 import com.yyide.chatim.dialog.ScheduleSearchFilterPop
 import com.yyide.chatim.model.schedule.*
@@ -35,6 +36,7 @@ import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.LabelManageViewModel
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.viewmodel.ScheduleSearchViewModel
+import org.joda.time.DateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -120,6 +122,9 @@ class ScheduleSearchActivity : BaseActivity() {
                 //search(keyWord)
                 //开始查询日程
                 filterTagCollect.name = keyWord
+                if (filterTagCollect.startTime == null){
+                    filterTagCollect.startTime = DateTime.now().toStringTime()
+                }
                 scheduleSearchViewModel.searchSchedule(filterTagCollect)
                 return@setOnEditorActionListener true
             }
