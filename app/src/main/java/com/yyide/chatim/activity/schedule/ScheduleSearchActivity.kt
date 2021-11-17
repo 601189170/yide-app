@@ -19,6 +19,7 @@ import com.google.android.flexbox.*
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.tencent.mmkv.MMKV
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseActivity
@@ -47,10 +48,12 @@ class ScheduleSearchActivity : BaseActivity() {
     private val scheduleSearchResultList = mutableListOf<ScheduleData>()
     private lateinit var scheduleSearchResultListAdapter: ScheduleTodayAdapter
     private val searchHistoryList = mutableListOf<String>()
+    private var userId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityScheduleSearchBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        userId = SpData.getIdentityInfo().userId
         initView()
         labelManageViewModel.selectLabelList()
         scheduleSearchViewModel.getScheduleSearchResultList().observe(this, {
@@ -242,15 +245,32 @@ class ScheduleSearchActivity : BaseActivity() {
     }
 
     private fun initSearchHistory() {
-        val historyList =
-            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.YD_SCHEDULE_HISTORY, HashSet())
-        if (historyList.isEmpty()) {
+        searchHistoryList.clear()
+        val userId = SpData.getIdentityInfo().userId
+        val decodeString = MMKV.defaultMMKV().decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
+        if (!TextUtils.isEmpty(decodeString)) {
+            try {
+                val searchHistoryBeanList: List<ScheduleSearchHistoryBean> =
+                    JSON.parseArray(decodeString, ScheduleSearchHistoryBean::class.java)
+                if (searchHistoryBeanList.map { it.userId }.contains(userId)) {
+                    searchHistoryBeanList.forEach {
+                        if (it.userId == userId) {
+                            searchHistoryList.addAll(it.historyList)
+                            return@forEach
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                loge("" + e.localizedMessage)
+            }
+        }
+
+        if (searchHistoryList.isEmpty()) {
             viewBinding.clSearchHistory.visibility = View.GONE
         } else {
             viewBinding.clSearchHistory.visibility = View.VISIBLE
         }
-        searchHistoryList.clear()
-        searchHistoryList.addAll(historyList)
+
         viewBinding.historyRecyclerView.layoutManager = FlexboxLayoutManager(this)
         viewBinding.historyRecyclerView.addItemDecoration(
             SpacesItemDecoration(
@@ -273,10 +293,27 @@ class ScheduleSearchActivity : BaseActivity() {
      * 清空搜索历史
      */
     private fun clearHistory() {
-        val search_history =
-            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.YD_SCHEDULE_HISTORY, HashSet())
-        search_history.clear()
-        MMKV.defaultMMKV().encode(MMKVConstant.YD_SCHEDULE_HISTORY, search_history)
+        val decodeString = MMKV.defaultMMKV().decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
+        if (!TextUtils.isEmpty(decodeString)) {
+            try {
+                val searchHistoryBeanList: List<ScheduleSearchHistoryBean> =
+                    JSON.parseArray(decodeString, ScheduleSearchHistoryBean::class.java)
+                if (searchHistoryBeanList.map { it.userId }.contains(userId)) {
+                    searchHistoryBeanList.forEach {
+                        if (it.userId == userId) {
+                            it.historyList.clear()
+                            MMKV.defaultMMKV().encode(
+                                MMKVConstant.YD_SCHEDULE_HISTORY,
+                                JSON.toJSONString(searchHistoryBeanList)
+                            )
+                            return@forEach
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                loge("" + e.localizedMessage)
+            }
+        }
         historyAdapter.setList(null)
         searchHistoryList.clear()
         viewBinding.clSearchHistory.visibility = View.GONE
@@ -338,13 +375,46 @@ class ScheduleSearchActivity : BaseActivity() {
      * 保存搜索历史
      */
     private fun saveHistory(keyWord: String) {
-        val decodeStringSet =
-            MMKV.defaultMMKV().decodeStringSet(MMKVConstant.YD_SCHEDULE_HISTORY, HashSet())
-        decodeStringSet.add(keyWord)
-        if (decodeStringSet.isNotEmpty() && decodeStringSet.size > 20) {
-
+        searchHistoryList.add(keyWord)
+        historyAdapter.setList(searchHistoryList)
+        val decodeString = MMKV.defaultMMKV().decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
+        if (TextUtils.isEmpty(decodeString)) {
+            val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
+            val historyList = mutableListOf<String>()
+            historyList.add(keyWord)
+            searchHistoryBeanList.add(ScheduleSearchHistoryBean("", historyList))
+            MMKV.defaultMMKV()
+                .encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
+        } else {
+            try {
+                val searchHistoryBeanList: List<ScheduleSearchHistoryBean> =
+                    JSON.parseArray(decodeString, ScheduleSearchHistoryBean::class.java)
+                if (searchHistoryBeanList.map { it.userId }.contains(userId)) {
+                    searchHistoryBeanList.forEach {
+                        if (it.userId == SpData.getIdentityInfo().userId) {
+                            val historyList = it.historyList
+                            historyList.add(keyWord)
+                            MMKV.defaultMMKV().encode(
+                                MMKVConstant.YD_SCHEDULE_HISTORY,
+                                JSON.toJSONString(searchHistoryBeanList)
+                            )
+                            return@forEach
+                        }
+                    }
+                } else {
+                    val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
+                    val historyList = mutableListOf<String>()
+                    historyList.add(keyWord)
+                    searchHistoryBeanList.add(ScheduleSearchHistoryBean("", historyList))
+                    MMKV.defaultMMKV().encode(
+                        MMKVConstant.YD_SCHEDULE_HISTORY,
+                        JSON.toJSONString(searchHistoryBeanList)
+                    )
+                }
+            } catch (e: Exception) {
+                loge("" + e.localizedMessage)
+            }
         }
-        MMKV.defaultMMKV().encode(MMKVConstant.YD_SCHEDULE_HISTORY, decodeStringSet)
     }
 
 }
