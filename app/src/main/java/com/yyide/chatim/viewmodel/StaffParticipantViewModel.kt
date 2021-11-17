@@ -117,6 +117,7 @@ class StaffParticipantViewModel : ViewModel() {
                         //participantListBean.userName = it.realname
                         participantListBean.department = false
                         participantListBean.checked = false
+                        participantListBean.guardians = it.guardians
                         participantList.add(participantListBean)
                     }
 

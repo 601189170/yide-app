@@ -249,33 +249,35 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
         }
     }
 
-    fun guardianName(relation:Int):String{
-        //0.父亲1.母亲2.爷爷3.奶奶4.外公5.外婆，6其他
-        when (relation) {
-            0 -> {
-                return "父亲"
+    companion object{
+        fun guardianName(relation:Int):String{
+            //0.父亲1.母亲2.爷爷3.奶奶4.外公5.外婆，6其他
+            when (relation) {
+                0 -> {
+                    return "父亲"
+                }
+                1 -> {
+                    return "母亲"
+                }
+                2 -> {
+                    return "爷爷"
+                }
+                3 -> {
+                    return "奶奶"
+                }
+                4 -> {
+                    return "外公"
+                }
+                5 -> {
+                    return "外婆"
+                }
+                6 -> {
+                    return "其他"
+                }
+                else -> {
+                }
             }
-            1 -> {
-                return "母亲"
-            }
-            2 -> {
-                return "爷爷"
-            }
-            3 -> {
-                return "奶奶"
-            }
-            4 -> {
-                return "外公"
-            }
-            5 -> {
-                return "外婆"
-            }
-            6 -> {
-                return "其他"
-            }
-            else -> {
-            }
+            return "其他"
         }
-        return "其他"
     }
 }

@@ -28,7 +28,27 @@ data class ParticipantRsp(
             var myType:String? = null,
             var type: String? = null,
             var department:Boolean = false,
-            var checked:Boolean = false
-        )
+            var checked:Boolean = false,
+            var guardians: List<GuardiansBean> = mutableListOf()
+        ){
+            data class GuardiansBean(
+                val id:String? = null,
+                var userId: String? = null,
+                var guardianName: String? = null,
+                var checked: Boolean = false,
+                //0.父亲1.母亲2.爷爷3.奶奶4.外公5.外婆，6其他
+                var relation:Int = 0
+            )
+        }
     }
+}
+
+fun ParticipantRsp.DataBean.ParticipantListBean.GuardiansBean.toParticipantListBean(): ParticipantRsp.DataBean.ParticipantListBean {
+    val participantListBean = ParticipantRsp.DataBean.ParticipantListBean()
+    participantListBean.id = this.id
+    participantListBean.userId = this.userId
+    participantListBean.realname = this.guardianName
+    participantListBean.department = false
+    participantListBean.name = this.guardianName
+    return participantListBean
 }

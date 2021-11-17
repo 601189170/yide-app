@@ -16,8 +16,12 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.schedule.ScheduleParticipantSearchActivity.Companion.guardianName
 import com.yyide.chatim.databinding.FragmentStaffParticipantBinding
 import com.yyide.chatim.model.schedule.ParticipantRsp
+import com.yyide.chatim.model.schedule.SearchParticipantRsp
+import com.yyide.chatim.model.schedule.toParticipantListBean
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpacesFlowItemDecoration
@@ -56,7 +60,20 @@ class StaffParticipantFragment : Fragment() {
                 }
                 staffParticipantViewModel.curParticipantList.value = list
                 synParticipantListSelectedStatus()
-                staffAdapter.setList(list)
+                //家长参与人列表有值时，使用有监护人的adapter
+                if (type == PARTICIPANT_TYPE_STAFF) {
+                    staffAdapter.setList(list)
+                } else {
+                    if (it.departmentList?.isNotEmpty() == true) {
+                        staffAdapter.setList(list)
+                    } else {
+                        val linearLayoutManager3 = LinearLayoutManager(requireContext())
+                        staffParticipantBinding.rvList.layoutManager = linearLayoutManager3
+                        staffParticipantBinding.rvList.adapter = studentAdapter
+                        studentAdapter.setList(list)
+                    }
+                }
+
                 staffParticipantViewModel.getParticipantList().value?.add(it)
                 navAdapter.setList(staffParticipantViewModel.getParticipantList().value)
                 return@observe
@@ -108,6 +125,7 @@ class StaffParticipantFragment : Fragment() {
                 dataBean.participantList?.let { curList?.addAll(it) }
                 //和选中的一致
                 synParticipantListSelectedStatus()
+                staffParticipantBinding.rvList.adapter = staffAdapter
                 staffAdapter.setList(curList)
             }
         }
@@ -117,6 +135,7 @@ class StaffParticipantFragment : Fragment() {
         staffParticipantBinding.rvList.layoutManager = linearLayoutManager2
         staffAdapter.setList(staffParticipantViewModel.curParticipantList.value)
         staffParticipantBinding.rvList.adapter = staffAdapter
+        //studentAdapter.
         staffAdapter.setOnItemClickListener { _, _, position ->
             loge("选择人员：$position")
             staffParticipantViewModel.curParticipantList.value?.also { curList ->
@@ -128,7 +147,19 @@ class StaffParticipantFragment : Fragment() {
                         dataBean.departmentList?.let { curList.addAll(it) }
                         dataBean.participantList?.let { curList.addAll(it) }
                         synParticipantListSelectedStatus()
-                        staffAdapter.setList(curList)
+                        if (type == PARTICIPANT_TYPE_STAFF) {
+                            staffAdapter.setList(curList)
+                        } else {
+                            if (dataBean.departmentList?.isNotEmpty() == true) {
+                                staffAdapter.setList(curList)
+                            } else {
+                                val linearLayoutManager3 = LinearLayoutManager(requireContext())
+                                staffParticipantBinding.rvList.layoutManager = linearLayoutManager3
+                                staffParticipantBinding.rvList.adapter = studentAdapter
+                                studentAdapter.setList(curList)
+                            }
+                        }
+
                         staffParticipantViewModel.getParticipantList().value?.add(dataBean)
                         navAdapter.setList(staffParticipantViewModel.getParticipantList().value)
                     } else {
@@ -161,14 +192,25 @@ class StaffParticipantFragment : Fragment() {
             { participantList ->
                 loge("当前选中参与人数据发生变化${JSON.toJSONString(participantList)}")
                 loge("当前选中参与人数据发生变化：${participantList.size}")
-                staffParticipantViewModel.curParticipantList.value?.also { curList ->
-                    curList.forEach {
-                        loge("对比---participantList=${JSON.toJSONString(participantList)}\n it=${JSON.toJSONString(it)}")
-                        it.checked = participantList.map { it.userId }.contains(it.userId)
+                loge(participantList.map { it.userId }.toString())
+                if (type == PARTICIPANT_TYPE_STAFF) {
+                    staffParticipantViewModel.curParticipantList.value?.also { curList ->
+                        curList.forEach {
+                            it.checked = participantList.map { it.userId }.contains(it.userId)
+                        }
+                        staffAdapter.setList(curList)
                     }
-                    staffAdapter.setList(curList)
+                } else {
+                    staffParticipantViewModel.curParticipantList.value?.also { curList ->
+                        curList.forEach {
+                            it.guardians.forEach {
+                                loge("it.userId=${it.userId}")
+                                it.checked = participantList.map { it.userId }.contains(it.userId)
+                            }
+                        }
+                        studentAdapter.setList(curList)
+                    }
                 }
-
             })
     }
 
@@ -203,7 +245,13 @@ class StaffParticipantFragment : Fragment() {
         val value = participantSharedViewModel.curStaffParticipantList.value
         staffParticipantViewModel.curParticipantList.value?.forEach {
             if (value != null) {
-                it.checked = value.map { it.userId }.contains(it.userId)
+                if (type == PARTICIPANT_TYPE_STAFF) {
+                    it.checked = value.map { it.userId }.contains(it.userId)
+                } else {
+                    it.guardians.forEach {
+                        it.checked = value.map { it.userId }.contains(it.userId)
+                    }
+                }
             }
         }
     }
@@ -238,6 +286,60 @@ class StaffParticipantFragment : Fragment() {
             holder.getView<CheckBox>(R.id.checkBox).isEnabled = !item.department
             holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
         }
+    }
+
+    private val studentAdapter = object :
+        BaseQuickAdapter<ParticipantRsp.DataBean.ParticipantListBean, BaseViewHolder>(R.layout.item_participant_student_guardians_list) {
+        override fun convert(
+            holder: BaseViewHolder,
+            item: ParticipantRsp.DataBean.ParticipantListBean
+        ) {
+            holder.setText(R.id.tv_student_name, "${item.name}")
+            val recyclerView = holder.getView<RecyclerView>(R.id.rv_parent_of_student)
+            recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+            val parentsAdapter = object :
+                BaseQuickAdapter<ParticipantRsp.DataBean.ParticipantListBean.GuardiansBean, BaseViewHolder>(
+                    R.layout.item_participant_parent_of_student_list
+                ) {
+                override fun convert(
+                    holder: BaseViewHolder,
+                    item: ParticipantRsp.DataBean.ParticipantListBean.GuardiansBean
+                ) {
+                    holder.setText(R.id.tv_name, item.guardianName)
+                    holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
+                    holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
+
+                    holder.setText(R.id.tv_guardian_name,guardianName(item.relation))
+                }
+            }
+            val guardians = item.guardians
+            recyclerView.adapter = parentsAdapter
+            parentsAdapter.setList(guardians)
+
+            parentsAdapter.setOnItemClickListener { _, _, position ->
+                guardians[position].checked = !guardians[position].checked
+                parentsAdapter.setList(guardians)
+
+                //上顶部选中
+                val participantListBean = guardians[position].toParticipantListBean()
+                val value = participantSharedViewModel.curStaffParticipantList.value
+                if (value?.map { it.userId }?.contains(participantListBean.userId) == true) {
+                    //value.remove(participantListBean)
+                    val iterator = value.iterator()
+                    while (iterator.hasNext()){
+                        val next = iterator.next()
+                        if (next.userId == participantListBean.userId){
+                            value.remove(next)
+                            break
+                        }
+                    }
+                } else {
+                    value?.add(participantListBean)
+                }
+                participantSharedViewModel.curStaffParticipantList.postValue(value)
+            }
+        }
+
     }
 
     companion object {
