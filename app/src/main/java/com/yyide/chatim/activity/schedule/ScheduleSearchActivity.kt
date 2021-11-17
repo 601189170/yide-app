@@ -62,7 +62,7 @@ class ScheduleSearchActivity : BaseActivity() {
             scheduleSearchResultListAdapter.setList(scheduleSearchResultList)
         })
 
-        scheduleMangeViewModel.selectAllScheduleList()
+//        scheduleMangeViewModel.selectAllScheduleList()
     }
 
     override fun getContentViewID(): Int {
@@ -166,7 +166,7 @@ class ScheduleSearchActivity : BaseActivity() {
     private val searchTimeListener = OnDateSetListener { _, millSeconds ->
         val simpleDateFormat1 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
         viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date(millSeconds))
-        val simpleDateFormat2 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
+        val simpleDateFormat2 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val startTime = simpleDateFormat2.format(Date(millSeconds))
         filterTagCollect.startTime = startTime
         //开始查询日程
