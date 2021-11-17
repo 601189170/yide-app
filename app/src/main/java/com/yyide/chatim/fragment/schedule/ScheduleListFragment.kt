@@ -42,6 +42,7 @@ import com.yyide.chatim.adapter.schedule.ScheduleListAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
@@ -225,14 +226,14 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     fun scrollToPosition(year: Int, month: Int, day: Int) {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         //定位到指定日期
-        val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter)
+        val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter).simplifiedDataTime()
         var scrollOuter: Int = -1
         list.let {
             for (i in 0 until list.size) {
                 val scheduleData = list[i]
-                if (!scheduleData.isMonthHead && !scheduleData.isTimeAxis && ScheduleDaoUtil.toDateTime(scheduleData.startTime)
-                        .simplifiedDataTime() == dateTime
-                ) {
+                val startTime = ScheduleDaoUtil.toDateTime(scheduleData.moreDayStartTime?:scheduleData.startTime).simplifiedDataTime()
+                loge("startTime=${startTime.toStringTime()} dateTime=${dateTime.toStringTime()}")
+                if (!scheduleData.isMonthHead && !scheduleData.isTimeAxis && startTime == dateTime) {
                     scrollOuter = i
                     return@let
                 }
