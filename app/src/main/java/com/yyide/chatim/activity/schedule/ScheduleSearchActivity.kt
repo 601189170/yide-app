@@ -77,7 +77,7 @@ class ScheduleSearchActivity : BaseActivity() {
 
     fun initView() {
         val simpleDateFormat1 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
-        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date())
+//        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date())
         viewBinding.cancel.setOnClickListener { finish() }
         viewBinding.btnDeleteSearch.setOnClickListener { viewBinding.edit.text = null }
         viewBinding.ivDel.setOnClickListener { clearHistory() }
@@ -98,12 +98,12 @@ class ScheduleSearchActivity : BaseActivity() {
         }
         //根据日期查询
         viewBinding.tvSearchTime.setOnClickListener {
-            DatePickerDialogUtil.showDateTime(
-                this,
-                "选择日程开始时间",
-                filterTagCollect.startTime,
-                searchTimeListener
-            )
+//            DatePickerDialogUtil.showDateTime(
+//                this,
+//                "选择日程开始时间",
+//                filterTagCollect.startTime,
+//                searchTimeListener
+//            )
         }
         viewBinding.edit.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -123,7 +123,7 @@ class ScheduleSearchActivity : BaseActivity() {
                 //开始查询日程
                 filterTagCollect.name = keyWord
                 if (filterTagCollect.startTime == null){
-                    filterTagCollect.startTime = DateTime.now().toStringTime()
+//                    filterTagCollect.startTime = DateTime.now().toStringTime()
                 }
                 scheduleSearchViewModel.searchSchedule(filterTagCollect)
                 return@setOnEditorActionListener true
@@ -160,7 +160,7 @@ class ScheduleSearchActivity : BaseActivity() {
         viewBinding.ivDelFilter.setOnClickListener {
             tagList.clear()
             viewBinding.clFilterCondition.visibility = View.GONE
-            viewBinding.tvSearchTime.visibility = View.VISIBLE
+//            viewBinding.tvSearchTime.visibility = View.VISIBLE
             filterAdapter.setList(null)
             filterTagCollect = FilterTagCollect()
         }
@@ -174,7 +174,7 @@ class ScheduleSearchActivity : BaseActivity() {
 
     private val searchTimeListener = OnDateSetListener { _, millSeconds ->
         val simpleDateFormat1 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
-        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date(millSeconds))
+//        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date(millSeconds))
         val simpleDateFormat2 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val startTime = simpleDateFormat2.format(Date(millSeconds))
         filterTagCollect.startTime = startTime
@@ -187,7 +187,7 @@ class ScheduleSearchActivity : BaseActivity() {
         if (isShowing) {
             viewBinding.clFilterCondition.visibility = View.VISIBLE
             viewBinding.clSearchHistory.visibility = View.GONE
-            viewBinding.tvSearchTime.visibility = View.INVISIBLE
+//            viewBinding.tvSearchTime.visibility = View.INVISIBLE
             viewBinding.tvFilter.setTextColor(resources.getColor(R.color.colorPrimary))
             viewBinding.tvFilter.setCompoundDrawablesWithIntrinsicBounds(
                 null,
@@ -198,7 +198,7 @@ class ScheduleSearchActivity : BaseActivity() {
         } else {
             viewBinding.clFilterCondition.visibility = View.GONE
             viewBinding.clSearchHistory.visibility = View.VISIBLE
-            viewBinding.tvSearchTime.visibility = View.VISIBLE
+//            viewBinding.tvSearchTime.visibility = View.VISIBLE
             viewBinding.tvFilter.setTextColor(resources.getColor(R.color.text_666666))
             viewBinding.tvFilter.setCompoundDrawablesWithIntrinsicBounds(
                 null,
@@ -292,7 +292,7 @@ class ScheduleSearchActivity : BaseActivity() {
             filterTagCollect.name = searchHistoryList[position]
             viewBinding.edit.setText(filterTagCollect.name)
             if (filterTagCollect.startTime == null){
-                filterTagCollect.startTime = DateTime.now().toStringTime()
+//                filterTagCollect.startTime = DateTime.now().toStringTime()
             }
             scheduleSearchViewModel.searchSchedule(filterTagCollect)
         }
