@@ -14,12 +14,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
-import com.yyide.chatim.activity.weekly.details.adapter.ClassAdapter
-import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.HotAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.StudentClassAdapter
 import com.yyide.chatim.activity.weekly.details.viewmodel.ParentsAttendanceViewModel
-import com.yyide.chatim.activity.weekly.details.viewmodel.TeacherAttendanceViewModel
 import com.yyide.chatim.activity.weekly.home.WeeklyUtil
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.*

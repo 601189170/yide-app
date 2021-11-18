@@ -154,7 +154,6 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
 
     private List<TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> convertDataToTreeNode(List<AttendanceRsp.TeacherItemBean> datas) {
         List<TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> nodes = new ArrayList<>();
-        Map<String, TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> map = new HashMap();
         for (int i = 0; i < datas.size(); i++) {
             List<TreeNode<AttendanceRsp.TeacherItemBean.CourseInfoFormListBean>> childs = new ArrayList<>();
             AttendanceRsp.TeacherItemBean peopleBean = datas.get(i);
@@ -169,7 +168,6 @@ public class SchoolTeacherAttendanceFragment extends BaseFragment implements Vie
             }
             treeNode.setChildren(childs);
             nodes.add(treeNode);
-            map.put(i + "", treeNode);
         }
         return nodes;
     }

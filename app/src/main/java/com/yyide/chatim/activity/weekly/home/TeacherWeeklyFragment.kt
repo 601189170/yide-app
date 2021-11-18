@@ -1,13 +1,10 @@
 package com.yyide.chatim.activity.weekly.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +23,6 @@ import com.yyide.chatim.databinding.*
 import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
-import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -151,7 +147,7 @@ class TeacherWeeklyFragment : BaseFragment() {
         if (SpData.getClassInfo() != null) {
             viewBinding.tvEvent.text = SpData.getClassInfo().classesName + "的周报"
         }
-        val classList = SpData.getClassList()
+        val classList = SpData.getDuplicationClassList()
         val adapterEvent = ClassAdapter()
         if (classList != null) {
             if (classList.size > 1) {

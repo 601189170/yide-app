@@ -307,7 +307,9 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             setTab(0, 0);
         } else if (BaseConstant.TYPE_MESSAGE.equals(messageEvent.getCode())) {
             setTab(1, 0);
-        } else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
+        } else if (BaseConstant.TYPE_SCHEDULE.equals(messageEvent.getCode())) {
+            setTab(4, 0);
+        }else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
             //模拟数据测试应用更新
             isShow = true;
             mvpPresenter.getVersionInfo();

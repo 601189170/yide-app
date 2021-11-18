@@ -64,13 +64,18 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
     private void initView(AttendanceRsp.DataBean item) {
         mViewBinding.swipeRefreshLayout.setOnRefreshListener(this::request);
         mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
-        //1 学生 2 教职工
-        if ("2".equals(attendanceRequestBean.getPeopleType())) {
-            startFragment(attendanceRequestBean, item);
+        if (item.getHeadmasterAttendanceList() != null && item.getHeadmasterAttendanceList().size() > 1) {
+            if (TextUtils.isEmpty(attendanceRequestBean.getTheme())) {
+                attendanceRequestBean = item.getHeadmasterAttendanceList().get(0);
+            }
+            mViewBinding.tvAttendanceTitle.setVisibility(View.VISIBLE);
+            mViewBinding.tvAttendanceTitle.setClickable(true);
+            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
         } else {
-            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(item, attendanceRequestBean)).commit();
+            mViewBinding.tvAttendanceTitle.setClickable(false);
+            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
-        mViewBinding.tvAttendanceTitle.setText(attendanceRequestBean.getTheme());
+
         if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
             mViewBinding.tvClassName.setClickable(true);
             mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
@@ -79,14 +84,14 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
             mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
         }
 
-        if (item.getHeadmasterAttendanceList() != null && item.getHeadmasterAttendanceList().size() > 1) {
-            mViewBinding.tvAttendanceTitle.setClickable(true);
-            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+        //1 学生 2 教职工
+        if ("2".equals(attendanceRequestBean.getPeopleType())) {
+            startFragment(attendanceRequestBean, item);
         } else {
-            mViewBinding.tvAttendanceTitle.setClickable(false);
-            mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            getChildFragmentManager().beginTransaction().replace(mViewBinding.flContent.getId(), SchoolStudentAttendanceFragment.newInstance(item, attendanceRequestBean)).commit();
         }
 
+        mViewBinding.tvAttendanceTitle.setText(attendanceRequestBean.getTheme());
         mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
             AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
             adapterEvent.setList(item.getHeadmasterAttendanceList());

@@ -106,9 +106,9 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     }
 
     private void setData(AttendanceRsp.DataBean.AttendanceListBean item) {
+        viewBinding.clContent.setVisibility(View.VISIBLE);
         if (item != null) {
             viewBinding.constraintLayout.setVisibility(View.VISIBLE);
-            viewBinding.clContent.setVisibility(View.VISIBLE);
             viewBinding.tvAttendanceTitle.setText(item.getTheme());
             if (gradeBean != null) {
                 viewBinding.tvEventName.setText(gradeBean.getGradeName());

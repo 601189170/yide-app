@@ -26,9 +26,12 @@
 
     <TextView
         android:id="@+id/tv_event_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_4"
         android:ellipsize="end"
+        android:gravity="center"
         android:lines="1"
         android:textColor="#B3ffffff"
         android:textSize="@dimen/text_12"

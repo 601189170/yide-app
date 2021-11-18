@@ -144,7 +144,7 @@ class TeacherHomeworkFragment : BaseFragment() {
             viewBinding.tvClassName.text = classesName
         }
 
-        SpData.getClassList().apply {
+        SpData.getDuplicationClassList().apply {
             if (size > 1) {
                 viewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(
                     null,

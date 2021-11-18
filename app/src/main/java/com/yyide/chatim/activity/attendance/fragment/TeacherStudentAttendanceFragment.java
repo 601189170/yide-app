@@ -87,6 +87,8 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     private void getAttendance() {
         if (itemParams != null) {
             mvpPresenter.attendance(classesId, itemParams.getServerId(), itemParams.getType(), itemParams.getAttendanceTimeId());
+        } else {
+            mvpPresenter.attendance(classesId, null, null, null);
         }
     }
 
@@ -112,6 +114,25 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             classesId = SpData.getClassInfo().classesId;
             mViewBinding.tvClassName.setText(SpData.getClassInfo().classesName);
         }
+        List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
+        if (classList != null && classList.size() > 1) {
+            mViewBinding.tvClassName.setClickable(true);
+            mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+        } else {
+            mViewBinding.tvClassName.setClickable(false);
+            mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+        }
+        mViewBinding.tvClassName.setOnClickListener(v -> {
+            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterClass, "请选择班级");
+            name = mViewBinding.tvClassName.getText().toString().trim();
+            adapterClass.setList(classList);
+            attendancePop.setOnSelectListener(index -> {
+                mViewBinding.tvClassName.setText(classList.get(index).classesName);
+                classesId = classList.get(index).classesId;
+                getAttendance();
+            });
+        });
+
     }
 
     @Override
@@ -163,19 +184,12 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     @SuppressLint("SetTextI18n")
     private void setDataView(AttendanceRsp.DataBean item) {
-        mViewBinding.tvClassName.setOnClickListener(v -> {
-            List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
-            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterClass, "请选择班级");
-            name = mViewBinding.tvClassName.getText().toString().trim();
-            adapterClass.setList(classList);
-            attendancePop.setOnSelectListener(index -> {
-                mViewBinding.tvClassName.setText(classList.get(index).classesName);
-                classesId = classList.get(index).classesId;
-                getAttendance();
-            });
-        });
+
         if (item != null) {
             itemStudents = item.getTeacherCourseForm();
+            if (itemParams == null && item.getClassroomTeacherAttendanceList() != null && item.getClassroomTeacherAttendanceList().size() > 0) {
+                itemParams = item.getClassroomTeacherAttendanceList().get(0);
+            }
             mViewBinding.tvAttendanceTitle.setOnClickListener(v -> {
                 AttendancePop attendancePop = new AttendancePop(getActivity(), adapterEvent, "请选择考勤事件");
                 adapterEvent.setList(item.getClassroomTeacherAttendanceList());
@@ -185,16 +199,6 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 });
             });
 
-            if (SpData.getIdentityInfo() != null) {
-                if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
-                    mViewBinding.tvClassName.setClickable(true);
-                    mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-                } else {
-                    mViewBinding.tvClassName.setClickable(false);
-                    mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                }
-            }
-
             if (item.getClassroomTeacherAttendanceList() != null && item.getClassroomTeacherAttendanceList().size() > 1) {
                 mViewBinding.tvAttendanceTitle.setClickable(true);
                 mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
@@ -202,6 +206,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                 mViewBinding.tvAttendanceTitle.setClickable(false);
                 mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
+
             if (item.getTeacherCourseForm() != null) {
                 setData(item.getTeacherCourseForm().getBaseInfo());
             } else {
@@ -345,13 +350,12 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         tvTime.setTextColor(Color.parseColor("#F66C6C"));
                         break;
                     case "5"://请假
-                        holder.getView(R.id.constraintLayout).setVisibility(View.GONE);
-                        holder.getView(R.id.layout_leave).setVisibility(View.VISIBLE);
-                        holder.setText(R.id.tv_leave_status, "请假");
+                        holder.setText(R.id.tv_status, "请假");
                         String startTime = DateUtils.formatTime(item.getLeaveStartTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
                         String endTime = DateUtils.formatTime(item.getLeaveEndTime(), "yyyy-MM-dd HH:mm:ss", "MM.dd HH:mm");
-                        holder.setText(R.id.tv_leave_event, "请假时间");
-                        holder.setText(R.id.tv_leave_time, startTime + "-" + endTime);
+                        holder.setText(R.id.tv_student_event, "请假时间");
+                        holder.setText(R.id.tv_student_time, startTime + "-" + endTime);
+                        tvTime.setTextColor(Color.parseColor("#F6BD16"));
                         break;
                     case "4":
                         //无效打卡

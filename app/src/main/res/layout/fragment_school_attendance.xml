@@ -16,6 +16,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="@dimen/dp_15"
             android:drawableRight="@mipmap/icon_down"
+            android:visibility="gone"
             android:drawablePadding="@dimen/dp_5"
             android:textColor="@color/text_1E1E1E"
             android:textSize="@dimen/text_15"

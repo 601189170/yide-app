@@ -1,7 +1,6 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
-import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -15,27 +14,12 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.SwichClassAdapter;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 
 /**
@@ -83,7 +67,7 @@ public class SwitchClassPopNew extends PopupWindow {
         SwichClassAdapter adapter = new SwichClassAdapter();
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
-        ArrayList<GetUserSchoolRsp.DataBean.FormBean> formBeans = SpData.getClassList();
+        ArrayList<GetUserSchoolRsp.DataBean.FormBean> formBeans = SpData.getDuplicationClassList();
         if (formBeans.size() > 0) {
             adapter.notifyData(formBeans);
             for (int i = 0; i < formBeans.size(); i++) {

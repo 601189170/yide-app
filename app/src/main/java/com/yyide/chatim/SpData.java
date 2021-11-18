@@ -63,14 +63,24 @@ public class SpData {
         return new ArrayList<>(personSet);
     }
 
-    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getClassList() {
+    /**
+     * 班级列表去重
+     *
+     * @return
+     */
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getDuplicationClassList() {
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
             return removeList(SpData.getIdentityInfo().form);
         }
         return new ArrayList<>();
     }
 
-    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getDuplicationClassList() {
+    /**
+     * 班级列表（未去重）
+     *
+     * @return
+     */
+    public static ArrayList<GetUserSchoolRsp.DataBean.FormBean> getClassList() {
         if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
             return (ArrayList<GetUserSchoolRsp.DataBean.FormBean>) SpData.getIdentityInfo().form;
         }

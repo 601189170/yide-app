@@ -106,6 +106,8 @@ public class MyMessageReceiver extends MessageReceiver {
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 } else if ("7".equals(pushModel.getPushType())) {
                     context.startActivity(new Intent(context, WeeklyHomeActivity.class));
+                } else if ("8".equals(pushModel.getPushType())) {
+                    EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SCHEDULE, ""));
                 } else {
                     //其他统一跳到首页
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));

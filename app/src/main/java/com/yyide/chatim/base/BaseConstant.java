@@ -97,6 +97,7 @@ public class BaseConstant {
     public static final String TYPE_MEETING_UPDATE_LIST = "type_meeting_update_list";
 
     public static final String TYPE_MAIN = "type_main";
+    public static final String TYPE_SCHEDULE = "type_schedule";
     public static final String TYPE_MESSAGE = "type_message";
     public static final String TYPE_IM_LOGIN = "type_im_login";
     public static final String TYPE_MESSAGE_UPDATE = "type_message_update";

@@ -15,7 +15,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.details.adapter.ClassAdapter
-import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.details.adapter.HotAdapter
 import com.yyide.chatim.activity.weekly.details.viewmodel.TeacherAttendanceStudentViewModel
 import com.yyide.chatim.activity.weekly.home.WeeklyUtil
@@ -141,7 +140,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
         if (detailList != null && detailList.isNotEmpty()) {
             viewBinding.slidingTabLayout.visibility = View.VISIBLE
             viewBinding.viewpager.visibility = View.VISIBLE
-            viewBinding.viewpager.offscreenPageLimit = detailList.size
+           //viewBinding.viewpager.offscreenPageLimit = detailList.size
             viewBinding.viewpager.adapter = object :
                 FragmentStatePagerAdapter(
                     childFragmentManager,
@@ -213,7 +212,7 @@ class TeacherAttendanceHomeStudentFragment : BaseFragment() {
             viewBinding.tvClassName.text = classBean.classesName + "的周报"
             classesId = classBean.classesId
         }
-        val classList = SpData.getClassList()
+        val classList = SpData.getDuplicationClassList()
         val adapterEvent = ClassAdapter()
         if (classList != null) {
             if (classList.size > 1) {

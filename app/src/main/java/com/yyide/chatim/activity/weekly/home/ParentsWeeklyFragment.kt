@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +19,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
-import com.yyide.chatim.activity.weekly.details.adapter.ClassAdapter
-import com.yyide.chatim.activity.weekly.details.adapter.DateAdapter
 import com.yyide.chatim.activity.weekly.home.viewmodel.ParentsViewModel
-import com.yyide.chatim.activity.weekly.home.viewmodel.TeacherViewModel
-import com.yyide.chatim.adapter.AttendanceAdapter
 import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.databinding.FragmentParentsWeeklyBinding
 import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
@@ -32,7 +27,6 @@ import com.yyide.chatim.dialog.AttendancePop
 import com.yyide.chatim.model.*
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.InitPieChart
-import org.w3c.dom.Text
 import java.util.*
 
 /**
@@ -248,7 +242,7 @@ open class ParentsWeeklyFragment : BaseFragment() {
             viewBinding.tvEvent.text = SpData.getClassInfo().studentName + "的周报"
             studentName = SpData.getClassInfo().studentName
         }
-        val classList = SpData.getDuplicationClassList()
+        val classList = SpData.getClassList()
         if (classList != null) {
             if (classList.size > 1) {
                 viewBinding.tvEvent.setCompoundDrawablesWithIntrinsicBounds(
