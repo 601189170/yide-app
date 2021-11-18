@@ -291,6 +291,9 @@ class ScheduleSearchActivity : BaseActivity() {
             //搜索
             filterTagCollect.name = searchHistoryList[position]
             viewBinding.edit.setText(filterTagCollect.name)
+            if (filterTagCollect.startTime == null){
+                filterTagCollect.startTime = DateTime.now().toStringTime()
+            }
             scheduleSearchViewModel.searchSchedule(filterTagCollect)
         }
     }
