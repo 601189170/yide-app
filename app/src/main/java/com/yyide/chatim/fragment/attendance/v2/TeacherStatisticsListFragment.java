@@ -81,7 +81,8 @@ public class TeacherStatisticsListFragment extends Fragment {
         weekStatisticsListAdapter.setOnClickedListener(position -> {
             final TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean peopleBean = data.get(position);
             peopleBean.setChecked(!peopleBean.getChecked());
-            weekStatisticsListAdapter.notifyDataSetChanged();
+            //weekStatisticsListAdapter.notifyDataSetChanged();
+            weekStatisticsListAdapter.notifyItemChanged(position);
         });
         if (data !=null && data.isEmpty()) {
             bind.blankPage.setVisibility(View.VISIBLE);
