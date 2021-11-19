@@ -14,11 +14,14 @@ import com.yyide.chatim.R
 import com.yyide.chatim.activity.schedule.ScheduleLabelManageActivity
 import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
 import com.yyide.chatim.activity.schedule.ScheduleSettingsActivity
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentScheduleBinding
+import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
+import org.greenrobot.eventbus.EventBus
 import org.joda.time.DateTime
 
 /**
@@ -126,5 +129,20 @@ class ScheduleFragment : Fragment() {
             }
         }
         ft.commitAllowingStateLoss()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        loge("onHiddenChanged $hidden")
+        if (!hidden) {
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loge("onResume")
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
     }
 }
