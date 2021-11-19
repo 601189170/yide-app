@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -89,7 +90,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     private String startTime;
     private String endTime;
 
-    public StudentWeekStatisticsFragment(String type,String theme,String serverId,String eventType) {
+    public StudentWeekStatisticsFragment(String type, String theme, String serverId, String eventType) {
         // Required empty public constructor
         this.type = type;
         this.historyEvent = theme;
@@ -130,49 +131,18 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 return;
             }
         }
-        if (identity && eventType) {
-            //学生事件考勤
-            if (DateUtils.minMonth(beginDate, month)) {
-                mViewBinding.layoutHeadStudentEvent.ivLeft.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadStudentEvent.ivLeft.setVisibility(View.VISIBLE);
-            }
-
-            if (month.compareTo(currentMonth) >= 0) {
-                mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.VISIBLE);
-            }
-            final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy.MM");
-            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(time);
-        } else if (!identity && eventType) {
-            //教师事件考勤
-            if (DateUtils.minMonth(beginDate, month)) {
-                mViewBinding.layoutHeadTeacherEvent.ivLeft.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadTeacherEvent.ivLeft.setVisibility(View.VISIBLE);
-            }
-            if (month.compareTo(currentMonth) >= 0) {
-                mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.VISIBLE);
-            }
-            final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy.MM");
-            mViewBinding.layoutHeadTeacherEvent.tvWeek.setText(time);
+        if (DateUtils.minMonth(beginDate, month)) {
+            mViewBinding.ivLeft.setVisibility(View.INVISIBLE);
         } else {
-            if (DateUtils.minMonth(beginDate, month)) {
-                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
-            }
-            if (month.compareTo(currentMonth) >= 0) {
-                mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.VISIBLE);
-            }
-            final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy.MM");
-            mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(time);
+            mViewBinding.ivLeft.setVisibility(View.VISIBLE);
         }
+        if (month.compareTo(currentMonth) >= 0) {
+            mViewBinding.ivRight.setVisibility(View.INVISIBLE);
+        } else {
+            mViewBinding.ivRight.setVisibility(View.VISIBLE);
+        }
+        final String time = ScheduleDaoUtil.INSTANCE.toStringTime(month, "yyyy.MM");
+        mViewBinding.tvWeek.setText(time);
         if (!init) {
             //final DateTime dateTime = DateTime.now().withMonthOfYear(month);
             startTime = month.dayOfMonth().withMinimumValue().toString("yyyy-MM-dd ") + "00:00:00";
@@ -181,7 +151,6 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
         }
     }
 
-    //@RequiresApi(api = Build.VERSION_CODES.O)
     private void setWeek(boolean init) {
         Log.e(TAG, "currentWeek" + currentWeek + "week：" + week);
         if (!init) {
@@ -190,52 +159,27 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 return;
             }
         }
-//        final Calendar calendar = Calendar.getInstance();
-//        final int year = calendar.get(Calendar.YEAR);
-//        final int month = calendar.get(Calendar.MONTH);
-//        final String[] monthWeek = DateUtils.getFirstDayAndLastDayByMonthWeek(year, month, week);
         final String format1 = getActivity().getString(R.string.week);
-        //startTime = DateUtils.formatTime(year + "." + monthWeek[0], "yyyy.MM.dd", "yyyy-MM-dd ") + "00:00:00";
-        //endTime = DateUtils.formatTime(year + "." + monthWeek[1], "yyyy.MM.dd", "yyyy-MM-dd ") + "23:59:59";
-        final DateTime firstDayOfWeek = week.minusDays(week.getDayOfWeek() % 7 -1);
+        final DateTime firstDayOfWeek = week.minusDays(week.getDayOfWeek() % 7 - 1);
         final DateTime lastDayOfWeek = firstDayOfWeek.plusDays(6);
         startTime = firstDayOfWeek.toString("yyyy-MM-dd ") + "00:00:00";
         endTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59";
         final String monthWeek0 = firstDayOfWeek.toString("MM.dd");
         final String monthWeek1 = lastDayOfWeek.toString("MM.dd");
         Log.e(TAG, "startTime= " + startTime + "endTime = " + endTime);
-        if (identity && eventType) {
-            if (week.compareTo(currentWeek) >= 0) {
-                mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadStudentEvent.ivRight.setVisibility(View.VISIBLE);
-                mViewBinding.layoutHeadStudentEvent.ivLeft.setVisibility(View.VISIBLE);
-            }
-            mViewBinding.layoutHeadStudentEvent.tvWeek.setText(String.format(format1, monthWeek0, monthWeek1));
-        } else if (!identity && eventType) {
-            if (week.compareTo(currentWeek) >= 0) {
-                mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadTeacherEvent.ivRight.setVisibility(View.VISIBLE);
-                mViewBinding.layoutHeadTeacherEvent.ivLeft.setVisibility(View.VISIBLE);
-            }
-            mViewBinding.layoutHeadTeacherEvent.tvWeek.setText(String.format(format1, monthWeek0, monthWeek1));
+        if (week.compareTo(currentWeek) >= 0) {
+            mViewBinding.ivRight.setVisibility(View.INVISIBLE);
         } else {
-            if (week.compareTo(currentWeek) >= 0) {
-                mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.INVISIBLE);
-            } else {
-                mViewBinding.layoutHeadTeacherCourse.ivRight.setVisibility(View.VISIBLE);
-                //mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
-            }
-            if (DateUtils.minWeek(beginDate, week)) {
-                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.INVISIBLE);
-                final String minDate = DateUtils.formatTime(beginDate, null, "MM.dd");
-                mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(String.format(format1, minDate, monthWeek1));
-            } else {
-                mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
-                mViewBinding.layoutHeadTeacherCourse.tvWeek.setText(String.format(format1, monthWeek0, monthWeek1));
-            }
-
+            mViewBinding.ivRight.setVisibility(View.VISIBLE);
+            //mViewBinding.layoutHeadTeacherCourse.ivLeft.setVisibility(View.VISIBLE);
+        }
+        if (DateUtils.minWeek(beginDate, week)) {
+            mViewBinding.ivLeft.setVisibility(View.INVISIBLE);
+            final String minDate = DateUtils.formatTime(beginDate, null, "MM.dd");
+            mViewBinding.tvWeek.setText(String.format(format1, minDate, monthWeek1));
+        } else {
+            mViewBinding.ivLeft.setVisibility(View.VISIBLE);
+            mViewBinding.tvWeek.setText(String.format(format1, monthWeek0, monthWeek1));
         }
         if (!init) {
             queryAttStatsData();
@@ -282,18 +226,18 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 dataBean.setDeptName(classesName);
                 if (classesName.equals(classesStudentName)) {
                     dataBean.setIsDefault(1);
+                    currentClass = dataBean.getClassId();
+                    currentStudentId = dataBean.getDeptId();
                 }
             } else {
                 dataBean.setDeptName(studentName);
                 if (studentName.equals(classesStudentName)) {
                     dataBean.setIsDefault(1);
+                    currentClass = dataBean.getClassId();
+                    currentStudentId = dataBean.getDeptId();
                 }
             }
             classList.add(dataBean);
-        }
-        if (classList.isEmpty()) {
-            Log.e(TAG, "initClassData: 当前账号没有学生");
-            mViewBinding.tvClassName.setVisibility(View.GONE);
         }
     }
 
@@ -308,17 +252,13 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
         }
         //初始化班级view
         initClassData();
-        initClassView();
+        //initClassView();
         mViewBinding.swipeRefreshLayout.setOnRefreshListener(this);
         mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
             mViewBinding.swipeRefreshLayout.setEnabled(verticalOffset >= 0);//页面滑动到顶部，才可以下拉刷新
         });
         if (isWeekStatistics) {
-//            final Calendar calendar = Calendar.getInstance();
-//            final int weekOfMonth = calendar.get(Calendar.WEEK_OF_YEAR);
-//            week = weekOfMonth;
-//            currentWeek = weekOfMonth;
             final DateTime now = DateTime.now();
             week = now;
             currentWeek = now;
@@ -425,24 +365,36 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initClassView() {
+        TextView tvClassName;
+        if (identity && eventType) {
+            //家长事件考勤
+            tvClassName = mViewBinding.layoutHeadStudentEvent.tvClassName;
+        } else if (!identity && eventType) {
+            //教师事件类型
+            tvClassName = mViewBinding.layoutHeadTeacherEvent.tvClassName;
+        } else {
+            //课程类型
+            tvClassName = mViewBinding.layoutHeadTeacherCourse.tvClassName;
+        }
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         if (classOptional.isPresent()) {
             final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
-            mViewBinding.tvClassName.setText(clazzBean.getDeptName());
+            tvClassName.setText(clazzBean.getDeptName());
             currentClass = clazzBean.getClassId();
             currentStudentId = clazzBean.getDeptId();
             if (classList.size() <= 1) {
-                mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+                tvClassName.setCompoundDrawables(null, null, null, null);
             } else {
-                Drawable drawable = getResources().getDrawable(R.drawable.icon_arrow_down);
+                final Drawable drawable = ContextCompat.getDrawable(requireActivity(), R.drawable.icon_white_arrow_down);
                 //设置图片大小，必须设置
+                assert drawable != null;
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                mViewBinding.tvClassName.setCompoundDrawables(null, null, drawable, null);
-                mViewBinding.tvClassName.setOnClickListener(v -> {
-                            final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), dialogType, classList);
+                tvClassName.setCompoundDrawables(null, null, drawable, null);
+                tvClassName.setOnClickListener(v -> {
+                            final DeptSelectPop deptSelectPop = new DeptSelectPop(requireActivity(), dialogType, classList);
                             deptSelectPop.setOnCheckedListener(dataBean -> {
                                 Log.e(TAG, "班级选择: " + dataBean);
-                                mViewBinding.tvClassName.setText(dataBean.getDeptName());
+                                tvClassName.setText(dataBean.getDeptName());
                                 //班级id
                                 currentClass = dataBean.getClassId();
                                 //学生id
@@ -453,6 +405,10 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                         }
                 );
             }
+        }
+        if (classList.isEmpty()) {
+            Log.e(TAG, "initClassData: 当前账号没有学生");
+            tvClassName.setVisibility(View.GONE);
         }
     }
 
@@ -508,7 +464,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
 
             if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getClassroomTeacherAttendanceList() == null) {
                 showBlank(false);
-                showData(null,null);
+                showData(null, null);
                 return;
             }
             showBlank(false);
@@ -530,7 +486,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 }
                 dataBean.setDeptName(name);
                 dataBean.setDeptId(serverId);
-                dataBean.setType(classroomTeacherAttendanceListBean.getType()+"");
+                dataBean.setType(classroomTeacherAttendanceListBean.getType() + "");
                 eventList.add(dataBean);
                 if (classroomTeacherAttendanceListBean.getType() == 2) {
                     if (weeksMonthStatisticalCourseForm != null) {
@@ -568,10 +524,10 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             if (studentsBeanList.size() != 0) {
                 final StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean = studentsBeanList.get(0);
                 //showData(weeksMonthListBean.getServerId(),weeksMonthListBean.getType()+"");
-                showData(TextUtils.isEmpty(historyEventId)?weeksMonthListBean.getServerId():historyEventId,TextUtils.isEmpty(historyEventType)?weeksMonthListBean.getType()+"":historyEventType);
+                showData(TextUtils.isEmpty(historyEventId) ? weeksMonthListBean.getServerId() : historyEventId, TextUtils.isEmpty(historyEventType) ? weeksMonthListBean.getType() + "" : historyEventType);
             } else {
                 ToastUtils.showShort("未查询到数据");
-                showData(null,null);
+                showData(null, null);
             }
         } else {
             //ToastUtils.showShort("温馨提示：" + attendanceWeekStatsRsp.getMsg());
@@ -583,17 +539,17 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void showData(String serverId,String type) {
-        Log.e(TAG, "showData: serverId="+serverId+", type="+type );
+    private void showData(String serverId, String type) {
+        Log.e(TAG, "showData: serverId=" + serverId + ", type=" + type);
         //每次更新数据默认选择缺勤rb
         mViewBinding.rgAttendanceType.check(R.id.rb_absence);
         StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean = null;
         for (StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean weeksMonthListBean1 : studentsBeanList) {
-            if ("2".equals(type) && weeksMonthListBean1.getType() == 2){
+            if ("2".equals(type) && weeksMonthListBean1.getType() == 2) {
                 weeksMonthListBean = weeksMonthListBean1;
                 break;
             }
-            if ("2".equals(type)){
+            if ("2".equals(type)) {
                 continue;
             }
             if (Objects.equals(weeksMonthListBean1.getServerId(), serverId)) {
@@ -652,79 +608,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             mViewBinding.layoutHeadStudentEvent.tvLateNum.setText(String.valueOf(weeksMonthListBean.getLate()));
             //早退人数
             mViewBinding.layoutHeadStudentEvent.tvLateEarlyNum.setText(String.valueOf(weeksMonthListBean.getEarly()));
-
-            mViewBinding.layoutHeadStudentEvent.ivLeft.setOnClickListener(v -> {
-                //向左选择日期
-                if (isWeekStatistics) {
-                    //week--;
-                    week = week.minusWeeks(1);
-                    setWeek(false);
-                } else {
-                    //month--;
-                    month = month.minusMonths(1);
-                    setMonth(false);
-                }
-            });
-            mViewBinding.layoutHeadStudentEvent.ivRight.setOnClickListener(v -> {
-                //向右选择日期
-                if (isWeekStatistics) {
-                    //week++;
-                    week = week.plusWeeks(1);
-                    setWeek(false);
-                } else {
-                    //month++;
-                    month = month.plusMonths(1);
-                    setMonth(false);
-                }
-
-            });
-
-        } else if (!identity && eventType) {
-            //教师事件考勤
-            mViewBinding.layoutHeadStudentEvent.getRoot().setVisibility(View.GONE);
-            mViewBinding.layoutHeadTeacherCourse.getRoot().setVisibility(View.GONE);
-            mViewBinding.layoutHeadTeacherEvent.getRoot().setVisibility(View.VISIBLE);
-            if (isWeekStatistics) {
-                mViewBinding.layoutHeadTeacherEvent.tvWeeklyStatistical.setText(getString(R.string.weekly_statistical));
-            } else {
-                mViewBinding.layoutHeadTeacherEvent.tvWeeklyStatistical.setText(getString(R.string.monthly_statistical));
-            }
-            mViewBinding.layoutHeadTeacherEvent.tvWeeklyStatisticalSubhead.setText(getString(R.string.statistical_man_time));
-
-            //缺勤人数
-            mViewBinding.layoutHeadTeacherEvent.tvAbsenceNum.setText(String.valueOf(weeksMonthListBean.getAbsenteeism()));
-            //请假人数
-            mViewBinding.layoutHeadTeacherEvent.tvAskForLeaveNum.setText(String.valueOf(weeksMonthListBean.getLeave()));
-            //迟到人数
-            mViewBinding.layoutHeadTeacherEvent.tvLateNum.setText(String.valueOf(weeksMonthListBean.getLate()));
-            //早退人数
-            mViewBinding.layoutHeadTeacherEvent.tvLateEarlyNum.setText(String.valueOf(weeksMonthListBean.getEarly()));
-
-            mViewBinding.layoutHeadTeacherEvent.ivLeft.setOnClickListener(v -> {
-                //向左选择日期
-                if (isWeekStatistics) {
-                    //week--;
-                    week = week.minusWeeks(1);
-                    setWeek(false);
-                } else {
-                    //month--;
-                    month = month.minusMonths(1);
-                    setMonth(false);
-                }
-            });
-            mViewBinding.layoutHeadTeacherEvent.ivRight.setOnClickListener(v -> {
-                //向右选择日期
-                if (isWeekStatistics) {
-                    //week++;
-                    week = week.plusWeeks(1);
-                    setWeek(false);
-                } else {
-                    //month++;
-                    month = month.plusMonths(1);
-                    setMonth(false);
-                }
-
-            });
+            initClassView();
         } else {
             //教师学生课程考勤
             mViewBinding.layoutHeadStudentEvent.getRoot().setVisibility(View.GONE);
@@ -751,32 +635,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             mViewBinding.layoutHeadTeacherCourse.tvAskForLeaveNum.setText(String.valueOf(weeksMonthListBean.getLeave()));
             //迟到人数
             mViewBinding.layoutHeadTeacherCourse.tvLateNum.setText(String.valueOf(weeksMonthListBean.getLate()));
-
-            mViewBinding.layoutHeadTeacherCourse.ivLeft.setOnClickListener(v -> {
-                //向左选择日期
-                if (isWeekStatistics) {
-                    //week--;
-                    week = week.minusWeeks(1);
-                    setWeek(false);
-                } else {
-                    //month--;
-                    month = month.minusMonths(1);
-                    setMonth(false);
-                }
-            });
-            mViewBinding.layoutHeadTeacherCourse.ivRight.setOnClickListener(v -> {
-                //向右选择日期
-                if (isWeekStatistics) {
-                    //week++;
-                    week = week.plusWeeks(1);
-                    setWeek(false);
-                } else {
-                    //month++;
-                    month = month.plusMonths(1);
-                    setMonth(false);
-                }
-
-            });
+            initClassView();
         }
 
         //0正常、1缺勤、2迟到/3早退,4请假
@@ -815,35 +674,12 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     private void showBlank(boolean show) {
         mViewBinding.blankPage.setVisibility(show ? View.VISIBLE : View.GONE);
         mViewBinding.collapsingtoolbarlayout.setVisibility(show ? View.GONE : View.VISIBLE);
-        //mViewBinding.constraintLayout.setVisibility(show?View.GONE:View.VISIBLE);
     }
 
     @Override
     public void onRefresh() {
         refresh = true;
-        //resetDate();
         queryAttStatsData();
-    }
-
-    private void resetDate() {
-        final DateTime now = DateTime.now();
-        if (isWeekStatistics) {
-            //val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
-            final DateTime firstDayOfWeek = now.minusDays(now.getDayOfWeek() % 7 -1);
-            final DateTime lastDayOfWeek = firstDayOfWeek.plusDays(6);
-            startTime = firstDayOfWeek.toString("yyyy-MM-dd ") + "00:00:00";
-            endTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59";
-            Log.e(TAG, "重置周的开始和结束时间 startTime=" + startTime + ", endTime=" + endTime);
-            return;
-        }
-
-        //val firstDayOfMonth = nowDateTime.minusDays(nowDateTime.dayOfMonth - 1)
-        //now.dayOfMonth().withMinimumValue();
-        final DateTime firstDayOfMonth = now.dayOfMonth().withMinimumValue();
-        final DateTime lastDayOfMonth = now.dayOfMonth().withMaximumValue();
-        startTime = firstDayOfMonth.toString("yyyy-MM-dd ") + "00:00:00";
-        endTime = lastDayOfMonth.toString("yyyy-MM-dd ") + "23:59:59";
-        Log.e(TAG, "重置月的开始和结束时间 startTime=" + startTime + ", endTime=" + endTime);
     }
 
     /**

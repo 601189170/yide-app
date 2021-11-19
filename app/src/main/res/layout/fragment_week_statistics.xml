@@ -68,32 +68,51 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
-                            android:id="@+id/tv_attendance_type"
+                        <ImageView
+                            android:id="@+id/iv_left"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:drawablePadding="@dimen/dp_10"
-                            android:text=""
-                            android:textColor="#1E1E1E"
-                            android:textSize="@dimen/text_15"
+                            android:layout_marginStart="@dimen/dp_2"
+                            android:padding="@dimen/dp_10"
+                            android:src="@drawable/icon_gray_arrow_left"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_class_name"
+                            android:id="@+id/tv_week"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="#1E1E1E"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/iv_left"
+                            app:layout_constraintLeft_toRightOf="@id/iv_left"
+                            app:layout_constraintTop_toTopOf="@id/iv_left" />
+
+                        <ImageView
+                            android:id="@+id/iv_right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dp_10"
+                            android:src="@drawable/icon_gray_arrow_right"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/tv_week"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_attendance_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
                             android:drawablePadding="@dimen/dp_10"
                             android:text=""
                             android:textColor="#606266"
-                            android:textSize="@dimen/text_14"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_attendance_type"
+                            android:textSize="14sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tv_attendance_type" />
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -168,19 +187,19 @@
 
                 </RadioGroup>
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_people_count"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="5人"-->
-<!--                    android:textColor="#ff1e1e1e"-->
-<!--                    android:textSize="@dimen/text_15"-->
-<!--                    android:layout_marginEnd="@dimen/dp_20"-->
-<!--                    app:layout_constraintTop_toTopOf="@id/rg_attendance_type"-->
-<!--                    android:layout_marginTop="@dimen/dp_8"-->
-<!--                    app:layout_constraintRight_toRightOf="parent"-->
-<!--                    android:visibility="gone"-->
-<!--                    />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tv_people_count"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="5人"-->
+                <!--                    android:textColor="#ff1e1e1e"-->
+                <!--                    android:textSize="@dimen/text_15"-->
+                <!--                    android:layout_marginEnd="@dimen/dp_20"-->
+                <!--                    app:layout_constraintTop_toTopOf="@id/rg_attendance_type"-->
+                <!--                    android:layout_marginTop="@dimen/dp_8"-->
+                <!--                    app:layout_constraintRight_toRightOf="parent"-->
+                <!--                    android:visibility="gone"-->
+                <!--                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
 

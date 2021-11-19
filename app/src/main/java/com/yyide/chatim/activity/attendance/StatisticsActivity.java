@@ -12,8 +12,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.fragment.attendance.DayStatisticsFragment;
-import com.yyide.chatim.fragment.attendance.WeekStatisticsFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.databinding.ActivityStatisticsBinding;
 import com.yyide.chatim.fragment.attendance.v2.StudentDayStatisticsFragment;
