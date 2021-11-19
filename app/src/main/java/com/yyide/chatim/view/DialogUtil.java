@@ -251,7 +251,8 @@ public class DialogUtil {
         binding.rvLabelList.setLayoutManager(new GridLayoutManager(context, 6));
         binding.rvLabelList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 10f), 6));
         binding.rvLabelList.setAdapter(adapter);
-
+        final InputFilter[] inputFilter = {new MaxTextLengthFilter(20)};
+        binding.edit.setFilters(inputFilter);
         binding.tvCancel.setOnClickListener(v -> {
             mDialog.dismiss();
         });

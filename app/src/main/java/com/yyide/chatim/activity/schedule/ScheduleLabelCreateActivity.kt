@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.schedule
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputFilter
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
@@ -19,6 +20,7 @@ import com.yyide.chatim.model.schedule.LabelColor
 import com.yyide.chatim.model.schedule.NewLabel
 import com.yyide.chatim.model.schedule.OldLabel
 import com.yyide.chatim.utils.DisplayUtils
+import com.yyide.chatim.utils.MaxTextLengthFilter
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.LabelManageViewModel
 import com.yyide.chatim.widget.CircleFrameLayout
@@ -99,6 +101,7 @@ class ScheduleLabelCreateActivity : BaseActivity() {
             SpaceItemDecoration(DisplayUtils.dip2px(this, 10f), 6)
         )
         labelCreateBinding.rvLabelList.adapter = adapter
+        labelCreateBinding.edit.filters = arrayOf<InputFilter>(MaxTextLengthFilter(20))
     }
 
     private fun addOrEditLabel() {

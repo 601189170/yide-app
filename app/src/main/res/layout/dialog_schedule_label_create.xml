@@ -63,6 +63,7 @@
             android:paddingStart="@dimen/dp_20"
             android:paddingEnd="@dimen/dp_20"
             android:textColor="#ff333333"
+            android:singleLine="true"
             android:textColorHint="#ff999999"
             android:textSize="@dimen/text_16" />
     </androidx.constraintlayout.widget.ConstraintLayout>
