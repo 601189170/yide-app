@@ -70,6 +70,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
     private lateinit var rvScheduleList: SwipeRecyclerView
     private lateinit var blankPage: ConstraintLayout
+    private lateinit var swipeRefreshLayout:SwipeRefreshLayout
     private lateinit var calendarComposeLayout: CalendarComposeLayout
     private var list = mutableListOf<ScheduleData>()
     private var first: Boolean = true
@@ -99,6 +100,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
         rvScheduleList = calendarComposeLayout.rvScheduleList
         blankPage = calendarComposeLayout.blankPage
+        swipeRefreshLayout = calendarComposeLayout.swipeRefreshLayout
         calendarComposeLayout.setOnCalendarClickListener(this)
         initScheduleList()
         initData()
@@ -110,7 +112,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         scheduleListViewViewModel.listViewData.observe(requireActivity(), {
             if (refresh){
                 refresh = false
-//                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
+                swipeRefreshLayout.isRefreshing = false
             }
             if (it.isEmpty()) {
                 return@observe
@@ -161,8 +163,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             updateDate()
         }
 
-//        fragmentScheduleListBinding.swipeRefreshLayout.setOnRefreshListener(this)
-//        fragmentScheduleListBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
 
     private fun initScheduleList() {
@@ -319,9 +321,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                     }
                     loge("滑动到顶部了")
                     //日期减一请求数据
-                    scrollOrientation = -1
-                    curTopDateTime = curTopDateTime.minusMonths(1)
-                    scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
+//                    scrollOrientation = -1
+//                    curTopDateTime = curTopDateTime.minusMonths(1)
+//                    scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
                 }
             }
         })
@@ -437,6 +439,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
 
     override fun onRefresh() {
         refresh = true
-        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+//        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+        scrollOrientation = -1
+        curTopDateTime = curTopDateTime.minusMonths(1)
+        scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
     }
 }

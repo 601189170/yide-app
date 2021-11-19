@@ -87,18 +87,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/schedule_content_list_bg_shape">
-
-                <com.yanzhenjie.recyclerview.SwipeRecyclerView
-                    android:id="@+id/rvScheduleList"
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipeRefreshLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:orientation="vertical"
-                    android:overScrollMode="never"
-                    android:paddingTop="6dp"
-                    android:paddingStart="20dp"/>
+                    android:layout_height="match_parent">
+                    <com.yanzhenjie.recyclerview.SwipeRecyclerView
+                        android:id="@+id/rvScheduleList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true"
+                        android:orientation="vertical"
+                        android:overScrollMode="never"
+                        android:paddingTop="6dp"
+                        android:paddingStart="20dp"/>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/blank_page"
