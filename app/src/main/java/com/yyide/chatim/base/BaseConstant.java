@@ -27,7 +27,7 @@ public class BaseConstant {
     //UAT- APPID
     public static final int SDKAPPID_UAT = 1400511951;//1400537733
 
-    public static final int SDKAPPID = SDKAPPID_RELEASE;
+    public static final int SDKAPPID = BuildConfig.DEBUG ? SDKAPPID_UAT : SDKAPPID_RELEASE;
 
     /*账号*/
     public static final String LOGINNAME = "LOGINNAME";
@@ -50,12 +50,12 @@ public class BaseConstant {
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
 
     //Http访问地址
-    public static String API_SERVER_URL = API_SERVER_URL_RELEASE;
+    public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
     //通知模板地址
     public static final String API_SERVER_HTML_RELEASE = "https://cloud.edu.1d1j.cn";
     public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.net";
-    public static final String API_SERVER_HTML = API_SERVER_HTML_RELEASE;
+    public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
 
     //学生作品
     public static final String STUDENT_HONOR_URL = API_SERVER_HTML + "/classcardapp/dist/index.html#/studentWorks";
@@ -72,7 +72,7 @@ public class BaseConstant {
     public static final String TEMPLATE_URL_RELEASE = "https://wap.edu.1d1j.cn/#/notice/edit/";
     public static final String TEMPLATE_URL_DEV = "https://app.uat.edu.1d1j.net/#/notice/edit/";
 
-    public static final String TEMPLATE_URL = TEMPLATE_URL_RELEASE;
+    public static final String TEMPLATE_URL = BuildConfig.DEBUG ? TEMPLATE_URL_DEV : TEMPLATE_URL_RELEASE;
 
     //隐私协议
     public static final String PRIVACY_URL = "https://file.1d1j.cn/privacyPolicy.html";
