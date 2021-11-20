@@ -546,6 +546,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
                     historyEventType = eventList.get(0).getType();
                 }
                 mViewBinding.tvAttendanceType.setVisibility(View.VISIBLE);
+                mViewBinding.viewpager.setVisibility(View.VISIBLE);
                 //默认选择第一个事件
                 //eventList.get(0).setIsDefault(1);
                 //初始化事件view
@@ -700,13 +701,19 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
         initPeopleListView();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void attendanceStatisticsFail(String msg) {
         Log.e(TAG, "attendanceStatisticsFail: " + msg);
+        if (!TextUtils.isEmpty(msg) && "请检查网络连接".equals(msg)){
+            ToastUtils.showShort(msg);
+        }
         if (refresh) {
             refresh = false;
             mViewBinding.swipeRefreshLayout.setRefreshing(false);
         }
+        mViewBinding.clAttendanceType.setVisibility(View.GONE);
+        mViewBinding.viewpager.setVisibility(View.GONE);
         showBlank(true);
     }
 
