@@ -324,12 +324,12 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
         }
 
         if (Objects.equals(status, "1")) {
-            if (DateUtils.dateExpired(endTime)) {
+            if (DateUtils.dateExpired(moreDayEndTime)) {
                 return TYPE_EXPIRED_COMPLETED;
             }
             return TYPE_UNEXPIRED_COMPLETED;
         }
-        if (!TextUtils.isEmpty(endTime) && DateUtils.dateExpired(endTime)) {
+        if (!TextUtils.isEmpty(moreDayEndTime) && DateUtils.dateExpired(moreDayEndTime)) {
             return TYPE_EXPIRED_NOT_COMPLETED;
         }
         return TYPE_UNEXPIRED_NOT_COMPLETED;

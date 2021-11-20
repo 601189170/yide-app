@@ -13,5 +13,6 @@ class MMKVConstant {
         const val YD_WEEKLY_DATE = "yd_weekly_date"
         const val YD_WEEKLY_DATE_WEEK = "yd_weekly_date_week"
         const val YD_FACE_PROTOCOL_AGREED_STATUS = "yd_face_protocol_agreed_status"
+        const val YD_SHOW_HISTORY_SCHEDULE = "yd_show_history_schedule"
     }
 }

@@ -3,7 +3,9 @@ package com.yyide.chatim.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
+import com.tencent.mmkv.MMKV
 import com.yyide.chatim.BaseApplication
+import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.database.AppDatabase
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleWithParticipantAndLabel
@@ -51,6 +53,9 @@ class ScheduleMangeViewModel : ViewModel() {
                         //查询日程成功 并保存
                         requestAllScheduleResult.postValue(true)
                         insertScheduleToDb(body.data.scheduleList)
+                        val historyShow = body.data.historyShow
+                        loge("是否显示历史日程 $historyShow")
+                        MMKV.defaultMMKV().encode(MMKVConstant.YD_SHOW_HISTORY_SCHEDULE,historyShow)
                         EventBus.getDefault().post(ScheduleEvent(ScheduleEvent.NEW_TYPE,true))
                         return
                     }

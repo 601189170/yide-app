@@ -2,8 +2,10 @@ package com.yyide.chatim.database
 
 import android.text.TextUtils
 import com.alibaba.fastjson.JSON
+import com.tencent.mmkv.MMKV
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.SpData
+import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.model.schedule.DayOfMonth
 import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.ScheduleData
@@ -449,7 +451,10 @@ object ScheduleDaoUtil {
                 scheduleData.moreDay = 0
                 scheduleData.moreDayStartTime = scheduleData.startTime
                 scheduleData.moreDayEndTime = scheduleData.endTime
-                listAllSchedule2.add(dayOfMonth)
+
+                if (showData(scheduleData.moreDayEndTime)){
+                    listAllSchedule2.add(dayOfMonth)
+                }
             } else {
                 //跨天的日程
                 val daysBetween = Days.daysBetween(startTime, endTime).days
@@ -463,7 +468,9 @@ object ScheduleDaoUtil {
                         scheduleData1.moreDayEndTime =
                             toDateTime(scheduleData1.startTime).simplifiedDataTime()
                                 .toStringTime("yyyy-MM-dd ") + "23:59:59"
-                        listAllSchedule2.add(DayOfMonth(dateTime, scheduleData1))
+                        if (showData(scheduleData1.moreDayEndTime)){
+                            listAllSchedule2.add(DayOfMonth(dateTime, scheduleData1))
+                        }
                     } else if (index == daysBetween) {
                         //最后一天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
@@ -471,12 +478,9 @@ object ScheduleDaoUtil {
                         scheduleData1.moreDayStartTime =
                             toDateTime(scheduleData1.endTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
                         scheduleData1.moreDayEndTime = scheduleData1.endTime
-                        listAllSchedule2.add(
-                            DayOfMonth(
-                                toDateTime(scheduleData1.endTime).simplifiedDataTime(),
-                                scheduleData1
-                            )
-                        )
+                        if (showData(scheduleData1.moreDayEndTime)){
+                            listAllSchedule2.add(DayOfMonth(toDateTime(scheduleData1.endTime).simplifiedDataTime(), scheduleData1))
+                        }
                     } else {
                         //中间的天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
@@ -487,7 +491,9 @@ object ScheduleDaoUtil {
                             allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
                         scheduleData1.moreDayEndTime =
                             allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
-                        listAllSchedule2.add(DayOfMonth(allDay.simplifiedDataTime(), scheduleData1))
+                        if (showData(scheduleData1.moreDayEndTime)){
+                            listAllSchedule2.add(DayOfMonth(allDay.simplifiedDataTime(), scheduleData1))
+                        }
                     }
                 }
                 //listAllSchedule2.add(it)
@@ -512,6 +518,19 @@ object ScheduleDaoUtil {
         }
         listAllSchedule2.sort()
         return listAllSchedule2
+    }
+
+    /**
+     * 判断是否需要添加历史日程
+     */
+    private fun showData(date: String): Boolean {
+        val dateTime = toDateTime(date).simplifiedDataTimeToMinute()
+        val now = DateTime.now().simplifiedDataTimeToMinute()
+        val decodeInt = MMKV.defaultMMKV().decodeInt(MMKVConstant.YD_SHOW_HISTORY_SCHEDULE, 0)
+        if (decodeInt == 0 && dateTime < now) {
+            return false
+        }
+        return true
     }
 
     /**
