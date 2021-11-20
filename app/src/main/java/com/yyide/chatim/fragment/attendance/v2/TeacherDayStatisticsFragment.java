@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.alibaba.fastjson.JSON;
 import com.beiing.weekcalendar.WeekCalendar;
 import com.beiing.weekcalendar.listener.GetViewHelper;
+import com.beiing.weekcalendar.listener.WeekChangeListener;
 import com.beiing.weekcalendar.utils.CalendarUtil;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
@@ -213,6 +214,13 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
             Log.e(TAG, "onDateSelect: " + text);
             currentDate = DateUtils.formatTime(text, "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss");
             queryAttStatsData(currentClass, currentDate);
+        });
+
+        weekCalendar.setWeekChangedListener(dateTime -> {
+            String text = dateTime.toString("yyyy-MM-dd");
+            final String time2 = DateUtils.formatTime(text, "yyyy-MM-dd", "MM月");
+            this.mViewBinding.tvCurrentDate.setText(time2);
+            Log.e(TAG, "onDateSelect: " + text);
         });
 
         RecyclerView recyclerview = view.findViewById(R.id.recyclerview);

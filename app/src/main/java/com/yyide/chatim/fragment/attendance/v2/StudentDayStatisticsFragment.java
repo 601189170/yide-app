@@ -212,6 +212,13 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
             queryAttStatsData(currentClass, currentDate);
         });
 
+        weekCalendar.setWeekChangedListener(dateTime -> {
+            String text = dateTime.toString("yyyy-MM-dd");
+            final String time2 = DateUtils.formatTime(text, "yyyy-MM-dd", "MM月");
+            this.mViewBinding.tvCurrentDate.setText(time2);
+            Log.e(TAG, "onDateSelect: " + text);
+        });
+
         RecyclerView recyclerview = view.findViewById(R.id.recyclerview);
         //统计-日-学生家长视角
         dayStatisticsListAdapter = new StudentDayStatisticsListAdapter(getContext(), data);
