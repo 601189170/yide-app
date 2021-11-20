@@ -4,12 +4,15 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
@@ -105,6 +108,27 @@ class ScheduleSearchActivity : BaseActivity() {
 //                searchTimeListener
 //            )
         }
+        viewBinding.edit.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                loge("beforeTextChanged ${s.toString()}")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                loge("onTextChanged ${s.toString()}")
+                if (TextUtils.isEmpty(s.toString())) {
+                    if (!viewBinding.clFilterCondition.isVisible) {
+                        viewBinding.clSearchHistory.visibility = View.VISIBLE
+                    }
+                } else {
+                    viewBinding.clSearchHistory.visibility = View.GONE
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                loge("afterTextChanged ${s.toString()}")
+            }
+
+        })
         viewBinding.edit.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 (v.context
@@ -197,7 +221,9 @@ class ScheduleSearchActivity : BaseActivity() {
             )
         } else {
             viewBinding.clFilterCondition.visibility = View.GONE
-            viewBinding.clSearchHistory.visibility = View.VISIBLE
+            if (TextUtils.isEmpty(viewBinding.edit.text.toString())){
+                viewBinding.clSearchHistory.visibility = View.VISIBLE
+            }
 //            viewBinding.tvSearchTime.visibility = View.VISIBLE
             viewBinding.tvFilter.setTextColor(resources.getColor(R.color.text_666666))
             viewBinding.tvFilter.setCompoundDrawablesWithIntrinsicBounds(
@@ -387,11 +413,11 @@ class ScheduleSearchActivity : BaseActivity() {
             searchHistoryList.add(keyWord)
             historyAdapter.setList(searchHistoryList)
         }
-        if (searchHistoryList.isEmpty()) {
-            viewBinding.clSearchHistory.visibility = View.GONE
-        } else {
-            viewBinding.clSearchHistory.visibility = View.VISIBLE
-        }
+//        if (searchHistoryList.isEmpty()) {
+//            viewBinding.clSearchHistory.visibility = View.GONE
+//        } else {
+//            viewBinding.clSearchHistory.visibility = View.VISIBLE
+//        }
         val decodeString = mmkv.decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
         if (TextUtils.isEmpty(decodeString)) {
             val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
