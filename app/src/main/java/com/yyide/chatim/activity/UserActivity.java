@@ -3,6 +3,7 @@ package com.yyide.chatim.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.solver.widgets.analyzer.VerticalWidgetRun;
+import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
@@ -22,18 +24,22 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.tbruyelle.rxpermissions3.RxPermissions;
+import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.base.MMKVConstant;
 import com.yyide.chatim.dialog.BottomHeadMenuPop;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.FaceOssBean;
+import com.yyide.chatim.model.FaceProtocolBean;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.presenter.UserPresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.TakePicUtil;
+import com.yyide.chatim.view.DialogUtil;
 import com.yyide.chatim.view.UserView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,7 +47,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -92,6 +100,9 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     private long depId;
     private String studentId;
 
+    private MMKV mmkv;
+    private String userId;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_user_layout;
@@ -100,6 +111,8 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mmkv = MMKV.defaultMMKV();
+        userId = SpData.getIdentityInfo().userId;
         EventBus.getDefault().register(this);
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             title.setText("学生信息");
@@ -210,13 +223,65 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 break;
             case R.id.layout6://设置人脸
                 //startActivity(new Intent(this, FaceCaptureActivity.class));
-                startActivityForResult(new Intent(this, FaceCaptureActivity.class), 1);
+                //startActivityForResult(new Intent(this, FaceCaptureActivity.class), 1);
+                if (getUserAgreedProtocol()) {
+                    startActivityForResult(new Intent(this, FaceCaptureActivity.class), 1);
+                } else {
+                    DialogUtil.showFaceProtocolDialog(this, new DialogUtil.OnClickListener() {
+                        @Override
+                        public void onCancel(View view) {
+
+                        }
+
+                        @Override
+                        public void onEnsure(View view) {
+                            saveUserAgreedFaceProtocol();
+                            startActivityForResult(new Intent(UserActivity.this, FaceCaptureActivity.class), 1);
+                        }
+                    });
+                }
                 break;
             case R.id.back_layout:
                 finish();
             default:
                 break;
         }
+    }
+
+    /**
+     * 保存当前用户同意人脸采集协议
+     */
+    private void saveUserAgreedFaceProtocol(){
+        final String decodeString = mmkv.decodeString(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS);
+        if (!TextUtils.isEmpty(decodeString)){
+            final List<FaceProtocolBean> faceProtocolBeans = JSON.parseArray(decodeString, FaceProtocolBean.class);
+            faceProtocolBeans.add(new FaceProtocolBean(userId,true));
+            mmkv.encode(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS,JSON.toJSONString(faceProtocolBeans));
+            return;
+        }
+        final List<FaceProtocolBean> faceProtocolBeans = new ArrayList<>();
+        faceProtocolBeans.add(new FaceProtocolBean(userId,true));
+        mmkv.encode(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS,JSON.toJSONString(faceProtocolBeans));
+    }
+
+    /**
+     * 判断当前用户是否同意过人脸采集协议
+     * @return
+     */
+    private boolean getUserAgreedProtocol(){
+        if (TextUtils.isEmpty(userId)){
+            return false;
+        }
+        final String decodeString = mmkv.decodeString(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS);
+        if (!TextUtils.isEmpty(decodeString)){
+            final List<FaceProtocolBean> faceProtocolBeans = JSON.parseArray(decodeString, FaceProtocolBean.class);
+            for (FaceProtocolBean faceProtocolBean : faceProtocolBeans) {
+                if (Objects.equals(faceProtocolBean.getUserId(), userId)){
+                    return faceProtocolBean.getAgreed();
+                }
+            }
+        }
+        return false;
     }
 
     private void rxPermission() {
@@ -374,6 +439,13 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 FaceOssBean.DataBean data = faceOssBean.getData();
                 final String status = data.getStatus();
                 face.setText(status);
+                if (!"采集成功".equals(status)) {
+                    final Drawable drawable = ContextCompat.getDrawable(this, R.drawable.face_capture_fail_icon);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    face.setCompoundDrawables(drawable, null, null, null);
+                } else {
+                    face.setCompoundDrawables(null, null, null, null);
+                }
             }
         }
     }

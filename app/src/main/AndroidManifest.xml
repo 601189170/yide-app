@@ -671,6 +671,10 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.schedule.ScheduleParticipantSearchActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.FaceCaptureProtocolActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
     </application>
 
 </manifest>

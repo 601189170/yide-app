@@ -249,6 +249,7 @@
                 android:layout_marginRight="38dp"
                 android:text="未设置"
                 android:textColor="#666666"
+                android:drawablePadding="@dimen/dp_5"
                 android:textSize="@dimen/text_12" />
 
             <ImageView

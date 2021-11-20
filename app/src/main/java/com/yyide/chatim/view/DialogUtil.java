@@ -42,12 +42,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.FaceCaptureProtocolActivity;
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
+import com.yyide.chatim.databinding.DialogFaceRecognitionUserProtocolBinding;
 import com.yyide.chatim.databinding.DialogLabelTopMenuSelectLayoutBinding;
 import com.yyide.chatim.databinding.DialogRepetitionScheduleModifyBinding;
 import com.yyide.chatim.databinding.DialogScheduleCustomRepetitionBinding;
@@ -1291,6 +1293,39 @@ public class DialogUtil {
             InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(messageTextView, InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    /**
+     * 显示人脸采集需用户同意
+     * @param context
+     * @param onClickListener
+     */
+    public static void showFaceProtocolDialog(Context context,OnClickListener onClickListener) {
+        DialogFaceRecognitionUserProtocolBinding binding = DialogFaceRecognitionUserProtocolBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        binding.btnAgreedOpen.setOnClickListener(v -> {
+            onClickListener.onEnsure(v);
+            mDialog.dismiss();
+        });
+        binding.tvCancel.setOnClickListener(v -> {
+            onClickListener.onCancel(v);
+            mDialog.dismiss();
+        });
+        binding.tvProtocol.setOnClickListener(v -> {
+            context.startActivity(new Intent(context, FaceCaptureProtocolActivity.class));
+        });
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.9);
+        //lp.height = DisplayUtils.dip2px(context, 276f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
     }
 
     public interface OnClickListener {

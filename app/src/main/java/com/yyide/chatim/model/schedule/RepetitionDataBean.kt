@@ -34,7 +34,7 @@ data class RepetitionDataBean(
             val repetitionDataBeanList = mutableListOf<RepetitionDataBean>()
             val repetitionDataBeanDay = RepetitionDataBean("天")
             val listDay = mutableListOf<String>()
-            for (i in 1..30) {
+            for (i in 1..31) {
                 listDay.add("" + i)
             }
             repetitionDataBeanDay.number = listDay
@@ -50,7 +50,7 @@ data class RepetitionDataBean(
 
             val repetitionDataBeanWeek = RepetitionDataBean("周")
             val listWeek = mutableListOf<String>()
-            for (i in 1..71) {
+            for (i in 1..52) {
                 listWeek.add("" + i)
             }
             repetitionDataBeanWeek.number = listWeek
