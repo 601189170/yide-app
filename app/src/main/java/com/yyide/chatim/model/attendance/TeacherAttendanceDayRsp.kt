@@ -34,6 +34,7 @@ data class TeacherAttendanceDayRsp(
             var normal: Int = 0,
             var late: Int = 0,
             var leave: Int = 0,
+            var early: Int = 0,
             var absenteeism: Int = 0,
             var totalNumber: Int = 0,
             var requiredTime: String? = null,
@@ -41,6 +42,7 @@ data class TeacherAttendanceDayRsp(
             var absenteeismList: List<EventBean>? = null,
             var leaveList: List<EventBean>? = null,
             var lateList: List<EventBean>? = null,
+            var earlyList:List<EventBean>? = null,
             var normalList: List<EventBean>? = null
         ) {
             data class EventBean(

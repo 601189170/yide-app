@@ -123,7 +123,7 @@ public class TeacherStatisticsListDetailFragment extends Fragment {
             viewBinding.rbLate.setText("早退");
             viewBinding.rbAbsence.setText("未签退");
             viewBinding.tvLate.setText("早退");
-            viewBinding.tvLateNum.setText(String.valueOf(data.getLate()));
+            viewBinding.tvLateNum.setText(String.valueOf(data.getEarly()));
         } else {
             //签到
             viewBinding.textview1.setText("出勤率:");
@@ -161,7 +161,7 @@ public class TeacherStatisticsListDetailFragment extends Fragment {
 
         if (Objects.equals(data.getAttendanceSignInOut(), "1")) {
             leaveEarlyPeople.clear();
-            final List<TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean.EventBean> leaveEarlyPeopleList = data.getLateList();
+            final List<TeacherAttendanceDayRsp.DataBean.EventBasicVoListBean.EventBean> leaveEarlyPeopleList = data.getEarlyList();
             leaveEarlyPeople.addAll(leaveEarlyPeopleList);
         } else {
             latePeople.clear();
