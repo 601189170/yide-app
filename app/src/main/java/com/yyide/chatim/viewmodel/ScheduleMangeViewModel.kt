@@ -82,7 +82,7 @@ class ScheduleMangeViewModel : ViewModel() {
      *
      */
     private fun insertScheduleToDb(scheduls: List<ScheduleData>?) {
-        loge("scheduls ${JSON.toJSONString(scheduls)}")
+        //loge("scheduls ${JSON.toJSONString(scheduls)}")
         ScheduleDaoUtil.clearAll()
         scheduls?.forEach {
             //插入数据到本地数据库

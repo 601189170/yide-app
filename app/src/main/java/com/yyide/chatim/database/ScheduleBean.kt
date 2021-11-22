@@ -111,6 +111,9 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
         scheduleData.remindTypeInfo = it.schedule.remindTypeInfo
         scheduleData.startTime = it.schedule.startTime
         scheduleData.endTime = it.schedule.endTime
+        scheduleData.moreDay = 0
+        scheduleData.moreDayStartTime = it.schedule.startTime
+        scheduleData.moreDayEndTime = it.schedule.endTime
         scheduleData.iconImg = it.schedule.iconImg
         scheduleData.isAllDay = it.schedule.isAllDay
         scheduleData.siteId = it.schedule.siteId
