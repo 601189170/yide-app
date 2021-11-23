@@ -1,5 +1,7 @@
 package com.yyide.chatim.model.schedule
 
+import com.yyide.chatim.database.ScheduleDaoUtil
+
 /**
  *
  * @author liu tao
@@ -57,6 +59,33 @@ data class RepetitionDataBean(
             repetitionDataBeanList.add(repetitionDataBeanWeek)
 
             return repetitionDataBeanList
+        }
+
+        fun getYearList(): List<String> {
+            val mutableListOf = mutableListOf<String>()
+            for (i in 2020..2120) {
+                mutableListOf.add("$i")
+            }
+            return mutableListOf
+        }
+
+        fun getMonthList(): List<String> {
+            val mutableListOf = mutableListOf<String>()
+            for (i in 1..12) {
+                mutableListOf.add("$i")
+            }
+            return mutableListOf
+        }
+
+        fun getDayList(year:String,month:String):List<String>{
+            val dateTime = ScheduleDaoUtil.toDateTime("$year-$month-01 00:00:00")
+            val minimumValue = dateTime.dayOfMonth().minimumValue
+            val maximumValue = dateTime.dayOfMonth().maximumValue
+            val mutableListOf = mutableListOf<String>()
+            for (i in minimumValue .. maximumValue){
+                mutableListOf.add("$i")
+            }
+            return mutableListOf
         }
     }
 }

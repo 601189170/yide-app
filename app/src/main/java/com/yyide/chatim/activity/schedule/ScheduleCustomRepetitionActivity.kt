@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.schedule
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import com.yyide.chatim.widget.WheelView
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter.ScrollPickerAdapterBuilder
 import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView
+import org.joda.time.DateTime
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.ArrayList
@@ -44,6 +46,9 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         val stringExtra = intent.getStringExtra("rule")
         jsonToMap = jsonToMap(stringExtra ?: "")
         loge("stringExtra ${stringExtra}")
+        //默认值
+        number.set("1")
+        unit.set("天")
         //{byweekday=[MO, TU, WE, FR], freq=weekly, interval=1}
         //{bymonthday=[1, 2, 3, 4, 5, 6], freq=monthly, interval=1}
     }
@@ -204,6 +209,22 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
             }
 
         })
+
+        //截止日期选择
+        /*val yearList = RepetitionDataBean.getYearList()
+        val monthList1 = RepetitionDataBean.getMonthList()
+        val now = DateTime.now()
+        val dayList = RepetitionDataBean.getDayList("${now.year}", "${now.monthOfYear}")
+        val yearDefault = yearList.indexOfFirst { it == "${now.year}" }
+        val monthDefault = monthList1.indexOfFirst { it == "${now.monthOfYear}" }
+        val dayDefault = dayList.indexOfFirst { it == "${now.dayOfMonth}" }
+
+        scheduleRepetitionBinding.yearWv.setData(yearList.map { "$it 年" })
+        scheduleRepetitionBinding.yearWv.setDefault(yearDefault)
+        scheduleRepetitionBinding.monthWv.setData(monthList1.map { "$it 月" })
+        scheduleRepetitionBinding.monthWv.setDefault(monthDefault)
+        scheduleRepetitionBinding.dayWv.setData(dayList.map { "$it 日" })
+        scheduleRepetitionBinding.dayWv.setDefault(dayDefault)*/
 
 
         scheduleRepetitionBinding.rvWeekList.setLayoutManager(GridLayoutManager(this, 3))
