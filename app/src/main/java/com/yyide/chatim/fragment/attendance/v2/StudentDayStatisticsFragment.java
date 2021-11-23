@@ -281,6 +281,9 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
         final DateTime dateTime = DateTime.parse(date, dateTimeFormatter);
         String startTime = dateTime.toString("yyyy-MM-dd ") + "00:00:00";
         String endTime = dateTime.toString("yyyy-MM-dd ") + "23:59:59";
+        if (dateTime.compareTo(DateTime.now()) > 0) {
+            ToastUtils.showShort("不支持查询未来时间");
+        }
         mvpPresenter.queryAppStudentAttendanceDay(classId,currentStudentId ,startTime, endTime);
     }
 
