@@ -273,6 +273,33 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             currentMonth = month;
             setMonth(false);
         }
+
+        mViewBinding.ivLeft.setOnClickListener(v -> {
+            //向左选择日期
+            if (isWeekStatistics) {
+                //week--;
+                week = week.minusWeeks(1);
+                setWeek(false);
+            } else {
+                //month--;
+                month = month.minusMonths(1);
+                setMonth(false);
+            }
+        });
+
+        mViewBinding.ivRight.setOnClickListener(v -> {
+            //向右选择日期
+            if (isWeekStatistics) {
+                //week++;
+                week = week.plusWeeks(1);
+                setWeek(false);
+            } else {
+                //month++;
+                month = month.plusMonths(1);
+                setMonth(false);
+            }
+
+        });
     }
 
     private void initPeopleListView() {
