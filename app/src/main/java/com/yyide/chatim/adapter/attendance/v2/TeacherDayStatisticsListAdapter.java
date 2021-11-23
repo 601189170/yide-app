@@ -70,7 +70,8 @@ public class TeacherDayStatisticsListAdapter extends RecyclerView.Adapter<Teache
             //签退
             holder.binding.tvLate.setText(context.getString(R.string.attendance_leave_early));
             holder.binding.tvAttendanceRateTitle.setText(context.getString(R.string.attendance_sign_out_rate));
-            holder.binding.tvAbsence.setText(context.getString(R.string.attendance_no_logout));
+            //holder.binding.tvAbsence.setText(context.getString(R.string.attendance_no_logout));
+            holder.binding.tvAbsence.setText(context.getString(R.string.attendance_absence));
             holder.binding.tvLateNum.setText(String.valueOf(dayStatisticsBean.getEarly()));
         }else {
             holder.binding.tvLate.setText(context.getString(R.string.attendance_late));

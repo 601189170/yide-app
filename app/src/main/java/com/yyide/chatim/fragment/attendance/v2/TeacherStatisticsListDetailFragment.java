@@ -119,9 +119,11 @@ public class TeacherStatisticsListDetailFragment extends Fragment {
         if ("1".equals(data.getAttendanceSignInOut())) {
             //签退
             viewBinding.textview1.setText("签退率:");
-            viewBinding.tvAbsence.setText("未签退");
+            //viewBinding.tvAbsence.setText("未签退");
+            viewBinding.rbAbsence.setText("缺勤");
             viewBinding.rbLate.setText("早退");
-            viewBinding.rbAbsence.setText("未签退");
+            //viewBinding.rbAbsence.setText("未签退");
+            viewBinding.rbAbsence.setText("缺勤");
             viewBinding.tvLate.setText("早退");
             viewBinding.tvLateNum.setText(String.valueOf(data.getEarly()));
         } else {
