@@ -79,7 +79,7 @@
         android:layout_height="48dp"
         android:layout_marginTop="@dimen/dp_40"
         android:background="@color/white"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/ll_date">
 
         <TextView
@@ -96,10 +96,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/iv_unfold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_20"
-            android:src="@drawable/icon_gray_arrow_down"
+            android:src="@drawable/icon_arrow_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -130,9 +131,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_deadline_never"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:src="@drawable/icon_select"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
+            android:id="@+id/ll_deadline"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginTop="@dimen/dp_10"
@@ -190,6 +203,12 @@
                 app:selectedTextSize="18sp"
                 app:unitHeight="50dp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/ll_deadline" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleBean
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.jsonToMap
 import com.yyide.chatim.databinding.ActivityScheduleCustomRepetitionBinding
 import com.yyide.chatim.model.schedule.MonthBean
@@ -33,6 +34,15 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
     var jsonToMap = mutableMapOf<String, Any?>()
     var number = AtomicReference<String>()
     var unit = AtomicReference<String>()
+    //是否显示截止时期选择
+    private var showDeadline = false
+    //默认永不截止
+    private var showDeadlineNever = true
+    private var until = ""
+    private var yearIndex = 0
+    private var monthIndex = 0
+    private var dayIndex = 0
+    private lateinit var dayList:List<String>
     lateinit var scheduleRepetitionBinding: ActivityScheduleCustomRepetitionBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +69,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         val repetitionDataBeanList = RepetitionDataBean.getList()
         val freq = jsonToMap["freq"]
         val interval = jsonToMap["interval"]?.toString() ?: "1"
+        until = jsonToMap["until"]?.toString()?:""
         number.set(interval)
         if (freq == "daily" || freq == "DAILY"){
             unit.set("天")
@@ -113,7 +124,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         scheduleRepetitionBinding.top.tvRight.setOnClickListener {
             val unitStr = unit.get()
             val numberStr = number.get()
-            val rule = mutableMapOf<String, Any>()
+            val rule = mutableMapOf<String, Any?>()
             if (unitStr == "天") {
                 //rule = "每${numberStr}天"
                 //rule = "{\"freq\": \"daily\",\"interval\": \"${numberStr}\"}"
@@ -154,6 +165,13 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                 }
                 //rule = "每${numberStr}周 $selectWeek"
             }
+            //添加截止时间
+            if (showDeadlineNever) {
+                rule["until"] = null
+            } else {
+                until = "${RepetitionDataBean.getYearList()[yearIndex]}-${RepetitionDataBean.getMonthList()[monthIndex]}-${dayList[dayIndex]} 23:59:59"
+                rule["until"] = until
+            }
             val intent = intent
             intent.putExtra("rule", JSON.toJSONString(rule))
             setResult(RESULT_OK, intent)
@@ -193,9 +211,11 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
                         if (it == "月") {
                             scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
                             scheduleRepetitionBinding.rvMonthList.visibility = View.VISIBLE
+                            scheduleRepetitionBinding.clBottomDeadline.visibility = View.GONE
                         } else if (it == "周") {
                             scheduleRepetitionBinding.rvWeekList.visibility = View.VISIBLE
                             scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+                            scheduleRepetitionBinding.clBottomDeadline.visibility = View.GONE
                         } else {
                             scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
                             scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
@@ -211,20 +231,115 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
         })
 
         //截止日期选择
-        /*val yearList = RepetitionDataBean.getYearList()
+        val yearList = RepetitionDataBean.getYearList()
         val monthList1 = RepetitionDataBean.getMonthList()
-        val now = DateTime.now()
-        val dayList = RepetitionDataBean.getDayList("${now.year}", "${now.monthOfYear}")
-        val yearDefault = yearList.indexOfFirst { it == "${now.year}" }
-        val monthDefault = monthList1.indexOfFirst { it == "${now.monthOfYear}" }
-        val dayDefault = dayList.indexOfFirst { it == "${now.dayOfMonth}" }
+        var now = DateTime.now()
+        if (TextUtils.isEmpty(until)) {
+            showDeadlineNever = true
+            scheduleRepetitionBinding.ivDeadlineNever.visibility = View.VISIBLE
+        } else {
+            showDeadlineNever = false
+            scheduleRepetitionBinding.ivDeadlineNever.visibility = View.GONE
+            now = ScheduleDaoUtil.toDateTime(until)
+        }
+        dayList = RepetitionDataBean.getDayList("${now.year}", "${now.monthOfYear}")
+        yearIndex = yearList.indexOfFirst { it == "${now.year}" }
+        monthIndex = monthList1.indexOfFirst { it == "${now.monthOfYear}" }
+        dayIndex = dayList.indexOfFirst { it == "${now.dayOfMonth}" }
 
         scheduleRepetitionBinding.yearWv.setData(yearList.map { "$it 年" })
-        scheduleRepetitionBinding.yearWv.setDefault(yearDefault)
+        scheduleRepetitionBinding.yearWv.setDefault(yearIndex)
         scheduleRepetitionBinding.monthWv.setData(monthList1.map { "$it 月" })
-        scheduleRepetitionBinding.monthWv.setDefault(monthDefault)
+        scheduleRepetitionBinding.monthWv.setDefault(monthIndex)
         scheduleRepetitionBinding.dayWv.setData(dayList.map { "$it 日" })
-        scheduleRepetitionBinding.dayWv.setDefault(dayDefault)*/
+        scheduleRepetitionBinding.dayWv.setDefault(dayIndex)
+
+        scheduleRepetitionBinding.yearWv.setOnSelectListener(object :WheelView.OnSelectListener{
+            override fun endSelect(id: Int, text: String?) {
+                loge("id=$id,选中${text}")
+                if (id != yearIndex){
+                    yearIndex = id
+                    val year = RepetitionDataBean.getYearList()[yearIndex]
+                    val month = RepetitionDataBean.getMonthList()[monthIndex]
+                    dayList = RepetitionDataBean.getDayList(year, month)
+                    scheduleRepetitionBinding.dayWv.setData(dayList.map { "$it 日" })
+                    showDeadlineNever = false
+                    scheduleRepetitionBinding.ivDeadlineNever.visibility = View.GONE
+                }
+
+            }
+
+            override fun selecting(id: Int, text: String?) {
+                loge("selecting id=$id,text=$text")
+            }
+
+        })
+
+        scheduleRepetitionBinding.monthWv.setOnSelectListener(object :WheelView.OnSelectListener{
+            override fun endSelect(id: Int, text: String?) {
+                loge("id=$id,选中${text}")
+                if (id != monthIndex){
+                    monthIndex = id
+                    val year = RepetitionDataBean.getYearList()[yearIndex]
+                    val month = RepetitionDataBean.getMonthList()[monthIndex]
+                    dayList = RepetitionDataBean.getDayList(year, month)
+                    scheduleRepetitionBinding.dayWv.setData(dayList.map { "$it 日" })
+                    showDeadlineNever = false
+                    scheduleRepetitionBinding.ivDeadlineNever.visibility = View.GONE
+                }
+            }
+
+            override fun selecting(id: Int, text: String?) {
+                loge("selecting id=$id,text=$text")
+            }
+
+        })
+
+        scheduleRepetitionBinding.dayWv.setOnSelectListener(object :WheelView.OnSelectListener{
+            override fun endSelect(id: Int, text: String?) {
+                loge("id=$id,选中${text}")
+                dayIndex = id
+                showDeadlineNever = false
+                scheduleRepetitionBinding.ivDeadlineNever.visibility = View.GONE
+            }
+
+            override fun selecting(id: Int, text: String?) {
+                loge("selecting id=$id,text=$text")
+            }
+
+        })
+
+        scheduleRepetitionBinding.clDeadline.setOnClickListener {
+            if (showDeadline) {
+                showDeadline = false
+                scheduleRepetitionBinding.ivUnfold.setImageResource(R.drawable.icon_arrow_down)
+                scheduleRepetitionBinding.clBottomDeadline.visibility = View.GONE
+                if (unit.get() == "周") {
+                    scheduleRepetitionBinding.rvWeekList.visibility = View.VISIBLE
+                } else if (unit.get() == "月") {
+                    scheduleRepetitionBinding.rvMonthList.visibility = View.VISIBLE
+                }
+                return@setOnClickListener
+            }
+            showDeadline = true
+            scheduleRepetitionBinding.ivUnfold.setImageResource(R.drawable.icon_arrow_up)
+            scheduleRepetitionBinding.clBottomDeadline.visibility = View.VISIBLE
+            if (unit.get() == "周") {
+                scheduleRepetitionBinding.rvWeekList.visibility = View.GONE
+            } else if (unit.get() == "月") {
+                scheduleRepetitionBinding.rvMonthList.visibility = View.GONE
+            }
+        }
+        //选择永不重复
+        scheduleRepetitionBinding.clDeadlineType.setOnClickListener {
+            if (showDeadlineNever) {
+                showDeadlineNever = false
+                scheduleRepetitionBinding.ivDeadlineNever.visibility = View.GONE
+            } else {
+                showDeadlineNever = true
+                scheduleRepetitionBinding.ivDeadlineNever.visibility = View.VISIBLE
+            }
+        }
 
 
         scheduleRepetitionBinding.rvWeekList.setLayoutManager(GridLayoutManager(this, 3))

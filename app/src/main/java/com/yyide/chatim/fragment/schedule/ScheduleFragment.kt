@@ -46,7 +46,7 @@ class ScheduleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //initFragmentContainer()
-        setFragment(3)
+        setFragment(0)
         fragmentScheduleBinding.btnSearch.setOnClickListener {
             startActivity(Intent(activity, ScheduleSearchActivity::class.java))
         }

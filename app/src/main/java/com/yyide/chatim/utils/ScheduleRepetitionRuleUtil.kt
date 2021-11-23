@@ -89,7 +89,7 @@ object ScheduleRepetitionRuleUtil {
         loge("startDate=$startDate <<->> endDate=$endDate")
         logd("dtstart= $dtstart <<->> until=$until")
         var untilDateTime: DateTime = endDate
-        until?.also {
+        if (!TextUtils.isEmpty(until) && until != null){
             untilDateTime = ScheduleDaoUtil.toDateTime(until)
         }
         logd("startDate= $startDate <<->> until=${untilDateTime.toString()}")
