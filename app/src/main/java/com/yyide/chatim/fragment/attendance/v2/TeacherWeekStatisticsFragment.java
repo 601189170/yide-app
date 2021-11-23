@@ -492,6 +492,9 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
             refresh = false;
             mViewBinding.swipeRefreshLayout.setRefreshing(false);
         }
+        eventList.clear();
+        studentsBeanList.clear();
+        mViewBinding.tvAttendanceType.setVisibility(View.GONE);
         if (attendanceWeekStatsRsp.getCode() == 200) {
             if (attendanceWeekStatsRsp.getData() == null) {
                 ToastUtils.showShort("" + attendanceWeekStatsRsp.getMsg());
@@ -506,8 +509,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
             final List<TeacherAttendanceWeekMonthRsp.DataBean.ClassroomTeacherAttendanceListBean> classroomTeacherAttendanceList = attendanceWeekStatsRsp.getData().getClassroomTeacherAttendanceList();
             final TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean weeksCourseForm = attendanceWeekStatsRsp.getData().getWeeksCourseForm();
             final List<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean> weeksEvenList = attendanceWeekStatsRsp.getData().getWeeksEvenList();
-            eventList.clear();
-            studentsBeanList.clear();
+
             for (int i = 0; i < classroomTeacherAttendanceList.size(); i++) {
                 final TeacherAttendanceWeekMonthRsp.DataBean.ClassroomTeacherAttendanceListBean classroomTeacherAttendanceListBean = classroomTeacherAttendanceList.get(i);
                 final String name = classroomTeacherAttendanceListBean.getTheme();
