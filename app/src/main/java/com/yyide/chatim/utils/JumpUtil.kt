@@ -16,6 +16,7 @@ import com.yyide.chatim.activity.weekly.WeeklyHomeActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.EventMessage
 import org.greenrobot.eventbus.EventBus
+import kotlin.math.log
 
 object JumpUtil {
 
@@ -66,7 +67,7 @@ object JumpUtil {
                 ToastUtils.showShort("暂无权限")
             } else {
                 val intent = Intent(mActivity, WebViewActivity::class.java)
-                intent.putExtra("url", url)
+                intent.putExtra("url", url + Base64Utils.getData())
                 mActivity.startActivity(intent)
 //                ToastUtils.showShort("当前版本不支持该功能")
             }

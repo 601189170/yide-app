@@ -8,6 +8,7 @@ import com.yyide.chatim.base.BaseViewModel
 import com.yyide.chatim.kotlin.network.NetworkApi
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.model.schedule.ParticipantRsp
+import com.yyide.chatim.model.schedule.Remind
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.model.schedule.SiteNameRsp
 import kotlinx.coroutines.launch
@@ -37,6 +38,9 @@ class MeetingSaveViewModel : BaseViewModel() {
 
     //日程id
     val scheduleId = MutableLiveData<String>()
+
+    //日程提醒
+    val remindLiveData = MutableLiveData<Remind>()
 
     /**
      * 创建会议

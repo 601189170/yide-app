@@ -323,6 +323,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             holder.setText(R.id.tv_student_time, "");
             holder.setText(R.id.tv_student_event, "");
             holder.setText(R.id.tv_status, "");
+            holder.getView(R.id.group).setVisibility(View.VISIBLE);
             if (!TextUtils.isEmpty(item.getAttendanceType())) {
                 switch (item.getAttendanceType()) {
                     case "0"://正常
@@ -332,9 +333,11 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                         tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "1"://缺勤
+                        holder.getView(R.id.group).setVisibility(View.GONE);
                         holder.setText(R.id.tv_status, "缺勤");
                         break;
                     case "6":
+                        holder.getView(R.id.group).setVisibility(View.GONE);
                         holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "未签到");
                         break;
                     case "3"://早退
@@ -377,7 +380,9 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     @Override
     public void getAttendanceFail(String msg) {
-        mViewBinding.swipeRefreshLayout.setRefreshing(false);
+        if (mViewBinding != null) {
+            mViewBinding.swipeRefreshLayout.setRefreshing(false);
+        }
         Log.d(TAG, "getHomeAttendanceFail-->>" + msg);
     }
 

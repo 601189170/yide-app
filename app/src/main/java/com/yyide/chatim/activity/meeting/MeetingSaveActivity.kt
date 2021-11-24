@@ -17,9 +17,7 @@ import com.huawei.hms.push.utils.DateUtil
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.meeting.viewmodel.MeetingSaveViewModel
-import com.yyide.chatim.activity.schedule.ScheduleAddressActivity
-import com.yyide.chatim.activity.schedule.ScheduleDateIntervalActivity
-import com.yyide.chatim.activity.schedule.ScheduleParticipantActivity
+import com.yyide.chatim.activity.schedule.*
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
@@ -27,6 +25,7 @@ import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityMeetingCreateBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.ParticipantRsp
+import com.yyide.chatim.model.schedule.Remind
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.model.schedule.SiteNameRsp
 import com.yyide.chatim.utils.DateUtils
@@ -56,6 +55,9 @@ class MeetingSaveActivity : BaseActivity() {
 
         //选择参与人
         const val REQUEST_CODE_PARTICIPANT_SELECT = 105
+
+        //提醒选择
+        const val REQUEST_CODE_REMIND_SELECT = 102
 
         //场地选择
         const val REQUEST_CODE_SITE_SELECT = 101
@@ -93,6 +95,7 @@ class MeetingSaveActivity : BaseActivity() {
             viewModel.startTimeLiveData.value = startTime
             viewModel.endTimeLiveData.value = endTime
         }
+
         viewBinding.tvTime.text =
             DateUtils.formatTime(
                 viewModel.startTimeLiveData.value,
@@ -143,6 +146,8 @@ class MeetingSaveActivity : BaseActivity() {
             resultCode = REQUEST_CODE_PARTICIPANT_SELECT
 
         }
+
+        //选择时间
         viewBinding.clTime.setOnClickListener {
             val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
             val allDay = viewModel.allDayLiveData.value
@@ -155,6 +160,13 @@ class MeetingSaveActivity : BaseActivity() {
             resultCode = REQUEST_CODE_DATE_SELECT
         }
 
+        viewBinding.clRemind.setOnClickListener {
+            val intent = Intent(this, ScheduleRemindActivity::class.java)
+            intent.putExtra("data", JSON.toJSONString(viewModel.remindLiveData.value))
+            intent.putExtra("allDay", viewModel.allDayLiveData.value)
+            startActivity.launch(intent)
+            resultCode = REQUEST_CODE_REMIND_SELECT
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -188,6 +200,30 @@ class MeetingSaveActivity : BaseActivity() {
                 "",
                 "MM月dd日 HH:mm"
             )
+        viewBinding.etRemark.setText(item.remark)
+        //日程提醒remind
+        if (item.remindTypeInfo == "10") {
+            viewBinding.tvRemind.text = Remind.getNotRemind().title
+            viewModel.remindLiveData.value = Remind.getNotRemind()
+        } else {
+            if (item.isAllDay == "1") {
+                list2.forEach { remind ->
+                    if (remind.id == item.remindTypeInfo) {
+                        viewBinding.tvRemind.text = remind.title
+                        viewModel.remindLiveData.value = remind
+                        return@forEach
+                    }
+                }
+            } else {
+                list.forEach { remind ->
+                    if (remind.id == item.remindTypeInfo) {
+                        viewBinding.tvRemind.text = remind.title
+                        viewModel.remindLiveData.value = remind
+                        return@forEach
+                    }
+                }
+            }
+        }
     }
 
     private fun getDetail() {
@@ -254,6 +290,9 @@ class MeetingSaveActivity : BaseActivity() {
                 if (viewModel.participantList.value != null) {
                     scheduleData.participant = viewModel.participantList.value
                 }
+                scheduleData.remark = viewBinding.etRemark.text.toString()
+                scheduleData.remindType = if (viewModel.allDayLiveData.value == true) "1" else "0"
+                scheduleData.remindTypeInfo = viewModel.remindLiveData.value?.id
                 scheduleData.startTime = startTime
                 scheduleData.endTime = endTime
                 scheduleData.type = "3"
@@ -264,6 +303,9 @@ class MeetingSaveActivity : BaseActivity() {
             }
         }
     }
+
+    val list = Remind.getList()
+    val list2 = Remind.getList2()
 
     @SuppressLint("SetTextI18n")
     private val startActivity =
@@ -289,6 +331,26 @@ class MeetingSaveActivity : BaseActivity() {
                                 "",
                                 "MM月dd日 HH:mm"
                             )
+                        if (allDay) {
+                            val selectedRemind = list2.filter { it.checked }
+                            if (selectedRemind.isNotEmpty()) {
+                                viewModel.remindLiveData.value = selectedRemind[0]
+                                viewBinding.tvRemind.text = selectedRemind[0].title
+                            } else {
+                                viewModel.remindLiveData.value = Remind.getNotRemind()
+                                viewBinding.tvRemind.text = Remind.getNotRemind().title
+                            }
+
+                        } else {
+                            val selectedRemind = list.filter { it.checked }
+                            if (selectedRemind.isNotEmpty()) {
+                                viewModel.remindLiveData.value = selectedRemind[0]
+                                viewBinding.tvRemind.text = selectedRemind[0].title
+                            } else {
+                                viewModel.remindLiveData.value = Remind.getNotRemind()
+                                viewBinding.tvRemind.text = Remind.getNotRemind().title
+                            }
+                        }
                     }
                     REQUEST_CODE_PARTICIPANT_SELECT -> {//选择参与人
                         val stringExtra = it.data!!.getStringExtra("data")
@@ -309,6 +371,22 @@ class MeetingSaveActivity : BaseActivity() {
                         viewBinding.tvSite.setTextColor(resources.getColor(R.color.text_1E1E1E))
                         viewBinding.tvSite.text = siteNameBean.name
                         viewModel.siteLiveData.value = siteNameBean
+                    }
+                    REQUEST_CODE_REMIND_SELECT -> {//选择提醒
+                        val stringExtra = it.data!!.getStringExtra("data")
+                        val remind = JSON.parseObject(stringExtra, Remind::class.java)
+                        loge("id=${remind.id},name=${remind.title}")
+                        viewBinding.tvRemind.text = remind.title
+                        viewModel.remindLiveData.value = remind
+                        if (viewModel.allDayLiveData.value == true) {
+                            list2.forEach {
+                                it.checked = it.id == remind.id
+                            }
+                        } else {
+                            list.forEach {
+                                it.checked = it.id == remind.id
+                            }
+                        }
                     }
                 }
             }
