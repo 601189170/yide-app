@@ -225,7 +225,11 @@ object ScheduleDaoUtil {
                         scheduleData1.moreDayEndTime =
                             toDateTime(scheduleData1.startTime).simplifiedDataTime()
                                 .toStringTime("yyyy-MM-dd ") + "23:59:59"
-                        listAllSchedule2.add(scheduleData1)
+                        if (toDateTime(scheduleData1.startTime).simplifiedDataTime() == finallyDateTime.simplifiedDataTime()){
+                            listAllSchedule2.add(scheduleData1)
+                            break
+                        }
+
                     } else if (index == daysBetween) {
                         //最后一天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
@@ -233,7 +237,7 @@ object ScheduleDaoUtil {
                         scheduleData1.moreDayStartTime =
                             toDateTime(scheduleData1.endTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
                         scheduleData1.moreDayEndTime = scheduleData1.endTime
-                        if (toDateTime(scheduleData1.endTime).simplifiedDataTime() <= finallyDateTime) {
+                        if (toDateTime(scheduleData1.endTime).simplifiedDataTime() == finallyDateTime.simplifiedDataTime()) {
                             listAllSchedule2.add(scheduleData1)
                         }
                     } else {
@@ -246,8 +250,9 @@ object ScheduleDaoUtil {
                             allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
                         scheduleData1.moreDayEndTime =
                             allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
-                        if (allDay.simplifiedDataTime() <= finallyDateTime) {
+                        if (allDay.simplifiedDataTime() == finallyDateTime.simplifiedDataTime()) {
                             listAllSchedule2.add(scheduleData1)
+                            break
                         }
                     }
                 }
