@@ -129,11 +129,9 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
 
     private void setDefaultView(String string) {
         className.setText(string);
-        table_group.setVisibility(View.INVISIBLE);
         subjectName.setText("-");
         time.setText("");
         tips.setText("");
-        table_next.setVisibility(View.GONE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -164,12 +162,10 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     }
 
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
-        table_group.setVisibility(View.VISIBLE);
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
         tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
-        table_next.setVisibility(View.VISIBLE);
     }
 
     @Override

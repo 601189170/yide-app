@@ -134,7 +134,6 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     CheckedTextView tab5;
     @BindView(R.id.msg_total_unread)
     UnreadCountTextView msgTotalUnread;
-    //for receive customer msg from jpush server
     public static boolean isForeground = false;
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION";
@@ -147,6 +146,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     private CallModel mCallModel;
     private ScheduleMangeViewModel scheduleMangeViewModel;
     private DateTime curDateTime;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_main;
@@ -191,8 +191,8 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         scheduleMangeViewModel = new ViewModelProvider(this).get(ScheduleMangeViewModel.class);
         scheduleMangeViewModel.getAllScheduleList();
         scheduleMangeViewModel.getCurDateTime().observe(this, dateTime -> {
-            Log.e(TAG, "时间改变: "+dateTime.toString());
-            if (curDateTime != null){
+            Log.e(TAG, "时间改变: " + dateTime.toString());
+            if (curDateTime != null) {
                 scheduleMangeViewModel.getCurDateTime().setValue(dateTime);
                 curDateTime = dateTime;
             }
@@ -309,7 +309,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             setTab(1, 0);
         } else if (BaseConstant.TYPE_SCHEDULE.equals(messageEvent.getCode())) {
             setTab(4, 0);
-        }else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
+        } else if (BaseConstant.TYPE_UPDATE_APP.equals(messageEvent.getCode())) {
             //模拟数据测试应用更新
             isShow = true;
             mvpPresenter.getVersionInfo();
@@ -559,8 +559,11 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 break;
             case 1:
                 MMKV.defaultMMKV().encode(MMKVConstant.YD_MAIN_JUMP_TYPE, type);
-                fg2 = new MessageFragment();
-                ft.replace(R.id.content, fg2, String.valueOf(tab2.getId()));
+                if (fg2 == null) {
+                    fg2 = new MessageFragment();
+                    ft.add(R.id.content, fg2, String.valueOf(tab2.getId()));
+                } else
+                    ft.show(fg2);
                 tab2.setChecked(true);
                 break;
             case 2:
