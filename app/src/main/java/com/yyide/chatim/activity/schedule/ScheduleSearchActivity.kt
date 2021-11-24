@@ -8,11 +8,13 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
@@ -21,12 +23,20 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.google.android.flexbox.*
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.tencent.mmkv.MMKV
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener
+import com.yanzhenjie.recyclerview.SwipeMenu
+import com.yanzhenjie.recyclerview.SwipeMenuCreator
+import com.yanzhenjie.recyclerview.SwipeMenuItem
+import com.yanzhenjie.recyclerview.SwipeRecyclerView
+import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.MMKVConstant
+import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityScheduleSearchBinding
 import com.yyide.chatim.dialog.ScheduleSearchFilterPop
@@ -37,6 +47,7 @@ import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpaceItemDecoration
 import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.LabelManageViewModel
+import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.viewmodel.ScheduleSearchViewModel
 import org.joda.time.DateTime
@@ -55,6 +66,9 @@ class ScheduleSearchActivity : BaseActivity() {
     private val searchHistoryList = mutableListOf<String>()
     private var userId: String? = null
     private val mmkv = MMKV.defaultMMKV()
+    private var curModifySchedule: ScheduleData? = null
+    private var enterDetailPage = false
+    private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityScheduleSearchBinding.inflate(layoutInflater)
@@ -71,13 +85,49 @@ class ScheduleSearchActivity : BaseActivity() {
             scheduleSearchResultListAdapter.setList(scheduleSearchResultList)
         })
 
-//        scheduleMangeViewModel.selectAllScheduleList()
+        //删除监听
+        scheduleEditViewModel.deleteResult.observe(this, {
+            if (it) {
+                ScheduleDaoUtil.deleteScheduleData(curModifySchedule?.id ?: "")
+                for (scheduleData in scheduleSearchResultList) {
+                    if (scheduleData.id == curModifySchedule?.id) {
+                        scheduleSearchResultList.remove(scheduleData)
+                        scheduleSearchResultListAdapter.setList(scheduleSearchResultList)
+                        return@observe
+                    }
+                }
+            }
+        })
+        //修改日程状态监听
+        scheduleEditViewModel.changeStatusResult.observe(this, {
+            if (it) {
+                ToastUtils.showShort("日程修改成功")
+                ScheduleDaoUtil.changeScheduleState(
+                    curModifySchedule?.id ?: "", curModifySchedule?.status ?: ""
+                )
+                scheduleSearchViewModel.searchSchedule(filterTagCollect)
+            } else {
+                ToastUtils.showShort("日程修改失败")
+            }
+        })
     }
 
     override fun getContentViewID(): Int {
         return R.layout.activity_schedule_search
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (enterDetailPage){
+            loge("从详情页进入搜索页重新请求数据")
+            scheduleSearchViewModel.searchSchedule(filterTagCollect)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        enterDetailPage = false
+    }
     fun initView() {
         val simpleDateFormat1 = SimpleDateFormat("yyyy-MM", Locale.getDefault())
 //        viewBinding.tvSearchTime.text = simpleDateFormat1.format(Date())
@@ -108,7 +158,7 @@ class ScheduleSearchActivity : BaseActivity() {
 //                searchTimeListener
 //            )
         }
-        viewBinding.edit.addTextChangedListener(object :TextWatcher{
+        viewBinding.edit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 loge("beforeTextChanged ${s.toString()}")
             }
@@ -146,7 +196,7 @@ class ScheduleSearchActivity : BaseActivity() {
                 //search(keyWord)
                 //开始查询日程
                 filterTagCollect.name = keyWord
-                if (filterTagCollect.startTime == null){
+                if (filterTagCollect.startTime == null) {
 //                    filterTagCollect.startTime = DateTime.now().toStringTime()
                 }
                 scheduleSearchViewModel.searchSchedule(filterTagCollect)
@@ -160,18 +210,27 @@ class ScheduleSearchActivity : BaseActivity() {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         viewBinding.recyclerview.layoutManager = linearLayoutManager
         scheduleSearchResultListAdapter = ScheduleTodayAdapter(scheduleSearchResultList)
-        viewBinding.recyclerview.addItemDecoration(SpaceItemDecoration(SpacesItemDecoration.dip2px(10f)))
+        viewBinding.recyclerview.setSwipeMenuCreator(mWeekSwipeMenuCreator)
+        viewBinding.recyclerview.setOnItemMenuClickListener(mWeekMenuItemClickListener)
+        viewBinding.recyclerview.addItemDecoration(
+            SpaceItemDecoration(
+                SpacesItemDecoration.dip2px(
+                    10f
+                )
+            )
+        )
         viewBinding.recyclerview.adapter = scheduleSearchResultListAdapter
         scheduleSearchResultListAdapter.setOnItemClickListener { _, _, position ->
             loge("setOnItemClickListener：$position")
+            enterDetailPage = true
             val scheduleData = scheduleSearchResultList[position]
-            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE){
-                MeetingSaveActivity.jumpUpdate(this@ScheduleSearchActivity,scheduleData.id)
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE) {
+                MeetingSaveActivity.jumpUpdate(this@ScheduleSearchActivity, scheduleData.id)
                 return@setOnItemClickListener
             }
 
-            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE){
-                ScheduleTimetableClassActivity.jump(this@ScheduleSearchActivity,scheduleData)
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE) {
+                ScheduleTimetableClassActivity.jump(this@ScheduleSearchActivity, scheduleData)
                 return@setOnItemClickListener
             }
 
@@ -190,8 +249,14 @@ class ScheduleSearchActivity : BaseActivity() {
         }
         //初始化过滤条件的布局
         val flexboxLayoutManager = FlexboxLayoutManager(this)
-        viewBinding.filterRecyclerView.layoutManager =flexboxLayoutManager
-        viewBinding.filterRecyclerView.addItemDecoration(SpacesItemDecoration(SpacesItemDecoration.dip2px(5f)))
+        viewBinding.filterRecyclerView.layoutManager = flexboxLayoutManager
+        viewBinding.filterRecyclerView.addItemDecoration(
+            SpacesItemDecoration(
+                SpacesItemDecoration.dip2px(
+                    5f
+                )
+            )
+        )
         viewBinding.filterRecyclerView.adapter = filterAdapter
         filterAdapter.setList(tagList)
     }
@@ -221,7 +286,7 @@ class ScheduleSearchActivity : BaseActivity() {
             )
         } else {
             viewBinding.clFilterCondition.visibility = View.GONE
-            if (TextUtils.isEmpty(viewBinding.edit.text.toString())){
+            if (TextUtils.isEmpty(viewBinding.edit.text.toString())) {
                 viewBinding.clSearchHistory.visibility = View.VISIBLE
             }
 //            viewBinding.tvSearchTime.visibility = View.VISIBLE
@@ -317,7 +382,7 @@ class ScheduleSearchActivity : BaseActivity() {
             //搜索
             filterTagCollect.name = searchHistoryList[position]
             viewBinding.edit.setText(filterTagCollect.name)
-            if (filterTagCollect.startTime == null){
+            if (filterTagCollect.startTime == null) {
 //                filterTagCollect.startTime = DateTime.now().toStringTime()
             }
             scheduleSearchViewModel.searchSchedule(filterTagCollect)
@@ -337,7 +402,10 @@ class ScheduleSearchActivity : BaseActivity() {
                     searchHistoryBeanList.forEach {
                         if (it.userId == userId) {
                             it.historyList.clear()
-                            mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
+                            mmkv.encode(
+                                MMKVConstant.YD_SCHEDULE_HISTORY,
+                                JSON.toJSONString(searchHistoryBeanList)
+                            )
                             return@forEach
                         }
                     }
@@ -345,7 +413,10 @@ class ScheduleSearchActivity : BaseActivity() {
             } catch (e: Exception) {
                 loge("" + e.localizedMessage)
                 val searchHistoryBeanList = mutableListOf<ScheduleSearchHistoryBean>()
-                mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
+                mmkv.encode(
+                    MMKVConstant.YD_SCHEDULE_HISTORY,
+                    JSON.toJSONString(searchHistoryBeanList)
+                )
             }
         }
         historyAdapter.setList(null)
@@ -409,7 +480,7 @@ class ScheduleSearchActivity : BaseActivity() {
      * 保存搜索历史
      */
     private fun saveHistory(keyWord: String) {
-        if (!searchHistoryList.contains(keyWord)){
+        if (!searchHistoryList.contains(keyWord)) {
             searchHistoryList.add(keyWord)
             historyAdapter.setList(searchHistoryList)
         }
@@ -433,7 +504,7 @@ class ScheduleSearchActivity : BaseActivity() {
                     searchHistoryBeanList.forEach {
                         if (it.userId == SpData.getIdentityInfo().userId) {
                             val historyList = it.historyList
-                            if (!historyList.contains(keyWord)){
+                            if (!historyList.contains(keyWord)) {
                                 historyList.add(keyWord)
                                 mmkv.encode(
                                     MMKVConstant.YD_SCHEDULE_HISTORY,
@@ -448,7 +519,10 @@ class ScheduleSearchActivity : BaseActivity() {
                     val historyList = mutableListOf<String>()
                     historyList.add(keyWord)
                     searchHistoryBeanList.add(ScheduleSearchHistoryBean(userId, historyList))
-                    mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
+                    mmkv.encode(
+                        MMKVConstant.YD_SCHEDULE_HISTORY,
+                        JSON.toJSONString(searchHistoryBeanList)
+                    )
                 }
             } catch (e: Exception) {
                 loge("" + e.localizedMessage)
@@ -456,9 +530,109 @@ class ScheduleSearchActivity : BaseActivity() {
                 val historyList = mutableListOf<String>()
                 historyList.add(keyWord)
                 searchHistoryBeanList.add(ScheduleSearchHistoryBean(userId, historyList))
-                mmkv.encode(MMKVConstant.YD_SCHEDULE_HISTORY, JSON.toJSONString(searchHistoryBeanList))
+                mmkv.encode(
+                    MMKVConstant.YD_SCHEDULE_HISTORY,
+                    JSON.toJSONString(searchHistoryBeanList)
+                )
             }
         }
     }
 
+    //设置侧滑选项
+    val width = DisplayUtils.dip2px(BaseApplication.getInstance(), 63f)
+    val height = ViewGroup.LayoutParams.MATCH_PARENT
+    private val markCompletedMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_blue)
+            //.setImage(R.drawable.ic_action_delete)
+            .setText("标为\n完成")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
+    private val markUnCompletedMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_orange)
+            //.setImage(R.drawable.ic_action_delete)
+            .setText("标为\n未完成")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
+    private val delMenuItem: SwipeMenuItem =
+        SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_red)
+            .setText("删除")
+            .setTextColor(Color.WHITE)
+            .setWidth(width)
+            .setHeight(height)
+
+    private val mWeekSwipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {
+        override fun onCreateMenu(
+            swipeLeftMenu: SwipeMenu,
+            swipeRightMenu: SwipeMenu,
+            position: Int
+        ) {
+            loge("position: $position")
+            val scheduleData = scheduleSearchResultList[position]
+            ////日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
+            val type = scheduleData.type
+            val promoterSelf = scheduleData.promoterSelf()
+            if (promoterSelf) {
+                run {
+                    when (type.toInt()) {
+                        Schedule.SCHEDULE_TYPE_SCHEDULE -> {
+                            if (scheduleData.status == "1") {
+                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+                            } else {
+                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            }
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                        Schedule.SCHEDULE_TYPE_CONFERENCE -> {
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * RecyclerView的Item的Menu点击监听。
+     */
+    private val mWeekMenuItemClickListener =
+        OnItemMenuClickListener { menuBridge, position ->
+            menuBridge.closeMenu()
+            val direction = menuBridge.direction // 左侧还是右侧菜单。
+            val menuPosition = menuBridge.position // 菜单在RecyclerView的Item中的Position。
+            if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
+                val scheduleData = scheduleSearchResultList[position]
+                val type = scheduleData.type
+                when (type.toInt()) {
+                    Schedule.SCHEDULE_TYPE_SCHEDULE -> {
+                        if (menuPosition == 0) {
+                            loge("修改")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.changeScheduleState(scheduleData)
+                            return@OnItemMenuClickListener
+                        }
+                        if (menuPosition == 1) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
+                    }
+                    Schedule.SCHEDULE_TYPE_CONFERENCE -> {
+                        if (menuPosition == 0) {
+                            loge("删除")
+                            curModifySchedule = scheduleData
+                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+                            return@OnItemMenuClickListener
+                        }
+                    }
+                }
+
+            } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
+                loge("list第$position; 左侧菜单第$menuPosition")
+            }
+        }
 }

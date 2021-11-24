@@ -219,7 +219,7 @@ class ScheduleEditViewModel : ViewModel() {
         } else {
             scheduleData.status = "1"
         }
-        val toJSONString = JSON.toJSONString(scheduleData)
+        val toJSONString = JSON.toJSONString(scheduleData.simpleScheduleData())
         val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
         dingApiStores.changeScheduleState(requestBody).enqueue(object :Callback<BaseRsp>{
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {

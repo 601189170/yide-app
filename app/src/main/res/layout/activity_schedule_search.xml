@@ -210,7 +210,7 @@
         android:background="#EBEBEB"
         app:layout_constraintTop_toBottomOf="@+id/cl_filter_condition" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.yanzhenjie.recyclerview.SwipeRecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
