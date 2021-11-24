@@ -194,6 +194,7 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
             holder.setText(R.id.tv_student_time, "");
             holder.setText(R.id.tv_student_event, "");
             holder.setText(R.id.tv_status, "");
+            holder.getView(R.id.group).setVisibility(View.VISIBLE);
             //考勤类型 0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
             if (!TextUtils.isEmpty(item.getAttendanceType())) {
                 switch (item.getAttendanceType()) {
@@ -204,9 +205,11 @@ public class SchoolEventTeacherAttendanceFragment extends BaseFragment implement
                         tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "6":
+                        holder.getView(R.id.group).setVisibility(View.GONE);
                         holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "未签退" : "未签到");
                         break;
                     case "1"://缺勤
+                        holder.getView(R.id.group).setVisibility(View.GONE);
                         holder.setText(R.id.tv_status, "缺勤");
                         break;
                     case "3"://早退

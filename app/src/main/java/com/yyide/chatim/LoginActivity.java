@@ -381,16 +381,12 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     @Override
     public void getAccountSwitch(LoginAccountBean model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {//1开启 0关闭
-            int versionCode = MMKV.defaultMMKV().decodeInt(BaseConstant.LOGIN_VERSION_CODE);
-            if (AppUtils.getAppVersionCode() > versionCode) {
-                MMKV.defaultMMKV().encode(BaseConstant.LOGIN_VERSION_CODE, AppUtils.getAppVersionCode());
-                if (model.getData() != null && "1".equals(model.getData().getValue())) {
-                    forgot.setText(model.getData().getName());
-                    isForget = true;
-                } else {
-                    isForget = false;
-                    forgot.setText(R.string.forget);
-                }
+            if (model.getData() != null && "1".equals(model.getData().getValue())) {
+                forgot.setText(model.getData().getName());
+                isForget = true;
+            } else {
+                isForget = false;
+                forgot.setText(R.string.forget);
             }
         }
     }

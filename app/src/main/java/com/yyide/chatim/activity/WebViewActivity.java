@@ -28,6 +28,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,6 +50,7 @@ public class WebViewActivity extends BaseActivity {
     private String type;
     private ValueAnimator pbAnim;
     private TextView tvTitle;
+    private ImageView imageView;
 
     private ValueCallback<Uri> uploadMessage;
     private ValueCallback<Uri[]> uploadMessageAboveL;
@@ -102,12 +104,14 @@ public class WebViewActivity extends BaseActivity {
         fl_webview = findViewById(R.id.fl_webview);
         pb_webview = findViewById(R.id.pb_webview);
         tvTitle = findViewById(R.id.title);
+        imageView = findViewById(R.id.back_layout);
         if (currentUrl.contains("/classcardapp/")) {
             view.setVisibility(View.GONE);
         } else {
             view.setVisibility(View.VISIBLE);
         }
-        findViewById(R.id.back_layout).setOnClickListener(v -> finish());
+        imageView.setImageResource(R.drawable.schedule_add_label_close_dialog_icon);
+        imageView.setOnClickListener(v -> finish());
     }
 
     private void initAnimtor() {

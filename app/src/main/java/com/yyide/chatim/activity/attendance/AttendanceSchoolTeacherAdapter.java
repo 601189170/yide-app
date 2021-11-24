@@ -35,15 +35,16 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
         TextView tvStatus = holder.getView(R.id.tv_status);
         TextView tvName = holder.getView(R.id.tv_student_name);
         ConstraintLayout constraintLayout = holder.getView(R.id.cl_bg);
-        holder.setText(R.id.tv_student_time, "");
+        holder.setText(R.id.tv_student_name, "");
         holder.setText(R.id.tv_student_event, "");
         holder.setText(R.id.tv_status, "");
         holder.setText(R.id.tv_student_time, "");
+        holder.getView(R.id.group).setVisibility(View.VISIBLE);
         if (itemParent.getLevel() == 1) {
             constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
             if (!TextUtils.isEmpty(item.getAttendanceType())) {
                 //0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
-                holder.setText(R.id.tv_student_name, item.getCourseInfo() + " " + item.getCourseName());
+                tvName.setText(item.getCourseInfo() + " " + item.getCourseName());
                 switch (item.getAttendanceType()) {
                     case "0"://正常
 //                        tvStatus.setText(item.getStatusType());
@@ -51,9 +52,11 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
 //                        tvTime.setTextColor(Color.parseColor("#606266"));
                         break;
                     case "1"://缺勤
+                        holder.getView(R.id.group).setVisibility(View.GONE);
                         tvStatus.setText("缺勤");
                         break;
                     case "6":
+                        holder.getView(R.id.group).setVisibility(View.GONE);
                         holder.setText(R.id.tv_status, "1".equals(item.getAttendanceSignInOut()) ? "缺勤" : "未签到");
                         break;
                     case "2"://迟到
@@ -80,8 +83,7 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
             }
         } else {
             constraintLayout.setBackgroundColor(getContext().getResources().getColor(R.color.white));
-            tvName.setEms(8);
-            tvName.setLines(1);
+            holder.getView(R.id.group).setVisibility(View.GONE);
             tvName.setText(!TextUtils.isEmpty(item.getCourseName()) ? item.getCourseName() : "未知姓名");
             holder.setText(R.id.tv_status, item.getSection() != null ? item.getSection() + "节" : "0节");
         }

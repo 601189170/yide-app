@@ -148,6 +148,11 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
         announRoll.setAdapter(announAdapter);
         constraintLayout.setVisibility(dataBean.getClassroomTeacherAttendanceList().size() > 0 ? View.GONE : View.VISIBLE);
         announAdapter.notifyData(dataBean.getClassroomTeacherAttendanceList());
+        if (dataBean.getClassroomTeacherAttendanceList() != null && dataBean.getClassroomTeacherAttendanceList().size() > 1) {
+            mHot.setVisibility(View.VISIBLE);
+        } else {
+            mHot.setVisibility(View.GONE);
+        }
         indexAdapter.setList(dataBean.getClassroomTeacherAttendanceList());
     }
 

@@ -25,6 +25,8 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.utils.DateUtils;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,7 +40,7 @@ import butterknife.BindView;
 public class TableFragment extends BaseMvpFragment<TablePresenter> implements listTimeDataByAppView {
 
     @BindView(R.id.tablelayout)
-    FrameLayout tablelayout;
+    ConstraintLayout tablelayout;
     @BindView(R.id.subjectName)
     TextView subjectName;
     @BindView(R.id.className)
@@ -49,10 +51,8 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView tips;
     @BindView(R.id.table_next)
     TextView table_next;
-    @BindView(R.id.iv_tips)
-    ImageView iv_tips;
-    @BindView(R.id.iv_logo)
-    ImageView iv_logo;
+    @BindView(R.id.table_group)
+    Group table_group;
     private View mBaseView;
 
     private static final String TAG = "TableFragment";
@@ -107,10 +107,10 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                             isTable = true;
                         } else if (mMillisecond < fromDataTime) {//课前
                             dataBean = item;
-                            table_next.setText("下一节");
+                            table_next.setText("下一节 | ");
                             break;
                         } else {//正在上课
-                            table_next.setText("本节课");
+                            table_next.setText("本节课 | ");
                             dataBean = item;
                             break;
                         }
@@ -129,12 +129,11 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
 
     private void setDefaultView(String string) {
         className.setText(string);
-        subjectName.setText("");
+        table_group.setVisibility(View.INVISIBLE);
+        subjectName.setText("-");
         time.setText("");
         tips.setText("");
         table_next.setVisibility(View.GONE);
-        iv_tips.setVisibility(View.GONE);
-        iv_logo.setVisibility(View.GONE);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -165,13 +164,12 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     }
 
     void setTableMsg(SelectSchByTeaidRsp.DataBean rsp) {
+        table_group.setVisibility(View.VISIBLE);
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
         tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
         table_next.setVisibility(View.VISIBLE);
-        iv_tips.setVisibility(View.VISIBLE);
-        iv_logo.setVisibility(View.VISIBLE);
     }
 
     @Override

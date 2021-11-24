@@ -57,7 +57,6 @@ class BookPatriarchDetailActivity : BaseActivity() {
         viewBinding.name.text = guardianItem.name
         viewBinding.tvFamilyRelations.text = guardianItem.getRelation()
         viewBinding.tvSingleGuardianship.text = if (guardianItem.singleParent == "1") "是" else "否"
-        viewBinding.tvEmployer.text = if(!TextUtils.isEmpty(guardianItem.workUnit)) guardianItem.workUnit else  "暂无"
         viewBinding.ivPhone.setOnClickListener {
             RxPermissionUtils.callPhone(this, guardianItem.phone)
         }
