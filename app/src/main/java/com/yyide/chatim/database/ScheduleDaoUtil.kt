@@ -468,7 +468,7 @@ object ScheduleDaoUtil {
                         scheduleData1.moreDayEndTime =
                             toDateTime(scheduleData1.startTime).simplifiedDataTime()
                                 .toStringTime("yyyy-MM-dd ") + "23:59:59"
-                        if (showData(scheduleData1.moreDayEndTime)){
+                        if (showData(scheduleData1.moreDayEndTime) && dateTime <= lastDayOfMonth) {
                             listAllSchedule2.add(DayOfMonth(dateTime, scheduleData1))
                         }
                     } else if (index == daysBetween) {
@@ -478,8 +478,9 @@ object ScheduleDaoUtil {
                         scheduleData1.moreDayStartTime =
                             toDateTime(scheduleData1.endTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
                         scheduleData1.moreDayEndTime = scheduleData1.endTime
-                        if (showData(scheduleData1.moreDayEndTime)){
-                            listAllSchedule2.add(DayOfMonth(toDateTime(scheduleData1.endTime).simplifiedDataTime(), scheduleData1))
+                        val simplifiedDataTime = toDateTime(scheduleData1.endTime).simplifiedDataTime()
+                        if (showData(scheduleData1.moreDayEndTime) && simplifiedDataTime <= lastDayOfMonth){
+                            listAllSchedule2.add(DayOfMonth(simplifiedDataTime, scheduleData1))
                         }
                     } else {
                         //中间的天
@@ -491,7 +492,7 @@ object ScheduleDaoUtil {
                             allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
                         scheduleData1.moreDayEndTime =
                             allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
-                        if (showData(scheduleData1.moreDayEndTime)){
+                        if (showData(scheduleData1.moreDayEndTime) && allDay <= lastDayOfMonth) {
                             listAllSchedule2.add(DayOfMonth(allDay.simplifiedDataTime(), scheduleData1))
                         }
                     }
