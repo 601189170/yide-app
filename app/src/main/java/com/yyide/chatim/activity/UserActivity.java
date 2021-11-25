@@ -439,7 +439,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                 FaceOssBean.DataBean data = faceOssBean.getData();
                 final String status = data.getStatus();
                 face.setText(status);
-                if (!"采集成功".equals(status)) {
+                if (!"采集成功".equals(status) && !"采集中".equals(status)) {
                     final Drawable drawable = ContextCompat.getDrawable(this, R.drawable.face_capture_fail_icon);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     face.setCompoundDrawables(drawable, null, null, null);
