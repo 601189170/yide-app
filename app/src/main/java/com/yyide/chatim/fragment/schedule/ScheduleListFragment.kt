@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,6 +75,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     private lateinit var calendarComposeLayout: CalendarComposeLayout
     private var list = mutableListOf<ScheduleData>()
     private var first: Boolean = true
+    private var update: Boolean = true
     private lateinit var scheduleListAdapter: ScheduleListAdapter
     private lateinit var curBottomDateTime: DateTime
     private lateinit var curTopDateTime: DateTime
@@ -110,15 +112,17 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         }
 
         scheduleListViewViewModel.listViewData.observe(requireActivity(), {
-            if (refresh){
-                refresh = false
-                swipeRefreshLayout.isRefreshing = false
-            }
             if (it.isEmpty()) {
                 return@observe
             }
             if (scrollOrientation == -1) {
                 list.addAll(0, it)
+                if (update) {
+                    update = false
+                    scheduleViewModel.curDateTime.value?.also {
+                        scrollToPosition(it.year, it.monthOfYear - 1, it.dayOfMonth)
+                    }
+                }
             } else {
                 list.addAll(it)
             }
@@ -131,11 +135,11 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             scheduleListAdapter.setList(list)
             if (refresh){
                 refresh = false
-//                fragmentScheduleListBinding.swipeRefreshLayout.isRefreshing = false
+                swipeRefreshLayout.isRefreshing = false
             }
-           scheduleViewModel.curDateTime.value?.also {
-                scrollToPosition(it.year,it.monthOfYear-1,it.dayOfMonth)
-            }
+//           scheduleViewModel.curDateTime.value?.also {
+//                scrollToPosition(it.year,it.monthOfYear-1,it.dayOfMonth)
+//            }
 
             blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
@@ -301,7 +305,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     }
 
     private fun initData() {
-        updateDate()
+//        updateDate()
         //监听列表滚动
         rvScheduleList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -321,20 +325,24 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                     }
                     loge("滑动到顶部了")
                     //日期减一请求数据
-//                    scrollOrientation = -1
-//                    curTopDateTime = curTopDateTime.minusMonths(1)
-//                    scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
+                    scrollOrientation = -1
+                    curTopDateTime = curTopDateTime.minusMonths(1)
+                    scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
                 }
             }
         })
     }
 
     private fun updateDate() {
+        update = true
         list.clear()
         curTopDateTime = DateTime.now()
         curBottomDateTime = DateTime.now()
         //timeAxisDateTime = DateTime.now().simplifiedDataTime()
         scheduleListViewViewModel.scheduleDataList(DateTime.now(), timeAxisDateTime,false)
+        scrollOrientation = -1
+        curTopDateTime = curTopDateTime.minusMonths(1)
+        scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
     }
 
     val width = DisplayUtils.dip2px(BaseApplication.getInstance(), 63f)
@@ -439,9 +447,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
 
     override fun onRefresh() {
         refresh = true
-//        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
-        scrollOrientation = -1
-        curTopDateTime = curTopDateTime.minusMonths(1)
-        scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+//        scrollOrientation = -1
+//        curTopDateTime = curTopDateTime.minusMonths(1)
+//        scheduleListViewViewModel.scheduleDataList(curTopDateTime, timeAxisDateTime)
     }
 }
