@@ -41,6 +41,7 @@ import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityScheduleSearchBinding
 import com.yyide.chatim.dialog.ScheduleSearchFilterPop
 import com.yyide.chatim.model.schedule.*
+import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
@@ -467,7 +468,7 @@ class ScheduleSearchActivity : BaseActivity() {
             } else {
                 val drawable = GradientDrawable()
                 drawable.cornerRadius = DisplayUtils.dip2px(context, 2f).toFloat()
-                drawable.setColor(Color.parseColor(item.label?.colorValue))
+                drawable.setColor(ColorUtil.parseColor(item.label?.colorValue))
                 holder.getView<TextView>(R.id.tv_search_value).background = drawable
                 holder.setTextColor(R.id.tv_search_value, context.resources.getColor(R.color.white))
                 holder.setText(R.id.tv_search_value, item.label?.labelName)

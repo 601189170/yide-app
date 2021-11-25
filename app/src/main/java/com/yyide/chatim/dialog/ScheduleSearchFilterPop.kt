@@ -21,6 +21,7 @@ import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.Label
 import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.model.schedule.ScheduleFilterTag
+import com.yyide.chatim.utils.ColorUtil
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
@@ -189,8 +190,13 @@ class ScheduleSearchFilterPop(
         }
         adapter.setList(labelList)
         //重置日期
-        dateStart.set(null)
-        dateEnd.set(null)
+        val startTime = DateTime.now().toString("yyyy-MM-dd ") + "00:00:00"
+        dateStart.set(filterTagCollect.startTime ?: startTime)
+        //结束日期
+        val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+        dateEnd.set(filterTagCollect.endTime ?: endTime)
+//        dateStart.set(null)
+//        dateEnd.set(null)
         binding.dateSelect.llVLine.visibility = View.GONE
         binding.dateSelect.dateTimePicker.visibility = View.GONE
     }
@@ -249,7 +255,9 @@ class ScheduleSearchFilterPop(
                 holder.setText(R.id.tv_tab_title, item.labelName)
                 val drawable = GradientDrawable()
                 drawable.cornerRadius = DisplayUtils.dip2px(context, 2f).toFloat()
-                drawable.setColor(Color.parseColor(item.colorValue))
+                //drawable.setColor(Color.parseColor(item.colorValue))
+                drawable.setColor(ColorUtil.parseColor(item.colorValue))
+
                 holder.getView<TextView>(R.id.tv_tab_title).background = drawable
                 holder.getView<CheckBox>(R.id.cb_check).isSelected = item.checked
                 holder.itemView.setOnClickListener {
