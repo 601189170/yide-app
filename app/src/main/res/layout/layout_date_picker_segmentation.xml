@@ -65,7 +65,6 @@
         android:id="@+id/np_datetime_hour"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/np_datetime_day"
         app:layout_constraintTop_toTopOf="parent"

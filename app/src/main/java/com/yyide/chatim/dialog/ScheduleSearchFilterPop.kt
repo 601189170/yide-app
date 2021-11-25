@@ -24,6 +24,7 @@ import com.yyide.chatim.model.schedule.ScheduleFilterTag
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
+import org.joda.time.DateTime
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
@@ -148,9 +149,11 @@ class ScheduleSearchFilterPop(
             }
         }
         //开始日期
-        dateStart.set(filterTagCollect.startTime ?: DateUtils.switchTime(Date()))
+        val startTime = DateTime.now().toString("yyyy-MM-dd ") + "00:00:00"
+        dateStart.set(filterTagCollect.startTime ?: startTime)
         //结束日期
-        dateEnd.set(filterTagCollect.endTime ?: DateUtils.switchTime(Date()))
+        val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+        dateEnd.set(filterTagCollect.endTime ?: endTime)
         //标签
         labelList.forEach {
             it.checked = filterTagCollect.labelId?.contains(it.id) == true
