@@ -438,8 +438,105 @@ object ScheduleDaoUtil {
                     }
 
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+                    newSchedule.moreDayStartTime = newSchedule.startTime
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                    newSchedule.moreDayEndTime = newSchedule.endTime
                     listAllSchedule.add(DayOfMonth(it, newSchedule))
+                } else {
+                    //计算跨月的日程，为下个月的显示上个月的数据准备
+                    loge("查询${firstDayOfMonth.toStringTime()} ~ ${lastDayOfMonth.toStringTime()}的日程")
+                    logd("查询指定月的数据:${schedule.name},${schedule.startTime}~${schedule.endTime},${schedule.rrule}")
+                    loge("重复规则日期${it.toStringTime()}")
+                    val toDateTime = toDateTime(schedule.endTime).simplifiedDataTime()
+                    if (toDateTime in firstDayOfMonth..lastDayOfMonth) {
+                        val newSchedule = schedule.clone() as ScheduleData
+                        newSchedule.moreDayStartTime =
+                            firstDayOfMonth.toString("yyyy-MM-dd ") + "00:00:00"
+                        listAllSchedule.add(DayOfMonth(firstDayOfMonth, newSchedule))
+                    } else {
+                        val newSchedule = schedule.clone() as ScheduleData
+                        val toDateTime = toDateTime(newSchedule.startTime)
+                        val dataTime = it.withTime(
+                            toDateTime.hourOfDay,
+                            toDateTime.minuteOfHour,
+                            toDateTime.secondOfMinute,
+                            0
+                        )
+                        val toDateTime2 = toDateTime(newSchedule.endTime)
+                        var dataTime2 = it.withTime(
+                            toDateTime2.hourOfDay,
+                            toDateTime2.minuteOfHour,
+                            toDateTime2.secondOfMinute,
+                            0
+                        )
+                        //考虑跨天显示
+                        if (toDateTime.simplifiedDataTime() != toDateTime2.simplifiedDataTime()) {
+                            val year = toDateTime2.year - toDateTime.year
+                            val month = toDateTime2.monthOfYear - toDateTime.monthOfYear
+                            val day = toDateTime2.dayOfMonth - toDateTime.dayOfMonth
+                            dataTime2 = dataTime2.plusYears(year)
+                            dataTime2 = dataTime2.plusMonths(month)
+                            dataTime2 = dataTime2.plusDays(day)
+                        }
+
+                        newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
+                        newSchedule.moreDayStartTime = newSchedule.startTime
+                        newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                        newSchedule.moreDayEndTime = newSchedule.endTime
+                        val startTime = toDateTime(newSchedule.moreDayStartTime)
+                        val endTime = toDateTime(newSchedule.endTime)
+                        val daysBetween = Days.daysBetween(startTime, endTime).days
+                        for (index in 0..daysBetween) {
+                            val scheduleData1 = newSchedule.clone() as ScheduleData
+                            if (index == 0) {
+                                scheduleData1.moreDay = 1
+                                scheduleData1.moreDayEndTime =
+                                    toDateTime(scheduleData1.moreDayStartTime).simplifiedDataTime()
+                                        .toStringTime("yyyy-MM-dd ") + "23:59:59"
+                                val simplifiedDataTime =
+                                    toDateTime(scheduleData1.moreDayEndTime).simplifiedDataTime()
+                                if (simplifiedDataTime in firstDayOfMonth..lastDayOfMonth) {
+                                    listAllSchedule.add(
+                                        DayOfMonth(
+                                            simplifiedDataTime,
+                                            scheduleData1
+                                        )
+                                    )
+                                }
+                            } else if (index == daysBetween) {
+                                scheduleData1.moreDay = 1
+                                scheduleData1.moreDayStartTime =
+                                    toDateTime(scheduleData1.moreDayEndTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
+                                val simplifiedDataTime =
+                                    toDateTime(scheduleData1.moreDayStartTime).simplifiedDataTime()
+                                if (simplifiedDataTime in firstDayOfMonth..lastDayOfMonth) {
+                                    listAllSchedule.add(
+                                        DayOfMonth(
+                                            simplifiedDataTime,
+                                            scheduleData1
+                                        )
+                                    )
+                                }
+                            } else {
+                                val allDay =
+                                    toDateTime(scheduleData1.moreDayStartTime).simplifiedDataTime()
+                                        .plusDays(index)
+                                scheduleData1.moreDay = 1
+                                scheduleData1.moreDayStartTime =
+                                    allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
+                                scheduleData1.moreDayEndTime =
+                                    allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
+                                if (allDay.simplifiedDataTime() in firstDayOfMonth..lastDayOfMonth) {
+                                    listAllSchedule.add(
+                                        DayOfMonth(
+                                            allDay.simplifiedDataTime(),
+                                            scheduleData1
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -449,14 +546,10 @@ object ScheduleDaoUtil {
         for (dayOfMonth in listAllSchedule) {
             val dateTime = dayOfMonth.dateTime
             val scheduleData = dayOfMonth.scheduleData
-            val startTime = toDateTime(scheduleData.startTime)
-            val endTime = toDateTime(scheduleData.endTime)
+            val startTime = toDateTime(scheduleData.moreDayStartTime)
+            val endTime = toDateTime(scheduleData.moreDayEndTime)
             if (startTime.simplifiedDataTime() == endTime.simplifiedDataTime()) {
                 //不是跨天的日程
-                scheduleData.moreDay = 0
-                scheduleData.moreDayStartTime = scheduleData.startTime
-                scheduleData.moreDayEndTime = scheduleData.endTime
-
                 if (showData(scheduleData.moreDayEndTime)){
                     listAllSchedule2.add(dayOfMonth)
                 }
@@ -469,12 +562,19 @@ object ScheduleDaoUtil {
                         //第一天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
                         scheduleData1.moreDay = 1
-                        scheduleData1.moreDayStartTime = scheduleData1.startTime
                         scheduleData1.moreDayEndTime =
-                            toDateTime(scheduleData1.startTime).simplifiedDataTime()
+                            toDateTime(scheduleData1.moreDayStartTime).simplifiedDataTime()
                                 .toStringTime("yyyy-MM-dd ") + "23:59:59"
                         if (showData(scheduleData1.moreDayEndTime) && dateTime <= lastDayOfMonth) {
-                            listAllSchedule2.add(DayOfMonth(dateTime, scheduleData1))
+                            val until = scheduleData1.rrule["until"]
+                            if (until != null && !TextUtils.isEmpty(until.toString())) {
+                                val untilDateTime = toDateTime(until.toString()).simplifiedDataTime()
+                                if (dateTime <= untilDateTime) {
+                                    listAllSchedule2.add(DayOfMonth(dateTime, scheduleData1))
+                                }
+                            } else {
+                                listAllSchedule2.add(DayOfMonth(dateTime, scheduleData1))
+                            }
                         }
                     } else if (index == daysBetween) {
                         //最后一天
@@ -485,20 +585,36 @@ object ScheduleDaoUtil {
                         scheduleData1.moreDayEndTime = scheduleData1.endTime
                         val simplifiedDataTime = toDateTime(scheduleData1.endTime).simplifiedDataTime()
                         if (showData(scheduleData1.moreDayEndTime) && simplifiedDataTime <= lastDayOfMonth){
-                            listAllSchedule2.add(DayOfMonth(simplifiedDataTime, scheduleData1))
+                            val until = scheduleData1.rrule["until"]
+                            if (until != null && !TextUtils.isEmpty(until.toString())) {
+                                val untilDateTime = toDateTime(until.toString()).simplifiedDataTime()
+                                if (simplifiedDataTime <= untilDateTime) {
+                                    listAllSchedule2.add(DayOfMonth(simplifiedDataTime, scheduleData1))
+                                }
+                            } else {
+                                listAllSchedule2.add(DayOfMonth(simplifiedDataTime, scheduleData1))
+                            }
                         }
                     } else {
                         //中间的天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
                         scheduleData1.moreDay = 1
                         val allDay =
-                            toDateTime(scheduleData1.startTime).simplifiedDataTime().plusDays(index)
+                            toDateTime(scheduleData1.moreDayStartTime).simplifiedDataTime().plusDays(index)
                         scheduleData1.moreDayStartTime =
                             allDay.toStringTime("yyyy-MM-dd ") + "00:00:00"
                         scheduleData1.moreDayEndTime =
                             allDay.toStringTime("yyyy-MM-dd ") + "23:59:59"
                         if (showData(scheduleData1.moreDayEndTime) && allDay <= lastDayOfMonth) {
-                            listAllSchedule2.add(DayOfMonth(allDay.simplifiedDataTime(), scheduleData1))
+                            val until = scheduleData1.rrule["until"]
+                            if (until != null && !TextUtils.isEmpty(until.toString())) {
+                                val untilDateTime = toDateTime(until.toString()).simplifiedDataTime()
+                                if (allDay.simplifiedDataTime() <= untilDateTime) {
+                                    listAllSchedule2.add(DayOfMonth(allDay.simplifiedDataTime(), scheduleData1))
+                                }
+                            } else {
+                                listAllSchedule2.add(DayOfMonth(allDay.simplifiedDataTime(), scheduleData1))
+                            }
                         }
                     }
                 }
