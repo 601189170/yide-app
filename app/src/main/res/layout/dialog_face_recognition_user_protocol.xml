@@ -42,8 +42,8 @@
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="@dimen/dp_10"
-        android:layout_height="@dimen/dp_10"
+        android:layout_width="@dimen/dp_12"
+        android:layout_height="@dimen/dp_12"
         android:layout_marginEnd="@dimen/dp_10"
         android:background="@drawable/schedule_add_label_selector"
         android:button="@null"

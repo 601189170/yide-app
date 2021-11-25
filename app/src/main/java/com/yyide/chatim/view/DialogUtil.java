@@ -1306,6 +1306,10 @@ public class DialogUtil {
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         binding.btnAgreedOpen.setOnClickListener(v -> {
+            if (!binding.checkBox.isChecked()){
+                ToastUtils.showShort("请勾选《一加壹人脸识别用户协议》");
+                return;
+            }
             onClickListener.onEnsure(v);
             mDialog.dismiss();
         });
