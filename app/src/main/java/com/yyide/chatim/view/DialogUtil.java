@@ -1307,7 +1307,7 @@ public class DialogUtil {
         mDialog.setContentView(rootView);
         binding.btnAgreedOpen.setOnClickListener(v -> {
             if (!binding.checkBox.isChecked()){
-                ToastUtils.showShort("请勾选《一加壹人脸识别用户协议》");
+                ToastUtils.showShort("请先阅读并勾选内容!");
                 return;
             }
             onClickListener.onEnsure(v);
