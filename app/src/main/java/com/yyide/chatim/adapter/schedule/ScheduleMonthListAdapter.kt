@@ -67,7 +67,7 @@ class ScheduleMonthListAdapter: BaseQuickAdapter<ScheduleData, BaseViewHolder>(R
             baseViewHolder.getView<TextView>(R.id.tv_label).text = label[0].labelName
             if (label.size>1){
                 baseViewHolder.getView<TextView>(R.id.tv_label_number).visibility = View.VISIBLE
-                baseViewHolder.getView<TextView>(R.id.tv_label_number).text = "+${label.size}"
+                baseViewHolder.getView<TextView>(R.id.tv_label_number).text = "+${label.size-1}"
             }else{
                 baseViewHolder.getView<TextView>(R.id.tv_label_number).visibility = View.GONE
             }
