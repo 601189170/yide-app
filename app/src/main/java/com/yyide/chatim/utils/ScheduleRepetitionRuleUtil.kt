@@ -340,23 +340,31 @@ object ScheduleRepetitionRuleUtil {
             }
             "weekly", "WEEKLY" -> {
                 //星期 MO(周一),TU(周二),WE(周三),TH(周四),FR(周五),SA(周六),SU(周日)
-                val weekday = StringBuffer()
-                for (week in byweekday) {
-                    when (week) {
-                        "MO" -> weekday.append("周一，")
-                        "TU" -> weekday.append("周二，")
-                        "WE" -> weekday.append("周三，")
-                        "TH" -> weekday.append("周四，")
-                        "FR" -> weekday.append("周五，")
-                        "SA" -> weekday.append("周六，")
-                        "SU" -> weekday.append("周日")
-                    }
-                }
-
+//                val weekday = StringBuffer()
+//                for (week in byweekday) {
+//                    when (week) {
+//                        "MO" -> weekday.append("周一")
+//                        "TU" -> weekday.append("周二")
+//                        "WE" -> weekday.append("周三")
+//                        "TH" -> weekday.append("周四")
+//                        "FR" -> weekday.append("周五")
+//                        "SA" -> weekday.append("周六")
+//                        "SU" -> weekday.append("周日")
+//                    }
+//                }
+                val weekdayList = byweekday.toString()
+                    .replace("[", "").replace("]", "")
+                    .replace("MO", "周一")
+                    .replace("TU", "周二")
+                    .replace("WE", "周三")
+                    .replace("TH", "周四")
+                    .replace("FR", "周五")
+                    .replace("SA", "周六")
+                    .replace("SU", "周日")
                 if (interval == 1) {
-                    return "每周的${weekday}"
+                    return "每周的${weekdayList}"
                 }
-                return "每${interval}周的${weekday}"
+                return "每${interval}周的${weekdayList}"
             }
             "monthly", "MONTHLY" -> {
                 val monthday = bymonthday.map { it + "日" }.toString().replace("[", "").replace("]", "")
