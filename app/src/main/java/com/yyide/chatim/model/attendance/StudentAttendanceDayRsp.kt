@@ -15,8 +15,10 @@ data class StudentAttendanceDayRsp(
 ) {
     data class DataBean(
         var className: String? = null,
+        var studentId: String? = null,
         var appStudentDailyStatisticalForm: AppStudentDailyStatisticalFormBean? = null,
-        var classroomTeacherAttendanceList: List<ClassroomTeacherAttendanceListBean>? = null
+        var classroomTeacherAttendanceList: List<ClassroomTeacherAttendanceListBean>? = null,
+        var studentInfos: List<StudentBean>?=null
     ) {
         data class AppStudentDailyStatisticalFormBean(
             var eventList: List<EventFormListBean>? = null,
@@ -49,6 +51,13 @@ data class StudentAttendanceDayRsp(
             var eventName: String? = null,
             var serverId: String? = null,
             var type: Int = 0
+        )
+
+        data class StudentBean(
+            var studentId: String? = null,
+            var classId: String? = null,
+            var studentName: String? = null,
+            var className: String? = null
         )
     }
 }

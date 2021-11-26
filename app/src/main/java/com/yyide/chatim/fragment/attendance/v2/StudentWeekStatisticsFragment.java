@@ -28,6 +28,7 @@ import com.yyide.chatim.databinding.FragmentWeekStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
+import com.yyide.chatim.model.attendance.StudentAttendanceDayRsp;
 import com.yyide.chatim.model.attendance.StudentAttendanceWeekMonthRsp;
 import com.yyide.chatim.presenter.attendance.v2.StudentWeekMonthStatisticsPresenter;
 import com.yyide.chatim.utils.DateUtils;
@@ -77,6 +78,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
     private List<StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean.WeeksMonthListBean.EventFormBean> leaveEarlyPeople = new ArrayList<>();
     private String currentClass;//当前班级
     private String currentStudentId;//当前学生id
+    private String currentStudentName;
     private int dialogType;
     private boolean identity = true;//确定是教师还是学生 true是学生  false 是老师
     private boolean eventType;//确定是否是课程考勤 true 事件考勤 false 课程考勤
@@ -201,6 +203,25 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
         }
         mvpPresenter.queryAppStudentAttendanceWeekMonth(currentClass, currentStudentId, startTime, endTime);
     }
+    /**
+     * 初始化
+     * @param studentBeanList
+     */
+    private void initClassData(List<StudentAttendanceWeekMonthRsp.DataBean.StudentBean> studentBeanList){
+        dialogType = 4;
+        classList.clear();
+        for (StudentAttendanceWeekMonthRsp.DataBean.StudentBean studentBean : studentBeanList) {
+            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+            dataBean.setDeptId(studentBean.getStudentId());
+            dataBean.setClassId(studentBean.getClassId());
+            dataBean.setDeptName(studentBean.getStudentName());
+            dataBean.setIsDefault(0);
+            if (currentStudentId.equals(studentBean.getStudentId())) {
+                dataBean.setIsDefault(1);
+            }
+            classList.add(dataBean);
+        }
+    }
 
     private void initClassData() {
         if (SpData.getIdentityInfo().staffIdentity()) {
@@ -251,7 +272,13 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             isWeekStatistics = true;
         }
         //初始化班级view
-        initClassData();
+        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+        if (classInfo != null){
+            currentClass = classInfo.classesId;
+            currentStudentId = classInfo.studentId;
+            //mViewBinding.tvClassName.setText(classInfo.classesStudentName);
+        }
+        //initClassData();
         //initClassView();
         mViewBinding.swipeRefreshLayout.setOnRefreshListener(this);
         mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
@@ -403,10 +430,11 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             //课程类型
             tvClassName = mViewBinding.layoutHeadTeacherCourse.tvClassName;
         }
+        tvClassName.setText(currentStudentName);
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         if (classOptional.isPresent()) {
             final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
-            tvClassName.setText(clazzBean.getDeptName());
+            //tvClassName.setText(clazzBean.getDeptName());
             currentClass = clazzBean.getClassId();
             currentStudentId = clazzBean.getDeptId();
             if (classList.size() <= 1) {
@@ -421,7 +449,7 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                             final DeptSelectPop deptSelectPop = new DeptSelectPop(requireActivity(), dialogType, classList);
                             deptSelectPop.setOnCheckedListener(dataBean -> {
                                 Log.e(TAG, "班级选择: " + dataBean);
-                                tvClassName.setText(dataBean.getDeptName());
+                                //tvClassName.setText(dataBean.getDeptName());
                                 //班级id
                                 currentClass = dataBean.getClassId();
                                 //学生id
@@ -497,6 +525,12 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
                 showData(null, null);
                 return;
             }
+            final List<StudentAttendanceWeekMonthRsp.DataBean.StudentBean> studentInfos = attendanceWeekStatsRsp.getData().getStudentInfos();
+            currentStudentName = attendanceWeekStatsRsp.getData().getClassName();
+            if (studentInfos !=null && !studentInfos.isEmpty()){
+                initClassData(studentInfos);
+            }
+
             showBlank(false);
             final List<StudentAttendanceWeekMonthRsp.DataBean.ClassroomTeacherAttendanceListBean> classroomTeacherAttendanceList = attendanceWeekStatsRsp.getData().getClassroomTeacherAttendanceList();
             final StudentAttendanceWeekMonthRsp.DataBean.WeeksMonthStatisticalFormBean weeksMonthStatisticalForm = attendanceWeekStatsRsp.getData().getWeeksMonthStatisticalForm();

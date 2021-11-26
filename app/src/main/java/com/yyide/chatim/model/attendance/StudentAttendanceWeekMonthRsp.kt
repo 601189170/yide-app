@@ -13,8 +13,10 @@ data class StudentAttendanceWeekMonthRsp(
 ) {
     data class DataBean(
         val className: String? = null,
+        var studentId: String? = null,
         val weeksMonthStatisticalForm: WeeksMonthStatisticalFormBean? = null,
-        val classroomTeacherAttendanceList: List<ClassroomTeacherAttendanceListBean>? = null
+        val classroomTeacherAttendanceList: List<ClassroomTeacherAttendanceListBean>? = null,
+        var studentInfos: List<StudentBean>?=null
     ) {
         data class WeeksMonthStatisticalFormBean(
             val weeksMonthStatisticalCourseForm: WeeksMonthListBean? = null,
@@ -63,6 +65,13 @@ data class StudentAttendanceWeekMonthRsp(
             val theme: String? = null,
             val serverId: String? = null,
             val type: Int = 0,
+        )
+
+        data class StudentBean(
+            var studentId: String? = null,
+            var classId: String? = null,
+            var studentName: String? = null,
+            var className: String? = null
         )
     }
 }

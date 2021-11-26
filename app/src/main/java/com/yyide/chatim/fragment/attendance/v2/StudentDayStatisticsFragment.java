@@ -99,6 +99,30 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
         return inflater.inflate(R.layout.fragment_day_statistics, container, false);
     }
 
+    /**
+     * 初始化
+     * @param studentBeanList
+     */
+    private void initClassData(List<StudentAttendanceDayRsp.DataBean.StudentBean> studentBeanList){
+        dialogType = 4;
+        classList.clear();
+        for (StudentAttendanceDayRsp.DataBean.StudentBean studentBean : studentBeanList) {
+            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+            dataBean.setDeptId(studentBean.getStudentId());
+            dataBean.setClassId(studentBean.getClassId());
+            dataBean.setDeptName(studentBean.getStudentName());
+            dataBean.setIsDefault(0);
+            if (currentStudentId.equals(studentBean.getStudentId())) {
+                dataBean.setIsDefault(1);
+            }
+            classList.add(dataBean);
+        }
+        if (classList.isEmpty()) {
+            Log.e(TAG, "initClassData: 当前账号没有学生");
+            mViewBinding.tvClassName.setVisibility(View.GONE);
+        }
+    }
+
     private void initClassData() {
         if (SpData.getIdentityInfo().staffIdentity()) {
             dialogType = 2;
@@ -143,8 +167,14 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
         super.onViewCreated(view, savedInstanceState);
         mViewBinding = FragmentDayStatisticsBinding.bind(view);
         eventDates = new ArrayList<>();
-        initClassData();
-        initClassView();
+        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+        if (classInfo != null){
+            currentClass = classInfo.classesId;
+            currentStudentId = classInfo.studentId;
+            //mViewBinding.tvClassName.setText(classInfo.classesStudentName);
+        }
+        //initClassData();
+        //initClassView();
         mViewBinding.swipeRefreshLayout.setOnRefreshListener(this);
         mViewBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
         mViewBinding.appBarLayout.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
@@ -233,7 +263,7 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
         if (classOptional.isPresent()) {
             final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
-            mViewBinding.tvClassName.setText(clazzBean.getDeptName());
+            //mViewBinding.tvClassName.setText(clazzBean.getDeptName());
             currentClass = clazzBean.getClassId();
             currentStudentId = clazzBean.getDeptId();
             currentClassName = clazzBean.getDeptName();
@@ -248,7 +278,7 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
                             final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), dialogType, classList);
                             deptSelectPop.setOnCheckedListener(dataBean -> {
                                 Log.e(TAG, "班级选择:" + dataBean.toString());
-                                mViewBinding.tvClassName.setText(dataBean.getDeptName());
+                                //mViewBinding.tvClassName.setText(dataBean.getDeptName());
                                 //班级id
                                 currentClass = dataBean.getClassId();
                                 //学生id
@@ -325,6 +355,20 @@ public class StudentDayStatisticsFragment extends BaseMvpFragment<StudentDayStat
                 showBlank(true);
                 notifyAdapter();
                 return;
+            }
+            //设置班级学生名
+            final List<StudentAttendanceDayRsp.DataBean.StudentBean> studentInfos = studentAttendanceDayRsp.getData().getStudentInfos();
+            final String className = studentAttendanceDayRsp.getData().getClassName();
+            final String studentId = studentAttendanceDayRsp.getData().getStudentId();
+            if (studentInfos !=null && !studentInfos.isEmpty()){
+                if (!TextUtils.isEmpty(className)) {
+                    mViewBinding.tvClassName.setVisibility(View.VISIBLE);
+                    mViewBinding.tvClassName.setText(className);
+                } else {
+                    mViewBinding.tvClassName.setVisibility(View.GONE);
+                }
+                initClassData(studentInfos);
+                initClassView();
             }
             final List<StudentAttendanceDayRsp.DataBean.ClassroomTeacherAttendanceListBean> classroomTeacherAttendanceList = studentAttendanceDayRsp.getData().getClassroomTeacherAttendanceList();
             this.classroomTeacherAttendanceList.addAll(classroomTeacherAttendanceList);
