@@ -44,6 +44,7 @@ class ScheduleEditActivity : BaseActivity() {
     private val scheduleMangeViewModel: ScheduleMangeViewModel by viewModels()
     val list = getList()
     val list2 = getList2()
+    var repetition:Boolean = false
     //否是是发起人
     private var promoter = false
     private var sourceRepetitionRule: Repetition? = null
@@ -105,6 +106,8 @@ class ScheduleEditActivity : BaseActivity() {
                 scheduleEditViewModel.repetitionLiveData.value = repetition
                 sourceRepetitionRule = repetition
             }
+            //是否是重复日程
+            repetition = it.isRepeat != "0"
             //日程提醒remind
             if (it.remindTypeInfo == "10") {
                 scheduleEditBinding.tvRemind.text = Remind.getNotRemind().title
@@ -180,10 +183,12 @@ class ScheduleEditActivity : BaseActivity() {
                 ToastUtils.showShort("需要输入日程名称")
                 return@setOnClickListener
             }
-            val rule = sourceRepetitionRule?.rule
-            scheduleEditViewModel.scheduleTitleLiveData.value = scheduleEditBinding.etScheduleTitle.text.toString()
-            val repetition = scheduleEditViewModel.repetitionLiveData.value
-            if ((repetition == null || repetition.rule?.isEmpty() != false) && (sourceRepetitionRule == null || rule == null)) {
+//            val rule = sourceRepetitionRule?.rule
+//            scheduleEditViewModel.scheduleTitleLiveData.value = scheduleEditBinding.etScheduleTitle.text.toString()
+//            val repetition = scheduleEditViewModel.repetitionLiveData.value
+            if (!repetition) {
+                //原始数据不是重复日程，所以不需要提示重复日程选择范围
+                //if ((repetition == null || repetition.rule?.isEmpty() != false) && (sourceRepetitionRule == null || rule == null)) {
                 scheduleEditViewModel.saveOrModifySchedule(true)
                 return@setOnClickListener
             }
