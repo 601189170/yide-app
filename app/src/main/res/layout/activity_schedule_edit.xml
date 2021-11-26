@@ -51,7 +51,7 @@
                     android:layout_marginStart="@dimen/dp_6"
                     android:background="@color/white"
                     android:hint="需要输入日程名称"
-                    android:maxEms="100"
+                    android:maxEms="20"
                     android:singleLine="true"
                     android:paddingEnd="90dp"
                     android:text="语文初三10班"

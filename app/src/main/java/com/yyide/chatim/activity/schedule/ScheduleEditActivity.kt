@@ -329,7 +329,7 @@ class ScheduleEditActivity : BaseActivity() {
 
         //限制输入框字数
         scheduleEditBinding.edit.filters = arrayOf<InputFilter>(MaxTextLengthFilter(200))
-        scheduleEditBinding.etScheduleTitle.filters = arrayOf<InputFilter>(MaxTextLengthFilter(100))
+        scheduleEditBinding.etScheduleTitle.filters = arrayOf<InputFilter>(MaxTextLengthFilter(20))
     }
 
     val adapter = object :

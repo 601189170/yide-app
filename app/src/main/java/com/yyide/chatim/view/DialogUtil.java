@@ -990,7 +990,7 @@ public class DialogUtil {
         scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2,"yyyy-MM-dd HH:mm:ss"));
         String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1,"MM月dd日 HH:mm");
         //arrayOf<InputFilter>(MaxTextLengthFilter(100))
-        final InputFilter[] inputFilter = {new MaxTextLengthFilter(100)};
+        final InputFilter[] inputFilter = {new MaxTextLengthFilter(20)};
         editView.setFilters(inputFilter);
         tvDate.setText(time);
         finished.setOnClickListener(v -> {
