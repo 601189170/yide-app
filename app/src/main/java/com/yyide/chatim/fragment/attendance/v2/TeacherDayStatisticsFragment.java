@@ -31,6 +31,7 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.v2.TeacherStatisticsDetailActivity;
 import com.yyide.chatim.adapter.attendance.v2.TeacherDayStatisticsListAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.databinding.FragmentDayStatisticsBinding;
 import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -73,6 +74,7 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
     private String historyEventType;//上一次选择的事件
     private TeacherDayStatisticsListAdapter dayStatisticsListAdapter;
     private boolean refresh;
+    private DateTime lastDateTime;
 
     //存储事件类型
     private List<TeacherAttendanceDayRsp.DataBean.ClassroomTeacherAttendanceListBean> classroomTeacherAttendanceList = new ArrayList<>();
@@ -240,6 +242,7 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
         });
 
         //请求数据
+        lastDateTime = DateTime.now();
         queryAttStatsData(currentClass, currentDate);
     }
 
@@ -298,7 +301,10 @@ public class TeacherDayStatisticsFragment extends BaseMvpFragment<TeacherDayStat
         String endTime = dateTime.toString("yyyy-MM-dd ") + "23:59:59";
         if (dateTime.compareTo(DateTime.now()) > 0) {
             ToastUtils.showShort("不支持查询未来时间");
+            mViewBinding.weekCalendar.setSelectDateTime(lastDateTime);
+            return;
         }
+        lastDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(date);
         mvpPresenter.queryAppTeacherThreeAttendanceDay(classId, startTime, endTime);
     }
 
