@@ -81,6 +81,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     private lateinit var curTopDateTime: DateTime
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private var refresh = false
+    private var scroll = true
     //是否显示时间轴
     private var timeAxisDateTime: DateTime? = null
 
@@ -112,7 +113,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         }
 
         scheduleListViewViewModel.listViewData.observe(requireActivity(), {
-            if (it.isEmpty()) {
+            if (it.isEmpty() && !update) {
                 return@observe
             }
             if (scrollOrientation == -1) {
@@ -120,7 +121,12 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                 if (update) {
                     update = false
                     scheduleViewModel.curDateTime.value?.also {
-                        scrollToPosition(it.year, it.monthOfYear - 1, it.dayOfMonth)
+                        if (scroll) {
+                            scroll = false
+                            scrollToPosition(it.year, it.monthOfYear - 1, it.dayOfMonth)
+                        } else {
+                            loge("不需要滚动")
+                        }
                     }
                 }
             } else {
@@ -285,6 +291,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
 
     override fun onResume() {
         super.onResume()
+        scroll = true
         updateDate()
         scheduleViewModel.curDateTime.value = DateTime.now().simplifiedDataTime()
     }
@@ -292,6 +299,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         loge("onHiddenChanged $hidden")
+        scroll = true
         if (!hidden) {
             //更新头部日期
             updateDate()
