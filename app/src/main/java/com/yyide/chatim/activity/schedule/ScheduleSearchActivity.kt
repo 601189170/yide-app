@@ -303,9 +303,9 @@ class ScheduleSearchActivity : BaseActivity() {
 
     private fun initFilterCondition(scheduleFilterTag: ScheduleFilterTag) {
         tagList.clear()
-        if (scheduleFilterTag.tags.isEmpty() && scheduleFilterTag.types.isEmpty()) {
-            return
-        }
+//        if (scheduleFilterTag.tags.isEmpty() && scheduleFilterTag.types.isEmpty()) {
+//            return
+//        }
         viewBinding.clSearchHistory.visibility = View.GONE
         viewBinding.clFilterCondition.visibility = View.VISIBLE
         if (scheduleFilterTag.types.isNotEmpty()) {
