@@ -394,7 +394,7 @@ object ScheduleDaoUtil {
     /**
      * 查询指定月的数据
      */
-    fun monthlyList(monthDateTime: DateTime, timeAxisDateTime: DateTime?): List<DayOfMonth> {
+    fun monthlyList(monthDateTime: DateTime, timeAxisDateTime: DateTime?,divideMoreDay:Boolean = true): List<DayOfMonth> {
         val firstDayOfMonth = monthDateTime.dayOfMonth().withMinimumValue().simplifiedDataTime()
         val lastDayOfMonth = monthDateTime.dayOfMonth().withMaximumValue().simplifiedDataTime()
         //本周最后的时间
@@ -442,7 +442,7 @@ object ScheduleDaoUtil {
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.moreDayEndTime = newSchedule.endTime
                     listAllSchedule.add(DayOfMonth(it, newSchedule))
-                } else {
+                } else if(divideMoreDay){
                     //计算跨月的日程，为下个月的显示上个月的数据准备
                     loge("查询${firstDayOfMonth.toStringTime()} ~ ${lastDayOfMonth.toStringTime()}的日程")
                     logd("查询指定月的数据:${schedule.name},${schedule.startTime}~${schedule.endTime},${schedule.rrule}")
@@ -553,7 +553,7 @@ object ScheduleDaoUtil {
                 if (showData(scheduleData.moreDayEndTime)){
                     listAllSchedule2.add(dayOfMonth)
                 }
-            } else {
+            } else if (divideMoreDay){
                 //跨天的日程
                 val daysBetween = Days.daysBetween(startTime, endTime).days
                 loge("$startTime,$endTime 跨天的日程跨天${daysBetween}")
@@ -619,6 +619,10 @@ object ScheduleDaoUtil {
                     }
                 }
                 //listAllSchedule2.add(it)
+            } else {
+                if (showData(scheduleData.moreDayEndTime)) {
+                    listAllSchedule2.add(dayOfMonth)
+                }
             }
         }
         listAllSchedule2.sort()
