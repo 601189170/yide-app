@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_40"
-        android:text="同意《一加壹人脸识别用户协议》"
+        android:text=""
         android:textColor="#ff666666"
         android:textSize="12sp"
         app:layout_constraintLeft_toLeftOf="@id/iv_tip_icon"

@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
@@ -1305,6 +1306,7 @@ public class DialogUtil {
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
+        binding.tvProtocol.setText(Html.fromHtml("同意 <font color='#2C8AFF'>《一加壹人脸识别用户协议》</font>"));
         binding.btnAgreedOpen.setOnClickListener(v -> {
             if (!binding.checkBox.isChecked()){
                 ToastUtils.showShort("请先阅读并勾选内容!");
