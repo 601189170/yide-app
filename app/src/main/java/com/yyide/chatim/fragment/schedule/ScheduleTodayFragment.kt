@@ -21,6 +21,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
+import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
@@ -189,7 +190,9 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }
-
+        fragmentScheduleTodayBinding.tvToday.setOnClickListener {
+            startActivity(Intent(requireActivity(), SchoolCalendarActivity::class.java))
+        }
         fragmentScheduleTodayBinding.swipeRefreshLayout.setOnRefreshListener(this)
         fragmentScheduleTodayBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }

@@ -128,4 +128,5 @@
     <color name="orange_normal">#FF9E6B</color>
     <color name="orange_pressed">#FF9E6B</color>
     <color name="default_item_decoration_color">#EBEBEB</color>
+    <color name="school_calendar_bg_color">#F2F7FA</color>
 </resources>

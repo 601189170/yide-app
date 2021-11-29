@@ -8,10 +8,8 @@ import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.ApproverRsp;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceRsp;
-import com.yyide.chatim.model.AttendanceSchoolGradeRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.BookRsp;
@@ -82,6 +80,8 @@ import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.ScheduleData;
 import com.yyide.chatim.model.schedule.ScheduleDataRsp;
 import com.yyide.chatim.model.schedule.ScheduleListRsp;
+import com.yyide.chatim.model.schedule.SchoolCalendarRsp;
+import com.yyide.chatim.model.schedule.SchoolSemesterRsp;
 import com.yyide.chatim.model.schedule.SearchParticipantRsp;
 import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
@@ -948,4 +948,25 @@ public interface DingApiStores {
      */
     @GET("/face/cloud-face/statistic/time")
     Observable<WeeklyDateBean> getWeeklyDate();
+
+    /**
+     * 查询校历学年学期
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/school/calendar/selectSemester
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/school/calendar/selectSemester")
+    Call<SchoolSemesterRsp> selectSemester();
+
+    /**
+     * 查询校历备注
+     * {
+     *     "dayOfMonth":"11"，
+     *     "id":"1461949270799777793"
+     * }
+     * https://api.uat.edu.1d1j.net/management/cloud-system/app/school/calendar/selectSchoolCalendar
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/management/cloud-system/app/school/calendar/selectSchoolCalendar")
+    Call<SchoolCalendarRsp> selectSchoolCalendar(@Body RequestBody requestBody);
+
 }

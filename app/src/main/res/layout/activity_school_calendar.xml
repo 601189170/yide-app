@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F7FA"
+    tools:context=".activity.schedule.ScheduleSettingsActivity">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_semester"
+        android:layout_width="210dp"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/school_calendar_semester_selector_bg"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top">
+
+        <TextView
+            android:id="@+id/tv_semester"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:drawableEnd="@drawable/icon_gray_arrow_down"
+            android:drawablePadding="@dimen/dp_10"
+            android:maxEms="10"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="#ff1e1e1e"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/cl_semester"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cl_semester">
+
+        <ImageView
+            android:id="@+id/iv_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            android:src="@drawable/icon_gray_arrow_left"
+            app:layout_constraintBottom_toBottomOf="@id/iv_right"
+            app:layout_constraintRight_toLeftOf="@id/tv_month"
+            app:layout_constraintTop_toTopOf="@id/iv_right" />
+
+        <TextView
+            android:id="@+id/tv_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9月"
+            android:textColor="#ff1e1e1e"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_right"
+            app:layout_constraintRight_toLeftOf="@id/iv_right"
+            app:layout_constraintTop_toTopOf="@id/iv_right" />
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            android:src="@drawable/icon_gray_arrow_right" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/top_calendar"
+        layout="@layout/layout_schedule_list_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="132dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

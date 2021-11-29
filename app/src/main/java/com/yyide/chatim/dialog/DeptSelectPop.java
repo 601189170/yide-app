@@ -101,6 +101,9 @@ public class DeptSelectPop extends PopupWindow {
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tvPopTitle.setCompoundDrawables(drawable, null, null, null);
                 break;
+            case 5:
+                tvPopTitle.setText("选择学期");
+                break;
             default:
                 break;
         }

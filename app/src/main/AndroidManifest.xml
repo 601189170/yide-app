@@ -675,6 +675,9 @@
             android:name=".activity.FaceCaptureProtocolActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
+        <activity android:name=".activity.schedule.SchoolCalendarActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

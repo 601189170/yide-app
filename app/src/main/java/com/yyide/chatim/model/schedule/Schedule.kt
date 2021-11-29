@@ -50,6 +50,10 @@ data class Schedule(
         const val SCHEDULE_TYPE_SCHOOL_SCHEDULE = 0
         const val SCHEDULE_TYPE_CONFERENCE = 3
         const val SCHEDULE_TYPE_CLASS_SCHEDULE = 1
+
+        //校历类型
+        const val SCHOOL_CALENDAR_TYPE_HEAD = 1
+        const val SCHOOL_CALENDAR_TYPE_ITEM = 2
     }
 }
 
