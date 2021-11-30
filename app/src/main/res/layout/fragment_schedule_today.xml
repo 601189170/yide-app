@@ -115,6 +115,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:maxImageSize="@dimen/dp_56"
             app:pressedTranslationZ="@dimen/dp_12"
+            android:visibility="gone"
             app:rippleColor="#e7d16b" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

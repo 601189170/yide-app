@@ -67,4 +67,21 @@
         app:layout_constraintTop_toBottomOf="@id/cl_top_tab"
         app:layout_constraintWidth_default="wrap"
         />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginBottom="100dp"
+        android:contentDescription="add schedule"
+        android:src="@drawable/add_schedule_bottom_big_icon"
+        app:backgroundTint="#2C8AFF"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="@dimen/dp_56"
+        app:pressedTranslationZ="@dimen/dp_12"
+        app:rippleColor="#e7d16b" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -115,10 +115,10 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.name = scheduleTitle?:""
         scheduleData.status = scheduleStatusLiveData.value
         scheduleData.type = "2"
-        scheduleData.isRepeat = repetition?.code.toString()
+        scheduleData.isRepeat = repetition?.code.toString()?:"0"
         scheduleData.rrule = if (repetition?.rule?.isEmpty() == true) null else repetition?.rule
         scheduleData.remindType = if (allDay) "1" else "0"
-        scheduleData.remindTypeInfo = remind?:""
+        scheduleData.remindTypeInfo = remind?:"9"
         scheduleData.startTime = startTime?:""
         scheduleData.endTime = endTime?:""
         scheduleData.isAllDay = if (allDay) "1" else "0"
@@ -236,4 +236,46 @@ class ScheduleEditViewModel : ViewModel() {
             }
         })
     }
+}
+
+fun ScheduleEditViewModel.toScheduleDataBean(): ScheduleDataBean {
+    val scheduleDataBean = ScheduleDataBean()
+    scheduleDataBean.name = this.scheduleTitleLiveData.value
+    scheduleDataBean.allDay = this.allDayLiveData.value ?: false
+    scheduleDataBean.startTime = this.startTimeLiveData.value
+    scheduleDataBean.endTime = this.endTimeLiveData.value
+    scheduleDataBean.remind = this.remindLiveData.value
+    scheduleDataBean.repetition = this.repetitionLiveData.value
+    scheduleDataBean.labelList = this.labelListLiveData.value
+    scheduleDataBean.participantList = this.participantList.value
+    scheduleDataBean.siteName = this.siteLiveData.value
+    scheduleDataBean.remark = this.remarkLiveData.value
+    return scheduleDataBean
+}
+
+fun ScheduleDataBean.toScheduleEditViewModel(scheduleEditViewModel: ScheduleEditViewModel):ScheduleEditViewModel{
+    scheduleEditViewModel.scheduleTitleLiveData.value = name
+    scheduleEditViewModel.allDayLiveData.value = allDay
+    scheduleEditViewModel.startTimeLiveData.value = startTime
+    scheduleEditViewModel.endTimeLiveData.value = endTime
+    scheduleEditViewModel.remindLiveData.value = remind
+    scheduleEditViewModel.repetitionLiveData.value = repetition
+    scheduleEditViewModel.labelListLiveData.value = labelList
+    scheduleEditViewModel.participantList.value = participantList
+    scheduleEditViewModel.siteLiveData.value = siteName
+    scheduleEditViewModel.remarkLiveData.value = remark
+    return scheduleEditViewModel
+}
+
+fun ScheduleEditViewModel.clearData(){
+    scheduleTitleLiveData.value = null
+    allDayLiveData.value = null
+    startTimeLiveData.value = null
+    endTimeLiveData.value = null
+    remindLiveData.value = null
+    repetitionLiveData.value = null
+    labelListLiveData.value = null
+    participantList.value = null
+    siteLiveData.value = null
+    remarkLiveData.value = null
 }

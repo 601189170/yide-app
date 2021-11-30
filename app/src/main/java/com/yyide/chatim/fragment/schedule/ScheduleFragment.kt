@@ -1,26 +1,37 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.JSONArray
 import com.yyide.chatim.R
-import com.yyide.chatim.activity.schedule.ScheduleLabelManageActivity
-import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
-import com.yyide.chatim.activity.schedule.ScheduleSettingsActivity
+import com.yyide.chatim.activity.schedule.*
+import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentScheduleBinding
 import com.yyide.chatim.model.EventMessage
+import com.yyide.chatim.model.schedule.LabelListRsp
+import com.yyide.chatim.model.schedule.ScheduleDataBean
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
-import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
+import com.yyide.chatim.viewmodel.*
 import org.greenrobot.eventbus.EventBus
 import org.joda.time.DateTime
 
@@ -32,8 +43,10 @@ import org.joda.time.DateTime
  */
 class ScheduleFragment : Fragment() {
     lateinit var fragmentScheduleBinding: FragmentScheduleBinding
-    val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
+    private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
+    private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
     val fragments = mutableListOf<Fragment>()
+    var showAddScheduleV2Dialog: Dialog? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +56,7 @@ class ScheduleFragment : Fragment() {
         return fragmentScheduleBinding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //initFragmentContainer()
@@ -74,7 +88,110 @@ class ScheduleFragment : Fragment() {
             fragmentScheduleBinding.tvCurrentDate.text = it.toStringTime("yyyy年MM月")
         })
 
+        fragmentScheduleBinding.fab.setOnClickListener {
+            //新增日程
+            //DialogUtil.showAddScheduleDialog(context, this, DateTime.now())
+            showAddScheduleV2Dialog = DialogUtil.showAddScheduleV2Dialog(
+                context,
+                this,
+                scheduleEditViewModel,
+                DateTime.now(),
+                onScheduleAddListener
+            )
+        }
+
+        //日程修改监听
+        scheduleEditViewModel.saveOrModifyResult.observe(requireActivity(), {
+            if (it){
+                scheduleEditViewModel.clearData()
+            }
+        })
+
+        //收到新增日程
+        scheduleViewModel.monthAddSchedule.observe(requireActivity()){
+            showAddScheduleV2Dialog = DialogUtil.showAddScheduleV2Dialog(
+                context,
+                this,
+                scheduleEditViewModel,
+                DateTime.now(),
+                onScheduleAddListener
+            )
+        }
     }
+
+    //日程新增监听
+    private val onScheduleAddListener = object :DialogUtil.OnScheduleAddListener{
+        override fun onFinish(view: View?) {
+            loge("onFinish")
+            val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
+            loge("toScheduleDataBean=$toScheduleDataBean")
+            scheduleEditViewModel.saveOrModifySchedule(false)
+        }
+
+        override fun onDate(view: View?) {
+            loge("onDate")
+            val intent = Intent(context, ScheduleSimpleEditionActivity::class.java)
+            val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
+            intent.putExtra("data",JSON.toJSONString(toScheduleDataBean))
+            dateLauncher.launch(intent)
+        }
+
+        override fun onLabel(view: View?) {
+            loge("onLabel")
+            val intent = Intent(context, ScheduleAddLabelActivity::class.java)
+            intent.putExtra("labelList", JSON.toJSONString(scheduleEditViewModel.labelListLiveData.value))
+            labelLauncher.launch(intent)
+        }
+
+        override fun onSwitch(view: View?) {
+            loge("onSwitch")
+            val intent = Intent(context, ScheduleFullEditionActivity::class.java)
+            val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
+            intent.putExtra("data",JSON.toJSONString(toScheduleDataBean))
+            fullEditionScheduleLauncher.launch(intent)
+        }
+    }
+    //日期回调
+    private val dateLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == AppCompatActivity.RESULT_OK) {
+                val stringExtra = it.data?.getStringExtra("data")
+                loge("$stringExtra")
+                val scheduleDataBean = JSON.parseObject(stringExtra, ScheduleDataBean::class.java)
+                scheduleDataBean?.toScheduleEditViewModel(scheduleEditViewModel)
+            }
+        }
+
+    //标签回调
+    private val labelLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == AppCompatActivity.RESULT_OK) {
+                val stringExtra = it.data?.getStringExtra("labelList")
+                loge("$stringExtra")
+                val labelListSource = JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
+                scheduleEditViewModel.labelListLiveData.value = labelListSource
+            }
+        }
+    //完整版返回数据
+    private val fullEditionScheduleLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == AppCompatActivity.RESULT_OK) {
+                val booleanExtra = it.data?.getBooleanExtra("saveOrModifyResult", false)?:false
+                if (booleanExtra){
+                    loge("日程添加成功")
+                    if (showAddScheduleV2Dialog != null && showAddScheduleV2Dialog?.isShowing == true) {
+                        showAddScheduleV2Dialog?.dismiss()
+                    }
+                    //清除数据
+                    scheduleEditViewModel.clearData()
+                    return@registerForActivityResult
+                }
+                val stringExtra = it.data?.getStringExtra("data")
+                loge("$stringExtra")
+                val scheduleDataBean = JSON.parseObject(stringExtra, ScheduleDataBean::class.java)
+                scheduleDataBean.toScheduleEditViewModel(scheduleEditViewModel)
+            }
+        }
 
     private fun setFragment(index: Int) {
         if (!(index == 0 || index == 1 || index == 2 || index == 3)) {

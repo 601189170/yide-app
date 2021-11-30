@@ -61,7 +61,8 @@ class SchoolCalendarViewModel : ViewModel() {
             return
         }
         val map = HashMap<String, Any>()
-        map["id"] = "1461949270799777793"
+//        map["id"] = "1461949270799777793"
+        map["id"] = id
         map["dayOfMonth"] = dayOfMonth
         val toJSONString = JSON.toJSONString(map)
         loge("查询校历：$toJSONString")

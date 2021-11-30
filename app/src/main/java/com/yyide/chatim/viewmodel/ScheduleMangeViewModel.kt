@@ -37,6 +37,9 @@ class ScheduleMangeViewModel : ViewModel() {
     val requestAllScheduleResult:MutableLiveData<Boolean> = MutableLiveData()
     //显示日期
     val curDateTime:MutableLiveData<DateTime> = MutableLiveData()
+
+    //月列表添加日程
+    val monthAddSchedule:MutableLiveData<DateTime> = MutableLiveData()
     init {
         curDateTime.value = DateTime.now()
     }

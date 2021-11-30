@@ -7,9 +7,11 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -50,6 +52,7 @@ import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.databinding.DialogAddLabelLayoutBinding;
+import com.yyide.chatim.databinding.DialogAddScheduleInputV2Binding;
 import com.yyide.chatim.databinding.DialogFaceRecognitionUserProtocolBinding;
 import com.yyide.chatim.databinding.DialogLabelTopMenuSelectLayoutBinding;
 import com.yyide.chatim.databinding.DialogRepetitionScheduleModifyBinding;
@@ -518,7 +521,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showMonthScheduleListDialog(Context context, String date, List<ScheduleData> scheduleList, LifecycleOwner lifecycleOwner) {
+    public static void showMonthScheduleListDialog(Context context, String date, List<ScheduleData> scheduleList, LifecycleOwner lifecycleOwner, OnScheduleAddSimpleListener onScheduleAddSimpleListener) {
         DialogScheduleMonthListBinding binding = DialogScheduleMonthListBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -548,8 +551,9 @@ public class DialogUtil {
         binding.clAddSchedule.setOnClickListener(v -> {
             final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(date);
             final DateTime nowTime = ScheduleDaoUtil.INSTANCE.dateTimeJointNowTime(dateTime);
+            onScheduleAddSimpleListener.add(v,nowTime);
             mDialog.dismiss();
-            DialogUtil.showAddScheduleDialog(context, lifecycleOwner,nowTime);
+            //DialogUtil.showAddScheduleDialog(context, lifecycleOwner,nowTime);
         });
 
         binding.tvDate.setText(DateUtils.formatTime(date,"","",true));
@@ -1043,6 +1047,83 @@ public class DialogUtil {
         showKeyboard(context, editView);
     }
 
+    /**
+     * 添加日程 新v2
+     * @param context
+     * @param date
+     */
+    public static Dialog showAddScheduleV2Dialog(Context context, LifecycleOwner lifecycleOwner,ScheduleEditViewModel scheduleEditViewModel, DateTime date,OnScheduleAddListener onScheduleAddListener) {
+        DialogAddScheduleInputV2Binding binding = DialogAddScheduleInputV2Binding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.inputDialog);
+        mDialog.setContentView(rootView);
+        if (date == null){
+            date = DateTime.now();
+        }
+        final List<DateTime> dateTimes = ScheduleDaoUtil.INSTANCE.defaultTwoTimeListOfDateTime(date);
+        final DateTime time1 = dateTimes.get(0);
+        final DateTime time2 = dateTimes.get(1);
+        scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1,"yyyy-MM-dd HH:mm:ss"));
+        scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2,"yyyy-MM-dd HH:mm:ss"));
+        String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1,"MM月dd日 HH:mm");
+        final InputFilter[] inputFilter = {new MaxTextLengthFilter(20)};
+        binding.edit.setFilters(inputFilter);
+        binding.tvDate.setText(time);
+        binding.btnFinish.setOnClickListener(v -> {
+            String title = binding.edit.getText().toString();
+            if (TextUtils.isEmpty(title)) {
+                ToastUtils.showShort("你还没告诉我您要准备做什么！");
+                return;
+            }
+            //日程提交
+            mDialog.dismiss();
+            scheduleEditViewModel.getScheduleTitleLiveData().setValue(title);
+            onScheduleAddListener.onFinish(v);
+        });
+        binding.edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                scheduleEditViewModel.getScheduleTitleLiveData().setValue(s.toString());
+            }
+        });
+        scheduleEditViewModel.getStartTimeLiveData().observe(lifecycleOwner, startTime -> {
+            if (TextUtils.isEmpty(startTime)){
+                return;
+            }
+            final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(startTime);
+            binding.tvDate.setText(dateTime.toString("MM月dd日 HH:mm"));
+        });
+        binding.tvLabel.setOnClickListener(onScheduleAddListener::onLabel);
+        binding.ivLabel.setOnClickListener(onScheduleAddListener::onLabel);
+        binding.tvDate.setOnClickListener(onScheduleAddListener::onDate);
+        binding.ivTime.setOnClickListener(onScheduleAddListener::onDate);
+        //切换版本
+        binding.tvEditionSwitch.setOnClickListener(onScheduleAddListener::onSwitch);
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        //设置宽高
+        lp.width = (int) context.getResources().getDisplayMetrics().widthPixels;
+        rootView.measure(0, 0);
+        lp.height = rootView.getMeasuredHeight();
+        lp.dimAmount = 0.75f; //半透明背景的灰度 在0.0f和1.0f之间，0.0f完全不暗，1.0f全暗
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+        showKeyboard(context, binding.edit);
+        return mDialog;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void showTopMenuLabelDialog(Context context, View view, LifecycleOwner lifecycleOwner, OnLabelItemListener onLabelItemListener){
         List<LabelListRsp.DataBean> labelList = new ArrayList<LabelListRsp.DataBean>();
@@ -1339,6 +1420,22 @@ public class DialogUtil {
 
         void onEnsure(View view);
     }
+
+    public interface OnScheduleAddListener{
+        //完成
+        void onFinish(View view);
+        //时间
+        void onDate(View view);
+        //标签
+        void onLabel(View view);
+        //版本切换
+        void onSwitch(View view);
+    }
+
+   public interface OnScheduleAddSimpleListener{
+       //完成
+       void add(View view,DateTime nowTime);
+   }
 
     public interface OnMenuItemListener {
         void onMenuItem(int index);

@@ -165,7 +165,9 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
         if (value!=null && value[dateTime] != null){
             val mutableList = value[dateTime]
             val showDataTime = dateTime.toString("yyyy-MM-dd HH:mm:ss")
-            DialogUtil.showMonthScheduleListDialog(requireContext(),showDataTime,mutableList,this)
+            DialogUtil.showMonthScheduleListDialog(requireContext(),showDataTime,mutableList,this){_,date->
+                scheduleViewModel.monthAddSchedule.value = date
+            }
         }
 
     }
