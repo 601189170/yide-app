@@ -40,12 +40,16 @@ object JumpUtil {
                 mActivity.startActivity(intent)
             }
             "考勤" -> {
-                if (!SpData.getIdentityInfo().staffIdentity()) {
-                    val intent = Intent(mActivity, StatisticsActivity::class.java)
-                    mActivity.startActivity(intent)
+                if (SpData.getClassInfo() != null) {
+                    if (!SpData.getIdentityInfo().staffIdentity()) {
+                        val intent = Intent(mActivity, StatisticsActivity::class.java)
+                        mActivity.startActivity(intent)
+                    } else {
+                        val intent = Intent(mActivity, AttendanceActivity::class.java)
+                        mActivity.startActivity(intent)
+                    }
                 } else {
-                    val intent = Intent(mActivity, AttendanceActivity::class.java)
-                    mActivity.startActivity(intent)
+                    ToastUtils.showShort("名下无班级考勤");
                 }
             }
             "待办" -> {

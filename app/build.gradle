@@ -29,8 +29,8 @@ android {
         applicationId "com.yyide.chatim"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 108
-        versionName "1.0.8"
+        versionCode 109
+        versionName "1.0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -88,48 +88,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    //多渠道打包
-/*    productFlavors {
-        oppo {
-            applicationId = "com.test.oppo"
-            //不同渠道配置不同参数
-            buildConfigField "int", "TEST_VALUE", "1"
-            buildConfigField "String", "TEST_NAME", "oppo"
-        }
-        vivo {
-            applicationId = "com.test.vivo"
-            //不同渠道配置不同参数
-            buildConfigField "int", "TEST_VALUE", "1"
-            buildConfigField "String", "TEST_NAME", "vivo"
-        }
-        360 {
-            applicationId = "com.test.360"
-            //不同渠道配置不同参数
-            buildConfigField "int", "TEST_VALUE", "1"
-            buildConfigField "String", "TEST_NAME", "360"
-        }
-        xiaomi {
-            applicationId = "com.test.xiaomi"
-            //不同渠道配置不同参数
-            buildConfigField "int", "TEST_VALUE", "1"
-            buildConfigField "String", "TEST_NAME", "xiaomi"
-        }
-        huawei {
-            applicationId = "com.test.huawei"
-            //不同渠道配置不同参数
-            buildConfigField "int", "TEST_VALUE", "2"
-            buildConfigField "String", "TEST_NAME", "huawei"
-        }
-        productFlavors.all {
-                //遍历productFlavors多渠道，设置渠道号（xiaomi 、huawei）
-            flavor -> flavor.manifestPlaceholders.put("CHANNEL", name)
-        }
-    }*/
 }
 //构建时间
 static def generateTime() {
-    return new Date().format("yyyy_MM_dd_HH_mm_ss")
+    return new Date().format("yyyy_MM_dd_HH_mm")
 }
 
 dependencies {

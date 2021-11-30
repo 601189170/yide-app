@@ -282,6 +282,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             if (secondTime - firstTime < 2000) {
                 ActivityUtils.finishAllActivities();
             } else {
+                setTab(0, 0);
                 Toast.makeText(getApplicationContext(), "再按一次返回键退出", Toast.LENGTH_SHORT).show();
                 firstTime = System.currentTimeMillis();
             }

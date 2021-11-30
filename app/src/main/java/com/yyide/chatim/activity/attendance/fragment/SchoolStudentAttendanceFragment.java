@@ -99,7 +99,7 @@ public class SchoolStudentAttendanceFragment extends BaseFragment {
                         }
                     }
                     mViewBinding.tvSign.setText("1".equals(itemStudents.getAttendanceSignInOut()) ? "签退率" : "出勤率");
-                    mViewBinding.tvAbsenceTitle.setText("1".equals(itemStudents.getAttendanceSignInOut()) ? "未签退" : "缺勤");
+                    //mViewBinding.tvAbsenceTitle.setText("1".equals(itemStudents.getAttendanceSignInOut()) ? "未签退" : "缺勤");
                     mViewBinding.tvLateNum.setText(("1".equals(itemStudents.getAttendanceSignInOut()) ? itemStudents.getEarly() : itemStudents.getLate()) + "");
                     mViewBinding.tvLeaveNum.setText(itemStudents.getLeave() + "");
                     mViewBinding.tvAbsenteeismNum.setText(itemStudents.getAbsenteeism() + "");

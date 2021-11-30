@@ -271,7 +271,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             mViewBinding.tvSign.setText("1".equals(item.getAttendanceSignInOut()) ? "签退率" : "出勤率");
             mViewBinding.tvLateName.setText("1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");
             mViewBinding.tvLate.setText("1".equals(item.getAttendanceSignInOut()) ? "早退" : "迟到");
-            mViewBinding.tvAbsenteeismName.setText("1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
+            //mViewBinding.tvAbsenteeismName.setText("1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
             mViewBinding.tvAbsenteeism.setText("1".equals(item.getAttendanceSignInOut()) ? "未签退" : "缺勤");
             mViewBinding.tvAttendanceRate.setText(item.getSignInOutRate());
             if (!TextUtils.isEmpty(item.getSignInOutRate())) {
