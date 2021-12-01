@@ -99,6 +99,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -1075,6 +1077,10 @@ public class DialogUtil {
                 ToastUtils.showShort("你还没告诉我您要准备做什么！");
                 return;
             }
+            if (isHasEmoji(title)){
+                ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!");
+                return;
+            }
             //日程提交
             mDialog.dismiss();
             scheduleEditViewModel.getScheduleTitleLiveData().setValue(title);
@@ -1443,5 +1449,14 @@ public class DialogUtil {
 
     public interface OnLabelItemListener{
         void labelItem(List<LabelListRsp.DataBean> labels);
+    }
+
+    /**
+     判断字符串是否含有Emoji表情
+     **/
+    public static boolean isHasEmoji(String reviewerName) {
+        Pattern pattern = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]");
+        Matcher matcher = pattern.matcher(reviewerName);
+        return matcher.find();
     }
 }

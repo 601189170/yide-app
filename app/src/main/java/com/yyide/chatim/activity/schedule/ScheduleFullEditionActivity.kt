@@ -27,6 +27,7 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleFullEditionBinding
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.*
+import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 import com.yyide.chatim.viewmodel.toScheduleDataBean
@@ -318,8 +319,14 @@ class ScheduleFullEditionActivity : BaseActivity() {
         }
         //新增日程
         scheduleFullEditionBinding.btnCommit.setOnClickListener {
-            if (TextUtils.isEmpty(scheduleFullEditionBinding.etScheduleTitle.text.toString())){
+            val title = scheduleFullEditionBinding.etScheduleTitle.text.toString()
+            if (TextUtils.isEmpty(title)){
                 ToastUtils.showShort("需要输入日程名称")
+                return@setOnClickListener
+            }
+
+            if (DialogUtil.isHasEmoji(title)){
+                ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!")
                 return@setOnClickListener
             }
             scheduleEditViewModel.scheduleTitleLiveData.value = scheduleFullEditionBinding.etScheduleTitle.text.toString()
