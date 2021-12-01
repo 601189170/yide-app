@@ -652,13 +652,14 @@ public class StudentWeekStatisticsFragment extends BaseMvpFragment<StudentWeekMo
             }
             mViewBinding.layoutHeadStudentEvent.tvWeeklyStatisticalSubhead.setText(getString(R.string.statistical_time));
             //考勤进度
-            final String rate = weeksMonthListBean.getSignInOutRate();
+            String rate = weeksMonthListBean.getSignInOutRate();
             try {
                 final float aFloat = Float.parseFloat(rate);
                 int rateInt = (int) (float) aFloat;
                 mViewBinding.layoutHeadStudentEvent.progress.setProgress(rateInt, true);
             } catch (Exception exception) {
                 Log.e(TAG, "onViewCreated: " + exception.getLocalizedMessage());
+                rate = "--";
             }
 
 
