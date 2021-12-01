@@ -241,6 +241,8 @@ open class ParentsWeeklyFragment : BaseFragment() {
         if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().studentName)) {
             viewBinding.tvEvent.text = SpData.getClassInfo().studentName + "的周报"
             studentName = SpData.getClassInfo().studentName
+        } else {
+            viewBinding.tvEvent.text = "暂无周报"
         }
         val classList = SpData.getClassList()
         if (classList != null) {

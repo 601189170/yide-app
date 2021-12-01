@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
@@ -114,7 +115,11 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
     @OnClick({R.id.constraintLayout})
     public void click(View v) {
 //        AttendanceActivity.start(getActivity(), 0);
-        startActivity(new Intent(getContext(), StatisticsActivity.class));
+        if (SpData.getClassInfo() != null) {
+            startActivity(new Intent(getContext(), StatisticsActivity.class));
+        } else {
+            ToastUtils.showShort("名下无班级考勤");
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -146,6 +146,8 @@ class TeacherWeeklyFragment : BaseFragment() {
     private fun initClassMenu() {
         if (SpData.getClassInfo() != null) {
             viewBinding.tvEvent.text = SpData.getClassInfo().classesName + "的周报"
+        } else {
+            viewBinding.tvEvent.text = "无班级周报"
         }
         val classList = SpData.getDuplicationClassList()
         val adapterEvent = ClassAdapter()
