@@ -642,7 +642,7 @@ object ScheduleDaoUtil {
                 }
             }
         }
-        listAllSchedule2.sort()
+        //listAllSchedule2.sort()
         return listAllSchedule2
     }
 

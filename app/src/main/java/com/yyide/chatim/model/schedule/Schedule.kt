@@ -2,6 +2,7 @@ package com.yyide.chatim.model.schedule
 
 import com.blankj.utilcode.util.LogUtils
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.utils.DateUtils
 import org.joda.time.DateTime
 
@@ -66,6 +67,11 @@ data class DayOfMonth(
     var scheduleData: ScheduleData
 ) : Comparable<DayOfMonth> {
     override fun compareTo(other: DayOfMonth): Int {
+        val dateTime2 = ScheduleDaoUtil.toDateTime(this.scheduleData.moreDayStartTime)
+        val dateTimeOther2 = ScheduleDaoUtil.toDateTime(other.scheduleData.moreDayStartTime)
+        if (this.dateTime.compareTo(other.dateTime) == 0){
+            return dateTime2.compareTo(dateTimeOther2)
+        }
         return this.dateTime.compareTo(other.dateTime)
     }
 

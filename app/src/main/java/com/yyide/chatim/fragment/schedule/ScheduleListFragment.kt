@@ -118,8 +118,10 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
             }
             if (scrollOrientation == -1) {
                 list.addAll(0, it)
+                scheduleListAdapter.setList(list)
                 if (update) {
                     update = false
+                    blankPage.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
                     scheduleViewModel.curDateTime.value?.also {
                         if (scroll) {
                             scroll = false
@@ -131,8 +133,9 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                 }
             } else {
                 list.addAll(it)
+                scheduleListAdapter.setList(list)
             }
-            scheduleListAdapter.setList(list)
+            //scheduleListAdapter.setList(list)
         })
         //重置更新列表时调用，和向上加载，向下加载区分开来
         scheduleListViewViewModel.updateListViewData.observe(requireActivity()){
