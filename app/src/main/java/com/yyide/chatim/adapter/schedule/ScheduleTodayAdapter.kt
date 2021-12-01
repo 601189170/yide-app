@@ -36,28 +36,15 @@ class ScheduleTodayAdapter(data: List<ScheduleData>) :
     fun commonConvert(holder: BaseViewHolder, item: ScheduleData) {
         loge("ScheduleData ${JSON.toJSONString(item)}")
         holder.setText(R.id.tv_schedule_name, item.name)
+        val target = if (item.isAllDay != "1") "MM月dd日 HH:mm" else "MM月dd日"
         if (item.moreDay == 1) {
-            val formatTime = DateUtils.formatTime(item.moreDayStartTime, "", "", true)
-            holder.setText(
-                R.id.tv_schedule_time_interval,
-                "$formatTime    " +
-                        DateUtils.formatTime(
-                            item.moreDayStartTime,
-                            "",
-                            "HH:mm"
-                        ) + "-" + DateUtils.formatTime(item.moreDayEndTime, "", "HH:mm")
-            )
+            val startTime = DateUtils.formatTime(item.moreDayStartTime, "", target)
+            val endTime = DateUtils.formatTime(item.moreDayEndTime, "", target)
+            holder.setText(R.id.tv_schedule_time_interval, "$startTime-$endTime")
         } else {
-            val formatTime = DateUtils.formatTime(item.startTime, "", "", true)
-            holder.setText(
-                R.id.tv_schedule_time_interval,
-                "$formatTime    " +
-                        DateUtils.formatTime(
-                            item.startTime,
-                            "",
-                            "HH:mm"
-                        ) + "-" + DateUtils.formatTime(item.endTime, "", "HH:mm")
-            )
+            val startTime = DateUtils.formatTime(item.startTime, "", target)
+            val endTime = DateUtils.formatTime(item.endTime, "", target)
+            holder.setText(R.id.tv_schedule_time_interval, "$startTime-$endTime")
         }
 
         loadImage(
