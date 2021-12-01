@@ -277,8 +277,13 @@ class ScheduleEditActivity : BaseActivity() {
         }
         scheduleEditBinding.btnCommit.visibility = if (promoter) View.VISIBLE else View.GONE
         scheduleEditBinding.btnCommit.setOnClickListener {
-            if (TextUtils.isEmpty(scheduleEditBinding.etScheduleTitle.text.toString())){
+            val title = scheduleEditBinding.etScheduleTitle.text.toString()
+            if (TextUtils.isEmpty(title)){
                 ToastUtils.showShort("需要输入日程名称")
+                return@setOnClickListener
+            }
+            if (DialogUtil.isHasEmoji(title)){
+                ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!")
                 return@setOnClickListener
             }
 //            val rule = sourceRepetitionRule?.rule

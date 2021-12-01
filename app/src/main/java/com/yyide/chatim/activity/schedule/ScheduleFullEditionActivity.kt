@@ -329,7 +329,7 @@ class ScheduleFullEditionActivity : BaseActivity() {
                 ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!")
                 return@setOnClickListener
             }
-            scheduleEditViewModel.scheduleTitleLiveData.value = scheduleFullEditionBinding.etScheduleTitle.text.toString()
+            scheduleEditViewModel.scheduleTitleLiveData.value = title
             scheduleEditViewModel.startTimeLiveData.value = dateStart.get()
             scheduleEditViewModel.endTimeLiveData.value = dateEnd.get()
             scheduleEditViewModel.saveOrModifySchedule(false)
