@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.schedule
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
@@ -12,6 +13,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
@@ -36,18 +38,24 @@ import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpacesItemDecoration
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
+import java.util.concurrent.atomic.AtomicReference
 
 class ScheduleEditActivity : BaseActivity() {
     lateinit var scheduleEditBinding: ActivityScheduleEditBinding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
     private val scheduleMangeViewModel: ScheduleMangeViewModel by viewModels()
+    var dateStart = AtomicReference("")
+    var dateEnd = AtomicReference("")
     val list = getList()
     val list2 = getList2()
     var repetition:Boolean = false
     //否是是发起人
     private var promoter = false
+    //开启编辑模式
+    private var enableEditMode = false
     private var sourceRepetitionRule: Repetition? = null
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scheduleEditBinding = ActivityScheduleEditBinding.inflate(layoutInflater)
@@ -59,10 +67,90 @@ class ScheduleEditActivity : BaseActivity() {
         return R.layout.activity_schedule_edit
     }
 
+    /**
+     * 设置编辑模式
+     * @param enable true设置可编辑 false设置不可编辑
+     */
+    private fun editEnable(enable:Boolean){
+        val editable = enable && promoter
+        //标题
+        scheduleEditBinding.top.title.text = if (editable) "编辑日程" else "日程详情"
+        scheduleEditBinding.top.ivEdit.visibility = if (!editable && promoter) View.VISIBLE else View.GONE
+        //日程名称
+        scheduleEditBinding.etScheduleTitle.isEnabled = editable
+        //日程完成状态
+        scheduleEditBinding.checkBox.isEnabled = editable
+        scheduleEditBinding.checkBox.visibility = if (editable) View.VISIBLE else View.GONE
+        val status = scheduleEditViewModel.scheduleStatusLiveData.value
+        if (status != "1") {
+            scheduleEditBinding.checkBox.visibility = if (editable) View.VISIBLE else View.GONE
+        } else {
+            scheduleEditBinding.checkBox.visibility = View.VISIBLE
+        }
+        //日期选择
+        if (!editable) {
+            scheduleEditBinding.llVLine.visibility = View.GONE
+            scheduleEditBinding.dateTimePicker.visibility = View.GONE
+        }
+        scheduleEditBinding.clStartTime.isEnabled = editable
+        scheduleEditBinding.clEndTime.isEnabled = editable
+        scheduleEditBinding.checkBoxAllDay.isEnabled = editable
+        //重复性选择
+        scheduleEditBinding.ivRepetitionArrow.visibility = if (editable) View.VISIBLE else View.GONE
+        scheduleEditBinding.clRepetition.isEnabled = editable
+        //提醒选择
+        scheduleEditBinding.ivRemindArrow.visibility = if (editable) View.VISIBLE else View.GONE
+        scheduleEditBinding.clRemind.isEnabled = editable
+        //便签及编辑新增按钮
+        scheduleEditBinding.btnAddLabel.visibility = if (editable) View.VISIBLE else View.GONE
+        adapter.setList(labelList)
+        //参与人participant
+        scheduleEditBinding.clParticipant.isEnabled = editable
+        val participant = scheduleEditViewModel.participantList.value?: mutableListOf()
+        if (participant.isEmpty()) {
+            scheduleEditBinding.clParticipant.visibility =
+                if (editable) View.VISIBLE else View.GONE
+        } else {
+            scheduleEditBinding.clParticipant.visibility = View.VISIBLE
+        }
+
+        //地址
+        scheduleEditBinding.clAddress.isEnabled = editable
+        val siteName = scheduleEditViewModel.siteLiveData.value
+        if (siteName != null) {
+            scheduleEditBinding.clAddress.visibility = if (enable) View.VISIBLE else View.GONE
+        } else {
+            scheduleEditBinding.clAddress.visibility = View.GONE
+        }
+
+        //备注 remark
+        scheduleEditBinding.clRemark.isEnabled = editable
+        val remark = scheduleEditViewModel.remarkLiveData.value
+        if (TextUtils.isEmpty(remark)) {
+            scheduleEditBinding.clRemark.visibility = View.GONE
+        } else {
+            scheduleEditBinding.clRemark.visibility = if (enable) View.VISIBLE else View.GONE
+        }
+        scheduleEditBinding.edit.isEnabled = editable
+
+        //保存提交
+        scheduleEditBinding.btnCommit.visibility = if (enable) View.VISIBLE else View.GONE
+
+        //底部文本
+        scheduleEditBinding.tvScheduleCreateTime.visibility = if (enable) View.GONE else View.VISIBLE
+        val format = getString(R.string.schedule_create_time_and_status)
+        val startTime = scheduleEditViewModel.startTimeLiveData.value
+        val statusText = if (status == "1") "已完成" else "待完成"
+        val bottomText = String.format(format,DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm"),statusText)
+        scheduleEditBinding.tvScheduleCreateTime.text = bottomText
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         scheduleEditBinding.clParticipant.visibility = if (SpData.getIdentityInfo().staffIdentity()) View.VISIBLE else View.GONE
         val stringExtra = intent.getStringExtra("data")
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
+        val format = getString(R.string.schedule_create_time_and_status)
         scheduleData?.let {
             //显示日程详情
             //判断是否是发起人，只有发起人才能编辑日程
@@ -171,10 +259,20 @@ class ScheduleEditActivity : BaseActivity() {
             if (TextUtils.isEmpty(it.remark) && TextUtils.isEmpty(it.siteId) && !promoter){
                 scheduleEditBinding.vLine4.visibility = View.GONE
             }
+
+            //底部文本
+            val statusText = if (it.status == "1") "已完成" else "待完成"
+            val bottomText = String.format(format,DateUtils.formatTime(it.startTime, "", "MM月dd日 HH:mm"),statusText)
+            scheduleEditBinding.tvScheduleCreateTime.text = bottomText
         }
 
-        scheduleEditBinding.top.title.text = "日程编辑"
+        scheduleEditBinding.top.title.text = "日程详情"
         scheduleEditBinding.top.backLayout.setOnClickListener {
+            if (enableEditMode) {
+                enableEditMode = false
+                editEnable(false)
+                return@setOnClickListener
+            }
             finish()
         }
         scheduleEditBinding.btnCommit.visibility = if (promoter) View.VISIBLE else View.GONE
@@ -203,6 +301,7 @@ class ScheduleEditActivity : BaseActivity() {
                 scheduleEditViewModel.saveOrModifySchedule(true)
             }
         }
+        //删除
         scheduleEditBinding.top.ivRight.visibility = if (promoter) View.VISIBLE else View.GONE
         scheduleEditBinding.top.ivRight.setOnClickListener {
             DialogUtil.showScheduleDelDialog(
@@ -220,6 +319,12 @@ class ScheduleEditActivity : BaseActivity() {
 
                 })
         }
+        //编辑
+        scheduleEditBinding.top.ivEdit.visibility = if (promoter) View.VISIBLE else View.GONE
+        scheduleEditBinding.top.ivEdit.setOnClickListener {
+            enableEditMode = true
+            editEnable(enableEditMode)
+        }
 
         scheduleEditBinding.checkBox.isEnabled = promoter
         scheduleEditBinding.checkBox.setOnCheckedChangeListener { _, isChecked ->
@@ -230,6 +335,143 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleEditBinding.etScheduleTitle.isEnabled = promoter
         scheduleEditBinding.edit.addTextChangedListener {
             scheduleEditViewModel.remarkLiveData.value = it.toString()
+        }
+        scheduleEditBinding.etScheduleTitle.addTextChangedListener{
+            scheduleEditViewModel.scheduleTitleLiveData.value = it.toString()
+        }
+
+        //日期操作
+        scheduleEditBinding.clStartTime.setOnClickListener {
+            if (scheduleEditBinding.llVLine.visibility == View.GONE) {
+                scheduleEditBinding.llVLine.visibility = View.VISIBLE
+                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
+            }
+            scheduleEditBinding.vDateTopMarkLeft.visibility = View.VISIBLE
+            scheduleEditBinding.vDateTopMarkRight.visibility = View.INVISIBLE
+            scheduleEditBinding.dateTimePicker.setDefaultMillisecond(
+                DateUtils.formatTime(
+                    dateStart.get(),
+                    ""
+                )
+            )
+        }
+
+        scheduleEditBinding.clEndTime.setOnClickListener {
+            if (scheduleEditBinding.llVLine.visibility == View.GONE) {
+                scheduleEditBinding.llVLine.visibility = View.VISIBLE
+                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
+            }
+            scheduleEditBinding.vDateTopMarkLeft.visibility = View.INVISIBLE
+            scheduleEditBinding.vDateTopMarkRight.visibility = View.VISIBLE
+            scheduleEditBinding.dateTimePicker.setDefaultMillisecond(
+                DateUtils.formatTime(
+                    dateEnd.get(),
+                    ""
+                )
+            )
+        }
+
+        val allDay = scheduleEditViewModel.allDayLiveData.value
+        val startTime = scheduleEditViewModel.startTimeLiveData.value
+        val endTime = scheduleEditViewModel.endTimeLiveData.value
+        if (allDay != null && allDay) {
+            scheduleEditBinding.checkBoxAllDay.isChecked = true
+            scheduleEditBinding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2)
+            scheduleEditBinding.tvTimeStart.visibility = View.GONE
+            scheduleEditBinding.tvTimeEnd.visibility = View.GONE
+        }
+        scheduleEditBinding.checkBoxAllDay.setOnCheckedChangeListener { _, isChecked ->
+            //设置是否全天
+            scheduleEditViewModel.allDayLiveData.value = isChecked
+            if (isChecked) {
+                scheduleEditBinding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2)
+                scheduleEditBinding.tvTimeStart.visibility = View.GONE
+                scheduleEditBinding.tvTimeEnd.visibility = View.GONE
+                //修改提醒类型 全天
+                val optionalRemind =
+                    list2.stream().filter(Remind::checked).findFirst()
+                if (optionalRemind.isPresent) {
+                    val remind = optionalRemind.get()
+                    scheduleEditViewModel.remindLiveData.value = remind
+                    scheduleEditBinding.tvRemind.text = remind.title
+                } else {
+                    scheduleEditViewModel.remindLiveData.value = Remind.getNotRemind()
+                    scheduleEditBinding.tvRemind.text = "不提醒"
+                }
+            } else {
+                scheduleEditBinding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation)
+                scheduleEditBinding.tvTimeStart.visibility = View.VISIBLE
+                scheduleEditBinding.tvTimeEnd.visibility = View.VISIBLE
+                //修改提醒类型 非全天
+                val optionalRemind =
+                    list.stream().filter(Remind::checked).findFirst()
+                if (optionalRemind.isPresent) {
+                    val remind = optionalRemind.get()
+                    scheduleEditViewModel.remindLiveData.value = remind
+                    scheduleEditBinding.tvRemind.text = remind.title
+                } else {
+                    scheduleEditViewModel.remindLiveData.value = Remind.getNotRemind()
+                    scheduleEditBinding.tvRemind.text = "不重复"
+                }
+            }
+        }
+
+        scheduleEditBinding.dateTimePicker.setOnDateTimeChangedListener { aLong ->
+            val date = DateUtils.getDate(aLong)
+            val time = DateUtils.formatTime(date, "", "", true)
+            loge("showEditScheduleDialog: $aLong,date=$date, time=$time")
+            if (scheduleEditBinding.vDateTopMarkLeft.visibility == View.VISIBLE) {
+                //左边选中设置左边的时间数据
+                scheduleEditBinding.tvDateStart.text = time
+                if (!scheduleEditBinding.checkBox.isChecked) {
+                    scheduleEditBinding.tvTimeStart.text =
+                        DateUtils.formatTime(date, "", "HH:mm")
+                }
+                dateStart.set(date)
+            } else if (scheduleEditBinding.vDateTopMarkRight.visibility == View.VISIBLE) {
+                //右边被选中设置右边的时间数据
+                scheduleEditBinding.tvDateEnd.text = time
+                if (!scheduleEditBinding.checkBox.isChecked) {
+                    scheduleEditBinding.tvTimeEnd.text =
+                        DateUtils.formatTime(date, "", "HH:mm")
+                }
+                dateEnd.set(date)
+            } else {
+                //第一次设置两边的数据
+                if (TextUtils.isEmpty(startTime)) {
+                    scheduleEditBinding.tvDateStart.text = time
+                    if (!scheduleEditBinding.checkBox.isChecked) {
+                        scheduleEditBinding.tvTimeStart.text =
+                            DateUtils.formatTime(date, "", "HH:mm")
+                    }
+                    dateStart.set(date)
+                } else {
+                    scheduleEditBinding.tvDateStart.text =
+                        DateUtils.formatTime(startTime, "", "", true)
+                    if (!scheduleEditBinding.checkBox.isChecked) {
+                        scheduleEditBinding.tvTimeStart.text =
+                            DateUtils.formatTime(startTime, "", "HH:mm")
+                    }
+                    dateStart.set(startTime)
+                }
+                if (TextUtils.isEmpty(endTime)) {
+                    scheduleEditBinding.tvDateEnd.text = time
+                    if (!scheduleEditBinding.checkBox.isChecked) {
+                        scheduleEditBinding.tvTimeEnd.text =
+                            DateUtils.formatTime(date, "", "HH:mm")
+                    }
+                    dateEnd.set(date)
+                } else {
+                    scheduleEditBinding.tvDateEnd.text =
+                        DateUtils.formatTime(endTime, "", "", true)
+                    if (!scheduleEditBinding.checkBox.isChecked) {
+                        scheduleEditBinding.tvTimeEnd.text =
+                            DateUtils.formatTime(endTime, "", "HH:mm")
+                    }
+                    dateEnd.set(endTime)
+                }
+            }
+            null
         }
 
         scheduleEditBinding.btnAddLabel.visibility = if (promoter) View.VISIBLE else View.GONE
@@ -269,18 +511,18 @@ class ScheduleEditActivity : BaseActivity() {
             startActivityForResult(intent, REQUEST_CODE_SITE_SELECT)
         }
 
-        scheduleEditBinding.ivDateArrow.visibility = if (promoter) View.VISIBLE else View.GONE
-        scheduleEditBinding.clDate.isEnabled = promoter
-        scheduleEditBinding.clDate.setOnClickListener {
-            val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
-            val allDay = scheduleEditViewModel.allDayLiveData.value
-            val startTime = scheduleEditViewModel.startTimeLiveData.value
-            val endTime = scheduleEditViewModel.endTimeLiveData.value
-            intent.putExtra("allDay", allDay)
-            intent.putExtra("startTime", startTime)
-            intent.putExtra("endTime", endTime)
-            startActivityForResult(intent, REQUEST_CODE_DATE_SELECT)
-        }
+
+//        scheduleEditBinding.clDate.isEnabled = promoter
+//        scheduleEditBinding.clDate.setOnClickListener {
+//            val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
+//            val allDay = scheduleEditViewModel.allDayLiveData.value
+//            val startTime = scheduleEditViewModel.startTimeLiveData.value
+//            val endTime = scheduleEditViewModel.endTimeLiveData.value
+//            intent.putExtra("allDay", allDay)
+//            intent.putExtra("startTime", startTime)
+//            intent.putExtra("endTime", endTime)
+//            startActivityForResult(intent, REQUEST_CODE_DATE_SELECT)
+//        }
 
         scheduleEditBinding.clParticipant.isEnabled = promoter
         scheduleEditBinding.clParticipant.setOnClickListener {
@@ -325,13 +567,17 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleMangeViewModel.requestAllScheduleResult.observe(this, {
             if (it) {
                 ToastUtils.showShort("修改日程成功")
-                finish()
+                enableEditMode = false
+                editEnable(enableEditMode)
+                //finish()
                 return@observe
             }
             ToastUtils.showShort("修改日程失败")
-            finish()
+            enableEditMode = false
+            editEnable(enableEditMode)
+            //finish()
         })
-
+        editEnable(enableEditMode)
         //限制输入框字数
         scheduleEditBinding.edit.filters = arrayOf<InputFilter>(MaxTextLengthFilter(200))
         scheduleEditBinding.etScheduleTitle.filters = arrayOf<InputFilter>(MaxTextLengthFilter(20))
@@ -341,7 +587,7 @@ class ScheduleEditActivity : BaseActivity() {
         BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_label_flow_list) {
         override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             holder.getView<ImageView>(R.id.iv_del).visibility =
-                if (promoter) View.VISIBLE else View.INVISIBLE
+                if (enableEditMode) View.VISIBLE else View.INVISIBLE
             val drawable = GradientDrawable()
             drawable.cornerRadius = DisplayUtils.dip2px(this@ScheduleEditActivity, 2f).toFloat()
             drawable.setColor(ColorUtil.parseColor(item.colorValue))
@@ -349,7 +595,7 @@ class ScheduleEditActivity : BaseActivity() {
             holder.setText(R.id.tv_label, item.labelName)
             holder.itemView.setOnClickListener {
                 loge("item=$item")
-                if (!promoter){
+                if (!enableEditMode){
                     loge("日程便签只有发起人才能删除！")
                     return@setOnClickListener
                 }
@@ -475,7 +721,7 @@ class ScheduleEditActivity : BaseActivity() {
         }
     }
 
-    private fun showSelectedParticipant(list: MutableList<ParticipantRsp.DataBean.ParticipantListBean>) {
+    private fun showSelectedParticipant(list: List<ParticipantRsp.DataBean.ParticipantListBean>) {
         val stringBuilder = StringBuilder()
         list.map { it.realname }.forEach {
             stringBuilder.append(it).append("  ")

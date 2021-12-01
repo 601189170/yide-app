@@ -41,13 +41,23 @@
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
             android:visibility="gone" />
-
+        <ImageView
+            android:id="@+id/iv_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/schedule_edit_icon"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/dp_40"
+            android:paddingStart="@dimen/dp_20"
+            android:paddingEnd="@dimen/dp_20"
+            android:visibility="gone"
+            />
         <ImageView
             android:id="@+id/iv_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:paddingStart="@dimen/dp_20"
+            android:layout_gravity="end"
+            android:paddingStart="@dimen/dp_10"
             android:paddingEnd="@dimen/dp_20"
             android:src="@drawable/schedule_setting_icon"
             android:visibility="gone" />

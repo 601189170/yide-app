@@ -115,12 +115,12 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.name = scheduleTitle?:""
         scheduleData.status = scheduleStatusLiveData.value
         scheduleData.type = "2"
-        scheduleData.isRepeat = repetition?.code.toString()?:"0"
+        scheduleData.isRepeat = repetition?.code?.toString()?:"0"
         scheduleData.rrule = if (repetition?.rule?.isEmpty() == true) null else repetition?.rule
         scheduleData.remindType = if (allDay) "1" else "0"
         scheduleData.remindTypeInfo = remind?:"9"
-        scheduleData.startTime = startTime?:""
-        scheduleData.endTime = endTime?:""
+        scheduleData.startTime = startTime
+        scheduleData.endTime = endTime
         scheduleData.isAllDay = if (allDay) "1" else "0"
         scheduleData.label = labelListLiveData.value
         scheduleData.participant = participantList.value
