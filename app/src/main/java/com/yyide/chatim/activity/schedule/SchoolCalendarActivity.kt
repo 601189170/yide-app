@@ -18,6 +18,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.adapter.schedule.SchoolCalendarAdapter
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivitySchoolCalendarBinding
 import com.yyide.chatim.dialog.DeptSelectPop
 import com.yyide.chatim.model.LeaveDeptRsp
@@ -63,7 +64,6 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         }
         //校历备注列表
         schoolCalendarViewModel.schoolCalendarList.observe(this){
-            loge("$it")
             if (refresh){
                 refresh = false
                 swipeRefreshLayout.isRefreshing = false
@@ -157,23 +157,16 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         curDateTime = DateTime.now().simplifiedDataTime()
         schoolCalendarBinding.tvMonth.text = curDateTime.monthOfYear.toString().plus("月")
 
-        schoolCalendarBinding.ivLeft.setOnClickListener {
+        schoolCalendarBinding.ivDateMinus.setOnClickListener {
             loge("月份减少")
             curDateTime = curDateTime.minusMonths(1)
             calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
-            update()
         }
 
-        schoolCalendarBinding.ivRight.setOnClickListener {
+        schoolCalendarBinding.ivDateAdd.setOnClickListener {
             loge("月份增加")
             curDateTime = curDateTime.plusMonths(1)
             calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
-            update()
-        }
-        schoolCalendarBinding.tvMonth.setOnClickListener {
-            curDateTime = curDateTime.plusMonths(1)
-            calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
-            update()
         }
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -185,6 +178,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     }
 
     override fun getContentViewID(): Int = R.layout.activity_school_calendar
+
     override fun onClickDate(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
     }
@@ -196,6 +190,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     }
 
     private fun update() {
+        loge("curDateTime=${curDateTime.toStringTime("yyyy-MM-dd")}")
         val monthOfYear = "${curDateTime.monthOfYear}"
         schoolCalendarBinding.tvMonth.text = monthOfYear.plus("月")
         selectSchoolCalendar()

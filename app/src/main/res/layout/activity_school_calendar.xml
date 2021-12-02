@@ -53,14 +53,11 @@
         app:layout_constraintTop_toTopOf="@id/cl_semester">
 
         <ImageView
-            android:id="@+id/iv_left"
+            android:id="@+id/iv_date_minus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_12"
-            android:src="@drawable/icon_gray_arrow_left"
-            app:layout_constraintBottom_toBottomOf="@id/iv_right"
-            app:layout_constraintRight_toLeftOf="@id/tv_month"
-            app:layout_constraintTop_toTopOf="@id/iv_right" />
+            android:src="@drawable/icon_gray_arrow_left" />
 
         <TextView
             android:id="@+id/tv_month"
@@ -68,13 +65,10 @@
             android:layout_height="wrap_content"
             android:text="9月"
             android:textColor="#ff1e1e1e"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/iv_right"
-            app:layout_constraintRight_toLeftOf="@id/iv_right"
-            app:layout_constraintTop_toTopOf="@id/iv_right" />
+            android:textSize="15sp" />
 
         <ImageView
-            android:id="@+id/iv_right"
+            android:id="@+id/iv_date_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_12"
