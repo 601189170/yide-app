@@ -2,6 +2,7 @@ package com.yyide.chatim.adapter.attendance.v2;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,122 +63,125 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.e("TeacherWeek", "onBindViewHolder: "+position );
         final TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean weekStatisticsBean = data.get(position);
         final String name = weekStatisticsBean.getUserName();
         holder.viewBinding.tvName.setText(name);
 
         final String string = context.getString(R.string.attendance_time_format);
         holder.viewBinding.tvAttendanceTime.setText(String.format(string,weekStatisticsBean.getSectionNumber()));
-        holder.viewBinding.childRecyclerview.setLayoutManager(new LinearLayoutManager(context));
-        BaseQuickAdapter adapter = new BaseQuickAdapter<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean, BaseViewHolder>(R.layout.item_statistics_child_list) {
-            @Override
-            protected void convert(@NotNull BaseViewHolder baseViewHolder, TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean dataBean) {
-                if (!TextUtils.isEmpty(dataBean.getSortName())) {
-                    String date = DateUtils.formatTime(dataBean.getRequiredTime(), null, "MM.dd");
-                    baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getSortName());
-                } else if(TextUtils.isEmpty(dataBean.getSortName()) && !TextUtils.isEmpty(dataBean.getEventName())){
-                    String date = DateUtils.formatTime(dataBean.getRequiredTime(), null, "MM.dd");
-                    baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getEventName());
-                } else {
-                    String date = DateUtils.formatTime(dataBean.getCourseStartTime(), null, "MM.dd");
-                    if (Objects.equals(dataBean.getAttendanceType(), "1") || "6".equals(dataBean.getAttendanceType())) {
-                        baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
-                        baseViewHolder.setVisible(R.id.tv_course_name,true);
-                        baseViewHolder.setText(R.id.tv_course_name,dataBean.getCourseName());
+        if (weekStatisticsBean.getChecked()){
+            holder.viewBinding.childRecyclerview.setLayoutManager(new LinearLayoutManager(context));
+            BaseQuickAdapter adapter = new BaseQuickAdapter<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean, BaseViewHolder>(R.layout.item_statistics_child_list) {
+                @Override
+                protected void convert(@NotNull BaseViewHolder baseViewHolder, TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean dataBean) {
+                    if (!TextUtils.isEmpty(dataBean.getSortName())) {
+                        String date = DateUtils.formatTime(dataBean.getRequiredTime(), null, "MM.dd");
+                        baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getSortName());
+                    } else if(TextUtils.isEmpty(dataBean.getSortName()) && !TextUtils.isEmpty(dataBean.getEventName())){
+                        String date = DateUtils.formatTime(dataBean.getRequiredTime(), null, "MM.dd");
+                        baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getEventName());
                     } else {
-                        baseViewHolder.setVisible(R.id.tv_course_name,true);
-                        baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
-                        baseViewHolder.setText(R.id.tv_course_name,dataBean.getCourseName());
+                        String date = DateUtils.formatTime(dataBean.getCourseStartTime(), null, "MM.dd");
+                        if (Objects.equals(dataBean.getAttendanceType(), "1") || "6".equals(dataBean.getAttendanceType())) {
+                            baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
+                            baseViewHolder.setVisible(R.id.tv_course_name,true);
+                            baseViewHolder.setText(R.id.tv_course_name,dataBean.getCourseName());
+                        } else {
+                            baseViewHolder.setVisible(R.id.tv_course_name,true);
+                            baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getCourseInfo());
+                            baseViewHolder.setText(R.id.tv_course_name,dataBean.getCourseName());
+                        }
+
                     }
 
-                }
+                    String status = dataBean.getAttendanceType();
+                    if (status == null){
+                        status = "";
+                    }
+                    //0正常、1缺勤、2迟到/3早退,4请假）
+                    //考勤类型 0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
+                    switch (status) {
+                        case "0":
+                            baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                            baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_normal));
+                            baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                            baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
+                            break;
+                        case "1":
+                            baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                            baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_absence));
+                            baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                            baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
+                            break;
+                        case "6":
+                            final String attendanceSignInOut = dataBean.getAttendanceSignInOut();
+                            if ("1".equals(attendanceSignInOut)) {
+                                baseViewHolder.setText(R.id.tv_attendance_status, context.getString(R.string.attendance_no_logout));
+                            } else {
+                                baseViewHolder.setText(R.id.tv_attendance_status, context.getString(R.string.attendance_no_sign_in));
+                            }
+                            baseViewHolder.setVisible(R.id.tv_attendance_status,true);
+                            baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                            baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
+                            break;
+                        case "2":
+                            baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.VISIBLE);
+                            baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
+                            baseViewHolder.setVisible(R.id.tv_attendance_status,false);
+                            baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_late));
+                            if (!TextUtils.isEmpty(dataBean.getClockName())){
+                                baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getClockName());
+                            }else {
+                                baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
+                            }
+                            final String date1 = DateUtils.formatTime(dataBean.getSignInTime(), null, "HH:mm");
+                            baseViewHolder.setText(R.id.tv_event_time,date1);
+                            baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late));
+                            break;
+                        case "3":
+                            baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.VISIBLE);
+                            baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
+                            baseViewHolder.setVisible(R.id.tv_attendance_status,false);
+                            baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_leave_early));
+                            if (!TextUtils.isEmpty(dataBean.getClockName())){
+                                baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getClockName());
+                            }else {
+                                baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
+                            }
+                            final String date2 = DateUtils.formatTime(dataBean.getSignInTime(), null, "HH:mm");
+                            baseViewHolder.setText(R.id.tv_event_time,date2);
+                            baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_leave_early));
+                            break;
+                        case "5":
+                            baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                            baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.VISIBLE);
+                            baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_ask_for_leave));
+                            baseViewHolder.setVisible(R.id.tv_attendance_status,false);
+                            baseViewHolder.setText(R.id.tv_leave_event_time_title,context.getString(R.string.attendance_leave_time));
+                            baseViewHolder.setTextColor(R.id.tv_leave_event_time,context.getResources().getColor(R.color.attendance_time_leave));
+                            final String data1 = DateUtils.formatTime(dataBean.getLeaveStartTime(), null, "MM.dd HH:mm");
+                            final String data2 = DateUtils.formatTime(dataBean.getLeaveEndTime(), null, "MM.dd HH:mm");
+                            baseViewHolder.setText(R.id.tv_leave_event_time,data1+"-"+data2);
+                            break;
 
-                String status = dataBean.getAttendanceType();
-                if (status == null){
-                    status = "";
+                        default:
+                            baseViewHolder.setVisible(R.id.tv_attendance_status,false);
+                            baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
+                            baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
+                            break;
+                    }
                 }
-                //0正常、1缺勤、2迟到/3早退,4请假）
-                //考勤类型 0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
-                switch (status) {
-                    case "0":
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
-                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_normal));
-                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
-                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
-                        break;
-                    case "1":
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
-                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_absence));
-                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
-                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
-                        break;
-                    case "6":
-                        final String attendanceSignInOut = dataBean.getAttendanceSignInOut();
-                        if ("1".equals(attendanceSignInOut)) {
-                            baseViewHolder.setText(R.id.tv_attendance_status, context.getString(R.string.attendance_no_logout));
-                        } else {
-                            baseViewHolder.setText(R.id.tv_attendance_status, context.getString(R.string.attendance_no_sign_in));
-                        }
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,true);
-                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
-                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
-                        break;
-                    case "2":
-                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.VISIBLE);
-                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
-                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_late));
-                        if (!TextUtils.isEmpty(dataBean.getClockName())){
-                            baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getClockName());
-                        }else {
-                            baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
-                        }
-                        final String date1 = DateUtils.formatTime(dataBean.getSignInTime(), null, "HH:mm");
-                        baseViewHolder.setText(R.id.tv_event_time,date1);
-                        baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_time_late));
-                        break;
-                    case "3":
-                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.VISIBLE);
-                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
-                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_leave_early));
-                        if (!TextUtils.isEmpty(dataBean.getClockName())){
-                            baseViewHolder.setText(R.id.tv_event_time_title,dataBean.getClockName());
-                        }else {
-                            baseViewHolder.setText(R.id.tv_event_time_title,context.getString(R.string.attendance_event_name));
-                        }
-                        final String date2 = DateUtils.formatTime(dataBean.getSignInTime(), null, "HH:mm");
-                        baseViewHolder.setText(R.id.tv_event_time,date2);
-                        baseViewHolder.setTextColor(R.id.tv_event_time,context.getResources().getColor(R.color.attendance_leave_early));
-                        break;
-                    case "5":
-                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
-                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.VISIBLE);
-                        baseViewHolder.setText(R.id.tv_attendance_status,context.getString(R.string.attendance_ask_for_leave));
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
-                        baseViewHolder.setText(R.id.tv_leave_event_time_title,context.getString(R.string.attendance_leave_time));
-                        baseViewHolder.setTextColor(R.id.tv_leave_event_time,context.getResources().getColor(R.color.attendance_time_leave));
-                        final String data1 = DateUtils.formatTime(dataBean.getLeaveStartTime(), null, "MM.dd HH:mm");
-                        final String data2 = DateUtils.formatTime(dataBean.getLeaveEndTime(), null, "MM.dd HH:mm");
-                        baseViewHolder.setText(R.id.tv_leave_event_time,data1+"-"+data2);
-                        break;
-
-                    default:
-                        baseViewHolder.setVisible(R.id.tv_attendance_status,false);
-                        baseViewHolder.getView(R.id.gp_event_time).setVisibility(View.GONE);
-                        baseViewHolder.getView(R.id.gp_leave_event_time).setVisibility(View.GONE);
-                        break;
-                }
-            }
-        };
-        holder.viewBinding.childRecyclerview.setAdapter(adapter);
-        adapter.setList(weekStatisticsBean.getCourseInfoFormList());
-        holder.viewBinding.childRecyclerview.setVisibility(weekStatisticsBean.getChecked()?View.VISIBLE:View.GONE);
+            };
+            holder.viewBinding.childRecyclerview.setAdapter(adapter);
+            adapter.setList(weekStatisticsBean.getCourseInfoFormList());
+        }
         if (weekStatisticsBean.getChecked()) {
             holder.viewBinding.ivDirection.setImageResource(R.drawable.icon_arrow_up);
         }else {
             holder.viewBinding.ivDirection.setImageResource(R.drawable.icon_arrow_down);
         }
+        holder.viewBinding.childRecyclerview.setVisibility(weekStatisticsBean.getChecked()?View.VISIBLE:View.GONE);
         //设置一级点击事件
         holder.itemView.setOnClickListener(v -> {
             onClickedListener.onClicked(position);
