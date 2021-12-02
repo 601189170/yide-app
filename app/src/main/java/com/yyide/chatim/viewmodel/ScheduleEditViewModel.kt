@@ -126,6 +126,20 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.participant = participantList.value
         scheduleData.siteId = siteLiveData.value?.id
         scheduleData.remark = remarkLiveData.value
+        //截止日期不能小于开始日期
+        if (scheduleData.rrule != null){
+            val until = scheduleData.rrule["until"]
+            until?.let {
+                if (!TextUtils.isEmpty(it.toString())){
+                    val startTimeDateTime = ScheduleDaoUtil.toDateTime(scheduleData.startTime)
+                    val untilDateTime = ScheduleDaoUtil.toDateTime(until.toString())
+                    if (startTimeDateTime>=untilDateTime){
+                        ToastUtils.showShort("提交失败，截止日期不能小于日程开始日期！")
+                        return
+                    }
+                }
+            }
+        }
         val toJSONString = JSON.toJSONString(scheduleData)
         loge("toJSONString=$toJSONString")
         val body = RequestBody.create(BaseConstant.JSON, toJSONString)

@@ -57,6 +57,7 @@ class SchoolCalendarViewModel : ViewModel() {
      */
     fun selectSchoolCalendar(id: String?, dayOfMonth: String?) {
         if (id == null || dayOfMonth == null){
+            schoolCalendarList.postValue(listOf())
             loge("id or dayOfMonth is null")
             return
         }

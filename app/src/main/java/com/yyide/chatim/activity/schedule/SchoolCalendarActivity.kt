@@ -54,8 +54,10 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         schoolCalendarViewModel.semesterList.observe(this) {
             if (it.isEmpty()) {
                 ToastUtils.showShort("查询校历学年学期失败")
+                blankPage.visibility = View.VISIBLE
                 return@observe
             }
+            blankPage.visibility = View.GONE
             initSemesterData(it)
             initSemesterView()
         }
