@@ -4,11 +4,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +21,6 @@ import com.yyide.chatim.R
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
-import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
@@ -29,7 +28,6 @@ import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.databinding.FragmentScheduleTodayBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
-import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_CLASS_SCHEDULE
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_CONFERENCE
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHEDULE_TYPE_SCHEDULE
 import com.yyide.chatim.utils.DisplayUtils
@@ -190,9 +188,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }
-        fragmentScheduleTodayBinding.tvToday.setOnClickListener {
-            startActivity(Intent(requireActivity(), SchoolCalendarActivity::class.java))
-        }
+
         fragmentScheduleTodayBinding.swipeRefreshLayout.setOnRefreshListener(this)
         fragmentScheduleTodayBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }

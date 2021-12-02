@@ -12,6 +12,7 @@ import com.yyide.chatim.activity.attendance.StatisticsActivity
 import com.yyide.chatim.activity.leave.AskForLeaveActivity
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity
+import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.activity.weekly.WeeklyHomeActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.EventMessage
@@ -66,6 +67,9 @@ object JumpUtil {
             }
             "会议" -> {
                 mActivity.startActivity(Intent(mActivity, MeetingHomeActivity::class.java))
+            }
+            "校历" ->{
+                mActivity.startActivity(Intent(mActivity,SchoolCalendarActivity::class.java))
             }
             else -> if ("#" == url) {
                 ToastUtils.showShort("暂无权限")
