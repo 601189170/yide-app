@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -39,6 +40,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
     //默认永不截止
     private var showDeadlineNever = true
     private var until = ""
+    private var startTime = ""
     private var yearIndex = 0
     private var monthIndex = 0
     private var dayIndex = 0
@@ -54,6 +56,7 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
 
     private fun initData() {
         val stringExtra = intent.getStringExtra("rule")
+        startTime = intent.getStringExtra("startTime")?:""
         jsonToMap = jsonToMap(stringExtra ?: "")
         loge("stringExtra ${stringExtra}")
         //默认值
@@ -169,8 +172,16 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
             if (showDeadlineNever) {
                 rule["until"] = null
             } else {
-                until = "${RepetitionDataBean.getYearList()[yearIndex]}-${RepetitionDataBean.getMonthList()[monthIndex]}-${dayList[dayIndex]} 23:59:59"
+                until =
+                    "${RepetitionDataBean.getYearList()[yearIndex]}-${RepetitionDataBean.getMonthList()[monthIndex]}-${dayList[dayIndex]} 23:59:59"
                 rule["until"] = until
+                //截止日期需晚于日程开始日期
+                if (!TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(until)) {
+                    if (ScheduleDaoUtil.toDateTime(startTime) >= ScheduleDaoUtil.toDateTime(until)) {
+                        ToastUtils.showShort("截止日期需晚于日程开始日期")
+                        return@setOnClickListener
+                    }
+                }
             }
             val intent = intent
             intent.putExtra("rule", JSON.toJSONString(rule))

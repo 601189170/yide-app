@@ -24,6 +24,7 @@ import com.google.android.flexbox.JustifyContent
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.ActivityScheduleFullEditionBinding
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.*
@@ -290,6 +291,8 @@ class ScheduleFullEditionActivity : BaseActivity() {
         //选择重复规则
         scheduleFullEditionBinding.clRepetition.setOnClickListener {
             val intent = Intent(this, ScheduleRepetitionActivity::class.java)
+            val startTime = scheduleEditViewModel.startTimeLiveData.value
+            intent.putExtra("startTime",startTime)
             intent.putExtra(
                 "data",
                 JSON.toJSONString(scheduleEditViewModel.repetitionLiveData.value)
@@ -328,6 +331,21 @@ class ScheduleFullEditionActivity : BaseActivity() {
             if (DialogUtil.isHasEmoji(title)){
                 ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!")
                 return@setOnClickListener
+            }
+            val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
+            toScheduleDataBean.repetition?.let {
+                val rule = it.rule
+                if (rule != null) {
+                    val until = rule["until"].toString()
+                    val startTime1 = toScheduleDataBean.startTime?:""
+                    //截止日期需晚于日程开始日期
+                    if (!TextUtils.isEmpty(startTime1) && !TextUtils.isEmpty(until)) {
+                        if (ScheduleDaoUtil.toDateTime(startTime1) >= ScheduleDaoUtil.toDateTime(until)) {
+                            ToastUtils.showShort("截止日期需晚于日程开始日期")
+                            return@setOnClickListener
+                        }
+                    }
+                }
             }
             scheduleEditViewModel.scheduleTitleLiveData.value = title
             scheduleEditViewModel.startTimeLiveData.value = dateStart.get()

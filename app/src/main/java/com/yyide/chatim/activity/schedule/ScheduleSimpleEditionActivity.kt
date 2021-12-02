@@ -109,6 +109,8 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
         scheduleSimpleEditionBinding.clRepetition.setOnClickListener {
             val intent = Intent(this, ScheduleRepetitionActivity::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleEditViewModel.repetitionLiveData.value))
+            val startTime = scheduleEditViewModel.startTimeLiveData.value
+            intent.putExtra("startTime",startTime)
             repetitionLauncher.launch(intent)
         }
 
@@ -259,6 +261,21 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
             scheduleEditViewModel.allDayLiveData.value = scheduleSimpleEditionBinding.checkBox.isChecked
 
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
+            toScheduleDataBean.repetition?.let {
+                val rule = it.rule
+                if (rule != null) {
+                    val until = rule["until"].toString()
+                    val startTime1 = toScheduleDataBean.startTime?:""
+                    //截止日期需晚于日程开始日期
+                    if (!TextUtils.isEmpty(startTime1) && !TextUtils.isEmpty(until)) {
+                        if (ScheduleDaoUtil.toDateTime(startTime1) >= ScheduleDaoUtil.toDateTime(until)) {
+                            ToastUtils.showShort("截止日期需晚于日程开始日期")
+                            return@setOnClickListener
+                        }
+                    }
+                }
+            }
+
             val intent = intent.putExtra("data",JSON.toJSONString(toScheduleDataBean))
             setResult(RESULT_OK,intent)
             finish()

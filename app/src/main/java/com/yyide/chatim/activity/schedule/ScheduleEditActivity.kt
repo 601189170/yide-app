@@ -502,6 +502,7 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleEditBinding.clRepetition.isEnabled = promoter
         scheduleEditBinding.clRepetition.setOnClickListener {
             val intent = Intent(this, ScheduleRepetitionActivity::class.java)
+            intent.putExtra("startTime",scheduleEditViewModel.startTimeLiveData.value.toString())
             intent.putExtra(
                 "data",
                 JSON.toJSONString(scheduleEditViewModel.repetitionLiveData.value)
