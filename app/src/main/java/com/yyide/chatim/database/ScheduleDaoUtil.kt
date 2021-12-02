@@ -268,9 +268,9 @@ object ScheduleDaoUtil {
     fun undoneOfWeek(): List<ScheduleData> {
         val nowDateTime = DateTime.now()
         //本周第一天
-        val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7).simplifiedDataTime()
+        val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7-1).simplifiedDataTime()
         val lastDayOfWeek =
-            nowDateTime.plusDays(7 - nowDateTime.dayOfWeek % 7 - 1).simplifiedDataTime()
+            nowDateTime.plusDays(7 - nowDateTime.dayOfWeek % 7).simplifiedDataTime()
         //本周最后的时间
         val finallyTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59"
         val startDateBeforeScheduleList = scheduleDao().getOneWeekUndoneScheduleList(finallyTime)
