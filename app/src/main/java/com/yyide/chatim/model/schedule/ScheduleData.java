@@ -63,6 +63,9 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     //是否是月的第一天
     private boolean firstDayOfMonth;
 
+    //日程创建时间
+    private String createdDateTime;
+
     public String getIsRepeat() {
         return isRepeat;
     }
@@ -309,6 +312,14 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
 
     public void setMoreDay(int moreDay) {
         this.moreDay = moreDay;
+    }
+
+    public String getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(String createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 
     @Override

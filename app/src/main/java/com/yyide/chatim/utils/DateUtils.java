@@ -333,6 +333,7 @@ public class DateUtils {
             date = resourceFormat.parse(time);
         } catch (ParseException e) {
             e.printStackTrace();
+            return "--";
         }
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(target);
         return simpleDateFormat2.format(date);

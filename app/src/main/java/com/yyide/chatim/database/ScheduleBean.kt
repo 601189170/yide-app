@@ -41,6 +41,7 @@ data class ScheduleBean(
     var siteName: String? = null,
     var updateType: String? = null,
     var updateDate: String? = null,
+    var createdDateTime: String? = null,
     var dayOfMonth: String? = null,
     var promoter:String? = null,
     var promoterName: String? = null
@@ -123,6 +124,7 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
         scheduleData.dayOfMonth = it.schedule.dayOfMonth
         scheduleData.promoter = it.schedule.promoter
         scheduleData.promoterName = it.schedule.promoterName
+        scheduleData.createdDateTime = it.schedule.createdDateTime
         // private List<LabelListRsp.DataBean> label;
         // private List<ParticipantRsp.DataBean.ParticipantListBean> participant;
         val participantList = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
@@ -175,6 +177,7 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
         scheduleBean.siteName = it.siteName
         scheduleBean.updateType = it.updateType
         scheduleBean.updateDate = it.updateDate
+        scheduleBean.createdDateTime = it.createdDateTime
         scheduleBean.dayOfMonth = it.dayOfMonth
         scheduleBean.promoter = it.promoter
         scheduleBean.promoterName = it.promoterName

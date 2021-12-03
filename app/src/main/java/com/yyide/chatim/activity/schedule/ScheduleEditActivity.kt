@@ -150,15 +150,15 @@ class ScheduleEditActivity : BaseActivity() {
             scheduleEditBinding.vLine4.visibility = View.VISIBLE
         }
         //保存提交
-        scheduleEditBinding.btnCommit.visibility = if (enable) View.VISIBLE else View.GONE
+        scheduleEditBinding.clBtnCommit.visibility = if (enable) View.VISIBLE else View.GONE
 
         //底部文本
-        scheduleEditBinding.tvScheduleCreateTime.visibility = if (enable) View.GONE else View.VISIBLE
-        val format = getString(R.string.schedule_create_time_and_status)
-        val startTime = scheduleEditViewModel.startTimeLiveData.value
-        val statusText = if (status == "1") "已完成" else "待完成"
-        val bottomText = String.format(format,DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm"),statusText)
-        scheduleEditBinding.tvScheduleCreateTime.text = bottomText
+        scheduleEditBinding.clScheduleCreateTime.visibility = if (enable) View.GONE else View.VISIBLE
+//        val format = getString(R.string.schedule_create_time_and_status)
+//        val startTime = scheduleEditViewModel.startTimeLiveData.value
+//        val statusText = if (status == "1") "已完成" else "待完成"
+//        val bottomText = String.format(format,DateUtils.formatTime(startTime, "", "MM月dd日 HH:mm"),statusText)
+//        scheduleEditBinding.tvScheduleCreateTime.text = bottomText
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -278,7 +278,7 @@ class ScheduleEditActivity : BaseActivity() {
 
             //底部文本
             val statusText = if (it.status == "1") "已完成" else "待完成"
-            val bottomText = String.format(format,DateUtils.formatTime(it.startTime, "", "MM月dd日 HH:mm"),statusText)
+            val bottomText = String.format(format,DateUtils.formatTime(it.createdDateTime, "", "MM月dd日 HH:mm"),statusText)
             scheduleEditBinding.tvScheduleCreateTime.text = bottomText
         }
 
@@ -291,7 +291,7 @@ class ScheduleEditActivity : BaseActivity() {
             }
             finish()
         }
-        scheduleEditBinding.btnCommit.visibility = if (promoter) View.VISIBLE else View.GONE
+        scheduleEditBinding.clBtnCommit.visibility = if (promoter) View.VISIBLE else View.GONE
         scheduleEditBinding.btnCommit.setOnClickListener {
             val title = scheduleEditBinding.etScheduleTitle.text.toString()
             if (TextUtils.isEmpty(title)){
@@ -609,7 +609,7 @@ class ScheduleEditActivity : BaseActivity() {
         BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_label_flow_list) {
         override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             holder.getView<ImageView>(R.id.iv_del).visibility =
-                if (enableEditMode) View.VISIBLE else View.INVISIBLE
+                if (enableEditMode) View.VISIBLE else View.GONE
             val drawable = GradientDrawable()
             drawable.cornerRadius = DisplayUtils.dip2px(this@ScheduleEditActivity, 2f).toFloat()
             drawable.setColor(ColorUtil.parseColor(item.colorValue))
