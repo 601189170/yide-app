@@ -56,6 +56,9 @@ public abstract class ApiCallback<M> implements Observer<M> {
             onSuccess(model);
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof NullPointerException){
+                return;
+            }
             onFailure(e.getMessage());
         }
     }

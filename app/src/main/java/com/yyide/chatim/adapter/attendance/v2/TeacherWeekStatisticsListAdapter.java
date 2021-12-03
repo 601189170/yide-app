@@ -22,6 +22,7 @@ import com.yyide.chatim.utils.DateUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,10 +72,14 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
         final String string = context.getString(R.string.attendance_time_format);
         holder.viewBinding.tvAttendanceTime.setText(String.format(string,weekStatisticsBean.getSectionNumber()));
         if (weekStatisticsBean.getChecked()){
-            holder.viewBinding.childRecyclerview.setLayoutManager(new LinearLayoutManager(context));
+//            final int[] index = {0};
+//            int page = 50;
+            LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(context);
+            holder.viewBinding.childRecyclerview.setLayoutManager(mLinearLayoutManager);
             BaseQuickAdapter adapter = new BaseQuickAdapter<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean, BaseViewHolder>(R.layout.item_statistics_child_list) {
                 @Override
                 protected void convert(@NotNull BaseViewHolder baseViewHolder, TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean dataBean) {
+//                    baseViewHolder.setIsRecyclable(false);
                     if (!TextUtils.isEmpty(dataBean.getSortName())) {
                         String date = DateUtils.formatTime(dataBean.getRequiredTime(), null, "MM.dd");
                         baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.getSortName());
@@ -173,8 +178,44 @@ public class TeacherWeekStatisticsListAdapter extends RecyclerView.Adapter<Teach
                     }
                 }
             };
+//            final List<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean> list = new ArrayList<>();
+            final List<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean> courseInfoFormList = weekStatisticsBean.getCourseInfoFormList();
+//            if (courseInfoFormList != null && courseInfoFormList.size() <= page) {
+//                list.addAll(courseInfoFormList);
+//            } else if (courseInfoFormList != null) {
+//                list.addAll(courseInfoFormList.subList(index[0], page));
+//            }
             holder.viewBinding.childRecyclerview.setAdapter(adapter);
-            adapter.setList(weekStatisticsBean.getCourseInfoFormList());
+//            holder.viewBinding.childRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                    super.onScrolled(recyclerView, dx, dy);
+//                    // canScrollVertically(1) 为false 的时候滑动到底部了
+//                    Log.e("TAG", "onScrolled: ");
+//                    if (!holder.viewBinding.childRecyclerview.canScrollVertically(1)) {
+//                        index[0]++;
+//                        if (courseInfoFormList == null){
+//                            return;
+//                        }
+//                        if (list.size() >= courseInfoFormList.size()) {
+//                            return;
+//                        }
+//                        if ((index[0] + 1) * page <= courseInfoFormList.size()) {
+//                            list.addAll(courseInfoFormList.subList(index[0] * page, (index[0] + 1) * page));
+//                            holder.viewBinding.childRecyclerview.post(() -> {
+//                                adapter.setList(list);
+//                            });
+//
+//                        } else {
+//                            list.addAll(courseInfoFormList.subList(index[0] * page, courseInfoFormList.size()));
+//                            holder.viewBinding.childRecyclerview.post(() -> {
+//                                adapter.setList(list);
+//                            });
+//                        }
+//                    }
+//                }
+//            });
+            adapter.setList(courseInfoFormList);
         }
         if (weekStatisticsBean.getChecked()) {
             holder.viewBinding.ivDirection.setImageResource(R.drawable.icon_arrow_up);
