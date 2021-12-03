@@ -117,22 +117,38 @@ class ScheduleEditActivity : BaseActivity() {
         //地址
         scheduleEditBinding.clAddress.isEnabled = editable
         val siteName = scheduleEditViewModel.siteLiveData.value
-        if (siteName != null) {
-            scheduleEditBinding.clAddress.visibility = if (enable) View.VISIBLE else View.GONE
-        } else {
+        if (siteName == null && !enable) {
             scheduleEditBinding.clAddress.visibility = View.GONE
+        } else {
+            if (editable) {
+                scheduleEditBinding.clAddress.visibility = View.VISIBLE
+            } else if (siteName != null) {
+                scheduleEditBinding.clAddress.visibility = View.VISIBLE
+            } else {
+                scheduleEditBinding.clAddress.visibility = View.GONE
+            }
         }
 
         //备注 remark
         scheduleEditBinding.clRemark.isEnabled = editable
         val remark = scheduleEditViewModel.remarkLiveData.value
-        if (TextUtils.isEmpty(remark)) {
+        if (TextUtils.isEmpty(remark) && !enable) {
             scheduleEditBinding.clRemark.visibility = View.GONE
         } else {
-            scheduleEditBinding.clRemark.visibility = if (enable) View.VISIBLE else View.GONE
+            if (editable) {
+                scheduleEditBinding.clRemark.visibility = View.VISIBLE
+            } else if (!TextUtils.isEmpty(remark)) {
+                scheduleEditBinding.clRemark.visibility = View.VISIBLE
+            } else {
+                scheduleEditBinding.clRemark.visibility = View.GONE
+            }
         }
         scheduleEditBinding.edit.isEnabled = editable
-
+        if (TextUtils.isEmpty(remark) && siteName == null && !editable) {
+            scheduleEditBinding.vLine4.visibility = View.GONE
+        } else {
+            scheduleEditBinding.vLine4.visibility = View.VISIBLE
+        }
         //保存提交
         scheduleEditBinding.btnCommit.visibility = if (enable) View.VISIBLE else View.GONE
 
