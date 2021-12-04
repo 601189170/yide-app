@@ -37,8 +37,8 @@ class ScheduleTodayAdapter(data: List<ScheduleData>) :
         loge("ScheduleData ${JSON.toJSONString(item)}")
         holder.setText(R.id.tv_schedule_name, item.name)
         val target = if (item.isAllDay != "1") "MM月dd日 HH:mm" else "MM月dd日"
-        val startTime = DateUtils.formatTime(item.moreDayStartTime, "", target)
-        val endTime = DateUtils.formatTime(item.moreDayEndTime, "", target)
+        val startTime = DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
+        val endTime = DateUtils.formatTime(item.moreDayEndTime ?: item.endTime, "", target)
         holder.setText(R.id.tv_schedule_time_interval, "$startTime-$endTime")
 
         loadImage(
