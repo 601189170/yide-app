@@ -73,7 +73,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                 swipeRefreshLayout.isRefreshing = false
             }
             schoolCalendarList.clear()
-            //removeTaskHints(hints)
+            removeTaskHints(hints)
             if (it.isEmpty()) {
                 blankPage.visibility = View.VISIBLE
             } else {
@@ -258,5 +258,10 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
      */
     private fun selectSchoolCalendar(){
         schoolCalendarViewModel.selectSchoolCalendar(curSemesterId,curDateTime.monthOfYear.toString())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        removeTaskHints(hints)
     }
 }
