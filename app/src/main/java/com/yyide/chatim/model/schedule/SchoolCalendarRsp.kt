@@ -1,6 +1,7 @@
 package com.yyide.chatim.model.schedule
 
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHOOL_CALENDAR_TYPE_HEAD
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHOOL_CALENDAR_TYPE_ITEM
 
@@ -22,12 +23,24 @@ class SchoolCalendarRsp(
         var schoolId: String? = null,
         var remark: String? = null,
         var type: Int = 0
-    ) : MultiItemEntity {
+    ) : MultiItemEntity, Comparable<DataBean> {
         override val itemType: Int
             get() =
                 if (type == 1)
                     SCHOOL_CALENDAR_TYPE_HEAD
                 else
                     SCHOOL_CALENDAR_TYPE_ITEM
+
+        override fun compareTo(other: DataBean): Int {
+            val dateTime = ScheduleDaoUtil.toDateTime(this.startTime ?: "", "yyyy-MM-dd")
+            val dateTimeOther = ScheduleDaoUtil.toDateTime(other.startTime ?: "", "yyyy-MM-dd")
+            val compareTo = dateTime.compareTo(dateTimeOther)
+            if (compareTo == 0) {
+                val dateTime1 = ScheduleDaoUtil.toDateTime(this.endTime ?: "", "yyyy-MM-dd")
+                val dateTimeOther1 = ScheduleDaoUtil.toDateTime(other.endTime ?: "", "yyyy-MM-dd")
+                return dateTime1.compareTo(dateTimeOther1)
+            }
+            return compareTo
+        }
     }
 }

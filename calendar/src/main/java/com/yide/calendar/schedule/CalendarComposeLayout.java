@@ -295,6 +295,14 @@ public class CalendarComposeLayout extends FrameLayout {
         return blankPage;
     }
 
+    public WeekCalendarView getWeekCalendarView() {
+        return weekCalendarView;
+    }
+
+    public MonthCalendarView getMonthCalendarView() {
+        return monthCalendarView;
+    }
+
     public SwipeRefreshLayout getSwipeRefreshLayout(){
         return swipeRefreshLayout;
     }

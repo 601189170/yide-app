@@ -12,12 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ToastUtils
 import com.yanzhenjie.recyclerview.SwipeRecyclerView
+import com.yide.calendar.CalendarUtils
+import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.schedule.CalendarComposeLayout
 import com.yyide.chatim.R
 import com.yyide.chatim.adapter.schedule.SchoolCalendarAdapter
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.toDateTime
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivitySchoolCalendarBinding
 import com.yyide.chatim.dialog.DeptSelectPop
@@ -46,6 +49,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     private lateinit var calendarComposeLayout: CalendarComposeLayout
     private lateinit var schoolCalendarAdapter:SchoolCalendarAdapter
     private var refresh = false
+    private val hints = mutableListOf<HintCircle>()
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,19 +73,67 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                 swipeRefreshLayout.isRefreshing = false
             }
             schoolCalendarList.clear()
+            //removeTaskHints(hints)
             if (it.isEmpty()) {
                 blankPage.visibility = View.VISIBLE
             } else {
                 blankPage.visibility = View.GONE
                 val dataBean = SchoolCalendarRsp.DataBean()
                 dataBean.type = 1
+                dataBean.startTime = curDateTime.toStringTime("yyyy-MM").plus("-01")
+                dataBean.endTime = curDateTime.toStringTime("yyyy-MM").plus("-01")
                 schoolCalendarList.add(dataBean)
             }
             schoolCalendarList.addAll(it)
+            schoolCalendarList.sort()
             schoolCalendarAdapter.setList(schoolCalendarList)
+            schoolCalendarList.forEach {
+                if (it.type == 1){
+                    return@forEach
+                }
+                it.startTime?.let {
+                    val dateTime = toDateTime(it,"yyyy-MM-dd")
+                    val hintCircle = HintCircle(dateTime,dateTime.dayOfMonth, 1)
+                    hints.add(hintCircle)
+                    addTaskHint(hintCircle)
+                }
+            }
         }
     }
+    /**
+     * 移除任务点
+     */
+    fun removeTaskHints(hints:List<HintCircle>){
+        hints.forEach {
+            val dateTime = it.dateTime
+            if (CalendarUtils.getInstance(this).removeTaskHint(dateTime.year,dateTime.monthOfYear-1,it)) {
+                if (calendarComposeLayout.monthCalendarView.currentMonthView != null) {
+                    calendarComposeLayout.monthCalendarView.currentMonthView.invalidate()
+                }
+                if (calendarComposeLayout.weekCalendarView.currentWeekView != null){
+                    calendarComposeLayout.weekCalendarView.currentWeekView.invalidate()
+                }
+            }
+        }
+        this.hints.clear()
+    }
 
+    /**
+     * 添加一个圆点提示
+     *
+     * @param day
+     */
+    fun addTaskHint(day: HintCircle) {
+        val mCurrentSelectYear = day.dateTime.year
+        val mCurrentSelectMonth = day.dateTime.monthOfYear -1
+        CalendarUtils.getInstance(this).addTaskHint(mCurrentSelectYear, mCurrentSelectMonth, day)
+        if (calendarComposeLayout.monthCalendarView.currentMonthView != null) {
+            calendarComposeLayout.monthCalendarView.currentMonthView.invalidate()
+        }
+        if (calendarComposeLayout.weekCalendarView.currentWeekView != null){
+            calendarComposeLayout.weekCalendarView.currentWeekView.invalidate()
+        }
+    }
     override fun onResume() {
         super.onResume()
         schoolCalendarViewModel.selectSemester()

@@ -37,6 +37,11 @@ object ScheduleDaoUtil {
         return DateTime.parse(date, dateTimeFormatter)
     }
 
+    fun toDateTime(date: String, pattern: String = "yyyy-MM-dd HH:mm:ss"): DateTime {
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern(pattern)
+        return DateTime.parse(date, dateTimeFormatter)
+    }
+
     /**
      * 指定日期拼接现在得时间（yyy-MM-dd + HH:mm:ss）
      */
