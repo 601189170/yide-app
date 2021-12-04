@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.notice.NoticeScopeActivity
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.LayoutScheduleSearchFilterBinding
 import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.Label
@@ -150,11 +151,11 @@ class ScheduleSearchFilterPop(
             }
         }
         //开始日期
-        val startTime = DateTime.now().toString("yyyy-MM-dd ") + "00:00:00"
-        dateStart.set(filterTagCollect.startTime ?: startTime)
+        //val startTime = DateTime.now().toString("yyyy-MM-dd ") + "00:00:00"
+        dateStart.set(filterTagCollect.startTime)
         //结束日期
-        val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
-        dateEnd.set(filterTagCollect.endTime ?: endTime)
+        //val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+        dateEnd.set(filterTagCollect.endTime)
         //标签
         labelList.forEach {
             it.checked = filterTagCollect.labelId?.contains(it.id) == true
@@ -190,13 +191,17 @@ class ScheduleSearchFilterPop(
         }
         adapter.setList(labelList)
         //重置日期
-        val startTime = DateTime.now().toString("yyyy-MM-dd ") + "00:00:00"
-        dateStart.set(filterTagCollect.startTime ?: startTime)
+        dateStart.set(null)
+        dateEnd.set(null)
+        binding.dateSelect.tvDateStart.text = "请选择"
+        binding.dateSelect.tvTimeStart.text = "开始日期"
+        binding.dateSelect.tvDateEnd.text = "请选择"
+        binding.dateSelect.tvTimeEnd.text = "结束日期"
+        //val startTime = DateTime.now().toString("yyyy-MM-dd ") + "00:00:00"
+//        dateStart.set(filterTagCollect.startTime)
         //结束日期
-        val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
-        dateEnd.set(filterTagCollect.endTime ?: endTime)
-//        dateStart.set(null)
-//        dateEnd.set(null)
+        //val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+//        dateEnd.set(filterTagCollect.endTime)
         binding.dateSelect.llVLine.visibility = View.GONE
         binding.dateSelect.dateTimePicker.visibility = View.GONE
     }
@@ -229,15 +234,23 @@ class ScheduleSearchFilterPop(
         if (cbDone) {
             status.add(1)
         }
-        val startDate = dateStart.get()
-        val endDate = dateEnd.get()
+        var startDate = dateStart.get()
+        var endDate = dateEnd.get()
+        //val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+        if (!TextUtils.isEmpty(startDate) && TextUtils.isEmpty(endDate)){
+            endDate = ScheduleDaoUtil.toDateTime(startDate).toString("yyyy-MM-dd ").plus("23:59:59")
+        }
+
+        if (TextUtils.isEmpty(startDate) && !TextUtils.isEmpty(endDate)){
+            startDate = ScheduleDaoUtil.toDateTime(endDate).toString("yyyy-MM-dd ").plus("00:00:00")
+        }
 
         val scheduleFilterTag =
             ScheduleFilterTag(
                 types,
                 status,
                 startDate,
-                if (TextUtils.isEmpty(endDate)) startDate else endDate,
+                endDate,
                 labelList.filter { it.checked })
         onSelectListener.result(scheduleFilterTag)
     }
@@ -273,16 +286,23 @@ class ScheduleSearchFilterPop(
     }
 
     private fun initDate(binding: LayoutScheduleSearchFilterBinding) {
-        binding.dateSelect.tvDateStart.text = DateUtils.formatTime(dateStart.get(), "", "", true)
-        binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(dateStart.get(), "", "HH:mm")
-        binding.dateSelect.tvDateEnd.text = DateUtils.formatTime(dateEnd.get(), "", "", true)
-        binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(dateEnd.get(), "", "HH:mm")
-        binding.dateSelect.dateTimePicker.setDefaultMillisecond(
-            DateUtils.formatTime(
-                dateStart.get(),
-                ""
-            )
-        )
+        if (TextUtils.isEmpty(dateStart.get())) {
+            binding.dateSelect.tvDateStart.text = "请选择"
+            binding.dateSelect.tvTimeStart.text = "开始日期"
+        } else {
+            binding.dateSelect.tvDateStart.text =
+                DateUtils.formatTime(dateStart.get(), "", "", true)
+            binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(dateStart.get(), "", "HH:mm")
+        }
+
+        if (TextUtils.isEmpty(dateEnd.get())) {
+            binding.dateSelect.tvDateEnd.text = "请选择"
+            binding.dateSelect.tvTimeEnd.text = "结束日期"
+        } else {
+            binding.dateSelect.tvDateEnd.text = DateUtils.formatTime(dateEnd.get(), "", "", true)
+            binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(dateEnd.get(), "", "HH:mm")
+        }
+
         binding.dateSelect.clStartTime.setOnClickListener {
             if (binding.dateSelect.llVLine.visibility == View.GONE) {
                 binding.dateSelect.llVLine.visibility = View.VISIBLE
@@ -290,12 +310,9 @@ class ScheduleSearchFilterPop(
             }
             binding.dateSelect.vDateTopMarkLeft.visibility = View.VISIBLE
             binding.dateSelect.vDateTopMarkRight.visibility = View.INVISIBLE
-            binding.dateSelect.dateTimePicker.setDefaultMillisecond(
-                DateUtils.formatTime(
-                    dateStart.get(),
-                    ""
-                )
-            )
+            val startTime = DateTime.now().toString("yyyy-MM-dd ") + "00:00:00"
+            val startTimeDateTime = DateUtils.formatTime(dateStart.get()?:startTime, "")
+            binding.dateSelect.dateTimePicker.setDefaultMillisecond(startTimeDateTime)
         }
 
         binding.dateSelect.clEndTime.setOnClickListener {
@@ -305,12 +322,9 @@ class ScheduleSearchFilterPop(
             }
             binding.dateSelect.vDateTopMarkLeft.visibility = View.INVISIBLE
             binding.dateSelect.vDateTopMarkRight.visibility = View.VISIBLE
-            binding.dateSelect.dateTimePicker.setDefaultMillisecond(
-                DateUtils.formatTime(
-                    dateEnd.get(),
-                    ""
-                )
-            )
+            val endTime = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+            val endTimeDateTime = DateUtils.formatTime(dateEnd.get()?:endTime, "")
+            binding.dateSelect.dateTimePicker.setDefaultMillisecond(endTimeDateTime)
         }
 
         binding.dateSelect.dateTimePicker.setOnDateTimeChangedListener { aLong ->
@@ -329,16 +343,16 @@ class ScheduleSearchFilterPop(
                 dateEnd.set(date)
             } else {
                 //第一次设置两边的数据
-                if (dateStart.get() == null) {
-                    binding.dateSelect.tvDateStart.text = time
-                    binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
-                    dateStart.set(date)
-                }
-                if (dateEnd.get() == null) {
-                    binding.dateSelect.tvDateEnd.text = time
-                    binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
-                    dateEnd.set(date)
-                }
+//                if (dateStart.get() == null) {
+//                    binding.dateSelect.tvDateStart.text = time
+//                    binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
+//                    dateStart.set(date)
+//                }
+//                if (dateEnd.get() == null) {
+//                    binding.dateSelect.tvDateEnd.text = time
+//                    binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
+//                    dateEnd.set(date)
+//                }
             }
             null
         }
