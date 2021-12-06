@@ -1,24 +1,24 @@
 package com.yyide.chatim.fragment.attendance.v2;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.R;
-import com.yyide.chatim.adapter.attendance.WeekStatisticsListAdapter;
-import com.yyide.chatim.adapter.attendance.v2.StudentWeekStatisticsListAdapter;
+import com.yyide.chatim.adapter.attendance.v2.TeacherWeekStatisticsExpandableListAdapter;
 import com.yyide.chatim.adapter.attendance.v2.TeacherWeekStatisticsListAdapter;
 import com.yyide.chatim.databinding.FragmentStatisticsListBinding;
-import com.yyide.chatim.model.AttendanceWeekStatsRsp;
-import com.yyide.chatim.model.attendance.StudentAttendanceWeekMonthRsp;
 import com.yyide.chatim.model.attendance.TeacherAttendanceWeekMonthRsp;
 
 import java.util.ArrayList;
@@ -70,11 +70,14 @@ public class TeacherStatisticsListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_statistics_list, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated: "+type+",hashCode,"+this.hashCode()+" data="+ JSON.toJSONString(data));
         final FragmentStatisticsListBinding bind = FragmentStatisticsListBinding.bind(view);
+        bind.expandableListView.setVisibility(View.GONE);
+        bind.recyclerview.setVisibility(View.VISIBLE);
         weekStatisticsListAdapter = new TeacherWeekStatisticsListAdapter(getContext(), data);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         bind.recyclerview.setAdapter(weekStatisticsListAdapter);
@@ -84,6 +87,17 @@ public class TeacherStatisticsListFragment extends Fragment {
             //weekStatisticsListAdapter.notifyDataSetChanged();
             weekStatisticsListAdapter.notifyItemChanged(position);
         });
+        //group数据
+//       ArrayList<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean> mGroupList = new ArrayList<>();
+//        //item数据
+//        ArrayList<List<TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean.CourseInfoFormListBean>> mItemSet = new ArrayList<>();
+//        for (TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean.EventBean datum : data) {
+//            mGroupList.add(datum);
+//            mItemSet.add(datum.getCourseInfoFormList());
+//        }
+//        TeacherWeekStatisticsExpandableListAdapter adapter = new TeacherWeekStatisticsExpandableListAdapter(requireContext(), mGroupList, mItemSet);
+//        bind.expandableListView.setAdapter(adapter);
+//        bind.expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> true);
         if (data !=null && data.isEmpty()) {
             bind.blankPage.setVisibility(View.VISIBLE);
         } else {

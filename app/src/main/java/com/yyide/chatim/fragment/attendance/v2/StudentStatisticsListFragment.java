@@ -75,6 +75,8 @@ public class StudentStatisticsListFragment extends Fragment {
         Log.e(TAG, "onViewCreated: "+type+",hashCode,"+this.hashCode()+" data="+ JSON.toJSONString(data));
         final FragmentStatisticsListBinding bind = FragmentStatisticsListBinding.bind(view);
         dayStatisticsDetailListAdapter = new StudentWeekStatisticsListAdapter(getContext(), data);
+        bind.recyclerview.setVisibility(View.VISIBLE);
+        bind.expandableListView.setVisibility(View.GONE);
         bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         bind.recyclerview.setAdapter(dayStatisticsDetailListAdapter);
         if (data !=null && data.isEmpty()) {

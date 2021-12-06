@@ -89,20 +89,20 @@ public class StatisticsListFragment extends Fragment {
 //            return;
 //        }
         final FragmentStatisticsListBinding bind = FragmentStatisticsListBinding.bind(view);
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
-            bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-            bind.recyclerview.setAdapter(weekStatisticsListAdapter);
-            weekStatisticsListAdapter.setOnClickedListener(position -> {
-                final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean peopleBean = data.get(position);
-                peopleBean.setChecked(!peopleBean.isChecked());
-                weekStatisticsListAdapter.notifyDataSetChanged();
-            });
-        }else {
-            dayStatisticsDetailListAdapter = new StudentWeekStatisticsListAdapter(getContext(), data);
-            bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-            bind.recyclerview.setAdapter(dayStatisticsDetailListAdapter);
-        }
+//        if (SpData.getIdentityInfo().staffIdentity()) {
+//            weekStatisticsListAdapter = new WeekStatisticsListAdapter(getContext(), data);
+//            bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+//            bind.recyclerview.setAdapter(weekStatisticsListAdapter);
+//            weekStatisticsListAdapter.setOnClickedListener(position -> {
+//                final AttendanceWeekStatsRsp.DataBean.AttendancesFormBean.StudentsBean.PeopleBean peopleBean = data.get(position);
+//                peopleBean.setChecked(!peopleBean.isChecked());
+//                weekStatisticsListAdapter.notifyDataSetChanged();
+//            });
+//        }else {
+//            dayStatisticsDetailListAdapter = new StudentWeekStatisticsListAdapter(getContext(), data);
+//            bind.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+//            bind.recyclerview.setAdapter(dayStatisticsDetailListAdapter);
+//        }
 
 
 
