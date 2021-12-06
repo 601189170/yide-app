@@ -58,8 +58,16 @@ object JumpUtil {
                     .post(EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1))
             }
             "周报" -> {
-                //context.startActivity(new Intent(context, PushSettingActivity.class));
-                mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
+                if (SpData.getIdentityInfo().isSchool) {
+                    mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
+                } else {
+                    //处理教师家长有绑定班级跳转
+                    if (SpData.getClassInfo() != null) {
+                        mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
+                    } else {
+                        ToastUtils.showShort("名下无班级周报");
+                    }
+                }
             }
             "日程" -> {
                 EventBus.getDefault()
@@ -68,8 +76,8 @@ object JumpUtil {
             "会议" -> {
                 mActivity.startActivity(Intent(mActivity, MeetingHomeActivity::class.java))
             }
-            "校历" ->{
-                mActivity.startActivity(Intent(mActivity,SchoolCalendarActivity::class.java))
+            "校历" -> {
+                mActivity.startActivity(Intent(mActivity, SchoolCalendarActivity::class.java))
             }
             else -> if ("#" == url) {
                 ToastUtils.showShort("暂无权限")
