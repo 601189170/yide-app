@@ -264,11 +264,11 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
             toScheduleDataBean.repetition?.let {
                 val rule = it.rule
                 if (rule != null) {
-                    val until = rule["until"].toString()
+                    val until = rule["until"]
                     val startTime1 = toScheduleDataBean.startTime?:""
                     //截止日期需晚于日程开始日期
-                    if (!TextUtils.isEmpty(startTime1) && !TextUtils.isEmpty(until)) {
-                        if (ScheduleDaoUtil.toDateTime(startTime1) >= ScheduleDaoUtil.toDateTime(until)) {
+                    if (until != null && !TextUtils.isEmpty(startTime1) && !TextUtils.isEmpty(until.toString())) {
+                        if (ScheduleDaoUtil.toDateTime(startTime1) >= ScheduleDaoUtil.toDateTime(until.toString())) {
                             ToastUtils.showShort("截止日期需晚于日程开始日期")
                             return@setOnClickListener
                         }
