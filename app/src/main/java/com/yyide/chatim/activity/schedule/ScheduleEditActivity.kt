@@ -80,12 +80,12 @@ class ScheduleEditActivity : BaseActivity() {
         scheduleEditBinding.etScheduleTitle.isEnabled = editable
         //日程完成状态
         scheduleEditBinding.checkBox.isEnabled = editable
-        scheduleEditBinding.checkBox.visibility = if (editable) View.VISIBLE else View.GONE
+//        scheduleEditBinding.checkBox.visibility = if (editable) View.VISIBLE else View.GONE
         val status = scheduleEditViewModel.scheduleStatusLiveData.value
         if (status != "1") {
-            scheduleEditBinding.checkBox.visibility = if (editable) View.VISIBLE else View.GONE
+//            scheduleEditBinding.checkBox.visibility = if (editable) View.VISIBLE else View.GONE
         } else {
-            scheduleEditBinding.checkBox.visibility = View.VISIBLE
+//            scheduleEditBinding.checkBox.visibility = View.VISIBLE
         }
         //日期选择
         if (!editable) {
@@ -178,7 +178,7 @@ class ScheduleEditActivity : BaseActivity() {
             scheduleEditViewModel.scheduleTitleLiveData.value = it.name
             //日程状态status
             if (!promoter && it.status != "1"){
-                scheduleEditBinding.checkBox.visibility = View.GONE
+//                scheduleEditBinding.checkBox.visibility = View.GONE
             }
             scheduleEditBinding.checkBox.isChecked = it.status == "1"
             scheduleEditViewModel.scheduleStatusLiveData.value = it.status

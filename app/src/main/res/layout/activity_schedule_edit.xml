@@ -460,7 +460,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
-                android:paddingBottom="@dimen/dp_20"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@id/cl_remark">
 
@@ -472,14 +471,15 @@
                     android:paddingTop="@dimen/dp_18"
                     android:paddingEnd="@dimen/dp_20"
                     android:paddingBottom="@dimen/dp_18"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/btn_add_label"/>
 
                 <Button
                     android:id="@+id/btn_add_label"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_24"
                     android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_24"
+                    android:layout_marginTop="@dimen/dp_20"
                     android:background="@drawable/add_label_btn_bg_shape"
                     android:drawableStart="@drawable/schedule_add_label_icon"
                     android:drawablePadding="@dimen/dp_6"
@@ -488,8 +488,9 @@
                     android:text="添加标签"
                     android:textColor="#1E1E1E"
                     android:textSize="@dimen/text_15"
+                    android:layout_marginBottom="@dimen/dp_20"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rv_label_list" />
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
