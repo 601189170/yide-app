@@ -1,5 +1,6 @@
 package com.yyide.chatim.model.attendance
 
+import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -71,3 +72,35 @@ data class TeacherAttendanceWeekMonthRsp(
         }
     }
 }
+
+data class EventBean(
+    var userName: String? = null,
+    var userId: String? = null,
+    var sectionNumber: Int = 0,
+    var type: Int = 0,//0第一层 1第二层
+    var checked: Boolean = false,
+    var attendanceType: String? = null,
+    var requiredTime: String? = null,
+    var signInTime: String? = null,
+    var clockName: String? = null,
+    var sortName: String? = null,
+    var eventName: String? = null,
+    var section: String? = null,
+    var timeFrame: String? = null,
+    var courseInfo: String? = null,
+    var courseName: String? = null,
+    var courseStartTime: String? = null,
+    var sectionOrder: String? = null,
+    var leaveStartTime: String? = null,
+    var leaveEndTime: String? = null,
+    var attendanceSignInOut: String? = null
+) : MultiItemEntity {
+    override val itemType: Int
+        get() = if (type == 0) GROUP_ITEM else CHILD_ITEM
+
+    companion object {
+        const val GROUP_ITEM = 1
+        const val CHILD_ITEM = 2
+    }
+}
+
