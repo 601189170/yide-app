@@ -234,6 +234,7 @@ object ScheduleRepetitionRuleUtil {
                 break
             }
             nowDateTime = nowDateTime.plusWeeks(interval)
+            nowDateTime= nowDateTime.minusDays(nowDateTime.dayOfWeek % 7)
         }
         return repetitionDate
     }
@@ -272,6 +273,7 @@ object ScheduleRepetitionRuleUtil {
                 break
             }
             nowDateTime = nowDateTime.plusMonths(interval)
+            nowDateTime = nowDateTime.minusDays(nowDateTime.dayOfMonth - 1)
         }
         return repetitionDate
     }
