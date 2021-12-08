@@ -53,9 +53,9 @@ class ScheduleSettingsActivity : BaseActivity() {
 //        scheduleSettingsBinding.gpSchoolCalendar.requestLayout()
         val conferenceEnable = settingsViewModel.conferenceEnable.value ?: false
         scheduleSettingsBinding.cbConference.isChecked = conferenceEnable
-        scheduleSettingsBinding.gpConference.visibility =
-            if (conferenceEnable) View.VISIBLE else View.GONE
-        scheduleSettingsBinding.gpConference.requestLayout()
+//        scheduleSettingsBinding.gpConference.visibility =
+//            if (conferenceEnable) View.VISIBLE else View.GONE
+//        scheduleSettingsBinding.gpConference.requestLayout()
 
         scheduleSettingsBinding.cbShowTimeline.isChecked =
             settingsViewModel.curTimelineEnable.value ?: false
@@ -139,14 +139,14 @@ class ScheduleSettingsActivity : BaseActivity() {
 //        }
 
         scheduleSettingsBinding.cbConference.isChecked = true
-        scheduleSettingsBinding.gpConference.visibility = View.GONE
+//        scheduleSettingsBinding.gpConference.visibility = View.GONE
         scheduleSettingsBinding.gpConference.requestLayout()
         scheduleSettingsBinding.cbConference.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                scheduleSettingsBinding.gpConference.visibility = View.VISIBLE
+//                scheduleSettingsBinding.gpConference.visibility = View.VISIBLE
                 scheduleSettingsBinding.vLine6.visibility = View.VISIBLE
             } else {
-                scheduleSettingsBinding.gpConference.visibility = View.GONE
+//                scheduleSettingsBinding.gpConference.visibility = View.GONE
                 scheduleSettingsBinding.vLine6.visibility = View.INVISIBLE
             }
             scheduleSettingsBinding.cbConferenceRemind.isChecked = isChecked
