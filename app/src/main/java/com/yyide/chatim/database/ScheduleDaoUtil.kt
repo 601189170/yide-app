@@ -207,7 +207,7 @@ object ScheduleDaoUtil {
         }
         listAllSchedule.sort()
         //计算跨天日程并切分时间段
-        val listAllSchedule2 = mutableListOf<ScheduleData>()
+      /*  val listAllSchedule2 = mutableListOf<ScheduleData>()
         for (scheduleData in listAllSchedule) {
             val startTime = toDateTime(scheduleData.startTime)
             val endTime = toDateTime(scheduleData.endTime)
@@ -263,8 +263,8 @@ object ScheduleDaoUtil {
                 }
             }
         }
-        listAllSchedule2.sort()
-        return listAllSchedule2
+        listAllSchedule2.sort()*/
+        return listAllSchedule
     }
 
     /**
