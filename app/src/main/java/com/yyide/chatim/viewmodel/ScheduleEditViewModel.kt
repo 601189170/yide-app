@@ -13,6 +13,7 @@ import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.loge
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
@@ -140,6 +141,12 @@ class ScheduleEditViewModel : ViewModel() {
                 }
             }
         }
+        //不支持跨天且重复日程
+        if (ScheduleRepetitionRuleUtil.moreDayAndRepetitionData(scheduleData.isRepeat,scheduleData.startTime,scheduleData.endTime)){
+            ToastUtils.showShort("暂时不支持跨天重复日程！")
+            return
+        }
+
         val toJSONString = JSON.toJSONString(scheduleData)
         loge("toJSONString=$toJSONString")
         val body = RequestBody.create(BaseConstant.JSON, toJSONString)

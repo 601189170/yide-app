@@ -259,7 +259,12 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
             scheduleEditViewModel.startTimeLiveData.value = dateStart.get()
             scheduleEditViewModel.endTimeLiveData.value = dateEnd.get()
             scheduleEditViewModel.allDayLiveData.value = scheduleSimpleEditionBinding.checkBox.isChecked
-
+            //不支持跨天且重复日程
+            val isRepeat = (scheduleEditViewModel.repetitionLiveData.value?.code?:"").toString()
+            if (ScheduleRepetitionRuleUtil.moreDayAndRepetitionData(isRepeat,dateStart.get(),dateEnd.get())){
+                ToastUtils.showShort("暂时不支持跨天重复日程！")
+                return@setOnClickListener
+            }
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
             toScheduleDataBean.repetition?.let {
                 val rule = it.rule

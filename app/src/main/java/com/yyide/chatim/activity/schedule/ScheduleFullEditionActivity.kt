@@ -332,6 +332,15 @@ class ScheduleFullEditionActivity : BaseActivity() {
                 ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!")
                 return@setOnClickListener
             }
+            //不支持跨天且重复日程
+            val isRepeat = (scheduleEditViewModel.repetitionLiveData.value?.code?:"").toString()
+            val startTime = scheduleEditViewModel.startTimeLiveData.value?.toString()?:""
+            val endTime = scheduleEditViewModel.endTimeLiveData.value?.toString()?:""
+            if (ScheduleRepetitionRuleUtil.moreDayAndRepetitionData(isRepeat,startTime,endTime)){
+                ToastUtils.showShort("暂时不支持跨天重复日程！")
+                return@setOnClickListener
+            }
+
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
             toScheduleDataBean.repetition?.let {
                 val rule = it.rule

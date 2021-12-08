@@ -42,6 +42,18 @@ object ScheduleRepetitionRuleUtil {
     }
 
     /**
+     * 判断一个日程是否是跨天且重复的日程
+     */
+    fun moreDayAndRepetitionData(isRepeat: String, startTime: String, endTime: String): Boolean {
+        val simplifiedDataTime1 = ScheduleDaoUtil.toDateTime(startTime).simplifiedDataTime()
+        val simplifiedDataTime2 = ScheduleDaoUtil.toDateTime(endTime).simplifiedDataTime()
+        if (isRepeat != "0" && simplifiedDataTime1.compareTo(simplifiedDataTime2) != 0) {
+            return true
+        }
+        return false
+    }
+
+    /**
      * 返回满足重复规则的日期 yyyy-MM-dd 00:00:00
      */
     fun calculate(
