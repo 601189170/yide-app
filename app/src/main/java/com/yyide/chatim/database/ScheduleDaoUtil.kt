@@ -398,9 +398,14 @@ object ScheduleDaoUtil {
 
     /**
      * 查询指定月的数据
+     * @param divideMoreDay 是否拆分跨天日程 默认拆分跨天日程
+     * @param moreThanMonth 是否请求当前月及以历史月的日程 默认只请求当前月的日程数据
      */
-    fun monthlyList(monthDateTime: DateTime, timeAxisDateTime: DateTime?,divideMoreDay:Boolean = true): List<DayOfMonth> {
-        val firstDayOfMonth = monthDateTime.dayOfMonth().withMinimumValue().simplifiedDataTime()
+    fun monthlyList(monthDateTime: DateTime, timeAxisDateTime: DateTime?,divideMoreDay:Boolean = true,moreThanMonth:Boolean = false): List<DayOfMonth> {
+        var firstDayOfMonth = monthDateTime.dayOfMonth().withMinimumValue().simplifiedDataTime()
+        if (moreThanMonth){
+            firstDayOfMonth = toDateTime("2000-01-01 00:00:00").simplifiedDataTime()
+        }
         val lastDayOfMonth = monthDateTime.dayOfMonth().withMaximumValue().simplifiedDataTime()
         //本周最后的时间
         val finallyTime = lastDayOfMonth.toString("yyyy-MM-dd ") + "23:59:59"

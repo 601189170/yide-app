@@ -34,9 +34,9 @@ class ScheduleListViewViewModel : ViewModel() {
      * 请求列表视图的日程数据 按日分组
      * @param dateTime 需要请求日程列表的时间 月
      */
-    private fun scheduleList(dateTime: DateTime,timeAxisDateTime:DateTime?):List<MonthViewScheduleData>{
+    private fun scheduleList(dateTime: DateTime,timeAxisDateTime:DateTime?,moreThanMonth:Boolean):List<MonthViewScheduleData>{
         val map = mutableMapOf<DateTime, MutableList<ScheduleData>>()
-        val monthlyList = ScheduleDaoUtil.monthlyList(dateTime,timeAxisDateTime,false)
+        val monthlyList = ScheduleDaoUtil.monthlyList(dateTime,timeAxisDateTime,false,moreThanMonth)
         monthlyList.forEach {
             if (map.containsKey(it.dateTime)) {
                 if (map[it.dateTime] == null) {
@@ -88,8 +88,8 @@ class ScheduleListViewViewModel : ViewModel() {
     /**
      * 获取日程列表数据
      */
-    fun scheduleDataList(dateTime: DateTime,timeAxisDateTime:DateTime?,loadMore:Boolean = true){
-        val scheduleList = scheduleList(dateTime, timeAxisDateTime)
+    fun scheduleDataList(dateTime: DateTime,timeAxisDateTime:DateTime?,loadMore:Boolean = true,moreThanMonth:Boolean = false){
+        val scheduleList = scheduleList(dateTime, timeAxisDateTime,moreThanMonth)
         val scheduleDataList = mutableListOf<ScheduleData>()
         scheduleList.forEach {
             //月开始
