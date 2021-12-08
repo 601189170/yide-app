@@ -82,6 +82,7 @@ import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil;
 import com.yyide.chatim.viewmodel.LabelManageViewModel;
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel;
 import com.yyide.chatim.widget.CircleFrameLayout;
+import com.yyide.chatim.widget.CustomInputDialog;
 import com.yyide.chatim.widget.SpaceItemDecoration;
 import com.yyide.chatim.widget.WheelView;
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
@@ -1057,7 +1058,7 @@ public class DialogUtil {
     public static Dialog showAddScheduleV2Dialog(Context context, LifecycleOwner lifecycleOwner,ScheduleEditViewModel scheduleEditViewModel, DateTime date,OnScheduleAddListener onScheduleAddListener) {
         DialogAddScheduleInputV2Binding binding = DialogAddScheduleInputV2Binding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
-        Dialog mDialog = new Dialog(context, R.style.inputDialog);
+        CustomInputDialog mDialog = new CustomInputDialog(context, R.style.inputDialog);
         mDialog.setContentView(rootView);
         if (date == null){
             date = DateTime.now();
