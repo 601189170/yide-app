@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
@@ -72,7 +73,7 @@ class ScheduleSearchFilterPop(
         initDate(mView)
         mView.tvConfirm.setOnClickListener {
             commit(mView)
-            hide()
+            //hide()
         }
         mView.tvReset.setOnClickListener {
             reset(mView)
@@ -245,6 +246,11 @@ class ScheduleSearchFilterPop(
             startDate = ScheduleDaoUtil.toDateTime(endDate).toString("yyyy-MM-dd ").plus("00:00:00")
         }
 
+        if (ScheduleDaoUtil.toDateTime(startDate)>ScheduleDaoUtil.toDateTime(endDate)){
+            ToastUtils.showShort("开始日期不能大于结束日期！")
+            return
+        }
+
         val scheduleFilterTag =
             ScheduleFilterTag(
                 types,
@@ -253,6 +259,7 @@ class ScheduleSearchFilterPop(
                 endDate,
                 labelList.filter { it.checked })
         onSelectListener.result(scheduleFilterTag)
+        hide()
     }
 
     fun hide() {
@@ -292,7 +299,8 @@ class ScheduleSearchFilterPop(
         } else {
             binding.dateSelect.tvDateStart.text =
                 DateUtils.formatTime(dateStart.get(), "", "", true)
-            binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(dateStart.get(), "", "HH:mm")
+            //binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(dateStart.get(), "", "HH:mm")
+            binding.dateSelect.tvTimeStart.visibility = View.GONE
         }
 
         if (TextUtils.isEmpty(dateEnd.get())) {
@@ -300,9 +308,10 @@ class ScheduleSearchFilterPop(
             binding.dateSelect.tvTimeEnd.text = "结束日期"
         } else {
             binding.dateSelect.tvDateEnd.text = DateUtils.formatTime(dateEnd.get(), "", "", true)
-            binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(dateEnd.get(), "", "HH:mm")
+            //binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(dateEnd.get(), "", "HH:mm")
+            binding.dateSelect.tvTimeEnd.visibility = View.GONE
         }
-
+        binding.dateSelect.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2)
         binding.dateSelect.clStartTime.setOnClickListener {
             if (binding.dateSelect.llVLine.visibility == View.GONE) {
                 binding.dateSelect.llVLine.visibility = View.VISIBLE
@@ -334,12 +343,14 @@ class ScheduleSearchFilterPop(
             if (binding.dateSelect.vDateTopMarkLeft.visibility == View.VISIBLE) {
                 //左边选中设置左边的时间数据
                 binding.dateSelect.tvDateStart.text = time
-                binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
+                //binding.dateSelect.tvTimeStart.text = DateUtils.formatTime(date, "", "HH:mm")
+                binding.dateSelect.tvTimeStart.visibility = View.GONE
                 dateStart.set(date)
             } else if (binding.dateSelect.vDateTopMarkRight.visibility == View.VISIBLE) {
                 //右边被选中设置右边的时间数据
                 binding.dateSelect.tvDateEnd.text = time
-                binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
+                //binding.dateSelect.tvTimeEnd.text = DateUtils.formatTime(date, "", "HH:mm")
+                binding.dateSelect.tvTimeEnd.visibility = View.GONE
                 dateEnd.set(date)
             } else {
                 //第一次设置两边的数据
