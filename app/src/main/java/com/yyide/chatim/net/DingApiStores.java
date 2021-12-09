@@ -87,6 +87,8 @@ import com.yyide.chatim.model.schedule.Settings;
 import com.yyide.chatim.model.schedule.SiteNameRsp;
 import com.yyide.chatim.model.schedule.StudentGuardianRsp;
 import com.yyide.chatim.model.schedule.TodayListRsp;
+import com.yyide.chatim.model.sitetable.SiteBuildingsRsp;
+import com.yyide.chatim.model.sitetable.SiteTableRsp;
 
 import java.util.HashMap;
 import java.util.List;
@@ -969,4 +971,19 @@ public interface DingApiStores {
     @POST("/management/cloud-system/app/school/calendar/selectSchoolCalendar")
     Call<SchoolCalendarRsp> selectSchoolCalendar(@Body RequestBody requestBody);
 
+    /**
+     * 查询场地课表建筑
+     * https://api.uat.edu.1d1j.net/timetable/cloud-timetable/v1/app/kcb/buildings
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/timetable/cloud-timetable/v1/app/kcb/buildings")
+    Call<SiteBuildingsRsp> buildings();
+
+    /**
+     * 查询场地课表
+     * https://api.uat.edu.1d1j.net/timetable/cloud-timetable/v1/app/kcb/sites
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/timetable/cloud-timetable/v1/app/kcb/sites")
+    Call<SiteTableRsp> sites(@Body RequestBody requestBody);
 }

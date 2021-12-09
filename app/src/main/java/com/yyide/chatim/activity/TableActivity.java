@@ -16,6 +16,7 @@ import com.yyide.chatim.activity.notice.NoticeItemFragment;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.ClassTableFragment;
 import com.yyide.chatim.fragment.MyTableFragment;
+import com.yyide.chatim.fragment.SiteTableFragment;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.TemplateTypeRsp;
 
@@ -25,6 +26,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,7 +41,7 @@ public class TableActivity extends BaseActivity {
     TabLayout mTablayout;
     @BindView(R.id.viewpager)
     ViewPager2 mViewpager;
-
+    List<Fragment> fragmentList;
     @Override
     public int getContentViewID() {
         return R.layout.activity_table_title;
@@ -61,31 +65,38 @@ public class TableActivity extends BaseActivity {
     }
 
     private void initViewPager() {
+        fragmentList = new ArrayList<>();
+        fragmentList.add(new MyTableFragment());
+        fragmentList.add(new ClassTableFragment());
+        fragmentList.add(new SiteTableFragment());
 
         mViewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         mViewpager.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
             public Fragment createFragment(int position) {
-                if(position == 0){
-                    return new MyTableFragment();
-                } else {
-                    return new ClassTableFragment();
-                }
+//                if(position == 0){
+//                    return new MyTableFragment();
+//                } else {
+//                    return new ClassTableFragment();
+//                }
+                return fragmentList.get(position);
             }
 
             @Override
             public int getItemCount() {
-                return 2;
+                return fragmentList.size();
             }
         });
-        new TabLayoutMediator(mTablayout, mViewpager, true, new TabLayoutMediator.TabConfigurationStrategy() {
+        new TabLayoutMediator(mTablayout, mViewpager, true,false, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                if(position == 0){
+                if (position == 0) {
                     tab.setText("我的课表");
-                } else {
+                } else if (position == 1) {
                     tab.setText("班级课表");
+                } else {
+                    tab.setText("场地课表");
                 }
             }
         }).attach();
