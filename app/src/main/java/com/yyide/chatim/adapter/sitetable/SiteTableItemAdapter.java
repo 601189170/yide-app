@@ -66,6 +66,12 @@ public class SiteTableItemAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void notifyData(List<SiteTableRsp.DataBean.ListBean> list,int position) {
+        this.list = list;
+        this.position = position;
+        notifyDataSetChanged();
+    }
+
     public void setIndex(int position) {
         this.position = position;
         notifyDataSetChanged();

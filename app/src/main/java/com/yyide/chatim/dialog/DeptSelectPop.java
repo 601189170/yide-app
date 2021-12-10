@@ -104,6 +104,9 @@ public class DeptSelectPop extends PopupWindow {
             case 5:
                 tvPopTitle.setText("选择学期");
                 break;
+            case 6:
+                tvPopTitle.setText("选择周次");
+                break;
             default:
                 break;
         }

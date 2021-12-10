@@ -1,26 +1,34 @@
 package com.yyide.chatim.fragment
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.blankj.utilcode.util.SizeUtils
 import com.yyide.chatim.R
-import com.yyide.chatim.adapter.sitetable.SiteTableTimeAdapter
 import com.yyide.chatim.adapter.TableSectionAdapter
 import com.yyide.chatim.adapter.sitetable.SiteTableItemAdapter
+import com.yyide.chatim.adapter.sitetable.SiteTableTimeAdapter
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.databinding.FragmentSiteTableBinding
+import com.yyide.chatim.dialog.DeptSelectPop
 import com.yyide.chatim.dialog.SwitchTableClassPop
+import com.yyide.chatim.fragment.attendance.v2.StudentDayStatisticsFragment
+import com.yyide.chatim.model.LeaveDeptRsp
 import com.yyide.chatim.model.SelectTableClassesRsp
 import com.yyide.chatim.model.sitetable.SiteTableRsp
 import com.yyide.chatim.model.sitetable.toWeekDayList
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.TimeUtil
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.SiteTableViewModel
@@ -37,6 +45,13 @@ class SiteTableFragment : Fragment() {
     lateinit var siteTableItemAdapter: SiteTableItemAdapter
     private lateinit var leftLayout: RelativeLayout
     var index = -1
+    //周次
+    private var week = 1
+    private var weekTotal = 1
+    private var thisWeek = 1
+    private var first = true
+    private val classList = mutableListOf<LeaveDeptRsp.DataBean>()
+    private var id: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +60,7 @@ class SiteTableFragment : Fragment() {
         return siteTableFragmentBinding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,6 +105,7 @@ class SiteTableFragment : Fragment() {
             siteTableFragmentBinding.top.className.text = childrenBean.name
             siteTableFragmentBinding.top.classlayout.isEnabled = true
             //默认查询第一个场地的课表
+            id = childrenBean.id
             siteTableViewModel.getSites(childrenBean.id, null)
         }
         //场地课表数据
@@ -98,6 +115,13 @@ class SiteTableFragment : Fragment() {
             }
             //本周次
             siteTableFragmentBinding.top.tvWeek.text = "${it.bzzc}周"
+            week = it.bzzc?.toInt()?:1
+            if (first){
+                first = false
+                thisWeek = week
+            }
+            //显示回调本周
+            siteTableFragmentBinding.top.backCurrentWeek.visibility = if (week == thisWeek) View.GONE else View.VISIBLE
             //本周一到周日日期标题
             weekdayList.clear()
             it.weekmap?.let {
@@ -130,6 +154,10 @@ class SiteTableFragment : Fragment() {
             //节次
             var sectionCount = 0
             it.zxb?.let {
+                weekTotal = it.xnzzc
+                //周次选择
+                initClassData()
+                initClassView()
                 sectionCount = it.zzxkjs + it.swkjs + it.xwkjs + it.wzxkjs
                 val sectionlist = mutableListOf<String>()
                 for (i in 0 until sectionCount) {
@@ -162,13 +190,20 @@ class SiteTableFragment : Fragment() {
                 }
             }
             loge("${courseList}")
-            siteTableItemAdapter.notifyData(courseList)
+            siteTableItemAdapter.notifyData(courseList,-1)
 
             //计算今日
-            val dayOfWeek = DateTime.now().dayOfWeek
-            index = dayOfWeek % 7 - 1
-            siteTableItemAdapter.setIndex(index)
-            adapter.setPosition(index)
+            if (weekdayList.isNotEmpty()) {
+                val dataTime = weekdayList[0].dataTime
+                val nowDateTime = DateTime.now()
+                val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7-1).simplifiedDataTime()
+                if (ScheduleDaoUtil.toDateTime(dataTime, "yyyy-MM-dd").simplifiedDataTime() == firstDayOfWeek) {
+                    val dayOfWeek = DateTime.now().dayOfWeek
+                    index = dayOfWeek % 7 - 1
+                    siteTableItemAdapter.setIndex(index)
+                    adapter.setPosition(index)
+                }
+            }
         }
         siteTableViewModel.getBuildings()
         initView()
@@ -180,6 +215,7 @@ class SiteTableFragment : Fragment() {
             val switchTableClassPop = SwitchTableClassPop(requireActivity(), data)
             switchTableClassPop.setSelectClasses { id, classesName ->
                 loge("id=$id,classesName=$classesName")
+                this.id = id.toString()
                 siteTableViewModel.getSites(id.toString(), null)
             }
         }
@@ -196,7 +232,52 @@ class SiteTableFragment : Fragment() {
             index = position
             siteTableItemAdapter.setIndex(index)
         }
+        //回调本周
+        siteTableFragmentBinding.top.backCurrentWeek.setOnClickListener {
+            index = -1
+            siteTableViewModel.getSites(id, null)
+        }
 
+    }
+
+    /**
+     * 初始化
+     * @param studentBeanList
+     */
+    private fun initClassData() {
+        classList.clear()
+        for (index in 1 .. weekTotal) {
+            val dataBean = LeaveDeptRsp.DataBean()
+            dataBean.deptId = "$index"
+            dataBean.classId = "$index"
+            dataBean.deptName = "第".plus("$index").plus("周")
+            dataBean.isDefault = 0
+            if (week == index) {
+                dataBean.isDefault = 1
+            }
+            classList.add(dataBean)
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private fun initClassView() {
+        val classOptional = classList.stream().filter { it.isDefault == 1 }.findFirst()
+        if (classOptional.isPresent) {
+            val clazzBean = classOptional.get()
+            week = clazzBean.classId.toInt()
+            if (classList.size <= 1) {
+                siteTableFragmentBinding.top.tvWeek.isEnabled = false
+            } else {
+                siteTableFragmentBinding.top.tvWeek.setOnClickListener { v ->
+                    val deptSelectPop = DeptSelectPop(activity, 6, classList)
+                    deptSelectPop.setOnCheckedListener { dataBean: LeaveDeptRsp.DataBean ->
+                        //班级id
+                        week = dataBean.classId.toInt()
+                        siteTableViewModel.getSites(id, "$week")
+                    }
+                }
+            }
+        }
     }
 
     //创建"第上下午"视图
