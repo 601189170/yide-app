@@ -246,7 +246,10 @@ class ScheduleSearchFilterPop(
             startDate = ScheduleDaoUtil.toDateTime(endDate).toString("yyyy-MM-dd ").plus("00:00:00")
         }
 
-        if (ScheduleDaoUtil.toDateTime(startDate)>ScheduleDaoUtil.toDateTime(endDate)){
+        if (!TextUtils.isEmpty(startDate) && !TextUtils.isEmpty(endDate) && ScheduleDaoUtil.toDateTime(
+                startDate
+            ) > ScheduleDaoUtil.toDateTime(endDate)
+        ) {
             ToastUtils.showShort("开始日期不能大于结束日期！")
             return
         }
