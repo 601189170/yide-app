@@ -49,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="08:00-09:00"
+        android:singleLine="true"
         android:textColor="#ff666666"
         android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="@id/iv_schedule_type_img"

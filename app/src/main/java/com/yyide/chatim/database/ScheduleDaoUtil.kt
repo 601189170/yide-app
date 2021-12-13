@@ -8,6 +8,7 @@ import com.yyide.chatim.SpData
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.model.schedule.DayOfMonth
 import com.yyide.chatim.model.schedule.FilterTagCollect
+import com.yyide.chatim.model.schedule.Schedule
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
@@ -148,6 +149,10 @@ object ScheduleDaoUtil {
         //需要的日程数据包括重复日程
         val listAllSchedule = mutableListOf<ScheduleData>()
         scheduleDataList.forEach { schedule ->
+            //只显示事务日程的日程清单。
+            if (schedule.type.toInt() != Schedule.SCHEDULE_TYPE_SCHEDULE) {
+                return@forEach
+            }
             val repetitionDate =
                 ScheduleRepetitionRuleUtil.calculate(
                     schedule.startTime,
@@ -285,6 +290,10 @@ object ScheduleDaoUtil {
         //需要的本周重复日程
         val listAllSchedule = mutableListOf<ScheduleData>()
         scheduleDataList.forEach { schedule ->
+            //只显示事务日程的日程清单。
+            if (schedule.type.toInt() != Schedule.SCHEDULE_TYPE_SCHEDULE) {
+                return@forEach
+            }
             val repetitionDate = ScheduleRepetitionRuleUtil.calculate(
                 schedule.startTime,
                 finallyTime,
