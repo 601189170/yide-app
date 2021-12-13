@@ -1,21 +1,13 @@
 package com.yyide.chatim;
 
-import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -54,6 +46,13 @@ public class SpData {
 
     public static GetUserSchoolRsp.DataBean.FormBean getClassInfo() {
         return JSON.parseObject(SPUtils.getInstance().getString(CLASS_INFO, ""), GetUserSchoolRsp.DataBean.FormBean.class);
+    }
+
+    public static String getUserId() {
+        if (SpData.getIdentityInfo() != null) {
+            return SpData.getIdentityInfo().userId;
+        }
+        return "";
     }
 
     //去重

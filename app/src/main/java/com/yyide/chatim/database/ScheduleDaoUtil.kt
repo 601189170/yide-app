@@ -126,7 +126,7 @@ object ScheduleDaoUtil {
      * 判断当前日程是否当前账户创建的
      */
     fun ScheduleData.promoterSelf(): Boolean {
-        val userId = SpData.getIdentityInfo().userId
+        val userId = SpData.getUserId()
         if (TextUtils.isEmpty(this.promoter) || TextUtils.isEmpty(userId)) {
             return false
         }

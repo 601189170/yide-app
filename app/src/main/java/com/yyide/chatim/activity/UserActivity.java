@@ -112,7 +112,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mmkv = MMKV.defaultMMKV();
-        userId = SpData.getIdentityInfo().userId;
+        userId = SpData.getUserId();
         EventBus.getDefault().register(this);
         if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             title.setText("学生信息");

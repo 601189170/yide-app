@@ -1,29 +1,20 @@
 package com.yyide.chatim.presenter;
 
 
-import android.text.TextUtils;
-
 import com.alibaba.fastjson.JSON;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetAppVersionResponse;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
-import com.yyide.chatim.model.ResultBean;
-import com.yyide.chatim.model.SelectUserRsp;
-import com.yyide.chatim.model.UploadRep;
 import com.yyide.chatim.model.UserLogoutRsp;
 import com.yyide.chatim.model.WeeklyDateBean;
 import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MainView;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**

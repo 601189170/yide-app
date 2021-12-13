@@ -88,7 +88,7 @@ public class SwitchIdentityPop extends PopupWindow {
             }
         });
         listview.setOnItemClickListener((parent, view, position, id) -> {
-            if (!adapter.getItem(position).userId.equals(SpData.getIdentityInfo().userId)) {
+            if (!adapter.getItem(position).userId.equals(SpData.getUserId())) {
                 adapter.setIndex(position);
                 selectUserSchool(adapter.getItem(position));
             }
@@ -285,9 +285,9 @@ public class SwitchIdentityPop extends PopupWindow {
     }
 
     void initIm(String userSig) {
-        UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
+        UserInfo.getInstance().setUserId(SpData.getUserId() + "");
         // 获取userSig函数
-        TUIKit.login(SpData.getIdentityInfo().userId + "", userSig, new IUIKitCallBack() {
+        TUIKit.login(SpData.getUserId() + "", userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
                 loadingTools.closeLoading();
@@ -295,7 +295,7 @@ public class SwitchIdentityPop extends PopupWindow {
                 DemoLog.i("TAG", "imLogin errorCode = " + code + ", errorInfo = " + desc);
                 UserInfo.getInstance().setAutoLogin(false);
                 UserInfo.getInstance().setUserSig(userSig);
-                UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
+                UserInfo.getInstance().setUserId(SpData.getUserId() + "");
                 Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
                 if (mOnCheckCallBack != null) {
@@ -315,7 +315,7 @@ public class SwitchIdentityPop extends PopupWindow {
                 loadingTools.closeLoading();
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
-                UserInfo.getInstance().setUserId(SpData.getIdentityInfo().userId + "");
+                UserInfo.getInstance().setUserId(SpData.getUserId() + "");
                 Log.e("TAG", "切换成功UserInfo==》: " + UserInfo.getInstance().getUserId());
 //                ActivityUtils.finishAllActivities();
 //                Intent intent = new Intent(context, MainActivity.class);

@@ -80,7 +80,11 @@ public class GetUserSchoolRsp implements Serializable {
         }
 
         public boolean isSchool() {
-            return TYPE_PRESIDENT.equals(status) || TYPE_ADMIN.equals(status);
+            return TYPE_PRESIDENT.equals(status);
+        }
+
+        public boolean isAdmin(){
+            return TYPE_ADMIN.equals(status);
         }
 
         public boolean isParent() {

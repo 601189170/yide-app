@@ -48,7 +48,6 @@ public class WebViewActivity extends BaseActivity {
     private WebSettings webSettings;
     private WebView mWebView;
     private String type;
-    private ValueAnimator pbAnim;
     private TextView tvTitle;
     private ImageView imageView;
 
@@ -94,7 +93,6 @@ public class WebViewActivity extends BaseActivity {
         type = getIntent().getStringExtra(PARAM_TYPE);
         json = getIntent().getStringExtra(PARAM_JSON);
         initView();
-        initAnimtor();
         initWebView();
     }
 
@@ -112,14 +110,6 @@ public class WebViewActivity extends BaseActivity {
         }
         imageView.setImageResource(R.drawable.schedule_add_label_close_dialog_icon);
         imageView.setOnClickListener(v -> finish());
-    }
-
-    private void initAnimtor() {
-        pbAnim = ValueAnimator.ofFloat(0f, 70f);
-        pbAnim.setDuration(3000);
-        pbAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-        //pbAnim.addUpdateListener(animation -> pb_webview.setProgress(animation.getAnimatedValue()));
-        pbAnim.start();
     }
 
     @SuppressLint("JavascriptInterface")
@@ -169,19 +159,10 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress == 100) {
-                    pbAnim.cancel();
-                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(pb_webview.getProgress(), 100f);
-                    valueAnimator.setDuration((long) (1500 * (1 - pb_webview.getProgress() / 100f)));
-                    //alueAnimator.addUpdateListener(animation -> pb_webview.setProgress((Integer) animation.getAnimatedValue()));
-                    valueAnimator.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            pb_webview.setVisibility(View.GONE);
-                        }
-                    });
-                    valueAnimator.start();
+                    pb_webview.setVisibility(View.GONE);
+                } else {
+                    pb_webview.setProgress(newProgress);
                 }
-
             }
 
             //For Android  >= 4.1
@@ -208,7 +189,6 @@ public class WebViewActivity extends BaseActivity {
                 if (pb_webview.getVisibility() == View.GONE) {
                     pb_webview.setProgress(0);
                     pb_webview.setVisibility(View.VISIBLE);
-                    pbAnim.start();
                 }
             }
 
@@ -233,7 +213,6 @@ public class WebViewActivity extends BaseActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
                 return false;
             }
 
