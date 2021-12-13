@@ -285,7 +285,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
      * 请求校历数据列表
      */
     private fun selectSchoolCalendar(){
-        schoolCalendarViewModel.selectSchoolCalendar(curSemesterId,curDateTime.monthOfYear.toString())
+        schoolCalendarViewModel.selectSchoolCalendar(curSemesterId,curDateTime.toStringTime("yyyy-MM"))
     }
 
     override fun onDestroy() {
