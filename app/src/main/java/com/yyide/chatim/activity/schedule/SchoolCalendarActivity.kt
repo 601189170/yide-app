@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ToastUtils
 import com.yanzhenjie.recyclerview.SwipeRecyclerView
@@ -29,10 +30,14 @@ import com.yyide.chatim.model.schedule.SchoolCalendarRsp
 import com.yyide.chatim.model.schedule.SchoolSemesterRsp
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
+import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpaceItemDecoration
 import com.yyide.chatim.viewmodel.SchoolCalendarViewModel
 import org.joda.time.DateTime
+import org.joda.time.Days
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 import java.util.ArrayList
 
 class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
@@ -74,6 +79,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             }
             schoolCalendarList.clear()
             removeTaskHints(hints)
+            schoolCalendarList.addAll(it)
+            schoolCalendarList.sort()
             if (it.isEmpty()) {
                 blankPage.visibility = View.VISIBLE
             } else {
@@ -82,26 +89,46 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                 dataBean.type = 1
                 dataBean.startTime = curDateTime.toStringTime("yyyy-MM").plus("-01")
                 dataBean.endTime = curDateTime.toStringTime("yyyy-MM").plus("-01")
-                schoolCalendarList.add(dataBean)
+                schoolCalendarList.add(0,dataBean)
             }
-            schoolCalendarList.addAll(it)
-            schoolCalendarList.sort()
+
             schoolCalendarAdapter.setList(schoolCalendarList)
             schoolCalendarList.forEach {
                 if (it.type == 1){
                     return@forEach
                 }
-                it.startTime?.let {
-                    val dateTime = toDateTime(it,"yyyy-MM-dd")
-                    val hintCircle = HintCircle(dateTime,dateTime.dayOfMonth, 1)
-                    hints.add(hintCircle)
-                    addTaskHint(hintCircle)
+                if (it.moreDay == 1) {
+                    //跨天计算
+                    val startTime = toDateTime(it.startTime?:"", "yyyy-MM-dd")
+                    val endTime = toDateTime(it.endTime?:"", "yyyy-MM-dd")
+
+                    val daysBetween = Days.daysBetween(startTime, endTime).days
+                    for (index in 0..daysBetween) {
+                        val dataBean:SchoolCalendarRsp.DataBean = it.copy()
+                        val allDay = toDateTime(dataBean.startTime?:"","yyyy-MM-dd").simplifiedDataTime().plusDays(index)
+                        //dataBean.startTime = allDay.toStringTime("yyyy-MM-dd")
+                        //dataBean.endTime = allDay.toStringTime("yyyy-MM-dd")
+                        if (startTime.year != allDay.year || startTime.monthOfYear != allDay.monthOfYear){
+                            break
+                        }
+                        val hintCircle = HintCircle(allDay, allDay.dayOfMonth, 1)
+                        hints.add(hintCircle)
+                        addTaskHint(hintCircle)
+                    }
+                } else {
+                    it.startTime?.let {
+                        val dateTime = toDateTime(it, "yyyy-MM-dd")
+                        val hintCircle = HintCircle(dateTime, dateTime.dayOfMonth, 1)
+                        hints.add(hintCircle)
+                        addTaskHint(hintCircle)
+                    }
                 }
+
             }
         }
     }
     /**
-     * 移除任务点
+     * 移除任务点 #FFFF4140
      */
     fun removeTaskHints(hints:List<HintCircle>){
         hints.forEach {
@@ -233,6 +260,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
 
     override fun onClickDate(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=$month,day=$day")
+        scrollToPosition(year, month, day)
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
@@ -263,5 +291,54 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     override fun onDestroy() {
         super.onDestroy()
         removeTaskHints(hints)
+    }
+
+    fun moveToPosition(position: Int, recyclerView: RecyclerView?) {
+        if (recyclerView == null || position == -1) {
+            return
+        }
+        val firstItem: Int = recyclerView.getChildLayoutPosition(recyclerView.getChildAt(0))
+        val lastItem: Int =
+            recyclerView.getChildLayoutPosition(recyclerView.getChildAt(recyclerView.getChildCount() - 1))
+        loge("moveToPosition:firstItem=$firstItem,lastItem=$lastItem")
+        if (position < firstItem || position > lastItem) {
+            //recyclerView.smoothScrollToPosition(position)
+            logd("scrollToPosition=$position")
+            //recyclerView.scrollToPosition(position)
+            val manager = recyclerView.layoutManager as LinearLayoutManager
+            manager.scrollToPositionWithOffset(position,0)
+        } else {
+            val movePosition = position - firstItem
+            val top: Int = recyclerView.getChildAt(movePosition).getTop()
+            logd("scrollBy=$top")
+            //recyclerView.smoothScrollBy(0, top)
+            recyclerView.scrollBy(0,top)
+        }
+    }
+
+    fun scrollToPosition(year: Int, month: Int, day: Int) {
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        //定位到指定日期
+        val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter)
+            .simplifiedDataTime()
+        var scrollOuter: Int = -1
+        dateTime.let {
+            for (i in 0 until schoolCalendarList.size - 1) {
+                val scheduleData1 = schoolCalendarList[i]
+                val scheduleData2 = schoolCalendarList[i + 1]
+                val dateTime1 = toDateTime((scheduleData1.startTime ?: "").plus(" 00:00:00")).simplifiedDataTime()
+                val dateTime2 = toDateTime((scheduleData2.startTime ?: "").plus(" 00:00:00")).simplifiedDataTime()
+                if (i != 0 && i != schoolCalendarList.size - 1 && it in dateTime1..dateTime2) {
+                    loge("----找到定位的位置----")
+                    if (scheduleData1.type != 1) {
+                        scrollOuter = i
+                        return@let
+                    }
+                    return@let
+                }
+            }
+        }
+        loge("需要滚动到 scrollOuter=$scrollOuter,dateTime=$dateTime")
+        moveToPosition(scrollOuter, rvScheduleList)
     }
 }

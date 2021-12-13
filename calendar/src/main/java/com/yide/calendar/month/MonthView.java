@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * Created by Jimmy on 2016/10/6 0006.
  */
 public class MonthView extends View {
-    private static final String TAG = "MonthView";
+    //private static final String TAG = "MonthView";
     private static final int NUM_COLUMNS = 7;
     private static final int NUM_ROWS = 6;
     private Paint mPaint;
@@ -150,7 +150,8 @@ public class MonthView extends View {
         mWorkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_work_day);
         mHolidays = CalendarUtils.getInstance(getContext()).getHolidays(mSelYear, mSelMonth + 1);
         mHintCircleColorList = new ArrayList<>();
-        mHintCircleColorList.add(Color.parseColor("#FF8040"));
+        //mHintCircleColorList.add(Color.parseColor("#FF8040"));
+        mHintCircleColorList.add(Color.parseColor("#FF4140"));
         mHintCircleColorList.add(Color.parseColor("#2FB29C"));
         mHintCircleColorList.add(Color.parseColor("#FF4140"));
         mHintCircleColorList.add(Color.parseColor("#6C6CEA"));
@@ -252,7 +253,7 @@ public class MonthView extends View {
         int selectedPoint[] = new int[2];
         int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
         int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth,startWithSunday);
-        Log.e(TAG, "drawThisMonth: mSelYear="+mSelYear+",mSelMonth="+mSelMonth +",monthDays="+monthDays+",weekNumber="+weekNumber);
+        //Log.e(TAG, "drawThisMonth: mSelYear="+mSelYear+",mSelMonth="+mSelMonth +",monthDays="+monthDays+",weekNumber="+weekNumber);
         for (int day = 0; day < monthDays; day++) {
             dayString = String.valueOf(day + 1);
             int col = (day + weekNumber - 1) % 7;
@@ -282,7 +283,7 @@ public class MonthView extends View {
             } else {
                 mPaint.setColor(mNormalDayColor);
             }
-            Log.d(TAG, "drawThisMonth: dayString="+dayString);
+            //Log.d(TAG, "drawThisMonth: dayString="+dayString);
             canvas.drawText(dayString, startX, startY, mPaint);
             mHolidayOrLunarText[row][col] = CalendarUtils.getHolidayFromSolar(mSelYear, mSelMonth, mDaysText[row][col]);
         }
@@ -300,7 +301,7 @@ public class MonthView extends View {
             nextMonth = 0;
             nextYear += 1;
         }
-        Log.e(TAG, "drawNextMonth: nextYear="+nextYear+",nextMonth="+nextMonth +",monthDays="+monthDays+",weekNumber="+weekNumber);
+        //Log.e(TAG, "drawNextMonth: nextYear="+nextYear+",nextMonth="+nextMonth +",monthDays="+monthDays+",weekNumber="+weekNumber);
         for (int day = 0; day < nextMonthDays; day++) {
             int column = (monthDays + weekNumber - 1 + day) % 7;
             int row = 5 - (nextMonthDays - day - 1) / 7;
@@ -311,7 +312,7 @@ public class MonthView extends View {
                 e.printStackTrace();
             }
             String dayString = String.valueOf(mDaysText[row][column]);
-            Log.d(TAG, "drawNextMonth: dayString="+dayString);
+            //Log.d(TAG, "drawNextMonth: dayString="+dayString);
             int startX = (int) (mColumnSize * column + (mColumnSize - mPaint.measureText(dayString)) / 2);
             int startY = (int) (mRowSize * row + mRowSize / 2 - (mPaint.ascent() + mPaint.descent()) / 2);
             canvas.drawText(dayString, startX, startY, mPaint);

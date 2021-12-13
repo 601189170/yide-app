@@ -95,7 +95,7 @@ class ScheduleListAdapter :
             val target = "yyyy年MM月dd日"
             val startTime = DateUtils.formatTime(item.moreDayStartTime ?: item.startTime, "", target)
             //val endTime = DateUtils.formatTime(item.moreDayEndTime ?: item.endTime, "", target)
-            holder.setText(R.id.tv_schedule_time_interval, "$startTime".plus("（全天）"))
+            holder.setText(R.id.tv_schedule_time_interval, startTime.plus("（全天）"))
             return
         }
         //4.适用日程：非全天不跨天重复、非全天不跨天非重复

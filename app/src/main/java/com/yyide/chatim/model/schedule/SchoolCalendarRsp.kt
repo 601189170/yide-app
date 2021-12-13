@@ -1,9 +1,11 @@
 package com.yyide.chatim.model.schedule
 
+import android.text.TextUtils
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHOOL_CALENDAR_TYPE_HEAD
 import com.yyide.chatim.model.schedule.Schedule.Companion.SCHOOL_CALENDAR_TYPE_ITEM
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 
 /**
  * @author liu tao
@@ -23,7 +25,7 @@ class SchoolCalendarRsp(
         var schoolId: String? = null,
         var remark: String? = null,
         var type: Int = 0
-    ) : MultiItemEntity, Comparable<DataBean> {
+    ) : MultiItemEntity,Comparable<DataBean>{
         override val itemType: Int
             get() =
                 if (type == 1)
@@ -42,5 +44,16 @@ class SchoolCalendarRsp(
             }
             return compareTo
         }
+        //当前校历是否跨天
+        val moreDay: Int
+            get() = if (!TextUtils.isEmpty(startTime)) {
+                val dateTime = ScheduleDaoUtil.toDateTime(this.startTime ?: "", "yyyy-MM-dd")
+                    .simplifiedDataTime()
+                val dateTime2 = ScheduleDaoUtil.toDateTime(this.endTime ?: "", "yyyy-MM-dd")
+                    .simplifiedDataTime()
+                if (dateTime == dateTime2) 0 else 1
+            } else 0
+
+
     }
 }

@@ -30,6 +30,10 @@ class SchoolCalendarAdapter(data: List<SchoolCalendarRsp.DataBean>) :
                 val date = DateUtils.formatTime(item.startTime, "yyyy-MM-dd", "MM月dd日")
                 holder.setText(R.id.tv_date,date)
                 holder.setText(R.id.tv_remark,item.remark)
+                if (item.moreDay == 1) {
+                    val date2 = DateUtils.formatTime(item.endTime, "yyyy-MM-dd", "MM月dd日")
+                    holder.setText(R.id.tv_date,date.plus("-").plus(date2))
+                }
             }
             else -> {
             }
