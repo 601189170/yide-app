@@ -74,7 +74,7 @@ class ScheduleSearchActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityScheduleSearchBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        userId = SpData.getIdentityInfo().userId
+        userId = SpData.getUserId()
         initView()
         labelManageViewModel.selectLabelList()
         scheduleSearchViewModel.getScheduleSearchResultList().observe(this, {
@@ -344,7 +344,7 @@ class ScheduleSearchActivity : BaseActivity() {
 
     private fun initSearchHistory() {
         searchHistoryList.clear()
-        val userId = SpData.getIdentityInfo().userId
+        val userId = SpData.getUserId()
         val decodeString = mmkv.decodeString(MMKVConstant.YD_SCHEDULE_HISTORY)
         if (!TextUtils.isEmpty(decodeString)) {
             try {
@@ -503,7 +503,7 @@ class ScheduleSearchActivity : BaseActivity() {
                     JSON.parseArray(decodeString, ScheduleSearchHistoryBean::class.java)
                 if (searchHistoryBeanList.map { it.userId }.contains(userId)) {
                     searchHistoryBeanList.forEach {
-                        if (it.userId == SpData.getIdentityInfo().userId) {
+                        if (it.userId == SpData.getUserId()) {
                             val historyList = it.historyList
                             if (!historyList.contains(keyWord)) {
                                 historyList.add(keyWord)

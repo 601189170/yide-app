@@ -342,7 +342,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     public void getUserSign(UserSigRsp bean) {
         if (bean.code == BaseConstant.REQUEST_SUCCES2) {
             SPUtils.getInstance().put(SpData.USERSIG, bean.data);
-            initIm(SpData.getIdentityInfo().userId, SpData.UserSig());
+            initIm(SpData.getUserId(), SpData.UserSig());
         } else {
             hideLoading();
             ToastUtils.showShort(bean.msg);

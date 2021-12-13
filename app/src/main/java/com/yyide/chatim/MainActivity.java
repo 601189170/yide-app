@@ -676,7 +676,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     private void initIm(String userSig) {
-        TUIKit.login(SpData.getIdentityInfo().userId + "", userSig, new IUIKitCallBack() {
+        TUIKit.login(SpData.getUserId() + "", userSig, new IUIKitCallBack() {
             @Override
             public void onError(String module, final int code, final String desc) {
                 runOnUiThread(() -> {
@@ -685,7 +685,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
                     UserInfo.getInstance().setAutoLogin(false);
                     UserInfo.getInstance().setUserSig(userSig);
-                    UserInfo.getInstance().setUserId(String.valueOf(SpData.getIdentityInfo().userId));
+                    UserInfo.getInstance().setUserId(String.valueOf(SpData.getUserId()));
                     Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活失败code：" + code);
                 });
                 DemoLog.i(TAG, "imLogin errorCode = " + code + ", errorInfo = " + desc);
@@ -703,7 +703,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
                 SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
-                UserInfo.getInstance().setUserId(String.valueOf(SpData.getIdentityInfo().userId));
+                UserInfo.getInstance().setUserId(String.valueOf(SpData.getUserId()));
                 Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_IM_LOGIN, ""));
             }

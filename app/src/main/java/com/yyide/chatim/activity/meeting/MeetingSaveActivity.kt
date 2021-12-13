@@ -171,7 +171,7 @@ class MeetingSaveActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setData(item: ScheduleData) {
-        if (item.promoter != SpData.getIdentityInfo().userId) {
+        if (item.promoter != SpData.getUserId()) {
             viewBinding.btnConfirm.visibility = View.GONE
             viewBinding.tvParticipant.isClickable = false
             viewBinding.tvSite.isClickable = false
