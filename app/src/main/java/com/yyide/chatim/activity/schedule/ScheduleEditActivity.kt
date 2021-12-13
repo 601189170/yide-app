@@ -302,6 +302,8 @@ class ScheduleEditActivity : BaseActivity() {
                 ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!")
                 return@setOnClickListener
             }
+            scheduleEditViewModel.startTimeLiveData.value = dateStart.get()
+            scheduleEditViewModel.endTimeLiveData.value = dateEnd.get()
             //不支持跨天且重复日程
             val isRepeat = (scheduleEditViewModel.repetitionLiveData.value?.code?:"").toString()
             val startTime = scheduleEditViewModel.startTimeLiveData.value?.toString()?:""
