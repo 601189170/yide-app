@@ -183,7 +183,8 @@ class SiteTableFragment : Fragment() {
                 val listBean = SiteTableRsp.DataBean.ListBean()
                 courseList.add(listBean)
                 it.list?.forEach {
-                    if ((it.skxq - 1) == index % 7 && (it.xh - 1) == index % sectionCount) {
+                    //if ((it.skxq - 1) == index % 7 && (it.xh) == ((index % sectionCount)+1)) {
+                    if (index == ((it.xh - 1) * 7 + it.skxq % 7 - 1)) {
                         courseList[index] = it
                         return@forEach
                     }
@@ -216,6 +217,7 @@ class SiteTableFragment : Fragment() {
             switchTableClassPop.setSelectClasses { id, classesName ->
                 loge("id=$id,classesName=$classesName")
                 this.id = id.toString()
+                siteTableFragmentBinding.top.className.text = classesName
                 siteTableViewModel.getSites(id.toString(), null)
             }
         }

@@ -140,7 +140,11 @@ data class SiteTableRsp(
             val jzgmc: String? = null,
             val bjid: Any? = null,
             val bjmc: Any? = null
-        )
+        ){
+            override fun toString(): String {
+                return "$kcmc jcdm=$jcdm xh=$xh skxq=$skxq"
+            }
+        }
     }
 }
 
