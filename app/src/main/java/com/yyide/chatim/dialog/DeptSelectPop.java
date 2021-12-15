@@ -44,6 +44,7 @@ public class DeptSelectPop extends PopupWindow {
     PopupWindow popupWindow;
     Window mWindow;
     private List<LeaveDeptRsp.DataBean> dataBeansList;
+    private int type;
     private OnCheckedListener onCheckedListener;
     private OnCheckedListener2 onCheckedListener2;
     public void setOnCheckedListener(OnCheckedListener onCheckedListener) {
@@ -73,6 +74,7 @@ public class DeptSelectPop extends PopupWindow {
         }
         this.context = context;
         this.dataBeansList = dataBeansList;
+        this.type = type;
         init(type);
     }
 
@@ -125,6 +127,25 @@ public class DeptSelectPop extends PopupWindow {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(deptSelectAdapter);
+        //val classOptional = dataBeansList.stream().filter { it.isDefault == 1 }.findFirst()
+        final Optional<LeaveDeptRsp.DataBean> first = dataBeansList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
+        if (first.isPresent() && type == 6) {
+            final LeaveDeptRsp.DataBean dataBean = first.get();
+            final String deptId = dataBean.getDeptId();
+            int position = Integer.parseInt(deptId) - 1;
+            final int firstItem = recyclerView.getChildLayoutPosition(recyclerView.getChildAt(0));
+            final int lastItem = recyclerView.getChildLayoutPosition(recyclerView.getChildAt(recyclerView.getChildCount() - 1));
+            if (position < firstItem || position > lastItem) {
+                final LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                layoutManager.scrollToPositionWithOffset(position, 0);
+            } else {
+                int movePosition = position - firstItem;
+                final int top = recyclerView.getChildAt(movePosition).getTop();
+                recyclerView.scrollBy(0, top);
+            }
+        }
+
+
         deptSelectAdapter.setOnClickedListener(position -> {
             //恢复状态
             for (LeaveDeptRsp.DataBean dataBean : dataBeansList) {
