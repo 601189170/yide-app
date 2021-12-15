@@ -102,7 +102,7 @@ class SiteTableFragment : Fragment() {
             }
 
             val childrenBean = children[0]
-            siteTableFragmentBinding.top.className.text = childrenBean.name
+            siteTableFragmentBinding.top.className.text = buildingsBean.name+"-"+childrenBean.name
             siteTableFragmentBinding.top.classlayout.isEnabled = true
             //默认查询第一个场地的课表
             id = childrenBean.id
@@ -190,9 +190,13 @@ class SiteTableFragment : Fragment() {
                     }
                 }
             }
-            loge("${courseList}")
+            loge("${courseList.size}")
             siteTableItemAdapter.notifyData(courseList,-1)
-
+            //空数据
+            siteTableFragmentBinding.empty2.root.visibility =if (it.list?.isEmpty() == true) View.VISIBLE else View.GONE
+            siteTableFragmentBinding.leftLayout.visibility = if (it.list?.isEmpty() == true) View.GONE else View.VISIBLE
+            siteTableFragmentBinding.listsection.visibility = if (it.list?.isEmpty() == true) View.GONE else View.VISIBLE
+            siteTableFragmentBinding.tablegrid.visibility = if (it.list?.isEmpty() == true) View.GONE else View.VISIBLE
             //计算今日
             if (weekdayList.isNotEmpty()) {
                 val dataTime = weekdayList[0].dataTime
@@ -216,8 +220,18 @@ class SiteTableFragment : Fragment() {
             val switchTableClassPop = SwitchTableClassPop(requireActivity(), data)
             switchTableClassPop.setSelectClasses { id, classesName ->
                 loge("id=$id,classesName=$classesName")
+                var parentName = ""
+                data.forEach {
+                    val name = it.name
+                    for (dataBean in it.list) {
+                        if (classesName == dataBean.showName){
+                            parentName = name
+                            return@forEach
+                        }
+                    }
+                }
                 this.id = id.toString()
-                siteTableFragmentBinding.top.className.text = classesName
+                siteTableFragmentBinding.top.className.text = parentName.plus("-").plus(classesName)
                 siteTableViewModel.getSites(id.toString(), null)
             }
         }
