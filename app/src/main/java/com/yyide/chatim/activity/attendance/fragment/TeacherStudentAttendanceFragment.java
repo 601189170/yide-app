@@ -182,9 +182,10 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
         mViewBinding.tvNormal.setTextColor(getResources().getColor(R.color.text_1E1E1E));
     }
 
+    private String attendanceTimeId = "";
+
     @SuppressLint("SetTextI18n")
     private void setDataView(AttendanceRsp.DataBean item) {
-
         if (item != null) {
             itemStudents = item.getTeacherCourseForm();
             if (itemParams == null && item.getClassroomTeacherAttendanceList() != null && item.getClassroomTeacherAttendanceList().size() > 0) {
@@ -198,10 +199,19 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
                     getAttendance();
                 });
             });
-
             if (item.getClassroomTeacherAttendanceList() != null && item.getClassroomTeacherAttendanceList().size() > 1) {
                 mViewBinding.tvAttendanceTitle.setClickable(true);
                 mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+                if (item.getTeacherCourseForm() == null) {
+                    if (item.getClassroomTeacherAttendanceList() != null && item.getClassroomTeacherAttendanceList().size() > 0) {
+                        itemParams = item.getClassroomTeacherAttendanceList().get(0);
+                    }
+                    //防止循环
+                    if (!attendanceTimeId.equals(itemParams.getAttendanceTimeId())) {
+                        attendanceTimeId = itemParams.getAttendanceTimeId();
+                        getAttendance();
+                    }
+                }
             } else {
                 mViewBinding.tvAttendanceTitle.setClickable(false);
                 mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);

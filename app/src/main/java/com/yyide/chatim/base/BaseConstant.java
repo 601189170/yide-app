@@ -53,7 +53,7 @@ public class BaseConstant {
     public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
     //通知模板地址
-    public static final String API_SERVER_HTML_RELEASE = "https://cloud.edu.1d1j.cn";
+    public static final String API_SERVER_HTML_RELEASE = "https://www.1d1j.cn";
     public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.net";
     public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
 
