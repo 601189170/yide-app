@@ -210,7 +210,7 @@ class ScheduleSearchActivity : BaseActivity() {
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         viewBinding.recyclerview.layoutManager = linearLayoutManager
-        scheduleSearchResultListAdapter = ScheduleTodayAdapter(scheduleSearchResultList)
+        scheduleSearchResultListAdapter = ScheduleTodayAdapter(ScheduleTodayAdapter.TYPE_SEARCH_LIST,scheduleSearchResultList)
         viewBinding.recyclerview.setSwipeMenuCreator(mWeekSwipeMenuCreator)
         viewBinding.recyclerview.setOnItemMenuClickListener(mWeekMenuItemClickListener)
         viewBinding.recyclerview.addItemDecoration(

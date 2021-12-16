@@ -32,29 +32,68 @@ class ScheduleMonthListAdapter: BaseQuickAdapter<ScheduleData, BaseViewHolder>(R
             else -> {
             }
         }
-        if (schedule.moreDay == 1){
+        //全天不跨天   全天
+        //全天跨天     全天 第1天，共3天
+        //非全天跨天   第1天，共3天
+        //非全天不跨天 08：00 - 10：00
+        //是否跨天
+        val moreDay = schedule.moreDay == 1//simplifiedDataTime != simplifiedDataTime1
+        //1.适用日程：全天跨天非重复
+        //全天跨天     全天 第1天，共3天
+        if (schedule.isAllDay == "1" && moreDay && schedule.isRepeat == "0") {
+            val timeDesc = "全天".plus(" 第${schedule.moreDayIndex}天，").plus("共${schedule.moreDayCount}天")
+            baseViewHolder.setText(R.id.tv_date,timeDesc)
+            baseViewHolder.setGone(R.id.iv_time,true)
+        }
+
+        //2.适用日程：非全天跨天非重复
+        //非全天跨天   第1天，共3天
+        if (schedule.isAllDay == "0" && moreDay && schedule.isRepeat == "0") {
+            val timeDesc = "".plus(" 第${schedule.moreDayIndex}天，").plus("共${schedule.moreDayCount}天")
+            baseViewHolder.setText(R.id.tv_date,timeDesc)
+            baseViewHolder.setGone(R.id.iv_time,true)
+        }
+
+        //3.适用日程：全天不跨天非重复、全天不跨天重复
+        //全天不跨天   全天
+        if ((schedule.isAllDay == "1" && !moreDay && schedule.isRepeat == "0") || (schedule.isAllDay == "1" && !moreDay && schedule.isRepeat != "0")){
+            baseViewHolder.setText(R.id.tv_date,"全天")
+            baseViewHolder.setGone(R.id.iv_time,true)
+        }
+
+        //4.适用日程：非全天不跨天重复、非全天不跨天非重复
+        //非全天不跨天 08：00 - 10：00
+        if ((schedule.isAllDay == "0" && !moreDay && schedule.isRepeat != "0") || (schedule.isAllDay == "0" && !moreDay && schedule.isRepeat == "0")){
             val startDate: String = schedule.moreDayStartTime
             val endDate: String = schedule.moreDayEndTime
-            baseViewHolder.setText(
-                R.id.tv_date,
-                DateUtils.formatTime(
-                    startDate,
-                    "",
-                    "HH:mm"
-                ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
-            )
-        }else{
-            val startDate: String = schedule.startTime
-            val endDate: String = schedule.endTime
-            baseViewHolder.setText(
-                R.id.tv_date,
-                DateUtils.formatTime(
-                    startDate,
-                    "",
-                    "HH:mm"
-                ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
-            )
+            val timeDesc =DateUtils.formatTime(startDate,"","HH:mm")+ "-" + DateUtils.formatTime(endDate,"","HH:mm")
+            baseViewHolder.setText(R.id.tv_date,timeDesc)
+            baseViewHolder.setGone(R.id.iv_time,false)
         }
+
+//        if (schedule.moreDay == 1){
+//            val startDate: String = schedule.moreDayStartTime
+//            val endDate: String = schedule.moreDayEndTime
+//            baseViewHolder.setText(
+//                R.id.tv_date,
+//                DateUtils.formatTime(
+//                    startDate,
+//                    "",
+//                    "HH:mm"
+//                ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
+//            )
+//        }else{
+//            val startDate: String = schedule.startTime
+//            val endDate: String = schedule.endTime
+//            baseViewHolder.setText(
+//                R.id.tv_date,
+//                DateUtils.formatTime(
+//                    startDate,
+//                    "",
+//                    "HH:mm"
+//                ) + "-" + DateUtils.formatTime(endDate, "", "HH:mm")
+//            )
+//        }
 
         //设置日程标签的背景
         val label = schedule.label

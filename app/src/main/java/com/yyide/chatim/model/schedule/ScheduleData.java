@@ -45,6 +45,8 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     private String moreDayStartTime;
     private String moreDayEndTime;
     private int moreDay;
+    private int moreDayIndex;
+    private int moreDayCount;
     private String iconImg;
     private String isAllDay;
     private List<LabelListRsp.DataBean> label;
@@ -320,6 +322,22 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
 
     public void setCreatedDateTime(String createdDateTime) {
         this.createdDateTime = createdDateTime;
+    }
+
+    public int getMoreDayIndex() {
+        return moreDayIndex;
+    }
+
+    public void setMoreDayIndex(int moreDayIndex) {
+        this.moreDayIndex = moreDayIndex;
+    }
+
+    public int getMoreDayCount() {
+        return moreDayCount;
+    }
+
+    public void setMoreDayCount(int moreDayCount) {
+        this.moreDayCount = moreDayCount;
     }
 
     @Override

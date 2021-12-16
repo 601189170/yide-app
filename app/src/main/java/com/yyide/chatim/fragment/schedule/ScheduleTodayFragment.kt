@@ -140,7 +140,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         fragmentScheduleTodayBinding.rvWeekUndoList.layoutManager = linearLayoutManager
-        thisWeekScheduleTodayAdapter = ScheduleTodayAdapter(weekUndoList)
+        thisWeekScheduleTodayAdapter = ScheduleTodayAdapter(ScheduleTodayAdapter.TYPE_WEEK_UNDONE_LIST,weekUndoList)
         fragmentScheduleTodayBinding.rvWeekUndoList.setSwipeMenuCreator(mWeekSwipeMenuCreator)
         fragmentScheduleTodayBinding.rvWeekUndoList.setOnItemMenuClickListener(
             mWeekMenuItemClickListener
@@ -166,7 +166,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val linearLayoutManager2 = LinearLayoutManager(context)
         linearLayoutManager2.orientation = LinearLayoutManager.VERTICAL
         fragmentScheduleTodayBinding.rvTodayList.layoutManager = linearLayoutManager2
-        todayScheduleTodayAdapter = ScheduleTodayAdapter(todayList)
+        todayScheduleTodayAdapter = ScheduleTodayAdapter(ScheduleTodayAdapter.TYPE_TODAY_LIST,todayList)
         fragmentScheduleTodayBinding.rvTodayList.setSwipeMenuCreator(mTodaySwipeMenuCreator)
         fragmentScheduleTodayBinding.rvTodayList.setOnItemMenuClickListener(
             mTodayMenuItemClickListener

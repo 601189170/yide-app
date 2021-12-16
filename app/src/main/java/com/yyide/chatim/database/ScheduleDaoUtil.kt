@@ -198,15 +198,23 @@ object ScheduleDaoUtil {
 //                    loge(
 //                        "dataTime=${it}, schedule=[name=${schedule.name}, date=${schedule.startTime} <-> ${schedule.endTime}]"
 //                    )
-                    val startTime = toDateTime(schedule.startTime)
-                    val endTime = toDateTime(schedule.endTime)
+                    val startTime = toDateTime(schedule.startTime).simplifiedDataTime()
+                    val endTime = toDateTime(schedule.endTime).simplifiedDataTime()
                     val now = DateTime.now().simplifiedDataTime()
-                    if (now in startTime..endTime) {
-                        schedule.moreDay = 1
-                        schedule.moreDayStartTime = schedule.startTime
-                        schedule.moreDayEndTime = schedule.endTime
-                        listAllSchedule.add(schedule)
+                    val daysBetween = Days.daysBetween(startTime, endTime).days
+                    for (index in 0..daysBetween) {
+                        val plusDays = startTime.plusDays(index).simplifiedDataTime()
+                        if (plusDays == now && now in startTime..endTime) {
+                            schedule.moreDayIndex = index +1
+                            schedule.moreDayCount = daysBetween + 1
+                            schedule.moreDay = 1
+                            schedule.moreDayStartTime = schedule.startTime
+                            schedule.moreDayEndTime = schedule.endTime
+                            listAllSchedule.add(schedule)
+                            break
+                        }
                     }
+
                 }
             }
         }
@@ -507,6 +515,8 @@ object ScheduleDaoUtil {
                         val daysBetween = Days.daysBetween(startTime, endTime).days
                         for (index in 0..daysBetween) {
                             val scheduleData1 = newSchedule.clone() as ScheduleData
+                            scheduleData1.moreDayIndex = index+1
+                            scheduleData1.moreDayCount = daysBetween+1
                             if (index == 0) {
                                 scheduleData1.moreDay = 1
                                 scheduleData1.moreDayEndTime =
@@ -580,6 +590,8 @@ object ScheduleDaoUtil {
                     if (index == 0) {
                         //第一天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDayIndex = index+1
+                        scheduleData1.moreDayCount = daysBetween+1
                         scheduleData1.moreDay = 1
                         scheduleData1.moreDayEndTime =
                             toDateTime(scheduleData1.moreDayStartTime).simplifiedDataTime()
@@ -598,6 +610,8 @@ object ScheduleDaoUtil {
                     } else if (index == daysBetween) {
                         //最后一天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDayIndex = index+1
+                        scheduleData1.moreDayCount = daysBetween+1
                         scheduleData1.moreDay = 1
                         scheduleData1.moreDayStartTime =
                             toDateTime(scheduleData1.endTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
@@ -617,6 +631,8 @@ object ScheduleDaoUtil {
                     } else {
                         //中间的天
                         val scheduleData1 = scheduleData.clone() as ScheduleData
+                        scheduleData1.moreDayIndex = index+1
+                        scheduleData1.moreDayCount = daysBetween+1
                         scheduleData1.moreDay = 1
                         val allDay =
                             toDateTime(scheduleData1.moreDayStartTime).simplifiedDataTime().plusDays(index)
