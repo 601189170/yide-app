@@ -95,7 +95,7 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
         }
 
         if (scheduleEditViewModel.remindLiveData.value == null) {
-            scheduleSimpleEditionBinding.tvRemind.text = "不重复"
+            scheduleSimpleEditionBinding.tvRemind.text = "不提醒"
             scheduleEditViewModel.remindLiveData.value = getNotRemind()
         }
 
@@ -168,7 +168,7 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
                     scheduleSimpleEditionBinding.tvRemind.text = remind.title
                 } else {
                     scheduleEditViewModel.remindLiveData.value = getNotRemind()
-                    scheduleSimpleEditionBinding.tvRemind.text = "不重复"
+                    scheduleSimpleEditionBinding.tvRemind.text = "不提醒"
                 }
             } else {
                 scheduleSimpleEditionBinding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation)
@@ -183,7 +183,7 @@ class ScheduleSimpleEditionActivity : BaseActivity() {
                     scheduleSimpleEditionBinding.tvRemind.text = remind.title
                 } else {
                     scheduleEditViewModel.remindLiveData.value = getNotRemind()
-                    scheduleSimpleEditionBinding.tvRemind.text = "不重复"
+                    scheduleSimpleEditionBinding.tvRemind.text = "不提醒"
                 }
             }
         }

@@ -47,7 +47,7 @@ object ScheduleRepetitionRuleUtil {
     fun moreDayAndRepetitionData(isRepeat: String, startTime: String, endTime: String): Boolean {
         val simplifiedDataTime1 = ScheduleDaoUtil.toDateTime(startTime).simplifiedDataTime()
         val simplifiedDataTime2 = ScheduleDaoUtil.toDateTime(endTime).simplifiedDataTime()
-        if (isRepeat != "0" && simplifiedDataTime1.compareTo(simplifiedDataTime2) != 0) {
+        if (!TextUtils.isEmpty(isRepeat) && isRepeat != "0" && simplifiedDataTime1.compareTo(simplifiedDataTime2) != 0) {
             return true
         }
         return false

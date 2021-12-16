@@ -172,6 +172,9 @@ class ScheduleFullEditionActivity : BaseActivity() {
         if (scheduleEditViewModel.remindLiveData.value == null) {
             scheduleFullEditionBinding.tvRemind.text = "不提醒"
             scheduleEditViewModel.remindLiveData.value = Remind.getNotRemind()
+        } else {
+            val title = scheduleEditViewModel.remindLiveData.value?.title
+            scheduleFullEditionBinding.tvRemind.text = title
         }
         val stringExtra = intent.getStringExtra("data")
         val scheduleDataBean = JSON.parseObject(stringExtra, ScheduleDataBean::class.java)
