@@ -243,6 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/v_line">
 
                 <ImageView
@@ -299,6 +300,7 @@
                 android:layout_height="1dp"
                 android:layout_marginStart="46dp"
                 android:background="#EBEBEB"
+                android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/cl_repetition" />
 
             <androidx.constraintlayout.widget.ConstraintLayout

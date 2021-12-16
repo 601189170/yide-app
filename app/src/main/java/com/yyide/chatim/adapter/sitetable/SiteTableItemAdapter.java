@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter.sitetable;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
+import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
 import com.yyide.chatim.utils.VHUtil;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +56,24 @@ public class SiteTableItemAdapter extends BaseAdapter {
 //        layout.setLayoutParams(layoutParams);
         //text_view.setText(getItem(position).subjectName + "\n" + getItem(position).fromDateTime + "\n" + getItem(position).toDateTime);
         text_view.setText(getItem(position).getKcmc());
-
+        final SiteTableRsp.DataBean.ListBean item = getItem(position);
         if (position % 7 == this.position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_ls));
         } else {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_white2));
+        }
+        final String kssj = item.getKssj();
+        final String jssj = item.getJssj();
+        final String date = item.getDate();
+        if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(kssj) && !TextUtils.isEmpty(jssj)){
+            DateTime startTime = ScheduleDaoUtil.INSTANCE.toDateTime(date+" "+kssj,"yyyy-MM-dd HH:mm");
+            DateTime endTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " "+jssj,"yyyy-MM-dd HH:mm");
+            final DateTime now = DateTime.now();
+            if (now.compareTo(startTime)>=0 && now.compareTo(endTime) <= 0){
+                //当前课程
+                layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_current));
+                text_view.setTextColor(view.getContext().getResources().getColor(R.color.white));
+            }
         }
         return view;
     }

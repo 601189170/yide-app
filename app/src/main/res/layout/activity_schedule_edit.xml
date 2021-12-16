@@ -253,6 +253,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/v_line">
 
                 <ImageView
@@ -304,6 +305,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@color/white"
+                android:layout_marginTop="@dimen/dp_10"
                 app:layout_constraintTop_toBottomOf="@id/v_line2">
 
                 <ImageView

@@ -20,6 +20,7 @@ import com.yyide.chatim.adapter.TableSectionAdapter
 import com.yyide.chatim.adapter.sitetable.SiteTableItemAdapter
 import com.yyide.chatim.adapter.sitetable.SiteTableTimeAdapter
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentSiteTableBinding
 import com.yyide.chatim.dialog.DeptSelectPop
 import com.yyide.chatim.dialog.SwitchTableClassPop
@@ -150,6 +151,23 @@ class SiteTableFragment : Fragment() {
                 if (eveningStudy > 0) {
                     createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy) //晚自习
                 }
+
+                val sectionlist = mutableListOf<String>()
+                it.zzx?.forEach {
+                    sectionlist.add(it.jcmc+"")
+                }
+                it.sw?.forEach {
+                     sectionlist.add(it.jcmc+"")
+                }
+                it.xw?.forEach {
+                    sectionlist.add(it.jcmc+"")
+                }
+                it.wzx?.forEach {
+                    sectionlist.add(it.jcmc+"")
+                }
+                tableSectionAdapter = TableSectionAdapter()
+                siteTableFragmentBinding.listsection.adapter = tableSectionAdapter
+                tableSectionAdapter?.notifyData(sectionlist)
             }
             //节次
             var sectionCount = 0
@@ -159,21 +177,22 @@ class SiteTableFragment : Fragment() {
                 initClassData()
                 initClassView()
                 sectionCount = it.zzxkjs + it.swkjs + it.xwkjs + it.wzxkjs
-                val sectionlist = mutableListOf<String>()
-                for (i in 0 until sectionCount) {
-                    if (earlyReading > 0 && i == 0) {
-                        sectionlist.add("早读")
-                    } else {
-                        if (earlyReading > 0) {
-                            sectionlist.add("$i")
-                        } else {
-                            sectionlist.add("${(i + 1)}")
-                        }
-                    }
-                }
-                tableSectionAdapter = TableSectionAdapter()
-                siteTableFragmentBinding.listsection.adapter = tableSectionAdapter
-                tableSectionAdapter?.notifyData(sectionlist)
+//                val sectionlist = mutableListOf<String>()
+//                for (i in 0 until sectionCount) {
+//                    if (earlyReading > 0 && i == 0) {
+//                        sectionlist.add("早读")
+//                    } else {
+//                        if (earlyReading > 0) {
+//                            sectionlist.add("$i")
+//                        } else {
+//                            sectionlist.add("${(i + 1)}")
+//                        }
+//                    }
+//                }
+
+//                tableSectionAdapter = TableSectionAdapter()
+//                siteTableFragmentBinding.listsection.adapter = tableSectionAdapter
+//                tableSectionAdapter?.notifyData(sectionlist)
             }
 
             //填课程
@@ -205,6 +224,11 @@ class SiteTableFragment : Fragment() {
                 if (ScheduleDaoUtil.toDateTime(dataTime, "yyyy-MM-dd").simplifiedDataTime() == firstDayOfWeek) {
                     val dayOfWeek = DateTime.now().dayOfWeek
                     index = dayOfWeek % 7 - 1
+                    for (i in courseList.indices) {
+                        if (i % 7 == index) {
+                            courseList[i].date = nowDateTime.toStringTime("yyyy-MM-dd")
+                        }
+                    }
                     siteTableItemAdapter.setIndex(index)
                     adapter.setPosition(index)
                 }

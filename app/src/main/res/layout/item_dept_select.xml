@@ -27,6 +27,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_current_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="当前周"
+        app:layout_constraintLeft_toRightOf="@id/tv_title"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        android:textColor="@color/blue11"
+        android:textSize="@dimen/text_16"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/dp_10"
+        android:visibility="gone"
+        />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

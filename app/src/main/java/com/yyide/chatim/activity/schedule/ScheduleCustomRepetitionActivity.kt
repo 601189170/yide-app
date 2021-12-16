@@ -117,6 +117,15 @@ class ScheduleCustomRepetitionActivity : BaseActivity() {
             }
         }
 
+        //截止日期显示
+        if (TextUtils.isEmpty(until)) {
+            //永不截止
+            scheduleRepetitionBinding.tvDeadlineDesc.text = "永不截止"
+        } else {
+            //显示截止日期
+            scheduleRepetitionBinding.tvDeadlineDesc.text = ""
+        }
+
         scheduleRepetitionBinding.top.title.text = "自定义重复"
         scheduleRepetitionBinding.top.backLayout.setOnClickListener {
             finish()

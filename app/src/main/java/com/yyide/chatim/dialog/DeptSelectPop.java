@@ -107,6 +107,7 @@ public class DeptSelectPop extends PopupWindow {
                 tvPopTitle.setText("选择学期");
                 break;
             case 6:
+                type = 6;
                 tvPopTitle.setText("选择周次");
                 break;
             default:
@@ -123,7 +124,7 @@ public class DeptSelectPop extends PopupWindow {
             }
         });
         //初始化列表
-        final DeptSelectAdapter deptSelectAdapter = new DeptSelectAdapter(context, dataBeansList);
+        final DeptSelectAdapter deptSelectAdapter = new DeptSelectAdapter(context,type, dataBeansList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         //recyclerView.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(deptSelectAdapter);
@@ -218,6 +219,7 @@ public class DeptSelectPop extends PopupWindow {
     public static class DeptSelectAdapter extends RecyclerView.Adapter<DeptSelectAdapter.ViewHolder> {
         private Context context;
         private List<LeaveDeptRsp.DataBean> data;
+        private int type;
 
         public void setOnClickedListener(DeptSelectAdapter.OnClickedListener onClickedListener) {
             this.onClickedListener = onClickedListener;
@@ -225,10 +227,10 @@ public class DeptSelectPop extends PopupWindow {
 
         private OnClickedListener onClickedListener;
 
-        public DeptSelectAdapter(Context context, List<LeaveDeptRsp.DataBean> data) {
+        public DeptSelectAdapter(Context context,int type, List<LeaveDeptRsp.DataBean> data) {
             this.context = context;
             this.data = data;
-
+            this.type = type;
         }
 
         @NonNull
@@ -244,6 +246,11 @@ public class DeptSelectPop extends PopupWindow {
             holder.tv_title.setText(dataBean.getDeptName());
             final boolean b = dataBean.getIsDefault() == 1;
             holder.checkBox.setVisibility(b?View.VISIBLE:View.GONE);
+            if (type == 6 && b) {
+                holder.tvCurrentWeek.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvCurrentWeek.setVisibility(View.GONE);
+            }
             holder.itemView.setOnClickListener(v -> {
                 onClickedListener.onClicked(position);
             });
@@ -264,7 +271,8 @@ public class DeptSelectPop extends PopupWindow {
             TextView tv_title;
             @BindView(R.id.checkBox)
             ImageView checkBox;
-
+            @BindView(R.id.tv_current_week)
+            TextView tvCurrentWeek;
             public ViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
