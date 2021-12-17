@@ -188,7 +188,14 @@ object ScheduleDaoUtil {
 
                     newSchedule.startTime = dataTime.toString("yyyy-MM-dd HH:mm:ss")
                     newSchedule.endTime = dataTime2.toString("yyyy-MM-dd HH:mm:ss")
+                    val daysBetween = Days.daysBetween(dataTime, dataTime2).days
                     newSchedule.moreDay = 0
+                    if (daysBetween>=1){
+                        //今日日程拆分
+                        newSchedule.moreDay = 1
+                        newSchedule.moreDayIndex = 1
+                        newSchedule.moreDayCount = daysBetween +1
+                    }
                     newSchedule.moreDayStartTime = newSchedule.startTime
                     newSchedule.moreDayEndTime = newSchedule.endTime
                     listAllSchedule.add(newSchedule)
