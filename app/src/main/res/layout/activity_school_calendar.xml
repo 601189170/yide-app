@@ -57,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_12"
+            android:visibility="gone"
             android:src="@drawable/icon_gray_arrow_left" />
 
         <TextView
@@ -65,13 +66,15 @@
             android:layout_height="wrap_content"
             android:text="9月"
             android:textColor="#ff1e1e1e"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:layout_marginEnd="@dimen/dp_18"/>
 
         <ImageView
             android:id="@+id/iv_date_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_12"
+            android:visibility="gone"
             android:src="@drawable/icon_gray_arrow_right" />
     </LinearLayout>
 

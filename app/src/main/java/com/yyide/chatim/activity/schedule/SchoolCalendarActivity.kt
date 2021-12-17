@@ -234,7 +234,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         swipeRefreshLayout.setOnRefreshListener(this)
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
         curDateTime = DateTime.now().simplifiedDataTime()
-        schoolCalendarBinding.tvMonth.text = curDateTime.monthOfYear.toString().plus("月")
+        schoolCalendarBinding.tvMonth.text = curDateTime.toStringTime("yyyy年MM月")
+                //schoolCalendarBinding.tvMonth.text = curDateTime.monthOfYear.toString().plus("月")
 
         schoolCalendarBinding.ivDateMinus.setOnClickListener {
             loge("月份减少")
@@ -272,7 +273,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     private fun update() {
         loge("curDateTime=${curDateTime.toStringTime("yyyy-MM-dd")}")
         val monthOfYear = "${curDateTime.monthOfYear}"
-        schoolCalendarBinding.tvMonth.text = monthOfYear.plus("月")
+        //schoolCalendarBinding.tvMonth.text = monthOfYear.plus("月")
+        schoolCalendarBinding.tvMonth.text = curDateTime.toStringTime("yyyy年MM月")
         selectSchoolCalendar()
     }
 
