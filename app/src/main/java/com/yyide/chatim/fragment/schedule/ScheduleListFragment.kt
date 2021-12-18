@@ -229,8 +229,24 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         //定位到指定日期
         val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter).simplifiedDataTime()
-        var scrollOuter: Int = -1
+        var scrollOuter: Int = 0
+        //先找对应位置
         dateTime.let {
+            for (i in 0 until list.size -1){
+                val scheduleData1 = list[i]
+                //val scheduleData2 = list[i+1]
+                val dateTime1 = ScheduleDaoUtil.toDateTime(scheduleData1.moreDayStartTime?:scheduleData1.startTime).simplifiedDataTime()
+                //val dateTime2 = ScheduleDaoUtil.toDateTime(scheduleData2.moreDayStartTime?:scheduleData2.startTime).simplifiedDataTime()
+                if (i != 0 && i != list.size - 1 && it == dateTime1) {
+                    loge("----找到定位的位置----")
+                    if (!scheduleData1.isMonthHead && !scheduleData1.isTimeAxis) {
+                        scrollOuter = i
+                        return@let
+                    }
+                    return@let
+                }
+            }
+            //找不到对应点击日期，找范围
             for (i in 0 until list.size - 1) {
                 val scheduleData1 = list[i]
                 val scheduleData2 = list[i+1]
