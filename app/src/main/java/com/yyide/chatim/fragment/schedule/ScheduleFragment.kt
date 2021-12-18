@@ -98,6 +98,9 @@ class ScheduleFragment : Fragment() {
                 DateTime.now(),
                 onScheduleAddListener
             )
+            showAddScheduleV2Dialog?.setOnDismissListener {
+                scheduleEditViewModel.clearData()
+            }
         }
 
         //日程修改监听
@@ -116,6 +119,9 @@ class ScheduleFragment : Fragment() {
                 DateTime.now(),
                 onScheduleAddListener
             )
+            showAddScheduleV2Dialog?.setOnDismissListener {
+                scheduleEditViewModel.clearData()
+            }
         }
     }
 

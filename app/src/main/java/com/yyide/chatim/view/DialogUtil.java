@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -1108,6 +1109,12 @@ public class DialogUtil {
                 return;
             }
             final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(startTime);
+            final MutableLiveData<Boolean> allDayLiveData = scheduleEditViewModel.getAllDayLiveData();
+            final Boolean allDayLiveDataValue = allDayLiveData.getValue();
+            if (allDayLiveDataValue != null && allDayLiveDataValue){
+                binding.tvDate.setText(dateTime.toString("MM月dd日")+" 全天");
+                return;
+            }
             binding.tvDate.setText(dateTime.toString("MM月dd日 HH:mm"));
         });
         binding.tvLabel.setOnClickListener(onScheduleAddListener::onLabel);

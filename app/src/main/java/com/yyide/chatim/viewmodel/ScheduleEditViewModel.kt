@@ -66,6 +66,7 @@ class ScheduleEditViewModel : ViewModel() {
         //初始化一个简单日程需要的数据
         startTimeLiveData.value = DateTime.now().toString("yyyy-MM-dd HH:mm:ss")
         endTimeLiveData.value = DateTime.now().toString("yyyy-MM-dd ") + "23:59:59"
+        allDayLiveData.value = false
         //默认不提醒
         remindLiveData.value = Remind.getNotRemind()
         repetitionLiveData.value = Repetition.getNotRepetition()
