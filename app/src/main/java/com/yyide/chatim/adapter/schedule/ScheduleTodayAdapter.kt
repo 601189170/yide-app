@@ -44,7 +44,7 @@ class ScheduleTodayAdapter(type: Int,data: List<ScheduleData>) :
         holder.setText(R.id.tv_schedule_name, item.name)
         loadImage(
             item.type.toInt(),
-            DateUtils.dateExpired(item.endTime),
+            DateUtils.dateExpired(item.moreDayEndTime),
             holder.getView(R.id.iv_schedule_type_img)
         )
         holder.getView<ImageView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE

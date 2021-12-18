@@ -63,7 +63,7 @@ class ScheduleListAdapter :
         }
         loadImage(
             item.type.toInt(),
-            DateUtils.dateExpired(item.endTime),
+            DateUtils.dateExpired(item.moreDayEndTime),
             holder.getView(R.id.iv_schedule_type_img)
         )
         //日期设置
