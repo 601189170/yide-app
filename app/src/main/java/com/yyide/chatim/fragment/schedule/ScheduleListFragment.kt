@@ -229,7 +229,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         //定位到指定日期
         val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter).simplifiedDataTime()
-        var scrollOuter: Int = 0
+        var scrollOuter: Int = -1
         //先找对应位置
         dateTime.let {
             for (i in 0 until list.size -1){
@@ -260,6 +260,17 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                     }
                     return@let
                 }
+            }
+        }
+        if (scrollOuter == -1 && list.isNotEmpty()) {
+            val scheduleData1 = list[0]
+            val dateTime1 = ScheduleDaoUtil.toDateTime(
+                scheduleData1.moreDayStartTime ?: scheduleData1.startTime
+            ).simplifiedDataTime()
+            if (dateTime <= dateTime1) {
+                scrollOuter = 0
+            } else {
+                scrollOuter = list.size - 1
             }
         }
         loge("需要滚动到 scrollOuter=$scrollOuter,dateTime=$dateTime")
