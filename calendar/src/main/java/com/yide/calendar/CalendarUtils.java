@@ -23,7 +23,7 @@ public class CalendarUtils {
     private static final String TAG = "CalendarUtils";
     private static CalendarUtils sUtils;
     private Map<String, int[]> sAllHolidays = new HashMap<>();
-    private Map<String, List<HintCircle>> sMonthTaskHint = new HashMap<>();
+    private final Map<String, List<HintCircle>> sMonthTaskHint = new HashMap<>();
 
     public static synchronized CalendarUtils getInstance(Context context) {
         if (sUtils == null) {
@@ -116,6 +116,9 @@ public class CalendarUtils {
         return false;
     }
 
+    public void clearAllTask(){
+        sUtils.sMonthTaskHint.clear();
+    }
     public List<HintCircle> getTaskHints(int year, int month) {
         String key = hashKey(year, month);
         List<HintCircle> hints = sUtils.sMonthTaskHint.get(key);

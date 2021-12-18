@@ -193,6 +193,9 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         loge("onHiddenChanged $hidden")
+        if (hidden){
+            CalendarUtils.getInstance(requireContext()).clearAllTask()
+        }
         if(!hidden){
             //更新头部日期
             updateData()
