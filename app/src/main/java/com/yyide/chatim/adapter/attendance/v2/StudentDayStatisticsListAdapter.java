@@ -78,7 +78,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_normal));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_normal));
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_normal);
-                showFaceImage(holder.mViewBanding.ivEventFaceRecognize, dayStatisticsBean.getPath());
+                //showFaceImage(holder.mViewBanding.ivEventFaceRecognize, dayStatisticsBean.getPath());
                 holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
                 holder.mViewBanding.tvEventTime.setText(eventTime);
                 break;
@@ -86,7 +86,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_late));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_late));
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_late);
-                showFaceImage(holder.mViewBanding.ivEventFaceRecognize, dayStatisticsBean.getPath());
+                //showFaceImage(holder.mViewBanding.ivEventFaceRecognize, dayStatisticsBean.getPath());
                 holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
                 holder.mViewBanding.tvEventTime.setText(eventTime);
                 break;
@@ -94,7 +94,7 @@ public class StudentDayStatisticsListAdapter extends RecyclerView.Adapter<Studen
                 holder.mViewBanding.tvEventStatus.setText(context.getString(R.string.attendance_leave_early));
                 holder.mViewBanding.tvEventStatus.setTextColor(context.getResources().getColor(R.color.attendance_leave_early));
                 holder.mViewBanding.ivEventStatus.setImageResource(R.drawable.icon_attendance_leave_early);
-                showFaceImage(holder.mViewBanding.ivEventFaceRecognize, dayStatisticsBean.getPath());
+                //showFaceImage(holder.mViewBanding.ivEventFaceRecognize, dayStatisticsBean.getPath());
                 holder.mViewBanding.tvEventTime.setVisibility(View.VISIBLE);
                 holder.mViewBanding.tvEventTime.setText(eventTime);
                 break;
