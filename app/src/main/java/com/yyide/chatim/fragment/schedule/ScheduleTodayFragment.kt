@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.yanzhenjie.recyclerview.*
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.gate.GateDetailInfoActivity
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
@@ -98,23 +100,29 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
+//        fragmentScheduleTodayBinding.tvToday.setOnClickListener {
+//            startActivity(Intent(requireContext(),GateDetailInfoActivity::class.java))
+//        }
         fragmentScheduleTodayBinding.fab.setOnClickListener {
             DialogUtil.showAddScheduleDialog(context, this, DateTime.now())
         }
-        val drawableLeft = resources.getDrawable(R.drawable.schedule_title_indicate_vertical_line_shape)
-        drawableLeft.setBounds(0, 0, drawableLeft.minimumWidth, drawableLeft.minimumHeight)
+
+        val drawableLeft = ResourcesCompat.getDrawable(resources,R.drawable.schedule_title_indicate_vertical_line_shape,null)?.apply {
+            setBounds(0,0,minimumWidth,minimumHeight)
+        }
         fragmentScheduleTodayBinding.tvTodayList.setOnClickListener {
             if (todayOpen){
-                val drawable = resources.getDrawable(R.drawable.schedule_fold_up_icon)
-                drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+                val drawable = ResourcesCompat.getDrawable(resources,R.drawable.schedule_fold_up_icon,null)?.apply {
+                    setBounds(0,0,minimumWidth,minimumHeight)
+                }
                 fragmentScheduleTodayBinding.tvTodayList.setCompoundDrawables(drawableLeft,null,drawable,null)
                 fragmentScheduleTodayBinding.rvTodayList.visibility = View.GONE
                 todayOpen = false
                 return@setOnClickListener
             }
-            val drawable = resources.getDrawable(R.drawable.schedule_fold_down_icon)
-            //设置图片大小，必须设置
-            drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+            val drawable = ResourcesCompat.getDrawable(resources,R.drawable.schedule_fold_down_icon,null)?.apply {
+                setBounds(0,0,minimumWidth,minimumHeight)
+            }
             fragmentScheduleTodayBinding.tvTodayList.setCompoundDrawables(drawableLeft,null,drawable,null)
             fragmentScheduleTodayBinding.rvTodayList.visibility = View.VISIBLE
             todayOpen = true
@@ -122,16 +130,19 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         fragmentScheduleTodayBinding.tvWeekUndo.setOnClickListener {
             if (weekOpen){
-                val drawable = resources.getDrawable(R.drawable.schedule_fold_up_icon)
-                drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+                val drawable = ResourcesCompat.getDrawable(resources,R.drawable.schedule_fold_up_icon,null)?.apply {
+                    setBounds(0,0,minimumWidth,minimumHeight)
+                }
+
                 fragmentScheduleTodayBinding.tvWeekUndo.setCompoundDrawables(drawableLeft,null,drawable,null)
                 fragmentScheduleTodayBinding.rvWeekUndoList.visibility = View.GONE
                 weekOpen = false
                 return@setOnClickListener
             }
-            val drawable = resources.getDrawable(R.drawable.schedule_fold_down_icon)
-            //设置图片大小，必须设置
-            drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
+
+            val drawable = ResourcesCompat.getDrawable(resources,R.drawable.schedule_fold_down_icon,null)?.apply {
+                setBounds(0,0,minimumWidth,minimumHeight)
+            }
             fragmentScheduleTodayBinding.tvWeekUndo.setCompoundDrawables(drawableLeft,null,drawable,null)
             fragmentScheduleTodayBinding.rvWeekUndoList.visibility = View.VISIBLE
             weekOpen = true

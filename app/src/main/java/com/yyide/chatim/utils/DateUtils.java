@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -674,7 +675,10 @@ public class DateUtils {
     }
 
     public static boolean dateExpired(String date){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (TextUtils.isEmpty(date)){
+            return false;
+        }
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         try {
             final Date parse = dateFormat.parse(date);
             if (parse != null){

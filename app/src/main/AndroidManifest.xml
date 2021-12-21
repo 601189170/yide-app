@@ -684,6 +684,9 @@
         <activity android:name=".activity.schedule.ScheduleFullEditionActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.gate.GateDetailInfoActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>
