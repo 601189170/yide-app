@@ -6,6 +6,7 @@ import com.tencent.mmkv.MMKV
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.SpData
 import com.yyide.chatim.base.MMKVConstant
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.model.schedule.DayOfMonth
 import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.Schedule
@@ -217,6 +218,23 @@ object ScheduleDaoUtil {
                             schedule.moreDay = 1
                             schedule.moreDayStartTime = schedule.startTime
                             schedule.moreDayEndTime = schedule.endTime
+                            if (index == 0) {
+                                //第一天
+                                schedule.moreDayEndTime =
+                                    toDateTime(schedule.moreDayStartTime).simplifiedDataTime()
+                                        .toStringTime("yyyy-MM-dd ") + "23:59:59"
+                            } else if (index == daysBetween) {
+                                //最后一天
+                                schedule.moreDayStartTime =
+                                    toDateTime(schedule.moreDayEndTime).toStringTime("yyyy-MM-dd ") + "00:00:00"
+                            } else {
+                                //中间的天
+                                schedule.moreDayStartTime =
+                                    plusDays.toStringTime("yyyy-MM-dd ") + "00:00:00"
+                                schedule.moreDayEndTime =
+                                    plusDays.toStringTime("yyyy-MM-dd ") + "23:59:59"
+                            }
+
                             listAllSchedule.add(schedule)
                             break
                         }
