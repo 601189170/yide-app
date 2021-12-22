@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.schedule
 
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -333,8 +334,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             for (i in 0 until schoolCalendarList.size - 1) {
                 val scheduleData1 = schoolCalendarList[i]
                 val scheduleData2 = schoolCalendarList[i + 1]
-                val dateTime1 = toDateTime((scheduleData1.startTime ?: "").plus(" 00:00:00")).simplifiedDataTime()
-                val dateTime2 = toDateTime((scheduleData2.startTime ?: "").plus(" 00:00:00")).simplifiedDataTime()
+                val dateTime1 = toDateTime((scheduleData1.startTime ?: "2000-01-01"),"yyyy-MM-dd").simplifiedDataTime()
+                val dateTime2 = toDateTime((scheduleData2.startTime ?: "2000-01-01"),"yyyy-MM-dd").simplifiedDataTime()
                 if (i != 0 && i != schoolCalendarList.size - 1 && it in dateTime1..dateTime2) {
                     loge("----找到定位的位置----")
                     if (scheduleData1.type != 1) {

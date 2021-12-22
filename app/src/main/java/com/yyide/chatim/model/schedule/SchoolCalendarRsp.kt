@@ -34,12 +34,24 @@ class SchoolCalendarRsp(
                     SCHOOL_CALENDAR_TYPE_ITEM
 
         override fun compareTo(other: DataBean): Int {
-            val dateTime = ScheduleDaoUtil.toDateTime(this.startTime ?: "", "yyyy-MM-dd")
-            val dateTimeOther = ScheduleDaoUtil.toDateTime(other.startTime ?: "", "yyyy-MM-dd")
+            val dateTime = ScheduleDaoUtil.toDateTime(
+                if (!TextUtils.isEmpty(this.startTime)) this.startTime ?: "" else "2000-01-01",
+                "yyyy-MM-dd"
+            )
+            val dateTimeOther = ScheduleDaoUtil.toDateTime(
+                if (!TextUtils.isEmpty(other.startTime)) other.startTime ?: "" else "2000-01-01",
+                "yyyy-MM-dd"
+            )
             val compareTo = dateTime.compareTo(dateTimeOther)
             if (compareTo == 0) {
-                val dateTime1 = ScheduleDaoUtil.toDateTime(this.endTime ?: "", "yyyy-MM-dd")
-                val dateTimeOther1 = ScheduleDaoUtil.toDateTime(other.endTime ?: "", "yyyy-MM-dd")
+                val dateTime1 = ScheduleDaoUtil.toDateTime(
+                    if (!TextUtils.isEmpty(this.endTime)) this.endTime ?: "" else "2000-01-01",
+                    "yyyy-MM-dd"
+                )
+                val dateTimeOther1 = ScheduleDaoUtil.toDateTime(
+                    if (!TextUtils.isEmpty(other.endTime)) other.endTime ?: "" else "2000-01-01",
+                    "yyyy-MM-dd"
+                )
                 return dateTime1.compareTo(dateTimeOther1)
             }
             return compareTo
