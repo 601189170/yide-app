@@ -175,6 +175,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             val dataBean = LeaveDeptRsp.DataBean()
             dataBean.deptId = it.id
             dataBean.deptName = it.schoolYear.plus(" ").plus(it.name)
+            dataBean.startDate = it.startDate
+            dataBean.endDate = it.endDate
             dataBean.isDefault = 0
             eventList.add(dataBean)
         }
@@ -211,6 +213,9 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                         loge("选择的学期：$dataBean")
                         curSemesterId = dataBean.deptId
                         schoolCalendarBinding.tvSemester.text = dataBean.deptName
+                        //切换学年学期需要默认选择学年学期开始日期
+                        curDateTime = toDateTime(dataBean.startDate,"yyyy-MM-dd")
+                        calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
                         selectSchoolCalendar()
                     }
                 }

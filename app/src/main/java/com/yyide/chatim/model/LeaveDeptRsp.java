@@ -63,7 +63,8 @@ public class LeaveDeptRsp {
         private int isDefault;
         private String classId;
         private String studentUserId;
-
+        private String startDate;
+        private String endDate;
         public String getDeptName() {
             return deptName;
         }
@@ -126,6 +127,32 @@ public class LeaveDeptRsp {
 
         public void setStudentUserId(String studentUserId) {
             this.studentUserId = studentUserId;
+        }
+
+        public String getStartDate() {
+            return startDate;
+        }
+
+        public void setStartDate(String startDate) {
+            this.startDate = startDate;
+        }
+
+        public String getEndDate() {
+            return endDate;
+        }
+
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
+        }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "deptName='" + deptName + '\'' +
+                    ", deptId='" + deptId + '\'' +
+                    ", startDate='" + startDate + '\'' +
+                    ", endDate='" + endDate + '\'' +
+                    '}';
         }
 
         public DataBean() {
