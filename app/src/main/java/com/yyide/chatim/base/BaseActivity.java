@@ -110,7 +110,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         DemoLog.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        //这样修改，必要每个界面都复写getContentViewID()
+        //这样修改，避免每个界面都复写getContentViewID()
         if (getContentViewID() !=0){
             setContentView(getContentViewID());
         }
