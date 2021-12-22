@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ToastUtils
+import com.jzxiang.pickerview.TimePickerDialog
+import com.jzxiang.pickerview.listener.OnDateSetListener
+import com.loper7.date_time_picker.DateTimeConfig
 import com.yanzhenjie.recyclerview.SwipeRecyclerView
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
@@ -29,6 +32,7 @@ import com.yyide.chatim.dialog.DeptSelectPop
 import com.yyide.chatim.model.LeaveDeptRsp
 import com.yyide.chatim.model.schedule.SchoolCalendarRsp
 import com.yyide.chatim.model.schedule.SchoolSemesterRsp
+import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.logd
@@ -39,7 +43,8 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     SwipeRefreshLayout.OnRefreshListener {
@@ -254,6 +259,21 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             curDateTime = curDateTime.plusMonths(1)
             calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
         }
+        //切换日期
+        val displayList: MutableList<Int> = mutableListOf()
+        displayList.add(DateTimeConfig.YEAR)
+        displayList.add(DateTimeConfig.MONTH)
+        schoolCalendarBinding.tvMonth.setOnClickListener {
+            val eventOptional = eventList.filter { it.deptId == curSemesterId }
+            if (eventOptional.isNotEmpty()){
+                val dataBean = eventOptional[0]
+                val startDateMillis = toDateTime(dataBean.startDate, "yyyy-MM-dd").millis
+                val endDateMillis = toDateTime(dataBean.endDate, "yyyy-MM-dd").millis
+                val millis = curDateTime.millis
+                DatePickerDialogUtil.showDate(this, "选择日期", "$millis", startDateMillis, endDateMillis, displayList, startTimeListener)
+                return@setOnClickListener
+            }
+        }
 
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -262,6 +282,17 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         schoolCalendarAdapter = SchoolCalendarAdapter(schoolCalendarList)
         rvScheduleList.adapter = schoolCalendarAdapter
     }
+
+    //日期选择监听
+    private val startTimeListener =
+        OnDateSetListener { timePickerView: TimePickerDialog?, millseconds: Long ->
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val timingTime = simpleDateFormat.format(Date(millseconds))
+            loge("startTimeListener: $timingTime")
+            curDateTime = toDateTime(timingTime, "yyyy-MM-dd").simplifiedDataTime()
+            schoolCalendarBinding.tvMonth.text =curDateTime.toStringTime("yyyy年MM月")
+            calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
+        }
 
     override fun getContentViewID(): Int = R.layout.activity_school_calendar
 

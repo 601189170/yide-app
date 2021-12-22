@@ -92,4 +92,44 @@ object DatePickerDialogUtil {
             .setOnCancel("取消") {
             }.build().show()
     }
+
+    /**
+     * @param minDate 最小时间
+     * @param maxDate 最大时间
+     * @param displayList 显示的日期格式
+     */
+    fun showDate(
+        context: Context,
+        title: String,
+        currentMillseconds: String?,
+        minDate: Long,
+        maxDate: Long,
+        displayList: MutableList<Int>,
+        onDateSetListener: OnDateSetListener
+    ) {
+        val model = CardDatePickerDialog.STACK
+        val pickerLayout = 0
+        var defaultDate: Long = 0
+        if (!TextUtils.isEmpty(currentMillseconds)) {
+            defaultDate = DateUtils.parseTimestamp(currentMillseconds, "")
+        }
+
+        CardDatePickerDialog.builder(context)
+            .setTitle(title)
+            .setDisplayType(displayList)
+            .setBackGroundModel(model)
+            .setMaxTime(maxDate)
+            .setPickerLayout(pickerLayout)
+            .setMinTime(minDate)
+            .setDefaultTime(defaultDate)
+            .setWrapSelectorWheel(false)
+            .showBackNow(false)
+            .showDateLabel(true)
+            .showFocusDateInfo(true)
+            .setOnChoose("确定") {
+                onDateSetListener.onDateSet(null, it)
+            }
+            .setOnCancel("取消") {
+            }.build().show()
+    }
 }
