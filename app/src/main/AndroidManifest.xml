@@ -687,6 +687,9 @@
         <activity android:name=".activity.gate.GateDetailInfoActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.gate.GateClassTeacherActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

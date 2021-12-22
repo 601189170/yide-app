@@ -76,7 +76,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         return res;
     }
 
-    public abstract int getContentViewID();
+    public int getContentViewID(){
+        return 0;
+    }
 
     public static void logout(Context context) {
         DemoLog.i(TAG, "logout");
@@ -108,7 +110,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         DemoLog.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewID());
+        //这样修改，必要每个界面都复写getContentViewID()
+        if (getContentViewID() !=0){
+            setContentView(getContentViewID());
+        }
         mActivity = this;
         unbinder = ButterKnife.bind(this);
         loading = new LoadingTools(this);
