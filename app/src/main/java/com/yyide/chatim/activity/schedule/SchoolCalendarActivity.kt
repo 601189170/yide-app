@@ -309,7 +309,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
 
     private fun update() {
         loge("curDateTime=${curDateTime.toStringTime("yyyy-MM-dd")}")
-        val monthOfYear = "${curDateTime.monthOfYear}"
+        //val monthOfYear = "${curDateTime.monthOfYear}"
         //schoolCalendarBinding.tvMonth.text = monthOfYear.plus("月")
         schoolCalendarBinding.tvMonth.text = curDateTime.toStringTime("yyyy年MM月")
         selectSchoolCalendar()
@@ -330,6 +330,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     override fun onDestroy() {
         super.onDestroy()
         removeTaskHints(hints)
+        CalendarUtils.getInstance(this).clearAllTask()
     }
 
     fun moveToPosition(position: Int, recyclerView: RecyclerView?) {
