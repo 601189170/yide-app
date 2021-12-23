@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#E0EBFE">
+
+    <TextView
+        android:id="@+id/tv_date_pick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_16"
+        android:drawableEnd="@drawable/icon_arrow_down"
+        android:drawablePadding="@dimen/dp_12"
+        android:text="2021/12/01"
+        android:textColor="#ff1e1e1e"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/layout_gate_through_summary_all"
+        layout="@layout/layout_gate_through_summary_all"
+        android:layout_width="match_parent"
+        android:layout_height="117dp"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_12"
+        app:layout_constraintTop_toBottomOf="@id/tv_date_pick" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@drawable/gate_student_staff_data_list_bg_shape"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintTop_toBottomOf="@id/layout_gate_through_summary_all"
+        app:layout_constraintWidth_default="percent">
+
+        <RadioGroup
+            android:id="@+id/rg_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/rb_all_people"
+                android:layout_width="62dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@drawable/selector_checked_tv"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="小学"
+                android:textColor="@color/black_white_color3"
+                android:textSize="@dimen/text_15" />
+
+            <RadioButton
+                android:id="@+id/rb_normal"
+                android:layout_width="62dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@drawable/selector_checked_tv"
+                android:button="@null"
+                android:gravity="center"
+                android:text="中学"
+                android:textColor="@color/black_white_color3"
+                android:textSize="@dimen/text_15"
+                android:visibility="visible" />
+
+            <RadioButton
+                android:id="@+id/rb_absence"
+                android:layout_width="62dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@drawable/selector_checked_tv"
+                android:button="@null"
+                android:gravity="center"
+                android:text="大学"
+                android:textColor="@color/black_white_color3"
+                android:textSize="@dimen/text_15" />
+        </RadioGroup>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            app:layout_constraintTop_toBottomOf="@id/rg_type"
+            tools:listitem="@layout/item_gate_student_staff"
+            android:layout_marginTop="@dimen/dp_10"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

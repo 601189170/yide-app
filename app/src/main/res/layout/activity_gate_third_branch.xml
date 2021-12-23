@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F8FC">
+
+    <include
+        android:id="@+id/top"
+        layout="@layout/title_layout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/layout_gate_through_branch_all"
+        layout="@layout/layout_gate_through_branch_all"
+        android:layout_width="match_parent"
+        android:layout_height="117dp"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
+        app:layout_constraintTop_toBottomOf="@id/top" />
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/layout_gate_through_branch_all"
+        app:tl_indicator_color="@color/colorPrimary"
+        app:tl_indicator_height="3dp"
+        app:tl_indicator_width="@dimen/dp_50"
+        app:tl_tab_space_equal="true"
+        app:tl_textSelectColor="#2C8AFF"
+        app:tl_textUnselectColor="#909399"
+        app:tl_textsize="@dimen/text_14" />
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E4E7ED"
+        app:layout_constraintTop_toBottomOf="@id/slidingTabLayout" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_line" />
+</androidx.constraintlayout.widget.ConstraintLayout>

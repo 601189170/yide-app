@@ -39,7 +39,8 @@ class GateDetailInfoActivity : BaseActivity() {
     }
 
     private fun initView() {
-        gateDetailInfoBinding.top.title.text = "欧阳娜娜的通行数据"
+        val stringExtra = intent.getStringExtra("username")?:"欧阳娜娜"
+        gateDetailInfoBinding.top.title.text = "${stringExtra}的通行数据"
         gateDetailInfoBinding.top.backLayout.setOnClickListener {
             finish()
         }

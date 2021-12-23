@@ -5,11 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".fragment.gate.PeopleThroughListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <include
+        android:id="@+id/layout_three_column_data"
+        layout="@layout/fragment_gate_through_list_three_column_data"
+        android:visibility="gone" />
 
+    <include
+        android:id="@+id/layout_four_column_data"
+        layout="@layout/fragment_gate_through_list_four_column_data"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/layout_two_column_data"
+        layout="@layout/fragment_gate_through_list_two_column_data"
+        android:visibility="gone" />
 </FrameLayout>

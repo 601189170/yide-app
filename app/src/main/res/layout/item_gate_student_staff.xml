@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="112dp"
+    android:background="@drawable/white_10_corner_shape">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
+        android:text="一年级"
+        android:textColor="#ff1e1e1e"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:src="@drawable/icon_gray_arrow_right"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
+
+    <View
+        android:id="@+id/v_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="45dp"
+        android:background="#EEF2F8"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <View
+        android:id="@+id/v_line1"
+        android:layout_width="1dp"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginBottom="18dp"
+        android:background="#EEF4FC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1" />
+
+    <View
+        android:id="@+id/v_line2"
+        android:layout_width="1dp"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginBottom="18dp"
+        android:background="#EEF4FC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline2" />
+
+    <TextView
+        android:id="@+id/tv_through_number_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:text="通行人数"
+        android:textColor="#909399"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/guideline1" />
+
+    <TextView
+        android:id="@+id/tv_through_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:text="60"
+        android:textColor="#606266"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_through_number_title"
+        app:layout_constraintLeft_toLeftOf="@id/tv_through_number_title"
+        app:layout_constraintRight_toRightOf="@id/tv_through_number_title" />
+
+    <TextView
+        android:id="@+id/tv_go_out_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:text="出校"
+        android:textColor="#909399"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/guideline1"
+        app:layout_constraintRight_toLeftOf="@id/guideline2" />
+
+    <TextView
+        android:id="@+id/tv_go_out_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:text="60"
+        android:textColor="#606266"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_go_out_title"
+        app:layout_constraintLeft_toLeftOf="@id/tv_go_out_title"
+        app:layout_constraintRight_toRightOf="@id/tv_go_out_title" />
+
+    <TextView
+        android:id="@+id/tv_go_into_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:text="入校"
+        android:textColor="#909399"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/guideline2"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_go_into_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:text="60"
+        android:textColor="#606266"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_go_into_title"
+        app:layout_constraintLeft_toLeftOf="@id/tv_go_into_title"
+        app:layout_constraintRight_toRightOf="@id/tv_go_into_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,3 +12,25 @@ data class GateDetailInfo(
     val type:Int,
     val title:String
 )
+
+/**
+ * 通行数据
+ */
+data class GateThroughData(
+    val type: Int,//类型 3列 4列 2列
+    val name:String,
+    val time: String,
+    val clazz:String,
+    val address:String
+)
+
+/**
+ * 通行列表部门数据
+ * 出校 入校
+ */
+data class GateBranchData(
+    val branch:String,
+    val total:Int,
+    val out:Int,
+    val into:Int
+)

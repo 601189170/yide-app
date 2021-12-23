@@ -690,6 +690,16 @@
         <activity android:name=".activity.gate.GateClassTeacherActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".activity.gate.GateStudentStaffActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.gate.GateAllThroughActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.gate.GateSecondBranchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.gate.GateThirdBranchActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
