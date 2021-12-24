@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F8FC">
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/ll_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="@dimen/dp_5"
         android:paddingBottom="@dimen/dp_5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/white">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -67,5 +67,13 @@
             android:textSize="14sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <include
+        android:id="@+id/layout_calendar"
+        layout="@layout/layout_custom_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ll_search"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
