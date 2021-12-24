@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.gate
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -36,6 +37,7 @@ class GateStudentStaffActivity : BaseActivity() {
         activityGateStudentStaffBinding.top.ivRight.setImageResource(R.drawable.gate_search_icon)
         activityGateStudentStaffBinding.top.ivRight.setOnClickListener {
             //搜索入口
+            startActivity(Intent(this,GateDataSearchActivity::class.java))
         }
 
         mTitles.add("学生")

@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.gate
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -54,6 +55,7 @@ class GateClassTeacherActivity : BaseActivity() {
         gateClassTeacherBinding.top.ivRight.setImageResource(R.drawable.gate_search_icon)
         gateClassTeacherBinding.top.ivRight.setOnClickListener {
             //搜索入口
+            startActivity(Intent(this,GateDataSearchActivity::class.java))
         }
         gateClassTeacherBinding.top.backLayout.setOnClickListener {
             finish()

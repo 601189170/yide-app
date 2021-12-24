@@ -700,6 +700,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.gate.GateThirdBranchActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.gate.GateDataSearchActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
