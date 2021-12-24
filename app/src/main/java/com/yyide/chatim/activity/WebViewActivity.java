@@ -151,7 +151,7 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                if (!TextUtils.isEmpty(title)) {
+                if (!TextUtils.isEmpty(title) && !title.equals("登录跳转")) {
                     tvTitle.setText(title);
                 }
             }
