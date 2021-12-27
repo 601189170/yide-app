@@ -244,6 +244,9 @@ class ScheduleFullEditionActivity : BaseActivity() {
                     scheduleFullEditionBinding.clParticipant.visibility = View.VISIBLE
                     showSelectedParticipant(it.participantList)
                 }
+            } else {
+                //家长不显示参与人
+                scheduleFullEditionBinding.clParticipant.visibility = View.GONE
             }
             //地址 siteId
             if (it.siteName != null) {

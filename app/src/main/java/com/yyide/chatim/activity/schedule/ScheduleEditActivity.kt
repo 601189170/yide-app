@@ -113,6 +113,10 @@ class ScheduleEditActivity : BaseActivity() {
         } else {
             scheduleEditBinding.clParticipant.visibility = View.VISIBLE
         }
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            //家长不显示参与人
+            scheduleEditBinding.clParticipant.visibility = View.GONE
+        }
 
         //地址
         scheduleEditBinding.clAddress.isEnabled = editable
