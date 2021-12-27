@@ -21,6 +21,7 @@ import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.schedule.CalendarComposeLayout
+import com.yide.calendar.schedule.CustomCalendarLayout
 import com.yyide.chatim.R
 import com.yyide.chatim.adapter.schedule.SchoolCalendarAdapter
 import com.yyide.chatim.base.BaseActivity
@@ -54,10 +55,10 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     private val schoolCalendarList = mutableListOf<SchoolCalendarRsp.DataBean>()
     private var curSemesterId: String? = null
     private lateinit var curDateTime:DateTime
-    private lateinit var rvScheduleList: SwipeRecyclerView
+    private lateinit var rvScheduleList: RecyclerView
     private lateinit var blankPage: ConstraintLayout
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var calendarComposeLayout: CalendarComposeLayout
+    private lateinit var calendarComposeLayout: CustomCalendarLayout
     private lateinit var schoolCalendarAdapter:SchoolCalendarAdapter
     private var refresh = false
     private val hints = mutableListOf<HintCircle>()
@@ -71,9 +72,11 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             if (it.isEmpty()) {
                 ToastUtils.showShort("查询校历学年学期失败")
                 blankPage.visibility = View.VISIBLE
+                schoolCalendarBinding.layoutCalendar.root.visibility = View.GONE
                 return@observe
             }
             blankPage.visibility = View.GONE
+            schoolCalendarBinding.layoutCalendar.root.visibility = View.VISIBLE
             initSemesterData(it)
             initSemesterView()
         }
@@ -140,11 +143,11 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         hints.forEach {
             val dateTime = it.dateTime
             if (CalendarUtils.getInstance(this).removeTaskHint(dateTime.year,dateTime.monthOfYear-1,it)) {
-                if (calendarComposeLayout.monthCalendarView.currentMonthView != null) {
-                    calendarComposeLayout.monthCalendarView.currentMonthView.invalidate()
+                if (calendarComposeLayout.currentMonthView != null) {
+                    calendarComposeLayout.currentMonthView.invalidate()
                 }
-                if (calendarComposeLayout.weekCalendarView.currentWeekView != null){
-                    calendarComposeLayout.weekCalendarView.currentWeekView.invalidate()
+                if (calendarComposeLayout.currentWeekView != null){
+                    calendarComposeLayout.currentWeekView.invalidate()
                 }
             }
         }
@@ -160,11 +163,12 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         val mCurrentSelectYear = day.dateTime.year
         val mCurrentSelectMonth = day.dateTime.monthOfYear -1
         CalendarUtils.getInstance(this).addTaskHint(mCurrentSelectYear, mCurrentSelectMonth, day)
-        if (calendarComposeLayout.monthCalendarView.currentMonthView != null) {
-            calendarComposeLayout.monthCalendarView.currentMonthView.invalidate()
+        if (calendarComposeLayout.currentMonthView != null) {
+            calendarComposeLayout.currentMonthView.invalidate()
         }
-        if (calendarComposeLayout.weekCalendarView.currentWeekView != null){
-            calendarComposeLayout.weekCalendarView.currentWeekView.invalidate()
+
+        if (calendarComposeLayout.currentWeekView != null){
+            calendarComposeLayout.currentWeekView.invalidate()
         }
     }
     override fun onResume() {
@@ -202,6 +206,10 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             val dataBean = eventOptional[0]
             curSemesterId = dataBean.deptId
             selectSchoolCalendar()
+            calendarComposeLayout.setCalendarInterval(
+                toDateTime(dataBean.startDate, "yyyy-MM-dd"),
+                toDateTime(dataBean.endDate, "yyyy-MM-dd")
+            )
             schoolCalendarBinding.tvSemester.text = dataBean.deptName
             if (eventList.size <= 1) {
                 schoolCalendarBinding.tvSemester.setCompoundDrawables(null, null, null, null)
@@ -220,8 +228,15 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                         curSemesterId = dataBean.deptId
                         schoolCalendarBinding.tvSemester.text = dataBean.deptName
                         //切换学年学期需要默认选择学年学期开始日期
-                        curDateTime = toDateTime(dataBean.startDate,"yyyy-MM-dd")
-                        calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
+                        curDateTime = toDateTime(dataBean.startDate, "yyyy-MM-dd")
+                        calendarComposeLayout.setCalendarInterval(
+                            toDateTime(
+                                dataBean.startDate,
+                                "yyyy-MM-dd"
+                            ), toDateTime(dataBean.endDate, "yyyy-MM-dd")
+                        )
+                        //calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
+                        calendarComposeLayout.setCurrentCalendar(curDateTime)
                         selectSchoolCalendar()
                     }
                 }
@@ -236,29 +251,17 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         }
         schoolCalendarBinding.top.flTitle.setBackgroundColor(resources.getColor(R.color.school_calendar_bg_color))
 
-        calendarComposeLayout = findViewById(R.id.calendarComposeLayout)
-        rvScheduleList = calendarComposeLayout.rvScheduleList
-        blankPage = calendarComposeLayout.blankPage
-        swipeRefreshLayout = calendarComposeLayout.swipeRefreshLayout
+        //calendarComposeLayout = findViewById(R.id.calendarComposeLayout)
+        calendarComposeLayout = schoolCalendarBinding.layoutCalendar.calendarComposeLayout
+        rvScheduleList = schoolCalendarBinding.rvScheduleList
+        blankPage = schoolCalendarBinding.blankPage
+        swipeRefreshLayout = schoolCalendarBinding.swipeRefreshLayout
         calendarComposeLayout.setOnCalendarClickListener(this)
 
         swipeRefreshLayout.setOnRefreshListener(this)
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
         curDateTime = DateTime.now().simplifiedDataTime()
         schoolCalendarBinding.tvMonth.text = curDateTime.toStringTime("yyyy年MM月")
-                //schoolCalendarBinding.tvMonth.text = curDateTime.monthOfYear.toString().plus("月")
-
-        schoolCalendarBinding.ivDateMinus.setOnClickListener {
-            loge("月份减少")
-            curDateTime = curDateTime.minusMonths(1)
-            calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
-        }
-
-        schoolCalendarBinding.ivDateAdd.setOnClickListener {
-            loge("月份增加")
-            curDateTime = curDateTime.plusMonths(1)
-            calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
-        }
         //切换日期
         val displayList: MutableList<Int> = mutableListOf()
         displayList.add(DateTimeConfig.YEAR)
@@ -291,7 +294,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             loge("startTimeListener: $timingTime")
             curDateTime = toDateTime(timingTime, "yyyy-MM-dd").simplifiedDataTime()
             schoolCalendarBinding.tvMonth.text =curDateTime.toStringTime("yyyy年MM月")
-            calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
+            //calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
+            calendarComposeLayout.setCurrentCalendar(curDateTime)
         }
 
     override fun getContentViewID(): Int = R.layout.activity_school_calendar
@@ -303,7 +307,11 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
         loge("onPageChange year=$year,month=$month,day=$day")
-        curDateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
+        val curDateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
+        if (this.curDateTime == curDateTime){
+            return
+        }
+        this.curDateTime = curDateTime
         update()
     }
 

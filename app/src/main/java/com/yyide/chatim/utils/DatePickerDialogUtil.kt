@@ -111,7 +111,7 @@ object DatePickerDialogUtil {
         val pickerLayout = 0
         var defaultDate: Long = 0
         if (!TextUtils.isEmpty(currentMillseconds)) {
-            defaultDate = DateUtils.parseTimestamp(currentMillseconds, "")
+            //defaultDate = DateUtils.parseTimestamp(currentMillseconds, "yyyy-MM-dd")
         }
 
         CardDatePickerDialog.builder(context)

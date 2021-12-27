@@ -14,7 +14,7 @@ import org.joda.time.DateTime
  * @date 2021/12/24 9:18
  * @description 闸机搜索界面
  */
-class GateDataSearchActivity : BaseActivity(), OnCalendarClickListener {
+class GateDataSearchActivity : BaseActivity() {
     private lateinit var activityGateDataSearchBinding: ActivityGateDataSearchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,19 +27,5 @@ class GateDataSearchActivity : BaseActivity(), OnCalendarClickListener {
         activityGateDataSearchBinding.cancel.setOnClickListener {
             finish()
         }
-
-        val calendarComposeLayout = activityGateDataSearchBinding.layoutCalendar.calendarComposeLayout
-        calendarComposeLayout.setOnCalendarClickListener(this)
-        val startMonths = DateTime.now().simplifiedDataTime().minusMonths(3)
-        val endMonths = DateTime.now().simplifiedDataTime().plusMonths(3)
-        calendarComposeLayout.setCalendarInterval(startMonths,endMonths)
-    }
-
-    override fun onClickDate(year: Int, month: Int, day: Int) {
-        loge("onClickDate: $year/${month+1}/$day")
-    }
-
-    override fun onPageChange(year: Int, month: Int, day: Int) {
-        loge("onPageChange: $year/${month+1}/$day")
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,9 +17,14 @@ import com.yide.calendar.OnCalendarClickListener;
 import com.yide.calendar.R;
 import com.yide.calendar.month.MonthView;
 import com.yide.calendar.month.OnMonthClickListener;
+import com.yide.calendar.week.OnWeekClickListener;
+import com.yide.calendar.week.WeekView;
 
 import org.joda.time.DateTime;
 import org.joda.time.Months;
+import org.joda.time.Weeks;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +36,7 @@ import java.util.List;
  * 1，需要指定日历开始时间，日历结束时间
  * 2，可滑动选择周月，可直接通过日期选中指定月周
  */
-public class CustomCalendarLayout extends FrameLayout implements OnMonthClickListener {
+public class CustomCalendarLayout extends FrameLayout implements OnMonthClickListener, OnWeekClickListener {
     //存月日历的view pager
     private ViewPager2 monthCalendarViewPager;
     //存周日历的view pager
@@ -40,7 +46,9 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
     private TypedArray mArray;
     private Context context;
     private List<View> monthViewList = new ArrayList<>();
+    private List<View> weekViewList = new ArrayList<>();
     private OnCalendarClickListener mOnCalendarClickListener;
+
     public CustomCalendarLayout(@NonNull Context context) {
         super(context);
     }
@@ -89,7 +97,10 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
      * @param endDate   日历的结束
      */
     public void setCalendarInterval(DateTime startDate, DateTime endDate) {
-        final int months = Months.monthsBetween(startDate, endDate).getMonths()+1;
+        monthViewList.clear();
+        weekViewList.clear();
+        //设置月日历
+        final int months = Months.monthsBetween(startDate, endDate).getMonths() + 1;
         for (int i = 0; i < months; i++) {
             final DateTime dateTime = startDate.plusMonths(i);
             final MonthView monthView = new MonthView(context, mArray, dateTime.getYear(), dateTime.getMonthOfYear() - 1);
@@ -98,10 +109,25 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         }
         final ViewPagerAdapter adapter = new ViewPagerAdapter(context, monthViewList);
         monthCalendarViewPager.setAdapter(adapter);
-        monthCalendarViewPager.registerOnPageChangeCallback(onPageChangeCallback);
-        setCurrentCalendar(new DateTime());
+        monthCalendarViewPager.registerOnPageChangeCallback(onMonthPageChangeCallback);
+        setCurrentMonthCalendar(new DateTime());
+        //设置周日历
+        final int weeks = Weeks.weeksBetween(startDate, endDate).getWeeks() + 1;
+        for (int i = 0; i < weeks; i++) {
+            DateTime dateTime = startDate.plusWeeks(i);
+            dateTime = dateTime.plusDays(-dateTime.getDayOfWeek() % 7);
+            WeekView weekView = new WeekView(context, mArray, dateTime);
+            weekView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            weekView.setOnWeekClickListener(this);
+            weekViewList.add(weekView);
+        }
+        final ViewPagerAdapter adapterWeek = new ViewPagerAdapter(context, weekViewList);
+        weekCalendarViewPager.setAdapter(adapterWeek);
+        weekCalendarViewPager.registerOnPageChangeCallback(onWeekPageChangeCallback);
+        setCurrentWeekCalendar(new DateTime());
     }
-    private final ViewPager2.OnPageChangeCallback onPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+
+    private final ViewPager2.OnPageChangeCallback onMonthPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
         @Override
         public void onPageSelected(int position) {
             super.onPageSelected(position);
@@ -109,7 +135,24 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
             final int selectYear = monthView.getSelectYear();
             final int selectMonth = monthView.getSelectMonth();
             final int selectDay = monthView.getSelectDay();
-            mOnCalendarClickListener.onPageChange(selectYear,selectMonth,selectDay);
+            mOnCalendarClickListener.onPageChange(selectYear, selectMonth, selectDay);
+            final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+            final DateTime dateTime = DateTime.parse(selectYear + "-" + (selectMonth + 1) + "-" + selectDay, dateTimeFormatter);
+            setCurrentWeekCalendar(dateTime);
+        }
+    };
+
+
+    private final ViewPager2.OnPageChangeCallback onWeekPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            final WeekView monthView = (WeekView) weekViewList.get(position);
+            final int selectYear = monthView.getSelectYear();
+            final int selectMonth = monthView.getSelectMonth();
+            final int selectDay = monthView.getSelectDay();
+            mOnCalendarClickListener.onPageChange(selectYear, selectMonth, selectDay);
+            setCurrentMonthCalendar(monthView.getStartDate());
         }
     };
 
@@ -118,21 +161,37 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
      *
      * @param dateTime 当前日历的日期
      */
-    public void setCurrentCalendar(DateTime dateTime) {
+    public void setCurrentMonthCalendar(DateTime dateTime) {
         for (int i = 0; i < monthViewList.size(); i++) {
             final MonthView view = (MonthView) monthViewList.get(i);
             final int selectYear = view.getSelectYear();
             final int selectMonth = view.getSelectMonth();
-            if (selectMonth == dateTime.getMonthOfYear()-1 && selectYear == dateTime.getYear()){
-                monthCalendarViewPager.setCurrentItem(i,false);
+            if (selectMonth == dateTime.getMonthOfYear() - 1 && selectYear == dateTime.getYear()) {
+                monthCalendarViewPager.setCurrentItem(i, false);
                 break;
             }
         }
     }
 
+    public void setCurrentWeekCalendar(DateTime dateTime) {
+        for (int i = 0; i < weekViewList.size(); i++) {
+            WeekView weekView = (WeekView) weekViewList.get(i);
+            final DateTime startDate = weekView.getStartDate();
+            final DateTime endDate = weekView.getEndDate();
+            if (dateTime.compareTo(startDate) >= 0 && dateTime.compareTo(endDate) <= 0) {
+                weekCalendarViewPager.setCurrentItem(i, false);
+            }
+        }
+    }
+
+    public void setCurrentCalendar(DateTime dateTime) {
+        setCurrentMonthCalendar(dateTime);
+        setCurrentWeekCalendar(dateTime);
+    }
+
     @Override
     public void onClickThisMonth(int year, int month, int day) {
-            mOnCalendarClickListener.onClickDate(year, month, day);
+        mOnCalendarClickListener.onClickDate(year, month, day);
     }
 
     @Override
@@ -152,5 +211,20 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
      */
     public void setOnCalendarClickListener(OnCalendarClickListener onCalendarClickListener) {
         mOnCalendarClickListener = onCalendarClickListener;
+    }
+
+    @Override
+    public void onClickDate(int year, int month, int day) {
+        mOnCalendarClickListener.onClickDate(year, month, day);
+    }
+
+    public WeekView getCurrentWeekView() {
+        final int currentItem = weekCalendarViewPager.getCurrentItem();
+        return (WeekView) weekViewList.get(currentItem);
+    }
+
+    public MonthView getCurrentMonthView() {
+        final int currentItem = monthCalendarViewPager.getCurrentItem();
+        return (MonthView) monthViewList.get(currentItem);
     }
 }

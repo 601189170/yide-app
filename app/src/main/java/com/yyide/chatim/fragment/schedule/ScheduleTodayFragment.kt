@@ -21,6 +21,7 @@ import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.gate.GateClassTeacherActivity
 import com.yyide.chatim.activity.gate.GateDetailInfoActivity
+import com.yyide.chatim.activity.gate.GateStudentStaffActivity
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
@@ -102,7 +103,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         fragmentScheduleTodayBinding.tvToday.setOnClickListener {
-//            startActivity(Intent(requireContext(),GateClassTeacherActivity::class.java))
+            startActivity(Intent(requireContext(),GateStudentStaffActivity::class.java))
         }
         fragmentScheduleTodayBinding.fab.setOnClickListener {
             DialogUtil.showAddScheduleDialog(context, this, DateTime.now())

@@ -99,7 +99,7 @@ public class WeekView extends View {
             mHintCircleColor = array.getColor(R.styleable.WeekCalendarView_week_hint_circle_color, Color.parseColor("#FE8595"));
             mLunarTextColor = array.getColor(R.styleable.WeekCalendarView_week_lunar_text_color, Color.parseColor("#ACA9BC"));
             mHolidayTextColor = array.getColor(R.styleable.WeekCalendarView_week_holiday_color, Color.parseColor("#A68BFF"));
-            mDaySize = array.getInteger(R.styleable.WeekCalendarView_week_day_text_size, 13);
+            mDaySize = array.getInteger(R.styleable.WeekCalendarView_week_day_text_size, 18);
             mLunarTextSize = array.getInteger(R.styleable.WeekCalendarView_week_day_lunar_text_size, 8);
             mIsShowHint = array.getBoolean(R.styleable.WeekCalendarView_week_show_task_hint, true);
             mIsShowLunar = array.getBoolean(R.styleable.WeekCalendarView_week_show_lunar, true);
