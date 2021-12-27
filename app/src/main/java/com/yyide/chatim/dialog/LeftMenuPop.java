@@ -372,9 +372,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 || GetUserSchoolRsp.DataBean.TYPE_TEACHER.equals(SpData.getIdentityInfo().status))
                 && SpData.getClassInfo() != null
                 && "N".equals(SpData.getClassInfo().teacherInd)) {
-            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "老师" : "");
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "教师" : "");
         } else {
-            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + SpData.getIdentityInfo().getIdentity() : "");
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "家长" : "");
         }
     }
 

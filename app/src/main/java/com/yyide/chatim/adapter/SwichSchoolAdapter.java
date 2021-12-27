@@ -48,11 +48,36 @@ public class SwichSchoolAdapter extends BaseAdapter {
         TextView school_info = VHUtil.ViewHolder.get(view, R.id.school_info);
         TextView school_name = VHUtil.ViewHolder.get(view, R.id.school_name);
         TextView select = VHUtil.ViewHolder.get(view, R.id.select);
+        TextView tvDesc = VHUtil.ViewHolder.get(view, R.id.tvDesc);
         View view_line = VHUtil.ViewHolder.get(view, R.id.view_line);
         ImageView img = VHUtil.ViewHolder.get(view, R.id.img);
         GlideUtil.loadImageHead(viewGroup.getContext(), getItem(position).img, img);
-        school_name.setText(getItem(position).schoolName);
-        school_info.setText(getItem(position).realname);
+        GetUserSchoolRsp.DataBean item = getItem(position);
+
+        school_name.setText(item.schoolName);
+        school_info.setText(item.getIdentityResult());
+
+//        List<GetUserSchoolRsp.DataBean.FormBean> listClass = item.form;
+        //处理家长身份显示多个学生
+//        if (!item.staffIdentity()) {
+//            if (listClass != null && listClass.size() > 0) {
+//                StringBuilder stringBuilder = new StringBuilder();
+//                stringBuilder.append("(");
+//                for (int i = 0; i < listClass.size(); i++) {
+//                    GetUserSchoolRsp.DataBean.FormBean studentItem = listClass.get(i);
+//                    if (i == listClass.size() - 1) {
+//                        stringBuilder.append(studentItem.studentName);
+//                    } else {
+//                        stringBuilder.append(studentItem.studentName).append("/");
+//                    }
+//                }
+//                stringBuilder.append(")");
+//                tvDesc.setText(stringBuilder.toString());
+//            }
+//        } else {
+//            tvDesc.setText("");
+//        }
+
         if (list.get(position).userId.equals(SpData.getUserId())) {
             select.setVisibility(View.VISIBLE);
         } else {
