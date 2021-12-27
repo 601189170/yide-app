@@ -69,7 +69,7 @@ public class GetUserSchoolRsp implements Serializable {
                 } else if (TYPE_CLASS_TEACHER.equals(status)) {
                     identity = "班主任";
                 } else if (TYPE_TEACHER.equals(status)) {
-                    identity = "老师";
+                    identity = "教师";
                 } else if (TYPE_BRAND_AUTH.equals(status)) {
                     identity = "班牌账号";
                 } else if (TYPE_ADMIN.equals(status)) {
@@ -79,11 +79,38 @@ public class GetUserSchoolRsp implements Serializable {
             return identity;
         }
 
+        /**
+         * 返回身份描述
+         *
+         * @return
+         */
+        public String getIdentityResult() {
+            String identity = "";
+            if (!TextUtils.isEmpty(status)) {
+                if (TYPE_PARENTS.equals(status)) {
+                    identity = "家长";
+                } else if (TYPE_STUDENT.equals(status)) {
+                    identity = "学生";
+                } else if (TYPE_PRESIDENT.equals(status)) {
+                    identity = "教师";
+                } else if (TYPE_CLASS_TEACHER.equals(status)) {
+                    identity = "教师";
+                } else if (TYPE_TEACHER.equals(status)) {
+                    identity = "教师";
+                } else if (TYPE_BRAND_AUTH.equals(status)) {
+                    identity = "班牌账号";
+                } else if (TYPE_ADMIN.equals(status)) {
+                    identity = "教师";
+                }
+            }
+            return identity;
+        }
+
         public boolean isSchool() {
             return TYPE_PRESIDENT.equals(status);
         }
 
-        public boolean isAdmin(){
+        public boolean isAdmin() {
             return TYPE_ADMIN.equals(status);
         }
 
