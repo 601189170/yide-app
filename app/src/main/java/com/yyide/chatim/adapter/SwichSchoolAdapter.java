@@ -55,7 +55,8 @@ public class SwichSchoolAdapter extends BaseAdapter {
         GetUserSchoolRsp.DataBean item = getItem(position);
 
         school_name.setText(item.schoolName);
-        school_info.setText(item.getIdentityResult());
+        tvDesc.setText("(" + item.getIdentityResult() + ")");
+        school_info.setText(item.realname);
 
 //        List<GetUserSchoolRsp.DataBean.FormBean> listClass = item.form;
         //处理家长身份显示多个学生
