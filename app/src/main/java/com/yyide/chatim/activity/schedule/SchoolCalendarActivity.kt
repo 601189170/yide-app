@@ -237,6 +237,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                         )
                         //calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
                         calendarComposeLayout.setCurrentCalendar(curDateTime)
+                        schoolCalendarBinding.tvMonth.text =curDateTime.toStringTime("yyyy年MM月")
                         selectSchoolCalendar()
                     }
                 }
