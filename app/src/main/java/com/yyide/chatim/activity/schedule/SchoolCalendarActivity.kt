@@ -103,35 +103,35 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
 
             schoolCalendarAdapter.setList(schoolCalendarList)
             schoolCalendarList.forEach {
-                if (it.type == 1){
+                if (it.type == 1) {
                     return@forEach
                 }
-                if (it.moreDay == 1) {
-                    //跨天计算
-                    val startTime = toDateTime(it.startTime?:"", "yyyy-MM-dd")
-                    val endTime = toDateTime(it.endTime?:"", "yyyy-MM-dd")
-
-                    val daysBetween = Days.daysBetween(startTime, endTime).days
-                    for (index in 0..daysBetween) {
-                        val dataBean:SchoolCalendarRsp.DataBean = it.copy()
-                        val allDay = toDateTime(dataBean.startTime?:"","yyyy-MM-dd").simplifiedDataTime().plusDays(index)
-                        //dataBean.startTime = allDay.toStringTime("yyyy-MM-dd")
-                        //dataBean.endTime = allDay.toStringTime("yyyy-MM-dd")
-                        if (startTime.year != allDay.year || startTime.monthOfYear != allDay.monthOfYear){
-                            break
-                        }
-                        val hintCircle = HintCircle(allDay, allDay.dayOfMonth, 1)
-                        hints.add(hintCircle)
-                        addTaskHint(hintCircle)
-                    }
-                } else {
-                    it.startTime?.let {
-                        val dateTime = toDateTime(it, "yyyy-MM-dd")
-                        val hintCircle = HintCircle(dateTime, dateTime.dayOfMonth, 1)
-                        hints.add(hintCircle)
-                        addTaskHint(hintCircle)
-                    }
+//                if (it.moreDay == 1) {
+//                    //跨天计算
+//                    val startTime = toDateTime(it.startTime?:"", "yyyy-MM-dd")
+//                    val endTime = toDateTime(it.endTime?:"", "yyyy-MM-dd")
+//
+//                    val daysBetween = Days.daysBetween(startTime, endTime).days
+//                    for (index in 0..daysBetween) {
+//                        val dataBean:SchoolCalendarRsp.DataBean = it.copy()
+//                        val allDay = toDateTime(dataBean.startTime?:"","yyyy-MM-dd").simplifiedDataTime().plusDays(index)
+//                        //dataBean.startTime = allDay.toStringTime("yyyy-MM-dd")
+//                        //dataBean.endTime = allDay.toStringTime("yyyy-MM-dd")
+//                        if (startTime.year != allDay.year || startTime.monthOfYear != allDay.monthOfYear){
+//                            break
+//                        }
+//                        val hintCircle = HintCircle(allDay, allDay.dayOfMonth, 1)
+//                        hints.add(hintCircle)
+//                        addTaskHint(hintCircle)
+//                    }
+//                } else {
+                it.startTime?.let {
+                    val dateTime = toDateTime(it, "yyyy-MM-dd")
+                    val hintCircle = HintCircle(dateTime, dateTime.dayOfMonth, 1)
+                    hints.add(hintCircle)
+                    addTaskHint(hintCircle)
                 }
+//                }
 
             }
         }
