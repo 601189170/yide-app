@@ -8,6 +8,7 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextPaint;
@@ -692,6 +693,7 @@ public class WheelView extends View {
             // 判断是否被选择
             if (isSelected()) {
                 textPaint.setColor(selectedColor);
+                textPaint.setTypeface(Typeface.DEFAULT_BOLD);
                 // 获取距离标准位置的距离
                 float moveToSelect = moveToSelected();
                 moveToSelect = moveToSelect > 0 ? moveToSelect : moveToSelect * (-1);
@@ -701,6 +703,7 @@ public class WheelView extends View {
                 textPaint.setTextSize(textSize);
             } else {
                 textPaint.setColor(normalColor);
+                textPaint.setTypeface(Typeface.DEFAULT);
                 textPaint.setTextSize(normalFont);
             }
 

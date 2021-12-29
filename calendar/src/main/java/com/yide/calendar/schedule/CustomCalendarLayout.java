@@ -219,8 +219,11 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
     }
 
     public void setCurrentCalendar(DateTime dateTime) {
-        setCurrentMonthCalendar(dateTime);
-        setCurrentWeekCalendar(dateTime);
+        if (mState == ScheduleState.OPEN) {
+            setCurrentMonthCalendar(dateTime);
+        } else {
+            setCurrentWeekCalendar(dateTime);
+        }
     }
 
     @Override

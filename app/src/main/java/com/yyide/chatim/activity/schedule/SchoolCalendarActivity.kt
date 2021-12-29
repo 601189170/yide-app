@@ -92,6 +92,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             schoolCalendarList.sort()
             if (it.isEmpty()) {
                 blankPage.visibility = View.VISIBLE
+                schoolCalendarBinding.layoutBlankPage.tvDesc.text = "暂无备注"
             } else {
                 blankPage.visibility = View.GONE
                 val dataBean = SchoolCalendarRsp.DataBean()
@@ -125,12 +126,15 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
 //                        addTaskHint(hintCircle)
 //                    }
 //                } else {
-                it.startTime?.let {
-                    val dateTime = toDateTime(it, "yyyy-MM-dd")
-                    val hintCircle = HintCircle(dateTime, dateTime.dayOfMonth, 1)
-                    hints.add(hintCircle)
-                    addTaskHint(hintCircle)
+                if (!TextUtils.isEmpty(it.startTime)){
+                    it.startTime?.let {
+                        val dateTime = toDateTime(it, "yyyy-MM-dd")
+                        val hintCircle = HintCircle(dateTime, dateTime.dayOfMonth, 1)
+                        hints.add(hintCircle)
+                        addTaskHint(hintCircle)
+                    }
                 }
+
 //                }
 
             }
@@ -271,10 +275,17 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             val eventOptional = eventList.filter { it.deptId == curSemesterId }
             if (eventOptional.isNotEmpty()){
                 val dataBean = eventOptional[0]
-                val startDateMillis = toDateTime(dataBean.startDate, "yyyy-MM-dd").millis
-                val endDateMillis = toDateTime(dataBean.endDate, "yyyy-MM-dd").millis
-                val millis = curDateTime.millis
-                DatePickerDialogUtil.showDate(this, "选择日期", "$millis", startDateMillis, endDateMillis, displayList, startTimeListener)
+                val startDate = toDateTime(dataBean.startDate, "yyyy-MM-dd")
+                val endDate = toDateTime(dataBean.endDate, "yyyy-MM-dd")
+                //val millis = curDateTime.millis
+                //DatePickerDialogUtil.showDate(this, "选择日期", "$millis", startDateMillis, endDateMillis, displayList, startTimeListener)
+                DatePickerDialogUtil.showDateYearAndMonth(this,"选择日期",startDate,endDate){
+                    loge("选择日期:${it.toStringTime("yyyy-MM-dd")}")
+                    curDateTime = it.simplifiedDataTime()
+                    schoolCalendarBinding.tvMonth.text =curDateTime.toStringTime("yyyy年MM月")
+                    //calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
+                    calendarComposeLayout.setCurrentCalendar(curDateTime)
+                }
                 return@setOnClickListener
             }
         }
@@ -302,12 +313,12 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     override fun getContentViewID(): Int = R.layout.activity_school_calendar
 
     override fun onClickDate(year: Int, month: Int, day: Int) {
-        loge("onClickDate year=$year,month=$month,day=$day")
+        loge("onClickDate year=$year,month=${month+1},day=$day")
         scrollToPosition(year, month, day)
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
-        loge("onPageChange year=$year,month=$month,day=$day")
+        loge("onPageChange year=$year,month=${month+1},day=$day")
         val curDateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
         if (this.curDateTime == curDateTime){
             return
