@@ -132,12 +132,13 @@ class SiteTableFragment : Fragment() {
                 adapter = SiteTableTimeAdapter(weekdayList)
                 siteTableFragmentBinding.top.grid.adapter = adapter
             }
-            //早读 上午 下午 晚自习
+            //早读 上午 下午 晚上 晚自习
             var earlyReading = 0
             it.jcbMap?.let {
                 earlyReading = if (it.zzx != null) it.zzx.size else 0
                 val morning = if (it.sw != null) it.sw.size else 0
                 val afternoon = if (it.xw != null) it.xw.size else 0
+                val evening = if (it.ws != null) it.ws.size else 0
                 val eveningStudy = if (it.wzx != null) it.wzx.size else 0
                 if (earlyReading > 0) {
                     createLeftTypeView(0, 1, earlyReading) //早读
@@ -148,8 +149,11 @@ class SiteTableFragment : Fragment() {
                 if (afternoon > 0) {
                     createLeftTypeView(earlyReading + morning, 3, afternoon) //下午
                 }
+                if (evening >0){
+                    createLeftTypeView(earlyReading+morning+afternoon,4,evening)//晚上
+                }
                 if (eveningStudy > 0) {
-                    createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy) //晚自习
+                    createLeftTypeView(morning + afternoon + earlyReading+evening, 5, eveningStudy) //晚自习
                 }
 
                 val sectionlist = mutableListOf<String>()
@@ -161,6 +165,9 @@ class SiteTableFragment : Fragment() {
                 }
                 it.xw?.forEach {
                     sectionlist.add(it.jcmc+"")
+                }
+                it.ws?.forEach {
+                    sectionlist.add("${it.jcmc}")
                 }
                 it.wzx?.forEach {
                     sectionlist.add(it.jcmc+"")
@@ -176,7 +183,7 @@ class SiteTableFragment : Fragment() {
                 //周次选择
                 initClassData()
                 initClassView()
-                sectionCount = it.zzxkjs + it.swkjs + it.xwkjs + it.wzxkjs
+                sectionCount = it.zzxkjs + it.swkjs + it.xwkjs + it.wzxkjs +it.wskjs
 //                val sectionlist = mutableListOf<String>()
 //                for (i in 0 until sectionCount) {
 //                    if (earlyReading > 0 && i == 0) {
@@ -346,6 +353,11 @@ class SiteTableFragment : Fragment() {
             }
             4 -> {
                 view.y = (CouseHeight * selection + SizeUtils.dp2px(3f)).toFloat()
+                view.background = resources.getDrawable(R.drawable.bg_table_type4)
+                text.text = "晚\n上"
+            }
+            5->{
+                view.y = (CouseHeight * selection + SizeUtils.dp2px(4f)).toFloat()
                 view.background = resources.getDrawable(R.drawable.bg_table_type4)
                 text.text = "晚\n自\n习"
             }

@@ -31,7 +31,8 @@ data class SiteTableRsp(
             val sw: List<JcbBean>? = null,
             val wzx: List<JcbBean>? = null,
             val zzx: List<JcbBean>? = null,
-            val xw: List<JcbBean>? = null
+            val xw: List<JcbBean>? = null,
+            val ws: List<JcbBean>? = null
         ) {
             data class JcbBean(
                 val bbh: Int = 0,
@@ -73,6 +74,7 @@ data class SiteTableRsp(
             val swkjs: Int = 0,
             val xwkjs: Int = 0,
             val wzxkjs: Int = 0,
+            val wskjs: Int = 0,
             val xn: String? = null,
             val xnxq: String? = null,
             val xnxqid: String? = null,
