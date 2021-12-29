@@ -353,7 +353,7 @@ class SiteTableFragment : Fragment() {
             }
             4 -> {
                 view.y = (CouseHeight * selection + SizeUtils.dp2px(3f)).toFloat()
-                view.background = resources.getDrawable(R.drawable.bg_table_type4)
+                view.background = resources.getDrawable(R.drawable.bg_table_type5)
                 text.text = "晚\n上"
             }
             5->{
