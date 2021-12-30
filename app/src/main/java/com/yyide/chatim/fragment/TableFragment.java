@@ -110,7 +110,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
                             table_next.setText("下一节 | ");
                             break;
                         } else {//正在上课
-                            table_next.setText("本节课 | ");
+                            table_next.setText("本节课 | "); 
                             dataBean = item;
                             break;
                         }
