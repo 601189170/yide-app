@@ -73,6 +73,7 @@ import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.model.attendance.StudentAttendanceWeekMonthRsp;
 import com.yyide.chatim.model.attendance.TeacherAttendanceDayRsp;
 import com.yyide.chatim.model.attendance.TeacherAttendanceWeekMonthRsp;
+import com.yyide.chatim.model.gate.GateDataPermissionRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
@@ -308,6 +309,14 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/backstage/cloud-backstage/application/search")
     Observable<TemplateListRsp> searchApp(@Body RequestBody requestBody);
+
+    /**
+     * 获取闸机数据相关权限
+     * https://api.uat.edu.1d1j.net/management/cloud-system/barrier-server/barrier/mobile/v2/queryUserBarrierPermissions
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/management/cloud-system/barrier-server/barrier/mobile/v2/queryUserBarrierPermissions")
+    Observable<GateDataPermissionRsp> queryUserBarrierPermissions();
 
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/message/cloud-message/user/announcement/getMyNoticeBacklog")

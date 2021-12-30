@@ -14,5 +14,7 @@ class MMKVConstant {
         const val YD_WEEKLY_DATE_WEEK = "yd_weekly_date_week"
         const val YD_FACE_PROTOCOL_AGREED_STATUS = "yd_face_protocol_agreed_status"
         const val YD_SHOW_HISTORY_SCHEDULE = "yd_show_history_schedule"
+        //查询闸机访问数据权限
+        const val YD_GATE_DATA_ACCESS_PERMISSION = "yd_gate_data_access_permission"
     }
 }

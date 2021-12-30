@@ -149,6 +149,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     public void onRefresh() {
         mvpPresenter.getMyAppList();
         mvpPresenter.getAppList();
+        mvpPresenter.queryUserBarrierPermissions();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -158,6 +159,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
         } else if (BaseConstant.TYPE_UPDATE_HOME.equals(messageEvent.getCode())) {
             mvpPresenter.getMyAppList();
             mvpPresenter.getAppList();
+            mvpPresenter.queryUserBarrierPermissions();
         }
     }
 
