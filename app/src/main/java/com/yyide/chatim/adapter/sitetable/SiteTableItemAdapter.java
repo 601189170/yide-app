@@ -65,9 +65,9 @@ public class SiteTableItemAdapter extends BaseAdapter {
         final String kssj = item.getKssj();
         final String jssj = item.getJssj();
         final String date = item.getDate();
-        if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(kssj) && !TextUtils.isEmpty(jssj)){
-            DateTime startTime = ScheduleDaoUtil.INSTANCE.toDateTime(date+" "+kssj,"yyyy-MM-dd HH:mm");
-            DateTime endTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " "+jssj,"yyyy-MM-dd HH:mm");
+        if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(kssj) && !TextUtils.isEmpty(jssj)) {
+            DateTime startTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " " + kssj, "yyyy-MM-dd HH:mm");
+            DateTime endTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " " + jssj, "yyyy-MM-dd HH:mm");
             final DateTime now = DateTime.now();
             if (now.compareTo(startTime) >= 0 && now.compareTo(endTime) <= 0) {
                 //当前课程
@@ -76,6 +76,8 @@ public class SiteTableItemAdapter extends BaseAdapter {
             } else {
                 text_view.setTextColor(view.getContext().getResources().getColor(R.color.black9));
             }
+        } else {
+            text_view.setTextColor(view.getContext().getResources().getColor(R.color.black9));
         }
         return view;
     }
@@ -85,7 +87,7 @@ public class SiteTableItemAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void notifyData(List<SiteTableRsp.DataBean.ListBean> list,int position) {
+    public void notifyData(List<SiteTableRsp.DataBean.ListBean> list, int position) {
         this.list = list;
         this.position = position;
         notifyDataSetChanged();
