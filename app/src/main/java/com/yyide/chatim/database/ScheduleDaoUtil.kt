@@ -40,6 +40,10 @@ object ScheduleDaoUtil {
     }
 
     fun toDateTime(date: String, pattern: String = "yyyy-MM-dd HH:mm:ss"): DateTime {
+        if (TextUtils.isEmpty(date)){
+            val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
+            return DateTime.parse("1970-01-01", dateTimeFormatter)
+        }
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern(pattern)
         return DateTime.parse(date, dateTimeFormatter)
     }

@@ -69,10 +69,12 @@ public class SiteTableItemAdapter extends BaseAdapter {
             DateTime startTime = ScheduleDaoUtil.INSTANCE.toDateTime(date+" "+kssj,"yyyy-MM-dd HH:mm");
             DateTime endTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " "+jssj,"yyyy-MM-dd HH:mm");
             final DateTime now = DateTime.now();
-            if (now.compareTo(startTime)>=0 && now.compareTo(endTime) <= 0){
+            if (now.compareTo(startTime) >= 0 && now.compareTo(endTime) <= 0) {
                 //当前课程
                 layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_current));
                 text_view.setTextColor(view.getContext().getResources().getColor(R.color.white));
+            } else {
+                text_view.setTextColor(view.getContext().getResources().getColor(R.color.black9));
             }
         }
         return view;

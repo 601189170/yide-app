@@ -246,7 +246,7 @@ public class DeptSelectPop extends PopupWindow {
             holder.tv_title.setText(dataBean.getDeptName());
             final boolean b = dataBean.getIsDefault() == 1;
             holder.checkBox.setVisibility(b?View.VISIBLE:View.GONE);
-            if (type == 6 && b) {
+            if (type == 6 && dataBean.isCurWeek()) {
                 holder.tvCurrentWeek.setVisibility(View.VISIBLE);
             } else {
                 holder.tvCurrentWeek.setVisibility(View.GONE);

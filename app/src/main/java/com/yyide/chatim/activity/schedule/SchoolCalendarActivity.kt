@@ -216,7 +216,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
             selectSchoolCalendar()
             calendarComposeLayout.setCalendarInterval(
                 toDateTime(dataBean.startDate, "yyyy-MM-dd"),
-                toDateTime(dataBean.endDate, "yyyy-MM-dd")
+                toDateTime(dataBean.endDate, "yyyy-MM-dd"),
+                DateTime.now().simplifiedDataTime()
             )
             schoolCalendarBinding.tvSemester.text = dataBean.deptName
             if (eventList.size <= 1) {
@@ -241,7 +242,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                             toDateTime(
                                 dataBean.startDate,
                                 "yyyy-MM-dd"
-                            ), toDateTime(dataBean.endDate, "yyyy-MM-dd")
+                            ), toDateTime(dataBean.endDate, "yyyy-MM-dd"),
+                            toDateTime(dataBean.startDate, "yyyy-MM-dd").simplifiedDataTime()
                         )
                         //calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
                         calendarComposeLayout.setCurrentCalendar(curDateTime)
@@ -289,6 +291,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                     schoolCalendarBinding.tvMonth.text =curDateTime.toStringTime("yyyy年MM月")
                     //calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
                     calendarComposeLayout.setCurrentCalendar(curDateTime)
+                    update()
                 }
                 return@setOnClickListener
             }
@@ -324,9 +327,6 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     override fun onPageChange(year: Int, month: Int, day: Int) {
         loge("onPageChange year=$year,month=${month+1},day=$day")
         val curDateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
-        if (this.curDateTime == curDateTime){
-            return
-        }
         this.curDateTime = curDateTime
         update()
     }

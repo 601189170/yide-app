@@ -118,7 +118,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
      * @param startDate 日历的开始
      * @param endDate   日历的结束
      */
-    public void setCalendarInterval(DateTime startDate, DateTime endDate) {
+    public void setCalendarInterval(DateTime startDate, DateTime endDate,DateTime currentDate) {
         monthViewList.clear();
         weekViewList.clear();
         //设置月日历
@@ -132,7 +132,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         final ViewPagerAdapter adapter = new ViewPagerAdapter(context, monthViewList);
         monthCalendarViewPager.setAdapter(adapter);
         monthCalendarViewPager.registerOnPageChangeCallback(onMonthPageChangeCallback);
-        setCurrentMonthCalendar(new DateTime());
+        setCurrentMonthCalendar(currentDate);
         //设置周日历
         final int weeks = Weeks.weeksBetween(startDate, endDate).getWeeks() + 1;
         for (int i = 0; i < weeks; i++) {
@@ -146,7 +146,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         final ViewPagerAdapter adapterWeek = new ViewPagerAdapter(context, weekViewList);
         weekCalendarViewPager.setAdapter(adapterWeek);
         weekCalendarViewPager.registerOnPageChangeCallback(onWeekPageChangeCallback);
-        setCurrentWeekCalendar(new DateTime());
+        setCurrentWeekCalendar(currentDate);
     }
 
     private final ViewPager2.OnPageChangeCallback onMonthPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
@@ -219,11 +219,8 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
     }
 
     public void setCurrentCalendar(DateTime dateTime) {
-        if (mState == ScheduleState.OPEN) {
-            setCurrentMonthCalendar(dateTime);
-        } else {
-            setCurrentWeekCalendar(dateTime);
-        }
+        setCurrentWeekCalendar(dateTime);
+        setCurrentMonthCalendar(dateTime);
     }
 
     @Override

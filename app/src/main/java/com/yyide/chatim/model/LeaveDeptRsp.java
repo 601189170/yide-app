@@ -65,6 +65,7 @@ public class LeaveDeptRsp {
         private String studentUserId;
         private String startDate;
         private String endDate;
+        private boolean curWeek;
         public String getDeptName() {
             return deptName;
         }
@@ -143,6 +144,14 @@ public class LeaveDeptRsp {
 
         public void setEndDate(String endDate) {
             this.endDate = endDate;
+        }
+
+        public boolean isCurWeek() {
+            return curWeek;
+        }
+
+        public void setCurWeek(boolean curWeek) {
+            this.curWeek = curWeek;
         }
 
         @Override

@@ -302,6 +302,7 @@ class SiteTableFragment : Fragment() {
             if (week == index) {
                 dataBean.isDefault = 1
             }
+            dataBean.isCurWeek = index == thisWeek
             classList.add(dataBean)
         }
     }
