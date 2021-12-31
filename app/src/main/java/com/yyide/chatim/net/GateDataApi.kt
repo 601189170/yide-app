@@ -2,6 +2,7 @@ package com.yyide.chatim.net
 
 import com.yyide.chatim.model.gate.ClassListOfTeacherBean
 import com.yyide.chatim.model.gate.GateBaseRsp
+import com.yyide.chatim.model.gate.SiteBean
 import retrofit2.http.GET
 
 /**
@@ -18,4 +19,10 @@ interface GateDataApi {
     @GET("/management/cloud-system/barrier-server/barrier/mobile/v2/queryClassInfoByTeacherId")
     suspend fun queryClassInfoByTeacherId(): GateBaseRsp<List<ClassListOfTeacherBean>>
 
+    /**
+     * 闸机建筑场地列表
+     * https://api.uat.edu.1d1j.net/management/cloud-system/v1/web/barrier/site/list
+     */
+    @GET("/management/cloud-system/v1/web/barrier/site/list")
+    suspend fun siteList(): GateBaseRsp<List<SiteBean>>
 }

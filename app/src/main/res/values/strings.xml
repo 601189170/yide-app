@@ -373,5 +373,6 @@
     <string name="schedule_edit_bottom_date">创建于%s 完成于%s</string>
     <string name="schedule_timetable_date">%s %s-%s</string>
     <string name="schedule_create_time_and_status">创建于%s  日程%s</string>
+    <string name="gate_page_title">%s通行数据</string>
 
 </resources>

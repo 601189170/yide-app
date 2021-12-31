@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
+import com.tencent.mmkv.MMKV
 import com.yanzhenjie.recyclerview.*
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.gate.GateClassTeacherActivity
 import com.yyide.chatim.activity.gate.GateDetailInfoActivity
 import com.yyide.chatim.activity.gate.GateStudentStaffActivity
@@ -27,6 +29,7 @@ import com.yyide.chatim.activity.schedule.ScheduleEditActivity
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.databinding.FragmentScheduleTodayBinding
@@ -103,7 +106,32 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         fragmentScheduleTodayBinding.tvToday.setOnClickListener {
-            startActivity(Intent(requireContext(),GateStudentStaffActivity::class.java))
+            //0全部 1学生 2教职工 3没有权限
+            val permission = MMKV.defaultMMKV().decodeString(MMKVConstant.YD_GATE_DATA_ACCESS_PERMISSION)
+            when (permission) {
+                "0" -> {
+                    startActivity(Intent(requireContext(), GateStudentStaffActivity::class.java))
+//                    startActivity(Intent(requireContext(), GateClassTeacherActivity::class.java))
+                }
+                "1" -> {
+                    if (SpData.getIdentityInfo().staffIdentity()) {
+                        startActivity(Intent(requireContext(), GateClassTeacherActivity::class.java))
+                    } else {
+                        startActivity(Intent(requireContext(), GateDetailInfoActivity::class.java))
+                    }
+
+                }
+                "2" -> {
+                    ToastUtils.showShort("没有权限")
+                }
+                "3" -> {
+                    ToastUtils.showShort("没有权限")
+                }
+                else -> {
+                    ToastUtils.showShort("没有权限")
+                }
+            }
+
         }
         fragmentScheduleTodayBinding.fab.setOnClickListener {
             DialogUtil.showAddScheduleDialog(context, this, DateTime.now())

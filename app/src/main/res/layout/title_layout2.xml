@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="#222222"
+            android:drawablePadding="@dimen/dp_5"
             android:textSize="18dp"
             android:textStyle="bold" />
 

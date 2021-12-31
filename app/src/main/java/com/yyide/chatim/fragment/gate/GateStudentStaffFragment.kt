@@ -7,14 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jzxiang.pickerview.TimePickerDialog
+import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.yyide.chatim.activity.gate.GateAllThroughActivity
 import com.yyide.chatim.activity.gate.GateSecondBranchActivity
 import com.yyide.chatim.adapter.gate.GateBranchData
 import com.yyide.chatim.adapter.gate.GateStudentStaffBranchAdapter
+import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentGateStudentStaffBinding
+import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpaceItemDecoration
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  *
@@ -26,7 +33,7 @@ import com.yyide.chatim.view.SpaceItemDecoration
 class GateStudentStaffFragment() : Fragment() {
     lateinit var fragmentGateStudentStaffBinding: FragmentGateStudentStaffBinding
     private var type = 1
-
+    private var currentDate = ""
     constructor(type: Int) : this() {
         this.type = type
     }
@@ -45,6 +52,9 @@ class GateStudentStaffFragment() : Fragment() {
         loge("type=$type")
         //学生
         if (type == 1) {
+            fragmentGateStudentStaffBinding.tvDatePick.setOnClickListener {
+                DatePickerDialogUtil.showDate(requireContext(), "选择日期", currentDate, startTimeListener)
+            }
             fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.tvGateEventTitle.text =
                 "全校学生出入校门口情况"
             fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.root.setOnClickListener {
@@ -82,6 +92,9 @@ class GateStudentStaffFragment() : Fragment() {
         //教职工
         fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.tvGateEventTitle.text =
             "全校教职工出入校门口情况"
+        fragmentGateStudentStaffBinding.tvDatePick.setOnClickListener {
+            DatePickerDialogUtil.showDate(requireContext(), "选择日期", currentDate, startTimeListener)
+        }
         fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.root.setOnClickListener {
             //查询全校教职工出入校门口情况界面
             val intent = Intent(requireContext(), GateAllThroughActivity::class.java)
@@ -114,4 +127,16 @@ class GateStudentStaffFragment() : Fragment() {
         fragmentGateStudentStaffBinding.recyclerView.adapter = adapter
 
     }
+
+    //日期选择监听
+    private val startTimeListener =
+        OnDateSetListener { timePickerView: TimePickerDialog?, millseconds: Long ->
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val timingTime = simpleDateFormat.format(Date(millseconds))
+            currentDate = timingTime
+            loge("startTimeListener: $timingTime")
+            val toStringTime =
+                ScheduleDaoUtil.toDateTime(timingTime, "yyyy-MM-dd").toStringTime("yyyy/MM/dd")
+            fragmentGateStudentStaffBinding.tvDatePick.text = toStringTime
+        }
 }
