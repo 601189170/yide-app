@@ -5,17 +5,14 @@ import android.content.Context
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.loper7.date_time_picker.DateTimeConfig
 import com.loper7.date_time_picker.dialog.CardDatePickerDialog
 import com.yyide.chatim.R
-import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.toDateTime
 import com.yyide.chatim.databinding.DialogShowDateYearAndMonthBinding
 import com.yyide.chatim.widget.WheelView
 import org.joda.time.DateTime
-import org.joda.time.Years
 
 /**
  *
@@ -201,7 +198,20 @@ object DatePickerDialogUtil {
             mDialog.dismiss()
             val calendarYear = yearList[yearIndex]
             val calendarMonth = calendarYear.months[monthIndex]
-            val dayOfMonth = DateTime.now().dayOfMonth
+            var dayOfMonth = DateTime.now().dayOfMonth
+            if (calendarMonth.month == "2" && dayOfMonth >= 28) {
+                val y = calendarYear.year.toInt()
+                if (y % 4 == 0 && y % 100 != 0 || y % 400 == 0) {
+                    if (dayOfMonth > 29) {
+                        dayOfMonth = 29
+                    }
+                } else {
+                    dayOfMonth = 28
+                }
+            }
+            if (listOf("4","6","9","11").contains(calendarMonth.month) && dayOfMonth == 31){
+                dayOfMonth = 30
+            }
             loge("${calendarYear.year}-${calendarMonth.month}-$dayOfMonth")
             onDateSetListener(toDateTime("${calendarYear.year}-${calendarMonth.month}-$dayOfMonth","yyyy-MM-dd"))
         }
