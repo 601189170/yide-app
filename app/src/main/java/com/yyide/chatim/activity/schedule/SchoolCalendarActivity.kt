@@ -285,7 +285,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                 val endDate = toDateTime(dataBean.endDate, "yyyy-MM-dd")
                 //val millis = curDateTime.millis
                 //DatePickerDialogUtil.showDate(this, "选择日期", "$millis", startDateMillis, endDateMillis, displayList, startTimeListener)
-                DatePickerDialogUtil.showDateYearAndMonth(this,"选择日期",startDate,endDate){
+                DatePickerDialogUtil.showDateYearAndMonth(this,"选择日期",curDateTime,startDate,endDate){
                     loge("选择日期:${it.toStringTime("yyyy-MM-dd")}")
                     curDateTime = it.simplifiedDataTime()
                     schoolCalendarBinding.tvMonth.text =curDateTime.toStringTime("yyyy年MM月")

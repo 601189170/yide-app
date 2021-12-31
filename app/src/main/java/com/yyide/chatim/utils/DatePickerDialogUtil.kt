@@ -150,6 +150,7 @@ object DatePickerDialogUtil {
     fun showDateYearAndMonth(
         context: Context,
         title: String = "选择日期",
+        curDateTime:DateTime,
         startDate: DateTime,
         endDate: DateTime,
         onDateSetListener: (datetime: DateTime) -> Unit
@@ -161,7 +162,24 @@ object DatePickerDialogUtil {
         var yearIndex = 0
         var monthIndex = 0
         val yearList = CalendarYear.getYearList(startDate, endDate)
-
+        if (curDateTime in startDate .. endDate){
+            //日期回显
+            val year = curDateTime.year
+            val monthOfYear = curDateTime.monthOfYear
+            for (index in yearList.indices) {
+                if (yearList[index].year.toInt() == year) {
+                    yearIndex = index
+                    val months = yearList[index].months
+                    for (index1 in months.indices) {
+                        if (months[index1].month.toInt() == monthOfYear){
+                            monthIndex = index1
+                            break
+                        }
+                    }
+                    break
+                }
+            }
+        }
         binding.yearWv.setData(yearList.map { "${it.year} 年" })
         binding.yearWv.setDefault(yearIndex)
         binding.monthWv.setData(yearList[yearIndex].months.map { "${it.month} 月" })
