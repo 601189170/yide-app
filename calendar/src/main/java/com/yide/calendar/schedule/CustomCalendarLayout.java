@@ -157,10 +157,13 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
             if (monthView != null){
                 final int selectYear = monthView.getSelectYear();
                 final int selectMonth = monthView.getSelectMonth();
-                final int selectDay = monthView.getSelectDay();
+                int selectDay = monthView.getSelectDay();
+                if (selectDay == -1){
+                    selectDay = 1;
+                }
                 Log.e(TAG, "month onPageSelected: position="+position+", "+selectYear+"/"+selectMonth+"/"+selectDay);
                 mOnCalendarClickListener.onPageChange(selectYear, selectMonth, selectDay);
-                monthView.clickThisMonth(selectYear, selectMonth, selectDay);
+//                monthView.clickThisMonth(selectYear, selectMonth, selectDay);
 //                final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 //                final DateTime dateTime = DateTime.parse(selectYear + "-" + (selectMonth + 1) + "-" + selectDay, dateTimeFormatter);
 //                setCurrentWeekCalendar(dateTime);
@@ -177,10 +180,13 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
             if (weekView != null){
                 final int selectYear = weekView.getSelectYear();
                 final int selectMonth = weekView.getSelectMonth();
-                final int selectDay = weekView.getSelectDay();
+                int selectDay = weekView.getSelectDay();
+                if (selectDay == -1){
+                    selectDay = 1;
+                }
                 Log.e(TAG, "week onPageSelected: position="+position+", "+selectYear+"/"+selectMonth+"/"+selectDay);
                 mOnCalendarClickListener.onPageChange(selectYear, selectMonth, selectDay);
-                weekView.clickThisWeek(selectYear,selectMonth,selectDay);
+//                weekView.clickThisWeek(selectYear,selectMonth,selectDay);
 //                setCurrentMonthCalendar(weekView.getStartDate());
             }
         }

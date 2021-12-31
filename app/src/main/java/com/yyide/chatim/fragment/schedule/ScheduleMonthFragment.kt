@@ -136,7 +136,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
         mcvCalendar?.currentMonthView?.let {
             mCurrentSelectYear = it.selectYear
             mCurrentSelectMonth = it.selectMonth
-            mCurrentSelectDay = it.selectDay
+            mCurrentSelectDay = if (it.selectDay == -1) 1 else it.selectDay
         }
     }
 
