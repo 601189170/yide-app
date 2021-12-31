@@ -213,6 +213,12 @@ public class MonthView extends View {
     private void initSize() {
         mColumnSize = getWidth() / NUM_COLUMNS;
         mRowSize = getHeight() / NUM_ROWS;
+        int monthDays = CalendarUtils.getMonthDays(mSelYear, mSelMonth);
+        int weekNumber = CalendarUtils.getFirstDayWeek(mSelYear, mSelMonth,startWithSunday);
+        int nextMonthDays = 42 - monthDays - weekNumber + 1;
+        if (nextMonthDays >= 7) {
+            mRowSize = getHeight() / (NUM_ROWS-1);
+        }
         mSelectCircleSize = (int) (mColumnSize / 3.2);
         while (mSelectCircleSize > mRowSize / 2) {
             mSelectCircleSize = (int) (mSelectCircleSize / 1.3);
@@ -305,6 +311,10 @@ public class MonthView extends View {
         for (int day = 0; day < nextMonthDays; day++) {
             int column = (monthDays + weekNumber - 1 + day) % 7;
             int row = 5 - (nextMonthDays - day - 1) / 7;
+            if (column == 0 && row == 5) {
+                break;
+            }
+
             try {
                 mDaysText[row][column] = day + 1;
                 mHolidayOrLunarText[row][column] = CalendarUtils.getHolidayFromSolar(nextYear, nextMonth, mDaysText[row][column]);
