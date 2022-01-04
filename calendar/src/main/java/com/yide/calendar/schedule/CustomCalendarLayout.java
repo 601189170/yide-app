@@ -157,10 +157,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
             if (monthView != null){
                 final int selectYear = monthView.getSelectYear();
                 final int selectMonth = monthView.getSelectMonth();
-                int selectDay = monthView.getSelectDay();
-                if (selectDay == -1){
-                    selectDay = 1;
-                }
+                final int selectDay = monthView.getSelectDay();
                 Log.e(TAG, "month onPageSelected: position="+position+", "+selectYear+"/"+selectMonth+"/"+selectDay);
                 mOnCalendarClickListener.onPageChange(selectYear, selectMonth, selectDay);
 //                monthView.clickThisMonth(selectYear, selectMonth, selectDay);
@@ -180,10 +177,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
             if (weekView != null){
                 final int selectYear = weekView.getSelectYear();
                 final int selectMonth = weekView.getSelectMonth();
-                int selectDay = weekView.getSelectDay();
-                if (selectDay == -1){
-                    selectDay = 1;
-                }
+                final int selectDay = weekView.getSelectDay();
                 Log.e(TAG, "week onPageSelected: position="+position+", "+selectYear+"/"+selectMonth+"/"+selectDay);
                 mOnCalendarClickListener.onPageChange(selectYear, selectMonth, selectDay);
 //                weekView.clickThisWeek(selectYear,selectMonth,selectDay);

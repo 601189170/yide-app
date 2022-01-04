@@ -216,7 +216,10 @@ object DatePickerDialogUtil {
             mDialog.dismiss()
             val calendarYear = yearList[yearIndex]
             val calendarMonth = calendarYear.months[monthIndex]
-            var dayOfMonth = DateTime.now().dayOfMonth
+            val now = DateTime.now()
+            val year = now.year
+            val monthOfYear = now.monthOfYear
+            var dayOfMonth = now.dayOfMonth
             if (calendarMonth.month == "2" && dayOfMonth >= 28) {
                 val y = calendarYear.year.toInt()
                 if (y % 4 == 0 && y % 100 != 0 || y % 400 == 0) {
@@ -229,6 +232,10 @@ object DatePickerDialogUtil {
             }
             if (listOf("4","6","9","11").contains(calendarMonth.month) && dayOfMonth == 31){
                 dayOfMonth = 30
+            }
+            //不是当前年月，默认显示当前月的第一天
+            if (calendarYear.year.toInt() != year || calendarMonth.month.toInt() != monthOfYear){
+                dayOfMonth = 1
             }
             loge("${calendarYear.year}-${calendarMonth.month}-$dayOfMonth")
             onDateSetListener(toDateTime("${calendarYear.year}-${calendarMonth.month}-$dayOfMonth","yyyy-MM-dd"))

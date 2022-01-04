@@ -92,12 +92,14 @@ class GateStudentStaffActivity : BaseActivity() {
         siteId = childrenBean.id ?: ""
         val title = String.format(getString(R.string.gate_page_title), siteBean.name)
         activityGateStudentStaffBinding.top.title.text = title
+        activityGateStudentStaffBinding.top.title.isEnabled = false
         if (data.size > 1 || children.size > 1) {
             //场地可选择
             val drawable =
                 ResourcesCompat.getDrawable(resources, R.drawable.gate_down_icon, null)?.apply {
                     setBounds(0, 0, minimumWidth, minimumHeight)
                 }
+            activityGateStudentStaffBinding.top.title.isEnabled = true
             activityGateStudentStaffBinding.top.title.setCompoundDrawables(
                 null,
                 null,
@@ -108,7 +110,7 @@ class GateStudentStaffActivity : BaseActivity() {
     }
 
     private fun initView() {
-        activityGateStudentStaffBinding.top.title.text = "校门口通行数据"
+        activityGateStudentStaffBinding.top.title.text = "通行数据"
         activityGateStudentStaffBinding.top.title.setOnClickListener {
             val switchTableClassPop = SwitchTableClassPop(this, siteData)
             switchTableClassPop.setSelectClasses { id, classesName ->

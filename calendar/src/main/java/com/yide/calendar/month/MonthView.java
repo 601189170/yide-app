@@ -178,7 +178,7 @@ public class MonthView extends View {
         if (mSelYear == mCurrYear && mSelMonth == mCurrMonth) {
             setSelectYearMonth(mSelYear, mSelMonth, mCurrDay);
         } else {
-            setSelectYearMonth(mSelYear, mSelMonth, -1);
+            setSelectYearMonth(mSelYear, mSelMonth, 1);
         }
     }
 
