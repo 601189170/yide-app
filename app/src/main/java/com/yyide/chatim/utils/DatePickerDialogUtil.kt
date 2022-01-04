@@ -271,9 +271,17 @@ data class CalendarYear(
                 if (year == 0) {
                     //第一年
                     val monthList = mutableListOf<CalendarMonth>()
-                    for (month in plusYears.monthOfYear..12) {
-                        val calendarMonth = CalendarMonth("$month")
-                        monthList.add(calendarMonth)
+                    if (years == 0) {
+                        //startDate和endDate是同一年，则月的结束是endDate的月
+                        for (month in plusYears.monthOfYear..endDate.monthOfYear) {
+                            val calendarMonth = CalendarMonth("$month")
+                            monthList.add(calendarMonth)
+                        }
+                    } else {
+                        for (month in plusYears.monthOfYear..12) {
+                            val calendarMonth = CalendarMonth("$month")
+                            monthList.add(calendarMonth)
+                        }
                     }
                     val calendarYear = CalendarYear("${plusYears.year}", monthList)
                     yearList.add(calendarYear)
