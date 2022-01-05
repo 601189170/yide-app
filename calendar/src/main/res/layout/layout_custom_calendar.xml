@@ -43,13 +43,13 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.viewpager2.widget.ViewPager2
+                <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewpager_week_calendar_view"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@color/calendar_bg_color" />
 
-                <androidx.viewpager2.widget.ViewPager2
+                <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewpager_month_calendar_view"
                     android:layout_width="match_parent"
                     android:layout_height="288dp"

@@ -239,10 +239,8 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                         //切换学年学期需要默认选择学年学期开始日期
                         curDateTime = toDateTime(dataBean.startDate, "yyyy-MM-dd")
                         calendarComposeLayout.setCalendarInterval(
-                            toDateTime(
-                                dataBean.startDate,
-                                "yyyy-MM-dd"
-                            ), toDateTime(dataBean.endDate, "yyyy-MM-dd"),
+                            toDateTime(dataBean.startDate, "yyyy-MM-dd"),
+                            toDateTime(dataBean.endDate, "yyyy-MM-dd"),
                             toDateTime(dataBean.startDate, "yyyy-MM-dd").simplifiedDataTime()
                         )
                         //calendarComposeLayout.setSelectedData(curDateTime.year,curDateTime.monthOfYear-1,1)
