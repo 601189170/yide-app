@@ -23,6 +23,7 @@ public class MyPagerAdapter extends PagerAdapter {
         this.context = context;
         this.viewList = viewList;
     }
+
     @Override
     public int getCount() {
         return viewList.size();
@@ -39,7 +40,7 @@ public class MyPagerAdapter extends PagerAdapter {
         View view = viewList.get(position);
         //判断其父容器是否存在，如存在，先和此子控件解除关系
         ViewPager parent = (ViewPager) view.getParent();
-        if (parent != null){
+        if (parent != null) {
             parent.removeView(view);
         }
         container.addView(view);
@@ -49,6 +50,8 @@ public class MyPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
 //        super.destroyItem(container, position, object);
-        container.removeView(viewList.get(position));
+        if (position < viewList.size()) {
+            container.removeView(viewList.get(position));
+        }
     }
 }
