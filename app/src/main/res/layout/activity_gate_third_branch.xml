@@ -51,4 +51,17 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/v_line" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/blank_page"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_default="percent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/top">
+
+        <include
+            android:id="@+id/layout_blank_page"
+            layout="@layout/layout_blank_page3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

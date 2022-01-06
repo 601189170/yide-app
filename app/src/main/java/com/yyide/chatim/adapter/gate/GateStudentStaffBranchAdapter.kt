@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yyide.chatim.databinding.ItemGateStudentStaffBinding
+import com.yyide.chatim.model.gate.GateBaseInfoBean
 
 /**
  *
@@ -14,7 +15,7 @@ import com.yyide.chatim.databinding.ItemGateStudentStaffBinding
  */
 class GateStudentStaffBranchAdapter(
     val context: Context,
-    private val dataList: List<GateBranchData>,
+    private val dataList: List<GateBaseInfoBean>,
     val onClickItemListener:(position:Int)->Unit
 ) : RecyclerView.Adapter<GateStudentStaffBranchAdapter.ViewHolder>() {
     class ViewHolder(val binding: ItemGateStudentStaffBinding) :
@@ -28,10 +29,10 @@ class GateStudentStaffBranchAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = dataList[position]
-        holder.binding.tvTitle.text = data.branch
-        holder.binding.tvGoIntoNumber.text = "${data.into}"
-        holder.binding.tvGoOutNumber.text = "${data.out}"
-        holder.binding.tvThroughNumber.text = "${data.total}"
+        holder.binding.tvTitle.text = data.name
+        holder.binding.tvGoIntoNumber.text = "${data.intoNumber}"
+        holder.binding.tvGoOutNumber.text = "${data.outNumber}"
+        holder.binding.tvThroughNumber.text = "${data.totalNumber}"
         holder.itemView.setOnClickListener {
             onClickItemListener(position)
         }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#E0EBFE">
 
     <TextView
@@ -48,57 +48,29 @@
             android:layout_marginTop="@dimen/dp_20"
             android:layout_marginEnd="@dimen/dp_12"
             android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RadioButton
-                android:id="@+id/rb_all_people"
-                android:layout_width="62dp"
-                android:layout_height="28dp"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:background="@drawable/selector_checked_tv"
-                android:button="@null"
-                android:checked="true"
-                android:gravity="center"
-                android:text="小学"
-                android:textColor="@color/black_white_color3"
-                android:textSize="@dimen/text_15" />
-
-            <RadioButton
-                android:id="@+id/rb_normal"
-                android:layout_width="62dp"
-                android:layout_height="28dp"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:background="@drawable/selector_checked_tv"
-                android:button="@null"
-                android:gravity="center"
-                android:text="中学"
-                android:textColor="@color/black_white_color3"
-                android:textSize="@dimen/text_15"
-                android:visibility="visible" />
-
-            <RadioButton
-                android:id="@+id/rb_absence"
-                android:layout_width="62dp"
-                android:layout_height="28dp"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:background="@drawable/selector_checked_tv"
-                android:button="@null"
-                android:gravity="center"
-                android:text="大学"
-                android:textColor="@color/black_white_color3"
-                android:textSize="@dimen/text_15" />
-        </RadioGroup>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
-            android:layout_marginEnd="@dimen/dp_12"
-            app:layout_constraintTop_toBottomOf="@id/rg_type"
-            tools:listitem="@layout/item_gate_student_staff"
             android:layout_marginTop="@dimen/dp_10"
-            />
+            android:layout_marginEnd="@dimen/dp_12"
+            android:paddingBottom="200dp"
+            app:layout_constraintTop_toBottomOf="@id/rg_type"
+            tools:listitem="@layout/item_gate_student_staff" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/blank_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <include
+                android:id="@+id/layout_blank_page"
+                layout="@layout/layout_blank_page2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

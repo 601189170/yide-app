@@ -1,5 +1,6 @@
 package com.yyide.chatim.viewmodel.gate
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.NetworkUtils
@@ -24,6 +25,8 @@ class GateSiteViewModel : ViewModel() {
     private val _siteDataList = MutableStateFlow<Result<List<SiteBean>>>(Result.Success(null))
     val siteDataList: StateFlow<Result<List<SiteBean>>> = _siteDataList
 
+    //当前选择的场地id
+    val curSiteId: MutableLiveData<String> by lazy { MutableLiveData() }
     fun siteList() {
         viewModelScope.launch {
             siteList

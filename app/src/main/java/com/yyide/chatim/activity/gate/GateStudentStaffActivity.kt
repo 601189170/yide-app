@@ -13,7 +13,8 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityGateStudentStaffBinding
 import com.yyide.chatim.dialog.SwitchTableClassPop
-import com.yyide.chatim.fragment.gate.GateStudentStaffFragment
+import com.yyide.chatim.fragment.gate.GateStaffFragment
+import com.yyide.chatim.fragment.gate.GateStudentFragment
 import com.yyide.chatim.model.SelectTableClassesRsp
 import com.yyide.chatim.model.gate.Result
 import com.yyide.chatim.model.gate.SiteBean
@@ -107,6 +108,8 @@ class GateStudentStaffActivity : BaseActivity() {
                 null
             )
         }
+        //通知子fragment场地请求结果
+        siteViewModel.curSiteId.value = siteId
     }
 
     private fun initView() {
@@ -129,6 +132,8 @@ class GateStudentStaffActivity : BaseActivity() {
                 val title = String.format(getString(R.string.gate_page_title), parentName)
                 activityGateStudentStaffBinding.top.title.text = title
                 //切换场地
+                //通知子fragment场地请求结果
+                siteViewModel.curSiteId.value = siteId
             }
         }
         activityGateStudentStaffBinding.top.backLayout.setOnClickListener {
@@ -143,8 +148,8 @@ class GateStudentStaffActivity : BaseActivity() {
 
         mTitles.add("学生")
         mTitles.add("教职工")
-        fragments.add(GateStudentStaffFragment(1))
-        fragments.add(GateStudentStaffFragment(2))
+        fragments.add(GateStudentFragment())
+        fragments.add(GateStaffFragment())
         activityGateStudentStaffBinding.viewpager.offscreenPageLimit = 2
         activityGateStudentStaffBinding.viewpager.adapter = object :
             FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

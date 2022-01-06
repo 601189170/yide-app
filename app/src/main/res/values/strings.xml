@@ -374,5 +374,6 @@
     <string name="schedule_timetable_date">%s %s-%s</string>
     <string name="schedule_create_time_and_status">创建于%s  日程%s</string>
     <string name="gate_page_title">%s通行数据</string>
+    <string name="gate_today_through_number">今日通行%s次</string>
 
 </resources>

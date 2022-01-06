@@ -33,10 +33,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_punch_in_base_info"
         android:layout_width="match_parent"
-        android:layout_height="154dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="210dp"
+        android:minHeight="82dp"
         android:layout_marginStart="@dimen/dp_12"
         android:layout_marginTop="@dimen/dp_16"
         android:layout_marginEnd="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_16"
         android:background="@drawable/white_10_corner_shape"
         app:layout_constraintTop_toBottomOf="@id/tv_date_pick">
 
@@ -51,7 +54,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/iv_username"
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"
@@ -66,12 +69,12 @@
             android:id="@+id/tv_today_pass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="今日通行3次"
+            android:text="@string/gate_today_through_number"
             android:textColor="#ff1e1e1e"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/iv_student_head"
-            app:layout_constraintLeft_toLeftOf="@id/iv_username"
-            app:layout_constraintTop_toBottomOf="@id/iv_username" />
+            app:layout_constraintLeft_toLeftOf="@id/tv_username"
+            app:layout_constraintTop_toBottomOf="@id/tv_username" />
 
         <View
             android:id="@+id/v_line"
@@ -99,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="06:00 校门口"
+            android:text="06:00 入-校门口"
             android:textColor="#ff1e1e1e"
             android:textSize="15sp"
             app:layout_constraintLeft_toRightOf="@id/iv_earliest_time"
@@ -110,11 +113,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
-            android:text="最早打卡时间"
+            android:text="最早通行时间"
             android:textColor="#ff909399"
             android:textSize="12sp"
             app:layout_constraintLeft_toLeftOf="@id/tv_earliest_punch_in_title"
             app:layout_constraintTop_toBottomOf="@id/tv_earliest_punch_in_title" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_earliest_punch_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="tv_earliest_punch_in_desc,tv_earliest_punch_in_title,iv_earliest_time" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -127,35 +137,40 @@
             android:id="@+id/iv_latest_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
             android:src="@drawable/gate_item_icon"
-            app:layout_constraintBottom_toBottomOf="@id/tv_latest_punch_in_desc"
-            app:layout_constraintLeft_toRightOf="@id/guideline"
-            app:layout_constraintTop_toTopOf="@id/tv_latest_punch_in_title" />
+            app:layout_constraintBottom_toBottomOf="@id/tv_latest_punch_out_desc"
+            app:layout_constraintLeft_toLeftOf="@id/iv_earliest_time"
+            app:layout_constraintTop_toTopOf="@id/tv_latest_punch_out_title" />
 
         <TextView
-            android:id="@+id/tv_latest_punch_in_title"
+            android:id="@+id/tv_latest_punch_out_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="06:00 校门口"
+            android:text="18:00 出-校门口"
             android:textColor="#ff1e1e1e"
             android:textSize="15sp"
             app:layout_constraintLeft_toRightOf="@id/iv_latest_time"
-            app:layout_constraintTop_toBottomOf="@id/v_line" />
+            app:layout_constraintTop_toBottomOf="@id/tv_earliest_punch_in_desc" />
 
         <TextView
-            android:id="@+id/tv_latest_punch_in_desc"
+            android:id="@+id/tv_latest_punch_out_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
-            android:text="最早打卡时间"
+            android:text="最晚通行时间"
             android:textColor="#ff909399"
             android:textSize="12sp"
-            app:layout_constraintLeft_toLeftOf="@id/tv_latest_punch_in_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_latest_punch_in_title" />
+            app:layout_constraintLeft_toLeftOf="@id/tv_latest_punch_out_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_latest_punch_out_title" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_latest_punch_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="tv_latest_punch_out_desc,tv_latest_punch_out_title,iv_latest_time" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

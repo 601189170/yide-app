@@ -27,17 +27,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_class"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="187dp"
-            android:text="班级/部门"
-            android:textColor="#ff909399"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -46,8 +35,8 @@
         android:layout_height="0dp"
         android:paddingStart="@dimen/dp_12"
         android:paddingEnd="@dimen/dp_12"
-        android:paddingBottom="@dimen/dp_40"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
-        tools:listitem="@layout/item_gate_through_list_two_column_data" />
+        android:paddingBottom="@dimen/dp_40"
+        tools:listitem="@layout/item_gate_through_list_one_column_data" />
 </androidx.constraintlayout.widget.ConstraintLayout>

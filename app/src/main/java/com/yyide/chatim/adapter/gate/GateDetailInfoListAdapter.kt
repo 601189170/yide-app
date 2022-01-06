@@ -41,15 +41,15 @@ class GateDetailInfoListAdapter(val context: Context, private val dataList: List
             holder.binding.vLineTop.visibility = View.VISIBLE
             holder.binding.vLineBottom.visibility = View.VISIBLE
         }
-        if (gateDetailInfo.type == 1) {
+        if (gateDetailInfo.type == 2) {
             //入校
-            holder.binding.tvEventType.text = "进校"
+            holder.binding.tvEventType.text = "进"
             holder.binding.tvEventType.setTextColor(context.resources.getColor(R.color.blue11))
             holder.binding.vDot.background =
                 ResourcesCompat.getDrawable(context.resources, R.drawable.dot_blue_shape, null)
         } else {
             //离校
-            holder.binding.tvEventType.text = "离校"
+            holder.binding.tvEventType.text = "入"
             holder.binding.tvEventType.setTextColor(context.resources.getColor(R.color.cpb_red_dark))
             holder.binding.vDot.background =
                 ResourcesCompat.getDrawable(context.resources, R.drawable.dot_red_shape, null)

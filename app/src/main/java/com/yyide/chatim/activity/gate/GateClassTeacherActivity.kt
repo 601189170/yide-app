@@ -25,14 +25,18 @@ import com.yyide.chatim.fragment.gate.PeopleThroughListFragment
 import com.yyide.chatim.model.LeaveDeptRsp
 import com.yyide.chatim.model.SelectTableClassesRsp
 import com.yyide.chatim.model.gate.ClassListOfTeacherBean
+import com.yyide.chatim.model.gate.GateThroughPeopleListBean
 import com.yyide.chatim.model.gate.Result
 import com.yyide.chatim.model.gate.SiteBean
 import com.yyide.chatim.utils.DatePickerDialogUtil
+import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.gate.ClassTeacherViewModel
 import com.yyide.chatim.viewmodel.gate.GateSiteViewModel
+import com.yyide.chatim.viewmodel.gate.GateThroughPeopleListViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.joda.time.DateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -56,12 +60,16 @@ class GateClassTeacherActivity : BaseActivity() {
     private val viewModel: ClassTeacherViewModel by viewModels()
     private val siteViewModel: GateSiteViewModel by viewModels()
     private var siteData = mutableListOf<SelectTableClassesRsp.DataBean>()
+    private val gateThroughPeopleListViewModel: GateThroughPeopleListViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         gateClassTeacherBinding = ActivityGateClassTeacherBinding.inflate(layoutInflater)
         setContentView(gateClassTeacherBinding.root)
+        currentDate = DateTime.now().simplifiedDataTime().toStringTime()
+        gateClassTeacherBinding.tvDatePick.text =
+            ScheduleDaoUtil.toDateTime(currentDate).toStringTime("yyyy/MM/dd")
         initView()
         //场地列表
         lifecycleScope.launch {
@@ -93,6 +101,85 @@ class GateClassTeacherActivity : BaseActivity() {
                 }
             }
         }
+        //班主任视角下的学生通行数据
+        lifecycleScope.launch {
+            gateThroughPeopleListViewModel.gateThroughPeopleList.collect {
+                when (it) {
+                    is Result.Success -> {
+                        handleData(it.data)
+                    }
+                    is Result.Error -> {
+                        loge("${it.exception?.localizedMessage}")
+                        ToastUtils.showShort("${it.exception?.localizedMessage}")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handleData(data: GateThroughPeopleListBean?) {
+        if (data == null) {
+            gateClassTeacherBinding.blankPage.visibility = View.VISIBLE
+            return
+        }
+        gateClassTeacherBinding.blankPage.visibility = View.GONE
+        val layoutGateThroughSummaryAll = gateClassTeacherBinding.layoutGateThroughSummaryAll
+        layoutGateThroughSummaryAll.tvGateEventTitle.text = data.title
+        layoutGateThroughSummaryAll.tvThroughNumber.text = "${data.totalNumber}"
+        layoutGateThroughSummaryAll.tvGoIntoNumber.text = "${data.intoNumber}"
+        layoutGateThroughSummaryAll.tvGoOutNumber.text = "${data.outNumber}"
+        //1出2入
+        mTitles.clear()
+        mTitles.add("通行人数(${data.totalNumber})")
+        mTitles.add("出校(${data.outNumber})")
+        mTitles.add("入校(${data.intoNumber})")
+
+        val dataList = mutableListOf<GateThroughPeopleListBean.PeopleListBean>()
+        val dataList2 = mutableListOf<GateThroughPeopleListBean.PeopleListBean>()
+        val dataList3 = mutableListOf<GateThroughPeopleListBean.PeopleListBean>()
+        //全部
+        data.peopleList?.forEach {
+            val bean = it.copy()
+            bean.type = 1
+            dataList3.add(bean)
+        }
+
+        //出校
+        data.peopleList?.filter { it.inOut == "1" }?.forEach {
+            val bean = it.copy()
+            bean.type = 3
+            dataList.add(bean)
+        }
+        //入校
+        data.peopleList?.filter { it.inOut == "2" }?.forEach {
+            val bean = it.copy()
+            bean.type = 3
+            dataList2.add(bean)
+        }
+
+        //1出校 2入校  3通行人数
+        fragments.clear()
+        fragments.add(PeopleThroughListFragment("3", "1", "1", currentDate, siteId, dataList3))
+        fragments.add(PeopleThroughListFragment("1", "1", "1", currentDate, siteId, dataList))
+        fragments.add(PeopleThroughListFragment("2", "1", "1", currentDate, siteId, dataList2))
+
+        gateClassTeacherBinding.viewpager.offscreenPageLimit = 3
+        gateClassTeacherBinding.viewpager.adapter = object :
+            FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+            override fun getItem(position: Int): Fragment {
+                return fragments[position]
+            }
+
+            override fun getCount(): Int {
+                return mTitles.size
+            }
+
+            override fun getPageTitle(position: Int): CharSequence {
+                return mTitles[position]
+            }
+        }
+        gateClassTeacherBinding.slidingTabLayout.setViewPager(gateClassTeacherBinding.viewpager)
+        gateClassTeacherBinding.slidingTabLayout.currentTab = 0
     }
 
     /**
@@ -126,16 +213,16 @@ class GateClassTeacherActivity : BaseActivity() {
             siteData.add(dataBean)
         }
         val childrenBean = children[0]
-        siteId = childrenBean.id?:""
-        val title = String.format(getString(R.string.gate_page_title),siteBean.name)
+        siteId = childrenBean.id ?: ""
+        val title = String.format(getString(R.string.gate_page_title), siteBean.name)
         gateClassTeacherBinding.top.title.text = title
-        if (data.size>1 ||children.size > 1){
+        if (data.size > 1 || children.size > 1) {
             //场地可选择
             val drawable =
                 ResourcesCompat.getDrawable(resources, R.drawable.gate_down_icon, null)?.apply {
                     setBounds(0, 0, minimumWidth, minimumHeight)
                 }
-            gateClassTeacherBinding.top.title.setCompoundDrawables(null,null,drawable,null)
+            gateClassTeacherBinding.top.title.setCompoundDrawables(null, null, drawable, null)
         }
         //请求班级列表
         viewModel.queryClassInfoByTeacherId()
@@ -153,21 +240,49 @@ class GateClassTeacherActivity : BaseActivity() {
             val className = classListOfTeacherBean.className
             gateClassTeacherBinding.tvClassPick.text = className
             gateClassTeacherBinding.tvClassPick.setCompoundDrawables(null, null, null, null)
+            //查询数据
+            gateThroughPeopleListViewModel.queryAllStudentPassageInOutDetails(
+                1,
+                currentDate,
+                4,
+                classId,
+                siteId
+            )
             return
         }
         val classListOfTeacherBean = data[0]
+        classId = classListOfTeacherBean.classId ?: ""
         val className = classListOfTeacherBean.className
         val drawable =
             ResourcesCompat.getDrawable(resources, R.drawable.icon_arrow_down, null)?.apply {
                 setBounds(0, 0, minimumWidth, minimumHeight)
             }
-        gateClassTeacherBinding.tvClassPick.setCompoundDrawables(null, null, null, drawable)
+        gateClassTeacherBinding.tvClassPick.setCompoundDrawables(null, null, drawable, null)
         gateClassTeacherBinding.tvClassPick.text = className
-        val deptSelectPop = DeptSelectPop(this, 2, classList)
-        deptSelectPop.setOnCheckedListener { dataBean ->
-            loge("选择的班级：$dataBean")
-            classId = dataBean.deptId
-            gateClassTeacherBinding.tvClassPick.text = dataBean.deptName
+        //查询数据
+        gateThroughPeopleListViewModel.queryAllStudentPassageInOutDetails(
+            1,
+            currentDate,
+            4,
+            classId,
+            siteId
+        )
+        //班级选择
+        gateClassTeacherBinding.tvClassPick.setOnClickListener {
+            val deptSelectPop = DeptSelectPop(this, 2, classList)
+            deptSelectPop.setOnCheckedListener { dataBean ->
+                loge("选择的班级：$dataBean")
+                classId = dataBean.deptId
+                gateClassTeacherBinding.tvClassPick.text = dataBean.deptName
+                //查询数据
+                gateThroughPeopleListViewModel.queryAllStudentPassageInOutDetails(
+                    1,
+                    currentDate,
+                    4,
+                    classId,
+                    siteId
+                )
+            }
         }
     }
 
@@ -198,16 +313,23 @@ class GateClassTeacherActivity : BaseActivity() {
                 siteData.forEach {
                     val name = it.name
                     for (dataBean in it.list) {
-                        if (classesName == dataBean.showName){
+                        if (classesName == dataBean.showName) {
                             parentName = name
                             return@forEach
                         }
                     }
                 }
                 this.siteId = id.toString()
-                val title = String.format(getString(R.string.gate_page_title),parentName)
+                val title = String.format(getString(R.string.gate_page_title), parentName)
                 gateClassTeacherBinding.top.title.text = title
                 //切换场地
+                gateThroughPeopleListViewModel.queryAllStudentPassageInOutDetails(
+                    1,
+                    currentDate,
+                    4,
+                    classId,
+                    siteId
+                )
             }
         }
         gateClassTeacherBinding.top.ivRight.visibility = View.VISIBLE
@@ -216,10 +338,6 @@ class GateClassTeacherActivity : BaseActivity() {
             //搜索入口
             startActivity(Intent(this, GateDataSearchActivity::class.java))
         }
-        //班级选择
-        gateClassTeacherBinding.tvClassPick.setOnClickListener {
-
-        }
         //日期选择
         gateClassTeacherBinding.tvDatePick.setOnClickListener {
             DatePickerDialogUtil.showDate(this, "选择日期", currentDate, startTimeListener)
@@ -227,57 +345,17 @@ class GateClassTeacherActivity : BaseActivity() {
         gateClassTeacherBinding.top.backLayout.setOnClickListener {
             finish()
         }
-        mTitles.add("出校(40)")
-        mTitles.add("入校(50)")
-        mTitles.add("通行人数(90)")
-        val dataList = mutableListOf<GateThroughData>()
-        for (index in 0..5) {
-            dataList.add(GateThroughData(3, "张三$index", "2021/12/03 08:00", "", "小北门"))
-        }
-
-        val dataList2 = mutableListOf<GateThroughData>()
-        for (index in 0..7) {
-            dataList2.add(GateThroughData(3, "张三$index", "2021/12/03 08:00", "", "小北门"))
-        }
-
-        val dataList3 = mutableListOf<GateThroughData>()
-        for (index in 0..12) {
-            dataList3.add(GateThroughData(2, "张三$index", "2021/12/03 08:00", "一年级${index}班", "小北门"))
-        }
-
-        fragments.add(PeopleThroughListFragment("1", "1", dataList))
-        fragments.add(PeopleThroughListFragment("2", "1", dataList2))
-        fragments.add(PeopleThroughListFragment("3", "1", dataList3))
-
-        gateClassTeacherBinding.viewpager.offscreenPageLimit = 3
-        gateClassTeacherBinding.viewpager.adapter = object :
-            FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-            override fun getItem(position: Int): Fragment {
-                return fragments[position]
-            }
-
-            override fun getCount(): Int {
-                return mTitles.size
-            }
-
-            override fun getPageTitle(position: Int): CharSequence {
-                return mTitles[position]
-            }
-        }
-        gateClassTeacherBinding.slidingTabLayout.setViewPager(gateClassTeacherBinding.viewpager)
-        gateClassTeacherBinding.slidingTabLayout.currentTab = 0
-
     }
 
     //日期选择监听
     private val startTimeListener =
         OnDateSetListener { timePickerView: TimePickerDialog?, millseconds: Long ->
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
             val timingTime = simpleDateFormat.format(Date(millseconds))
             currentDate = timingTime
             loge("startTimeListener: $timingTime")
             val toStringTime =
-                ScheduleDaoUtil.toDateTime(timingTime, "yyyy-MM-dd").toStringTime("yyyy/MM/dd")
+                ScheduleDaoUtil.toDateTime(timingTime).toStringTime("yyyy/MM/dd")
             gateClassTeacherBinding.tvDatePick.text = toStringTime
         }
 }

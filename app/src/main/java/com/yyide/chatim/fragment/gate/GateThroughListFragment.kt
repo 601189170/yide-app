@@ -11,6 +11,7 @@ import com.yyide.chatim.activity.gate.GateDetailInfoActivity
 import com.yyide.chatim.adapter.gate.GateThroughData
 import com.yyide.chatim.adapter.gate.GateThroughListAdapter
 import com.yyide.chatim.databinding.FragmentGateThroughListBinding
+import com.yyide.chatim.model.gate.GateThroughPeopleListBean
 
 /**
  * @author liu tao
@@ -26,17 +27,25 @@ class PeopleThroughListFragment() : Fragment() {
     //1出校 2入校  3通行人数
     private var page_type: String? = null
     private var identity_type: String? = null
-    private var dataList: List<GateThroughData> = mutableListOf()
+    private var dataList: List<GateThroughPeopleListBean.PeopleListBean> = mutableListOf()
     private lateinit var fragmentGateThroughListBinding: FragmentGateThroughListBinding
-
+    private var peopleType:String? = null
+    private var queryTime:String? = null
+    private var siteId:String? = null
     constructor(
         page_type: String,
         identity_type: String,
-        dataList: List<GateThroughData>
+        peopleType:String,
+        queryTime:String,
+        siteId:String,
+        dataList: List<GateThroughPeopleListBean.PeopleListBean>
     ) : this() {
         this.page_type = page_type
         this.identity_type = identity_type
         this.dataList = dataList
+        this.peopleType = peopleType
+        this.queryTime = queryTime
+        this.siteId = siteId
     }
 
     override fun onCreateView(
@@ -50,10 +59,13 @@ class PeopleThroughListFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //1出校 2入校  3通行人数
         when (page_type) {
             "1" -> {
                 when (identity_type) {
                     "1" -> {
+                        fragmentGateThroughListBinding.layoutOneColumnData.root.visibility =
+                            View.GONE
                         fragmentGateThroughListBinding.layoutTwoColumnData.root.visibility =
                             View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.root.visibility =
@@ -64,24 +76,24 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "出校时间"
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
-                            val name = dataList[it].name
-                            toDetail(name)
+                            toDetail(it)
                         }
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.adapter = adapter
                     }
                     "2" -> {
+                        fragmentGateThroughListBinding.layoutOneColumnData.root.visibility =
+                            View.GONE
                         fragmentGateThroughListBinding.layoutTwoColumnData.root.visibility =
                             View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.root.visibility =
                             View.GONE
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.VISIBLE
-                        //三列出校
+                        //四列出校
                         fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "出校时间"
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
-                            val name = dataList[it].name
-                            toDetail(name)
+                            toDetail(it)
                         }
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.adapter = adapter
                     }
@@ -90,6 +102,8 @@ class PeopleThroughListFragment() : Fragment() {
             "2" -> {
                 when (identity_type) {
                     "1" -> {
+                        fragmentGateThroughListBinding.layoutOneColumnData.root.visibility =
+                            View.GONE
                         fragmentGateThroughListBinding.layoutTwoColumnData.root.visibility =
                             View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.root.visibility =
@@ -100,24 +114,24 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "入校时间"
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
-                            val name = dataList[it].name
-                            toDetail(name)
+                            toDetail(it)
                         }
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.adapter = adapter
                     }
                     "2" -> {
+                        fragmentGateThroughListBinding.layoutOneColumnData.root.visibility =
+                            View.GONE
                         fragmentGateThroughListBinding.layoutTwoColumnData.root.visibility =
                             View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.root.visibility =
                             View.GONE
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.VISIBLE
-                        //三列入校
+                        //四列入校
                         fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "入校时间"
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
-                            val name = dataList[it].name
-                            toDetail(name)
+                            toDetail(it)
                         }
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.adapter = adapter
                     }
@@ -126,21 +140,24 @@ class PeopleThroughListFragment() : Fragment() {
             "3" -> {
                 when (identity_type) {
                     "1" -> {
-                        fragmentGateThroughListBinding.layoutTwoColumnData.root.visibility =
+                        fragmentGateThroughListBinding.layoutOneColumnData.root.visibility =
                             View.VISIBLE
+                        fragmentGateThroughListBinding.layoutTwoColumnData.root.visibility =
+                            View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.root.visibility =
                             View.GONE
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.GONE
-                        //两列 通行人数
-                        fragmentGateThroughListBinding.layoutTwoColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                        //一列 通行人数
+                        fragmentGateThroughListBinding.layoutOneColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
-                            val name = dataList[it].name
-                            toDetail(name)
+                            toDetail(it)
                         }
-                        fragmentGateThroughListBinding.layoutTwoColumnData.recyclerView.adapter = adapter
+                        fragmentGateThroughListBinding.layoutOneColumnData.recyclerView.adapter = adapter
                     }
                     "2" -> {
+                        fragmentGateThroughListBinding.layoutOneColumnData.root.visibility =
+                            View.GONE
                         fragmentGateThroughListBinding.layoutTwoColumnData.root.visibility =
                             View.VISIBLE
                         fragmentGateThroughListBinding.layoutThreeColumnData.root.visibility =
@@ -150,8 +167,7 @@ class PeopleThroughListFragment() : Fragment() {
                         //两列 通行人数
                         fragmentGateThroughListBinding.layoutTwoColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
-                            val name = dataList[it].name
-                            toDetail(name)
+                            toDetail(it)
                         }
                         fragmentGateThroughListBinding.layoutTwoColumnData.recyclerView.adapter = adapter
                     }
@@ -160,9 +176,16 @@ class PeopleThroughListFragment() : Fragment() {
         }
     }
 
-    fun toDetail(username:String){
+    /**
+     * 查看详情
+     */
+    private fun toDetail(position:Int){
+        val peopleListBean = dataList[position]
         val intent = Intent(context, GateDetailInfoActivity::class.java)
-        intent.putExtra("username",username)
+        intent.putExtra("peopleType",peopleType)
+        intent.putExtra("queryTime",queryTime)
+        intent.putExtra("userId",peopleListBean.userId)
+        intent.putExtra("siteId",siteId)
         requireContext().startActivity(intent)
     }
 

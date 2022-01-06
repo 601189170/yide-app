@@ -49,6 +49,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <include
+            android:id="@+id/layout_gate_through_summary_all"
             layout="@layout/layout_gate_through_summary_all"
             app:layout_constraintTop_toBottomOf="@id/tv_date_pick"
             android:layout_width="match_parent"
@@ -84,4 +85,16 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/v_line" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/blank_page"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_default="percent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/cl_gate_base_detail">
+
+        <include
+            android:id="@+id/layout_blank_page"
+            layout="@layout/layout_blank_page2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

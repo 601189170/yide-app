@@ -19,4 +19,8 @@
         android:id="@+id/layout_two_column_data"
         layout="@layout/fragment_gate_through_list_two_column_data"
         android:visibility="gone" />
+    <include
+        android:id="@+id/layout_one_column_data"
+        layout="@layout/fragment_gate_through_list_one_column_data"
+        android:visibility="gone" />
 </FrameLayout>

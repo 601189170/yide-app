@@ -3,18 +3,23 @@ package com.yyide.chatim.utils
 import android.content.Context
 import android.content.Intent
 import com.blankj.utilcode.util.ToastUtils
+import com.tencent.mmkv.MMKV
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.AppManagerActivity
 import com.yyide.chatim.activity.TableActivity
 import com.yyide.chatim.activity.WebViewActivity
 import com.yyide.chatim.activity.attendance.AttendanceActivity
 import com.yyide.chatim.activity.attendance.StatisticsActivity
+import com.yyide.chatim.activity.gate.GateClassTeacherActivity
+import com.yyide.chatim.activity.gate.GateDetailInfoActivity
+import com.yyide.chatim.activity.gate.GateStudentStaffActivity
 import com.yyide.chatim.activity.leave.AskForLeaveActivity
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity
 import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.activity.weekly.WeeklyHomeActivity
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.model.EventMessage
 import org.greenrobot.eventbus.EventBus
 import kotlin.math.log
@@ -78,6 +83,41 @@ object JumpUtil {
             }
             "校历" -> {
                 mActivity.startActivity(Intent(mActivity, SchoolCalendarActivity::class.java))
+            }
+            "通行统计" -> {
+                //0全部 1学生 2教职工 3没有权限
+                val permission =
+                    MMKV.defaultMMKV().decodeString(MMKVConstant.YD_GATE_DATA_ACCESS_PERMISSION)
+                when (permission) {
+                    "0" -> {
+                        mActivity.startActivity(
+                            Intent(
+                                mActivity,
+                                GateStudentStaffActivity::class.java
+                            )
+                        )
+                    }
+                    "1" -> {
+                        if (SpData.getIdentityInfo().staffIdentity()) {
+                            mActivity.startActivity(
+                                Intent(
+                                    mActivity,
+                                    GateClassTeacherActivity::class.java
+                                )
+                            )
+                        } else {
+                            mActivity.startActivity(
+                                Intent(
+                                    mActivity,
+                                    GateDetailInfoActivity::class.java
+                                )
+                            )
+                        }
+                    }
+                    else -> {
+                        ToastUtils.showShort("没有权限")
+                    }
+                }
             }
             else -> if ("#" == url) {
                 ToastUtils.showShort("暂无权限")
