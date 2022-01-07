@@ -73,12 +73,18 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     private List<String> tags = new ArrayList<>();//存储历史
 
     private static String BOOK_SEARCH_HISTORY = "BOOK_SEARCH_HISTORY";
+    /**
+     * 从闸机通行统计app搜索跳转
+     */
+    public static String FROM_GATE = "from_gate";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String from = getIntent().getStringExtra("from");
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ItemBookSearchAdapter();
+        adapter.setFrom(from);
         EmptyBinding emptyBinding = EmptyBinding.inflate(getLayoutInflater());
         emptyBinding.tvDesc.setText("未搜索到人员");
         recyclerview.setAdapter(adapter);

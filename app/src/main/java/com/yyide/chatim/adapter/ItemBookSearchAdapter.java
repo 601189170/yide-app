@@ -12,8 +12,10 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.book.BookPatriarchDetailActivity;
+import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.activity.book.BookStudentDetailActivity;
 import com.yyide.chatim.activity.book.BookTeacherDetailActivity;
+import com.yyide.chatim.activity.gate.GateDetailInfoActivity;
 import com.yyide.chatim.databinding.ItemBookSearchBinding;
 import com.yyide.chatim.databinding.ItemNewBookGuardianBinding;
 import com.yyide.chatim.databinding.ItemNewBookGuardianSearchBinding;
@@ -40,6 +42,10 @@ import com.yyide.chatim.utils.GlideUtil;
 public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, BaseViewHolder> {
     private int ITEM_TYPE_TEACHER = 0;
     private int ITEM_TYPE_STUDENT = 1;
+    private String from;
+    public void setFrom(String from) {
+        this.from = from;
+    }
 
     public ItemBookSearchAdapter() {
         addItemType(ITEM_TYPE_TEACHER, R.layout.item_book_search);
@@ -63,6 +69,10 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
             guardianAdapter.setList(student.getParentList());
             guardianAdapter.setOnItemClickListener((adapter, view, position1) -> {
                 Parent item1 = guardianAdapter.getItem(position1);
+                if (BookSearchActivity.FROM_GATE.equals(from)){
+                    //跳转闸机通行数据详情页
+                    return;
+                }
                 BookGuardianItem guardianItem = new BookGuardianItem(
                         item1.getName(),
                         item1.getId(),
@@ -77,6 +87,12 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
             });
             holder.itemView.setOnClickListener(v -> {
                 BookSearchStudent item = student.getList();
+                if (BookSearchActivity.FROM_GATE.equals(from)){
+                    //跳转闸机通行数据详情页
+                    final String userId = item.getUserId();
+                    GateDetailInfoActivity.Companion.toDetail(getContext(),1,null,userId,null);
+                    return;
+                }
                 BookStudentItem studentItem = new BookStudentItem(item.getId(),
                         item.getName(),
                         item.getPhone(),
@@ -102,6 +118,12 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
 
             holder.itemView.setOnClickListener(v -> {
                 BookTeacherItem teacherItem1 = teacher.getList();
+                if (BookSearchActivity.FROM_GATE.equals(from)){
+                    //跳转闸机通行数据详情页
+                    final String userId = teacherItem1.getUserId();
+                    GateDetailInfoActivity.Companion.toDetail(getContext(),2,null,userId,null);
+                    return;
+                }
                 BookTeacherItem teacherItem = new BookTeacherItem(
                         teacherItem1.getName(),
                         teacherItem1.getSex(),

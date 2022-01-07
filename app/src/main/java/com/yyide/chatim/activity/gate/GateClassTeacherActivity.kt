@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.book.BookSearchActivity
 import com.yyide.chatim.adapter.gate.GateThroughData
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
@@ -336,7 +337,10 @@ class GateClassTeacherActivity : BaseActivity() {
         gateClassTeacherBinding.top.ivRight.setImageResource(R.drawable.gate_search_icon)
         gateClassTeacherBinding.top.ivRight.setOnClickListener {
             //搜索入口
-            startActivity(Intent(this, GateDataSearchActivity::class.java))
+            //startActivity(Intent(this, GateDataSearchActivity::class.java))
+            val intent = Intent(this, BookSearchActivity::class.java)
+            intent.putExtra("from",BookSearchActivity.FROM_GATE)
+            startActivity(intent)
         }
         //日期选择
         gateClassTeacherBinding.tvDatePick.setOnClickListener {
@@ -357,5 +361,13 @@ class GateClassTeacherActivity : BaseActivity() {
             val toStringTime =
                 ScheduleDaoUtil.toDateTime(timingTime).toStringTime("yyyy/MM/dd")
             gateClassTeacherBinding.tvDatePick.text = toStringTime
+            //查询数据
+            gateThroughPeopleListViewModel.queryAllStudentPassageInOutDetails(
+                1,
+                currentDate,
+                4,
+                classId,
+                siteId
+            )
         }
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.lifecycleScope
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.book.BookSearchActivity
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityGateStudentStaffBinding
 import com.yyide.chatim.dialog.SwitchTableClassPop
@@ -143,7 +144,10 @@ class GateStudentStaffActivity : BaseActivity() {
         activityGateStudentStaffBinding.top.ivRight.setImageResource(R.drawable.gate_search_icon)
         activityGateStudentStaffBinding.top.ivRight.setOnClickListener {
             //搜索入口
-            startActivity(Intent(this, GateDataSearchActivity::class.java))
+            //startActivity(Intent(this, GateDataSearchActivity::class.java))
+            val intent = Intent(this, BookSearchActivity::class.java)
+            intent.putExtra("from", BookSearchActivity.FROM_GATE)
+            startActivity(intent)
         }
 
         mTitles.add("学生")

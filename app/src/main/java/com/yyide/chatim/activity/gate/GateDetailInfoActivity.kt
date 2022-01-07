@@ -1,5 +1,7 @@
 package com.yyide.chatim.activity.gate
 
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -289,6 +291,17 @@ class GateDetailInfoActivity : BaseActivity() {
                 this,
                 finalFacePath
             )
+        }
+    }
+
+    companion object{
+        fun toDetail(context: Context,peopleType:Int,queryTime:String?,userId:String?,siteId:String?){
+            val intent = Intent(context, GateDetailInfoActivity::class.java)
+            intent.putExtra("peopleType", peopleType)
+            intent.putExtra("queryTime", queryTime)
+            intent.putExtra("userId", userId)
+            intent.putExtra("siteId", siteId)
+            context.startActivity(intent)
         }
     }
 }
