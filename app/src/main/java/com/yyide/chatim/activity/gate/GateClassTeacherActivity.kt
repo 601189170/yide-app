@@ -187,6 +187,7 @@ class GateClassTeacherActivity : BaseActivity() {
      * 处理场地
      */
     private fun handleSiteListData(data: List<SiteBean>?) {
+        gateClassTeacherBinding.top.title.isEnabled = false
         if (data == null || data.isEmpty()) {
             return
         }
@@ -223,6 +224,7 @@ class GateClassTeacherActivity : BaseActivity() {
                 ResourcesCompat.getDrawable(resources, R.drawable.gate_down_icon, null)?.apply {
                     setBounds(0, 0, minimumWidth, minimumHeight)
                 }
+            gateClassTeacherBinding.top.title.isEnabled = true
             gateClassTeacherBinding.top.title.setCompoundDrawables(null, null, drawable, null)
         }
         //请求班级列表
