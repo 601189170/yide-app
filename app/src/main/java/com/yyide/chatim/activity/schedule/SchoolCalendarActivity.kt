@@ -103,7 +103,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
                 dataBean.type = 1
                 dataBean.startTime = curDateTime.toStringTime("yyyy-MM").plus("-01")
                 dataBean.endTime = curDateTime.toStringTime("yyyy-MM").plus("-01")
-                schoolCalendarList.add(0,dataBean)
+                //schoolCalendarList.add(0,dataBean)
             }
 
             schoolCalendarAdapter.setList(schoolCalendarList)

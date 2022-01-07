@@ -156,7 +156,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mVerticalTextView.setResources(list);
         mVerticalTextView.setTextStillTime(4000);
         mVerticalTextView.setOnItemClickListener(i -> {
-            mListener.jumpFragment(1);
+            //mListener.jumpFragment(1);
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
         });
     }
@@ -249,10 +249,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             case R.id.student_honor_content:
                 //startActivity(new Intent(getActivity(), StudentHonorListActivity.class));
                 break;
-            case R.id.layout_message:
-//                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
-                break;
+//            case R.id.layout_message:
+////                startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
+//                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
+//                break;
             case R.id.notice_content:
                 //startActivity(new Intent(getActivity(), NoticeAnnouncementActivity.class));
                 break;

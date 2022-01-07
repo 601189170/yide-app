@@ -112,15 +112,26 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+                android:layout_height="match_parent"
+                android:background="@drawable/calendar_content_list_bg_shape">
+                <TextView
+                    android:id="@+id/tv_remark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="本月备注"
+                    android:textColor="#ff1e1e1e"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_14"
+                    />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvScheduleList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/calendar_content_list_bg_shape"
+                    android:layout_below="@id/tv_remark"
                     android:paddingStart="20dp"
-                    android:paddingTop="6dp"
+                    android:paddingTop="@dimen/dp_10"
                     android:paddingEnd="0dp"
                     android:visibility="visible" />
 
@@ -129,6 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/white"
+                    android:layout_below="@id/tv_remark"
                     android:visibility="gone">
 
                     <include

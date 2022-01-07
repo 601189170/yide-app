@@ -8,12 +8,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.RequiresApi;
 
 import com.yide.calendar.CalendarUtils;
 import com.yide.calendar.HintCircle;
@@ -24,6 +27,7 @@ import org.joda.time.DateTime;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Jimmy on 2016/10/7 0007.
@@ -96,7 +100,7 @@ public class WeekView extends View {
             mSelectBGTodayColor = array.getColor(R.styleable.WeekCalendarView_week_selected_circle_today_color, Color.parseColor("#2C8AFF"));
             mNormalDayColor = array.getColor(R.styleable.WeekCalendarView_week_normal_text_color, Color.parseColor("#575471"));
             mCurrentDayColor = array.getColor(R.styleable.WeekCalendarView_week_today_text_color, Color.parseColor("#2C8AFF"));
-            mHintCircleColor = array.getColor(R.styleable.WeekCalendarView_week_hint_circle_color, Color.parseColor("#FE8595"));
+            mHintCircleColor = array.getColor(R.styleable.WeekCalendarView_week_hint_circle_color, Color.parseColor("#FF4140"));
             mLunarTextColor = array.getColor(R.styleable.WeekCalendarView_week_lunar_text_color, Color.parseColor("#ACA9BC"));
             mHolidayTextColor = array.getColor(R.styleable.WeekCalendarView_week_holiday_color, Color.parseColor("#A68BFF"));
             mDaySize = array.getInteger(R.styleable.WeekCalendarView_week_day_text_size, 18);
@@ -111,7 +115,7 @@ public class WeekView extends View {
             mSelectBGTodayColor = Color.parseColor("#2C8AFF");
             mNormalDayColor = Color.parseColor("#575471");
             mCurrentDayColor = Color.parseColor("#2C8AFF");
-            mHintCircleColor = Color.parseColor("#FE8595");
+            mHintCircleColor = Color.parseColor("#FF4140");
             mLunarTextColor = Color.parseColor("#ACA9BC");
             mHolidayTextColor = Color.parseColor("#A68BFF");
             mDaySize = 13;
@@ -203,6 +207,7 @@ public class WeekView extends View {
         setMeasuredDimension(widthSize, heightSize);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onDraw(Canvas canvas) {
         initSize();
@@ -336,8 +341,10 @@ public class WeekView extends View {
      *
      * @param canvas
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void drawHintCircle(Canvas canvas) {
         if (mIsShowHint) {
+            mHintCircleColor = Color.parseColor("#FF4140");
             mPaint.setColor(mHintCircleColor);
             int startMonth = mStartDate.getMonthOfYear();
             int endMonth = mStartDate.plusDays(7).getMonthOfYear();
@@ -363,10 +370,15 @@ public class WeekView extends View {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void drawHintCircle(List<HintCircle> hints, int day, int col, Canvas canvas) {
-        if (!hints.contains(day)) return;
+        //if (!hints.contains(day)) return;
+        if (!hints.stream().map(HintCircle::getDay).collect(Collectors.toList()).contains(day)) {
+            return;
+        }
         float circleX = (float) (mColumnSize * col + mColumnSize * 0.5);
-        float circleY = (float) (mRowSize * 0.75);
+        //float circleY = (float) (mRowSize * 0.75);
+        float circleY = (float) (mRowSize* 0.95);
         canvas.drawCircle(circleX, circleY, mCircleRadius, mPaint);
     }
 

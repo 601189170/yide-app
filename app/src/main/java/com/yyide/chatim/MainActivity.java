@@ -293,6 +293,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
+        Log.e(TAG, "Event: " + messageEvent.getCode());
         if (BaseConstant.TYPE_CHECK_HELP_CENTER.equals(messageEvent.getCode())) {
             setTab(3, 0);
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
@@ -445,6 +446,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @Override
     public void jumpFragment(int index) {
+        Log.e(TAG, "jumpFragment: "+index );
         setTab(index, 1);
     }
 
@@ -530,6 +532,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     void setTab(int position, int type) {
+        Log.e(TAG, "setTab: "+position+", "+type );
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
@@ -615,6 +618,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout, R.id.tab5_layout})
     public void onViewClicked(View view) {
+        Log.e(TAG, "onViewClicked: "+view.getId());
         switch (view.getId()) {
             case R.id.tab1_layout:
                 setTab(0, 0);
