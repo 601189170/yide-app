@@ -1,5 +1,7 @@
 package com.yyide.chatim.net
 
+import com.yyide.chatim.model.BaseRsp
+import com.yyide.chatim.model.PushSettingBean
 import com.yyide.chatim.model.gate.*
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -83,4 +85,18 @@ interface GateDataApi {
      */
     @POST("/management/cloud-system/barrier-server/barrier/mobile/v2/queryAllTeacherPassageInOutDetails")
     suspend fun queryAllTeacherPassageInOutDetails(@Body requestBody: RequestBody): GateBaseRsp<GateThroughPeopleListBean>
+
+    /**
+     * 查询用户通知开关
+     * https://api.uat.edu.1d1j.net/message/cloud-message/message-push/push/mobile/v1/queryUserNoticeOnOffByUserId
+     */
+    @GET("/message/cloud-message/message-push/push/mobile/v1/queryUserNoticeOnOffByUserId")
+    suspend fun queryUserNoticeOnOffByUserId(): GateBaseRsp<PushSettingBean>
+
+    /**
+     * 更新用户开关
+     * https://api.uat.edu.1d1j.net/message/cloud-message/message-push/push/mobile/v1/updateUserNoticeOnOffByUserIdAndType
+     */
+    @POST("/message/cloud-message/message-push/push/mobile/v1/updateUserNoticeOnOffByUserIdAndType")
+    suspend fun updateUserNoticeOnOffByUserIdAndType(@Body requestBody: RequestBody): BaseRsp
 }
