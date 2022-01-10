@@ -87,17 +87,24 @@ class GateStaffFragment() : Fragment() {
                 }
             }
         }
-        adminViewModel.queryTeacherBarrierPassageDataByDeptId(
-            null,
-            currentDate.toStringTime(),
-            curSiteId
-        )
+//        adminViewModel.queryTeacherBarrierPassageDataByDeptId(
+//            null,
+//            currentDate.toStringTime(),
+//            curSiteId
+//        )
     }
 
     private fun handleData(data: StaffBean?) {
-        if (data == null) {
+        if (data == null || data.totalNumber == 0) {
+            //空数据列表处理
+            fragmentGateStudentStaffBinding.blankPage.visibility = View.VISIBLE
+            fragmentGateStudentStaffBinding.rgType.visibility = View.GONE
+            fragmentGateStudentStaffBinding.recyclerView.visibility = View.GONE
             return
         }
+        fragmentGateStudentStaffBinding.blankPage.visibility = View.GONE
+        fragmentGateStudentStaffBinding.rgType.visibility = View.GONE
+        fragmentGateStudentStaffBinding.recyclerView.visibility = View.VISIBLE
         fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.tvGateEventTitle.text =
             "${data.name}"
         fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.tvThroughNumber.text =

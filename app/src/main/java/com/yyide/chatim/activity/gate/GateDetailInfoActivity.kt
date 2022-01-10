@@ -150,11 +150,17 @@ class GateDetailInfoActivity : BaseActivity() {
                 userId,
                 siteId
             )
+            gateDetailInfoBinding.top.title.text = "${deptName}的通行数据"
+            if (eventList.size == 1) {
+                gateDetailInfoBinding.top.title.isEnabled = false
+                gateDetailInfoBinding.top.title.setCompoundDrawables(null, null, null, null)
+                return
+            }
             val drawable =
                 ResourcesCompat.getDrawable(resources, R.drawable.gate_down_icon, null)?.apply {
                     setBounds(0, 0, minimumWidth, minimumHeight)
                 }
-            gateDetailInfoBinding.top.title.text = "${deptName}的通行数据"
+
             gateDetailInfoBinding.top.title.isEnabled = true
             gateDetailInfoBinding.top.title.setCompoundDrawables(null, null, drawable, null)
             gateDetailInfoBinding.top.title.setOnClickListener {
@@ -206,7 +212,7 @@ class GateDetailInfoActivity : BaseActivity() {
             gateDetailInfoBinding.tvLatestPunchOutTitle.text = latestThroughTime
         }
 
-        if (TextUtils.isEmpty(data.earliestTime) && TextUtils.isEmpty(data.earliestTime)) {
+        if (TextUtils.isEmpty(data.earliestTime) && TextUtils.isEmpty(data.latestTime)) {
             gateDetailInfoBinding.vLine.visibility = View.GONE
         }
 
