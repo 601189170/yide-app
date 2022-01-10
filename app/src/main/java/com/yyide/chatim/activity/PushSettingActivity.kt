@@ -45,7 +45,7 @@ class PushSettingActivity : BaseActivity() {
             pushSettingViewModel.updatePushSettingList.collect {
                 when (it) {
                     is Result.Success -> {
-                        ToastUtils.showShort("更新成功")
+                        //ToastUtils.showShort("更新成功")
                         pushSettingViewModel.queryUserNoticeOnOffByUserId()
                     }
                     is Result.Error -> {
