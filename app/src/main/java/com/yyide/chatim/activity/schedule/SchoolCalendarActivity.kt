@@ -213,12 +213,25 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         if (eventOptional.isNotEmpty()) {
             val dataBean = eventOptional[0]
             curSemesterId = dataBean.deptId
-            selectSchoolCalendar()
             calendarComposeLayout.setCalendarInterval(
                 toDateTime(dataBean.startDate, "yyyy-MM-dd"),
                 toDateTime(dataBean.endDate, "yyyy-MM-dd"),
                 DateTime.now().simplifiedDataTime()
             )
+            //默认开启的学期，学期月份不包含当月月份
+            //首次点击进入默认学期的第一个月
+            if (curDateTime in toDateTime(
+                    dataBean.startDate,
+                    "yyyy-MM-dd"
+                )..toDateTime(dataBean.endDate, "yyyy-MM-dd")
+            ) {
+                selectSchoolCalendar()
+            } else {
+                curDateTime = toDateTime(dataBean.startDate, "yyyy-MM-dd")
+                schoolCalendarBinding.tvMonth.text = curDateTime.toStringTime("yyyy年MM月")
+                calendarComposeLayout.setCurrentCalendar(curDateTime)
+                selectSchoolCalendar()
+            }
             schoolCalendarBinding.tvSemester.text = dataBean.deptName
             if (eventList.size <= 1) {
                 schoolCalendarBinding.tvSemester.setCompoundDrawables(null, null, null, null)
