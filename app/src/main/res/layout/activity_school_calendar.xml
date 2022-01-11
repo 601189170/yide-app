@@ -141,7 +141,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/white"
                     android:layout_below="@id/tv_remark"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <include
                         android:id="@+id/layout_blank_page"
