@@ -538,8 +538,12 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         tab3.setChecked(false);
         tab4.setChecked(false);
         tab5.setChecked(false);
+
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+
+        //getSupportFragmentManager().popBackStack();
+
         Fragment fg1 = fm.findFragmentByTag(String.valueOf(tab1.getId()));
         Fragment fg2 = fm.findFragmentByTag(String.valueOf(tab2.getId()));
         Fragment fg3 = fm.findFragmentByTag(String.valueOf(tab3.getId()));
@@ -551,6 +555,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         if (fg3 != null) ft.hide(fg3);
         if (fg4 != null) ft.hide(fg4);
         if (fg5 != null) ft.hide(fg5);
+
         switch (position) {
             case 0:
                 if (fg1 == null) {

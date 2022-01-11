@@ -38,7 +38,9 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.WebModel;
+import com.yyide.chatim.model.WebParamsUser;
 
 public class WebViewActivity extends BaseActivity {
 
@@ -103,7 +105,7 @@ public class WebViewActivity extends BaseActivity {
         pb_webview = findViewById(R.id.pb_webview);
         tvTitle = findViewById(R.id.title);
         imageView = findViewById(R.id.back_layout);
-        if (currentUrl.contains("/classcardapp/")) {
+        if (currentUrl.contains("/classcardapp/") || currentUrl.contains("canteenReservation/home")) {
             view.setVisibility(View.GONE);
         } else {
             view.setVisibility(View.VISIBLE);
@@ -233,11 +235,15 @@ public class WebViewActivity extends BaseActivity {
                     finish();
                 } else if ("getToken".equalsIgnoreCase(webModel.enentName)) {
                     return SpData.User() != null ? SpData.User().data.accessToken : "";
+                } else if ("getUserInfo".equalsIgnoreCase(webModel.enentName)) {
+                    GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
+                    return JSON.toJSONString(new WebParamsUser(identityInfo.userId, identityInfo.schoolId));
                 }
             }
         }
         return "";
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
