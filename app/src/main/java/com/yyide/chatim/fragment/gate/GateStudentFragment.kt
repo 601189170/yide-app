@@ -157,6 +157,7 @@ class GateStudentFragment() : Fragment() {
             fragmentGateStudentStaffBinding.blankPage.visibility = View.VISIBLE
             fragmentGateStudentStaffBinding.rgType.visibility = View.GONE
             fragmentGateStudentStaffBinding.recyclerView.visibility = View.GONE
+            fragmentGateStudentStaffBinding.rgType.removeAllViews()
             return
         }
         fragmentGateStudentStaffBinding.blankPage.visibility = View.GONE
@@ -166,6 +167,10 @@ class GateStudentFragment() : Fragment() {
         addRadioGroupView(fragmentGateStudentStaffBinding.rgType,data)
         fragmentGateStudentStaffBinding.rgType.setOnCheckedChangeListener { _, checkedId ->
             loge("学段类型改变：$checkedId")
+            val barrierSectionBean = data[checkedId]
+            dataList.clear()
+            dataList.addAll(barrierSectionBean.list)
+            adapter.notifyDataSetChanged()
         }
         val barrierSectionBean = data[0]
         dataList.clear()
@@ -183,10 +188,7 @@ class GateStudentFragment() : Fragment() {
                 .getLayoutParams() as LinearLayout.LayoutParams
             layoutParams.setMargins(0, 0, DisplayUtils.dip2px(requireContext(), 10f), 0) //4个参数按顺序分别是左上右下
             button.setLayoutParams(layoutParams)
-            if (index == 0){
-                // 设置默认选中方式2
-                radiogroup.check(button.id)
-            }
+            button.isChecked = index == 0
         }
     }
 
@@ -195,7 +197,7 @@ class GateStudentFragment() : Fragment() {
             return
         }
         codeBtn.setBackgroundResource(R.drawable.selector_checked_tv)
-        codeBtn.setTextColor(this.resources.getColor(R.color.black_white_color3))
+        codeBtn.setTextColor(this.resources.getColorStateList(R.color.black_white_color3))
         codeBtn.buttonDrawable = ColorDrawable(Color.TRANSPARENT)
         codeBtn.textSize = 15f
         codeBtn.id = id

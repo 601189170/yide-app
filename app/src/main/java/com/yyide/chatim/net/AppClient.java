@@ -11,6 +11,8 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.LoginRsp;
 
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -69,6 +71,7 @@ public class AppClient {
             builder.connectTimeout(30, TimeUnit.SECONDS). // 设置连接超时时间
                     readTimeout(30, TimeUnit.SECONDS).
                     writeTimeout(30, TimeUnit.SECONDS).build();
+//            builder.hostnameVerifier(new AllowAllHostnameVerifier());
             okHttpClient = builder.build();
         }
         return okHttpClient;

@@ -12,6 +12,8 @@
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_16"
         android:text="学生出入校门口情况"
+        android:singleLine="true"
+        android:maxEms="12"
         android:textColor="#FFFFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"

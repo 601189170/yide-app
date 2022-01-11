@@ -90,6 +90,11 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.VISIBLE
                         //四列出校
+                        if (peopleType == "2") {
+                            fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "部门"
+                        } else {
+                            fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "班级"
+                        }
                         fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "出校时间"
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
@@ -128,6 +133,11 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.VISIBLE
                         //四列入校
+                        if (peopleType == "2") {
+                            fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "部门"
+                        } else {
+                            fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "班级"
+                        }
                         fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "入校时间"
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
@@ -165,6 +175,11 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.GONE
                         //两列 通行人数
+                        if (peopleType == "2") {
+                            fragmentGateThroughListBinding.layoutTwoColumnData.tvClass.text = "部门"
+                        } else {
+                            fragmentGateThroughListBinding.layoutTwoColumnData.tvClass.text = "班级"
+                        }
                         fragmentGateThroughListBinding.layoutTwoColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
                             toDetail(it)

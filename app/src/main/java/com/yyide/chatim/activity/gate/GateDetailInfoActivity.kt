@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
@@ -20,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.PhotoViewActivity.Companion.start
 import com.yyide.chatim.adapter.attendance.v2.StudentDayStatisticsListAdapter
 import com.yyide.chatim.adapter.gate.GateDetailInfo
@@ -30,6 +32,7 @@ import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityGateDetailInfoBinding
 import com.yyide.chatim.dialog.DeptSelectPop
 import com.yyide.chatim.fragment.leave.RequestLeaveStaffFragment
+import com.yyide.chatim.model.GetUserSchoolRsp.DataBean.FormBean
 import com.yyide.chatim.model.LeaveDeptRsp
 import com.yyide.chatim.model.gate.Result
 import com.yyide.chatim.model.gate.StudentInfoBean
@@ -128,14 +131,19 @@ class GateDetailInfoActivity : BaseActivity() {
             return
         }
         eventList.clear()
+        val classInfo = SpData.getClassInfo()
+        var studentUserId:String? =  null
+        if (classInfo != null){
+            studentUserId = classInfo.studentUserId
+        }
         data.forEach {
             val dataBean = LeaveDeptRsp.DataBean()
             dataBean.deptId = it.userId
             dataBean.deptName = it.userName
-            dataBean.isDefault = 0
+            dataBean.isDefault = if (it.userId == studentUserId) 1 else 0
             eventList.add(dataBean)
         }
-        if (eventList.isNotEmpty()) {
+        if (eventList.isNotEmpty() && eventList.find { it.isDefault == 1 } == null) {
             eventList[0].isDefault = 1
         }
 
@@ -214,6 +222,8 @@ class GateDetailInfoActivity : BaseActivity() {
 
         if (TextUtils.isEmpty(data.earliestTime) && TextUtils.isEmpty(data.latestTime)) {
             gateDetailInfoBinding.vLine.visibility = View.GONE
+        } else {
+            gateDetailInfoBinding.vLine.visibility = View.VISIBLE
         }
 
         showFaceImage(gateDetailInfoBinding.ivStudentHead, data.image ?: "")

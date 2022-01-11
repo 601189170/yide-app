@@ -2,6 +2,7 @@ package com.yyide.chatim.activity.gate
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -91,9 +92,15 @@ class GateSecondBranchActivity : BaseActivity() {
     }
 
     private fun handleTeacherData(data: StaffBean?) {
-        if (data == null) {
+        if (data == null || data.totalNumber == 0 || (data.deptDataList == null && data.list == null)) {
+            activityGateSecondBranchBinding.blankPage.visibility = View.VISIBLE
+            activityGateSecondBranchBinding.layoutGateThroughBranchAll.root.visibility = View.GONE
+            activityGateSecondBranchBinding.recyclerView.visibility = View.GONE
             return
         }
+        activityGateSecondBranchBinding.blankPage.visibility = View.GONE
+        activityGateSecondBranchBinding.layoutGateThroughBranchAll.root.visibility = View.VISIBLE
+        activityGateSecondBranchBinding.recyclerView.visibility = View.VISIBLE
         activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvThroughNumber.text =
             "${data.totalNumber}"
         activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvGoOutNumber.text =
@@ -115,9 +122,15 @@ class GateSecondBranchActivity : BaseActivity() {
     }
 
     private fun handleData(data: StudentGradeInOutInfoBean?) {
-        if (data == null) {
+        if (data?.basicsForm == null || data.studentDataList == null) {
+            activityGateSecondBranchBinding.blankPage.visibility = View.VISIBLE
+            activityGateSecondBranchBinding.layoutGateThroughBranchAll.root.visibility = View.GONE
+            activityGateSecondBranchBinding.recyclerView.visibility = View.GONE
             return
         }
+        activityGateSecondBranchBinding.blankPage.visibility = View.GONE
+        activityGateSecondBranchBinding.layoutGateThroughBranchAll.root.visibility = View.VISIBLE
+        activityGateSecondBranchBinding.recyclerView.visibility = View.VISIBLE
         data.basicsForm?.let {
             activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvThroughNumber.text =
                 "${it.totalNumber}"

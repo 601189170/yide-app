@@ -47,14 +47,14 @@ public class BaseConstant {
 //    public static final String API_SERVER_URL_UAT = "http://192.168.3.108:8888";//Dev 环境
 
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
-    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.net";
+    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.cn";
 
     //Http访问地址
     public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
 
     //通知模板地址
     public static final String API_SERVER_HTML_RELEASE = "https://www.1d1j.cn";
-    public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.net";
+    public static final String API_SERVER_HTML_UAT = "https://cloud.uat.edu.1d1j.cn";
     public static final String API_SERVER_HTML = BuildConfig.DEBUG ? API_SERVER_HTML_UAT : API_SERVER_HTML_RELEASE;
 
     //学生作品
@@ -70,7 +70,7 @@ public class BaseConstant {
     //通知公告模板地址
 //    public static final String TEMPLATE_URL_DEV = "http://192.168.3.147:8005/#/notice/edit/";
     public static final String TEMPLATE_URL_RELEASE = "https://wap.edu.1d1j.cn/#/notice/edit/";
-    public static final String TEMPLATE_URL_DEV = "https://app.uat.edu.1d1j.net/#/notice/edit/";
+    public static final String TEMPLATE_URL_DEV = "https://app.uat.edu.1d1j.cn/#/notice/edit/";
 
     public static final String TEMPLATE_URL = BuildConfig.DEBUG ? TEMPLATE_URL_DEV : TEMPLATE_URL_RELEASE;
 
