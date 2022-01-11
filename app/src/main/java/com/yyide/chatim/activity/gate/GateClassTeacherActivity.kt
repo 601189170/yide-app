@@ -346,7 +346,10 @@ class GateClassTeacherActivity : BaseActivity() {
         }
         //日期选择
         gateClassTeacherBinding.tvDatePick.setOnClickListener {
-            DatePickerDialogUtil.showDate(this, "选择日期", currentDate, startTimeListener)
+            val now = DateTime.now()
+            val millisMax = now.millis
+            val millisMin = now.minusMonths(3).millis
+            DatePickerDialogUtil.showDate(this, "选择日期", currentDate, millisMin,millisMax,startTimeListener)
         }
         gateClassTeacherBinding.top.backLayout.setOnClickListener {
             finish()

@@ -132,10 +132,15 @@ class GateStaffFragment() : Fragment() {
             "全校教职工出入校门口情况"
         fragmentGateStudentStaffBinding.tvDatePick.text = currentDate.toStringTime("yyyy/MM/dd")
         fragmentGateStudentStaffBinding.tvDatePick.setOnClickListener {
+            val now = DateTime.now()
+            val millisMax = now.millis
+            val millisMin = now.minusMonths(3).millis
             DatePickerDialogUtil.showDate(
                 requireContext(),
                 "选择日期",
                 currentDate.toStringTime(),
+                millisMin,
+                millisMax,
                 startTimeListener
             )
         }

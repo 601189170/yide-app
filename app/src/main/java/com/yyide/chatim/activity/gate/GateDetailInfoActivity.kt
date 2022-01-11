@@ -251,10 +251,15 @@ class GateDetailInfoActivity : BaseActivity() {
 
         //选择日期
         gateDetailInfoBinding.tvDatePick.setOnClickListener {
+            val now = DateTime.now()
+            val millisMax = now.millis
+            val millisMin = now.minusMonths(3).millis
             DatePickerDialogUtil.showDate(
                 this,
                 "选择日期",
                 curDateTime.toStringTime(""),
+                millisMin,
+                millisMax,
                 startTimeListener
             )
         }

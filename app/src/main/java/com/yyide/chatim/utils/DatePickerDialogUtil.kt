@@ -65,6 +65,8 @@ object DatePickerDialogUtil {
         context: Context,
         title: String,
         currentMillseconds: String?,
+        minDate: Long = 0,
+        maxDate: Long = 0,
         onDateSetListener: OnDateSetListener
     ) {
         val displayList: MutableList<Int> = mutableListOf()
@@ -74,8 +76,8 @@ object DatePickerDialogUtil {
 //        displayList.add(DateTimeConfig.HOUR)
 //        displayList.add(DateTimeConfig.MIN)
         val model = CardDatePickerDialog.STACK
-        val maxDate: Long = 0
-        val minDate: Long = 0
+//        val maxDate: Long = 0
+//        val minDate: Long = 0
         val pickerLayout = 0
         var defaultDate: Long = 0
         if (!TextUtils.isEmpty(currentMillseconds)) {
