@@ -100,6 +100,9 @@ class GateStaffFragment() : Fragment() {
             fragmentGateStudentStaffBinding.blankPage.visibility = View.VISIBLE
             fragmentGateStudentStaffBinding.rgType.visibility = View.GONE
             fragmentGateStudentStaffBinding.recyclerView.visibility = View.GONE
+            fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.tvThroughNumber.text = "0"
+            fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.tvGoOutNumber.text = "0"
+            fragmentGateStudentStaffBinding.layoutGateThroughSummaryAll.tvGoIntoNumber.text = "0"
             return
         }
         fragmentGateStudentStaffBinding.blankPage.visibility = View.GONE
