@@ -127,22 +127,24 @@ public class TodoMsgFragment extends BaseFragment {
     }
 
     void setTab(int position) {
-        tab1.setChecked(false);
-        tab2.setChecked(false);
-        tab3.setChecked(false);
-        switch (position) {//0待办 1 已拒绝 3全部
-            case 0:
-                viewpager.setCurrentItem(0);
-                tab1.setChecked(true);
-                break;
-            case 1:
-                viewpager.setCurrentItem(1);
-                tab2.setChecked(true);
-                break;
-            case 2:
-                viewpager.setCurrentItem(2);
-                tab3.setChecked(true);
-                break;
+        if (tab1 != null) {
+            tab1.setChecked(false);
+            tab2.setChecked(false);
+            tab3.setChecked(false);
+            switch (position) {//0待办 1 已拒绝 3全部
+                case 0:
+                    viewpager.setCurrentItem(0);
+                    tab1.setChecked(true);
+                    break;
+                case 1:
+                    viewpager.setCurrentItem(1);
+                    tab2.setChecked(true);
+                    break;
+                case 2:
+                    viewpager.setCurrentItem(2);
+                    tab3.setChecked(true);
+                    break;
+            }
         }
     }
 }
