@@ -19,6 +19,7 @@ import com.yyide.chatim.fragment.gate.GateStudentFragment
 import com.yyide.chatim.model.SelectTableClassesRsp
 import com.yyide.chatim.model.gate.Result
 import com.yyide.chatim.model.gate.SiteBean
+import com.yyide.chatim.utils.SelectorDialogUtil
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.gate.GateSiteViewModel
 import kotlinx.coroutines.flow.collect
@@ -37,7 +38,7 @@ class GateStudentStaffActivity : BaseActivity() {
     val fragments = mutableListOf<Fragment>()
     private val siteViewModel: GateSiteViewModel by viewModels()
     private var siteId = ""
-    private var siteData = mutableListOf<SelectTableClassesRsp.DataBean>()
+    private var siteData = mutableListOf<SiteBean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityGateStudentStaffBinding = ActivityGateStudentStaffBinding.inflate(layoutInflater)
@@ -69,30 +70,15 @@ class GateStudentStaffActivity : BaseActivity() {
         }
         val siteBean = data[0]
         val children = siteBean.children
-        if (children == null || children.isEmpty()) {
+        if (children.isEmpty()) {
             //楼栋有数据但是场地为空
             return
         }
         siteData.clear()
-        data.forEach {
-            val dataBean = SelectTableClassesRsp.DataBean()
-            dataBean.id = it.id?.toLong() ?: 0L
-            dataBean.name = it.name
-            dataBean.showName = it.name
-            val childDataList = mutableListOf<SelectTableClassesRsp.DataBean>()
-            it.children?.forEach {
-                val dataBean2 = SelectTableClassesRsp.DataBean()
-                dataBean2.id = it.id?.toLong() ?: 0L
-                dataBean2.name = it.name
-                dataBean2.showName = it.name
-                childDataList.add(dataBean2)
-            }
-            dataBean.list = childDataList
-            siteData.add(dataBean)
-        }
+        siteData.addAll(data)
         val childrenBean = children[0]
         siteId = childrenBean.id ?: ""
-        val title = String.format(getString(R.string.gate_page_title), siteBean.name)
+        val title = String.format(getString(R.string.gate_page_title), childrenBean.name)
         activityGateStudentStaffBinding.top.title.text = title
         activityGateStudentStaffBinding.top.title.isEnabled = false
         if (data.size > 1 || children.size > 1) {
@@ -116,23 +102,10 @@ class GateStudentStaffActivity : BaseActivity() {
     private fun initView() {
         activityGateStudentStaffBinding.top.title.text = "通行数据"
         activityGateStudentStaffBinding.top.title.setOnClickListener {
-            val switchTableClassPop = SwitchTableClassPop(this, siteData)
-            switchTableClassPop.setSelectClasses { id, classesName ->
-                loge("id=$id,classesName=$classesName")
-                var parentName = ""
-                siteData.forEach {
-                    val name = it.name
-                    for (dataBean in it.list) {
-                        if (classesName == dataBean.showName) {
-                            parentName = name
-                            return@forEach
-                        }
-                    }
-                }
-                this.siteId = id.toString()
-                val title = String.format(getString(R.string.gate_page_title), parentName)
+            SelectorDialogUtil.showSiteSelector(this, "切换场地",siteId,siteData){siteBean, childBean ->
+                this.siteId = childBean.id
+                val title = String.format(getString(R.string.gate_page_title), childBean.name)
                 activityGateStudentStaffBinding.top.title.text = title
-                //切换场地
                 //通知子fragment场地请求结果
                 siteViewModel.curSiteId.value = siteId
             }

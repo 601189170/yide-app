@@ -6,12 +6,12 @@ package com.yyide.chatim.model.gate
  * @description 场地列表
  */
 data class SiteBean(
-    var id: String? = null,
-    var name: String? = null,
-    var children: List<ChildrenBean>? = null
+    var id: String,
+    var name: String,
+    var children: List<ChildrenBean>
 ) {
     data class ChildrenBean(
-        var id: String? = null,
-        var name: String? = null
+        var id: String,
+        var name: String
     )
 }

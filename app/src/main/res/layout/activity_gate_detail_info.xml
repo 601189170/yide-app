@@ -179,6 +179,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_detailed_record"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_12"
@@ -187,6 +188,7 @@
                 android:layout_marginBottom="@dimen/dp_20"
                 android:background="@drawable/white_10_corner_shape"
                 android:padding="@dimen/dp_16"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/cl_punch_in_base_info">
 
                 <TextView

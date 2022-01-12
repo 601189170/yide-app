@@ -236,6 +236,11 @@ class GateDetailInfoActivity : BaseActivity() {
             val type = it.inOut?.toInt() ?: 2
             dataList.add(GateDetailInfo(date, time, type, title))
         }
+        if (dataList.isEmpty()) {
+            gateDetailInfoBinding.clDetailedRecord.visibility = View.GONE
+        } else {
+            gateDetailInfoBinding.clDetailedRecord.visibility = View.VISIBLE
+        }
         gateDetailInfoListAdapter.notifyDataSetChanged()
     }
 
@@ -289,7 +294,13 @@ class GateDetailInfoActivity : BaseActivity() {
      */
     private fun showFaceImage(imageView: ImageView, path: String) {
         loge("showFaceImage: $path")
+        //android.resource://包名/drawable/"+R.drawable.news
         if (TextUtils.isEmpty(path)) {
+            Glide.with(this)
+                .load("android.resource://com.yyide.chatim/drawable/"+R.drawable.default_head)
+                .circleCrop()
+                .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                .into(imageView)
             return
         }
         imageView.visibility = View.VISIBLE

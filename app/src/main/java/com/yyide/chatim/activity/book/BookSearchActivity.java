@@ -95,6 +95,11 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         if (!search_history.isEmpty()) {
             tags.addAll(search_history);
         }
+        if (tags.isEmpty()) {
+            cl_search_history.setVisibility(View.GONE);
+        } else {
+            cl_search_history.setVisibility(View.VISIBLE);
+        }
         itemBookSearchHistoryAdapter = new ItemBookSearchHistoryAdapter(this, tags);
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(this);
         //flexDirection 属性决定主轴的方向（即项目的排列方向）。类似 LinearLayout 的 vertical 和 horizontal。
@@ -174,12 +179,16 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 
     private void showHistory() {
         cl_search_content.setVisibility(View.GONE);
-        cl_search_history.setVisibility(View.VISIBLE);
         Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<>());
         if (!search_history.isEmpty()) {
             tags.clear();
             tags.addAll(search_history);
             itemBookSearchHistoryAdapter.notifyDataSetChanged();
+        }
+        if (tags.isEmpty()) {
+            cl_search_history.setVisibility(View.GONE);
+        } else {
+            cl_search_history.setVisibility(View.VISIBLE);
         }
     }
 
@@ -193,6 +202,7 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         search_history.clear();
         tags.clear();
         MMKV.defaultMMKV().encode(BOOK_SEARCH_HISTORY, search_history);
+        cl_search_history.setVisibility(View.GONE);
         itemBookSearchHistoryAdapter.notifyDataSetChanged();
     }
 

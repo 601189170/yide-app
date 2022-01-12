@@ -14,6 +14,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.listener.OnDateSetListener
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.book.BookSearchActivity
 import com.yyide.chatim.adapter.gate.GateThroughData
 import com.yyide.chatim.base.BaseActivity
@@ -31,6 +32,7 @@ import com.yyide.chatim.model.gate.Result
 import com.yyide.chatim.model.gate.SiteBean
 import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
+import com.yyide.chatim.utils.SelectorDialogUtil
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.viewmodel.gate.ClassTeacherViewModel
 import com.yyide.chatim.viewmodel.gate.GateSiteViewModel
@@ -60,7 +62,7 @@ class GateClassTeacherActivity : BaseActivity() {
     private val classList = mutableListOf<LeaveDeptRsp.DataBean>()
     private val viewModel: ClassTeacherViewModel by viewModels()
     private val siteViewModel: GateSiteViewModel by viewModels()
-    private var siteData = mutableListOf<SelectTableClassesRsp.DataBean>()
+    private var siteData = mutableListOf<SiteBean>()
     private val gateThroughPeopleListViewModel: GateThroughPeopleListViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -198,25 +200,10 @@ class GateClassTeacherActivity : BaseActivity() {
             return
         }
         siteData.clear()
-        data.forEach {
-            val dataBean = SelectTableClassesRsp.DataBean()
-            dataBean.id = it.id?.toLong() ?: 0L
-            dataBean.name = it.name
-            dataBean.showName = it.name
-            val childDataList = mutableListOf<SelectTableClassesRsp.DataBean>()
-            it.children?.forEach {
-                val dataBean2 = SelectTableClassesRsp.DataBean()
-                dataBean2.id = it.id?.toLong() ?: 0L
-                dataBean2.name = it.name
-                dataBean2.showName = it.name
-                childDataList.add(dataBean2)
-            }
-            dataBean.list = childDataList
-            siteData.add(dataBean)
-        }
+        siteData.addAll(data)
         val childrenBean = children[0]
         siteId = childrenBean.id ?: ""
-        val title = String.format(getString(R.string.gate_page_title), siteBean.name)
+        val title = String.format(getString(R.string.gate_page_title), childrenBean.name)
         gateClassTeacherBinding.top.title.text = title
         if (data.size > 1 || children.size > 1) {
             //场地可选择
@@ -253,9 +240,10 @@ class GateClassTeacherActivity : BaseActivity() {
             )
             return
         }
-        val classListOfTeacherBean = data[0]
-        classId = classListOfTeacherBean.classId ?: ""
-        val className = classListOfTeacherBean.className
+        val classListOfTeacherBeanList = classList.filter { it.isDefault == 1 }
+        val classListOfTeacherBean = classListOfTeacherBeanList[0]
+        classId = classListOfTeacherBean.deptId ?: ""
+        val className = classListOfTeacherBean.deptName
         val drawable =
             ResourcesCompat.getDrawable(resources, R.drawable.icon_arrow_down, null)?.apply {
                 setBounds(0, 0, minimumWidth, minimumHeight)
@@ -294,14 +282,15 @@ class GateClassTeacherActivity : BaseActivity() {
      */
     fun initClassData(data: List<ClassListOfTeacherBean>) {
         classList.clear()
+        val classInfo = SpData.getClassInfo()
         data.forEach {
             val dataBean = LeaveDeptRsp.DataBean()
             dataBean.deptId = it.classId
             dataBean.deptName = it.className
-            dataBean.isDefault = 0
+            dataBean.isDefault = if (classInfo.classesName == it.className) 1 else 0
             classList.add(dataBean)
         }
-        if (classList.isNotEmpty()) {
+        if (classList.isNotEmpty() && classList.find { it.isDefault == 1 } == null) {
             classList[0].isDefault = 1
         }
     }
@@ -309,21 +298,14 @@ class GateClassTeacherActivity : BaseActivity() {
     private fun initView() {
         gateClassTeacherBinding.top.title.text = "校门口通行数据"
         gateClassTeacherBinding.top.title.setOnClickListener {
-            val switchTableClassPop = SwitchTableClassPop(this, siteData)
-            switchTableClassPop.setSelectClasses { id, classesName ->
-                loge("id=$id,classesName=$classesName")
-                var parentName = ""
-                siteData.forEach {
-                    val name = it.name
-                    for (dataBean in it.list) {
-                        if (classesName == dataBean.showName) {
-                            parentName = name
-                            return@forEach
-                        }
-                    }
-                }
-                this.siteId = id.toString()
-                val title = String.format(getString(R.string.gate_page_title), parentName)
+            SelectorDialogUtil.showSiteSelector(
+                this,
+                "切换场地",
+                siteId,
+                siteData
+            ) { siteBean, childBean ->
+                this.siteId = childBean.id
+                val title = String.format(getString(R.string.gate_page_title), childBean.name)
                 gateClassTeacherBinding.top.title.text = title
                 //切换场地
                 gateThroughPeopleListViewModel.queryAllStudentPassageInOutDetails(

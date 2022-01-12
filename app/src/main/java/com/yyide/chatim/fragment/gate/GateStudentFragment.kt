@@ -168,8 +168,16 @@ class GateStudentFragment() : Fragment() {
         fragmentGateStudentStaffBinding.rgType.visibility = View.VISIBLE
         fragmentGateStudentStaffBinding.recyclerView.visibility = View.VISIBLE
         fragmentGateStudentStaffBinding.rgType.removeAllViews()
-        addRadioGroupView(fragmentGateStudentStaffBinding.rgType,data)
-        fragmentGateStudentStaffBinding.rgType.setOnCheckedChangeListener { _, checkedId ->
+        val radioGroup = RadioGroup(requireContext())
+        radioGroup.orientation = LinearLayout.HORIZONTAL
+        val layoutParams = ViewGroup.LayoutParams(
+            RadioGroup.LayoutParams.MATCH_PARENT,
+            RadioGroup.LayoutParams.WRAP_CONTENT
+        )
+        radioGroup.layoutParams = layoutParams
+        addRadioGroupView(radioGroup,data)
+        fragmentGateStudentStaffBinding.rgType.addView(radioGroup)
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
             loge("学段类型改变：$checkedId")
             val barrierSectionBean = data[checkedId]
             dataList.clear()
@@ -184,15 +192,26 @@ class GateStudentFragment() : Fragment() {
     }
     ////动态添加视图
     private fun addRadioGroupView(radiogroup: RadioGroup,data: List<BarrierSectionBean>) {
+        radiogroup.removeAllViews()
         for (index in data.indices) {
             val button = RadioButton(requireContext())
-            setRaidBtnAttribute(button, data[index].name?:"", index)
+            button.isChecked = false
+            setRaidBtnAttribute(button, data[index].name ?: "", index)
             radiogroup.addView(button)
-            val layoutParams: LinearLayout.LayoutParams = button
-                .getLayoutParams() as LinearLayout.LayoutParams
-            layoutParams.setMargins(0, 0, DisplayUtils.dip2px(requireContext(), 10f), 0) //4个参数按顺序分别是左上右下
-            button.setLayoutParams(layoutParams)
-            button.isChecked = index == 0
+            val layoutParams: LinearLayout.LayoutParams =
+                button.layoutParams as LinearLayout.LayoutParams
+            layoutParams.setMargins(
+                0,
+                0,
+                DisplayUtils.dip2px(requireContext(), 10f),
+                0
+            ) //4个参数按顺序分别是左上右下
+            button.layoutParams = layoutParams
+            if (index == 0) {
+                loge("id = ${button.id}")
+                radiogroup.check(button.id)
+            }
+            //button.isChecked = index == 0
         }
     }
 
