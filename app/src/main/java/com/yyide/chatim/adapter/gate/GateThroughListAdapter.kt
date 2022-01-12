@@ -108,7 +108,7 @@ class GateThroughListAdapter(
         var date = ""
         if (!TextUtils.isEmpty(throughData.addTime)) {
             date = ScheduleDaoUtil.toDateTime(throughData.addTime ?: "")
-                .toStringTime("yyyy/MM/dd HH:mm")
+                .toStringTime("yyyy/MM/dd HH:mm:ss")
         }
         loge("${getItemViewType(position)} ,${throughData}")
         when (getItemViewType(position)) {
