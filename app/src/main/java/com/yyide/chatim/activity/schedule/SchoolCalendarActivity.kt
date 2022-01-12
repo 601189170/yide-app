@@ -332,7 +332,13 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
 
     override fun onClickDate(year: Int, month: Int, day: Int) {
         loge("onClickDate year=$year,month=${month+1},day=$day")
-        scrollToPosition(year, month, day)
+        if (this.curDateTime.year == year && this.curDateTime.monthOfYear == month + 1) {
+            scrollToPosition(year, month, day)
+        } else {
+            val curDateTime = DateTime(year, month + 1, day, 0, 0, 0).simplifiedDataTime()
+            this.curDateTime = curDateTime
+            update()
+        }
     }
 
     override fun onPageChange(year: Int, month: Int, day: Int) {

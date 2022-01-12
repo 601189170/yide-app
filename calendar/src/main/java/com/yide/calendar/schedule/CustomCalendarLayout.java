@@ -290,12 +290,22 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
 
     @Override
     public void onClickLastMonth(int year, int month, int day) {
-
+        final int currentItem = monthCalendarViewPager.getCurrentItem();
+        if (currentItem != 0){
+            final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+            final DateTime dateTime = DateTime.parse(year + "-" + (month + 1) + "-" + day, dateTimeFormatter);
+            setCurrentMonthCalendar(dateTime);
+        }
     }
 
     @Override
     public void onClickNextMonth(int year, int month, int day) {
-
+        final int currentItem = monthCalendarViewPager.getCurrentItem();
+        if (currentItem != monthViewList.size() - 1) {
+            final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+            final DateTime dateTime = DateTime.parse(year + "-" + (month + 1) + "-" + day, dateTimeFormatter);
+            setCurrentMonthCalendar(dateTime);
+        }
     }
 
     /**
