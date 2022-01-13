@@ -24,6 +24,8 @@ import com.yide.calendar.LunarCalendarUtils;
 import com.yide.calendar.R;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Calendar;
 import java.util.List;
@@ -193,6 +195,11 @@ public class SchoolCalendarWeekView extends View {
     }
 
     public void setSelectYearMonth(int year, int month, int day) {
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        final DateTime date = DateTime.parse(year + "-" + (month + 1) + "-" + day, dateTimeFormatter);
+        if (date.compareTo(minDateTime) < 0 || date.compareTo(maxDateTime) > 0) {
+            return;
+        }
         mSelYear = year;
         mSelMonth = month;
         mSelDay = day;
