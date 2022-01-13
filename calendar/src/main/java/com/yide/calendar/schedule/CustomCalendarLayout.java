@@ -20,6 +20,7 @@ import com.yide.calendar.R;
 import com.yide.calendar.month.MonthView;
 import com.yide.calendar.month.OnMonthClickListener;
 import com.yide.calendar.week.OnWeekClickListener;
+import com.yide.calendar.week.SchoolCalendarWeekView;
 import com.yide.calendar.week.WeekView;
 
 import org.joda.time.DateTime;
@@ -104,7 +105,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
             weekCalendarViewPager.setVisibility(INVISIBLE);
             ivShowCalendar.setImageResource(R.drawable.calendar_up_icon);
             //显示月，调整月的位置
-            final WeekView weekView = (WeekView)weekViewList.get(weekCalendarViewPager.getCurrentItem());
+            final SchoolCalendarWeekView weekView = (SchoolCalendarWeekView)weekViewList.get(weekCalendarViewPager.getCurrentItem());
             if (weekView != null){
                 final int selectYear = weekView.getSelectYear();
                 final int selectMonth = weekView.getSelectMonth();
@@ -149,7 +150,10 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         for (int i = 0; i < weeks; i++) {
             DateTime dateTime = startDate.plusWeeks(i);
             dateTime = dateTime.plusDays(-dateTime.getDayOfWeek() % 7);
-            WeekView weekView = new WeekView(context, mArray, dateTime);
+            SchoolCalendarWeekView weekView = new SchoolCalendarWeekView(context, mArray, dateTime,startDate,endDate);
+            if (i == 0) {
+                weekView.setSelectYearMonth(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth());
+            }
             weekView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             weekView.setOnWeekClickListener(this);
             weekViewList.add(weekView);
@@ -209,7 +213,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         @Override
         public void onPageSelected(int position) {
             super.onPageSelected(position);
-            final WeekView weekView = (WeekView) weekViewList.get(position);
+            final SchoolCalendarWeekView weekView = (SchoolCalendarWeekView) weekViewList.get(position);
             if (weekView != null){
                 final int selectYear = weekView.getSelectYear();
                 final int selectMonth = weekView.getSelectMonth();
@@ -230,7 +234,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
 
         @Override
         public void onPageSelected(int position) {
-            final WeekView weekView = (WeekView) weekViewList.get(position);
+            final SchoolCalendarWeekView weekView = (SchoolCalendarWeekView) weekViewList.get(position);
             if (weekView != null) {
                 final int selectYear = weekView.getSelectYear();
                 final int selectMonth = weekView.getSelectMonth();
@@ -267,7 +271,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
 
     public void setCurrentWeekCalendar(DateTime dateTime) {
         for (int i = 0; i < weekViewList.size(); i++) {
-            WeekView weekView = (WeekView) weekViewList.get(i);
+            SchoolCalendarWeekView weekView = (SchoolCalendarWeekView) weekViewList.get(i);
             final DateTime startDate = weekView.getStartDate();
             final DateTime endDate = weekView.getEndDate();
             if (dateTime.compareTo(startDate) >= 0 && dateTime.compareTo(endDate) <= 0) {
@@ -322,9 +326,9 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         mOnCalendarClickListener.onClickDate(year, month, day);
     }
 
-    public WeekView getCurrentWeekView() {
+    public SchoolCalendarWeekView getCurrentWeekView() {
         final int currentItem = weekCalendarViewPager.getCurrentItem();
-        return (WeekView) weekViewList.get(currentItem);
+        return (SchoolCalendarWeekView) weekViewList.get(currentItem);
     }
 
     public MonthView getCurrentMonthView() {
