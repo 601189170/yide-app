@@ -46,7 +46,7 @@
         android:layout_height="0dp"
         android:paddingStart="@dimen/dp_12"
         android:paddingEnd="@dimen/dp_12"
-        android:paddingBottom="@dimen/dp_40"
+        android:paddingBottom="@dimen/dp_50"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
         tools:listitem="@layout/item_gate_through_list_two_column_data" />
