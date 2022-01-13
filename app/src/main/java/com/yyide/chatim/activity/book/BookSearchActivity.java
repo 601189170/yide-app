@@ -2,11 +2,14 @@ package com.yyide.chatim.activity.book;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -61,6 +64,9 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 
     @BindView(R.id.recyclerview_search_history)
     RecyclerView recyclerviewHistory;
+
+    @BindView(R.id.btn_delete_search)
+    Button btnDeleteSearch;
 
     private ItemBookSearchAdapter adapter;
     private ItemBookSearchHistoryAdapter itemBookSearchHistoryAdapter;
@@ -134,6 +140,27 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
                 return true;
             }
             return false;
+        });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String s1 = s.toString();
+                if (!TextUtils.isEmpty(s1)) {
+                    btnDeleteSearch.setVisibility(View.VISIBLE);
+                } else {
+                    btnDeleteSearch.setVisibility(View.GONE);
+                }
+            }
         });
     }
 
