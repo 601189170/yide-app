@@ -41,7 +41,7 @@ class AdminViewModel : BaseViewModel() {
      */
     fun queryBasicsInfoBySiteId(queryTime: String, siteId: String) {
         viewModelScope.launch {
-            val body = mapOf("queryTime" to queryTime, "siteId" to siteId)
+            val body = mapOf("queryTime" to queryTime, "buildingId" to siteId)
             val toJSONString = JSON.toJSONString(body)
             loge("获取首页基础信息：$toJSONString")
             requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
@@ -65,7 +65,7 @@ class AdminViewModel : BaseViewModel() {
      */
     fun queryBarrierSectionStatistical(queryTime: String, siteId: String) {
         viewModelScope.launch {
-            val body = mapOf("queryTime" to queryTime, "siteId" to siteId)
+            val body = mapOf("queryTime" to queryTime, "buildingId" to siteId)
             val toJSONString = JSON.toJSONString(body)
             loge("获取首页学段统计信息：$toJSONString")
             requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
@@ -88,7 +88,7 @@ class AdminViewModel : BaseViewModel() {
      * 查询闸机统计教职工出入数--部门
      */
     fun queryTeacherBarrierPassageDataByDeptId(deptId: String?, queryTime: String?, siteId: String?) {
-        val body = mapOf("deptId" to deptId, "queryTime" to queryTime, "siteId" to siteId)
+        val body = mapOf("deptId" to deptId, "queryTime" to queryTime, "buildingId" to siteId)
         val toJSONString = JSON.toJSONString(body)
         loge("查询闸机统计教职工出入数--部门：$toJSONString")
         requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)

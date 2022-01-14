@@ -69,19 +69,19 @@ class GateStudentStaffActivity : BaseActivity() {
             return
         }
         val siteBean = data[0]
-        val children = siteBean.children
-        if (children.isEmpty()) {
-            //楼栋有数据但是场地为空
-            return
-        }
+//        val children = siteBean.children
+//        if (children.isEmpty()) {
+//            //楼栋有数据但是场地为空
+//            return
+//        }
         siteData.clear()
         siteData.addAll(data)
-        val childrenBean = children[0]
-        siteId = childrenBean.id ?: ""
-        val title = String.format(getString(R.string.gate_page_title), childrenBean.name)
+//        val childrenBean = children[0]
+        siteId = siteBean.id ?: ""
+        val title = String.format(getString(R.string.gate_page_title), siteBean.name)
         activityGateStudentStaffBinding.top.title.text = title
         activityGateStudentStaffBinding.top.title.isEnabled = false
-        if (data.size > 1 || children.size > 1) {
+        if (data.size > 1) {
             //场地可选择
             val drawable =
                 ResourcesCompat.getDrawable(resources, R.drawable.gate_down_icon, null)?.apply {
@@ -102,9 +102,9 @@ class GateStudentStaffActivity : BaseActivity() {
     private fun initView() {
         activityGateStudentStaffBinding.top.title.text = "通行数据"
         activityGateStudentStaffBinding.top.title.setOnClickListener {
-            SelectorDialogUtil.showSiteSelector(this, "切换场地",siteId,siteData){siteBean, childBean ->
-                this.siteId = childBean.id
-                val title = String.format(getString(R.string.gate_page_title), childBean.name)
+            SelectorDialogUtil.showSiteSelector(this, "切换场地",siteId,siteData,1){siteBean, childBean ->
+                this.siteId = siteBean.id//childBean.id
+                val title = String.format(getString(R.string.gate_page_title), siteBean.name)
                 activityGateStudentStaffBinding.top.title.text = title
                 //通知子fragment场地请求结果
                 siteViewModel.curSiteId.value = siteId

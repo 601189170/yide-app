@@ -96,6 +96,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/v_line"
             android:layout_width="0.5dp"
             android:layout_height="@dimen/dp_14"
             android:layout_gravity="center"

@@ -123,14 +123,25 @@ class GateClassTeacherActivity : BaseActivity() {
     private fun handleData(data: GateThroughPeopleListBean?) {
         if (data == null) {
             gateClassTeacherBinding.blankPage.visibility = View.VISIBLE
+            gateClassTeacherBinding.viewpager.visibility = View.GONE
+            gateClassTeacherBinding.slidingTabLayout.visibility = View.GONE
             return
         }
-        gateClassTeacherBinding.blankPage.visibility = View.GONE
         val layoutGateThroughSummaryAll = gateClassTeacherBinding.layoutGateThroughSummaryAll
         layoutGateThroughSummaryAll.tvGateEventTitle.text = data.title
         layoutGateThroughSummaryAll.tvThroughNumber.text = "${data.totalNumber}"
         layoutGateThroughSummaryAll.tvGoIntoNumber.text = "${data.intoNumber}"
         layoutGateThroughSummaryAll.tvGoOutNumber.text = "${data.outNumber}"
+
+        if (data.peopleList== null || data.peopleList?.isEmpty() == true){
+            gateClassTeacherBinding.blankPage.visibility = View.VISIBLE
+            gateClassTeacherBinding.viewpager.visibility = View.GONE
+            gateClassTeacherBinding.slidingTabLayout.visibility = View.GONE
+            return
+        }
+        gateClassTeacherBinding.blankPage.visibility = View.GONE
+        gateClassTeacherBinding.viewpager.visibility = View.VISIBLE
+        gateClassTeacherBinding.slidingTabLayout.visibility = View.VISIBLE
         //1出2入
         mTitles.clear()
         mTitles.add("通行人数(${data.totalNumber})")
@@ -194,18 +205,18 @@ class GateClassTeacherActivity : BaseActivity() {
             return
         }
         val siteBean = data[0]
-        val children = siteBean.children
-        if (children == null || children.isEmpty()) {
-            //楼栋有数据但是场地为空
-            return
-        }
+//        val children = siteBean.children
+//        if (children == null || children.isEmpty()) {
+//            //楼栋有数据但是场地为空
+//            return
+//        }
         siteData.clear()
         siteData.addAll(data)
-        val childrenBean = children[0]
-        siteId = childrenBean.id ?: ""
-        val title = String.format(getString(R.string.gate_page_title), childrenBean.name)
+//        val childrenBean = children[0]
+        siteId = siteBean.id ?: ""
+        val title = String.format(getString(R.string.gate_page_title), siteBean.name)
         gateClassTeacherBinding.top.title.text = title
-        if (data.size > 1 || children.size > 1) {
+        if (data.size > 1) {
             //场地可选择
             val drawable =
                 ResourcesCompat.getDrawable(resources, R.drawable.gate_down_icon, null)?.apply {
@@ -302,10 +313,11 @@ class GateClassTeacherActivity : BaseActivity() {
                 this,
                 "切换场地",
                 siteId,
-                siteData
+                siteData,
+                1,
             ) { siteBean, childBean ->
-                this.siteId = childBean.id
-                val title = String.format(getString(R.string.gate_page_title), childBean.name)
+                this.siteId = siteBean.id
+                val title = String.format(getString(R.string.gate_page_title), siteBean.name)
                 gateClassTeacherBinding.top.title.text = title
                 //切换场地
                 gateThroughPeopleListViewModel.queryAllStudentPassageInOutDetails(

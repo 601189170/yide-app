@@ -47,7 +47,7 @@ class GateThroughPeopleListViewModel : BaseViewModel() {
             "queryTime" to queryTime,
             "queryType" to queryType,
             "id" to id,
-            "siteId" to siteId
+            "buildingId" to siteId
         )
         val toJSONString = JSON.toJSONString(mapOf)
         loge("获取闸机通行的人员列表：$toJSONString")
@@ -73,7 +73,7 @@ class GateThroughPeopleListViewModel : BaseViewModel() {
     fun queryAllTeacherPassageInOutDetails(queryTime:String?,siteId:String?){
         val mapOf = mapOf(
             "queryTime" to queryTime,
-            "siteId" to siteId
+            "buildingId" to siteId
         )
         val toJSONString = JSON.toJSONString(mapOf)
         loge("获取闸机通行的人员列表：$toJSONString")

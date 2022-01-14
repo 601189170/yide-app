@@ -80,7 +80,7 @@ class ThroughPeopleDetailViewModel : BaseViewModel() {
             "peopleType" to peopleType,
             "queryTime" to queryTime,
             "userId" to userId,
-            "siteId" to siteId
+            "buildingId" to siteId
         )
         val toJSONString = JSON.toJSONString(mapOf)
         loge("获取闸机通行的人员列表：$toJSONString")
