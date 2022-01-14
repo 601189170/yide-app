@@ -152,7 +152,7 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
             dateTime = dateTime.plusDays(-dateTime.getDayOfWeek() % 7);
             SchoolCalendarWeekView weekView = new SchoolCalendarWeekView(context, mArray, dateTime,startDate,endDate);
             if (i == 0) {
-                weekView.setSelectYearMonth(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth());
+                weekView.setSelectYearMonth(startDate.getYear(), startDate.getMonthOfYear()-1, startDate.getDayOfMonth());
             }
             weekView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             weekView.setOnWeekClickListener(this);
