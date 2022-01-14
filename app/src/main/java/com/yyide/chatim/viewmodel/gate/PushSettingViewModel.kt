@@ -24,20 +24,20 @@ import java.lang.Exception
 class PushSettingViewModel : BaseViewModel() {
     lateinit var requestBody: RequestBody
     private val _getPushSettingList =
-        MutableStateFlow<Result<List<PushSettingBean.OffFormListBean>>>(Result.Success(null))
-    val getPushSettingList: StateFlow<Result<List<PushSettingBean.OffFormListBean>>> =
+        MutableStateFlow<Result<List<PushSettingBean>>>(Result.Success(null))
+    val getPushSettingList: StateFlow<Result<List<PushSettingBean>>> =
         _getPushSettingList
 
     private val _updatePushSettingList = MutableStateFlow<Result<BaseRsp>>(Result.Success(null))
     val updatePushSettingList: StateFlow<Result<BaseRsp>> = _updatePushSettingList
 
-    private val getPushSettingListRequest: Flow<GateBaseRsp<PushSettingBean>> = flow {
+    private fun getPushSettingListRequest(): Flow<GateBaseRsp<List<PushSettingBean>>> = flow {
         networkExceptionHandler()
         val queryUserNoticeOnOffByUserId = gateDataApi.queryUserNoticeOnOffByUserId()
         emit(queryUserNoticeOnOffByUserId)
     }
 
-    private val updatePushSettingListRequest: Flow<BaseRsp> = flow {
+    private fun updatePushSettingListRequest(): Flow<BaseRsp> = flow {
         networkExceptionHandler()
         val updateUserNoticeOnOffByUserIdAndType =
             gateDataApi.updateUserNoticeOnOffByUserIdAndType(requestBody)
@@ -49,14 +49,14 @@ class PushSettingViewModel : BaseViewModel() {
      */
     fun queryUserNoticeOnOffByUserId() {
         viewModelScope.launch {
-            getPushSettingListRequest
+            getPushSettingListRequest()
                 .flowOn(Dispatchers.Default)
                 .catch { exception ->
                     _getPushSettingList.value = Result.Error(exception)
                 }
                 .collect {
                     if (it.code == 200 && it.data != null) {
-                        _getPushSettingList.value = Result.Success(it.data!!.offFormList)
+                        _getPushSettingList.value = Result.Success(it.data)
                     } else {
                         _getPushSettingList.value = Result.Error(Exception("${it.code},${it.msg}"))
                     }
@@ -67,7 +67,7 @@ class PushSettingViewModel : BaseViewModel() {
     /**
      * 更新用户开关
      */
-    fun updateUserNoticeOnOffByUserIdAndType(data: List<PushSettingBean.OffFormListBean>) {
+    fun updateUserNoticeOnOffByUserIdAndType(data: List<PushSettingBean>) {
         if (data.isEmpty()) {
             return
         }
@@ -75,7 +75,7 @@ class PushSettingViewModel : BaseViewModel() {
         loge("更新用户开关:$toJSONString")
         requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
         viewModelScope.launch {
-            updatePushSettingListRequest
+            updatePushSettingListRequest()
                 .flowOn(Dispatchers.Default)
                 .catch { exception ->
                     _updatePushSettingList.value = Result.Error(exception)

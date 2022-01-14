@@ -91,7 +91,7 @@ interface GateDataApi {
      * https://api.uat.edu.1d1j.net/message/cloud-message/message-push/push/mobile/v1/queryUserNoticeOnOffByUserId
      */
     @GET("/message/cloud-message/message-push/push/mobile/v1/queryUserNoticeOnOffByUserId")
-    suspend fun queryUserNoticeOnOffByUserId(): GateBaseRsp<PushSettingBean>
+    suspend fun queryUserNoticeOnOffByUserId(): GateBaseRsp<List<PushSettingBean>>
 
     /**
      * 更新用户开关
