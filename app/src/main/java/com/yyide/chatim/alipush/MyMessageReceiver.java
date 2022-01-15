@@ -93,7 +93,7 @@ public class MyMessageReceiver extends MessageReceiver {
                 } else if ("2".equals(pushModel.getPushType())) {
                     //跳转至待办
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
-                } else if ("3".equals(pushModel.getPushType()) || "6".equals(pushModel.getPushType())) {
+                } else if ("3".equals(pushModel.getPushType()) || "6".equals(pushModel.getPushType()) || "9".equals(pushModel.getPushType())) {
                     //系统通知
                     Intent intent = new Intent(context, MessageNoticeActivity.class);
                     //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

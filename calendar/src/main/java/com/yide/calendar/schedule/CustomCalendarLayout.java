@@ -133,7 +133,8 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         monthViewList.clear();
         weekViewList.clear();
         //设置月日历
-        final int months = Months.monthsBetween(startDate, endDate).getMonths() + 1;
+        //final int months = Months.monthsBetween(startDate, endDate).getMonths() + 1;
+        final int months = (endDate.getYear() - startDate.getYear()) * 12 + (endDate.getMonthOfYear() - startDate.getMonthOfYear())+1;
         for (int i = 0; i < months; i++) {
             final DateTime dateTime = startDate.plusMonths(i);
             final MonthView monthView = new MonthView(context, mArray, dateTime.getYear(), dateTime.getMonthOfYear() - 1);

@@ -213,6 +213,14 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         if (eventOptional.isNotEmpty()) {
             val dataBean = eventOptional[0]
             curSemesterId = dataBean.deptId
+            if (toDateTime(dataBean.startDate, "yyyy-MM-dd") > toDateTime(
+                    dataBean.endDate,
+                    "yyyy-MM-dd"
+                )
+            ) {
+                ToastUtils.showShort("学期起始时间设置有误，开始日期不应该大于结束时间")
+                return
+            }
             calendarComposeLayout.setCalendarInterval(
                 toDateTime(dataBean.startDate, "yyyy-MM-dd"),
                 toDateTime(dataBean.endDate, "yyyy-MM-dd"),
