@@ -205,8 +205,10 @@ class GateDetailInfoActivity : BaseActivity() {
             gateDetailInfoBinding.groupEarliestPunchIn.visibility = View.VISIBLE
         }
         data.earliestTime?.let {
+            //最早1出 2入
+            val inOrOut = if (data.earliestlout == "1") "出" else "入"
             val earliestThroughTime =
-                ScheduleDaoUtil.toDateTime(it).toStringTime("HH:mm") + " 入-${data.earliestAddress}"
+                ScheduleDaoUtil.toDateTime(it).toStringTime("HH:mm") + " ${inOrOut}-${data.earliestAddress}"
             gateDetailInfoBinding.tvEarliestPunchInTitle.text = earliestThroughTime
         }
         if (TextUtils.isEmpty(data.latestTime)) {
@@ -215,8 +217,10 @@ class GateDetailInfoActivity : BaseActivity() {
             gateDetailInfoBinding.groupLatestPunchOut.visibility = View.VISIBLE
         }
         data.latestTime?.let {
+            //最晚1出 2入
+            val inOrOut = if (data.latestlout == "1") "出" else "入"
             val latestThroughTime =
-                ScheduleDaoUtil.toDateTime(it).toStringTime("HH:mm") + " 出-${data.latestAddress}"
+                ScheduleDaoUtil.toDateTime(it).toStringTime("HH:mm") + " ${inOrOut}-${data.latestAddress}"
             gateDetailInfoBinding.tvLatestPunchOutTitle.text = latestThroughTime
         }
 

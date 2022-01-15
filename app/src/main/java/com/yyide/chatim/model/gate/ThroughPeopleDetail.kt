@@ -11,9 +11,11 @@ data class ThroughPeopleDetail(
     var number: Int = 0,
     var earliestTime: String? = null,
     var earliestAddress: String? = null,
+    var earliestlout: String? = null,
     var image: String? = null,
     var latestTime: String? = null,
     var latestAddress: String? = null,
+    var latestlout: String? = null,
     var trajectoryInfo: List<TrajectoryInfoBean>? = null
 ) {
     data class TrajectoryInfoBean (

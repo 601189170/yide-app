@@ -92,21 +92,28 @@ class GateSecondBranchActivity : BaseActivity() {
     }
 
     private fun handleTeacherData(data: StaffBean?) {
-        if (data == null || data.totalNumber == 0 || (data.deptDataList == null && data.list == null)) {
+        if (data == null) {
             activityGateSecondBranchBinding.blankPage.visibility = View.VISIBLE
             activityGateSecondBranchBinding.layoutGateThroughBranchAll.root.visibility = View.GONE
             activityGateSecondBranchBinding.recyclerView.visibility = View.GONE
             return
         }
-        activityGateSecondBranchBinding.blankPage.visibility = View.GONE
         activityGateSecondBranchBinding.layoutGateThroughBranchAll.root.visibility = View.VISIBLE
-        activityGateSecondBranchBinding.recyclerView.visibility = View.VISIBLE
+        activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvGateEventTitle.text = "${data.name}"
         activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvThroughNumber.text =
             "${data.totalNumber}"
         activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvGoOutNumber.text =
             "${data.outNumber}"
         activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvGoIntoNumber.text =
             "${data.intoNumber}"
+
+        if (data.list.isNullOrEmpty() && data.deptDataList.isNullOrEmpty()){
+            activityGateSecondBranchBinding.blankPage.visibility = View.VISIBLE
+            activityGateSecondBranchBinding.recyclerView.visibility = View.GONE
+            return
+        }
+        activityGateSecondBranchBinding.blankPage.visibility = View.GONE
+        activityGateSecondBranchBinding.recyclerView.visibility = View.VISIBLE
         dataList.clear()
         data.deptDataList?.forEach {
             val gateBaseInfoBean = it.copy()
@@ -132,6 +139,7 @@ class GateSecondBranchActivity : BaseActivity() {
         activityGateSecondBranchBinding.layoutGateThroughBranchAll.root.visibility = View.VISIBLE
         activityGateSecondBranchBinding.recyclerView.visibility = View.VISIBLE
         data.basicsForm?.let {
+            activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvGateEventTitle.text = "${it.name}"
             activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvThroughNumber.text =
                 "${it.totalNumber}"
             activityGateSecondBranchBinding.layoutGateThroughBranchAll.tvGoOutNumber.text =
