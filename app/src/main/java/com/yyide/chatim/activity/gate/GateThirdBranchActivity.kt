@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
@@ -123,7 +124,7 @@ class GateThirdBranchActivity : BaseActivity() {
         fragments.add(PeopleThroughListFragment("2", "1", "$peopleType", "$queryTime", "$siteId", dataList2))
         activityGateThirdBranchBinding.viewpager.offscreenPageLimit = 3
         activityGateThirdBranchBinding.viewpager.adapter = object :
-            FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+            FragmentStatePagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
                 return fragments[position]
             }
