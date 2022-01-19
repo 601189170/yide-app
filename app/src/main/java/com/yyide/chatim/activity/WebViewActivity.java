@@ -237,7 +237,7 @@ public class WebViewActivity extends BaseActivity {
                     return SpData.User() != null ? SpData.User().data.accessToken : "";
                 } else if ("getUserInfo".equalsIgnoreCase(webModel.enentName)) {
                     GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-                    return JSON.toJSONString(new WebParamsUser(identityInfo.userId, identityInfo.schoolId));
+                    return JSON.toJSONString(new WebParamsUser(identityInfo.userId, identityInfo.schoolId+""));
                 }
             }
         }
