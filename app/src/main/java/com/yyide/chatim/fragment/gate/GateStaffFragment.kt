@@ -95,7 +95,7 @@ class GateStaffFragment() : Fragment() {
     }
 
     private fun handleData(data: StaffBean?) {
-        if (data == null || data.totalNumber == 0) {
+        if (data == null) {
             //空数据列表处理
             fragmentGateStudentStaffBinding.blankPage.visibility = View.VISIBLE
             fragmentGateStudentStaffBinding.rgType.visibility = View.GONE
