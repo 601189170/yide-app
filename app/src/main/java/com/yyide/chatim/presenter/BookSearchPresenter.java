@@ -2,6 +2,7 @@ package com.yyide.chatim.presenter;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.BookRsp;
@@ -22,10 +23,16 @@ public class BookSearchPresenter extends BasePresenter<BookSearchView> {
         attachView(view);
     }
 
-    public void bookSearch(String name, String type){
+    public void bookSearch(String name, String type,String queryType){
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("type", type);
         hashMap.put("name",name);
+        //试用范围 1 通讯录 2 闸机
+        if (BookSearchActivity.FROM_GATE.equals(queryType)) {
+            hashMap.put("queryType", 2);
+        } else {
+            hashMap.put("queryType", 1);
+        }
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(hashMap));
         mvpView.showLoading();
         addSubscription(dingApiStores.selectAllList(body), new ApiCallback<BookSearchRsp>() {

@@ -84,10 +84,12 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
      */
     public static String FROM_GATE = "from_gate";
 
+    public String from;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final String from = getIntent().getStringExtra("from");
+        from = getIntent().getStringExtra("from");
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ItemBookSearchAdapter();
         adapter.setFrom(from);
@@ -166,9 +168,9 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 
     private void search(String keyWord) {
         if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-            mvpPresenter.bookSearch(keyWord, "1");
+            mvpPresenter.bookSearch(keyWord, "1",from);
         } else {
-            mvpPresenter.bookSearch(keyWord, "2");
+            mvpPresenter.bookSearch(keyWord, "2",from);
         }
     }
 
