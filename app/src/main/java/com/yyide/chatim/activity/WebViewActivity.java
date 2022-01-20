@@ -237,13 +237,21 @@ public class WebViewActivity extends BaseActivity {
                     return SpData.User() != null ? SpData.User().data.accessToken : "";
                 } else if ("getUserInfo".equalsIgnoreCase(webModel.enentName)) {
                     GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-                    return JSON.toJSONString(new WebParamsUser(identityInfo.userId, identityInfo.schoolId+""));
+                    GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+                    String userId = "";
+                    String schoolId = "";
+                    if (identityInfo != null) {
+                        schoolId = identityInfo.schoolId + "";
+                    }
+                    if (classInfo != null) {
+                        userId = classInfo.studentUserId;
+                    }
+                    return JSON.toJSONString(new WebParamsUser(userId, schoolId));
                 }
             }
         }
         return "";
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
