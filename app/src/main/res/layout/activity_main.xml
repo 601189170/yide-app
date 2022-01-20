@@ -91,8 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="@dimen/dp_2"
-                android:layout_marginBottom="4dp"
+                android:layout_marginTop="@dimen/dp_4"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:minWidth="18dp"
@@ -100,7 +99,6 @@
                 android:textColor="#fff"
                 android:textSize="@dimen/text_10"
                 android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/tab2"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
