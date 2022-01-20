@@ -60,19 +60,37 @@
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.flyco.tablayout.SlidingTabLayout
+<!--    <com.flyco.tablayout.SlidingTabLayout-->
+<!--        android:id="@+id/slidingTabLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@color/white"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/cl_gate_base_detail"-->
+<!--        app:tl_indicator_color="@color/colorPrimary"-->
+<!--        app:tl_indicator_height="3dp"-->
+<!--        app:tl_indicator_width="@dimen/dp_50"-->
+<!--        app:tl_tab_space_equal="true"-->
+<!--        app:tl_textSelectColor="#2C8AFF"-->
+<!--        app:tl_textUnselectColor="#909399"-->
+<!--        app:tl_textsize="@dimen/text_14" />-->
+
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/slidingTabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/cl_gate_base_detail"
-        app:tl_indicator_color="@color/colorPrimary"
-        app:tl_indicator_height="3dp"
-        app:tl_indicator_width="@dimen/dp_50"
-        app:tl_tab_space_equal="true"
-        app:tl_textSelectColor="#2C8AFF"
-        app:tl_textUnselectColor="#909399"
-        app:tl_textsize="@dimen/text_14" />
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed"
+        app:tabBackground="@color/transparent"
+        app:tabRippleColor="@color/transparent"
+        app:tabSelectedTextColor="#2C8AFF"
+        app:tabTextColor="#909399" />
+
     <View
         android:id="@+id/v_line"
         android:layout_width="match_parent"

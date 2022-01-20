@@ -28,6 +28,7 @@ import com.yyide.chatim.adapter.gate.GateBranchData
 import com.yyide.chatim.adapter.gate.GateStudentStaffBranchAdapter
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
+import com.yyide.chatim.databinding.FragmentGateStudentBinding
 import com.yyide.chatim.databinding.FragmentGateStudentStaffBinding
 import com.yyide.chatim.model.gate.BarrierSectionBean
 import com.yyide.chatim.model.gate.GateBaseInfoBean
@@ -53,7 +54,7 @@ import java.util.*
  *              type=1学生
  */
 class GateStudentFragment() : Fragment() {
-    lateinit var fragmentGateStudentStaffBinding: FragmentGateStudentStaffBinding
+    lateinit var fragmentGateStudentStaffBinding: FragmentGateStudentBinding
     private var currentDate: DateTime = DateTime.now().simplifiedDataTime()
     private val adminViewModel: AdminViewModel by viewModels()
     private val siteViewModel: GateSiteViewModel by activityViewModels()
@@ -65,7 +66,7 @@ class GateStudentFragment() : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragmentGateStudentStaffBinding = FragmentGateStudentStaffBinding.inflate(layoutInflater)
+        fragmentGateStudentStaffBinding = FragmentGateStudentBinding.inflate(layoutInflater)
         return fragmentGateStudentStaffBinding.root
     }
 

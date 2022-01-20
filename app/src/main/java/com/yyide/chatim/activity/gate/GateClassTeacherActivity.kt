@@ -193,8 +193,9 @@ class GateClassTeacherActivity : BaseActivity() {
                 return mTitles[position]
             }
         }
-        gateClassTeacherBinding.slidingTabLayout.setViewPager(gateClassTeacherBinding.viewpager)
-        gateClassTeacherBinding.slidingTabLayout.currentTab = 0
+//        gateClassTeacherBinding.slidingTabLayout.setViewPager(gateClassTeacherBinding.viewpager)
+        gateClassTeacherBinding.slidingTabLayout.setupWithViewPager(gateClassTeacherBinding.viewpager)
+//        gateClassTeacherBinding.slidingTabLayout.currentTab = 0
     }
 
     /**
