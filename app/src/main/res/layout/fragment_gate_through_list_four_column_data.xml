@@ -74,4 +74,16 @@
         app:layout_constraintHeight_default="percent"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
         tools:listitem="@layout/item_gate_through_list_four_column_data" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/blank_page"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_default="percent"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/cl_top">
+
+        <include
+            android:id="@+id/layout_blank_page"
+            layout="@layout/layout_blank_page2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

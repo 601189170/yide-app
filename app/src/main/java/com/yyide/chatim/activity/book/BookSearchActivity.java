@@ -94,7 +94,7 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         adapter = new ItemBookSearchAdapter();
         adapter.setFrom(from);
         EmptyBinding emptyBinding = EmptyBinding.inflate(getLayoutInflater());
-        emptyBinding.tvDesc.setText("未搜索到人员");
+        emptyBinding.tvDesc.setText("未找到该人员");
         recyclerview.setAdapter(adapter);
         adapter.setEmptyView(emptyBinding.getRoot());
 

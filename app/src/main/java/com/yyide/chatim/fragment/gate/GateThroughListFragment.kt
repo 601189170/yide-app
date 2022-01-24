@@ -74,6 +74,8 @@ class PeopleThroughListFragment() : Fragment() {
                             View.GONE
                         //三列出校
                         fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "出校时间"
+                        fragmentGateThroughListBinding.layoutThreeColumnData.blankPage.visibility =
+                            if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
                             toDetail(it)
@@ -96,6 +98,8 @@ class PeopleThroughListFragment() : Fragment() {
                             fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "班级"
                         }
                         fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "出校时间"
+                        fragmentGateThroughListBinding.layoutFourColumnData.blankPage.visibility =
+                            if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
                             toDetail(it)
@@ -117,6 +121,8 @@ class PeopleThroughListFragment() : Fragment() {
                             View.GONE
                         //三列入校
                         fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "入校时间"
+                        fragmentGateThroughListBinding.layoutThreeColumnData.blankPage.visibility =
+                            if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
                             toDetail(it)
@@ -139,6 +145,8 @@ class PeopleThroughListFragment() : Fragment() {
                             fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "班级"
                         }
                         fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "入校时间"
+                        fragmentGateThroughListBinding.layoutFourColumnData.blankPage.visibility =
+                            if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
                             toDetail(it)
@@ -159,6 +167,8 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.GONE
                         //一列 通行人数
+                        fragmentGateThroughListBinding.layoutOneColumnData.blankPage.visibility =
+                            if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutOneColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
                             toDetail(it)
@@ -180,6 +190,8 @@ class PeopleThroughListFragment() : Fragment() {
                         } else {
                             fragmentGateThroughListBinding.layoutTwoColumnData.tvClass.text = "班级"
                         }
+                        fragmentGateThroughListBinding.layoutTwoColumnData.blankPage.visibility =
+                            if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutTwoColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                         val adapter = GateThroughListAdapter(requireContext(), dataList){
                             toDetail(it)

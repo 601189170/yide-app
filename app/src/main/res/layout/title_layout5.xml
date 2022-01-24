@@ -29,7 +29,7 @@
             android:textSize="18dp"
             android:text=""
             android:singleLine="true"
-            android:ellipsize="middle"
+            android:ellipsize="end"
             android:maxEms="12"
             android:textStyle="bold" />
 

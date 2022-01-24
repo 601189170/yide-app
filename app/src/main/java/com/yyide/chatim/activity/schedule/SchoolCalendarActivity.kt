@@ -70,7 +70,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
         initView()
         schoolCalendarViewModel.semesterList.observe(this) {
             if (it.isEmpty()) {
-                ToastUtils.showShort("查询校历学年学期失败")
+//                ToastUtils.showShort("查询校历学年学期失败")
                 schoolCalendarBinding.blankPage2.visibility = View.VISIBLE
                 schoolCalendarBinding.layoutCalendar.root.visibility = View.GONE
                 schoolCalendarBinding.top.flTitle.setBackgroundColor(resources.getColor(R.color.white))
