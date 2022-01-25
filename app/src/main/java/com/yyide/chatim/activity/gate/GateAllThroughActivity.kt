@@ -79,9 +79,8 @@ class GateAllThroughActivity : BaseActivity() {
         }
         activityGateAllThroughBinding.blankPage.visibility = View.GONE
         val layoutGateThroughSummaryAll = activityGateAllThroughBinding.layoutGateThroughSummaryAll
-        if (type == 1){
-            layoutGateThroughSummaryAll.tvGateEventTitle.text = data.title
-        }
+        activityGateAllThroughBinding.top.title.text = data.title
+        layoutGateThroughSummaryAll.tvGateEventTitle.text = data.title
         layoutGateThroughSummaryAll.tvThroughNumber.text = "${data.totalNumber}"
         layoutGateThroughSummaryAll.tvGoIntoNumber.text = "${data.intoNumber}"
         layoutGateThroughSummaryAll.tvGoOutNumber.text = "${data.outNumber}"
@@ -146,15 +145,15 @@ class GateAllThroughActivity : BaseActivity() {
     }
 
     private fun initView() {
-        if (type == 2) {
-            activityGateAllThroughBinding.top.title.text = "全校教职工出入校门详情"
-            activityGateAllThroughBinding.layoutGateThroughSummaryAll.tvGateEventTitle.text =
-                "全校教职工出入校门详情"
-        } else {
-            activityGateAllThroughBinding.top.title.text = "全校学生出入校门详情"
-            activityGateAllThroughBinding.layoutGateThroughSummaryAll.tvGateEventTitle.text =
-                "全校学生出入校门详情"
-        }
+//        if (type == 2) {
+//            activityGateAllThroughBinding.top.title.text = "全校教职工出入校门详情"
+//            activityGateAllThroughBinding.layoutGateThroughSummaryAll.tvGateEventTitle.text =
+//                "全校教职工出入校门详情"
+//        } else {
+//            activityGateAllThroughBinding.top.title.text = "全校学生出入校门详情"
+//            activityGateAllThroughBinding.layoutGateThroughSummaryAll.tvGateEventTitle.text =
+//                "全校学生出入校门详情"
+//        }
         activityGateAllThroughBinding.top.backLayout.setOnClickListener {
             finish()
         }
