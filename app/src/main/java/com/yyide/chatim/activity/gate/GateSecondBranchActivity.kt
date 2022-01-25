@@ -86,7 +86,7 @@ class GateSecondBranchActivity : BaseActivity() {
                     }
                 }
             }
-            gateSecondBranchViewModel.queryAllStudentInOutInfo(peopleType, queryTime, queryType, id)
+            gateSecondBranchViewModel.queryAllStudentInOutInfo(peopleType, queryTime, queryType, id,siteId)
         }
 
     }
@@ -172,6 +172,7 @@ class GateSecondBranchActivity : BaseActivity() {
                 intent.putExtra("peopleType", peopleType)
                 intent.putExtra("queryTime", queryTime)
                 intent.putExtra("queryType", data.type)
+                intent.putExtra("siteId", siteId)
                 startActivity(intent)
                 return@GateStudentStaffBranchAdapter
             }

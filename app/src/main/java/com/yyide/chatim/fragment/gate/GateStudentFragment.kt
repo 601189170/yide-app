@@ -143,6 +143,7 @@ class GateStudentFragment() : Fragment() {
             intent.putExtra("peopleType",1)
             intent.putExtra("queryTime",currentDate.toStringTime())
             intent.putExtra("queryType",3)
+            intent.putExtra("siteId",curSiteId)
             requireContext().startActivity(intent)
         }
         fragmentGateStudentStaffBinding.recyclerView.addItemDecoration(

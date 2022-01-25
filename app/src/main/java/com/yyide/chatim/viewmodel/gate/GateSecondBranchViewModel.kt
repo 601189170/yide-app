@@ -39,12 +39,13 @@ class GateSecondBranchViewModel : BaseViewModel() {
      * @param queryTime
      * @param queryType
      */
-    fun queryAllStudentInOutInfo(peopleType: Int?, queryTime: String?, queryType: Int?, id: String?) {
+    fun queryAllStudentInOutInfo(peopleType: Int?, queryTime: String?, queryType: Int?, id: String?,siteId:String?) {
         val mapOf = mapOf(
             "peopleType" to peopleType,
             "queryTime" to queryTime,
             "queryType" to queryType,
             "id" to id,
+            "buildingId" to siteId
         )
         val toJSONString = JSON.toJSONString(mapOf)
         loge("获取闸机通行的部门层级列表：$toJSONString")
