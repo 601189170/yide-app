@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="187dp"
-            android:text="班级/部门"
+            android:text="部门"
             android:textColor="#ff909399"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"

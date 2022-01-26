@@ -73,7 +73,7 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.GONE
                         //三列出校
-                        fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "出校时间"
+//                        fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "出校时间"
                         fragmentGateThroughListBinding.layoutThreeColumnData.blankPage.visibility =
                             if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -97,7 +97,7 @@ class PeopleThroughListFragment() : Fragment() {
                         } else {
                             fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "班级"
                         }
-                        fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "出校时间"
+//                        fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "出校时间"
                         fragmentGateThroughListBinding.layoutFourColumnData.blankPage.visibility =
                             if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -120,7 +120,7 @@ class PeopleThroughListFragment() : Fragment() {
                         fragmentGateThroughListBinding.layoutFourColumnData.root.visibility =
                             View.GONE
                         //三列入校
-                        fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "入校时间"
+//                        fragmentGateThroughListBinding.layoutThreeColumnData.tvTime.text = "入校时间"
                         fragmentGateThroughListBinding.layoutThreeColumnData.blankPage.visibility =
                             if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutThreeColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -144,7 +144,7 @@ class PeopleThroughListFragment() : Fragment() {
                         } else {
                             fragmentGateThroughListBinding.layoutFourColumnData.tvClass.text = "班级"
                         }
-                        fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "入校时间"
+//                        fragmentGateThroughListBinding.layoutFourColumnData.tvTime.text = "入校时间"
                         fragmentGateThroughListBinding.layoutFourColumnData.blankPage.visibility =
                             if (dataList.isEmpty()) View.VISIBLE else View.GONE
                         fragmentGateThroughListBinding.layoutFourColumnData.recyclerView.layoutManager = LinearLayoutManager(requireContext())

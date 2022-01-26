@@ -86,8 +86,8 @@ class GateAllThroughActivity : BaseActivity() {
         layoutGateThroughSummaryAll.tvGoOutNumber.text = "${data.outNumber}"
         //1出2入
         mTitles.add("通行人数(${data.totalNumber})")
-        mTitles.add("出校(${data.outNumber})")
-        mTitles.add("入校(${data.intoNumber})")
+        mTitles.add("出(${data.outNumber})")
+        mTitles.add("入(${data.intoNumber})")
 
         val dataList = mutableListOf<GateThroughPeopleListBean.PeopleListBean>()
         val dataList2 = mutableListOf<GateThroughPeopleListBean.PeopleListBean>()
