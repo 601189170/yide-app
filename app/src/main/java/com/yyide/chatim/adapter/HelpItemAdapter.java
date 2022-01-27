@@ -4,6 +4,7 @@ import android.graphics.drawable.LevelListDrawable;
 import android.os.Build;
 import android.text.Html;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
 
@@ -15,6 +16,8 @@ import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.HelpItemRep;
+import com.yyide.chatim.utils.DisplayUtils;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.SampleCoverVideo;
 
 import org.jetbrains.annotations.NotNull;
@@ -94,7 +97,11 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
 
                 //增加title
                 gsyVideoPlayer.getTitleTextView().setVisibility(View.GONE);
-
+                //设置封面
+                ImageView imageView = new ImageView(getContext());
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                GlideUtil.loadImage(getContext(),itemBean.getVideo(),imageView);
+                gsyVideoPlayer.setThumbImageView(imageView);
                 //设置返回键
                 gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
                 //设置全屏按键功能

@@ -33,6 +33,18 @@ public class GlideUtil {
         Glide.with(context).load(url).centerCrop().into(imageView);
     }
 
+    /**
+     * 加载第四秒的帧数作为封面
+     *  url就是视频的地址
+     */
+    public static void loadCover(Context context, String url, ImageView imageView) {
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Glide.with(context)
+                .setDefaultRequestOptions(new RequestOptions().frame(4000000).centerCrop())
+                .load(url)
+                .into(imageView);
+    }
+
     public static void loadImageHead(Context context, String url, ImageView imageView) {
         RequestOptions roundOptions = new RequestOptions()
                 .transform(new RoundedCorners(12));
