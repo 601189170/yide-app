@@ -40,7 +40,7 @@ public class GlideUtil {
     public static void loadCover(Context context, String url, ImageView imageView) {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Glide.with(context)
-                .setDefaultRequestOptions(new RequestOptions().frame(4000000).centerCrop())
+                .setDefaultRequestOptions(new RequestOptions().frame(1000000).centerCrop())
                 .load(url)
                 .into(imageView);
     }
