@@ -237,7 +237,8 @@ object DatePickerDialogUtil {
             }
             //不是当前年月，默认显示当前月的第一天
             if (calendarYear.year.toInt() != year || calendarMonth.month.toInt() != monthOfYear){
-                dayOfMonth = 1
+                //dayOfMonth = 1
+                dayOfMonth = startDate.dayOfMonth
             }
             loge("${calendarYear.year}-${calendarMonth.month}-$dayOfMonth")
             onDateSetListener(toDateTime("${calendarYear.year}-${calendarMonth.month}-$dayOfMonth","yyyy-MM-dd"))

@@ -1,8 +1,5 @@
 package com.yyide.chatim.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -18,7 +15,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
@@ -37,7 +33,6 @@ import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.WebModel;
 import com.yyide.chatim.model.WebParamsUser;
@@ -175,7 +170,7 @@ public class WebViewActivity extends BaseActivity {
 
             // For Android >= 5.0
             @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
                 uploadMessageAboveL = filePathCallback;
                 openImageChooserActivity();
                 return true;
@@ -237,14 +232,19 @@ public class WebViewActivity extends BaseActivity {
                     return SpData.User() != null ? SpData.User().data.accessToken : "";
                 } else if ("getUserInfo".equalsIgnoreCase(webModel.enentName)) {
                     GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-                    GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
                     String userId = "";
                     String schoolId = "";
                     if (identityInfo != null) {
                         schoolId = identityInfo.schoolId + "";
-                    }
-                    if (classInfo != null) {
-                        userId = classInfo.studentUserId;
+                        if (identityInfo.staffIdentity()) {
+                            userId = identityInfo.userId;
+                        } else {
+                            GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+                            if (classInfo != null) {
+                                userId = classInfo.studentUserId;
+                            }
+
+                        }
                     }
                     return JSON.toJSONString(new WebParamsUser(userId, schoolId));
                 }
