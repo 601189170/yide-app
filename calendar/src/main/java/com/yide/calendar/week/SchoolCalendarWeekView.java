@@ -373,12 +373,12 @@ public class SchoolCalendarWeekView extends View {
             } else {
                 for (int i = 0; i < 7; i++) {
                     List<HintCircle> hints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear() - 1);
-                    List<HintCircle> nextHints = CalendarUtils.getInstance(getContext()).getTaskHints(mStartDate.getYear(), mStartDate.getMonthOfYear());
                     DateTime date = mStartDate.plusDays(i);
                     int month = date.getMonthOfYear();
                     if (month == startMonth) {
                         drawHintCircle(hints, date.getDayOfMonth(), i, canvas);
                     } else {
+                        List<HintCircle> nextHints = CalendarUtils.getInstance(getContext()).getTaskHints(date.getYear(), date.getMonthOfYear()-1);
                         drawHintCircle(nextHints, date.getDayOfMonth(), i, canvas);
                     }
                 }

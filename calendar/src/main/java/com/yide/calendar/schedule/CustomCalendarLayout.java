@@ -1,5 +1,7 @@
 package com.yide.calendar.schedule;
 
+import static com.yide.calendar.week.SchoolCalendarWeekView.DAYS_OF_WEEK;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -147,7 +149,8 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         monthCalendarViewPager.addOnPageChangeListener(onMonthPageChangeListener);
         setCurrentMonthCalendar(currentDate);
         //设置周日历
-        final int weeks = Weeks.weeksBetween(startDate, endDate).getWeeks() + 1;
+        //final int weeks = Weeks.weeksBetween(startDate, endDate).getWeeks() + 1;
+        final int weeks = weekCount(startDate, endDate);
         for (int i = 0; i < weeks; i++) {
             DateTime dateTime = startDate.plusWeeks(i);
             dateTime = dateTime.plusDays(-dateTime.getDayOfWeek() % 7);
@@ -185,6 +188,24 @@ public class CustomCalendarLayout extends FrameLayout implements OnMonthClickLis
         }
     };
 
+    /**
+     * 计算两个时间段相隔多少周
+     * @param startDate
+     * @param endDate
+     * @return 周数
+     */
+    private int weekCount(DateTime startDate, DateTime endDate){
+        int week = 0;
+        DateTime mStartDate = startDate.minusDays(startDate.getDayOfWeek() % DAYS_OF_WEEK - 1);
+        while (true){
+            mStartDate = mStartDate.plusWeeks(1);
+            week++;
+            if (mStartDate.compareTo(endDate) > 0) {
+                break;
+            }
+        }
+        return week;
+    }
     private final ViewPager.OnPageChangeListener onMonthPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
