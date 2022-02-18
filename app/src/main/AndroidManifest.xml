@@ -15,8 +15,7 @@
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-<!--    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -80,6 +79,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+        <activity
+            android:name=".base.KTBaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.operation.OperationActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.meeting.MeetingHistoryActivity"
             android:exported="true"
@@ -567,12 +572,10 @@
 
         <meta-data
             android:name="com.vivo.push.api_key"
-            android:value="b750b6b5cb37b1d289a1aeb8f62a0a20"
-             />
+            android:value="b750b6b5cb37b1d289a1aeb8f62a0a20" />
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="105495198"
-            /> <!-- ********vivo推送设置end******** -->
+            android:value="105495198" /> <!-- ********vivo推送设置end******** -->
         <!-- ********OPPO 推送 start******** -->
         <service
             android:name="com.heytap.msp.push.service.CompatibleDataMessageCallbackService"
@@ -632,8 +635,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.scancode.ConfirmSuccessActivity"
-            android:screenOrientation="portrait" />
-        <!-- 日程编辑 -->
+            android:screenOrientation="portrait" /> <!-- 日程编辑 -->
         <activity
             android:name=".activity.schedule.ScheduleEditActivity"
             android:screenOrientation="portrait" />
@@ -667,41 +669,46 @@
         <activity
             android:name=".activity.schedule.ScheduleSettingsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.schedule.ScheduleTimetableClassActivity"
+        <activity
+            android:name=".activity.schedule.ScheduleTimetableClassActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.schedule.ScheduleParticipantSearchActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.schedule.ScheduleParticipantSearchActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FaceCaptureProtocolActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity android:name=".activity.schedule.SchoolCalendarActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.schedule.ScheduleSimpleEditionActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.schedule.ScheduleFullEditionActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.gate.GateDetailInfoActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.gate.GateClassTeacherActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.gate.GateStudentStaffActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activity.gate.GateAllThroughActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".activity.gate.GateSecondBranchActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.gate.GateThirdBranchActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.gate.GateDataSearchActivity"
-            android:screenOrientation="portrait"/>
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.SchoolCalendarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleSimpleEditionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleFullEditionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.gate.GateDetailInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.gate.GateClassTeacherActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.gate.GateStudentStaffActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.gate.GateAllThroughActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.gate.GateSecondBranchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.gate.GateThirdBranchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.gate.GateDataSearchActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

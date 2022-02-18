@@ -27,7 +27,8 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/dp_6"
         app:cardElevation="0dp"
-        app:cardPreventCornerOverlap="true"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/btn_confirm"
         app:layout_constraintTop_toBottomOf="@+id/ic_close">
 
@@ -35,9 +36,7 @@
             android:id="@+id/iv_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:visibility="visible"
+            android:scaleType="centerCrop"
             app:left_bottom_radius="@dimen/dp_6"
             app:left_top_radius="@dimen/dp_6"
             app:right_bottom_radius="@dimen/dp_6"

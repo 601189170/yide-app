@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/dp_12">
+
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_12"
+        android:text="请选择"
+        android:textColor="#ff909399"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvToDay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvToDay" />
+
+    <CheckedTextView
+        android:id="@+id/tvToDay"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="25dp"
+        android:background="@drawable/selector_border"
+        android:checked="true"
+        android:gravity="center"
+        android:text="今日"
+        android:textAlignment="center"
+        android:textColor="@drawable/selector_text_gary_blue_color"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvWeek"
+        app:layout_constraintStart_toEndOf="@+id/textview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <CheckedTextView
+        android:id="@+id/tvWeek"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="25dp"
+        android:background="@drawable/selector_border"
+        android:gravity="center"
+        android:text="本周"
+        android:textAlignment="center"
+        android:textColor="@drawable/selector_text_gary_blue_color"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvLastWeek"
+        app:layout_constraintStart_toEndOf="@+id/tvToDay"
+        app:layout_constraintTop_toTopOf="@+id/tvToDay" />
+
+    <CheckedTextView
+        android:id="@+id/tvLastWeek"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="25dp"
+        android:background="@drawable/selector_border"
+        android:gravity="center"
+        android:text="上周"
+        android:textAlignment="center"
+        android:textColor="@drawable/selector_text_gary_blue_color"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvMonth"
+        app:layout_constraintStart_toEndOf="@+id/tvWeek"
+        app:layout_constraintTop_toTopOf="@+id/tvWeek" />
+
+    <CheckedTextView
+        android:id="@+id/tvMonth"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="25dp"
+        android:background="@drawable/selector_border"
+        android:gravity="center"
+        android:text="本月"
+        android:textAlignment="center"
+        android:textColor="@drawable/selector_text_gary_blue_color"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@+id/tvLastMonth"
+        app:layout_constraintStart_toEndOf="@+id/tvLastWeek"
+        app:layout_constraintTop_toTopOf="@+id/tvLastWeek" />
+
+    <CheckedTextView
+        android:id="@+id/tvLastMonth"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="25dp"
+        android:background="@drawable/selector_border"
+        android:gravity="center"
+        android:text="上月"
+        android:textAlignment="center"
+        android:textColor="@drawable/selector_text_gary_blue_color"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvMonth"
+        app:layout_constraintTop_toTopOf="@+id/tvMonth" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout10"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/white_radius_6dp_border_1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview">
+
+        <TextView
+            android:id="@+id/tvStartTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:drawablePadding="@dimen/dp_12"
+            android:text="2021-08-01"
+            android:textColor="#ff909399"
+            android:textSize="13sp"
+            app:drawableStartCompat="@drawable/att_tab"
+            app:layout_constraintBottom_toBottomOf="@+id/view14"
+            app:layout_constraintEnd_toStartOf="@+id/view14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view14" />
+
+        <View
+            android:id="@+id/view14"
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="1dp"
+            android:background="#D8D8D8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvEndTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:drawablePadding="@dimen/dp_12"
+            android:text="2021-08-31"
+            android:textColor="#ff909399"
+            android:textSize="13sp"
+            app:drawableStartCompat="@drawable/att_tab"
+            app:layout_constraintBottom_toBottomOf="@+id/view14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view14"
+            app:layout_constraintTop_toTopOf="@+id/view14" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

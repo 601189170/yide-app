@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.yyide.chatim",
+  "variantName": "processReleaseResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 114,
+      "versionName": "1.1.4",
+      "outputFile": "yide_APK_release_V1.1.4_2022_02_18_14_03.apk"
+    }
+  ]
+}

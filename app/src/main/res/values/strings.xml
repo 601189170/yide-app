@@ -58,7 +58,6 @@
     <string name="weekly_home_title">周报</string>
     <string name="no_data">暂无数据</string>
     <string name="weekly_home_desc">一加壹想代表所有学生和家长和您说一句：辛苦啦~</string>
-    <string name="weekly_read_html"><b><font color='#1E1E1E'>全校学生考勤共<font color="#2C8AFF">%d</font>次异常，教职工共<font color="#2C8AFF">%d</font>次</font></b></string>
     <string name="weekly_student_tab">学生篇</string>
     <string name="weekly_teacher_tab">教师篇</string>
     <string name="weekly_homework_chart">作业图表</string>
@@ -70,13 +69,17 @@
     <string name="weekly_school_student_desc">全校学生每天%s出勤率</string>
     <string name="weekly_school_student_attend">全校各年级%s出勤率</string>
 
+    <!--作业-->
+    <string name="operation_title">作业</string>
+    <string name="operation_read_html"><b><font color='#909399'>已读 <font color="#2C8AFF"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
+    <string name="operation_completed_html"><b><font color='#909399'>已完成 <font color="#2C8AFF"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
+
     <!--会议-->
     <string name="meeting_create_title">创建会议</string>
     <string name="meeting_update_title">修改会议</string>
     <string name="meeting_title">会议</string>
     <string name="meeting_history_title">历史会议</string>
     <string name="meeting_please_input_time">请选择会议时间</string>
-
 
     // 主页Tab相关
     <string name="tab_contact_tab_text">通讯录</string>

@@ -100,7 +100,7 @@ public class HelpItemAdapter extends BaseMultiItemQuickAdapter<HelpItemRep.Recor
                 //设置封面
                 ImageView imageView = new ImageView(getContext());
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                GlideUtil.loadCover(getContext(),itemBean.getVideo(),imageView);
+                GlideUtil.loadCover(getContext(), itemBean.getVideo() + "?x-oss-process=video/snapshot,t_1000,m_fast", imageView);
                 gsyVideoPlayer.setThumbImageView(imageView);
                 //设置返回键
                 gsyVideoPlayer.getBackButton().setVisibility(View.GONE);
