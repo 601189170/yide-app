@@ -48,9 +48,11 @@ public class BaseConstant {
 
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.cn";
+    public static final String API_SERVER_URL_UAT_V2 = "http://192.168.3.148:9528";
 
     //Http访问地址
     public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;
+    public static String API_V2_SERVER_URL = API_SERVER_URL_UAT_V2;
 
     //通知模板地址
     public static final String API_SERVER_HTML_RELEASE = "https://www.1d1j.cn";

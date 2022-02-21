@@ -30,6 +30,7 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
+import com.yyide.chatim.model.sitetable.SiteTableRsp;
 import com.yyide.chatim.presenter.ClassTablePresenter;
 import com.yyide.chatim.view.ClassTableView;
 
@@ -91,11 +92,11 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         tvDesc.setText("本周暂无课表数据");
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-        if (SpData.getIdentityInfo().weekNum <= 0) {
-            tv_week.setText("");
-        } else {
-            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
-        }
+//        if (SpData.getIdentityInfo().weekNum <= 0) {
+//            tv_week.setText("");
+//        } else {
+//            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
+//        }
         grid.setOnItemClickListener((parent, view1, position, id) -> {
             timeAdapter.setPosition(position);
             index = position;
@@ -118,13 +119,14 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         }
         mvpPresenter.listAllBySchoolId();
         classInfo = SpData.getClassInfo();
-        if (classInfo != null) {
-            className.setText(classInfo.classesName);
-            mvpPresenter.listTimeDataByApp(classInfo.classesId);
-        } else {
-            className.setText("暂无班级");
-        }
-
+//        if (classInfo != null) {
+//            className.setText(classInfo.classesName);
+//            mvpPresenter.listTimeDataByApp(classInfo.classesId);
+//        } else {
+//            className.setText("暂无班级");
+//        }
+        //暂时使用固定班级id测试
+        mvpPresenter.listTimeDataByApp("1491675357620822017");
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
         if (identityInfo != null) {
             if ("Y".equalsIgnoreCase(identityInfo.schoolType)) {
@@ -146,7 +148,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 classPopNew.setOnCheckCallBack(classBean -> {
                     this.classInfo = classBean;
                     className.setText(classBean.classesName);
-                    mvpPresenter.listTimeDataByApp(classBean.classesId);
+//                    mvpPresenter.listTimeDataByApp(classBean.classesId);
                 });
             } else {
                 ToastUtils.showShort("您没有其他班级");
@@ -180,44 +182,51 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     }
 
     @Override
-    public void listTimeDataByApp(listTimeDataByAppRsp rsp) {
+    public void listTimeDataByApp(SiteTableRsp rsp) {
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-            if (rsp.data != null) {
+        if (rsp.getCode() == 0) {
+            if (rsp.getData() != null) {
                 empty.setVisibility(View.GONE);
                 mScrollView.setVisibility(View.VISIBLE);
-                String jc = rsp.data.timetableStructure;
-                String s = jc.replaceAll("节课", "");
-                int num = Integer.parseInt(s);
-                int earlyReading = rsp.data.earlyReadingList != null ? rsp.data.earlyReadingList.size() : 0;
-                int morning = rsp.data.morningList != null ? rsp.data.morningList.size() : 0;
-                int afternoon = rsp.data.afternoonList != null ? rsp.data.afternoonList.size() : 0;
-                int eveningStudy = rsp.data.eveningStudyList != null ? rsp.data.eveningStudyList.size() : 0;
-
+                //String jc = rsp.data.timetableStructure;
+                //String s = jc.replaceAll("节课", "");
+                //int num = Integer.parseInt(s);
+                final int thisWeek = rsp.getData().getThisWeek();
+                tv_week.setText(getString(R.string.weekNum, thisWeek + ""));
+                final SiteTableRsp.DataBean.SectionListBean sectionList = rsp.getData().getSectionList();
+                int earlyReading = sectionList.getEarlySelfStudyList() != null ? sectionList.getEarlySelfStudyList().size() : 0;
+                int morning = sectionList.getMorningList() != null ? sectionList.getMorningList().size() : 0;
+                int afternoon = sectionList.getAfternoonList() != null ? sectionList.getAfternoonList().size() : 0;
+                int night = sectionList.getNightList()!= null ? sectionList.getNightList().size() : 0;
+                int eveningStudy = sectionList.getLateSelfStudyList() != null ? sectionList.getLateSelfStudyList().size() : 0;
+                int sectionCount = earlyReading+morning+afternoon+night+eveningStudy;
                 List<String> sectionlist = new ArrayList<>();
-                if (rsp.data.subList != null && rsp.data.subList.size() > 0) {
-                    List<listTimeDataByAppRsp.DataBean.SubListBean> subListBeans = new ArrayList<>();
-                    for (int j = 0; j < num; j++) {//处理课表数据排版
-                        List<listTimeDataByAppRsp.DataBean.SubListBean> subListBeansWeek = new ArrayList<>();
-                        for (int i = 0; i < rsp.data.subList.size(); i++) {
-                            if (earlyReading > 0) { //有早读0和没早读1 下标不同
-                                if (rsp.data.subList.get(i).section == j) {
-                                    subListBeansWeek.add(rsp.data.subList.get(i));
-                                }
-                            } else {
-                                if (rsp.data.subList.get(i).section == j + 1) {
-                                    subListBeansWeek.add(rsp.data.subList.get(i));
-                                }
+                if (rsp.getData().getTimetableList() != null && rsp.getData().getTimetableList().size() > 0) {
+                    List<SiteTableRsp.DataBean.TimetableListBean> subListBeans = new ArrayList<>();
+                    //val courseBoxCount = sectionCount * 7
+                    //            for (index in 0 until courseBoxCount) {
+                    //                val listBean = SiteTableRsp.DataBean.TimetableListBean()
+                    //                courseList.add(listBean)
+                    //                it.timetableList?.forEach {
+                    //                    //if ((it.skxq - 1) == index % 7 && (it.xh) == ((index % sectionCount)+1)) {
+                    //                    if (index == ((it.section - 1) * 7 + it.week % 7 - 1)) {
+                    //                        courseList[index] = it
+                    //                        return@forEach
+                    //                    }
+                    //                }
+                    //            }
+                    int courseBoxCount = sectionCount * 7;
+                    for (int i = 0; i < courseBoxCount; i++) {
+                        final SiteTableRsp.DataBean.TimetableListBean listBean = new SiteTableRsp.DataBean.TimetableListBean();
+                        subListBeans.add(listBean);
+                        final List<SiteTableRsp.DataBean.TimetableListBean> timetableList = rsp.getData().getTimetableList();
+                        for (int j = 0; j < timetableList.size(); j++) {
+                            final SiteTableRsp.DataBean.TimetableListBean timetableListBean = timetableList.get(j);
+                            if (i ==((timetableListBean.getSection() - 1) * 7 + timetableListBean.getWeek() % 7 - 1)){
+                                subListBeans.set(i,timetableListBean);
+                                break;
                             }
                         }
-
-                        if (subListBeansWeek.size() < 7) {
-                            int index = subListBeansWeek.size() > 0 ? 7 - subListBeansWeek.size() : 7;
-                            for (int i = 0; i < index; i++) {
-                                subListBeans.add(new listTimeDataByAppRsp.DataBean.SubListBean());
-                            }
-                        }
-                        subListBeans.addAll(subListBeans.size(), subListBeansWeek);
                     }
                     tableItemAdapter.notifyData(subListBeans);
                 }
@@ -231,19 +240,42 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 if (afternoon > 0) {
                     createLeftTypeView(earlyReading + morning, 3, afternoon);//下午
                 }
-                if (eveningStudy > 0) {
-                    createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚自习
+                if (night>0){
+                    createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚上
                 }
-                for (int i = 0; i < num; i++) {
-                    if (earlyReading > 0 && i == 0) {
-                        sectionlist.add("早读");
-                    } else {
-                        if (earlyReading > 0) {
-                            sectionlist.add(i + "");
-                        } else {
-                            sectionlist.add(i + 1 + "");
-                        }
-                    }
+                if (eveningStudy > 0) {
+                    createLeftTypeView(morning + afternoon + earlyReading+night, 5, eveningStudy);//晚自习
+                }
+//                for (int i = 0; i < sectionCount; i++) {
+//                    if (earlyReading > 0 && i == 0) {
+//                        sectionlist.add("早读");
+//                    } else {
+//                        if (earlyReading > 0) {
+//                            sectionlist.add(i + "");
+//                        } else {
+//                            sectionlist.add(i + 1 + "");
+//                        }
+//                    }
+//                }
+                for (int i = 0; i < sectionList.getEarlySelfStudyList().size(); i++) {
+                    final SiteTableRsp.DataBean.SectionListBean.ListBean listBean = sectionList.getEarlySelfStudyList().get(i);
+                    sectionlist.add(listBean.getName());
+                }
+                for (int i = 0; i < sectionList.getMorningList().size(); i++) {
+                    final SiteTableRsp.DataBean.SectionListBean.ListBean listBean = sectionList.getMorningList().get(i);
+                    sectionlist.add(listBean.getName());
+                }
+                for (int i = 0; i < sectionList.getAfternoonList().size(); i++) {
+                    final SiteTableRsp.DataBean.SectionListBean.ListBean listBean = sectionList.getAfternoonList().get(i);
+                    sectionlist.add(listBean.getName());
+                }
+                for (int i = 0; i < sectionList.getNightList().size(); i++) {
+                    final SiteTableRsp.DataBean.SectionListBean.ListBean listBean = sectionList.getNightList().get(i);
+                    sectionlist.add(listBean.getName());
+                }
+                for (int i = 0; i < sectionList.getLateSelfStudyList().size(); i++) {
+                    final SiteTableRsp.DataBean.SectionListBean.ListBean listBean = sectionList.getLateSelfStudyList().get(i);
+                    sectionlist.add(listBean.getName());
                 }
                 tableSectionAdapter.notifyData(sectionlist);
             } else {
@@ -282,6 +314,11 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 break;
             case 4:
                 view.setY((CouseHeight * selection) + SizeUtils.dp2px(3));
+                view.setBackground(getResources().getDrawable(R.drawable.bg_table_type5));
+                text.setText("晚\n上");
+                break;
+            case 5:
+                view.setY((CouseHeight * selection) + SizeUtils.dp2px(4));
                 view.setBackground(getResources().getDrawable(R.drawable.bg_table_type4));
                 text.setText("晚\n自\n习");
                 break;
@@ -312,6 +349,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void OnSelectClassesListener(long classesId, String classesName) {
         className.setText(classesName);
-        mvpPresenter.listTimeDataByApp(classesId + "");
+        //mvpPresenter.listTimeDataByApp(classesId + "");
     }
 }

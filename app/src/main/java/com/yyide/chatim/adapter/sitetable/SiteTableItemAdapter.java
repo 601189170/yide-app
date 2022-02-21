@@ -26,7 +26,7 @@ import java.util.List;
 
 public class SiteTableItemAdapter extends BaseAdapter {
 
-    public List<SiteTableRsp.DataBean.ListBean> list = new ArrayList<>();
+    public List<SiteTableRsp.DataBean.TimetableListBean> list = new ArrayList<>();
 
     public int position = -1;
 
@@ -36,7 +36,7 @@ public class SiteTableItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public SiteTableRsp.DataBean.ListBean getItem(int position) {
+    public SiteTableRsp.DataBean.TimetableListBean getItem(int position) {
         return list.get(position);
     }
 
@@ -55,15 +55,15 @@ public class SiteTableItemAdapter extends BaseAdapter {
 //        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(80));
 //        layout.setLayoutParams(layoutParams);
         //text_view.setText(getItem(position).subjectName + "\n" + getItem(position).fromDateTime + "\n" + getItem(position).toDateTime);
-        text_view.setText(getItem(position).getKcmc());
-        final SiteTableRsp.DataBean.ListBean item = getItem(position);
+        text_view.setText(getItem(position).getSubjectName());
+        final SiteTableRsp.DataBean.TimetableListBean item = getItem(position);
         if (position % 7 == this.position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_ls));
         } else {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_white2));
         }
-        final String kssj = item.getKssj();
-        final String jssj = item.getJssj();
+        final String kssj = item.getStartTime();
+        final String jssj = item.getEndTime();
         final String date = item.getDate();
         if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(kssj) && !TextUtils.isEmpty(jssj)) {
             DateTime startTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " " + kssj, "yyyy-MM-dd HH:mm");
@@ -82,12 +82,12 @@ public class SiteTableItemAdapter extends BaseAdapter {
         return view;
     }
 
-    public void notifyData(List<SiteTableRsp.DataBean.ListBean> list) {
+    public void notifyData(List<SiteTableRsp.DataBean.TimetableListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }
 
-    public void notifyData(List<SiteTableRsp.DataBean.ListBean> list, int position) {
+    public void notifyData(List<SiteTableRsp.DataBean.TimetableListBean> list, int position) {
         this.list = list;
         this.position = position;
         notifyDataSetChanged();

@@ -8,6 +8,7 @@ import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.listTimeDataRsp;
+import com.yyide.chatim.model.sitetable.SiteTableRsp;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -20,7 +21,7 @@ public interface ClassTableView extends BaseView {
     void listAllBySchoolIdFail(String msg);
 
 
-    void listTimeDataByApp(listTimeDataByAppRsp rsp);
+    void listTimeDataByApp(SiteTableRsp rsp);
 
     void listTimeDataByAppFail(String rsp);
 

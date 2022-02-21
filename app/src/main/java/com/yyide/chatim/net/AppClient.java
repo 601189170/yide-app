@@ -37,7 +37,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class AppClient {
     public static Retrofit mDingRetrofit;
+    public static Retrofit mDingRetrofit2;
     private static OkHttpClient okHttpClient;
+    private static OkHttpClient okHttpClient2;
 
     public static Retrofit getDingRetrofit() {
         if (mDingRetrofit == null) {
@@ -49,6 +51,49 @@ public class AppClient {
                     .build();
         }
         return mDingRetrofit;
+    }
+
+    /**
+     * 临时使用固定token 正式上线替换getDingRetrofit()
+     * @return mDingRetrofit
+     */
+    @Deprecated
+    public static Retrofit getDingRetrofit2() {
+        if (mDingRetrofit2 == null) {
+            mDingRetrofit2 = new Retrofit.Builder()
+                    .baseUrl(BaseConstant.API_V2_SERVER_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                    .client(getOkHttpClient2())
+                    .build();
+        }
+        return mDingRetrofit2;
+    }
+    @Deprecated
+    public static OkHttpClient getOkHttpClient2() {
+        if (okHttpClient2 == null) {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            if (AppUtils.isAppDebug()) {
+                // Log信息拦截器
+                HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                //设置 Debug Log 模式
+                builder.addInterceptor(loggingInterceptor);
+            }
+            //cache url
+            File httpCacheDirectory = new File(BaseApplication.getInstance().getExternalCacheDir(), "responses");
+            int cacheSize = 10 * 1024 * 1024; // 10 MiB
+            Cache cache = new Cache(httpCacheDirectory, cacheSize);
+            builder.cache(cache);
+            builder.addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR2);
+//            builder.addInterceptor(new TokenHeaderInterceptor());
+            builder.connectTimeout(30, TimeUnit.SECONDS). // 设置连接超时时间
+                    readTimeout(30, TimeUnit.SECONDS).
+                    writeTimeout(30, TimeUnit.SECONDS).build();
+//            builder.hostnameVerifier(new AllowAllHostnameVerifier());
+            okHttpClient2 = builder.build();
+        }
+        return okHttpClient2;
     }
 
     public static OkHttpClient getOkHttpClient() {
@@ -93,6 +138,39 @@ public class AppClient {
                     .cacheControl(cacheControl)
                     .build();
         }
+
+        Response originalResponse = chain.proceed(request);
+        if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
+            int maxAge = 0; // read from cache
+            return originalResponse.newBuilder()
+                    .removeHeader("Pragma")
+                    .header("Cache-Control", "public ,max-age=" + maxAge)
+                    .build();
+        } else {
+            int maxStale = 60 * 60 * 24 * 28; // tolerate 4-weeks stale
+            return originalResponse.newBuilder()
+                    .removeHeader("Pragma")
+                    .header("Cache-Control", "public, only-if-xcached, max-stale=" + maxStale)
+                    .build();
+        }
+    };
+    //cache
+    static Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR2 = chain -> {
+        CacheControl.Builder cacheBuilder = new CacheControl.Builder();
+        cacheBuilder.maxAge(0, TimeUnit.SECONDS);
+        cacheBuilder.maxStale(365, TimeUnit.DAYS);
+        CacheControl cacheControl = cacheBuilder.build();
+
+        Request request = chain.request();
+        //LoginRsp user = SpData.User();
+        String token = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJyb2xlcyI6WyI1NDYzMjVfcHJpbmNpcGFsIiwiNTQ2MzI1X2RlcHRfaGVhZCIsIjU0NjMyNV9jYW1wdXNfaGVhZCIsIjU0NjMyNV9hY2FkZW1pY3MiLCI1NDYzMjVfZ3JhZGVfaGVhZCIsIjU0NjMyNV9oZWFkbWFzdGVyIiwiNTQ2MzI1X3RlYWNoZXIiXSwibmFtZSI6IueuoeeQhuWRmCIsImlkIjoxNDI1NDU4NjYyMzUxNjM5OTUyLCJleHAiOjE2NDYyNzQwNjAsImJpZCI6MTQ1ODI1NzYyNDA0MTU0NjMyNSwiYXV0aG9yaXRpZXMiOlsiNTQ2MzI1X2dyYWRlX2hlYWQiLCI1NDYzMjVfYWNhZGVtaWNzIiwiNTQ2MzI1X2hlYWRtYXN0ZXIiLCI1NDYzMjVfZGVwdF9oZWFkIiwiNTQ2MzI1X3RlYWNoZXIiLCI1NDYzMjVfY2FtcHVzX2hlYWQiLCI1NDYzMjVfcHJpbmNpcGFsIl0sImp0aSI6IjUzN2QxMzNhLWI5MzUtNDE4Ny04MTI1LTU0Mjk5ZWFkZTc4ZSIsImNsaWVudF9pZCI6InlpZGUtY2xvdWQiLCJ1c2VybmFtZSI6ImFkbWluIn0.iBgj6khGqWfnFrn1qFMB8tXVmAwnIdozHvyEotubCu9aXpoToCOiI5adKU9zdwUozDJtY7YK7aHayC74cIhnaUvhjJLGTEVx84-cz7Ykm7vQ8CxbHZt67PkfcfUWoz5DA2NOX_pvwoKWMGZtlebz9GvmFD7BFdLNFP-Buyp36FeZodilKWOaQcIhZXmQkgGY5yem3Gdut1HFfnEsgSdFouJP-lQclPTw2x53kl9wyIVEgUt-FcYgPC0K6OLwTm7jQ4rEFo2N56YiF5Su6TVnDgvsxXWULgwxk1nmkkYBlwg4pJlRMB68YYUrt5O_qI991VjKB-fmaM8nVWdNSjbXdg";
+        //if (user != null) {
+        Log.e("TAG1", "intercept: " + JSON.toJSONString(token));
+        request = request.newBuilder()
+                .addHeader("Authorization", token)
+                .cacheControl(cacheControl)
+                .build();
+        //}
 
         Response originalResponse = chain.proceed(request);
         if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {

@@ -17,11 +17,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class BasePresenter<V> {
     protected V mvpView;
     protected DingApiStores dingApiStores;
+    //临时使用
+    protected DingApiStores dingApiStores2;
     private CompositeDisposable mCompositeDisposable;
 
     public void attachView(V mvpView) {
         this.mvpView = mvpView;
         dingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
+        dingApiStores2 = AppClient.getDingRetrofit2().create(DingApiStores.class);
     }
 
     public void detachView() {

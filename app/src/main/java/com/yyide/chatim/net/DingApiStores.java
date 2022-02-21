@@ -173,8 +173,8 @@ public interface DingApiStores {
 
     //通过班级查询班级课表
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
-    @POST("/timetable/cloud-timetable/timetable/listTimeDataByApp")
-    Observable<listTimeDataByAppRsp> listTimeDataByApp(@Body RequestBody info);
+    @POST("/cloud/app/timetable/getWeekTime")
+    Observable<SiteTableRsp> listTimeDataByApp(@Body RequestBody info);
 
     //添加用户设备基本信息
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
@@ -991,8 +991,10 @@ public interface DingApiStores {
     /**
      * 查询场地课表
      * https://api.uat.edu.1d1j.net/timetable/cloud-timetable/v1/app/kcb/sites
+     * v2
+     * http://192.168.3.148:9528/cloud/app/timetable/getWeekTime
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/timetable/cloud-timetable/v1/app/kcb/sites")
+    @POST("/cloud/app/timetable/getWeekTime")
     Call<SiteTableRsp> sites(@Body RequestBody requestBody);
 }

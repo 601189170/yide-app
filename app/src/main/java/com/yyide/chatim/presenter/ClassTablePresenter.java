@@ -7,8 +7,11 @@ import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.TableJSON;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
+import com.yyide.chatim.model.sitetable.SiteTableRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.ClassTableView;
+
+import java.util.HashMap;
 
 import okhttp3.RequestBody;
 
@@ -46,11 +49,15 @@ public class ClassTablePresenter extends BasePresenter<ClassTableView> {
 
     public void listTimeDataByApp(String classid) {
         mvpView.showLoading();
-        TableJSON info = new TableJSON(classid);
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(info));
-        addSubscription(dingApiStores.listTimeDataByApp(body), new ApiCallback<listTimeDataByAppRsp>() {
+//        TableJSON info = new TableJSON(classid);
+        final HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("type","1");
+        hashMap.put("typeId",classid);
+        //hashMap.put("weekTime",weekTime);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(hashMap));
+        addSubscription(dingApiStores2.listTimeDataByApp(body), new ApiCallback<SiteTableRsp>() {
             @Override
-            public void onSuccess(listTimeDataByAppRsp model) {
+            public void onSuccess(SiteTableRsp model) {
                 mvpView.listTimeDataByApp(model);
             }
 

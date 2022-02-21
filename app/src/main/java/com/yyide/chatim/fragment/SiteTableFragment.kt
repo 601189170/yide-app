@@ -53,6 +53,7 @@ class SiteTableFragment : Fragment() {
     private var first = true
     private val classList = mutableListOf<LeaveDeptRsp.DataBean>()
     private var id: String? = null
+    private val type = "2"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,6 +66,8 @@ class SiteTableFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //"2", "1493486638053486593"
+        id = "1493486638053486593"
         siteTableViewModel.siteBuildingLiveData.observe(requireActivity()) {
             val buildings = it.buildings
             if (!it.isExistsSiteKcb || buildings == null || buildings.isEmpty()) {
@@ -107,7 +110,7 @@ class SiteTableFragment : Fragment() {
             siteTableFragmentBinding.top.classlayout.isEnabled = true
             //默认查询第一个场地的课表
             id = childrenBean.id
-            siteTableViewModel.getSites(childrenBean.id, null)
+            siteTableViewModel.getSites(type,childrenBean.id)
         }
         //场地课表数据
         siteTableViewModel.siteTableLiveData.observe(requireActivity()) {
@@ -115,8 +118,8 @@ class SiteTableFragment : Fragment() {
                 return@observe
             }
             //本周次
-            siteTableFragmentBinding.top.tvWeek.text = "${it.bzzc}周"
-            week = it.bzzc?.toInt()?:1
+            siteTableFragmentBinding.top.tvWeek.text = "${it.thisWeek}周"
+            week = it.thisWeek
             if (first){
                 first = false
                 thisWeek = week
@@ -125,7 +128,7 @@ class SiteTableFragment : Fragment() {
             siteTableFragmentBinding.top.backCurrentWeek.visibility = if (week == thisWeek) View.GONE else View.VISIBLE
             //本周一到周日日期标题
             weekdayList.clear()
-            it.weekmap?.let {
+            it.weekList?.let {
                 val toWeekDayList = it.toWeekDayList()
                 loge("周数据$toWeekDayList")
                 weekdayList.addAll(toWeekDayList)
@@ -134,12 +137,15 @@ class SiteTableFragment : Fragment() {
             }
             //早读 上午 下午 晚上 晚自习
             var earlyReading = 0
-            it.jcbMap?.let {
-                earlyReading = if (it.zzx != null) it.zzx.size else 0
-                val morning = if (it.sw != null) it.sw.size else 0
-                val afternoon = if (it.xw != null) it.xw.size else 0
-                val evening = if (it.ws != null) it.ws.size else 0
-                val eveningStudy = if (it.wzx != null) it.wzx.size else 0
+            //节次
+            var sectionCount = 0
+            weekTotal = it.weekTotal
+            it.sectionList?.let {
+                earlyReading = if (it.earlySelfStudyList != null) it.earlySelfStudyList!!.size else 0
+                val morning = if (it.morningList != null) it.morningList!!.size else 0
+                val afternoon = if (it.afternoonList != null) it.afternoonList!!.size else 0
+                val evening = if (it.nightList != null) it.nightList!!.size else 0
+                val eveningStudy = if (it.lateSelfStudyList != null) it.lateSelfStudyList!!.size else 0
                 if (earlyReading > 0) {
                     createLeftTypeView(0, 1, earlyReading) //早读
                 }
@@ -157,60 +163,40 @@ class SiteTableFragment : Fragment() {
                 }
 
                 val sectionlist = mutableListOf<String>()
-                it.zzx?.forEach {
-                    sectionlist.add(it.jcmc+"")
+                it.earlySelfStudyList?.forEach {
+                    sectionlist.add(it.name+"")
                 }
-                it.sw?.forEach {
-                     sectionlist.add(it.jcmc+"")
+                it.morningList?.forEach {
+                     sectionlist.add(it.name+"")
                 }
-                it.xw?.forEach {
-                    sectionlist.add(it.jcmc+"")
+                it.afternoonList?.forEach {
+                    sectionlist.add(it.name+"")
                 }
-                it.ws?.forEach {
-                    sectionlist.add("${it.jcmc}")
+                it.nightList?.forEach {
+                    sectionlist.add("${it.name}")
                 }
-                it.wzx?.forEach {
-                    sectionlist.add(it.jcmc+"")
+                it.lateSelfStudyList?.forEach {
+                    sectionlist.add(it.name+"")
                 }
                 tableSectionAdapter = TableSectionAdapter()
                 siteTableFragmentBinding.listsection.adapter = tableSectionAdapter
                 tableSectionAdapter?.notifyData(sectionlist)
-            }
-            //节次
-            var sectionCount = 0
-            it.zxb?.let {
-                weekTotal = it.xnzzc
+
                 //周次选择
                 initClassData()
                 initClassView()
-                sectionCount = it.zzxkjs + it.swkjs + it.xwkjs + it.wzxkjs +it.wskjs
-//                val sectionlist = mutableListOf<String>()
-//                for (i in 0 until sectionCount) {
-//                    if (earlyReading > 0 && i == 0) {
-//                        sectionlist.add("早读")
-//                    } else {
-//                        if (earlyReading > 0) {
-//                            sectionlist.add("$i")
-//                        } else {
-//                            sectionlist.add("${(i + 1)}")
-//                        }
-//                    }
-//                }
-
-//                tableSectionAdapter = TableSectionAdapter()
-//                siteTableFragmentBinding.listsection.adapter = tableSectionAdapter
-//                tableSectionAdapter?.notifyData(sectionlist)
+                sectionCount = morning + afternoon + earlyReading + evening + eveningStudy
             }
 
             //填课程
-            val courseList = mutableListOf<SiteTableRsp.DataBean.ListBean>()
+            val courseList = mutableListOf<SiteTableRsp.DataBean.TimetableListBean>()
             val courseBoxCount = sectionCount * 7
             for (index in 0 until courseBoxCount) {
-                val listBean = SiteTableRsp.DataBean.ListBean()
+                val listBean = SiteTableRsp.DataBean.TimetableListBean()
                 courseList.add(listBean)
-                it.list?.forEach {
+                it.timetableList?.forEach {
                     //if ((it.skxq - 1) == index % 7 && (it.xh) == ((index % sectionCount)+1)) {
-                    if (index == ((it.xh - 1) * 7 + it.skxq % 7 - 1)) {
+                    if (index == ((it.section - 1) * 7 + it.week % 7 - 1)) {
                         courseList[index] = it
                         return@forEach
                     }
@@ -219,10 +205,10 @@ class SiteTableFragment : Fragment() {
             loge("${courseList.size}")
             siteTableItemAdapter.notifyData(courseList,-1)
             //空数据
-            siteTableFragmentBinding.empty2.root.visibility =if (it.list?.isEmpty() == true) View.VISIBLE else View.GONE
-            siteTableFragmentBinding.leftLayout.visibility = if (it.list?.isEmpty() == true) View.GONE else View.VISIBLE
-            siteTableFragmentBinding.listsection.visibility = if (it.list?.isEmpty() == true) View.GONE else View.VISIBLE
-            siteTableFragmentBinding.tablegrid.visibility = if (it.list?.isEmpty() == true) View.GONE else View.VISIBLE
+            siteTableFragmentBinding.empty2.root.visibility =if (it.timetableList?.isEmpty() == true) View.VISIBLE else View.GONE
+            siteTableFragmentBinding.leftLayout.visibility = if (it.timetableList?.isEmpty() == true) View.GONE else View.VISIBLE
+            siteTableFragmentBinding.listsection.visibility = if (it.timetableList?.isEmpty() == true) View.GONE else View.VISIBLE
+            siteTableFragmentBinding.tablegrid.visibility = if (it.timetableList?.isEmpty() == true) View.GONE else View.VISIBLE
             //计算今日
             if (weekdayList.isNotEmpty()) {
                 val dataTime = weekdayList[0].dataTime
@@ -241,7 +227,10 @@ class SiteTableFragment : Fragment() {
                 }
             }
         }
-        siteTableViewModel.getBuildings()
+        // TODO: 场地列表接口暂时没有，直接使用指定场地id访问场地课表接口
+        //siteTableViewModel.getBuildings()
+        //直接访问课表接口，场地列表后端写好后注释下面代码
+        siteTableViewModel.getSites(type, id)
         initView()
     }
 
@@ -263,7 +252,7 @@ class SiteTableFragment : Fragment() {
                 }
                 this.id = id.toString()
                 siteTableFragmentBinding.top.className.text = parentName.plus("-").plus(classesName)
-                siteTableViewModel.getSites(id.toString(), null)
+                siteTableViewModel.getSites(type,id.toString())
             }
         }
         siteTableItemAdapter = SiteTableItemAdapter()
@@ -282,7 +271,7 @@ class SiteTableFragment : Fragment() {
         //回调本周
         siteTableFragmentBinding.top.backCurrentWeek.setOnClickListener {
             index = -1
-            siteTableViewModel.getSites(id, null)
+            siteTableViewModel.getSites(type,id)
         }
 
     }
@@ -321,7 +310,7 @@ class SiteTableFragment : Fragment() {
                     deptSelectPop.setOnCheckedListener { dataBean: LeaveDeptRsp.DataBean ->
                         //班级id
                         week = dataBean.classId.toInt()
-                        siteTableViewModel.getSites(id, "$week")
+                        siteTableViewModel.getSites(type,id, "$week")
                     }
                 }
             }

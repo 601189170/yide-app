@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.SizeUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
+import com.yyide.chatim.model.sitetable.SiteTableRsp;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 
 public class TableItemAdapter extends BaseAdapter {
-    public List<listTimeDataByAppRsp.DataBean.SubListBean> list = new ArrayList<>();
+    public List<SiteTableRsp.DataBean.TimetableListBean> list = new ArrayList<>();
 
     public int position = -1;
 
@@ -31,7 +32,7 @@ public class TableItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public listTimeDataByAppRsp.DataBean.SubListBean getItem(int position) {
+    public SiteTableRsp.DataBean.TimetableListBean getItem(int position) {
         return list.get(position);
     }
 
@@ -50,7 +51,7 @@ public class TableItemAdapter extends BaseAdapter {
 //        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(80));
 //        layout.setLayoutParams(layoutParams);
         //text_view.setText(getItem(position).subjectName + "\n" + getItem(position).fromDateTime + "\n" + getItem(position).toDateTime);
-        text_view.setText(getItem(position).subjectName);
+        text_view.setText(getItem(position).getSubjectName());
 
         if (position % 7 == this.position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_ls));
@@ -60,7 +61,7 @@ public class TableItemAdapter extends BaseAdapter {
         return view;
     }
 
-    public void notifyData(List<listTimeDataByAppRsp.DataBean.SubListBean> list) {
+    public void notifyData(List<SiteTableRsp.DataBean.TimetableListBean> list) {
         this.list = list;
         notifyDataSetChanged();
     }
