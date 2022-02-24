@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.listener.OnDateSetListener
+import com.yyide.chatim.BuildConfig
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.PhotoViewActivity.Companion.start
@@ -301,7 +302,7 @@ class GateDetailInfoActivity : BaseActivity() {
         //android.resource://包名/drawable/"+R.drawable.news
         if (TextUtils.isEmpty(path)) {
             Glide.with(this)
-                .load("android.resource://com.yyide.chatim/drawable/"+R.drawable.default_head)
+                .load("android.resource://${BuildConfig.APPLICATION_ID}/drawable/"+R.drawable.default_head)
                 .circleCrop()
                 .apply(RequestOptions.bitmapTransform(CircleCrop()))
                 .into(imageView)
