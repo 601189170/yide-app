@@ -37,6 +37,7 @@
     <color name="text_1E1E1E">#1E1E1E</color>
     <color name="text_333333">#333333</color>
     <color name="text_999999">#ff999999</color>
+    <color name="text_A60">#A6000000</color>
 
     <color name="black11">#999999</color>
     <color name="line_10">#EEF2F8</color>

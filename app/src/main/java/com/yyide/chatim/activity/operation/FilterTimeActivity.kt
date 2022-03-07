@@ -17,7 +17,7 @@ class FilterTimeActivity :
         initView()
     }
 
-    private fun initView() {
+     override fun initView() {
         binding.top.title.text = getString(R.string.filter_title)
         binding.top.backLayout.setOnClickListener { finish() }
         binding.btnConfirm.setOnClickListener { }

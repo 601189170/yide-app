@@ -966,6 +966,7 @@ public interface DingApiStores {
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/school/calendar/selectSemester")
+//    @POST("/cloud/calendar/selectSemester")
     Call<SchoolSemesterRsp> selectSemester();
 
     /**
