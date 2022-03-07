@@ -38,6 +38,7 @@ import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.operation.OperationActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.base.MMKVConstant;
@@ -236,7 +237,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content})
+    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content, R.id.school_name})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_img:
@@ -258,6 +259,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 break;
             case R.id.class_honor_content:
                 //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                break;
+            case R.id.school_name:
+                startActivity(new Intent(getActivity(), OperationActivity.class));
                 break;
             default:
                 break;

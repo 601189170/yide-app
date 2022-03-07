@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_10"
                     android:text="显示"
-                    android:textColor="#2C8AFF"
+                    android:textColor="@color/colorAccent"
                     app:layout_constraintBottom_toBottomOf="@+id/phone"
                     app:layout_constraintStart_toEndOf="@+id/phone"
                     app:layout_constraintTop_toTopOf="@+id/phone" />
@@ -256,7 +256,7 @@
                     android:drawablePadding="@dimen/dp_10"
                     android:gravity="center"
                     android:text="发消息"
-                    android:textColor="#ff2c8aff"
+                    android:textColor="#ff11C685"
                     android:textSize="18sp"
                     app:drawableLeftCompat="@mipmap/icon_message"
                     app:layout_constraintBottom_toBottomOf="parent"

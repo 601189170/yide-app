@@ -15,9 +15,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout1"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="44dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
-        app:layout_constraintTop_toBottomOf="@+id/top">
+        app:layout_constraintTop_toBottomOf="@+id/top"
+        tools:layout_editor_absoluteX="0dp">
 
         <TextView
             android:id="@+id/tvClassName"
@@ -35,13 +36,38 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <include
+        android:id="@+id/layoutTime"
+        layout="@layout/layout_operation_top_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout1" />
+
+    <com.flyco.tablayout.SegmentTabLayout
+        android:id="@+id/mTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        app:layout_constraintTop_toBottomOf="@+id/layoutTime"
+        app:tl_bar_color="@color/white"
+        app:tl_indicator_anim_enable="true"
+        app:tl_indicator_color="@color/colorAccent"
+        app:tl_indicator_margin_bottom="2dp"
+        app:tl_indicator_margin_left="2dp"
+        app:tl_indicator_margin_right="2dp"
+        app:tl_indicator_margin_top="2dp"
+        app:tl_textBold="SELECT"
+        app:tl_textSelectColor="@color/white"
+        app:tl_textUnselectColor="#303133"
+        app:tl_textsize="@dimen/text_13" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/color_F5F8FC"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout1"
-        tools:listitem="@layout/item_operation_bk" />
+        app:layout_constraintTop_toBottomOf="@+id/mTabLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

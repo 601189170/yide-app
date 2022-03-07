@@ -56,7 +56,7 @@ public class AttendanceParentsAdapter extends LoopPagerAdapter {
                     case "3":
                         tv_attendance_time.setText("打卡时间：" + item.getSignInTime());
                         img.setImageResource(R.mipmap.icon_home_attendance_normal);
-                        tv_attendance_status.setTextColor(Color.parseColor("#2C8AFF"));
+                        tv_attendance_status.setTextColor(Color.parseColor("#11C685"));
                         tv_attendance_status.setText("已打卡");
                         break;
                     case "1":

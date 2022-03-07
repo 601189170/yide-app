@@ -28,6 +28,6 @@ public class DefaultItemViewProvider implements IViewProvider<String> {
     public void updateView(@NonNull View itemView, boolean isSelected) {
         TextView tv = itemView.findViewById(R.id.tv_content);
         tv.setTextSize(isSelected ? 18 : 14);
-        tv.setTextColor(Color.parseColor(isSelected ? "#2C8AFF" : "#000000"));
+        tv.setTextColor(Color.parseColor(isSelected ? "#11C685" : "#000000"));
     }
 }

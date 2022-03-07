@@ -159,7 +159,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
                                 android:text="显示"
-                                android:textColor="#2C8AFF" />
+                                android:textColor="@color/colorAccent" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -228,7 +228,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="16dp"
                                     android:text="显示"
-                                    android:textColor="#2C8AFF" />
+                                    android:textColor="@color/colorAccent" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -298,7 +298,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="16dp"
                                     android:text="显示"
-                                    android:textColor="#2C8AFF" />
+                                    android:textColor="@color/colorAccent" />
                             </LinearLayout>
                         </LinearLayout>
 

@@ -35,7 +35,7 @@ public class GlideUtil {
 
     /**
      * 加载第四秒的帧数作为封面
-     *  url就是视频的地址
+     * url就是视频的地址
      */
     public static void loadCover(Context context, String url, ImageView imageView) {
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -76,6 +76,7 @@ public class GlideUtil {
                 .error(R.drawable.bg_corners_blue_2)
                 .into(img);
     }
+
     //圆图
     public static void loadCircleImage(Context context, Drawable drawable, ImageView imageView) {
         RequestOptions myOptions = new RequestOptions()

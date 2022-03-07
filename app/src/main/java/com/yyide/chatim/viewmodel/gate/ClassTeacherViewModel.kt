@@ -23,7 +23,6 @@ class ClassTeacherViewModel : ViewModel() {
     private val _classDataList =
         MutableStateFlow<Result<List<ClassListOfTeacherBean>>>(Result.Success(null))
     val classDataList: StateFlow<Result<List<ClassListOfTeacherBean>>> = _classDataList
-
     /**
      * 查询班级列表
      */

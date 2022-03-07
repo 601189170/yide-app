@@ -1,38 +1,21 @@
 package com.yyide.chatim.activity.weekly.home
 
-import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.*
-import android.widget.PopupWindow
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.ThreadUtils.runOnUiThread
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.yyide.chatim.R
 import com.yyide.chatim.activity.weekly.WeeklyDetailsActivity
 import com.yyide.chatim.activity.weekly.details.BarCharts
 import com.yyide.chatim.activity.weekly.home.viewmodel.SchoolViewModel
 import com.yyide.chatim.base.BaseFragment
-import com.yyide.chatim.databinding.DialogWeekMessgeBinding
 import com.yyide.chatim.databinding.FragmentSchoolWeeklyBinding
-import com.yyide.chatim.databinding.ItemWeeklyChartsVerticalBinding
-import com.yyide.chatim.model.*
+import com.yyide.chatim.model.SchoolHomeAttendance
+import com.yyide.chatim.model.SchoolHomeSummary
+import com.yyide.chatim.model.SchoolHomeWork
+import com.yyide.chatim.model.WeeklyDateBean
 import com.yyide.chatim.utils.DateUtils
-import java.math.BigDecimal
-import java.util.ArrayList
-import com.github.mikephil.charting.components.XAxis
 
 
 /**

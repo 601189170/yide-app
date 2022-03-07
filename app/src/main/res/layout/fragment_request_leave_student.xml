@@ -59,7 +59,7 @@
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="19dp"
                 android:text="@string/ask_for_leave_time"
-                android:textColor="#ff2c8aff"
+                android:textColor="#ff11C685"
                 android:textSize="14sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rg_time_type" />
@@ -196,7 +196,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/section_for_leave"
-                    android:textColor="#ff2c8aff"
+                    android:textColor="#ff11C685"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cl_ask_for_leave_date"
@@ -243,7 +243,7 @@
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_20"
                 android:text="@string/reason_for_leave"
-                android:textColor="#ff2c8aff"
+                android:textColor="#ff11C685"
                 android:textSize="14sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_ask_for_leave_time" />
@@ -321,7 +321,7 @@
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_20"
                 android:text="@string/flow"
-                android:textColor="#ff2c8aff"
+                android:textColor="#ff11C685"
                 android:textSize="14sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_department" />

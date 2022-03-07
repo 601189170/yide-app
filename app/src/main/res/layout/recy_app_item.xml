@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="3dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:background="#2C8AFF" />
+            android:background="@color/colorAccent" />
     </FrameLayout>
 
 </LinearLayout>

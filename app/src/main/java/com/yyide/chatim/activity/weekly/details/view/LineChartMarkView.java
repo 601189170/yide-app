@@ -33,6 +33,7 @@ public class LineChartMarkView extends MarkerView {
         tv_name = findViewById(R.id.tv_name);
         tv_this_week = findViewById(R.id.tv_this_week);
         tv_last_week = findViewById(R.id.tv_last_week);
+
     }
 
     @SuppressLint("SetTextI18n")

@@ -30,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@+id/tv_event_name"
         app:layout_constraintTop_toTopOf="parent"
         app:lyj_cut_corner="none"
-        app:lyj_reached_color="#2C8AFF"
+        app:lyj_reached_color="@color/colorAccent"
         app:lyj_reached_height="15dp"
         app:lyj_text_align="middle"
         app:lyj_text_bold="false"

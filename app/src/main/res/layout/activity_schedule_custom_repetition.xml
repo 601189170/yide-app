@@ -36,7 +36,7 @@
             app:noEmpty="true"
             app:normalTextColor="#333333"
             app:normalTextSize="@dimen/text_16"
-            app:selectedTextColor="#2C8AFF"
+            app:selectedTextColor="@color/colorAccent"
             app:selectedTextSize="18sp"
             app:unitHeight="50dp" />
 
@@ -52,7 +52,7 @@
             app:noEmpty="true"
             app:normalTextColor="#333333"
             app:normalTextSize="@dimen/text_16"
-            app:selectedTextColor="#2C8AFF"
+            app:selectedTextColor="@color/colorAccent"
             app:selectedTextSize="18sp"
             app:unitHeight="50dp" />
 
@@ -68,7 +68,7 @@
             app:noEmpty="true"
             app:normalTextColor="#333333"
             app:normalTextSize="@dimen/text_16"
-            app:selectedTextColor="#2C8AFF"
+            app:selectedTextColor="@color/colorAccent"
             app:selectedTextSize="18sp"
             app:unitHeight="50dp" />
     </LinearLayout>
@@ -179,7 +179,7 @@
                 app:noEmpty="true"
                 app:normalTextColor="#333333"
                 app:normalTextSize="@dimen/text_16"
-                app:selectedTextColor="#2C8AFF"
+                app:selectedTextColor="@color/colorAccent"
                 app:selectedTextSize="18sp"
                 app:unitHeight="50dp" />
 
@@ -195,7 +195,7 @@
                 app:noEmpty="true"
                 app:normalTextColor="#333333"
                 app:normalTextSize="@dimen/text_16"
-                app:selectedTextColor="#2C8AFF"
+                app:selectedTextColor="@color/colorAccent"
                 app:selectedTextSize="18sp"
                 app:unitHeight="50dp" />
 
@@ -211,7 +211,7 @@
                 app:noEmpty="true"
                 app:normalTextColor="#333333"
                 app:normalTextSize="@dimen/text_16"
-                app:selectedTextColor="#2C8AFF"
+                app:selectedTextColor="@color/colorAccent"
                 app:selectedTextSize="18sp"
                 app:unitHeight="50dp" />
         </LinearLayout>

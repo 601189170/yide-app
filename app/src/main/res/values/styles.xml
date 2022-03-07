@@ -39,18 +39,7 @@
         <item name="android:backgroundDimAmount">0.6</item>
     </style>
 
-    <style name="NoAnimationDialog" parent="@android:style/Animation.Dialog">
-        <item name="android:windowEnterAnimation">@null</item>
-        <item name="android:windowExitAnimation">@null</item>
-    </style>
-
     <!--dialog去阴影-->
-    <style name="dialogNoBg">
-        <item name="android:background">#00000000</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-    </style>
 
     <style name="MyProgressBar2" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:minHeight">16dp</item>
@@ -70,38 +59,11 @@
         <item name="android:progressDrawable">@drawable/progress_bg_vertical</item>
     </style>
 
-    <style name="MyProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:maxHeight">50dip</item>
-        <item name="android:minHeight">10dip</item>
-        <item name="android:indeterminateOnly">false</item>
-        <item name="android:indeterminateDrawable">
-            @android:drawable/progress_indeterminate_horizontal
-        </item>
-        <item name="android:progressDrawable">@drawable/progressbar_h1</item>
-    </style>
-
     <style name="CheckBoxTheme">
         <item name="colorAccent">@color/colorPrimary</item><!--选中颜色-->
         <item name="colorControlNormal">@color/color_cccccc</item><!--未选中颜色-->
     </style>
 
-
-    <style name="MatchMatch">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
-
-    <style name="MatchMatch.Vertical">
-        <item name="android:orientation">vertical</item>
-    </style>
-
-    <style name="MatchMatch.Horizontal">
-        <item name="android:orientation">horizontal</item>
-    </style>
-
-    <style name="NoTitleFullscreen.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="NoTitleFullscreen.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="popwin_anim_style" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/am_in</item>
@@ -151,18 +113,6 @@
         <item name="android:windowExitAnimation">@anim/dialog_exit_anim</item>
     </style>
 
-    <style name="RadioGroupButtonStyle">
-        <!-- 这个属性是去掉button 默认样式-->
-        <item name="android:button">@null</item>
-
-        <item name="android:gravity">center</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">10sp</item>
-        <item name="android:textColor">#1E232A</item>
-    </style>
-
     <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
@@ -180,11 +130,6 @@
     <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
-    </style>
-
-    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">4dp</item>
     </style>
 
     <style name="ThemeOverlay.App.Button.TextButton" parent="">
@@ -213,15 +158,6 @@
         <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Button</item>
     </style>
 
-    <style name="Widget.NoTitleFullscreen.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
-    </style>
-
-    <style name="Widget.NoTitleFullscreen.ButtonBar.Fullscreen" parent="">
-        <item name="android:background">@color/black_overlay</item>
-        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
-    </style>
-
     <!--不带输入框-->
     <style name="dialog" parent="@android:style/Theme.Holo.Light.Dialog">
         <item name="android:windowFrame">@color/transparent</item><!-- 边框 -->
@@ -241,10 +177,6 @@
         <item name="android:windowBackground">@color/transparent</item><!-- 自己想要的背景 -->
         <item name="android:backgroundDimEnabled">true</item><!-- 模糊 -->
         <item name="android:windowSoftInputMode">stateAlwaysVisible</item><!--显示软件盘-->
-    </style>
-
-    <style name="TabLayoutTextStyle" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">@dimen/text_16</item>
     </style>
 
 </resources>

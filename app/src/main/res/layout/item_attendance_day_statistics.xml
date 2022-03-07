@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_20"
             android:text="97"
-            android:textColor="#ff2c8aff"
+            android:textColor="#ff11C685"
             android:textSize="30sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_event_name" />
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/percent"
-            android:textColor="#ff2c8aff"
+            android:textColor="#ff11C685"
             android:textSize="13sp"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_attendance_rate"
             app:layout_constraintLeft_toRightOf="@id/tv_attendance_rate" />

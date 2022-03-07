@@ -252,7 +252,7 @@
                     android:background="@drawable/white_border_1dp"
                     android:gravity="center"
                     android:text="重置"
-                    android:textColor="#ff2c8aff"
+                    android:textColor="#ff11C685"
                     android:textSize="@dimen/text_16"
                     app:layout_constraintEnd_toStartOf="@+id/tv_confirm"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"

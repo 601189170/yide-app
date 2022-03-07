@@ -12,6 +12,7 @@ abstract class KTBaseFragment<VB : ViewBinding>(
     private lateinit var _binding: VB
     protected val binding get() = _binding
 //    override fun getLayoutId() = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

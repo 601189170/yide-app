@@ -72,7 +72,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#122C8AFF"
+        android:background="#1211C685"
         android:padding="@dimen/dp_5"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -6,7 +6,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.tencent.mmkv.MMKV
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.AppManagerActivity
-import com.yyide.chatim.activity.TableActivity
+import com.yyide.chatim.activity.table.TableActivity
 import com.yyide.chatim.activity.WebViewActivity
 import com.yyide.chatim.activity.attendance.AttendanceActivity
 import com.yyide.chatim.activity.attendance.StatisticsActivity
@@ -22,7 +22,6 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.model.EventMessage
 import org.greenrobot.eventbus.EventBus
-import kotlin.math.log
 
 object JumpUtil {
 

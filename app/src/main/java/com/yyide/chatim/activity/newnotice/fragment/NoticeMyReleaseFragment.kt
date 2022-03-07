@@ -126,7 +126,7 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
                     time = DateUtils.parseTimestamp(item.timerDate, "yyyy-MM-dd HH:mm:ss")
                 }
                 val typeString = if (item.isConfirm) getString(R.string.notice_confirm_count) else getString(R.string.notice_have_read)
-                val html = typeString + "：<b><font color=\"#2C8AFF\">" + item.confirmOrReadNum + "</font><font color=\"#999999\">/" + item.totalNum + "</font></b>";
+                val html = typeString + "：<b><font color=\"#11C685\">" + item.confirmOrReadNum + "</font><font color=\"#999999\">/" + item.totalNum + "</font></b>";
                 if (item.totalNum == 0) {
                     view.tvNoticeConfirm.visibility = View.INVISIBLE
                 } else {

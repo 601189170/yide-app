@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_notice_add"
         app:maxImageSize="@dimen/dp_56"
-        app:backgroundTint="#2C8AFF"
+        app:backgroundTint="@color/colorAccent"
         app:rippleColor="#e7d16b"
         app:borderWidth="0dp"
         app:fabSize="normal"

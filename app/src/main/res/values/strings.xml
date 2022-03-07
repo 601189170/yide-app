@@ -10,8 +10,6 @@
     <string name="confirm">确定</string>
 
     // 登录相关
-    <string name="account">用户名</string>
-    <string name="password">密码</string>
 
     <string name="tab_home">首页</string>
     <string name="tab_schedule">日程</string>
@@ -19,15 +17,7 @@
     <string name="tab_workbench">工作台</string>
     <string name="tab_help">帮助</string>
 
-    <string name="login_title">登录·即时通信</string>
-    <string name="login_sub_title">体验群组聊天，音视频对话等 IM 功能</string>
-    <string name="input_number">请输入手机号</string>
-    <string name="input_verification">请输入短信验证码</string>
-    <string name="verification_code">获取验证码</string>
     <string name="button_login">登录</string>
-    <string name="password_login">密码登录</string>
-    <string name="official_website">访问官网</string>
-    <string name="debug_mode_summary">IM 账号直接登录界面，此只在 Debug 模式下显示</string>
     <string name="account_hint">手机号</string>
     <string name="account_pwd_hint">请输入登录密码</string>
     <string name="cancel">取消</string>
@@ -39,17 +29,7 @@
     <string name="book_title_info_yd">个人信息</string>
 
     // "我"相关
-    <string name="profile">我</string>
-    <string name="id">账号：%1$s</string>
-    <string name="modify_user_icon">修改头像</string>
-    <string name="modify_nick_name">修改昵称</string>
-    <string name="modify_signature">修改个性签名</string>
-    <string name="add_rule">加我为好友时</string>
-    <string name="allow_type_allow_any">允许任何人</string>
-    <string name="allow_type_deny_any">拒绝任何人</string>
-    <string name="allow_type_need_confirm">需要验证</string>
     <string name="exit">退出登录</string>
-    <string name="about_im">关于即时通信IM</string>
 
     <!--推送配置-->
     <string name="push_setting_title">推送配置</string>
@@ -62,30 +42,24 @@
     <string name="weekly_teacher_tab">教师篇</string>
     <string name="weekly_homework_chart">作业图表</string>
     <string name="weekly_homework_data">作业数据</string>
-    <string name="startTime_endTime">%s-%s</string>
     <string name="weekly_attend_desc">你的本周%s考勤%s异常记录</string>
     <string name="weekly_desc_name">本周%s考勤</string>
-    <string name="weekly_school_desc">全校教职工每天%s考勤率</string>
     <string name="weekly_school_student_desc">全校学生每天%s出勤率</string>
     <string name="weekly_school_student_attend">全校各年级%s出勤率</string>
 
     <!--作业-->
     <string name="operation_title">作业</string>
-    <string name="operation_read_html"><b><font color='#909399'>已读 <font color="#2C8AFF"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
-    <string name="operation_completed_html"><b><font color='#909399'>已完成 <font color="#2C8AFF"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
+    <string name="filter_title">筛选</string>
+    <string name="operation_detail_title">作业详情</string>
+    <string name="operation_read_html"><b><font color='#909399'>已读 <font color="#11C685"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
+    <string name="operation_completed_html"><b><font color='#909399'>已完成 <font color="#11C685"><b>%1$d</b></font>/<b>%2$d</b></font></b></string>
 
     <!--会议-->
     <string name="meeting_create_title">创建会议</string>
     <string name="meeting_update_title">修改会议</string>
-    <string name="meeting_title">会议</string>
-    <string name="meeting_history_title">历史会议</string>
     <string name="meeting_please_input_time">请选择会议时间</string>
 
     // 主页Tab相关
-    <string name="tab_contact_tab_text">通讯录</string>
-    <string name="tab_conversation_tab_text">消息</string>
-    <string name="tab_profile_tab_text">我</string>
-    <string name="tab_scenes_tab_text">直播</string>
     <string name="home_attendance">数据考勤</string>
 
     // "+"menu相关
@@ -104,20 +78,12 @@
     // 群信息相关
     <string name="tips_empty_group_member">请选择群成员</string>
     <string name="tips_empty_group_type">请选择加群方式</string>
-    <string name="no_friend_apply">暂无好友申请</string>
     <string name="newestVersion">已经是最新版本</string>
     <string name="forget">忘记密码？</string>
 
     // 新朋友
-    <string name="request_agree">同意</string>
-    <string name="request_accepted">已接受</string>
-    <string name="request_waiting">等待验证</string>
-    <string name="test_custom_action">自定义消息</string>
-    <string name="test_custom_message">查看详情>></string>
-    <string name="privacy_text">已同意《<a href="http://privacy.qq.com/">隐私政策</a>》</string>
 
     <!--Im-->
-    <string name="call_timeout">本次通话已超时</string>
     <string name="call_notification">音视频邀请消息通知</string>
     <string name="background_tip">当程序处于后台时新的来电消息会通过通知栏提醒用户</string>
     <string name="new_msg_notification">新普通消息通知</string>
@@ -157,7 +123,6 @@
     <string name="date_for_leave">请假日期</string>
     <string name="section_for_leave">请假节次</string>
     <string name="check_all">全选</string>
-    <string name="choose_class">所在班级</string>
     <string name="choose_student">请假人</string>
     <string name="carbon_copy_people">抄送人</string>
     <string name="select_carbon_copy_people">选择抄送人</string>
@@ -167,15 +132,10 @@
     <string name="attendance_title">考勤</string>
     <string name="statistics_title">统计</string>
     <string name="attendance_time_text">考勤时间 %s</string>
-    <string name="attendance_leave_time_text">离校时间 %s</string>
     <string name="attendance_punch_card_text">打卡时间：%s</string>
-    <string name="attendance_late_text">迟到时间：%s</string>
-    <string name="attendance_leave_text">早退时间：%s</string>
     <string name="attendance_ask_leave_text">请假时间：%s</string>
     <string name="attendance_time_format">%d次</string>
-    <string name="month">%d月</string>
     <string name="week">%s - %s</string>
-    <string name="attendance_event_desc"><b><font color="#FFFFFF" size="40px">%s</font><font color='#999999' size="20px">(人)</font></b></string>
 
     <!--//考勤状态 1 正常，2迟到，3早退，4，未签到，5请假-->
     <string name="attendance_normal">正常</string>
@@ -213,7 +173,6 @@
     <string name="notice_to_confirm">去确认</string>
     <string name="notice_tab_my_notice">我的通知</string>
     <string name="notice_tab_my_release">我的发布</string>
-    <string name="notice_select_number">已选择(%d)</string>
     <string name="notice_send_obj">发送对象：%s</string>
     <string name="notice_confirm_number">（%d/%d）已确认</string>
     <string name="notice_confirm_number_text">已确认（%d/%d）</string>
@@ -222,7 +181,6 @@
     <string name="timed_send_long_text">%d天后发送</string>
     <string name="notice_my_push_title">我发布的通知</string>
     <string name="notice_confirm_count">已确认</string>
-    <string name="notice_read_html"><b>%s ：<font color="#2C8AFF">%d</font><font color='#999999'>/%d</font></b></string>
     <string name="notice_has_withdrawn">已撤回</string>
     <string name="notice_have_read">已读</string>
     <string name="notice_have_been_confirmed">已确认</string>
@@ -232,7 +190,6 @@
     <string name="notice_timing_push">定时发布</string>
     <string name="notice_time">发布时间</string>
     <string name="notice_immediately_push">立即发布</string>
-    <string name="notice_need_to_confirm">是否需要确认</string>
     <string name="notice_preview_title">预览</string>privacy_exit
     <string name="notice_release_time_title">发布时刻</string>D
     <string name="notice_input_title_number">%d/30</string>
@@ -257,7 +214,6 @@
     <string name="notice_input_title">请在此处输入标题</string>
     <string name="notice_input_content">在这里输入内容</string>
     <string name="notice_input_push_time">请选择发布时间</string>
-    <string name="notice_confirm">确认</string>
     <string name="notice_site">按场地</string>
     <string name="notice_brand">按班级</string>
     <string name="notice_teacher_number">教师%d人</string>
@@ -273,7 +229,6 @@
     <string name="permission_call_phone">需要开启对您手机的拨打电话权限，是否现在开启</string>
     <string name="permission_camera">需要开启对您手机的相机权限，是否现在开启</string>
     <string name="permission_file">需要开启对您手机的文件读写权限，是否现在开启</string>
-    <string name="update_versionName">更新版本：%s</string>
 
     //隐私政策
     <string name="privacy_tips">\t\t\t\t一加壹App重视用户的个人信息和隐私保护，我们依据最新的法律法规要求，更新制定了隐私政策，请您务必仔细阅读，充分理解 "用户协议" 和 "隐私政策" 各条件，包括但不限于:为了向您提供即时资讯、内容分享等服务，我们需要收集您的设备信息、操作日志等个人信息，您可以在“设置”中查看、变更、删除个人信息并管理你的授权。你可点击阅读《用户协议》和《隐私政策》了解详细信息。如您对协议内容有任何疑问、意见或建议，可通过客服与我们联系，如你同意并接受全部条款后，请点击“同意”开始接受我们的服务。</string>
@@ -289,9 +244,6 @@
     <string name="statistical_time">（人次）</string>
     <string name="weekly_statistical">每周统计</string>
     <string name="monthly_statistical">每月统计</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="people_number">%d人</string>
-    <string name="look_big_image">查看大图</string>
     <string name="my_info">我的信息</string>
     <string name="open_push_notification_permission">开启推送通知</string>
     <string name="open_push_notification_tip">实时获取最新信息，不再错过\n重要通知。</string>
@@ -307,9 +259,6 @@
     <string name="login_success">登录成功</string>
     <string name="search_class_brand_name_landscape">请输入横屏班牌名称</string>
     <string name="search_class_brand_name_portrait">请输入竖屏班牌名称</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
     <string name="already_refused">已拒绝</string>
     <string name="already_undone">已撤销</string>
     <string name="face_recongize_disable_tip">当前账号人脸已禁用，请联系管理员！</string>
@@ -360,23 +309,20 @@
     <string name="tuesday">二</string>
     <string name="monday">一</string>
     <string name="daily_statistic">每日统计</string>
-    <string name="get_register_code_fail_tip">当前账号没有查询到注册码，请联系管理员！</string>
     <string name="current_school_no_face_activate_tip">当前学校没有人脸激活码！</string>
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="add_schedule_content_tip_text">准备做什么？</string>
-    <string name="title_activity_schedule_search_new">ScheduleSearchNewActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="schedule_edit_bottom_date">创建于%s 完成于%s</string>
     <string name="schedule_timetable_date">%s %s-%s</string>
     <string name="schedule_create_time_and_status">创建于%s  日程%s</string>
     <string name="gate_page_title">%s通行数据</string>
     <string name="gate_today_through_number">今日通行%s次</string>
+    <string name="title_activity_new_login">NewLoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 
 </resources>

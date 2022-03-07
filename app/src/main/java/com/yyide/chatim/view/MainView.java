@@ -19,24 +19,7 @@ public interface MainView extends BaseView {
 
     void getVersionInfo(GetAppVersionResponse rsp);
 
-    void UserLogoutData(UserLogoutRsp rsp);
-
     void fail(String msg);
-//    void UserLogoutDataFail(String msg);
-//    void addUserEquipmentInfoFail(String rsp);
-
-//    void getUserSchool(GetUserSchoolRsp rsp);
-//    void getUserSchoolDataFail(String rsp);
-//    void listAllScheduleByTeacherIdDataFail(String rsp);
-
-    void selectSchByTeaid(SelectSchByTeaidRsp rsp);
-
-    void updateVersion(SelectUserRsp rsp);
-
-    void listAllScheduleByTeacherId(ListAllScheduleByTeacherIdRsp rsp);
-
-
-    void addUserEquipmentInfo(ResultBean rsp);
 
     void getCopywriter(WeeklyDescBean model);
 

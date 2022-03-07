@@ -415,38 +415,13 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     @Override
-    public void UserLogoutData(UserLogoutRsp rsp) {
-        Log.e("TAG", "UserLogoutData==》: " + JSON.toJSONString(rsp));
-    }
-
-    @Override
     public void fail(String msg) {
         Log.e("TAG", "fail==》: " + JSON.toJSONString(msg));
     }
 
     @Override
-    public void selectSchByTeaid(SelectSchByTeaidRsp rsp) {
-        Log.e("TAG", "selectSchByTeaid==》: " + JSON.toJSONString(rsp));
-    }
-
-    @Override
-    public void updateVersion(SelectUserRsp rsp) {
-
-    }
-
-    @Override
-    public void listAllScheduleByTeacherId(ListAllScheduleByTeacherIdRsp rsp) {
-        Log.e("TAG", "listAllScheduleByTeacherId==》: " + JSON.toJSONString(rsp));
-    }
-
-    @Override
-    public void addUserEquipmentInfo(ResultBean rsp) {
-        Log.e("TAG", "addUserEquipmentInfo==》: " + JSON.toJSONString(rsp));
-    }
-
-    @Override
     public void jumpFragment(int index) {
-        Log.e(TAG, "jumpFragment: "+index );
+        Log.e(TAG, "jumpFragment: " + index);
         setTab(index, 1);
     }
 
@@ -532,7 +507,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
     }
 
     void setTab(int position, int type) {
-        Log.e(TAG, "setTab: "+position+", "+type );
+        Log.e(TAG, "setTab: " + position + ", " + type);
         tab1.setChecked(false);
         tab2.setChecked(false);
         tab3.setChecked(false);
@@ -623,7 +598,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
 
     @OnClick({R.id.tab1_layout, R.id.tab2_layout, R.id.tab3_layout, R.id.tab4_layout, R.id.tab5_layout})
     public void onViewClicked(View view) {
-        Log.e(TAG, "onViewClicked: "+view.getId());
+        Log.e(TAG, "onViewClicked: " + view.getId());
         switch (view.getId()) {
             case R.id.tab1_layout:
                 setTab(0, 0);

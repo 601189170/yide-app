@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
     <TextView
-        android:textColor="#2C8AFF"
+        android:textColor="@color/colorAccent"
         android:textSize="14sp"
         android:text="调课申请"
         android:layout_marginLeft="20dp"

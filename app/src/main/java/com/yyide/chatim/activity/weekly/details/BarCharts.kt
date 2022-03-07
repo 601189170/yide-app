@@ -34,7 +34,7 @@ class BarCharts {
                     if (item.value != null) item.value.toFloat() else 0f
                 )
             )
-            colors.add(Color.parseColor("#2C8AFF"))
+            colors.add(Color.parseColor("#11C685"))
         }
         // y轴的数据集合
         val barDataSet = BarDataSet(yValues, "")

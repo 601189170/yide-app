@@ -10,11 +10,12 @@ import com.yyide.chatim.databinding.ActivityOperationBinding
  * @Data 2022年2月17日13:35:32
  * @Author lrz
  */
-class OperationActivity : KTBaseActivity<ActivityOperationBinding>(ActivityOperationBinding::inflate) {
+class OperationActivity :
+    KTBaseActivity<ActivityOperationBinding>(ActivityOperationBinding::inflate) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainerView.id, OperationFragment.newInstance())
+            .replace(binding.fragmentContainerView.id, OperationFragment.newInstance()).commit()
     }
 }

@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login_success"
-        android:textColor="#ff2c8aff"
+        android:textColor="#ff11C685"
         android:textSize="@dimen/text_15"
         app:layout_constraintLeft_toLeftOf="@id/iv_success_icon"
         app:layout_constraintRight_toRightOf="@id/iv_success_icon"

@@ -34,7 +34,7 @@
         app:tl_indicator_height="3dp"
         app:tl_indicator_width="@dimen/dp_50"
         app:tl_tab_space_equal="true"
-        app:tl_textSelectColor="#2C8AFF"
+        app:tl_textSelectColor="@color/colorAccent"
         app:tl_textUnselectColor="#909399"
         app:tl_textsize="@dimen/text_14" />
 

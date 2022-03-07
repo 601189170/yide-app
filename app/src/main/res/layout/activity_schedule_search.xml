@@ -64,7 +64,7 @@
             android:paddingStart="@dimen/dp_10"
             android:paddingEnd="@dimen/dp_20"
             android:text="取消"
-            android:textColor="#2C8AFF"
+            android:textColor="@color/colorAccent"
             android:textSize="@dimen/text_16"
             android:textStyle="bold" />
     </LinearLayout>

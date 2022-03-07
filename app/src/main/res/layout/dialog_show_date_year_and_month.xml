@@ -25,7 +25,7 @@
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_24"
         android:text="取消"
-        android:textColor="#ff2c8aff"
+        android:textColor="#ff11C685"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,7 +38,7 @@
         android:layout_marginTop="@dimen/dp_24"
         android:layout_marginEnd="@dimen/dp_20"
         android:text="确定"
-        android:textColor="#ff2c8aff"
+        android:textColor="#ff11C685"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintRight_toRightOf="parent"
@@ -74,7 +74,7 @@
                 app:noEmpty="true"
                 app:normalTextColor="#333333"
                 app:normalTextSize="@dimen/text_16"
-                app:selectedTextColor="#2C8AFF"
+                app:selectedTextColor="@color/colorAccent"
                 app:selectedTextSize="18sp"
                 app:unitHeight="50dp" />
 
@@ -90,7 +90,7 @@
                 app:noEmpty="true"
                 app:normalTextColor="#333333"
                 app:normalTextSize="@dimen/text_16"
-                app:selectedTextColor="#2C8AFF"
+                app:selectedTextColor="#11C685"
                 app:selectedTextSize="18sp"
                 app:unitHeight="50dp" />
         </LinearLayout>

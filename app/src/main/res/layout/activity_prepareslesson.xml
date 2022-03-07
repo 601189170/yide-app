@@ -68,7 +68,7 @@
                     android:id="@+id/tv_time_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#ff2c8aff"
+                    android:textColor="#ff11C685"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_code"
                     app:layout_constraintEnd_toEndOf="parent"

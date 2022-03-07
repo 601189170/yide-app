@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
         android:text="进校"
-        android:textColor="#ff2c8aff"
+        android:textColor="#ff11C685"
         android:textSize="15sp"
         app:layout_constraintLeft_toRightOf="@id/v_line_top"
         app:layout_constraintTop_toTopOf="@id/tv_time" />

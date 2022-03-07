@@ -1,17 +1,18 @@
 package com.yyide.chatim.activity.operation.fragment
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.Html
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.flyco.tablayout.listener.OnTabSelectListener
 import com.yyide.chatim.R
-import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
+import com.yyide.chatim.activity.operation.viewmodel.OperationViewModel
 import com.yyide.chatim.databinding.OperationFragmentBinding
 
 /**
@@ -22,6 +23,8 @@ import com.yyide.chatim.databinding.OperationFragmentBinding
 class OperationFragment : Fragment() {
 
     companion object {
+        private val mFragments = ArrayList<Fragment>()
+        private val mTitles = arrayOf("作业数据", "作业图表")
         fun newInstance() = OperationFragment()
     }
 
@@ -49,19 +52,87 @@ class OperationFragment : Fragment() {
         viewBinding.top.ivRight.setOnClickListener { }
         viewBinding.tvClassName.setOnClickListener { }
 
-        viewBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        viewBinding.recyclerView.adapter = mAdapter
-    }
-
-    private val mAdapter =
-        object :
-            BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_weekly_attendance) {
-            override fun convert(holder: BaseViewHolder, item: String) {
-                val viewBind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
-                val read = getString(R.string.operation_read_html, 0, 40)
-                val completed = getString(R.string.operation_completed_html, 0, 40)
-                Html.fromHtml(read)
-                Html.fromHtml(completed)
+        viewBinding.layoutTime.tvToDay.setOnClickListener {
+            if (!viewBinding.layoutTime.tvToDay.isChecked) {
+                setCheck()
+                viewBinding.layoutTime.tvToDay.isChecked = true
             }
         }
+        viewBinding.layoutTime.tvWeek.setOnClickListener {
+            if (!viewBinding.layoutTime.tvWeek.isChecked) {
+                setCheck()
+                viewBinding.layoutTime.tvWeek.isChecked = true
+            }
+        }
+        viewBinding.layoutTime.tvLastWeek.setOnClickListener {
+            if (!viewBinding.layoutTime.tvLastWeek.isChecked) {
+                setCheck()
+                viewBinding.layoutTime.tvLastWeek.isChecked = true
+            }
+        }
+        viewBinding.layoutTime.tvMonth.setOnClickListener {
+            if (!viewBinding.layoutTime.tvMonth.isChecked) {
+                setCheck()
+                viewBinding.layoutTime.tvMonth.isChecked = true
+            }
+        }
+        viewBinding.layoutTime.tvLastMonth.setOnClickListener {
+            if (!viewBinding.layoutTime.tvLastMonth.isChecked) {
+                setCheck()
+                viewBinding.layoutTime.tvLastMonth.isChecked = true
+            }
+        }
+    }
+
+    private fun setCheck() {
+        viewBinding.layoutTime.tvToDay.isChecked = false
+        viewBinding.layoutTime.tvWeek.isChecked = false
+        viewBinding.layoutTime.tvLastWeek.isChecked = false
+        viewBinding.layoutTime.tvMonth.isChecked = false
+        viewBinding.layoutTime.tvLastMonth.isChecked = false
+    }
+
+    private fun tl_3() {
+        val viewPager: ViewPager = viewBinding.viewpager
+        viewPager.adapter = MyPagerAdapter(childFragmentManager)
+        viewBinding.mTabLayout.setTabData(mTitles)
+        viewBinding.mTabLayout.setOnTabSelectListener(object : OnTabSelectListener {
+            override fun onTabSelect(position: Int) {
+                viewPager.currentItem = position
+            }
+
+            override fun onTabReselect(position: Int) {}
+        })
+        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                viewBinding.mTabLayout.currentTab = position
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {}
+        })
+        viewPager.currentItem = 1
+    }
+
+    private class MyPagerAdapter(fm: FragmentManager?) :
+        FragmentPagerAdapter(fm!!) {
+        override fun getCount(): Int {
+            return mFragments.size
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return mTitles.get(position)
+        }
+
+        override fun getItem(position: Int): Fragment {
+            return mFragments.get(position)
+        }
+    }
+
 }

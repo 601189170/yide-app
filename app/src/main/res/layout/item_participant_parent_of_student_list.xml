@@ -37,7 +37,7 @@
         android:paddingEnd="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_2"
         android:text="父亲"
-        android:textColor="#ff2c8aff"
+        android:textColor="#ff11C685"
         android:textSize="13sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/tv_name"
