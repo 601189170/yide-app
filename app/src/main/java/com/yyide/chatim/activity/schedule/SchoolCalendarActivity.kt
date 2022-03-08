@@ -187,7 +187,7 @@ class SchoolCalendarActivity : BaseActivity(), OnCalendarClickListener,
     /**
      * 初始化学期列表数据
      */
-    fun initSemesterData(semesterList: List<SchoolSemesterRsp.DataBean>) {
+    fun initSemesterData(semesterList: List<SchoolSemesterRsp.Data>) {
         eventList.clear()
         semesterList.forEach {
             val dataBean = LeaveDeptRsp.DataBean()

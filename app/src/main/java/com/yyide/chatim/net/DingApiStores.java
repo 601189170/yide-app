@@ -965,8 +965,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/school/calendar/selectSemester
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/school/calendar/selectSemester")
-//    @POST("/cloud/calendar/selectSemester")
+//    @POST("/management/cloud-system/app/school/calendar/selectSemester")
+    @POST("/cloud/calendar/selectSemester")
     Call<SchoolSemesterRsp> selectSemester();
 
     /**
@@ -978,7 +978,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/school/calendar/selectSchoolCalendar
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/school/calendar/selectSchoolCalendar")
+//    @POST("/management/cloud-system/app/school/calendar/selectSchoolCalendar")
+    @POST("/cloud/calendar/selectSchoolCalendar")
     Call<SchoolCalendarRsp> selectSchoolCalendar(@Body RequestBody requestBody);
 
     /**

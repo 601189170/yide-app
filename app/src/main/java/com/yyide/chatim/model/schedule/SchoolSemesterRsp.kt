@@ -9,9 +9,10 @@ class SchoolSemesterRsp(
     var code: Int = 0,
     var isSuccess: Boolean = false,
     var msg: String? = null,
-    var data: List<DataBean>? = null
+    var data: List<Data>? = null
+
 ) {
-    data class DataBean(
+    data class Data(
         var id: String? = null,
         var schoolYear: String? = null,
         var name: String? = null,
@@ -22,4 +23,5 @@ class SchoolSemesterRsp(
         var delInd: String? = null,
         var createdDateTime: String? = null,
     )
+
 }

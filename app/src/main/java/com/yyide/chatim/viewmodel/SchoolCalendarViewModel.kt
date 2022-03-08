@@ -3,10 +3,10 @@ package com.yyide.chatim.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
-import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.schedule.SchoolCalendarRsp
 import com.yyide.chatim.model.schedule.SchoolSemesterRsp
+
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.logd
@@ -25,7 +25,8 @@ import retrofit2.Response
 class SchoolCalendarViewModel : ViewModel() {
     private var apiStores: DingApiStores =
         AppClient.getDingRetrofit().create(DingApiStores::class.java)
-    val semesterList = MutableLiveData<List<SchoolSemesterRsp.DataBean>>()
+    val semesterList = MutableLiveData<List<SchoolSemesterRsp.Data>>()
+
     val schoolCalendarList = MutableLiveData<List<SchoolCalendarRsp.DataBean>>()
 
     /**
@@ -39,7 +40,7 @@ class SchoolCalendarViewModel : ViewModel() {
             ) {
                 val body = response.body()
                 logd("$body")
-                if (body != null && body.code == 200 && body.data != null) {
+                if (body != null && body.code == 0 && body.data != null) {
                     semesterList.postValue(body.data ?: listOf())
                 } else {
                     semesterList.postValue(listOf())
@@ -75,7 +76,7 @@ class SchoolCalendarViewModel : ViewModel() {
             ) {
                 val body = response.body()
                 logd("$body")
-                if (body != null && body.code == 200 && body.data != null) {
+                if (body != null && body.code == 0 && body.data != null) {
                     schoolCalendarList.postValue(body.data ?: listOf())
                 } else {
                     schoolCalendarList.postValue(listOf())
