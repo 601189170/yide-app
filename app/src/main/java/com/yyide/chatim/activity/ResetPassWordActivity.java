@@ -21,6 +21,9 @@ import com.yyide.chatim.view.ResetPasswordView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 忘记密码
+ */
 public class ResetPassWordActivity extends BaseMvpActivity<ResetPasswordPresenter> implements ResetPasswordView {
 
     @BindView(R.id.title)

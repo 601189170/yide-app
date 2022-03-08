@@ -64,8 +64,8 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
 //        for (i in 1..RETRY_COUNT) {
         try {
             val response = block()
-            if (response.code != ErrorCode.OK) {
-                throw NetworkException.of(response.code, "response code not 200")
+            if (response.code != ErrorCode.OK && response.code != 0) {
+                throw NetworkException.of(response.code, "${response.message}")
             }
             if (response.data == null) {
                 throw NetworkException.of(ErrorCode.VALUE_IS_NULL, "response value is null")
@@ -114,9 +114,9 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
             var request = chain.request()
             val user = SpData.User()
             if (user != null) {
-                Log.e("TAG", "intercept: " + JSON.toJSONString(user.data))
+                Log.e("TAG", "intercept: " + JSON.toJSONString(user))
                 request = request.newBuilder()
-                    .addHeader("Authorization", user.data.accessToken)
+                    .addHeader("Authorization", user.getAccessToken())
                     .cacheControl(cacheControl)
                     .build()
             }

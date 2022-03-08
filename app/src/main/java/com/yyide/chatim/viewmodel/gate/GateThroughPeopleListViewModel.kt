@@ -1,9 +1,7 @@
 package com.yyide.chatim.viewmodel.gate
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alibaba.fastjson.JSON
-import com.blankj.utilcode.util.NetworkUtils
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.gate.GateBaseRsp
 import com.yyide.chatim.model.gate.GateThroughPeopleListBean
@@ -15,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
-import java.lang.RuntimeException
 
 /**
  *

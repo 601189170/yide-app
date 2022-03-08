@@ -28,7 +28,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
-import com.yyide.chatim.LoginActivity;
+import com.yyide.chatim.login.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PowerActivity;

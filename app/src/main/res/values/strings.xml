@@ -9,19 +9,19 @@
     //通用
     <string name="confirm">确定</string>
 
-    // 登录相关
-
     <string name="tab_home">首页</string>
     <string name="tab_schedule">日程</string>
     <string name="tab_message">消息</string>
     <string name="tab_workbench">工作台</string>
     <string name="tab_help">帮助</string>
 
+    // 登录相关
     <string name="button_login">登录</string>
     <string name="account_hint">手机号</string>
     <string name="account_pwd_hint">请输入登录密码</string>
     <string name="cancel">取消</string>
     <string name="weekNum">%s周</string>
+    <string name="next_step">下一步</string>
 
     <!--通讯录-->
     <string name="please_input_search_content">请输入搜索内容</string>

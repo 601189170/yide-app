@@ -632,7 +632,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .addHeader("Authorization", SpData.User().data.accessToken)
+                .addHeader("Authorization", SpData.User().accessToken)
                 .post(body)
                 .build();
         //发起请求

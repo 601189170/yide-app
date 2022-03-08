@@ -19,7 +19,7 @@ class OperationDetailActivity :
         initViewPager()
     }
 
-     override fun initView() {
+    override fun initView() {
         binding.top.title.text = getString(R.string.operation_detail_title)
         binding.top.backLayout.setOnClickListener { finish() }
     }

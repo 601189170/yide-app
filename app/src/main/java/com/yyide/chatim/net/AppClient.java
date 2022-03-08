@@ -55,13 +55,14 @@ public class AppClient {
 
     /**
      * 临时使用固定token 正式上线替换getDingRetrofit()
+     *
      * @return mDingRetrofit
      */
     @Deprecated
     public static Retrofit getDingRetrofit2() {
         if (mDingRetrofit2 == null) {
             mDingRetrofit2 = new Retrofit.Builder()
-                    .baseUrl(BaseConstant.API_V2_SERVER_URL)
+                    .baseUrl(BaseConstant.API_SERVER_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                     .client(getOkHttpClient2())
@@ -69,6 +70,7 @@ public class AppClient {
         }
         return mDingRetrofit2;
     }
+
     @Deprecated
     public static OkHttpClient getOkHttpClient2() {
         if (okHttpClient2 == null) {
@@ -132,9 +134,9 @@ public class AppClient {
         Request request = chain.request();
         LoginRsp user = SpData.User();
         if (user != null) {
-            Log.e("TAG", "intercept: " + JSON.toJSONString(user.data.accessToken));
+            Log.e("TAG", "intercept: " + JSON.toJSONString(user.accessToken));
             request = request.newBuilder()
-                    .addHeader("Authorization", user.data.accessToken)
+                    .addHeader("Authorization", user.accessToken)
                     .cacheControl(cacheControl)
                     .build();
         }
@@ -192,7 +194,7 @@ public class AppClient {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            String token = SpData.User().data.accessToken;
+            String token = SpData.User().accessToken;
             if (TextUtils.isEmpty(token)) {
                 Request originalRequest = chain.request();
                 return chain.proceed(originalRequest);

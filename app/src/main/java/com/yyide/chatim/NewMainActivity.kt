@@ -477,7 +477,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         //请求组合创建
         val request = Request.Builder()
             .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-            .addHeader("Authorization", SpData.User().data.accessToken)
+            .addHeader("Authorization", SpData.User().accessToken)
             .post(body)
             .build()
         //发起请求

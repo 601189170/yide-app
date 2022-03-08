@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
-import com.yyide.chatim.LoginActivity;
+import com.yyide.chatim.login.LoginActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.net.AppClient;

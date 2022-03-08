@@ -1,4 +1,4 @@
-package com.yyide.chatim;
+package com.yyide.chatim.login;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,14 +26,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.RegexUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
+import com.yyide.chatim.BuildConfig;
+import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.RegisterActivity;
 import com.yyide.chatim.activity.ResetPassWordActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -302,28 +304,28 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void getLoginSuccess(LoginRsp bean) {
-        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-            //存储登录信息
-            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-            getUserSchool();
-        } else {
-            hideLoading();
-            ToastUtils.showShort(bean.msg);
-        }
+//        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+//            //存储登录信息
+//            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+//            getUserSchool();
+//        } else {
+//            hideLoading();
+//            ToastUtils.showShort(bean.msg);
+//        }
     }
 
     @Override
     public void loginMobileData(LoginRsp bean) {
-        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
-            //存储登录信息
-            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-            SPUtils.getInstance().put(SpData.USERPHONE, phone);
-            //getUserSig();
-            getUserSchool();
-        } else {
-            hideLoading();
-            ToastUtils.showShort(bean.message);
-        }
+//        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+//            //存储登录信息
+//            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+//            SPUtils.getInstance().put(SpData.USERPHONE, phone);
+//            //getUserSig();
+//            getUserSchool();
+//        } else {
+//            hideLoading();
+//            ToastUtils.showShort(bean.message);
+//        }
     }
 
 

@@ -20,13 +20,13 @@ import java.util.TreeSet;
 public class SpData {
 
     /*用户信息，登录返回，登录信息版本号*/
-    public static final String LOGINDATA = "LOGINDATA_NEW";
-    public static final String USERPHONE = "USERPHONE";
-    public static final String SCHOOLINFO = "SCHOOLINFO";
-    public static final String IDENTIY_INFO = "IDENTIY_INFO";
-    public static final String USERSIG = "USERSIG";
-    public static final String USERNAME = "USERNAME";
-    public static final String CLASS_INFO = "CLASS_INFO";
+    public static final String LOGINDATA = "LOGINDATA_NEW2";
+    public static final String USERPHONE = "USERPHONE2";
+    public static final String SCHOOLINFO = "SCHOOLINFO2";
+    public static final String IDENTIY_INFO = "IDENTIY_INFO2";
+    public static final String USERSIG = "USERSIG2";
+    public static final String USERNAME = "USERNAME2";
+    public static final String CLASS_INFO = "CLASS_INFO2";
 
     public static LoginRsp User() {
         return JSON.parseObject(SPUtils.getInstance().getString(LOGINDATA, ""), LoginRsp.class);

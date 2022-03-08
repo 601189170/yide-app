@@ -12,12 +12,8 @@ import com.yyide.chatim.databinding.ActivityFilterTimeBinding
  */
 class FilterTimeActivity :
     KTBaseActivity<ActivityFilterTimeBinding>(ActivityFilterTimeBinding::inflate) {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initView()
-    }
 
-     override fun initView() {
+    override fun initView() {
         binding.top.title.text = getString(R.string.filter_title)
         binding.top.backLayout.setOnClickListener { finish() }
         binding.btnConfirm.setOnClickListener { }

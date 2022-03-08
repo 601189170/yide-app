@@ -11,6 +11,27 @@ import retrofit2.http.Query
 object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL) {
 
     /**
+     * 登录
+     */
+    suspend fun login(requestBody: RequestBody) = getResult {
+        service.login(requestBody)
+    }
+
+    /**
+     * 获取学校和身份信息
+     */
+    suspend fun getSchoolIdentityInfo() = getResult {
+        service.schoolIdentityInfo()
+    }
+
+    /**
+     * 学校身份登录应用
+     */
+    suspend fun schoolIdentityLogin(requestBody: RequestBody) = getResult {
+        service.schoolIdentityLogin(requestBody)
+    }
+
+    /**
      * 教师/班主任周报
      */
     suspend fun teacherWeekly(

@@ -16,5 +16,8 @@ class MMKVConstant {
         const val YD_SHOW_HISTORY_SCHEDULE = "yd_show_history_schedule"
         //查询闸机访问数据权限
         const val YD_GATE_DATA_ACCESS_PERMISSION = "yd_gate_data_access_permission"
+        const val YD_USERNAME = "yd_username"
+        const val YD_PASSWORD = "yd_password"
+        const val YD_LOGIN = "yd_login"
     }
 }

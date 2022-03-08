@@ -65,6 +65,7 @@
                         android:singleLine="true"
                         android:textColorHint="#C0C4CC"
                         android:textSize="@dimen/text_14" />
+                    
 
                     <ImageView
                         android:id="@+id/del"
@@ -238,11 +239,11 @@
                 android:layout_marginStart="@dimen/dp_30"
                 android:layout_marginTop="220dp"
                 android:src="@mipmap/ic_launcher_logo"
+                android:visibility="visible"
                 app:left_bottom_radius="6dp"
-                app:right_bottom_radius="6dp"
-                app:right_top_radius="6dp"
                 app:left_top_radius="6dp"
-                android:visibility="visible" />
+                app:right_bottom_radius="6dp"
+                app:right_top_radius="6dp" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

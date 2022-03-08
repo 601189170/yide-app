@@ -9,13 +9,36 @@ import retrofit2.http.*
 interface INetworkService {
 
     /**
+     * 登录
+     */
+    @POST("/auth/oauth/token")
+    suspend fun login(@Body requestBody: RequestBody): BaseResponse<LoginRsp>
+
+    /**
+     * 选择身份后登录-获取学校身份信息
+     */
+    @POST("/cloud/mobile/user/login")
+    suspend fun schoolIdentityLogin(@Body requestBody: RequestBody): BaseResponse<UserBean>
+
+    /**
+     * 刷新Token
+     */
+    @POST("/auth/oauth/token")
+    suspend fun refreshToken(@Body requestBody: RequestBody): BaseResponse<LoginRsp>
+
+    /**
+     * 获取学校信息
+     */
+    @GET("/cloud/mobile/user/school")
+    suspend fun schoolIdentityInfo(): BaseResponse<List<SchoolIdentityRsp>>
+
+    /**
      * 教师班主任周报
      * classId	是	string	班级id
      * teacherId	是	string	老师id
      * startTime	是	string	这周开始时间
      * endTime	是	string	这周结束时间
      */
-//    @Headers("Content-Type: application/json", "Accept: application/json")
     @GET("/face/cloud-face/app/v1/teacher/weekly")
     suspend fun requestTeacherWeekly(
         @Query("classId") classId: String,
