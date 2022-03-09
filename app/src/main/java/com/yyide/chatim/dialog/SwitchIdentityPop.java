@@ -25,21 +25,20 @@ import com.yyide.chatim.adapter.SwichSchoolAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.SelectUserSchoolRsp;
 import com.yyide.chatim.model.UserInfo;
-import com.yyide.chatim.model.UserSigRsp;
 import com.yyide.chatim.utils.DemoLog;
 import com.yyide.chatim.utils.LoadingTools;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -139,9 +138,9 @@ public class SwitchIdentityPop extends PopupWindow {
 
     void selectUserSchool(GetUserSchoolRsp.DataBean school) {
         loadingTools.showLoading();
-        SchoolRsp rsp = new SchoolRsp();
-        rsp.userId = school.userId;
-        RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(rsp));
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", school.userId);
+        RequestBody requestBody = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         //请求组合创建
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/selectUserSchool")

@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.yyide.chatim.R;
-import com.yyide.chatim.model.SchoolIdentityRsp;
+import com.yyide.chatim.model.SchoolRsp;
 
 import java.util.List;
 
@@ -20,10 +20,10 @@ import java.util.List;
  * @CreateDate: 8/23/21 1:05 PM
  */
 public class IdentityAdapter extends PagerAdapter {
-    private List<SchoolIdentityRsp.IdentityBean> mData;
+    private List<SchoolRsp.IdentityBean> mData;
     private Context mContext;
 
-    public IdentityAdapter(Context ctx, List<SchoolIdentityRsp.IdentityBean> data) {
+    public IdentityAdapter(Context ctx, List<SchoolRsp.IdentityBean> data) {
         this.mContext = ctx;
         this.mData = data;
     }
@@ -38,10 +38,15 @@ public class IdentityAdapter extends PagerAdapter {
     public Object instantiateItem(final ViewGroup container, final int position) {//子View显示
         View view = View.inflate(container.getContext(), R.layout.item_identity, null);
         ImageView imageView = view.findViewById(R.id.ivHead);
-        SchoolIdentityRsp.IdentityBean schoolChildren = mData.get(position);
+        SchoolRsp.IdentityBean schoolChildren = mData.get(position);
 //        imageView.setOnClickListener(view1 -> Toast.makeText(mContext, "当前条目：" + position % mData.size(), Toast.LENGTH_SHORT).show());
         TextView tvName = view.findViewById(R.id.tvName);
         tvName.setText(schoolChildren.getIdentityName());
+        if ("2".equals(schoolChildren.getIdentity())) {
+            imageView.setImageResource(R.mipmap.icon_parents_head);
+        } else if ("1".equals(schoolChildren.getIdentity())) {
+            imageView.setImageResource(R.mipmap.icon_techer_head);
+        }
         container.addView(view);//添加到父控件
         return view;
     }

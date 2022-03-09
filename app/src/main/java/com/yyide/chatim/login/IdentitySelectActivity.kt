@@ -17,7 +17,7 @@ import com.yyide.chatim.login.banner.IdentityAdapter
 import com.yyide.chatim.login.banner.ScaleTransformer
 import com.yyide.chatim.login.banner.SchoolAdapter
 import com.yyide.chatim.login.viewmodel.IdentitySelectViewModel
-import com.yyide.chatim.model.SchoolIdentityRsp
+import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.utils.loge
 
 /**
@@ -29,9 +29,9 @@ class IdentitySelectActivity :
     KTBaseActivity<ActivityIdentitySelectBinding>(ActivityIdentitySelectBinding::inflate) {
 
     val viewModel: IdentitySelectViewModel by viewModels()
-    var schoolBean: SchoolIdentityRsp? = null
-    var identityBean: SchoolIdentityRsp.IdentityBean? = null
-    var schoolList: List<SchoolIdentityRsp>? = null
+    var schoolBean: SchoolRsp? = null
+    var identityBean: SchoolRsp.IdentityBean? = null
+    var schoolList: List<SchoolRsp>? = null
 
     override fun initView() {
         super.initView()
@@ -42,6 +42,7 @@ class IdentitySelectActivity :
 
         //处理选择学校数据
         viewModel.schoolLiveData.observe(this) {
+            hideLoading()
             if (it.isSuccess) {
                 val listData = it.getOrNull()
                 if (!listData.isNullOrEmpty()) {
@@ -56,7 +57,7 @@ class IdentitySelectActivity :
                 }
             }
         }
-
+        showLoading()
         viewModel.schoolIdentity()
     }
 
@@ -64,7 +65,7 @@ class IdentitySelectActivity :
     private fun initSchoolViewPager(
         viewPager: ViewPager,
         viewPagerRootView: ConstraintLayout,
-        listData: List<SchoolIdentityRsp>
+        listData: List<SchoolRsp>
     ) {
         //设置适配器
         viewPager.adapter =
@@ -120,7 +121,7 @@ class IdentitySelectActivity :
     private fun initIdentityViewPager(
         viewPager: ViewPager,
         viewPagerRootView: ConstraintLayout,
-        listData: List<SchoolIdentityRsp.IdentityBean>
+        listData: List<SchoolRsp.IdentityBean>
     ) {
         //设置适配器
         viewPager.adapter =
@@ -156,7 +157,7 @@ class IdentitySelectActivity :
 
         override fun onPageSelected(position: Int) {
             identityBean = schoolBean!!.children[position]
-            ToastUtils.showShort("选择身份:${identityBean!!.identityName}")
+            //ToastUtils.showShort("选择身份:${identityBean!!.identityName}")
         }
 
         override fun onPageScrollStateChanged(state: Int) {
@@ -176,10 +177,16 @@ class IdentitySelectActivity :
                 viewModel.loginLiveData.observe(this) {
                     if (it.isSuccess) {
                         SPUtils.getInstance()
-                            .put(SpData.SCHOOLINFO, JSON.toJSONString(it.getOrNull()))
+                            .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                         SPUtils.getInstance()
                             .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
                         startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    } else {
+                        it.exceptionOrNull()?.localizedMessage?.let { it1 ->
+                            loge(it1)
+                            ToastUtils.showLong(it1)
+                        }
                     }
                 }
                 viewModel.identityLogin(identityBean!!.id, schoolBean!!.id)

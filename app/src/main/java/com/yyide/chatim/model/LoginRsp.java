@@ -4,7 +4,7 @@ import com.yyide.chatim.kotlin.network.base.BaseResponse;
 
 import java.io.Serializable;
 
-public class LoginRsp extends BaseResponse implements Serializable {
+public class LoginRsp extends BaseResponse<LoginRsp> implements Serializable {
 
     /**
      * msg : 登录成功

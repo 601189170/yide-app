@@ -30,7 +30,7 @@ interface INetworkService {
      * 获取学校信息
      */
     @GET("/cloud/mobile/user/school")
-    suspend fun schoolIdentityInfo(): BaseResponse<List<SchoolIdentityRsp>>
+    suspend fun schoolIdentityInfo(): BaseResponse<List<SchoolRsp>>
 
     /**
      * 教师班主任周报

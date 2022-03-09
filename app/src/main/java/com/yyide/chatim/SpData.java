@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
+import com.yyide.chatim.model.SchoolRsp;
+import com.yyide.chatim.model.UserBean;
 
 import java.util.ArrayList;
 import java.util.List;

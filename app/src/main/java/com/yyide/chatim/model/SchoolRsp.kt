@@ -3,7 +3,7 @@ package com.yyide.chatim.model
 import com.alibaba.fastjson.annotation.JSONField
 
 
-data class SchoolIdentityRsp(
+data class SchoolRsp(
     val id: Long = 0,
     val isInit: Boolean = false,
     val schoolLogo: String = "",

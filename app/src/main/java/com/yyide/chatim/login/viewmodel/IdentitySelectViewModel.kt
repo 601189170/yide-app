@@ -6,15 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.kotlin.network.NetworkApi
-import com.yyide.chatim.model.LoginRsp
-import com.yyide.chatim.model.SchoolIdentityRsp
+import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.model.UserBean
 import kotlinx.coroutines.launch
-import okhttp3.FormBody
 import okhttp3.RequestBody
 
 class IdentitySelectViewModel : ViewModel() {
-    val schoolLiveData = MutableLiveData<Result<List<SchoolIdentityRsp>>>()
+    val schoolLiveData = MutableLiveData<Result<List<SchoolRsp>>>()
     val loginLiveData = MutableLiveData<Result<UserBean>>()
 
     /**
