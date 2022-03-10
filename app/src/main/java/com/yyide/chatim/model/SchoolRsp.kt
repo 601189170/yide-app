@@ -21,10 +21,15 @@ data class SchoolRsp(
 //    schoolName	string	学校名称
     data class IdentityBean(
         val id: Long = 0,
-        val identity: String = "",
+        val identity: String = "",// 1 教职工 -  2 家长
         val identityName: String = "",
         val isEnabled: Boolean = false,
-    )
+    ) {
+        companion object{
+            val IDENTITY_TEACHER = "1"
+            val IDENTITY_PARENTS = "2"
+        }
+    }
 }
 
 data class UserBean(

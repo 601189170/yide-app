@@ -664,7 +664,7 @@ public class MainActivity extends BaseMvpActivity<MainPresenter> implements Conv
             @Override
             public void onError(String module, final int code, final String desc) {
                 runOnUiThread(() -> {
-                    //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    //YDToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
                     SPUtils.getInstance().put(BaseConstant.LOGINNAME, SPUtils.getInstance().getString(BaseConstant.LOGINNAME));
                     SPUtils.getInstance().put(BaseConstant.PASSWORD, SPUtils.getInstance().getString(BaseConstant.PASSWORD));
                     UserInfo.getInstance().setAutoLogin(false);

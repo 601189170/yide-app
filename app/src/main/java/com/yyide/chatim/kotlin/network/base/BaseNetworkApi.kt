@@ -20,6 +20,7 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.ParameterizedType
+import java.net.SocketException
 import java.util.concurrent.TimeUnit
 
 /**
@@ -73,6 +74,9 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
             return Result.success(response.data)
         } catch (throwable: Throwable) {
             if (throwable is NetworkException) {
+                return Result.failure(throwable)
+            }
+            if (throwable is SocketException) {
                 return Result.failure(throwable)
             }
             if ((throwable is HttpException && throwable.code() == ErrorCode.UNAUTHORIZED)) {

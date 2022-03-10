@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity;
+package com.yyide.chatim.activity.face;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

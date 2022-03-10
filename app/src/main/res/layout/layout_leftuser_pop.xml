@@ -12,75 +12,69 @@
         android:background="#F5F8FC"
         android:orientation="vertical">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="#DEECFF">
+            android:layout_height="200dp"
+            android:background="@mipmap/icon_personal_center_bg">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout11"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="14dp">
-
-                <FrameLayout
-                    android:id="@+id/user_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.yyide.chatim.widget.RadiusImageView
-                        android:id="@+id/head_img"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="right|center_vertical"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/default_head"
-                        app:left_bottom_radius="6dp"
-                        app:left_top_radius="6dp"
-                        app:right_bottom_radius="6dp"
-                        app:right_top_radius="6dp" />
-
-                    <TextView
-                        android:id="@+id/user_name"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/corners4"
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_16"
-                        android:visibility="gone" />
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/head_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:ellipsize="end"
-                    android:lines="2"
-                    android:paddingStart="@dimen/dp_5"
-                    android:paddingEnd="@dimen/dp_5"
-                    android:textColor="#212121"
-                    android:textSize="@dimen/text_18"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_close"
-                    app:layout_constraintStart_toEndOf="@+id/user_img"
-                    app:layout_constraintTop_toTopOf="@+id/user_img" />
+                android:layout_height="@dimen/dp_40"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/iv_close"
+                    android:id="@+id/ivBack"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:scaleType="center"
+                    android:src="@drawable/att_tab"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@drawable/icon_my_close"
+                    android:text="个人中心"
+                    android:textColor="#ff333333"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </FrameLayout>
+            <org.raphets.roundimageview.RoundImageView
+                android:id="@+id/head_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginTop="@dimen/dp_30"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_head"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout11" />
+
+            <TextView
+                android:id="@+id/head_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/dp_10"
+                android:ellipsize="end"
+                android:lines="1"
+                android:paddingStart="@dimen/dp_5"
+                android:paddingEnd="@dimen/dp_5"
+                android:textColor="@color/text_333333"
+                android:textSize="@dimen/text_20"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/head_img"
+                app:layout_constraintStart_toStartOf="@+id/head_img"
+                app:layout_constraintTop_toBottomOf="@+id/head_img" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -101,7 +95,8 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingStart="20dp"
-                    android:paddingEnd="18dp">
+                    android:paddingEnd="18dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -113,8 +108,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="切换班级"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -140,7 +135,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="18dp"
-                    android:background="@color/line_11" />
+                    android:background="@color/line_11"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/layout2"
@@ -156,15 +152,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/my_icon2" />
+                        android:src="@mipmap/my_icon2" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="切换身份"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -201,7 +197,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/my_icon3" />
+                        android:src="@mipmap/my_icon3" />
 
                     <TextView
                         android:id="@+id/my_info"
@@ -209,8 +205,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="@string/my_info"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -243,15 +239,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/my_icon4" />
+                        android:src="@mipmap/my_icon4" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="修改密码"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -284,15 +280,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/my_icon5" />
+                        android:src="@mipmap/my_icon5" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="帮助中心"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -333,8 +329,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="权限设置"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -369,8 +365,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="推送通知"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -400,15 +396,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/my_icon7" />
+                        android:src="@mipmap/my_icon7" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="清理缓存"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:id="@+id/tv_cache"
@@ -443,15 +439,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/my_icon8" />
+                        android:src="@mipmap/my_icon8" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="版本更新"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:id="@+id/tv_version"
@@ -463,7 +459,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_right" />
+                        android:src="@mipmap/icon_right" />
                 </LinearLayout>
 
                 <View
@@ -495,8 +491,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="关于"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -530,15 +526,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/my_icon9" />
+                        android:src="@mipmap/my_icon9" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="隐私政策"
-                        android:textColor="#1E232A"
-                        android:textSize="@dimen/text_15" />
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -548,7 +544,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/icon_right" />
+                        android:src="@mipmap/icon_right" />
                 </LinearLayout>
 
                 <TextView
@@ -568,7 +564,8 @@
                     android:gravity="center"
                     android:text="@string/exit"
                     android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/text_15"
+                    android:textSize="@dimen/text_16"
+                    android:textStyle="bold"
                     android:visibility="visible" />
             </LinearLayout>
         </ScrollView>

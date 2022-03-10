@@ -38,8 +38,8 @@ public class SpData {
         SPUtils.getInstance().remove(LOGINDATA);
     }
 
-    public static GetUserSchoolRsp Schoolinfo() {
-        return JSON.parseObject(SPUtils.getInstance().getString(SCHOOLINFO, ""), GetUserSchoolRsp.class);
+    public static SchoolRsp Schoolinfo() {
+        return JSON.parseObject(SPUtils.getInstance().getString(SCHOOLINFO, ""), SchoolRsp.class);
     }
 
     public static GetUserSchoolRsp.DataBean getIdentityInfo() {

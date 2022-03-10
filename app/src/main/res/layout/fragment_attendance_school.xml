@@ -37,7 +37,7 @@
                 android:paddingStart="@dimen/dp_10"
                 android:text="@string/home_attendance"
                 android:textColor="#1E232A"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_14"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

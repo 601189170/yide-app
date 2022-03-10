@@ -138,7 +138,7 @@ public class SplashActivity extends AppCompatActivity {
                         if (bean.getCode() == BaseConstant.REQUEST_SUCCES2) {
                             //存储登录信息
                             SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
-                            getUserSchool();
+                            handleData();
                         } else {
                             startLogin();
                         }
@@ -150,42 +150,6 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             startLogin();
         }
-    }
-
-    //获取学校信息
-    void getUserSchool() {
-        Request request = new Request.Builder()
-//                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-                .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/user/getUserSchoolByApp")
-                .addHeader("Authorization", SpData.User().accessToken)
-                .build();
-        //发起请求
-        mOkHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("TAG", "getUserSigonFailure: " + e.toString());
-                startLogin();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
-                Log.e("TAG", "getUserSchool333==>: " + data);
-                GetUserSchoolRsp rsp = JSON.parseObject(data, GetUserSchoolRsp.class);
-                SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-                if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-                    if (rsp.data != null) {
-                        SpData.setIdentityInfo(rsp);
-                    } else {
-                        ToastUtils.showShort(rsp.msg);
-                    }
-                    handleData();
-                } else {
-                    ToastUtils.showShort(rsp.msg);
-                    startLogin();
-                }
-            }
-        });
     }
 
 
@@ -331,11 +295,6 @@ public class SplashActivity extends AppCompatActivity {
                     return;
                 }
             }
-            /*if (SpData.User() != null && SpData.User() != null && !TextUtils.isEmpty(SpData.User().refreshToken)) {
-                toLogin();
-            } else {
-                startLogin();
-            }*/
         }
     }
 }

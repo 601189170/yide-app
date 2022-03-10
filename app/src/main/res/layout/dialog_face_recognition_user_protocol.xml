@@ -7,75 +7,86 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_40"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center"
         android:text="开启人脸采集"
         android:textColor="#ff1a1a1a"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_17"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_tip_icon"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_30"
-        android:src="@drawable/face_protocol_tip_icon"
-        app:layout_constraintLeft_toLeftOf="@id/tv_title"
-        app:layout_constraintRight_toRightOf="@id/tv_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        android:background="#F3FCF9"
+        android:paddingBottom="@dimen/dp_30"
+        app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+        <ImageView
+            android:id="@+id/iv_tip_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_40"
+            android:src="@drawable/face_protocol_tip_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_30"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_tip_icon">
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="@dimen/dp_14"
+                android:layout_height="@dimen/dp_14"
+                android:background="@drawable/schedule_add_label_selector"
+                android:button="@null"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_protocol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#999999"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/checkBox"
+                app:layout_constraintStart_toEndOf="@+id/checkBox"
+                app:layout_constraintTop_toTopOf="@+id/checkBox" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/tv_protocol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_40"
-        android:text=""
-        android:textColor="#ff666666"
-        android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="@id/iv_tip_icon"
-        app:layout_constraintRight_toRightOf="@id/iv_tip_icon"
-        app:layout_constraintTop_toBottomOf="@id/iv_tip_icon" />
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="@dimen/dp_12"
-        android:layout_height="@dimen/dp_12"
-        android:layout_marginEnd="@dimen/dp_10"
-        android:background="@drawable/schedule_add_label_selector"
-        android:button="@null"
-        app:layout_constraintRight_toLeftOf="@id/tv_protocol"
-        app:layout_constraintTop_toTopOf="@id/tv_protocol"
-        app:layout_constraintBottom_toBottomOf="@id/tv_protocol"/>
-
-    <Button
         android:id="@+id/btn_agreed_open"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_44"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="@dimen/dp_14"
-        android:layout_marginEnd="25dp"
-        android:background="@drawable/bg_blue"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center"
         android:text="同意开启"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_18"
-        app:layout_constraintTop_toBottomOf="@id/tv_protocol" />
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_cancel"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+
     <TextView
         android:id="@+id/tv_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center"
         android:text="取消"
-        android:textColor="#ff666666"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="@id/btn_agreed_open"
-        app:layout_constraintRight_toRightOf="@id/btn_agreed_open"
-        app:layout_constraintTop_toBottomOf="@id/btn_agreed_open"
-        android:layout_marginTop="@dimen/dp_14"
-        android:paddingStart="@dimen/dp_20"
-        android:paddingEnd="@dimen/dp_20"
-        android:paddingBottom="@dimen/dp_30"
-        />
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintEnd_toStartOf="@+id/btn_agreed_open"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 </androidx.constraintlayout.widget.ConstraintLayout>

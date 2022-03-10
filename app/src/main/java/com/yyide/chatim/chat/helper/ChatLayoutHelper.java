@@ -37,7 +37,7 @@ public class ChatLayoutHelper {
 //        noticeLayout.setOnNoticeClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                ToastUtil.toastShortMessage("赏白银五千两");
+//                YDToastUtil.toastShortMessage("赏白银五千两");
 //            }
 //        });
 //
@@ -95,7 +95,7 @@ public class ChatLayoutHelper {
 //        action.setActionClickListener(new PopActionClickListener() {
 //            @Override
 //            public void onActionClick(int position, Object data) {
-//                ToastUtil.toastShortMessage("新增一个pop action");
+//                YDToastUtil.toastShortMessage("新增一个pop action");
 //            }
 //        });
 //        messageLayout.addPopAction(action);
@@ -105,13 +105,13 @@ public class ChatLayoutHelper {
 //            @Override
 //            public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
 //                l.onMessageLongClick(view, position, messageInfo);
-//                ToastUtil.toastShortMessage("demo中自定义长按item");
+//                YDToastUtil.toastShortMessage("demo中自定义长按item");
 //            }
 //
 //            @Override
 //            public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
 //                l.onUserIconClick(view, position, messageInfo);
-//                ToastUtil.toastShortMessage("demo中自定义点击头像");
+//                YDToastUtil.toastShortMessage("demo中自定义点击头像");
 //            }
 //        });
 
@@ -129,7 +129,7 @@ public class ChatLayoutHelper {
 //        inputLayout.replaceMoreInput(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                ToastUtil.toastShortMessage("自定义的更多功能按钮事件");
+//                YDToastUtil.toastShortMessage("自定义的更多功能按钮事件");
 //                MessageInfo info = MessageInfoUtil.buildTextMessage("自定义的消息");
 //                layout.sendMessage(info, false);
 //            }
@@ -175,7 +175,7 @@ public class ChatLayoutHelper {
 //            btn1.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    ToastUtil.toastShortMessage("自定义的按钮1");
+//                    YDToastUtil.toastShortMessage("自定义的按钮1");
 //                    if (getChatLayout() != null) {
 //                        Gson gson = new Gson();
 //                        CustomHelloMessage customHelloMessage = new CustomHelloMessage();
@@ -189,7 +189,7 @@ public class ChatLayoutHelper {
 //            btn2.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    ToastUtil.toastShortMessage("自定义的按钮2");
+//                    YDToastUtil.toastShortMessage("自定义的按钮2");
 //                    if (getChatLayout() != null) {
 //                        Gson gson = new Gson();
 //                        CustomHelloMessage customHelloMessage = new CustomHelloMessage();

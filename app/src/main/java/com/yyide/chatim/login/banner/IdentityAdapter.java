@@ -20,8 +20,8 @@ import java.util.List;
  * @CreateDate: 8/23/21 1:05 PM
  */
 public class IdentityAdapter extends PagerAdapter {
-    private List<SchoolRsp.IdentityBean> mData;
-    private Context mContext;
+    private final List<SchoolRsp.IdentityBean> mData;
+    private final Context mContext;
 
     public IdentityAdapter(Context ctx, List<SchoolRsp.IdentityBean> data) {
         this.mContext = ctx;

@@ -87,8 +87,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/start_time"
-                        android:textColor="#ff212121"
-                        android:textSize="@dimen/text_15"
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -129,8 +129,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/end_time"
-                        android:textColor="#ff212121"
-                        android:textSize="@dimen/text_15"
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -171,8 +171,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/date_for_leave"
-                        android:textColor="#ff212121"
-                        android:textSize="@dimen/text_15"
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -296,8 +296,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/choose_student"
-                    android:textColor="#ff212121"
-                    android:textSize="@dimen/text_15"
+                    android:textColor="@color/text_333333"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -341,7 +341,7 @@
                     android:layout_marginStart="48dp"
                     android:text="@string/approver_required"
                     android:textColor="#ff999999"
-                    android:textSize="@dimen/text_15"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toTopOf="@id/line2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -382,7 +382,7 @@
                     android:layout_marginStart="48dp"
                     android:text="@string/copy_people"
                     android:textColor="#ff999999"
-                    android:textSize="@dimen/text_15"
+                    android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line2" />

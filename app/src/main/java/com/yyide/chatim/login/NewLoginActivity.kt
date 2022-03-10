@@ -3,6 +3,7 @@ package com.yyide.chatim.login
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -29,27 +31,18 @@ import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.ActivityNewLoginBinding
 import com.yyide.chatim.login.viewmodel.LoginViewModel
 import com.yyide.chatim.model.UserInfo
-import com.yyide.chatim.utils.DemoLog
-import com.yyide.chatim.utils.Utils
-import com.yyide.chatim.utils.loge
+import com.yyide.chatim.utils.*
 
 class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLoginBinding::inflate) {
 
     private val TAG = NewLoginActivity::class.java.simpleName
     private val viewModel: LoginViewModel by viewModels()
-    override fun initView() {
-        val window: Window = window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
-        super.initView()
 
+    override fun initView() {
+        super.initView()
+        setScreenFull()
         binding.etUser.setText(MMKV.defaultMMKV().decodeString(MMKVConstant.YD_USERNAME))
         binding.etPwd.setText(MMKV.defaultMMKV().decodeString(MMKVConstant.YD_PASSWORD))
-
         Utils.checkPermission(this)
         binding.ivDel.setOnClickListener {
             binding.etUser.setText("")
@@ -68,7 +61,6 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
             hideLoading()
             if (it.isSuccess) {
                 if (bean != null) {
-//                    ToastUtils.showLong("登录成功")
                     //登陆成功保存账号密码
                     MMKV.defaultMMKV()
                         .encode(MMKVConstant.YD_USERNAME, binding.etUser.text.toString())
@@ -93,19 +85,19 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
         val password: String = binding.etPwd.text.toString().trim { it <= ' ' }
 //        if (ll_sms.isShown()) { //处理登录逻辑
 //            if (TextUtils.isEmpty(mobile)) {
-//                ToastUtils.showShort("请输入手机号码")
+//                YDToastUtil.showShort("请输入手机号码")
 //            } else if (TextUtils.isEmpty(validateCode)) {
-//                ToastUtils.showShort("请输入验证码")
+//                YDToastUtil.showShort("请输入验证码")
 //            } else {
 //                tologinBymobile(validateCode, mobile)
 //            }
 //        } else {
         when {
             TextUtils.isEmpty(mobile) -> {
-                ToastUtils.showShort("请输入手机号码")
+                YDToastUtil.showMessage("请输入手机号码")
             }
             TextUtils.isEmpty(password) -> {
-                ToastUtils.showShort("请输入密码")
+                YDToastUtil.showMessage("请输入密码")
             }
             else -> {
                 showLoading()
@@ -145,7 +137,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
         TUIKit.login(userId, userSig, object : IUIKitCallBack {
             override fun onError(module: String, code: Int, desc: String) {
                 runOnUiThread {
-                    //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    //YDToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
                     SPUtils.getInstance()
                         .put(BaseConstant.LOGINNAME, binding.etUser.text.toString())
                     SPUtils.getInstance()

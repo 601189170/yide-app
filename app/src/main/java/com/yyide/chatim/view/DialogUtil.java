@@ -33,7 +33,6 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +45,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.FaceCaptureProtocolActivity;
+import com.yyide.chatim.activity.face.FaceCaptureProtocolActivity;
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity;
@@ -87,13 +86,10 @@ import com.yyide.chatim.widget.CustomInputDialog;
 import com.yyide.chatim.widget.SpaceItemDecoration;
 import com.yyide.chatim.widget.WheelView;
 import com.yyide.chatim.widget.scrollpicker.adapter.ScrollPickerAdapter;
-import com.yyide.chatim.widget.scrollpicker.view.ScrollPickerView;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +100,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 
 
 /**
@@ -224,22 +219,22 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showLabelCreateScheduleDialog(Context context, LifecycleOwner lifecycleOwner,OnClickListener onClickListener){
+    public static void showLabelCreateScheduleDialog(Context context, LifecycleOwner lifecycleOwner, OnClickListener onClickListener) {
         DialogScheduleLabelCreateBinding binding = DialogScheduleLabelCreateBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         final List<LabelColor> labelColorList = LabelColor.Companion.getLabelColorList();
-        final BaseQuickAdapter adapter = new BaseQuickAdapter<LabelColor, BaseViewHolder>(R.layout.item_label_color){
+        final BaseQuickAdapter adapter = new BaseQuickAdapter<LabelColor, BaseViewHolder>(R.layout.item_label_color) {
 
             @Override
             protected void convert(@NonNull BaseViewHolder holder, LabelColor item) {
-                final CircleFrameLayout circleFrameLayout = (CircleFrameLayout)holder.getView(R.id.v_border_circle);
+                final CircleFrameLayout circleFrameLayout = (CircleFrameLayout) holder.getView(R.id.v_border_circle);
                 final ImageView imageView = (ImageView) holder.getView(R.id.iv_default_color);
                 circleFrameLayout.setRadius(DisplayUtils.dip2px(context, 24f));
                 circleFrameLayout.setBackgroundColor(Color.parseColor(item.getColor()));
                 final View view = holder.getView(R.id.v_border);
-                view.setVisibility(item.getChecked()?View.VISIBLE:View.INVISIBLE);
+                view.setVisibility(item.getChecked() ? View.VISIBLE : View.INVISIBLE);
 
                 if (item.getColor().equals(LabelColor.color1)) {
                     circleFrameLayout.setVisibility(View.GONE);
@@ -248,8 +243,8 @@ public class DialogUtil {
                     circleFrameLayout.setVisibility(View.VISIBLE);
                     imageView.setVisibility(View.GONE);
                 }
-                holder.itemView.setOnClickListener(v -> {
-                    for(LabelColor labelColor:labelColorList){
+                holder.getView(R.id.itemView).setOnClickListener(v -> {
+                    for (LabelColor labelColor : labelColorList) {
                         labelColor.setChecked(false);
                     }
                     item.setChecked(true);
@@ -304,7 +299,7 @@ public class DialogUtil {
 
     }
 
-    private static ScrollPickerAdapter getScrollPickerAdapter(Context context,List<String> list,PickerAdapterListener listener){
+    private static ScrollPickerAdapter getScrollPickerAdapter(Context context, List<String> list, PickerAdapterListener listener) {
         ScrollPickerAdapter.ScrollPickerAdapterBuilder<String> builder2 =
                 new ScrollPickerAdapter.ScrollPickerAdapterBuilder<String>(context)
                         .setDataList(list)
@@ -315,14 +310,14 @@ public class DialogUtil {
                         .setOnScrolledListener(v -> {
                             String text = (String) v.getTag();
                             Log.e(TAG, "onSelectedItemClicked: " + text);
-                            if (listener != null){
+                            if (listener != null) {
                                 listener.change(text);
                             }
                         });
         return builder2.build();
     }
 
-    public interface PickerAdapterListener{
+    public interface PickerAdapterListener {
         void change(String number);
     }
 
@@ -333,7 +328,7 @@ public class DialogUtil {
         AtomicReference<String> number = new AtomicReference<>();
         AtomicReference<String> unit = new AtomicReference<>();
         final Repetition repetition = scheduleEditViewModel.getRepetitionLiveData().getValue();
-        Log.e(TAG, "showCustomRepetitionScheduleDialog: "+JSON.toJSONString(repetition) );
+        Log.e(TAG, "showCustomRepetitionScheduleDialog: " + JSON.toJSONString(repetition));
         unit.set("天");
         number.set("1");
         if (repetition != null && repetition.getRule() != null && !repetition.getRule().isEmpty()) {
@@ -349,7 +344,7 @@ public class DialogUtil {
                 final String[] byweekdayList = byweekday.replace("[", "").replace("]", "").split(",");
                 final List<String> stringList = new ArrayList<>();
                 for (String s : byweekdayList) {
-                    stringList.add(s.trim().replace("\"",""));
+                    stringList.add(s.trim().replace("\"", ""));
                 }
                 for (WeekBean weekBean : weekList) {
                     weekBean.setChecked(stringList.contains(weekBean.getShortname()));
@@ -360,7 +355,7 @@ public class DialogUtil {
                 final String[] bymonthdayList = bymonthday.replace("[", "").replace("]", "").split(",");
                 final List<String> stringList = new ArrayList<>();
                 for (String s : bymonthdayList) {
-                    stringList.add(s.trim().replace("\"",""));
+                    stringList.add(s.trim().replace("\"", ""));
                 }
                 for (MonthBean monthBean : monthList) {
                     monthBean.setChecked(stringList.contains(monthBean.getTitle()));
@@ -386,7 +381,7 @@ public class DialogUtil {
             @Override
             public void endSelect(int id, String text) {
                 unit.set(text);
-                final List<String> numberList = RepetitionDataBean.Companion.getNumberList(text,repetitionDataBeanList);
+                final List<String> numberList = RepetitionDataBean.Companion.getNumberList(text, repetitionDataBeanList);
                 binding.numberWv.setData(numberList);
                 binding.numberWv.setDefault(0);
                 if ("月".equals(text)) {
@@ -408,7 +403,7 @@ public class DialogUtil {
         });
 
         final List<String> numberlist = repetitionDataBeanList.get(unitIndex).getNumber();
-        final int numberIndex = Integer.parseInt(number.get()) -1;
+        final int numberIndex = Integer.parseInt(number.get()) - 1;
         binding.numberWv.setData(numberlist);
         binding.numberWv.setDefault(numberIndex);
         binding.numberWv.setOnSelectListener(new WheelView.OnSelectListener() {
@@ -423,38 +418,38 @@ public class DialogUtil {
             }
         });
 
-        binding.rvWeekList.setLayoutManager(new GridLayoutManager(context,3));
-        BaseQuickAdapter adapter = new BaseQuickAdapter<WeekBean,BaseViewHolder>(R.layout.item_dialog_week_custom_repetition){
+        binding.rvWeekList.setLayoutManager(new GridLayoutManager(context, 3));
+        BaseQuickAdapter adapter = new BaseQuickAdapter<WeekBean, BaseViewHolder>(R.layout.item_dialog_week_custom_repetition) {
 
             @Override
             protected void convert(@NonNull BaseViewHolder baseViewHolder, WeekBean weekBean) {
-                baseViewHolder.setText(R.id.title,weekBean.getTitle());
+                baseViewHolder.setText(R.id.title, weekBean.getTitle());
                 baseViewHolder.getView(R.id.title).setSelected(weekBean.getChecked());
-                baseViewHolder.itemView.setOnClickListener(v -> {
+                baseViewHolder.getView(R.id.title).setOnClickListener(v -> {
                     weekBean.setChecked(!weekBean.getChecked());
                     baseViewHolder.getView(R.id.title).setSelected(weekBean.getChecked());
                 });
             }
         };
         adapter.setList(weekList);
-        binding.rvWeekList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f),3));
+        binding.rvWeekList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f), 3));
         binding.rvWeekList.setAdapter(adapter);
 
-        binding.rvMonthList.setLayoutManager(new GridLayoutManager(context,7));
-        BaseQuickAdapter quickAdapter = new BaseQuickAdapter<MonthBean,BaseViewHolder>(R.layout.item_dialog_month_custom_repetition){
+        binding.rvMonthList.setLayoutManager(new GridLayoutManager(context, 7));
+        BaseQuickAdapter quickAdapter = new BaseQuickAdapter<MonthBean, BaseViewHolder>(R.layout.item_dialog_month_custom_repetition) {
 
             @Override
             protected void convert(@NonNull BaseViewHolder baseViewHolder, MonthBean monthBean) {
-                baseViewHolder.setText(R.id.title,monthBean.getTitle());
+                baseViewHolder.setText(R.id.title, monthBean.getTitle());
                 baseViewHolder.getView(R.id.title).setSelected(monthBean.getChecked());
-                baseViewHolder.itemView.setOnClickListener(v -> {
+                baseViewHolder.getView(R.id.title).setOnClickListener(v -> {
                     monthBean.setChecked(!monthBean.getChecked());
                     baseViewHolder.getView(R.id.title).setSelected(monthBean.getChecked());
                 });
             }
         };
         quickAdapter.setList(monthList);
-        binding.rvMonthList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f),7));
+        binding.rvMonthList.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 2f), 7));
         binding.rvMonthList.setAdapter(quickAdapter);
 
         if ("月".equals(unit.get())) {
@@ -472,27 +467,27 @@ public class DialogUtil {
             mDialog.dismiss();
         });
         binding.tvFinish.setOnClickListener(v -> {
-            Map<String,Object> rule = new HashMap<String,Object>();
+            Map<String, Object> rule = new HashMap<String, Object>();
             final String unitStr = unit.get();
             final String numberStr = number.get();
             if ("天".equals(unitStr)) {
                 //rule = "{\"freq\": \"daily\",\"interval\": \"" + numberStr + "\"}";
-                rule.put("freq","daily");
-                rule.put("interval",numberStr);
+                rule.put("freq", "daily");
+                rule.put("interval", numberStr);
 
             } else if ("月".equals(unitStr)) {
                 final List<MonthBean> collect = monthList.stream().filter(MonthBean::getChecked).collect(Collectors.toList());
                 if (!collect.isEmpty()) {
                     List<String> bymonthday = collect.stream().map(MonthBean::getTitle).collect(Collectors.toList());
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\",\"bymonthday\":\"" + bymonthday + "\"}";
-                    rule.put("freq","monthly");
-                    rule.put("interval",numberStr);
-                    rule.put("bymonthday",JSON.toJSONString(bymonthday));
+                    rule.put("freq", "monthly");
+                    rule.put("interval", numberStr);
+                    rule.put("bymonthday", JSON.toJSONString(bymonthday));
 
                 } else {
                     //rule = "{\"freq\": \"monthly\",\"interval\": \"" + numberStr + "\"}";
-                    rule.put("freq","monthly");
-                    rule.put("interval",numberStr);
+                    rule.put("freq", "monthly");
+                    rule.put("interval", numberStr);
                 }
 
             } else if ("周".equals(unitStr)) {
@@ -500,16 +495,16 @@ public class DialogUtil {
                 if (!collect.isEmpty()) {
                     List<String> byweekday = collect.stream().map(WeekBean::getShortname).collect(Collectors.toList());
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\",\"byweekday\":\"" + byweekday + "\"}";
-                    rule.put("freq","weekly");
-                    rule.put("interval",numberStr);
-                    rule.put("byweekday",JSON.toJSONString(byweekday));
+                    rule.put("freq", "weekly");
+                    rule.put("interval", numberStr);
+                    rule.put("byweekday", JSON.toJSONString(byweekday));
                 } else {
                     //rule = "{\"freq\": \"weekly\",\"interval\": \"" + numberStr + "\"}";
-                    rule.put("freq","weekly");
-                    rule.put("interval",numberStr);
+                    rule.put("freq", "weekly");
+                    rule.put("interval", numberStr);
                 }
             }
-            scheduleEditViewModel.getRepetitionLiveData().setValue(new Repetition(8,"自定义重复",true,rule));
+            scheduleEditViewModel.getRepetitionLiveData().setValue(new Repetition(8, "自定义重复", true, rule));
             mDialog.dismiss();
         });
         Window dialogWindow = mDialog.getWindow();
@@ -542,8 +537,8 @@ public class DialogUtil {
                         MeetingSaveActivity.Companion.jumpUpdate(context, scheduleData.getId());
                         return;
                     }
-                    if (scheduleData.getType().equals(""+Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE)){
-                        ScheduleTimetableClassActivity.Companion.jump(context,scheduleData);
+                    if (scheduleData.getType().equals("" + Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE)) {
+                        ScheduleTimetableClassActivity.Companion.jump(context, scheduleData);
                         return;
                     }
                     final Intent intent = new Intent(context, ScheduleEditActivity.class);
@@ -555,12 +550,12 @@ public class DialogUtil {
         binding.clAddSchedule.setOnClickListener(v -> {
             final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(date);
             final DateTime nowTime = ScheduleDaoUtil.INSTANCE.dateTimeJointNowTime(dateTime);
-            onScheduleAddSimpleListener.add(v,nowTime);
+            onScheduleAddSimpleListener.add(v, nowTime);
             mDialog.dismiss();
             //DialogUtil.showAddScheduleDialog(context, lifecycleOwner,nowTime);
         });
 
-        binding.tvDate.setText(DateUtils.formatTime(date,"","",true));
+        binding.tvDate.setText(DateUtils.formatTime(date, "", "", true));
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.BOTTOM);
         dialogWindow.setWindowAnimations(R.style.popwin_anim_style2);
@@ -574,7 +569,7 @@ public class DialogUtil {
         mDialog.show();
     }
 
-    public static void showScheduleDelDialog(Context context, View view,OnClickListener onClickListener) {
+    public static void showScheduleDelDialog(Context context, View view, OnClickListener onClickListener) {
         DialogScheduleDelBinding binding = DialogScheduleDelBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -647,7 +642,7 @@ public class DialogUtil {
         view.getLocationOnScreen(location);//获取在整个屏幕内的绝对坐标
         final int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
         final int right = view.getRight();
-        lp.x = widthPixels - DisplayUtils.dip2px(context, 160f) - (widthPixels - right) -DisplayUtils.dip2px(context, 20f); //对 dialog 设置 x 轴坐标
+        lp.x = widthPixels - DisplayUtils.dip2px(context, 160f) - (widthPixels - right) - DisplayUtils.dip2px(context, 20f); //对 dialog 设置 x 轴坐标
         lp.y = location[1] + view.getHeight() / 2;// - notificationBar; //对dialog设置y轴坐标
 
         lp.width = DisplayUtils.dip2px(context, 160f);
@@ -660,14 +655,14 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showRepetitionScheduleDialog(Context context, LifecycleOwner lifecycleOwner,ScheduleEditViewModel scheduleEditViewModel) {
+    public static void showRepetitionScheduleDialog(Context context, LifecycleOwner lifecycleOwner, ScheduleEditViewModel scheduleEditViewModel) {
         DialogScheduleRepetitionBinding binding = DialogScheduleRepetitionBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         final List<Repetition> list = Repetition.Companion.getList();
         final Repetition value = scheduleEditViewModel.getRepetitionLiveData().getValue();
-        if (value != null){
+        if (value != null) {
             for (Repetition repetition : list) {
                 repetition.setChecked(Objects.equals(repetition.getRule(), value.getRule()));
             }
@@ -676,7 +671,7 @@ public class DialogUtil {
             }
         }
         scheduleEditViewModel.getRepetitionLiveData().observe(lifecycleOwner, repetition -> {
-            if (repetition.getCode() == 8){
+            if (repetition.getCode() == 8) {
                 String rule = ScheduleRepetitionRuleUtil.INSTANCE.ruleToString(JSON.toJSONString(repetition.getRule()));
                 binding.tvCustomRule.setText(rule);
             }
@@ -689,7 +684,7 @@ public class DialogUtil {
                 baseViewHolder.setText(R.id.tv_title, repetition.getTitle());
                 ImageView ivRemind = baseViewHolder.getView(R.id.iv_remind);
                 ivRemind.setVisibility(repetition.getChecked() ? View.VISIBLE : View.GONE);
-                baseViewHolder.itemView.setOnClickListener(v -> {
+                baseViewHolder.getView(R.id.itemView).setOnClickListener(v -> {
                     for (Repetition repetition1 : list) {
                         repetition1.setChecked(false);
                     }
@@ -708,13 +703,13 @@ public class DialogUtil {
         });
         binding.tvFinish.setOnClickListener(v -> {
             final List<Repetition> collect = list.stream().filter(Repetition::getChecked).collect(Collectors.toList());
-            if (!collect.isEmpty()){
+            if (!collect.isEmpty()) {
                 scheduleEditViewModel.getRepetitionLiveData().setValue(collect.get(0));
             }
             mDialog.dismiss();
         });
         binding.clCustom.setOnClickListener(v -> {
-            showCustomRepetitionScheduleDialog(context,scheduleEditViewModel);
+            showCustomRepetitionScheduleDialog(context, scheduleEditViewModel);
             mDialog.dismiss();
         });
         Window dialogWindow = mDialog.getWindow();
@@ -731,7 +726,7 @@ public class DialogUtil {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showRemindScheduleDialog(Context context, ScheduleEditViewModel scheduleEditViewModel,List<Remind> list) {
+    public static void showRemindScheduleDialog(Context context, ScheduleEditViewModel scheduleEditViewModel, List<Remind> list) {
         DialogScheduleRemindBinding binding = DialogScheduleRemindBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -755,7 +750,7 @@ public class DialogUtil {
                 baseViewHolder.setText(R.id.tv_title, remind.getTitle());
                 ImageView ivRemind = baseViewHolder.getView(R.id.iv_remind);
                 ivRemind.setVisibility(remind.getChecked() ? View.VISIBLE : View.GONE);
-                baseViewHolder.itemView.setOnClickListener(v -> {
+                baseViewHolder.getView(R.id.itemView).setOnClickListener(v -> {
                     for (Remind remind1 : list) {
                         remind1.setChecked(false);
                     }
@@ -800,7 +795,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showEditScheduleDialog(Context context, LifecycleOwner lifecycleOwner,ScheduleEditViewModel scheduleEditViewModel) {
+    public static void showEditScheduleDialog(Context context, LifecycleOwner lifecycleOwner, ScheduleEditViewModel scheduleEditViewModel) {
         DialogScheduleEditBinding binding = DialogScheduleEditBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -814,10 +809,10 @@ public class DialogUtil {
             scheduleEditViewModel.getRemindLiveData().setValue(Remind.Companion.getNotRemind());
         }
         binding.clRemind.setOnClickListener(v -> {
-            showRemindScheduleDialog(context,scheduleEditViewModel,binding.checkBox.isChecked()?list2:list);
+            showRemindScheduleDialog(context, scheduleEditViewModel, binding.checkBox.isChecked() ? list2 : list);
         });
         binding.clRepetition.setOnClickListener(v -> {
-            showRepetitionScheduleDialog(context,lifecycleOwner,scheduleEditViewModel);
+            showRepetitionScheduleDialog(context, lifecycleOwner, scheduleEditViewModel);
         });
         binding.clStartTime.setOnClickListener(v -> {
             if (binding.llVLine.getVisibility() == View.GONE) {
@@ -826,7 +821,7 @@ public class DialogUtil {
             }
             binding.vDateTopMarkLeft.setVisibility(View.VISIBLE);
             binding.vDateTopMarkRight.setVisibility(View.INVISIBLE);
-            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateStart.get(),""));
+            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateStart.get(), ""));
         });
         binding.clEndTime.setOnClickListener(v -> {
             if (binding.llVLine.getVisibility() == View.GONE) {
@@ -835,12 +830,12 @@ public class DialogUtil {
             }
             binding.vDateTopMarkLeft.setVisibility(View.INVISIBLE);
             binding.vDateTopMarkRight.setVisibility(View.VISIBLE);
-            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateEnd.get(),""));
+            binding.dateTimePicker.setDefaultMillisecond(DateUtils.formatTime(dateEnd.get(), ""));
         });
         final Boolean allDay = scheduleEditViewModel.getAllDayLiveData().getValue();
         final String startTime = scheduleEditViewModel.getStartTimeLiveData().getValue();
         final String endTime = scheduleEditViewModel.getEndTimeLiveData().getValue();
-        if (allDay != null && allDay){
+        if (allDay != null && allDay) {
             binding.checkBox.setChecked(true);
             binding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2);
             binding.tvTimeStart.setVisibility(View.GONE);
@@ -932,7 +927,7 @@ public class DialogUtil {
 
         binding.tvFinish.setOnClickListener(v -> {
             final int compareDate = ScheduleDaoUtil.INSTANCE.compareDate(dateStart.get(), dateEnd.get());
-            if (compareDate >= 0){
+            if (compareDate >= 0) {
                 ToastUtils.showShort("开始时间不能大于或等于结束时间");
                 return;
             }
@@ -950,7 +945,7 @@ public class DialogUtil {
         });
         scheduleEditViewModel.getRepetitionLiveData().observe(lifecycleOwner, repetition -> {
             binding.tvRepetition.setText(repetition.getTitle());
-            if (repetition.getCode() == 8){
+            if (repetition.getCode() == 8) {
                 String rule = ScheduleRepetitionRuleUtil.INSTANCE.ruleToString(JSON.toJSONString(repetition.getRule()));
                 binding.tvRepetition.setText("重复");
                 binding.tvCustomRule.setText(rule);
@@ -985,7 +980,7 @@ public class DialogUtil {
         mDialog.setContentView(rootView);
         final ScheduleEditViewModel scheduleEditViewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(ScheduleEditViewModel.class);
         //String time = DateUtils.formatTime(DateUtils.switchTime(new Date()), "", "MM月dd日 HH:mm");
-        if (date == null){
+        if (date == null) {
             date = DateTime.now();
             //time = date.toString("MM月dd日 MM月dd日 HH:mm");
             //scheduleEditViewModel.getStartTimeLiveData().setValue(date.toString("yyyy-MM-dd HH:mm:ss"));
@@ -995,9 +990,9 @@ public class DialogUtil {
         final List<DateTime> dateTimes = ScheduleDaoUtil.INSTANCE.defaultTwoTimeListOfDateTime(date);
         final DateTime time1 = dateTimes.get(0);
         final DateTime time2 = dateTimes.get(1);
-        scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1,"yyyy-MM-dd HH:mm:ss"));
-        scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2,"yyyy-MM-dd HH:mm:ss"));
-        String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1,"MM月dd日 HH:mm");
+        scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1, "yyyy-MM-dd HH:mm:ss"));
+        scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2, "yyyy-MM-dd HH:mm:ss"));
+        String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1, "MM月dd日 HH:mm");
         //arrayOf<InputFilter>(MaxTextLengthFilter(100))
         final InputFilter[] inputFilter = {new MaxTextLengthFilter(20)};
         editView.setFilters(inputFilter);
@@ -1014,7 +1009,7 @@ public class DialogUtil {
         });
 
         scheduleEditViewModel.getStartTimeLiveData().observe(lifecycleOwner, dateTime -> {
-            Log.e(TAG, "showAddScheduleDialog: 日期已修改" );
+            Log.e(TAG, "showAddScheduleDialog: 日期已修改");
             if (Objects.equals(scheduleEditViewModel.getAllDayLiveData().getValue(), true)) {
                 String startTime = DateUtils.formatTime(dateTime, "", "MM月dd日");
                 tvDate.setText(startTime);
@@ -1025,16 +1020,16 @@ public class DialogUtil {
         });
 
         tvLabel.setOnClickListener(v -> {
-            showAddLabelDialog(context, lifecycleOwner,scheduleEditViewModel);
+            showAddLabelDialog(context, lifecycleOwner, scheduleEditViewModel);
         });
         ivLabel.setOnClickListener(v -> {
-            showAddLabelDialog(context, lifecycleOwner,scheduleEditViewModel);
+            showAddLabelDialog(context, lifecycleOwner, scheduleEditViewModel);
         });
         tvDate.setOnClickListener(v -> {
-            showEditScheduleDialog(context,lifecycleOwner,scheduleEditViewModel);
+            showEditScheduleDialog(context, lifecycleOwner, scheduleEditViewModel);
         });
         ivTime.setOnClickListener(v -> {
-            showEditScheduleDialog(context,lifecycleOwner,scheduleEditViewModel);
+            showEditScheduleDialog(context, lifecycleOwner, scheduleEditViewModel);
         });
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.BOTTOM);
@@ -1053,23 +1048,24 @@ public class DialogUtil {
 
     /**
      * 添加日程 新v2
+     *
      * @param context
      * @param date
      */
-    public static Dialog showAddScheduleV2Dialog(Context context, LifecycleOwner lifecycleOwner,ScheduleEditViewModel scheduleEditViewModel, DateTime date,OnScheduleAddListener onScheduleAddListener) {
+    public static Dialog showAddScheduleV2Dialog(Context context, LifecycleOwner lifecycleOwner, ScheduleEditViewModel scheduleEditViewModel, DateTime date, OnScheduleAddListener onScheduleAddListener) {
         DialogAddScheduleInputV2Binding binding = DialogAddScheduleInputV2Binding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         CustomInputDialog mDialog = new CustomInputDialog(context, R.style.inputDialog);
         mDialog.setContentView(rootView);
-        if (date == null){
+        if (date == null) {
             date = DateTime.now();
         }
         final List<DateTime> dateTimes = ScheduleDaoUtil.INSTANCE.defaultTwoTimeListOfDateTime(date);
         final DateTime time1 = dateTimes.get(0);
         final DateTime time2 = dateTimes.get(1);
-        scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1,"yyyy-MM-dd HH:mm:ss"));
-        scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2,"yyyy-MM-dd HH:mm:ss"));
-        String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1,"MM月dd日 HH:mm");
+        scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1, "yyyy-MM-dd HH:mm:ss"));
+        scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2, "yyyy-MM-dd HH:mm:ss"));
+        String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1, "MM月dd日 HH:mm");
         final InputFilter[] inputFilter = {new MaxTextLengthFilter(20)};
         binding.edit.setFilters(inputFilter);
         binding.tvDate.setText(time);
@@ -1079,7 +1075,7 @@ public class DialogUtil {
                 ToastUtils.showShort("你还没告诉我您要准备做什么！");
                 return;
             }
-            if (isHasEmoji(title)){
+            if (isHasEmoji(title)) {
                 ToastUtils.showShort("日程名称含有非字符的数据，请重新输入!");
                 return;
             }
@@ -1105,14 +1101,14 @@ public class DialogUtil {
             }
         });
         scheduleEditViewModel.getStartTimeLiveData().observe(lifecycleOwner, startTime -> {
-            if (TextUtils.isEmpty(startTime)){
+            if (TextUtils.isEmpty(startTime)) {
                 return;
             }
             final DateTime dateTime = ScheduleDaoUtil.INSTANCE.toDateTime(startTime);
             final MutableLiveData<Boolean> allDayLiveData = scheduleEditViewModel.getAllDayLiveData();
             final Boolean allDayLiveDataValue = allDayLiveData.getValue();
-            if (allDayLiveDataValue != null && allDayLiveDataValue){
-                binding.tvDate.setText(dateTime.toString("MM月dd日")+" 全天");
+            if (allDayLiveDataValue != null && allDayLiveDataValue) {
+                binding.tvDate.setText(dateTime.toString("MM月dd日") + " 全天");
                 return;
             }
             binding.tvDate.setText(dateTime.toString("MM月dd日 HH:mm"));
@@ -1139,7 +1135,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showTopMenuLabelDialog(Context context, View view, LifecycleOwner lifecycleOwner, OnLabelItemListener onLabelItemListener){
+    public static void showTopMenuLabelDialog(Context context, View view, LifecycleOwner lifecycleOwner, OnLabelItemListener onLabelItemListener) {
         List<LabelListRsp.DataBean> labelList = new ArrayList<LabelListRsp.DataBean>();
         DialogLabelTopMenuSelectLayoutBinding binding = DialogLabelTopMenuSelectLayoutBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
@@ -1151,11 +1147,11 @@ public class DialogUtil {
                 Log.e(TAG, "convert: " + label.toString());
                 baseViewHolder.setText(R.id.tv_label, label.getLabelName());
                 final GradientDrawable gradientDrawable = new GradientDrawable();
-                gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context,2f));
+                gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context, 2f));
                 gradientDrawable.setColor(ColorUtil.parseColor(label.getColorValue()));
                 baseViewHolder.getView(R.id.tv_label).setBackground(gradientDrawable);
                 baseViewHolder.getView(R.id.checkBox).setSelected(label.getChecked());
-                baseViewHolder.itemView.setOnClickListener(v -> {
+                baseViewHolder.getView(R.id.itemView).setOnClickListener(v -> {
                     label.setChecked(!label.getChecked());
                     notifyDataSetChanged();
                 });
@@ -1166,7 +1162,7 @@ public class DialogUtil {
         binding.rvLabelList.setAdapter(adapter);
 
         mDialog.setOnCancelListener(dialog -> {
-            onLabelItemListener.labelItem(labelList.stream().filter(it ->it.getChecked()).collect(Collectors.toList()));
+            onLabelItemListener.labelItem(labelList.stream().filter(it -> it.getChecked()).collect(Collectors.toList()));
         });
         final LabelManageViewModel viewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(LabelManageViewModel.class);
         viewModel.selectLabelList();
@@ -1199,7 +1195,7 @@ public class DialogUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void showAddLabelDialog(Context context, LifecycleOwner lifecycleOwner,ScheduleEditViewModel scheduleEditViewModel) {
+    public static void showAddLabelDialog(Context context, LifecycleOwner lifecycleOwner, ScheduleEditViewModel scheduleEditViewModel) {
         List<LabelListRsp.DataBean> labelList = new ArrayList<>();
         DialogAddLabelLayoutBinding binding = DialogAddLabelLayoutBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
@@ -1221,16 +1217,17 @@ public class DialogUtil {
                 Log.e(TAG, "convert: " + label.toString());
                 baseViewHolder.setText(R.id.tv_label, label.getLabelName());
                 final GradientDrawable gradientDrawable = new GradientDrawable();
-                gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context,2f));
+                gradientDrawable.setCornerRadius(DisplayUtils.dip2px(context, 2f));
                 gradientDrawable.setColor(ColorUtil.parseColor(label.getColorValue()));
                 baseViewHolder.getView(R.id.tv_label).setBackground(gradientDrawable);
                 baseViewHolder.getView(R.id.checkBox).setSelected(label.getChecked());
-                baseViewHolder.itemView.setOnClickListener(v -> {
+                baseViewHolder.getView(R.id.itemView).setOnClickListener(v -> {
                     label.setChecked(!label.getChecked());
                     notifyDataSetChanged();
                 });
             }
         };
+
         //adapter.setList(labelList);
         binding.rvLabelList.setLayoutManager(new LinearLayoutManager(context));
         binding.rvLabelList.addItemDecoration(new DefaultItemDecoration(context.getResources().getColor(R.color.default_item_decoration_color)));
@@ -1238,7 +1235,7 @@ public class DialogUtil {
         final LabelManageViewModel viewModel = new ViewModelProvider.AndroidViewModelFactory(BaseApplication.getInstance()).create(LabelManageViewModel.class);
         viewModel.selectLabelList();
         viewModel.getLabelList().observe(lifecycleOwner, dataBeans -> {
-            Log.e(TAG, "showAddLabelDialog: 更新标签数据" );
+            Log.e(TAG, "showAddLabelDialog: 更新标签数据");
             labelList.clear();
             labelList.addAll(dataBeans);
             final List<LabelListRsp.DataBean> value = scheduleEditViewModel.getLabelListLiveData().getValue();
@@ -1266,17 +1263,17 @@ public class DialogUtil {
         });
 
         mDialog.setOnShowListener(dialog -> {
-            Log.e(TAG, "setOnShowListener: "+dialog.toString() );
+            Log.e(TAG, "setOnShowListener: " + dialog.toString());
         });
 
         mDialog.setOnDismissListener(dialog -> {
-            Log.e(TAG, "setOnDismissListener: "+dialog.toString() );
+            Log.e(TAG, "setOnDismissListener: " + dialog.toString());
         });
 
         mDialog.setOnKeyListener((dialog, keyCode, event) -> {
-            Log.e(TAG, "onKey: "+dialog.toString() );
-            Log.e(TAG, "onKey: "+keyCode );
-            Log.e(TAG, "onKey: "+event.toString() );
+            Log.e(TAG, "onKey: " + dialog.toString());
+            Log.e(TAG, "onKey: " + keyCode);
+            Log.e(TAG, "onKey: " + event.toString());
             return false;
         });
         Window dialogWindow = mDialog.getWindow();
@@ -1295,7 +1292,7 @@ public class DialogUtil {
     /**
      * 修改重复日程选项的弹框
      */
-    public static void showRepetitionScheduleModifyDialog(Context context,OnMenuItemListener onMenuItemListener) {
+    public static void showRepetitionScheduleModifyDialog(Context context, OnMenuItemListener onMenuItemListener) {
         DialogRepetitionScheduleModifyBinding binding = DialogRepetitionScheduleModifyBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
@@ -1393,17 +1390,18 @@ public class DialogUtil {
 
     /**
      * 显示人脸采集需用户同意
+     *
      * @param context
      * @param onClickListener
      */
-    public static void showFaceProtocolDialog(Context context,OnClickListener onClickListener) {
+    public static void showFaceProtocolDialog(Context context, OnClickListener onClickListener) {
         DialogFaceRecognitionUserProtocolBinding binding = DialogFaceRecognitionUserProtocolBinding.inflate(LayoutInflater.from(context));
         ConstraintLayout rootView = binding.getRoot();
         Dialog mDialog = new Dialog(context, R.style.dialog);
         mDialog.setContentView(rootView);
         binding.tvProtocol.setText(Html.fromHtml("同意 <font color='#11C685'>《一加壹人脸识别用户协议》</font>"));
         binding.btnAgreedOpen.setOnClickListener(v -> {
-            if (!binding.checkBox.isChecked()){
+            if (!binding.checkBox.isChecked()) {
                 ToastUtils.showShort("请先阅读并勾选内容!");
                 return;
             }
@@ -1435,32 +1433,35 @@ public class DialogUtil {
         void onEnsure(View view);
     }
 
-    public interface OnScheduleAddListener{
+    public interface OnScheduleAddListener {
         //完成
         void onFinish(View view);
+
         //时间
         void onDate(View view);
+
         //标签
         void onLabel(View view);
+
         //版本切换
         void onSwitch(View view);
     }
 
-   public interface OnScheduleAddSimpleListener{
-       //完成
-       void add(View view,DateTime nowTime);
-   }
+    public interface OnScheduleAddSimpleListener {
+        //完成
+        void add(View view, DateTime nowTime);
+    }
 
     public interface OnMenuItemListener {
         void onMenuItem(int index);
     }
 
-    public interface OnLabelItemListener{
+    public interface OnLabelItemListener {
         void labelItem(List<LabelListRsp.DataBean> labels);
     }
 
     /**
-     判断字符串是否含有Emoji表情
+     * 判断字符串是否含有Emoji表情
      **/
     public static boolean isHasEmoji(String reviewerName) {
         Pattern pattern = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]");

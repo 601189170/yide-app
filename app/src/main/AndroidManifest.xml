@@ -446,11 +446,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- 人脸采集首页 -->
         <activity
-            android:name=".activity.FaceCaptureActivity"
+            android:name=".activity.face.FaceCaptureActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- 人脸裁剪界面 -->
         <activity
-            android:name=".activity.FaceCropActivity"
+            android:name=".activity.face.FaceCropActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- 请假界面 -->
         <activity
@@ -691,7 +691,7 @@
             android:name=".activity.schedule.ScheduleParticipantSearchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.FaceCaptureProtocolActivity"
+            android:name=".activity.face.FaceCaptureProtocolActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

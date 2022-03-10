@@ -43,7 +43,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dp_14"
             android:textColor="@color/text_212121"
-            android:textSize="@dimen/text_15" />
+            android:textSize="@dimen/text_14" />
 
     </LinearLayout>
 

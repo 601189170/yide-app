@@ -58,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static IMEventListener mIMEventListener = new IMEventListener() {
         @Override
         public void onForceOffline() {
-            //ToastUtil.toastLongMessage("您的帐号已在其它终端登录");
+            //YDToastUtil.toastLongMessage("您的帐号已在其它终端登录");
             //logout(BaseApplication.getInstance());
         }
     };

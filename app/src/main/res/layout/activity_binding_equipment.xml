@@ -90,6 +90,6 @@
         android:background="@drawable/flow_pass_bg_shape"
         android:text="@string/enter_login"
         android:textColor="#ffffffff"
-        android:textSize="@dimen/text_15"
+        android:textSize="@dimen/text_14"
         app:layout_constraintTop_toBottomOf="@id/cl_active_code" />
 </androidx.constraintlayout.widget.ConstraintLayout>

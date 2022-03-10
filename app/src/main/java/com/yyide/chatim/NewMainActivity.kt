@@ -99,9 +99,9 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setScreenFull()
         EventBus.getDefault().register(this)
         registerMessageReceiver() // used for receive msg
-
         //登录IM
         getUserSig()
         //注册极光别名
@@ -508,7 +508,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             override fun onError(module: String, code: Int, desc: String) {
                 runOnUiThread {
 
-                    //ToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
+                    //YDToastUtil.toastLongMessage("登录失败, errCode = " + code + ", errInfo = " + desc);
                     SPUtils.getInstance().put(
                         BaseConstant.LOGINNAME,
                         SPUtils.getInstance().getString(BaseConstant.LOGINNAME)

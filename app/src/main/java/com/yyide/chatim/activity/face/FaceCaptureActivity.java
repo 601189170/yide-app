@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity;
+package com.yyide.chatim.activity.face;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,10 +24,8 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kevin.crop.UCrop;
-import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.BaseRsp;
@@ -35,8 +33,6 @@ import com.yyide.chatim.model.FaceOssBean;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.presenter.FaceUploadPresenter;
-import com.yyide.chatim.utils.DisplayUtils;
-import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.FaceUploadView;
 
 import java.io.File;
@@ -46,7 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import butterknife.BindView;
@@ -68,6 +63,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
 
     @BindView(R.id.tv_student_name)
     TextView tvStudentName;//现在学生名字
+
     private List<LeaveDeptRsp.DataBean> classList = new ArrayList<>();
     private static final int REQUEST_TAKE_PHOTO = 1;
     private String classesId;
@@ -89,30 +85,30 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         //classesId = SpData.getIdentityInfo().classesId;
         //depId = SpData.getIdentityInfo().teacherDepId;
         realname = SpData.getIdentityInfo().realname;
-        Log.e("FaceUploadPresenter", "getFaceData: name="+realname +",classId="+classesId+",depId="+depId);
+        Log.e("FaceUploadPresenter", "getFaceData: name=" + realname + ",classId=" + classesId + ",depId=" + depId);
         //人名或者id为空则不能上传人脸
         parmsNull();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void parmsNull() {
-            if (!SpData.getIdentityInfo().staffIdentity()) {
-                tvStudentName.setVisibility(View.VISIBLE);
-                initClassData();
-                if (TextUtils.isEmpty(studentId) || "0".equals(studentId)) {
-                    warnTip(getString(R.string.face_classid_null_tip));
-                } else {
-                    initClassView();
-                    mvpPresenter.getFaceData(realname,classesId , depId,studentId);
-                }
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            tvStudentName.setVisibility(View.VISIBLE);
+            initClassData();
+            if (TextUtils.isEmpty(studentId) || "0".equals(studentId)) {
+                warnTip(getString(R.string.face_classid_null_tip));
             } else {
-                tvStudentName.setVisibility(View.GONE);
-                if (TextUtils.isEmpty(realname)) {
-                    warnTip(getString(R.string.face_username_null_tip));
-                } else {
-                    mvpPresenter.getFaceData(realname, classesId, depId, studentId);
-                }
+                initClassView();
+                mvpPresenter.getFaceData(realname, classesId, depId, studentId);
             }
+        } else {
+            tvStudentName.setVisibility(View.GONE);
+            if (TextUtils.isEmpty(realname)) {
+                warnTip(getString(R.string.face_username_null_tip));
+            } else {
+                mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+            }
+        }
     }
 
     private void warnTip(String msg) {
@@ -120,7 +116,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         tv_face_capture_tip.setVisibility(View.VISIBLE);
         tv_face_capture_tip.setText(msg);
         //tv_face_capture_tip.setTextColor(getResources().getColor(R.color.face_warn));
-        tv_face_capture_tip.setCompoundDrawablesWithIntrinsicBounds(getDrawable(R.drawable.icon_tips),null,null,null);
+        tv_face_capture_tip.setCompoundDrawablesWithIntrinsicBounds(getDrawable(R.drawable.icon_tips), null, null, null);
         tv_face_capture_tip.setCompoundDrawablePadding(10);
         btn_start_capture.setClickable(false);
         btn_start_capture.setAlpha(0.2f);
@@ -196,23 +192,25 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, "onActivityResult: requestCode:"+requestCode+",resultCode:"+resultCode );
+        Log.e(TAG, "onActivityResult: requestCode:" + requestCode + ",resultCode:" + resultCode);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Log.e(TAG, "显示当前照片: " + currentPhotoPath);
             File temp = new File(currentPhotoPath);
             startCropActivity(Uri.fromFile(temp));
         } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
-                if (data ==  null){
-                    //取消并重新获取图片
-                    dispatchTakePictureIntent();
-                    return;
-                }
-                handleCropResult(data);
+            if (data == null) {
+                //取消并重新获取图片
+                dispatchTakePictureIntent();
+                return;
+            }
+            handleCropResult(data);
         } else {
         }
     }
+
     /**
      * 处理剪切后的返回值
+     *
      * @param result
      */
     private void handleCropResult(Intent result) {
@@ -220,7 +218,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         if (resultUri != null) {
             String filePath = resultUri.getEncodedPath();
             String imagePath = Uri.decode(filePath);
-            Log.e(TAG,"imagePath:"+imagePath);
+            Log.e(TAG, "imagePath:" + imagePath);
             Bitmap bmp;
             try {
                 bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
@@ -236,7 +234,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
 
             }
             //图片上传
-            mvpPresenter.updateFaceData(realname,classesId,depId,studentId,imagePath);
+            mvpPresenter.updateFaceData(realname, classesId, depId, studentId, imagePath);
 
             File file = new File(currentPhotoPath);
             if (file.exists()) {
@@ -295,26 +293,26 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     @Override
     public void faceUploadSuccess(BaseRsp baseRsp) {
         Log.e(TAG, "faceUploadSuccess: " + baseRsp.toString());
-        ToastUtils.showShort(""+baseRsp.getMsg());
-        if (baseRsp.getCode() == 200){
+        ToastUtils.showShort("" + baseRsp.getMsg());
+        if (baseRsp.getCode() == 200) {
             tv_face_capture_tip.setText(R.string.face_upload_success_tip);
-        }else {
+        } else {
             tv_face_capture_tip.setText(R.string.face_upload_fail_tip);
         }
-        mvpPresenter.getFaceData(realname,classesId,depId,studentId);
+        mvpPresenter.getFaceData(realname, classesId, depId, studentId);
     }
 
     @Override
     public void faceUploadFail(String msg) {
         Log.e(TAG, "faceUploadFail: " + msg);
-        ToastUtils.showShort("提交失败："+msg);
+        ToastUtils.showShort("提交失败：" + msg);
         tv_face_capture_tip.setText(R.string.face_upload_fail_tip);
-        mvpPresenter.getFaceData(realname,classesId,depId,studentId);
+        mvpPresenter.getFaceData(realname, classesId, depId, studentId);
     }
 
     @Override
     public void getFaceDataSuccess(FaceOssBean faceOssBean) {
-        Log.e(TAG, "getFaceDataSuccess: "+faceOssBean.toString() );
+        Log.e(TAG, "getFaceDataSuccess: " + faceOssBean.toString());
         if (faceOssBean.getCode() == 200) {
             if (faceOssBean.getData() != null) {
                 FaceOssBean.DataBean data = faceOssBean.getData();
@@ -343,11 +341,10 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     }
 
 
-
     @Override
     public void getFaceDataFail(String msg) {
-        Log.e(TAG, "getFaceDataFail: "+msg );
-        ToastUtils.showShort(""+msg);
+        Log.e(TAG, "getFaceDataFail: " + msg);
+        ToastUtils.showShort("" + msg);
         btn_start_capture.setClickable(true);
         btn_start_capture.setAlpha(1f);
     }
@@ -383,7 +380,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initClassView() {
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
-        if (classOptional.isPresent()){
+        if (classOptional.isPresent()) {
             final LeaveDeptRsp.DataBean clazzBean = classOptional.get();
             tvStudentName.setText(clazzBean.getDeptName());
             studentId = clazzBean.getDeptId();
@@ -399,11 +396,11 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                             deptSelectPop.setOnCheckedListener((id, dept) -> {
                                 Log.e(TAG, "班级选择: id=" + id + ", dept=" + dept);
                                 tvStudentName.setText(dept);
-                                if (TextUtils.isEmpty(id) || "0".equals(id)){
+                                if (TextUtils.isEmpty(id) || "0".equals(id)) {
                                     warnTip(getString(R.string.face_classid_null_tip));
                                 }
                                 studentId = id;
-                                mvpPresenter.getFaceData(realname,classesId , depId,studentId);
+                                mvpPresenter.getFaceData(realname, classesId, depId, studentId);
                             });
                         }
                 );

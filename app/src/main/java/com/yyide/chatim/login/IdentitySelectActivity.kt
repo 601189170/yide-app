@@ -2,17 +2,28 @@ package com.yyide.chatim.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.MainActivity
+import com.yyide.chatim.NewMainActivity
+import com.yyide.chatim.R
 import com.yyide.chatim.SpData
+import com.yyide.chatim.adapter.SwitchIdentityAdapter
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityIdentitySelectBinding
+import com.yyide.chatim.databinding.ItemSelectIdentityBinding
 import com.yyide.chatim.login.banner.IdentityAdapter
 import com.yyide.chatim.login.banner.ScaleTransformer
 import com.yyide.chatim.login.banner.SchoolAdapter
@@ -55,6 +66,20 @@ class IdentitySelectActivity :
                     loge(it1)
                     ToastUtils.showLong(it1)
                 }
+            }
+        }
+
+        binding.schoolLeft.setOnClickListener {
+            val currentItem = binding.vpSchool.currentItem
+            if (schoolList != null && schoolList!!.isNotEmpty()) {
+                binding.vpSchool.currentItem = currentItem - 1
+            }
+        }
+
+        binding.schoolRight.setOnClickListener {
+            val currentItem = binding.vpSchool.currentItem
+            if (schoolList != null && schoolList!!.isNotEmpty()) {
+                binding.vpSchool.currentItem = currentItem + 1
             }
         }
         showLoading()
@@ -104,13 +129,10 @@ class IdentitySelectActivity :
             schoolBean = schoolList?.get(position)
             //选择身份
             schoolList?.get(position)?.let {
-                initIdentityViewPager(
-                    binding.vpIdentity,
-                    binding.constraintLayout2,
-                    it.children
-                )
+                if (it.children.isNotEmpty()) {
+                    initAdapter(it.children)
+                }
             }
-//            ToastUtils.showShort("onPageSelected:${position}")
         }
 
         override fun onPageScrollStateChanged(state: Int) {
@@ -118,51 +140,17 @@ class IdentitySelectActivity :
         }
     }
 
-    private fun initIdentityViewPager(
-        viewPager: ViewPager,
-        viewPagerRootView: ConstraintLayout,
-        listData: List<SchoolRsp.IdentityBean>
-    ) {
-        //设置适配器
-        viewPager.adapter =
-            IdentityAdapter(this, listData)
-
-        //Pager之间的间距
-        viewPager.pageMargin = 20
-
-        //预加载
-        viewPager.offscreenPageLimit = 3
-
-        //设置两边小 中间大 【切记配合 xml: android:clipChildren="false" 参数使用】
-        viewPager.setPageTransformer(
-            true,
-            ScaleTransformer()
-        )
-
-        binding.vpIdentity.addOnPageChangeListener(identityOnPageChangeListener)
-        if (listData.isNotEmpty()) {
-            identityOnPageChangeListener.onPageSelected(0)
+    private fun initAdapter(listData: List<SchoolRsp.IdentityBean>) {
+        val mAdapter = SwitchIdentityAdapter()
+        binding.recyclerView.layoutManager =
+            GridLayoutManager(this@IdentitySelectActivity, listData.size)
+        binding.recyclerView.adapter = mAdapter
+        mAdapter.setList(listData)
+        mAdapter.setSelectIndex(0)
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+            mAdapter.setSelectIndex(position)
         }
-        //viewPager左右两边滑动无效的处理
-        viewPagerRootView.setOnTouchListener { v, event -> viewPager.onTouchEvent(event) }
-    }
-
-    private val identityOnPageChangeListener = object : OnPageChangeListener {
-        override fun onPageScrolled(
-            position: Int,
-            positionOffset: Float,
-            positionOffsetPixels: Int
-        ) {
-        }
-
-        override fun onPageSelected(position: Int) {
-            identityBean = schoolBean!!.children[position]
-            //ToastUtils.showShort("选择身份:${identityBean!!.identityName}")
-        }
-
-        override fun onPageScrollStateChanged(state: Int) {
-
-        }
+        identityBean = mAdapter.getSelectItem()
     }
 
     private fun nextStep() {
@@ -180,7 +168,7 @@ class IdentitySelectActivity :
                             .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                         SPUtils.getInstance()
                             .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
-                        startActivity(Intent(this, MainActivity::class.java))
+                        startActivity(Intent(this, NewMainActivity::class.java))
                         finish()
                     } else {
                         it.exceptionOrNull()?.localizedMessage?.let { it1 ->

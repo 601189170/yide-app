@@ -53,11 +53,13 @@ public class ScaleTransformer implements ViewPager.PageTransformer {
             view.setScaleY(MIN_SCALE);
             textView.setTextColor(Color.parseColor("#999999"));
             viewBg.setVisibility(View.VISIBLE);
+            textView.setTextSize(13);
         } else {
             view.setScaleX(MAX_SCALE);
             view.setScaleY(MAX_SCALE);
             textView.setTextColor(Color.parseColor("#333333"));
             viewBg.setVisibility(View.INVISIBLE);
+            textView.setTextSize(15);
         }
         if (position < 1) {
             float scaleFactor = MIN_SCALE + (1 - Math.abs(position)) * (MAX_SCALE - MIN_SCALE);

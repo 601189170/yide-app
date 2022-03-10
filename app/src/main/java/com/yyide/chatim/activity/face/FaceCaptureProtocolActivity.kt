@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity
+package com.yyide.chatim.activity.face
 
 import android.os.Bundle
 import com.yyide.chatim.R

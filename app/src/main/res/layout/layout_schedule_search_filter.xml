@@ -62,7 +62,7 @@
                             android:gravity="center"
                             android:text="事务日程"
                             android:textColor="@color/schedule_filter_bg_text_color_selector"
-                            android:textSize="@dimen/text_15" />
+                            android:textSize="@dimen/text_14" />
 
                         <CheckBox
                             android:id="@+id/cb_school_calendar"
@@ -74,7 +74,7 @@
                             android:gravity="center"
                             android:text="校历"
                             android:textColor="@color/schedule_filter_bg_text_color_selector"
-                            android:textSize="@dimen/text_15" />
+                            android:textSize="@dimen/text_14" />
 
                         <CheckBox
                             android:id="@+id/cb_meeting"
@@ -86,7 +86,7 @@
                             android:gravity="center"
                             android:text="会议"
                             android:textColor="@color/schedule_filter_bg_text_color_selector"
-                            android:textSize="@dimen/text_15" />
+                            android:textSize="@dimen/text_14" />
 
                         <CheckBox
                             android:id="@+id/cb_class_schedule"
@@ -98,7 +98,7 @@
                             android:gravity="center"
                             android:text="课表"
                             android:textColor="@color/schedule_filter_bg_text_color_selector"
-                            android:textSize="@dimen/text_15" />
+                            android:textSize="@dimen/text_14" />
                     </com.google.android.flexbox.FlexboxLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -138,7 +138,7 @@
                         android:gravity="center"
                         android:text="未完成"
                         android:textColor="@color/schedule_filter_bg_text_color_selector"
-                        android:textSize="@dimen/text_15"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintStart_toStartOf="@+id/tv_status"
                         app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
@@ -152,7 +152,7 @@
                         android:gravity="center"
                         android:text="完成"
                         android:textColor="@color/schedule_filter_bg_text_color_selector"
-                        android:textSize="@dimen/text_15"
+                        android:textSize="@dimen/text_14"
                         app:layout_constraintStart_toEndOf="@+id/cb_undone"
                         app:layout_constraintTop_toTopOf="@+id/cb_undone" />
 

@@ -15,6 +15,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.face.FaceCaptureActivity;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
 import com.yyide.chatim.adapter.UserNoticeListAdapter;

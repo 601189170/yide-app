@@ -41,7 +41,7 @@
 
     <color name="black11">#999999</color>
     <color name="line_10">#EEF2F8</color>
-    <color name="line_11">#DCDFE6</color>
+    <color name="line_11">#D8D8D8</color>
     <color name="line_E4E7ED">#E4E7ED</color>
 
     <color name="colorTodayText">@color/colorAccent</color>

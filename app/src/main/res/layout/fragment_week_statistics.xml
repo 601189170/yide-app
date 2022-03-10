@@ -147,7 +147,7 @@
                         android:gravity="center"
                         android:text="@string/attendance_absence"
                         android:textColor="@color/black_white_color3"
-                        android:textSize="@dimen/text_15" />
+                        android:textSize="@dimen/text_14" />
 
                     <RadioButton
                         android:id="@+id/rb_late"
@@ -159,7 +159,7 @@
                         android:gravity="center"
                         android:text="@string/attendance_late"
                         android:textColor="@color/black_white_color3"
-                        android:textSize="@dimen/text_15" />
+                        android:textSize="@dimen/text_14" />
 
                     <RadioButton
                         android:id="@+id/rb_leave"
@@ -171,7 +171,7 @@
                         android:gravity="center"
                         android:text="@string/attendance_ask_for_leave"
                         android:textColor="@color/black_white_color3"
-                        android:textSize="@dimen/text_15" />
+                        android:textSize="@dimen/text_14" />
 
                     <RadioButton
                         android:id="@+id/rb_leave_early"
@@ -183,7 +183,7 @@
                         android:gravity="center"
                         android:text="@string/attendance_leave_early"
                         android:textColor="@color/black_white_color3"
-                        android:textSize="@dimen/text_15" />
+                        android:textSize="@dimen/text_14" />
 
                 </RadioGroup>
 
@@ -193,7 +193,7 @@
                 <!--                    android:layout_height="wrap_content"-->
                 <!--                    android:text="5人"-->
                 <!--                    android:textColor="#ff1e1e1e"-->
-                <!--                    android:textSize="@dimen/text_15"-->
+                <!--                    android:textSize="@dimen/text_14"-->
                 <!--                    android:layout_marginEnd="@dimen/dp_20"-->
                 <!--                    app:layout_constraintTop_toTopOf="@id/rg_attendance_type"-->
                 <!--                    android:layout_marginTop="@dimen/dp_8"-->

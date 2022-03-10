@@ -38,6 +38,7 @@ import com.yyide.chatim.activity.UserActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.alipush.AliasUtil;
 import com.yyide.chatim.base.BaseConstant;
+import com.yyide.chatim.login.NewLoginActivity;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.utils.FileCacheUtils;
@@ -92,7 +93,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         ivClass = mView.findViewById(R.id.iv_class);
         ivIdentity = mView.findViewById(R.id.iv_identity);
         tvVersion = mView.findViewById(R.id.tv_version);
-        mView.findViewById(R.id.iv_close).setOnClickListener(v -> {
+        mView.findViewById(R.id.ivBack).setOnClickListener(v -> {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
             }
@@ -183,7 +184,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 layout1.setEnabled(false);
                 ivClass.setVisibility(View.INVISIBLE);
             }
-            if (SpData.Schoolinfo() != null && SpData.Schoolinfo().data != null && SpData.Schoolinfo().data.size() > 1) {
+            if (SpData.Schoolinfo() != null && SpData.Schoolinfo() != null) {
                 ivIdentity.setVisibility(View.VISIBLE);
                 layout2.setEnabled(true);
             } else {
@@ -214,7 +215,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 
     public void setHeadImg(String path) {
         if (head_img != null) {
-            GlideUtil.loadImageHead(context, path, head_img);
+            GlideUtil.loadCircleImage(context, path, head_img);
         }
     }
 
@@ -330,7 +331,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                     }
                 });
                 hide();
-                context.startActivity(new Intent(context, LoginActivity.class));
+                context.startActivity(new Intent(context, NewLoginActivity.class));
                 context.finish();
                 break;
             case R.id.layout_push:

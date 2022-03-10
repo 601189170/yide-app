@@ -55,8 +55,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_4"
-                    android:textColor="#ff212121"
-                    android:textSize="@dimen/text_15"
+                    android:textColor="@color/text_333333"
+                    android:textSize="@dimen/text_14"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/ivHead"
                     app:layout_constraintTop_toTopOf="@+id/ivHead" />
@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_10"
                     android:textColor="#212121"
-                    android:textSize="@dimen/text_15"
+                    android:textSize="@dimen/text_14"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/textView16"
                     app:layout_constraintTop_toBottomOf="@+id/textView16" />

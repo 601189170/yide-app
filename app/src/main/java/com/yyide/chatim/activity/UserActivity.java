@@ -1,10 +1,7 @@
 package com.yyide.chatim.activity;
 
-import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -15,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.solver.widgets.analyzer.VerticalWidgetRun;
 import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
@@ -23,10 +19,10 @@ import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
-import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.face.FaceCaptureActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.base.MMKVConstant;
