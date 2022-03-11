@@ -1,7 +1,6 @@
 package com.yyide.chatim.presenter;
 
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -21,7 +20,6 @@ import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.http.Header;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -85,7 +83,7 @@ public class UserPresenter extends BasePresenter<UserView> {
         addSubscription(dingApiStores.uploadImg(requestImgPart, studentId), new ApiCallback<UploadRep>() {
             @Override
             public void onSuccess(UploadRep model) {
-                if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
                     mvpView.uploadFileSuccess(model.getData());
                 } else {
                     mvpView.uploadFileFail(model.getMessage());

@@ -80,7 +80,7 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
 
     @Override
     public void getAppAppListSuccess(AppAddRsp model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2 && model.getData() != null) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS && model.getData() != null) {
             if (pageNum == 1) {
                 if (model != null && model.getData() != null) {
                     addAdapter.setList(model.getData().getRecords());
@@ -109,7 +109,7 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
     @Override
     public void addAppSuccess(ResultBean model) {
         ToastUtils.showShort(model.getMsg());
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             if (recordsBean != null) {
                 recordsBean.setIsAdd(true);
 //                baseQuickAdapter.notifyItemChanged(positionIndex, recordsBean);

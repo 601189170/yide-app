@@ -2,18 +2,13 @@ package com.yyide.chatim.fragment;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,12 +23,10 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentAttendanceSchoolBinding;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.AttendancePresenter;
@@ -159,7 +152,7 @@ public class AttendanceSchoolFragment extends BaseMvpFragment<AttendancePresente
 
     @Override
     public void getAttendanceSuccess(AttendanceRsp model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
             } else {

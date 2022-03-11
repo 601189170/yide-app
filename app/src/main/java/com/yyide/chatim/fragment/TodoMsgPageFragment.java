@@ -227,7 +227,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     public void getMyNoticePageSuccess(TodoRsp noticeHomeRsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getMyNoticePageSuccess: " + noticeHomeRsp.toString());
-        if (BaseConstant.REQUEST_SUCCES2 == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
+        if (BaseConstant.REQUEST_SUCCESS == noticeHomeRsp.getCode() && noticeHomeRsp.getData() != null) {
             if (mParam1 == 0) {
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", noticeHomeRsp.getData().getTotal()));
             }

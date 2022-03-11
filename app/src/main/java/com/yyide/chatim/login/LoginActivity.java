@@ -33,7 +33,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BuildConfig;
-import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.NewMainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.RegisterActivity;
@@ -331,7 +331,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void getCode(SmsVerificationRsp bean) {
-        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+        if (bean.code == BaseConstant.REQUEST_SUCCESS) {
             //存储登录信息
             ToastUtils.showShort("验证码已发送");
             time.start();
@@ -342,7 +342,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void getUserSign(UserSigRsp bean) {
-        if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+        if (bean.code == BaseConstant.REQUEST_SUCCESS) {
             SPUtils.getInstance().put(SpData.USERSIG, bean.data);
             initIm(SpData.getUserId(), SpData.UserSig());
         } else {
@@ -364,13 +364,13 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
     public void getUserSchool(GetUserSchoolRsp rsp) {
         SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
         ScheduleDaoUtil.INSTANCE.clearAll();
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             //登陆成功保存账号密码
             SPUtils.getInstance().put(BaseConstant.LOGINNAME, userEdit.getText().toString());
             SPUtils.getInstance().put(BaseConstant.PASSWORD, passwordEdit.getText().toString());
             SpData.setIdentityInfo(rsp);
             hideLoading();
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, NewMainActivity.class));
             //getUserSig();
         } else {
             hideLoading();
@@ -382,7 +382,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
 
     @Override
     public void getAccountSwitch(LoginAccountBean model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {//1开启 0关闭
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {//1开启 0关闭
             if (model.getData() != null && "1".equals(model.getData().getValue())) {
                 forgot.setText(model.getData().getName());
                 isForget = true;
@@ -488,7 +488,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                     UserInfo.getInstance().setAutoLogin(false);
                     UserInfo.getInstance().setUserSig(userSig);
                     UserInfo.getInstance().setUserId(String.valueOf(userId));
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, NewMainActivity.class));
                     finish();
                     Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
                 });
@@ -503,7 +503,7 @@ public class LoginActivity extends BaseMvpActivity<LoginPresenter> implements Lo
                 UserInfo.getInstance().setAutoLogin(true);
                 UserInfo.getInstance().setUserSig(userSig);
                 UserInfo.getInstance().setUserId(String.valueOf(userId));
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, NewMainActivity.class));
                 hideLoading();
                 Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功");
                 finish();

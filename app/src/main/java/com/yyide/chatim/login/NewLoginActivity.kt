@@ -2,8 +2,6 @@ package com.yyide.chatim.login
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.os.Build
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -12,10 +10,7 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -23,15 +18,20 @@ import com.tencent.mmkv.MMKV
 import com.tencent.qcloud.tim.uikit.TUIKit
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil
-import com.yyide.chatim.MainActivity
+import com.yyide.chatim.NewMainActivity
 import com.yyide.chatim.SpData
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.ActivityNewLoginBinding
 import com.yyide.chatim.login.viewmodel.LoginViewModel
+import com.yyide.chatim.model.LoginRsp
+import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.model.UserInfo
-import com.yyide.chatim.utils.*
+import com.yyide.chatim.utils.DemoLog
+import com.yyide.chatim.utils.Utils
+import com.yyide.chatim.utils.YDToastUtil
+import com.yyide.chatim.utils.loge
 
 class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLoginBinding::inflate) {
 
@@ -41,6 +41,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
     override fun initView() {
         super.initView()
         setScreenFull()
+        initEdit()
         binding.etUser.setText(MMKV.defaultMMKV().decodeString(MMKVConstant.YD_USERNAME))
         binding.etPwd.setText(MMKV.defaultMMKV().decodeString(MMKVConstant.YD_PASSWORD))
         Utils.checkPermission(this)
@@ -55,7 +56,6 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
         binding.btnLogin.setOnClickListener {
             login()
         }
-        initEdit()
         viewModel.loginLiveData.observe(this) {
             val bean = it.getOrNull()
             hideLoading()
@@ -66,8 +66,8 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                         .encode(MMKVConstant.YD_USERNAME, binding.etUser.text.toString())
                     MMKV.defaultMMKV()
                         .encode(MMKVConstant.YD_PASSWORD, binding.etPwd.text.toString())
-                    SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean))
-                    startActivity(Intent(this, IdentitySelectActivity::class.java))
+                    //获取学校信息
+                    getSchoolInfo(bean)
                 }
             } else {
                 it.exceptionOrNull()?.localizedMessage?.let { it1 ->
@@ -75,8 +75,64 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                     ToastUtils.showLong(it1)
                 }
             }
-
         }
+    }
+
+    private fun getSchoolInfo(loginRsp: LoginRsp) {
+        //处理选择学校数据
+        viewModel.schoolLiveData.observe(this) {
+            hideLoading()
+            if (it.isSuccess) {
+                val listData = it.getOrNull()
+                if (!listData.isNullOrEmpty()) {
+                    if (listData.size > 1 || (listData.isNotEmpty() && listData[0].children.size > 1)) {
+                        IdentitySelectActivity.start(this, loginRsp)
+                    } else {
+                        if (listData.isNotEmpty() && listData[0].children.isNotEmpty()) {
+                            identityLogin(loginRsp, listData[0], listData[0].children[0])
+                        } else {
+                            YDToastUtil.showMessage("无学校或无身份")
+                        }
+                    }
+                }
+            } else {
+                it.exceptionOrNull()?.localizedMessage?.let { it1 ->
+                    loge(it1)
+                    ToastUtils.showLong(it1)
+                }
+            }
+        }
+        showLoading()
+        viewModel.schoolIdentity()
+    }
+
+    /**
+     * 用户学校身份登录
+     */
+    private fun identityLogin(
+        loginRsp: LoginRsp,
+        schoolBean: SchoolRsp,
+        identityBean: SchoolRsp.IdentityBean
+    ) {
+        viewModel.loginLiveData.observe(this) {
+            hideLoading()
+            if (it.isSuccess) {
+                SPUtils.getInstance()
+                    .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
+                SPUtils.getInstance()
+                    .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
+                SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(loginRsp))
+                startActivity(Intent(this, NewMainActivity::class.java))
+                finish()
+            } else {
+                it.exceptionOrNull()?.localizedMessage?.let { it1 ->
+                    loge(it1)
+                    ToastUtils.showLong(it1)
+                }
+            }
+        }
+        showLoading()
+        viewModel.identityLogin(identityBean!!.id, schoolBean!!.id)
     }
 
     private fun login() {
@@ -145,7 +201,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                     UserInfo.getInstance().setAutoLogin(false)
                     UserInfo.getInstance().userSig = userSig
                     UserInfo.getInstance().userId = userId
-                    startActivity(Intent(this@NewLoginActivity, MainActivity::class.java))
+                    startActivity(Intent(this@NewLoginActivity, NewMainActivity::class.java))
                     finish()
                     Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功")
                 }
@@ -159,7 +215,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 UserInfo.getInstance().setAutoLogin(true)
                 UserInfo.getInstance().userSig = userSig
                 UserInfo.getInstance().userId = userId
-                startActivity(Intent(this@NewLoginActivity, MainActivity::class.java))
+                startActivity(Intent(this@NewLoginActivity, NewMainActivity::class.java))
                 hideLoading()
                 Log.e(TAG, "initIm==>onSuccess: 腾讯IM激活成功")
                 finish()

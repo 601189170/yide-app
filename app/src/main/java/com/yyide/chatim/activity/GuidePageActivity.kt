@@ -1,71 +1,57 @@
-package com.yyide.chatim.activity;
+package com.yyide.chatim.activity
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import com.yyide.chatim.base.BaseActivity
+import com.yyide.chatim.fragment.GuidePageFragment
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.blankj.utilcode.util.SPUtils
+import com.yyide.chatim.R
+import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.databinding.ActivityGuidePageBinding
+import java.util.ArrayList
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.blankj.utilcode.util.SPUtils;
-import com.yyide.chatim.R;
-import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.databinding.ActivityGuidePageBinding;
-import com.yyide.chatim.fragment.GuidePageFragment;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class GuidePageActivity extends BaseActivity {
-
-    private ActivityGuidePageBinding pageBinding;
-    private List<Fragment> fragments = new ArrayList<>();
-    @Override
-    public int getContentViewID() {
-        return R.layout.activity_guide_page;
+class GuidePageActivity : BaseActivity() {
+    private var pageBinding: ActivityGuidePageBinding? = null
+    private val fragments: MutableList<Fragment> = ArrayList()
+    override fun getContentViewID(): Int {
+        return R.layout.activity_guide_page
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        pageBinding = ActivityGuidePageBinding.inflate(getLayoutInflater());
-        setContentView(pageBinding.getRoot());
-        initViewPager();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        pageBinding = ActivityGuidePageBinding.inflate(layoutInflater)
+        setContentView(pageBinding!!.root)
+        initViewPager()
     }
 
-    private void initViewPager() {
-        fragments.add(GuidePageFragment.newInstance(0));
-        fragments.add(GuidePageFragment.newInstance(1));
-        fragments.add(GuidePageFragment.newInstance(2));
-        fragments.add(GuidePageFragment.newInstance(3));
-        pageBinding.viewpager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        pageBinding.viewpager.setAdapter(new FragmentStateAdapter(this) {
-            @NonNull
-            @Override
-            public Fragment createFragment(int position) {
-                return fragments.get(position);
+    private fun initViewPager() {
+        fragments.add(GuidePageFragment.newInstance(0))
+        fragments.add(GuidePageFragment.newInstance(1))
+        fragments.add(GuidePageFragment.newInstance(2))
+        fragments.add(GuidePageFragment.newInstance(3))
+        pageBinding!!.viewpager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        pageBinding!!.viewpager.adapter = object : FragmentStateAdapter(this) {
+            override fun createFragment(position: Int): Fragment {
+                return fragments[position]
             }
 
-            @Override
-            public int getItemCount() {
-                return fragments.isEmpty() ? 0 : fragments.size();
+            override fun getItemCount(): Int {
+                return if (fragments.isEmpty()) 0 else fragments.size
             }
-        });
+        }
     }
 
-    @Override
-    public void onBackPressed() {
-        boolean firstOpenApp = SPUtils.getInstance().getBoolean(BaseConstant.FIRST_OPEN_APP,true);
-        if (firstOpenApp){
-            final Intent intent = getIntent();
-            intent.putExtra("interrupt",true);
-            setResult(Activity.RESULT_OK,intent);
-            finish();
-        }else {
-            super.onBackPressed();
+    override fun onBackPressed() {
+        val firstOpenApp = SPUtils.getInstance().getBoolean(BaseConstant.FIRST_OPEN_APP, true)
+        if (firstOpenApp) {
+            val intent = intent
+            intent.putExtra("interrupt", true)
+            setResult(RESULT_OK, intent)
+            finish()
+        } else {
+            super.onBackPressed()
         }
     }
 }

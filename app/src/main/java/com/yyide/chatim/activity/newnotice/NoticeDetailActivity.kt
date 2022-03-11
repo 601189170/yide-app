@@ -245,7 +245,7 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
     override fun retractSuccess(model: ResultBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 detailBinding.btnToWithdraw.visibility = View.GONE
                 detailBinding.btnCommit.visibility = View.VISIBLE
                 detailBinding.btnCommit.isClickable = false
@@ -257,7 +257,7 @@ class NoticeDetailActivity : BaseMvpActivity<NoticeDetailPresenter>(), NoticeDet
 
     override fun getMyReceivedList(model: NoticeMyReleaseDetailBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 setDate(model.data)
             }
         }

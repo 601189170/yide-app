@@ -320,7 +320,7 @@ class NoticeGeneralPushActivity : BaseMvpActivity<NoticeReleasePresenter>(),
     }
 
     override fun getBlankReleaseSuccess(model: ResultBean?) {
-        if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
+        if (model != null && model.code == BaseConstant.REQUEST_SUCCESS) {
             Handler().postDelayed({
                 EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_PUSH_BLANK, ""))
                 EventBus.getDefault()

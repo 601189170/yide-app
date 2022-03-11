@@ -174,7 +174,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
     @Override
     public void getGradeListSuccess(AttendanceRsp model) {
         viewBinding.swipeRefreshLayout.setRefreshing(false);
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             if (model.getData() != null) {
                 setDataView(model.getData());
             }

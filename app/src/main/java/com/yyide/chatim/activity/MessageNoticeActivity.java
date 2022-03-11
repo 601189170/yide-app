@@ -160,7 +160,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
 
     @Override
     public void updateNoticeSuccess(ResultBean resultBean) {
-        if (resultBean.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (resultBean.getCode() == BaseConstant.REQUEST_SUCCESS) {
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_UPDATE, ""));
         }
     }

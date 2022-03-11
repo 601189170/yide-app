@@ -17,13 +17,11 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.adapter.AttendanceAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -35,7 +33,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -139,7 +136,7 @@ public class AttendanceTeacherFragment extends BaseMvpFragment<AttendancePresent
 
     @Override
     public void getAttendanceSuccess(AttendanceRsp model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
             } else {

@@ -87,7 +87,7 @@ class BookTeacherFragment : BaseMvpFragment<BookPresenter>(), BookView {
     override fun getBookList(model: BookRsp?) {
         mViewBinding.root.visibility = View.VISIBLE
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 //处理没有学校名字
                 if (TextUtils.isEmpty(model.data.schoolName_)) {
                     mViewBinding.tvSchoolName.text = SpData.getIdentityInfo().schoolName

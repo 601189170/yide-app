@@ -21,7 +21,7 @@ import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitUtils;
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.NewMainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.chat.helper.IBaseLiveListener;
 import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager;
@@ -153,9 +153,8 @@ public class MessageNotification {
         Intent launch;
         // 小米手机需要在设置里面把【云通信IM】的"后台弹出权限"打开才能点击Notification跳转。
         if (isDialing) {
-            launch = new Intent(mContext, MainActivity.class);
+            launch = new Intent(mContext, NewMainActivity.class);
             launch = baseCallListener.putCallExtra(launch, Constants.CHAT_INFO, msg);
-            launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         } else {
             ChatInfo chatInfo = new ChatInfo();
             if (!TextUtils.isEmpty(msg.getGroupID())) {
@@ -168,8 +167,8 @@ public class MessageNotification {
             chatInfo.setChatName(title);
             launch = new Intent(mContext, ChatActivity.class);
             launch.putExtra(Constants.CHAT_INFO, chatInfo);
-            launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
+        launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         builder.setContentIntent(PendingIntent.getActivity(mContext,
                 (int) SystemClock.uptimeMillis(), launch, PendingIntent.FLAG_UPDATE_CURRENT));
 

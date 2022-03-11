@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -164,7 +163,7 @@ public class AppManagerActivity extends BaseMvpActivity<AppMannagerPresenter> im
 
     @Override
     public void deleteSuccess(ResultBean model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             ToastUtils.showShort(model.getMsg());
             if (dataBean != null) {
                 baseQuickAdapter.remove(dataBean);

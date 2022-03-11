@@ -8,9 +8,6 @@ import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.PreparesLessonView;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import okhttp3.RequestBody;
 
 public class PreparesLessonPresenter extends BasePresenter<PreparesLessonView> {
@@ -24,7 +21,7 @@ public class PreparesLessonPresenter extends BasePresenter<PreparesLessonView> {
         addSubscription(dingApiStores.addLessons(body), new ApiCallback<ResultBean>() {
             @Override
             public void onSuccess(ResultBean model) {
-                if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
                     mvpView.addPreparesLessonSuccess(model.getMsg());
                 } else {
                     mvpView.addPreparesLessonFail(model.getMsg());
@@ -49,7 +46,7 @@ public class PreparesLessonPresenter extends BasePresenter<PreparesLessonView> {
         addSubscription(dingApiStores.updateLessons(body), new ApiCallback<ResultBean>() {
             @Override
             public void onSuccess(ResultBean model) {
-                if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
                     mvpView.addPreparesLessonSuccess(model.getMsg());
                 } else {
                     mvpView.addPreparesLessonFail(model.getMsg());

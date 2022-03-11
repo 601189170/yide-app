@@ -16,13 +16,11 @@ import androidx.viewpager.widget.ViewPager;
 import com.jude.rollviewpager.RollPagerView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.attendance.AttendanceActivity;
 import com.yyide.chatim.activity.attendance.StatisticsActivity;
 import com.yyide.chatim.adapter.AttendanceParentsAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -138,7 +136,7 @@ public class AttendancePatriarchFragment extends BaseMvpFragment<AttendancePrese
 
     @Override
     public void getAttendanceSuccess(AttendanceRsp model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (model.getData() != null) {
                 setData(model.getData());
             }

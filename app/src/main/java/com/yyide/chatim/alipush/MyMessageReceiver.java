@@ -15,13 +15,11 @@ import androidx.core.app.NotificationCompat;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.sdk.android.push.MessageReceiver;
-import com.alibaba.sdk.android.push.notification.BasicCustomPushNotification;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
-import com.alibaba.sdk.android.push.notification.CustomNotificationBuilder;
-import com.alibaba.sdk.android.push.notification.PushData;
+import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.NewMainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
@@ -136,14 +134,14 @@ public class MyMessageReceiver extends MessageReceiver {
 
     //send msg to MainActivity
     private void processCustomMessage(Context context, String title, String summary, String extras) {
-        if (MainActivity.isForeground) {
-            Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-            msgIntent.putExtra(MainActivity.KEY_MESSAGE, summary);
+        if (BaseConstant.isForeground) {
+            Intent msgIntent = new Intent(NewMainActivity.MESSAGE_RECEIVED_ACTION);
+            msgIntent.putExtra(NewMainActivity.KEY_MESSAGE, summary);
             if (!ExampleUtil.isEmpty(extras)) {
                 try {
                     JSONObject extraJson = new JSONObject(extras);
                     if (extraJson.length() > 0) {
-                        msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
+                        msgIntent.putExtra(NewMainActivity.KEY_EXTRAS, extras);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

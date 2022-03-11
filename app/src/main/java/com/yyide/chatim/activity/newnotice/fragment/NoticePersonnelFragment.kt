@@ -391,7 +391,7 @@ class NoticePersonnelFragment : BaseMvpFragment<NoticeDesignatedPersonnelPresent
 
     override fun getDesignatedPersonnelList(model: NoticePersonnelBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS && model.data != null) {
                 list = model.data
                 total = 0
                 total = getAllCount(model.data)

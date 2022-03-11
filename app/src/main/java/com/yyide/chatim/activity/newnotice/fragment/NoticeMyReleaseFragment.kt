@@ -166,7 +166,7 @@ class NoticeMyReleaseFragment : BaseMvpFragment<NoticeMyReleasePresenter?>(), No
 
     override fun getMyReceivedList(model: NoticeItemBean) {
         viewBinding!!.swipeRefreshLayout.isRefreshing = false
-        if (model.code == BaseConstant.REQUEST_SUCCES2) {
+        if (model.code == BaseConstant.REQUEST_SUCCESS) {
             if (pageNum == 1) {
                 if (model?.data != null) {
                     mAdapter.setList(model.data.records)

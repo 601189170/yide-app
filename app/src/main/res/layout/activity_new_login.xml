@@ -51,6 +51,7 @@
             android:textColorHint="#B3B3B3"
             android:textSize="@dimen/text_14"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView30"
             app:layout_constraintTop_toBottomOf="@+id/textView30" />
 
@@ -69,7 +70,7 @@
             android:background="@null"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:src="@drawable/icon_my_close"
+            android:src="@mipmap/icon_close"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/etUser"
             app:layout_constraintEnd_toEndOf="@+id/etUser"

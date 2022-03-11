@@ -1,34 +1,5 @@
 package com.yyide.chatim.jiguang;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.text.TextUtils;
-import android.util.Log;
-
-import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.ToastUtils;
-import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.MainActivity;
-import com.yyide.chatim.R;
-import com.yyide.chatim.SplashActivity;
-import com.yyide.chatim.activity.MessageNoticeActivity;
-import com.yyide.chatim.activity.newnotice.NoticeConfirmDetailActivity;
-import com.yyide.chatim.activity.notice.NoticeDetailActivity;
-import com.yyide.chatim.base.BaseConstant;
-import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.PushModel;
-import com.yyide.chatim.utils.Utils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-
-import androidx.core.app.NotificationCompat;
 
 //import cn.jpush.android.api.CmdMessage;
 //import cn.jpush.android.api.CustomMessage;
@@ -37,7 +8,6 @@ import androidx.core.app.NotificationCompat;
 //import cn.jpush.android.api.NotificationMessage;
 //import cn.jpush.android.service.JPushMessageReceiver;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 //public class PushMessageReceiver extends JPushMessageReceiver {
 public class PushMessageReceiver {

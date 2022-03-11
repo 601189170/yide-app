@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +12,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity;
-import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
-import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeHomePresenter;
 import com.yyide.chatim.activity.notice.view.NoticeHomeView;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.HomeNoticeRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -99,7 +92,7 @@ public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> impleme
     public void noticeHome(NoticeMyReleaseDetailBean homeNoticeRsp) {
         Log.e(TAG, "noticeHome: " + homeNoticeRsp);
         if (isAdded()) {
-            if (homeNoticeRsp.code == BaseConstant.REQUEST_SUCCES2) {
+            if (homeNoticeRsp.code == BaseConstant.REQUEST_SUCCESS) {
                 data = homeNoticeRsp.data;
                 if (data != null) {
                     notice_time.setVisibility(View.VISIBLE);

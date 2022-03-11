@@ -232,7 +232,7 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
     override fun getNoticeReleasedList(model: NoticeReleaseTemplateBean?) {
         pushBinding?.swipeRefreshLayout?.isRefreshing = false
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 //数据加载完之后
                 if (pageNum == 1) {
                     if (model.data != null && model.data.records != null) {
@@ -278,7 +278,7 @@ class NoticeTemplateReleaseFragment : BaseMvpFragment<NoticeReleaseTemplatePrese
     override fun getNoticeReleasedClassifyList(model: NoticeReleaseTemplateBean?) {
         pushBinding?.swipeRefreshLayout?.isRefreshing = false
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 tabAdapter.setList(model.data.records)
                 if (model.data.records != null && model.data.records.size > 0) {
                     messageTemplateTypeId = model.data.records[0].id

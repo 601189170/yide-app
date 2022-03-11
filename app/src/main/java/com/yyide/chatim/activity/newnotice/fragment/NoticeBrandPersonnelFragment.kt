@@ -383,7 +383,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
 
     override fun getBrandPersonnelList(model: NoticeBrandBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS && model.data != null) {
                 brandList = model.data
                 total = getAllCount(model.data as ArrayList<NoticeBrandBean.DataBean>)
                 reverseElection(model.data as ArrayList<NoticeBrandBean.DataBean>)
@@ -395,7 +395,7 @@ class NoticeBrandPersonnelFragment : BaseMvpFragment<NoticeBrandPersonnelPresent
 
     override fun getSitePersonnelList(model: NoticeBrandBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS && model.data != null) {
                 getData(model.data as ArrayList<NoticeBrandBean.DataBean>)
                 siteList = model.data
             }

@@ -123,7 +123,7 @@ public class StudentHonorFragment extends BaseMvpFragment<StudentHonorPresenter>
 
     @Override
     public void getStudentHonorSuccess(StudentHonorRsp model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             List<String> imgs = new ArrayList<>();
             //StudentHonorRsp.DataBean data = model.getData().getRecords();
             if (model.getData() != null && model.getData().getRecords() != null && model.getData().getRecords().size() > 0) {

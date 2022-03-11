@@ -3,23 +3,16 @@ package com.yyide.chatim.activity.newnotice
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Log
 import android.view.View
-import android.widget.TabHost
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
-import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.newnotice.fragment.NoticeUnreadPersonnelFragment
-import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityNoticeUnConfirmListBinding
 import com.yyide.chatim.model.EventMessage
-import com.yyide.chatim.model.NoticeBlankReleaseBean
 import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeUnreadPresenter
 import com.yyide.chatim.view.NoticeUnreadView
@@ -27,7 +20,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.*
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener as OnPageChangeListener
 
 /**
  * 收到的通知详情未确认人员列表
@@ -127,7 +119,7 @@ class NoticeUnConfirmListActivity : BaseMvpActivity<NoticeUnreadPresenter>(), No
 
     override fun pushNotice(model: ResultBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 ToastUtils.showShort("已提醒未确认人员")
                 finish()
             }

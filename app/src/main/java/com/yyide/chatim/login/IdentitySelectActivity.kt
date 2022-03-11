@@ -1,10 +1,8 @@
 package com.yyide.chatim.login
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,22 +10,16 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.SPUtils
-import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
-import com.yyide.chatim.MainActivity
 import com.yyide.chatim.NewMainActivity
-import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.adapter.SwitchIdentityAdapter
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityIdentitySelectBinding
-import com.yyide.chatim.databinding.ItemSelectIdentityBinding
-import com.yyide.chatim.login.banner.IdentityAdapter
 import com.yyide.chatim.login.banner.ScaleTransformer
 import com.yyide.chatim.login.banner.SchoolAdapter
-import com.yyide.chatim.login.viewmodel.IdentitySelectViewModel
+import com.yyide.chatim.login.viewmodel.LoginViewModel
+import com.yyide.chatim.model.LoginRsp
 import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.utils.loge
 
@@ -39,18 +31,42 @@ import com.yyide.chatim.utils.loge
 class IdentitySelectActivity :
     KTBaseActivity<ActivityIdentitySelectBinding>(ActivityIdentitySelectBinding::inflate) {
 
-    val viewModel: IdentitySelectViewModel by viewModels()
+    val viewModel: LoginViewModel by viewModels()
     var schoolBean: SchoolRsp? = null
     var identityBean: SchoolRsp.IdentityBean? = null
     var schoolList: List<SchoolRsp>? = null
 
+    companion object {
+        fun start(context: Context, loginRsp: LoginRsp) {
+            val intent = Intent(context, IdentitySelectActivity::class.java)
+            intent.putExtra("loginRsp", loginRsp)
+            context.startActivity(intent)
+        }
+    }
+
     override fun initView() {
         super.initView()
-
         binding.btnConfirm.setOnClickListener {
             nextStep()
         }
 
+        binding.schoolLeft.setOnClickListener {
+            val currentItem = binding.vpSchool.currentItem
+            if (schoolList != null && schoolList!!.isNotEmpty()) {
+                binding.vpSchool.currentItem = currentItem - 1
+            }
+        }
+
+        binding.schoolRight.setOnClickListener {
+            val currentItem = binding.vpSchool.currentItem
+            if (schoolList != null && schoolList!!.isNotEmpty()) {
+                binding.vpSchool.currentItem = currentItem + 1
+            }
+        }
+        getSchoolInfo()
+    }
+
+    private fun getSchoolInfo() {
         //处理选择学校数据
         viewModel.schoolLiveData.observe(this) {
             hideLoading()
@@ -66,20 +82,6 @@ class IdentitySelectActivity :
                     loge(it1)
                     ToastUtils.showLong(it1)
                 }
-            }
-        }
-
-        binding.schoolLeft.setOnClickListener {
-            val currentItem = binding.vpSchool.currentItem
-            if (schoolList != null && schoolList!!.isNotEmpty()) {
-                binding.vpSchool.currentItem = currentItem - 1
-            }
-        }
-
-        binding.schoolRight.setOnClickListener {
-            val currentItem = binding.vpSchool.currentItem
-            if (schoolList != null && schoolList!!.isNotEmpty()) {
-                binding.vpSchool.currentItem = currentItem + 1
             }
         }
         showLoading()
@@ -163,11 +165,13 @@ class IdentitySelectActivity :
             }
             else -> {
                 viewModel.loginLiveData.observe(this) {
+                    hideLoading()
                     if (it.isSuccess) {
                         SPUtils.getInstance()
                             .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                         SPUtils.getInstance()
                             .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
+                        SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(intent.getSerializableExtra("loginRsp")))
                         startActivity(Intent(this, NewMainActivity::class.java))
                         finish()
                     } else {
@@ -177,6 +181,7 @@ class IdentitySelectActivity :
                         }
                     }
                 }
+                showLoading()
                 viewModel.identityLogin(identityBean!!.id, schoolBean!!.id)
             }
         }

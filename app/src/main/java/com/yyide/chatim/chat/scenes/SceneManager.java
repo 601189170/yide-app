@@ -17,7 +17,7 @@ import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.tencent.rtmp.TXLiveBase;
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.NewMainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.chat.helper.IBaseLiveListener;
 import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager;
@@ -91,7 +91,7 @@ public class SceneManager {
                     ToastUtil.toastLongMessage(BaseApplication.getInstance().getString(R.string.call_time_out));
                 } else {
                     if (TextUtils.isEmpty(model.groupId)) {
-                        Intent mainIntent = new Intent(BaseApplication.getInstance(), MainActivity.class);
+                        Intent mainIntent = new Intent(BaseApplication.getInstance(), NewMainActivity.class);
                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         BaseApplication.getInstance().startActivity(mainIntent);
                     } else {
@@ -109,7 +109,7 @@ public class SceneManager {
 
                             @Override
                             public void onSuccess() {
-                                Intent mainIntent = new Intent(BaseApplication.getInstance(), MainActivity.class);
+                                Intent mainIntent = new Intent(BaseApplication.getInstance(), NewMainActivity.class);
                                 mainIntent.putExtra(Constants.CALL_MODEL, model);
                                 mainIntent.putExtra(Constants.IS_OFFLINE_PUSH_JUMP, true);
                                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

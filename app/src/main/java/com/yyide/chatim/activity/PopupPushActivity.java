@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.sdk.android.push.AndroidPopupActivity;
-import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.NewMainActivity;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class PopupPushActivity extends AndroidPopupActivity {
     @Override
     protected void onSysNoticeOpened(String title, String summary, Map<String, String> extMap) {
         Log.d(TAG, "OnMiPushSysNoticeOpened, title: " + title + ", content: " + summary + ", extMap: " + extMap);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, NewMainActivity.class);
         if (!extMap.isEmpty()){
             intent.putExtra("extras", JSON.toJSONString(extMap));
         }

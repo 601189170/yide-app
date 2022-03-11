@@ -27,14 +27,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.mmkv.MMKV;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.OfflineMessageBean;
 import com.yyide.chatim.activity.GuidePageActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.login.NewLoginActivity;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.UserInfo;
 import com.yyide.chatim.thirdpush.OfflineMessageDispatcher;
@@ -93,13 +91,13 @@ public class SplashActivity extends AppCompatActivity {
             showPrivacy();
         } else if (firstOpenApp) {
             //第一次打开app
-            new Handler().postDelayed(() -> startGuidePage(), 500);
+            new Handler().postDelayed(this::startGuidePage, 500);
         } else {
-//            if (SpData.User() != null && SpData.User() != null && !TextUtils.isEmpty(SpData.User().refreshToken)) {
-//                toLogin();
-//            } else {
-            new Handler().postDelayed(() -> startLogin(), 3000);
-//            }
+            if (SpData.User() != null && !TextUtils.isEmpty(SpData.User().refreshToken)) {
+                toLogin();
+            } else {
+                new Handler().postDelayed(this::startLogin, 3000);
+            }
         }
     }
 
@@ -133,9 +131,9 @@ public class SplashActivity extends AppCompatActivity {
                 public void onResponse(Call call, Response response) throws IOException {
                     String data = response.body().string();
                     Log.e(TAG, "mOkHttpClient==>: " + data);
-                    if (response.code() == BaseConstant.REQUEST_SUCCES2) {
+                    if (response.code() == BaseConstant.REQUEST_SUCCESS) {
                         LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
-                        if (bean.getCode() == BaseConstant.REQUEST_SUCCES2) {
+                        if (bean.getCode() == BaseConstant.REQUEST_SUCCESS2) {
                             //存储登录信息
                             SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
                             handleData();
@@ -154,7 +152,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
     private void handleData() {
-        mFlashView.postDelayed(() -> startMain(), SPLASH_TIME);
+        mFlashView.postDelayed(this::startMain, SPLASH_TIME);
     }
 
     private void startLogin() {
@@ -178,7 +176,7 @@ public class SplashActivity extends AppCompatActivity {
             finish();
             return;
         }
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        Intent intent = new Intent(SplashActivity.this, NewMainActivity.class);
         startActivity(intent);
         finish();
     }
@@ -206,9 +204,9 @@ public class SplashActivity extends AppCompatActivity {
         //需要显示的字串
         SpannableString spannedString = new SpannableString(string);
         //设置点击字体颜色
-        ForegroundColorSpan colorSpan1 = new ForegroundColorSpan(getResources().getColor(R.color.blue));
+        ForegroundColorSpan colorSpan1 = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
         spannedString.setSpan(colorSpan1, index1, index1 + key1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        ForegroundColorSpan colorSpan2 = new ForegroundColorSpan(getResources().getColor(R.color.blue));
+        ForegroundColorSpan colorSpan2 = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
         spannedString.setSpan(colorSpan2, index2, index2 + key2.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         //设置点击字体大小
         AbsoluteSizeSpan sizeSpan1 = new AbsoluteSizeSpan(14, true);
@@ -234,7 +232,6 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 WebViewActivity.startTitle(SplashActivity.this, BaseConstant.PRIVACY_URL, getString(R.string.privacy_title));
-
             }
 
             @Override
@@ -294,6 +291,11 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
                     return;
                 }
+            }
+            if (SpData.User() != null && SpData.User() != null && !TextUtils.isEmpty(SpData.User().accessToken)) {
+                toLogin();
+            } else {
+                startLogin();
             }
         }
     }

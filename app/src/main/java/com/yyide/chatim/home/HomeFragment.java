@@ -2,11 +2,9 @@ package com.yyide.chatim.home;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,28 +24,22 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.nan.xarch.constant.MMKVKey;
-import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.BuildConfig;
-import com.yyide.chatim.MainActivity;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.operation.OperationActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.base.MMKVConstant;
 import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.fragment.AttendanceTeacherFragment;
 import com.yyide.chatim.fragment.AttendancePatriarchFragment;
 import com.yyide.chatim.fragment.AttendanceSchoolFragment;
-import com.yyide.chatim.fragment.BannerFragment;
 import com.yyide.chatim.fragment.ClassHonorFragment;
 import com.yyide.chatim.fragment.NoticeFragment;
 import com.yyide.chatim.fragment.StudentHonorFragment;
@@ -58,7 +50,6 @@ import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.TodoRsp;
-import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.TakePicUtil;
@@ -68,14 +59,10 @@ import com.yyide.chatim.view.VerticalTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.objectweb.asm.Handle;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -405,7 +392,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     @Override
     public void confirmNotice(ResultBean model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (dialog != null && dialog.isShowing() && isClose) {
                 dialog.dismiss();
             }
@@ -414,7 +401,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     @Override
     public void getNotice(NoticeMyReleaseDetailBean model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.code) {
+        if (BaseConstant.REQUEST_SUCCESS == model.code) {
             showNotice(model.data);
         }
     }
@@ -423,7 +410,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void getUserSchool(GetUserSchoolRsp rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.d("TAG", "getUserSchool==》: " + JSON.toJSONString(rsp));
-        if (BaseConstant.REQUEST_SUCCES2 == rsp.code) {
+        if (BaseConstant.REQUEST_SUCCESS == rsp.code) {
             SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
             SpData.setIdentityInfo(rsp);
         }
@@ -487,7 +474,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     public void getIndexMyNotice(TodoRsp rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
-        if (rsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.getCode() == BaseConstant.REQUEST_SUCCESS) {
             if (rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
                 tv_todo.setVisibility(View.VISIBLE);
                 tv_todo.setText(rsp.getData().getTotal() + "");

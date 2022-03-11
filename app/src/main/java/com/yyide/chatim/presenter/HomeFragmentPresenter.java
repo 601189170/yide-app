@@ -1,9 +1,6 @@
 package com.yyide.chatim.presenter;
 
 
-import android.text.TextUtils;
-
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -11,7 +8,6 @@ import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UploadRep;
-import com.yyide.chatim.model.WeeklyDescBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.HomeFragmentView;
 
@@ -128,7 +124,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         addSubscription(dingApiStores.uploadImg(requestImgPart, null), new ApiCallback<UploadRep>() {
             @Override
             public void onSuccess(UploadRep model) {
-                if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
                     mvpView.uploadFileSuccess(model.getData());
                 } else {
                     mvpView.getFail(model.getMessage());

@@ -84,7 +84,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         Log.e(TAG, "SelectSchByTeaid: " + JSON.toJSONString(rsp));
         boolean isTable = false;
         SelectSchByTeaidRsp.DataBean dataBean = null;
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             if (rsp.data != null && rsp.data.size() > 0) {
                 Calendar c = Calendar.getInstance();
                 for (SelectSchByTeaidRsp.DataBean item : rsp.data) {

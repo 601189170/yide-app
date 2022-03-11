@@ -24,7 +24,6 @@ import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
-import com.tencent.qcloud.tim.uikit.component.action.PopActionClickListener;
 import com.tencent.qcloud.tim.uikit.component.action.PopDialogAdapter;
 import com.tencent.qcloud.tim.uikit.component.action.PopMenuAction;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
@@ -54,8 +53,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -323,7 +320,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
     @Override
     public void getUserNoticePageSuccess(UserMsgNoticeRsp userNoticeRsp) {
-        if (userNoticeRsp.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (userNoticeRsp.getCode() == BaseConstant.REQUEST_SUCCESS) {
             List<UserMsgNoticeRsp.DataBean.RecordsBean> records = userNoticeRsp.getData().getRecords();
             if (records != null && records.size() > 0) {
                 int total = userNoticeRsp.getData().getTotal();

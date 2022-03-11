@@ -77,13 +77,15 @@ import java.util.*
 class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBinding::inflate),
     MessageUnreadWatcher {
 
-    var isForeground = false
-    private var mMessageReceiver: MessageReceiver? = null
-    val MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION"
-    val KEY_TITLE = "title"
-    val KEY_MESSAGE = "message"
-    val KEY_EXTRAS = "extras"
-    var TAG = "MainActivity"
+    companion object {
+        private var mMessageReceiver: MessageReceiver? = null
+        const val MESSAGE_RECEIVED_ACTION = "cn.jiguang.demo.jpush.MESSAGE_RECEIVED_ACTION"
+        const val KEY_TITLE = "title"
+        const val KEY_MESSAGE = "message"
+        const val KEY_EXTRAS = "extras"
+        val TAG = "NewMainActivity"
+    }
+
     private var isShow = false
     private var firstTime: Long = 0
     private var mCallModel: CallModel? = null
@@ -266,7 +268,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         if (BaseConstant.TYPE_CHECK_HELP_CENTER == messageEvent.code) {
             setFragment(SCHEDULE_TYPE, scheduleFragment)
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO == messageEvent.code) {
-            ActivityUtils.finishToActivity(MainActivity::class.java, false)
+            ActivityUtils.finishToActivity(NewMainActivity::class.java, false)
 //            setTab(1, 1)
             setFragment(MESSAGE_TYPE, messageFragment)
         } else if (BaseConstant.TYPE_UPDATE_HOME == messageEvent.code) {
@@ -275,7 +277,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         } else if (BaseConstant.TYPE_REGISTER_UNREAD == messageEvent.code) {
             //ConversationManagerKit.getInstance().addUnreadWatcher(this);
         } else if (BaseConstant.TYPE_MAIN == messageEvent.code) {
-            ActivityUtils.finishToActivity(MainActivity::class.java, false)
+            ActivityUtils.finishToActivity(NewMainActivity::class.java, false)
             setFragment(HOME_TYPE, homeFragment)
         } else if (BaseConstant.TYPE_MESSAGE == messageEvent.code) {
             setFragment(MESSAGE_TYPE, messageFragment)
@@ -305,7 +307,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         mMessageReceiver = MessageReceiver()
         val filter = IntentFilter()
         filter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-        filter.addAction(MainActivity.MESSAGE_RECEIVED_ACTION)
+        filter.addAction(MESSAGE_RECEIVED_ACTION)
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter)
     }
 
@@ -349,7 +351,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     fun showError() {}
 
     fun getCopywriter(model: WeeklyDescBean) {
-        if (model.code == BaseConstant.REQUEST_SUCCES2) {
+        if (model.code == BaseConstant.REQUEST_SUCCESS) {
             if (model.data != null && model.data.size > 0) {
                 val data = model.data
                 Collections.addAll(data) //填充
@@ -360,7 +362,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     fun getWeeklyDate(model: WeeklyDateBean) {
-        if (model.code == BaseConstant.REQUEST_SUCCES2) {
+        if (model.code == BaseConstant.REQUEST_SUCCESS) {
             if (model.data != null) {
                 MMKV.defaultMMKV()
                     .encode(MMKVConstant.YD_WEEKLY_DATE, JSON.toJSONString(model.data))
@@ -370,7 +372,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     fun getVersionInfo(rsp: GetAppVersionResponse) {
         Log.e("TAG", "getData==》: " + JSON.toJSONString(rsp))
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             if (rsp.data != null) {
                 download(rsp.data)
             } else if (isShow) {
@@ -386,13 +388,14 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     inner class MessageReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             try {
-                if (MainActivity.MESSAGE_RECEIVED_ACTION == intent.action) {
-                    val messge = intent.getStringExtra(MainActivity.KEY_MESSAGE)
-                    val extras = intent.getStringExtra(MainActivity.KEY_EXTRAS)
+                if (MESSAGE_RECEIVED_ACTION == intent.action) {
+                    val messge = intent.getStringExtra(KEY_MESSAGE)
+                    val extras = intent.getStringExtra(KEY_EXTRAS)
                     val showMsg = StringBuilder()
-                    showMsg.append(MainActivity.KEY_MESSAGE + " : ").append(messge).append("\n")
+                    showMsg.append("$KEY_MESSAGE : ").append(messge).append("\n")
                     if (!ExampleUtil.isEmpty(extras)) {
-                        showMsg.append(MainActivity.KEY_EXTRAS + " : ").append(extras).append("\n")
+                        showMsg.append("$KEY_EXTRAS : ").append(extras)
+                            .append("\n")
                     }
                     Log.e("TAG", "setCustomMsg: $showMsg.toString()")
                 }
@@ -405,7 +408,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onResume() {
         Log.i(TAG, "onResume")
-        MainActivity.isForeground = true
+        BaseConstant.isForeground = true
         super.onResume()
         GSYVideoManager.onResume()
         if (mCallModel != null) {
@@ -451,7 +454,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     override fun onPause() {
-        MainActivity.isForeground = false
+        BaseConstant.isForeground = false
         super.onPause()
         GSYVideoManager.onPause()
     }
@@ -477,7 +480,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         //请求组合创建
         val request = Request.Builder()
             .url(BaseConstant.API_SERVER_URL + "/management/cloud-system/im/getUserSig")
-            .addHeader("Authorization", SpData.User().accessToken)
+            .addHeader("Authorization", SpData.User().getAccessToken())
             .post(body)
             .build()
         //发起请求
@@ -492,7 +495,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
                 val data = response.body!!.string()
                 Log.e(TAG, "getUserSig==>: $data")
                 val bean = JSON.parseObject(data, UserSigRsp::class.java)
-                if (bean.code == BaseConstant.REQUEST_SUCCES2) {
+                if (bean.code == BaseConstant.REQUEST_SUCCESS) {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data)
                     initIm(bean.data)
                 } else {

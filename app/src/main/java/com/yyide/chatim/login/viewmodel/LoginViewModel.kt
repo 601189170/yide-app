@@ -2,15 +2,21 @@ package com.yyide.chatim.login.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.alibaba.fastjson.JSON
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseViewModel
 import com.yyide.chatim.kotlin.network.NetworkApi
 import com.yyide.chatim.model.LoginRsp
+import com.yyide.chatim.model.SchoolRsp
+import com.yyide.chatim.model.UserBean
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.RequestBody
 
 class LoginViewModel : BaseViewModel() {
     val loginLiveData = MutableLiveData<Result<LoginRsp>>()
+    val schoolLiveData = MutableLiveData<Result<List<SchoolRsp>>>()
+    val identityLoginLiveData = MutableLiveData<Result<UserBean>>()
 
     fun login(userName: String, pwd: String) {
         viewModelScope.launch {
@@ -22,6 +28,28 @@ class LoginViewModel : BaseViewModel() {
                 .add("password", pwd)
                 .build()
             loginLiveData.value = NetworkApi.login(body)
+        }
+    }
+
+    /**
+     * 获取学校信息
+     */
+    fun schoolIdentity() {
+        viewModelScope.launch {
+            schoolLiveData.value = NetworkApi.getSchoolIdentityInfo()
+        }
+    }
+
+    /**
+     * 身份登录
+     */
+    fun identityLogin(identityId: Long, schoolId: Long) {
+        viewModelScope.launch {
+            val map = mutableMapOf<String, Any>()
+            map["id"] = identityId
+            map["schoolId"] = schoolId
+            val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
+            identityLoginLiveData.value = NetworkApi.schoolIdentityLogin(body)
         }
     }
 

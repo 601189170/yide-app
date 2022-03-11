@@ -21,7 +21,6 @@ import com.yyide.chatim.adapter.ClassPhotoAdapter;
 import com.yyide.chatim.adapter.IndexAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.ClassesPhotoBannerRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.presenter.ClassPhotoPresenter;
@@ -132,7 +131,7 @@ public class ClassHonorFragment extends BaseMvpFragment<ClassPhotoPresenter> imp
 
     @Override
     public void getClassesPhotoSuccess(ClassesPhotoRsp model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             List<ClassesPhotoRsp.DataBean.AlbumEntityBean> imgs = new ArrayList<>();
             //StudentHonorRsp.DataBean data = model.getData().getRecords();
             if (model.getData() != null && model.getData().size() > 0) {

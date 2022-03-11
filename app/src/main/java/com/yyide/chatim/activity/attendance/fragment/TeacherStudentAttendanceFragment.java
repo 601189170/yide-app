@@ -25,10 +25,8 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentAttendanceBinding;
 import com.yyide.chatim.dialog.AttendancePop;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.presenter.AttendanceHomePresenter;
 import com.yyide.chatim.presenter.AttendanceTeacherPresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.AttendanceCheckView;
@@ -381,7 +379,7 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
     @Override
     public void getAttendanceSuccess(AttendanceRsp model) {
         mViewBinding.swipeRefreshLayout.setRefreshing(false);
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (model.getData() != null) {
                 setDataView(model.getData());
             }

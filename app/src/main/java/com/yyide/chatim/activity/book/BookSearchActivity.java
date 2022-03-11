@@ -191,7 +191,7 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     @Override
     public void selectUserListSuccess(BookSearchRsp model) {
         Log.e(TAG, "selectUserListSuccess: " + model.toString());
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             hideHistory();
             List<Teacher> teacherList = model.getData().getTeacherList();
             recyclerview.scrollToPosition(0);

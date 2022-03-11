@@ -68,7 +68,7 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
 
     override fun getBookList(model: BookRsp?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 viewBinding.linearlayout.visibility = View.VISIBLE
                 if (TextUtils.isEmpty(model.data.schoolName_)) {
                     viewBinding.tvSchoolName.text = SpData.getIdentityInfo().schoolName

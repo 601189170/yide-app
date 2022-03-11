@@ -4,20 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.tencent.imsdk.v2.V2TIMConversation;
+import androidx.annotation.Nullable;
 
+import com.tencent.imsdk.v2.V2TIMConversation;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.contact.ContactItemBean;
 import com.tencent.qcloud.tim.uikit.modules.contact.FriendProfileLayout;
 import com.tencent.qcloud.tim.uikit.utils.TUIKitConstants;
 import com.yyide.chatim.BaseApplication;
-import com.yyide.chatim.base.BaseActivity;
-import com.yyide.chatim.MainActivity;
+import com.yyide.chatim.NewMainActivity;
 import com.yyide.chatim.R;
+import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.chat.ChatActivity;
 import com.yyide.chatim.utils.Constants;
-
-import androidx.annotation.Nullable;
 
 public class FriendProfileActivity extends BaseActivity {
 
@@ -53,7 +52,7 @@ public class FriendProfileActivity extends BaseActivity {
 
             @Override
             public void onDeleteFriendClick(String id) {
-                Intent intent = new Intent(BaseApplication.getInstance(), MainActivity.class);
+                Intent intent = new Intent(BaseApplication.getInstance(), NewMainActivity.class);
                 startActivity(intent);
             }
         });

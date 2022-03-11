@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -151,7 +150,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     @Override
     public void messageNumberSuccess(TodoRsp model) {
         Log.d(TAG, "messageNumberSuccess>>:" + model.getData().getTotal());
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             if (model.getData() != null) {
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", model.getData().getTotal()));
                 setNumber(model.getData().getTotal());

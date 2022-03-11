@@ -10,15 +10,12 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PreparesLessonActivity;
@@ -30,7 +27,6 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.presenter.MyTablePresenter;
-import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.view.MyTableView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -170,7 +166,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
         mSwipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaid: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2 && rsp.data != null) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS && rsp.data != null) {
             list = rsp.data;
             adapter.setList(getTableList(list, weekDay));
         }

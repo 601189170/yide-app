@@ -147,7 +147,7 @@ public class ParentsStudentAttendanceFragment extends BaseMvpFragment<Attendance
 
     @Override
     public void getAttendanceSuccess(AttendanceRsp model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             AttendanceRsp.DataBean data = model.getData();
             if (data != null) {
                 setDataView(data);

@@ -15,9 +15,10 @@ public class BaseConstant {
     public static final int PAGE_SIZE = 20;
 
     /*请求成功消息编码*/
-    public static int REQUEST_SUCCES = 10000;
+    public static int REQUEST_SUCCESS = 200;
 
-    public static int REQUEST_SUCCES2 = 200;
+    public static int REQUEST_SUCCESS2 = 0;
+
 
     /**
      * 腾讯IM APPID
@@ -84,6 +85,8 @@ public class BaseConstant {
     public static final String SP_PRIVACY = "sp_privacy";
 
     public static final String LOGIN_VERSION_CODE = "login_version_code";
+
+    public static boolean isForeground = false;
 
     /**
      * EventBus 常量

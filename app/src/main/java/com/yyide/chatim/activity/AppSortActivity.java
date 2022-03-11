@@ -20,8 +20,6 @@ import com.yyide.chatim.view.AppSortView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.List;
-
 public class AppSortActivity extends BaseMvpActivity<AppSortPresenter> implements AppSortView, AppSortAdapter.OnDragStartListener {
     private ActivityAppSortBinding mViewBinding;
     private ItemTouchHelper mItemTouchHelper;
@@ -66,7 +64,7 @@ public class AppSortActivity extends BaseMvpActivity<AppSortPresenter> implement
 
     @Override
     public void sendAppSortSuccess(ResultBean model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_APP_MANAGER, ""));
             finish();
         }

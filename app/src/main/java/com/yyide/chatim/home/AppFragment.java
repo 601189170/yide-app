@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -17,8 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.AppManagerActivity;
@@ -180,7 +177,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
 
     @Override
     public void getMyAppListSuccess(MyAppListRsp model) {
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (model != null && model.getData() != null) {
                 List<MyAppListRsp.DataBean> data = model.getData();
                 MyAppListRsp.DataBean itemBean = new MyAppListRsp.DataBean();
@@ -203,7 +200,7 @@ public class AppFragment extends BaseMvpFragment<AppPresenter> implements AppVie
     @Override
     public void getAppListSuccess(AppItemBean model) {
         mSwipeRefreshLayout.setRefreshing(false);
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (model.getData() != null && model.getData().getRecords() != null) {
                 recylAppAdapter.notifydata(model.getData().getRecords());
                 List<AppItemBean.DataBean.RecordsBean> records = model.getData().getRecords();

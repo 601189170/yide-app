@@ -29,7 +29,6 @@ import com.yyide.chatim.dialog.SwitchClassPopNew;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
-import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
 import com.yyide.chatim.presenter.ClassTablePresenter;
 import com.yyide.chatim.view.ClassTableView;
@@ -171,7 +170,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void listAllBySchoolId(listAllBySchoolIdRsp rsp) {
         Log.e("TAG", "listAllBySchoolId==>: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
 
         }
     }
@@ -336,7 +335,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     @Override
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {
-        if (model.getCode() == BaseConstant.REQUEST_SUCCES2) {
+        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             data = model.getData();
         }
     }

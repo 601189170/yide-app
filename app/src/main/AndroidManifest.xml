@@ -84,6 +84,7 @@
             android:exported="false" />
         <activity
             android:name=".login.NewLoginActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:exported="false" />
         <activity
             android:name=".NewMainActivity"
@@ -276,19 +277,7 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity> <!-- <meta-data -->
+        <!-- <meta-data -->
         <!-- android:name="design_width_in_dp" -->
         <!-- android:value="1080" /> -->
         <!-- <meta-data -->

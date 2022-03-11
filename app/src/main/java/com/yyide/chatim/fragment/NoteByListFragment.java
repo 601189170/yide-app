@@ -3,24 +3,17 @@ package com.yyide.chatim.fragment;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.ListView;
 
 import com.alibaba.fastjson.JSON;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.NoteByListActivity;
 import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.adapter.NoteItemAdapter;
-import com.yyide.chatim.adapter.NotelistAdapter;
-import com.yyide.chatim.adapter.NotelistAdapter2;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.TeacherlistRsp;
@@ -31,7 +24,6 @@ import com.yyide.chatim.view.NoteByListBookView;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -155,7 +147,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
     @Override
     public void TeacherlistRsp(TeacherlistRsp rsp) {
         Log.e("TAG", "TeacherlistRsp: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             Log.e("TAG", "records: " + JSON.toJSONString(rsp.data.records));
 //            adapter2.notifdata(rsp.data.records);
             noteItemAdapter.addData(rsp.data.records);
@@ -175,7 +167,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 
     @Override
     public void studentListRsp(TeacherlistRsp rsp) {
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             Log.e("TAG", "records: " + JSON.toJSONString(rsp.data.records));
 //            adapter2.notifdata(rsp.data.records);
             noteItemAdapter.addData(rsp.data.records);

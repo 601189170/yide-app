@@ -5,9 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -15,11 +13,9 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpFragment
 import com.yyide.chatim.databinding.FragmentNoticeUnreadPersonnelListBinding
-import com.yyide.chatim.databinding.ItemNoticePersonnelBinding
 import com.yyide.chatim.databinding.ItemNoticeUnreadPersonnelBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.NoticeUnreadPeopleBean
-import com.yyide.chatim.model.ResultBean
 import com.yyide.chatim.presenter.NoticeUnreadPeoplePresenter
 import com.yyide.chatim.view.NoticeUnreadPeopleView
 import org.greenrobot.eventbus.EventBus
@@ -96,7 +92,7 @@ class NoticeUnreadPersonnelFragment : BaseMvpFragment<NoticeUnreadPeoplePresente
 
     override fun getUnreadPeopleList(model: NoticeUnreadPeopleBean?) {
         if (model != null) {
-            if (model.code == BaseConstant.REQUEST_SUCCES2 && model.data != null) {
+            if (model.code == BaseConstant.REQUEST_SUCCESS && model.data != null) {
                 if (pageNum == 1) {
                     if (model.data != null) {
                         EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_NOTICE_UN_CONFIRM_NUMBER, "", model.data.total))

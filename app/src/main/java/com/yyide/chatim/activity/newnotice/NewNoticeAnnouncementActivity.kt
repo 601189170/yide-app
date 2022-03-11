@@ -5,11 +5,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
-import com.blankj.utilcode.util.ActivityUtils
-import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit
-import com.yyide.chatim.MainActivity
 import com.yyide.chatim.R
-import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReceivedFragment
 import com.yyide.chatim.activity.newnotice.fragment.NoticeMyReleaseFragment
 import com.yyide.chatim.activity.newnotice.fragment.NoticeTemplateReleaseFragment
@@ -79,7 +75,7 @@ class NewNoticeAnnouncementActivity : BaseActivity() {
         addSubscription(mDingApiStores.noticePermission(), object : ApiCallback<NoticePermissionBean?>() {
             override fun onSuccess(model: NoticePermissionBean?) {
                 if (model != null) {
-                    if (model.code == BaseConstant.REQUEST_SUCCES2) {
+                    if (model.code == BaseConstant.REQUEST_SUCCESS) {
                         if (!model.data.permission) {
                             mTitles.add(getString(R.string.notice_tab_my_received))
                             noticeBinding!!.slidingTabLayout.visibility = View.GONE

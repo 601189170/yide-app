@@ -152,7 +152,7 @@ public class HelpListActivity extends BaseMvpActivity<HelpIntroductionPresenter>
     @Override
     public void getHelpListSuccess(HelpItemRep model) {
         mSwipeRefreshLayout.setRefreshing(false);
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             if (pageNum == 1) {
                 if (model != null && model.getData() != null) {
                     adapter.setList(model.getData().getRecords());

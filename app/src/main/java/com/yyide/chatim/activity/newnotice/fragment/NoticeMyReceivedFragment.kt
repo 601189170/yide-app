@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.SizeUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.newnotice.NoticeConfirmDetailActivity
@@ -171,7 +170,7 @@ class NoticeMyReceivedFragment : BaseMvpFragment<NoticeReceivedPresenter?>(), No
 
     override fun getMyReceivedList(model: NoticeItemBean?) {
         viewBinding!!.swipeRefreshLayout.isRefreshing = false
-        if (model?.code == BaseConstant.REQUEST_SUCCES2) {
+        if (model?.code == BaseConstant.REQUEST_SUCCESS) {
             if (pageNum == 1) {
                 if (model?.data != null) {
                     receivedAdapter.setList(model.data.records)

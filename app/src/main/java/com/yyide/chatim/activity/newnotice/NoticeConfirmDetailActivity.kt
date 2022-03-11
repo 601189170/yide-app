@@ -81,7 +81,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
             mDingApiStores.confirmNoticeDetail(publishId),
             object : ApiCallback<NoticeMyReleaseDetailBean?>() {
                 override fun onSuccess(model: NoticeMyReleaseDetailBean?) {
-                    if (model != null && model.code == BaseConstant.REQUEST_SUCCES2) {
+                    if (model != null && model.code == BaseConstant.REQUEST_SUCCESS) {
                         if (model.data != null) {
                             setDetailView(model)
                         } else {
@@ -199,7 +199,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
             object : ApiCallback<ResultBean?>() {
                 override fun onSuccess(model: ResultBean?) {
                     if (model != null) {
-                        if (model.code == BaseConstant.REQUEST_SUCCES2) {
+                        if (model.code == BaseConstant.REQUEST_SUCCESS) {
                             confirmDetailBinding.btnConfirm.isClickable = false
                             confirmDetailBinding.btnConfirm.setBackgroundResource(R.drawable.bg_corners_gray2_22)
                             confirmDetailBinding.btnConfirm.text =

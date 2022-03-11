@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -145,7 +144,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     @Override
     public void listByApp(ListByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             //学校组织结构
             ArrayList<ListByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
             if (rsp.data.size() > 0) {
@@ -164,7 +163,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     @Override
     public void selectListByApp(ListByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             //小初高组织结构
             ArrayList<ListByAppRsp.DataBean.ListBean> listBeans = new ArrayList<>();
             if (rsp.data != null && rsp.data.size() > 0) {
@@ -185,7 +184,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     @Override
     public void universityListByApp(ListByAppRsp rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
             //通讯录（大学）组织结构
             List<ListByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
             if (rsp.data.size() > 0) {

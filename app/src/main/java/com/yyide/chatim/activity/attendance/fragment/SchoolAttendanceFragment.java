@@ -157,7 +157,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
     @Override
     public void getAttendanceSuccess(AttendanceRsp model) {
         mViewBinding.swipeRefreshLayout.setRefreshing(false);
-        if (BaseConstant.REQUEST_SUCCES2 == model.getCode()) {
+        if (BaseConstant.REQUEST_SUCCESS == model.getCode()) {
             AttendanceRsp.DataBean data = model.getData();
             if (data != null) {
                 initView(data);
