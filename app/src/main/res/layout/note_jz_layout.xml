@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/layout_jz_all"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginHorizontal="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="教职工"
+            android:id="@+id/teacher_btn"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableEnd="@drawable/icon_down_note"
+            android:textColor="@color/text_212121"
+            android:textSize="@dimen/text_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_teacher"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="学生"
+            android:id="@+id/student_btn"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableEnd="@drawable/icon_down_note"
+            android:textColor="@color/text_212121"
+            android:textSize="@dimen/text_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="5dp"
+            android:id="@+id/recyclerView_student"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+</LinearLayout>

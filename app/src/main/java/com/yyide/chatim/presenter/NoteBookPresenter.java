@@ -3,6 +3,8 @@ package com.yyide.chatim.presenter;
 
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.ListByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp2;
+import com.yyide.chatim.model.ListByAppRsp3;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.NoteBookView;
 
@@ -18,9 +20,9 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
 
     public void listByApp() {
 //        mvpView.showLoading();
-        addSubscription(dingApiStores.listByApp(), new ApiCallback<ListByAppRsp>() {
+        addSubscription(dingApiStores.listByApp(), new ApiCallback<ListByAppRsp2>() {
             @Override
-            public void onSuccess(ListByAppRsp model) {
+            public void onSuccess(ListByAppRsp2 model) {
                 mvpView.listByApp(model);
             }
 
@@ -57,9 +59,9 @@ public class NoteBookPresenter extends BasePresenter<NoteBookView> {
     }
 
     public void universitySelectListByApp() {
-        addSubscription(dingApiStores.universitySelectListByApp(), new ApiCallback<ListByAppRsp>() {
+        addSubscription(dingApiStores.universitySelectListByApp(), new ApiCallback<ListByAppRsp3>() {
             @Override
-            public void onSuccess(ListByAppRsp model) {
+            public void onSuccess(ListByAppRsp3 model) {
                 mvpView.universityListByApp(model);
             }
 

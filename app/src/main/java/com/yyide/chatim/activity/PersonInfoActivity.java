@@ -88,6 +88,9 @@ public class PersonInfoActivity extends BaseActivity {
     int type3 = 1;
     TeacherlistRsp.DataBean.RecordsBean bean;
 
+    @BindView(R.id.send)
+    TextView send;
+
     @Override
     public int getContentViewID() {
         return R.layout.activity_person_info;
@@ -102,6 +105,12 @@ public class PersonInfoActivity extends BaseActivity {
         bean = JSON.parseObject(data, TeacherlistRsp.DataBean.RecordsBean.class);
         Log.e("TAG", "PersonInfoActivity: " + JSON.toJSONString(bean));
         setData(organization);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     private void setData(String organization) {
@@ -141,6 +150,8 @@ public class PersonInfoActivity extends BaseActivity {
             sex.setText(!TextUtils.isEmpty(bean.sex) ? "1".equals(bean.sex) ? "男" : "女" : "无");
             tv_class_name.setText(TextUtils.isEmpty(bean.classesName) ? "未知班级" : bean.classesName);
             phone.setText(!TextUtils.isEmpty(bean.phone) ? setMobile(bean.phone) : "暂无手机号码");
+
+            Log.e("TAG", "setData==>phone: "+bean.phone );
             address.setText(!TextUtils.isEmpty(bean.address) ? bean.address : "暂无住址");
             if (TextUtils.isEmpty(bean.phone)) {
                 iv_phone.setVisibility(View.GONE);

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.ListByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp2;
 import com.yyide.chatim.utils.VHUtil;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 
 public class NoBookItemAdapter extends BaseAdapter {
-   public List<ListByAppRsp.DataBean.ListBean> list=new ArrayList<>();
+   public List<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> list=new ArrayList<>();
 
 
     @Override
@@ -27,7 +28,7 @@ public class NoBookItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public ListByAppRsp.DataBean.ListBean getItem(int position) {
+    public ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO getItem(int position) {
         return list.get(position);
     }
 
@@ -41,10 +42,12 @@ public class NoBookItemAdapter extends BaseAdapter {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.notebook_item, null, false);
         TextView item = VHUtil.ViewHolder.get(view, R.id.name);
+        TextView msg_number = VHUtil.ViewHolder.get(view, R.id.msg_number);
+        msg_number.setText(getItem(position).employeeAddBookDTOList.size()+"");
         item.setText(getItem(position).name);
         return view;
     }
-    public void notifyData(List<ListByAppRsp.DataBean.ListBean> list) {
+    public void notifyData(List<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> list) {
         this.list = list;
         notifyDataSetChanged();
     }

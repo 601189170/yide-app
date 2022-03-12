@@ -7,6 +7,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.BookRsp;
 import com.yyide.chatim.model.BookSearchRsp;
+import com.yyide.chatim.model.BookSearchRsp2;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.UserInfoRsp;
 import com.yyide.chatim.net.ApiCallback;
@@ -24,9 +25,14 @@ public class BookSearchPresenter extends BasePresenter<BookSearchView> {
     }
 
     public void bookSearch(String name, String type,String queryType){
+//        {
+//            "type":1,
+//                "name":"1"
+//        }
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("type", type);
         hashMap.put("name",name);
+
         //试用范围 1 通讯录 2 闸机
         if (BookSearchActivity.FROM_GATE.equals(queryType)) {
             hashMap.put("queryType", 2);

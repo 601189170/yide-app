@@ -30,6 +30,7 @@
 
     <!--字体颜色-->
     <color name="text_666666">#ff666666</color>
+    <color name="text_f3">#FF333333</color>
     <color name="text_909399">#ff909399</color>
     <color name="text_303133">#ff303133</color>
     <color name="text_606266">#606266</color>

@@ -14,6 +14,7 @@ import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.BookRsp;
 import com.yyide.chatim.model.BookSearchRsp;
+import com.yyide.chatim.model.BookSearchRsp2;
 import com.yyide.chatim.model.BrandSearchRsp;
 import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
@@ -33,6 +34,8 @@ import com.yyide.chatim.model.LeaveListRsp;
 import com.yyide.chatim.model.LeavePhraseRsp;
 import com.yyide.chatim.model.ListAllScheduleByTeacherIdRsp;
 import com.yyide.chatim.model.ListByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp2;
+import com.yyide.chatim.model.ListByAppRsp3;
 import com.yyide.chatim.model.LoginAccountBean;
 import com.yyide.chatim.model.LoginRsp;
 import com.yyide.chatim.model.MessageNumberRsp;
@@ -204,16 +207,18 @@ public interface DingApiStores {
     Call<ResultBean> getUserEquipmentInfoPage(@Body RequestBody info);
 
     //查询组织架构列表信息 大学组织结构
-    @POST("/management/cloud-system/department/listByApp")
-    Observable<ListByAppRsp> listByApp();
+//    @POST("/management/cloud-system/department/listByApp")
+    @GET("/cloud/app/addressBookApp/getEmployeeAddressBook")
+    Observable<ListByAppRsp2> listByApp();
 
     //查询组织架构列表信息 小初高组织结构
     @POST("/management/cloud-system/section/selectListByApp")
     Observable<ListByAppRsp> selectListByApp();
 
     //通讯录-学生/家长（大学）
-    @POST("/management/cloud-system/departmentClass/selectListByApp")
-    Observable<ListByAppRsp> universitySelectListByApp();
+//    @POST("/management/cloud-system/departmentClass/selectListByApp")
+    @GET("/cloud/app/addressBookApp/getElternAddressBook")
+    Observable<ListByAppRsp3> universitySelectListByApp();
 
     //查询应用
     @POST("/backstage/cloud-backstage/application/search")
@@ -446,7 +451,8 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/management/cloud-system/app/teacher/selectAllList
     //通讯录搜索-所有
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/v1/app/addressBookApp/searchAddressBook")
+//    @POST("/management/cloud-system/v1/app/addressBookApp/searchAddressBook")
+    @POST("/cloud/app/addressBookApp/searchAddressBook")
     Observable<BookSearchRsp> selectAllList(@Body RequestBody requestBody);
 
     //通讯录搜索-小初高

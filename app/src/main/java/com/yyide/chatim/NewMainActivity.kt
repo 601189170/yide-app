@@ -351,7 +351,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     fun showError() {}
 
     fun getCopywriter(model: WeeklyDescBean) {
-        if (model.code == BaseConstant.REQUEST_SUCCESS) {
+        if (model.code == BaseConstant.REQUEST_SUCCES) {
             if (model.data != null && model.data.size > 0) {
                 val data = model.data
                 Collections.addAll(data) //填充
@@ -362,7 +362,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     fun getWeeklyDate(model: WeeklyDateBean) {
-        if (model.code == BaseConstant.REQUEST_SUCCESS) {
+        if (model.code == BaseConstant.REQUEST_SUCCES) {
             if (model.data != null) {
                 MMKV.defaultMMKV()
                     .encode(MMKVConstant.YD_WEEKLY_DATE, JSON.toJSONString(model.data))
@@ -372,7 +372,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     fun getVersionInfo(rsp: GetAppVersionResponse) {
         Log.e("TAG", "getData==》: " + JSON.toJSONString(rsp))
-        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
+        if (rsp.code == BaseConstant.REQUEST_SUCCES) {
             if (rsp.data != null) {
                 download(rsp.data)
             } else if (isShow) {
@@ -495,7 +495,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
                 val data = response.body!!.string()
                 Log.e(TAG, "getUserSig==>: $data")
                 val bean = JSON.parseObject(data, UserSigRsp::class.java)
-                if (bean.code == BaseConstant.REQUEST_SUCCESS) {
+                if (bean.code == BaseConstant.REQUEST_SUCCES) {
                     SPUtils.getInstance().put(SpData.USERSIG, bean.data)
                     initIm(bean.data)
                 } else {

@@ -3,6 +3,7 @@ package com.yyide.chatim.fragment;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.yyide.chatim.activity.PersonInfoActivity;
 import com.yyide.chatim.adapter.NoteItemAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.model.ListByAppRsp2;
 import com.yyide.chatim.model.TeacherlistRsp;
 import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.presenter.NoteBookByListPresenter;
@@ -45,8 +47,10 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
     private NoteItemAdapter noteItemAdapter;
     private String islast;
     private String organization;
-    ArrayList<ListByAppRsp.DataBean.ListBean> listBean = new ArrayList<>();
+    ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBean = new ArrayList<>();
+    ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO> nowBean = new ArrayList<>();
     public static final String PARAMS_NAME = "listBean";
+    public static final String PARAMS_NAME2 = "nowBean";
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         islast = getArguments().getString("islast");
         organization = getArguments().getString("organization");
         listBean = getArguments().getParcelableArrayList(PARAMS_NAME);
+        nowBean = getArguments().getParcelableArrayList(PARAMS_NAME2);
+        Log.e("TAG", "NoteByListFragment: "+ JSON.toJSONString(listBean));
+        Log.e("TAG", "NoteByListFragment==》: "+ JSON.toJSONString(nowBean));
         return mBaseView;
     }
 
@@ -84,32 +91,55 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         itemDecoration.setDrawable(new ColorDrawable(ContextCompat.getColor(getActivity(), R.color.color_DCDFE6)));
         recyclerview.addItemDecoration(itemDecoration);
         recyclerview.setAdapter(noteItemAdapter);
+
+        List<TeacherlistRsp.DataBean.RecordsBean> list = new ArrayList<>();
         if (listBean != null && listBean.size() > 0) {
             //添加组织部门数据
             if (listBean != null) {
-                List<TeacherlistRsp.DataBean.RecordsBean> list = new ArrayList<>();
-                for (ListByAppRsp.DataBean.ListBean item : listBean) {
+
+                for (ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO item : listBean) {
                     TeacherlistRsp.DataBean.RecordsBean bean = new TeacherlistRsp.DataBean.RecordsBean();
                     bean.organizationItem = item;
+
                     bean.itemType = 1;
                     bean.name = item.name;
-                    bean.id = item.id;
+
+                    bean.id = Long.parseLong(item.id);
                     list.add(bean);
                 }
-                noteItemAdapter.addData(list);
             }
         }
-        noteItemAdapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
-            //上拉加载时取消下拉刷新
-            noteItemAdapter.getLoadMoreModule().setEnableLoadMore(true);
-            //请求数据
-            pageNum++;
-            sendRequset();
-        });
-        noteItemAdapter.setEmptyView(R.layout.empty);
-        noteItemAdapter.getLoadMoreModule().setAutoLoadMore(true);
+        if (nowBean!=null){
+            for (ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO item2  : nowBean) {
+                TeacherlistRsp.DataBean.RecordsBean bean = new TeacherlistRsp.DataBean.RecordsBean();
+                bean.organizationItem2 = item2;
+                bean.itemType = 0;
+                bean.name = item2.name;
+                bean.phone =item2.phone;
+                bean.email =item2.email;
+                bean.sex =item2.gender;
+                bean.subjectName =item2.subjectName;
+//            bean.sex = String.valueOf(item2.gender);
+                bean.id = Long.parseLong(item2.id);
+                list.add(bean);
+            }
+        }
+
+        noteItemAdapter.addData(list);
+//        noteItemAdapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
+//            //上拉加载时取消下拉刷新
+//            noteItemAdapter.getLoadMoreModule().setEnableLoadMore(true);
+//            //请求数据
+//            pageNum++;
+//            sendRequset();
+//        });
+        Log.e("TAG", "listBean: "+JSON.toJSONString(listBean) );
+        if (list.size()==0){
+            noteItemAdapter.setEmptyView(R.layout.empty);
+        }
+//        noteItemAdapter.getLoadMoreModule().setAutoLoadMore(true);
         //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
-        noteItemAdapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
+//        noteItemAdapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
         noteItemAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (noteItemAdapter.getItem(position).getItemType() == 1) {
                 NoteByListActivity activity = (NoteByListActivity) getActivity();
@@ -117,19 +147,29 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                 bundle.putString("id", String.valueOf(noteItemAdapter.getItem(position).id));
                 bundle.putString("name", String.valueOf(noteItemAdapter.getItem(position).name));
                 bundle.putString("organization", organization);
+                ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBean = new ArrayList<>();
+                ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO> nowBean = new ArrayList<>();
+//                listBean.add(noteItemAdapter.getItem(position).organizationItem);
+                Log.e("TAG", "noteItemAdapter: "+JSON.toJSONString(noteItemAdapter.getItem(position)) );
+                Log.e("TAG", "setOnItemClickListener: "+JSON.toJSONString(noteItemAdapter.getItem(position).organizationItem) );
+                Log.e("TAG", "setOnItemClickListener==》employeeAddBookDTOList: "+JSON.toJSONString(noteItemAdapter.getItem(position).organizationItem2) );
+                bundle.putParcelableArrayList(PARAMS_NAME, (ArrayList<? extends Parcelable>) noteItemAdapter.getItem(position).organizationItem.children);
+                bundle.putParcelableArrayList(PARAMS_NAME2, (ArrayList<? extends Parcelable>) noteItemAdapter.getItem(position).organizationItem.employeeAddBookDTOList);
                 TeacherlistRsp.DataBean.RecordsBean item = noteItemAdapter.getItem(position);
-                if (item.organizationItem.list != null && item.organizationItem.list.size() > 0) {
+                if (item.organizationItem.children != null && item.organizationItem.children.size() > 0) {
                     bundle.putString("islast", "2");
                 } else {
                     bundle.putString("islast", "1");
                 }
 
-                if (noteItemAdapter.getItem(position).organizationItem.list != null && noteItemAdapter.getItem(position).organizationItem.list.size() > 0) {
-                    bundle.putParcelableArrayList(PARAMS_NAME, noteItemAdapter.getItem(position).organizationItem.list);
-                }
+//                if (noteItemAdapter.getItem(position).organizationItem.children != null && noteItemAdapter.getItem(position).organizationItem.children.size() > 0) {
+//                    bundle.putParcelableArrayList(PARAMS_NAME, (ArrayList<? extends Parcelable>) noteItemAdapter.getItem(position).organizationItem.children);
+//                }
                 activity.initDeptFragmentNew(bundle);
             } else {
                 Intent intent = new Intent();
+                noteItemAdapter.getItem(position);
+                Log.e("TAG", "initView: "+JSON.toJSONString(noteItemAdapter.getItem(position)) );
                 intent.putExtra("data", JSON.toJSONString(noteItemAdapter.getItem(position)));
                 intent.putExtra("organization", organization);
                 intent.setClass(mActivity, PersonInfoActivity.class);

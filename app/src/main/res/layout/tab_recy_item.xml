@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:layout_height="53dp">
 
     <TextView
@@ -9,7 +11,16 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/dp_8"
         android:gravity="center"
+        android:text="dsdsd"
         android:textColor="@color/blue11"
         android:textSize="@dimen/text_14" />
+
+    <ImageView
+        android:id="@+id/last_right"
+        android:src="@drawable/icon_txl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </ImageView>
 
 </LinearLayout>

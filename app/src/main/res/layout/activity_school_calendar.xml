@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F7FA"
+    android:background="@color/white"
     tools:context=".activity.schedule.ScheduleSettingsActivity">
 
     <include
@@ -32,7 +32,7 @@
                 android:layout_height="@dimen/dp_30"
                 android:layout_marginStart="@dimen/dp_12"
                 android:layout_marginTop="@dimen/dp_30"
-                android:background="@drawable/school_calendar_semester_selector_bg"
+                android:background="@color/white"
                 android:minWidth="100dp"
                 android:visibility="invisible"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -114,17 +114,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/calendar_content_list_bg_shape">
+
                 <TextView
                     android:id="@+id/tv_remark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="本月备注"
-                    android:textColor="#ff1e1e1e"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_14"
-                    />
+                    android:text="本月备注"
+                    android:textColor="#ff1e1e1e"
+                    android:textSize="18sp"
+                     />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvScheduleList"
                     android:layout_width="match_parent"

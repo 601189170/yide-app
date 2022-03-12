@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -41,6 +42,7 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
                 viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(view);
         viewHolder.item = view.findViewById(R.id.item);
+        viewHolder.lastright = view.findViewById(R.id.last_right);
         return viewHolder;
     }
 
@@ -51,11 +53,13 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
                 viewHolder.item.setText(getItem(i).name + " >");
             }
             viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.blue11));
+            viewHolder.lastright.setVisibility(View.VISIBLE);
         } else {
             if (!TextUtils.isEmpty(getItem(i).name)) {
                 viewHolder.item.setText(getItem(i).name);
             }
             viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.black10));
+            viewHolder.lastright.setVisibility(View.GONE);
         }
     }
 
@@ -69,11 +73,13 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
         public ViewHolder(View arg0) {
             super(arg0);
             item = arg0.findViewById(R.id.item);
+            lastright = arg0.findViewById(R.id.last_right);
             item.setOnClickListener(this);
         }
 
 
         TextView item;
+        ImageView lastright;
 
 
         @Override

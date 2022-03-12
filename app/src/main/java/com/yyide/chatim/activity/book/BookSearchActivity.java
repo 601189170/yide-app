@@ -30,6 +30,7 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.databinding.EmptyBinding;
 import com.yyide.chatim.model.BookSearchRsp;
+import com.yyide.chatim.model.BookSearchRsp2;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.Student;
 import com.yyide.chatim.model.Teacher;
@@ -190,10 +191,10 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 
     @Override
     public void selectUserListSuccess(BookSearchRsp model) {
-        Log.e(TAG, "selectUserListSuccess: " + model.toString());
-        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
+//        Log.e(TAG, "selectUserListSuccess: " + model.toString());
+        if (model.getCode() == BaseConstant.REQUEST_SUCCES_0) {
             hideHistory();
-            List<Teacher> teacherList = model.getData().getTeacherList();
+            List<Teacher> teacherList = model.getData().getElternList();
             recyclerview.scrollToPosition(0);
             //将学生数据加入
             if (!model.getData().getStudentList().isEmpty()) {

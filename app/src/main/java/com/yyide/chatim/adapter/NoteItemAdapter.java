@@ -1,5 +1,7 @@
 package com.yyide.chatim.adapter;
 
+import android.text.TextUtils;
+
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
@@ -26,7 +28,13 @@ public class NoteItemAdapter extends BaseMultiItemQuickAdapter<TeacherlistRsp.Da
                 break;
             default:
                 RoundImageView img = holder.getView(R.id.img);
-                holder.setText(R.id.name, itemBean.name);
+                if (!TextUtils.isEmpty(itemBean.employeeSubjects)){
+                    holder.setText(R.id.name, itemBean.name+"("+(itemBean.employeeSubjects)+")");
+                }else {
+                    holder.setText(R.id.name, itemBean.name);
+                }
+
+
                 holder.setText(R.id.tv_name_title, StringUtils.subString(itemBean.name, 2));
                 break;
         }

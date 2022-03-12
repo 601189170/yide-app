@@ -115,14 +115,14 @@ class RegisterActivity : BaseMvpActivity<RegisterPresenter>(), RegisterView {
 
     override fun registerSuccess(model: ResultBean?) {
         ToastUtils.showShort(model?.msg)
-        if (model?.code == BaseConstant.REQUEST_SUCCESS) {
+        if (model?.code == BaseConstant.REQUEST_SUCCES) {
             finish()
         }
     }
 
     override fun getSmsSuccess(model: ResultBean) {
         ToastUtils.showShort(model.msg)
-        if (model.code == BaseConstant.REQUEST_SUCCESS) {
+        if (model.code == BaseConstant.REQUEST_SUCCES) {
             time!!.start()
         }
     }

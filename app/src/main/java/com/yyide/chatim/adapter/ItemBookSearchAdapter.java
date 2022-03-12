@@ -117,6 +117,7 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
             }
 
             holder.itemView.setOnClickListener(v -> {
+
                 BookTeacherItem teacherItem1 = teacher.getList();
                 if (BookSearchActivity.FROM_GATE.equals(from)){
                     //跳转闸机通行数据详情页
@@ -124,17 +125,20 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                     GateDetailInfoActivity.Companion.toDetail(getContext(),2,null,userId,null);
                     return;
                 }
-                BookTeacherItem teacherItem = new BookTeacherItem(
-                        teacherItem1.getName(),
-                        teacherItem1.getSex(),
-                        teacherItem1.getPhone(),
-                        teacherItem1.getUserId(),
-                        teacherItem1.getEmail(),
-                        teacherItem1.getSubjectName(),
-                        teacherItem1.getTeachingSubjects(),
-                        teacherItem1.getFaceInformation(),
-                        teacherItem1.getWhitelist());
-                BookTeacherDetailActivity.start(getContext(), teacherItem);
+                if (teacherItem1!=null){
+                    BookTeacherItem teacherItem = new BookTeacherItem(
+                            teacherItem1.getName(),
+                            teacherItem1.getSex(),
+                            teacherItem1.getPhone(),
+                            teacherItem1.getUserId(),
+                            teacherItem1.getEmail(),
+                            teacherItem1.getSubjectName(),
+                            teacherItem1.getTeachingSubjects(),
+                            teacherItem1.getFaceInformation(),
+                            teacherItem1.getWhitelist());
+                    BookTeacherDetailActivity.start(getContext(), teacherItem);
+                }
+
             });
         }
     }
@@ -149,7 +153,13 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
         protected void convert(@NonNull BaseViewHolder baseViewHolder, Parent item) {
             ItemNewBookGuardianSearchBinding bind = ItemNewBookGuardianSearchBinding.bind(baseViewHolder.itemView);
             bind.tvName.setText(item.getName());
-            bind.tvGuardianName.setText(item.getRelationType());
+            bind.tvGuardianName.setText(TextUtils.isEmpty(item.getRelationType())?"":item.getRelationType());
+//            if (!TextUtils.isEmpty(item.getRelationType())){
+//                bind.tvGuardianName.setText(item.getRelationType());
+//            }else {
+//                bind.tvGuardianName.setText(item.getRelationType());
+//            }
+
         }
     }
 }

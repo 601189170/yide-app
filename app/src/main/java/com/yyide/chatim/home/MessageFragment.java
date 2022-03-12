@@ -18,6 +18,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.widget.MsgView;
 import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.NoteBookActivity;
 import com.yyide.chatim.activity.book.NewBookActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
@@ -128,7 +129,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.note:
-//                startActivity(new Intent(mActivity, NoteBookActivity.class));
+                startActivity(new Intent(mActivity, NoteBookActivity.class));
                 startActivity(new Intent(mActivity, NewBookActivity.class));
                 break;
         }

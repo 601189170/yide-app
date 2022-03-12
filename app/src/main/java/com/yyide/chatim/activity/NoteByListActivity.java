@@ -18,12 +18,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.blankj.utilcode.util.SPUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.adapter.TabRecyAdapter;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.NoteByListFragment;
 import com.yyide.chatim.model.ListByAppRsp;
+import com.yyide.chatim.model.ListByAppRsp2;
 import com.yyide.chatim.model.NoteTabBean;
 
 import java.util.ArrayList;
@@ -42,7 +45,8 @@ public class NoteByListActivity extends BaseActivity {
     RecyclerView recyclerview;
     TabRecyAdapter tabRecyAdapter;
     List<NoteTabBean> listTab = new ArrayList<>();
-    ArrayList<ListByAppRsp.DataBean.ListBean> listBean = new ArrayList<>();
+    ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBean = new ArrayList<>();
+    ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO> nowBean = new ArrayList<>();
     List<Fragment> fragments = new ArrayList<>();
     private String id;
     private String name;
@@ -61,10 +65,18 @@ public class NoteByListActivity extends BaseActivity {
         name = getIntent().getStringExtra("name");
         organization = getIntent().getStringExtra("organization");
         type = getIntent().getStringExtra("type");
-        listBean = getIntent().getParcelableArrayListExtra("listBean");
-        title.setText("通讯录");
 
+        String str = getIntent().getStringExtra("listBean");
+        String str2 = getIntent().getStringExtra("nowBean");
+        listBean= (ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO>) JSON.parseObject(str,new TypeReference<List<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO>>(){});
+        nowBean= (ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO>) JSON.parseObject(str2,new TypeReference<List<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO>>(){});
+
+
+        title.setText("通讯录");
+        Log.e("TAG", "NoteByListActivity: "+ JSON.toJSONString(listBean));
+        Log.e("TAG", "NoteByListActivity==>: "+ JSON.toJSONString(nowBean));
         tabRecyAdapter = new TabRecyAdapter();
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerview.setLayoutManager(linearLayoutManager);
@@ -140,6 +152,7 @@ public class NoteByListActivity extends BaseActivity {
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
             bundle.putParcelableArrayList("listBean", listBean);
+            bundle.putParcelableArrayList("nowBean", nowBean);
             noteTab.islast = "2";
             bundle.putString("islast", noteTab.islast);
             bundle.putString("organization", organization);
@@ -157,6 +170,7 @@ public class NoteByListActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         bundle.putParcelableArrayList("listBean", listBean);
+        bundle.putParcelableArrayList("nowBean", nowBean);
         if (listBean.size() == 0) {
             noteTabBean.islast = "1";
         } else {

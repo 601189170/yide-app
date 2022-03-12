@@ -12,6 +12,7 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.activity.viewModels
 import com.alibaba.fastjson.JSON
+import com.blankj.utilcode.util.AppUtils
 import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.tencent.mmkv.MMKV
@@ -20,6 +21,8 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil
 import com.yyide.chatim.NewMainActivity
 import com.yyide.chatim.SpData
+import com.yyide.chatim.activity.NoteBookActivity
+import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.base.MMKVConstant
@@ -76,6 +79,10 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 }
             }
         }
+//        startActivity(Intent(this, NoteBookActivity::class.java))
+        startActivity(Intent(this, SchoolCalendarActivity::class.java))
+
+
     }
 
     private fun getSchoolInfo(loginRsp: LoginRsp) {
@@ -245,6 +252,10 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
+//        startActivity(Intent(this, SchoolCalendarActivity::class.java))
+        startActivity(Intent(this, NoteBookActivity::class.java))
+
+
     }
 
 }

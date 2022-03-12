@@ -20,7 +20,7 @@ data class DataBean(
     @JSONField(name = "studentList")
     var studentList: MutableList<Student>,
     @JSONField(name = "teacherList")
-    var teacherList: MutableList<Teacher>
+    var elternList: MutableList<Teacher>
 )
 
 data class Student(

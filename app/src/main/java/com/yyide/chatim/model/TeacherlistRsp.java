@@ -1,8 +1,12 @@
 package com.yyide.chatim.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherlistRsp implements Serializable {
@@ -39,7 +43,7 @@ public class TeacherlistRsp implements Serializable {
         public List<RecordsBean> records;
 
 
-        public static class RecordsBean implements MultiItemEntity {
+        public static class RecordsBean  implements MultiItemEntity,Parcelable{
             /**
              * id : 585
              * delInd : 0
@@ -102,6 +106,7 @@ public class TeacherlistRsp implements Serializable {
             public String email;
             public String sex; //1 男  0 女
             public String classesName;//班级名称
+            public String employeeSubjects;//班级名称
             public String primaryGuardianPhone;//主监护人
             public String deputyGuardianPhone;//副监护人
             public String healthStatus;
@@ -131,15 +136,31 @@ public class TeacherlistRsp implements Serializable {
             public long departmentId;
             public List<DepartmentsBean> departments;
             public List<SubjectsBean> subjects;
+            public String subjectName;
+            public String adress;
             public List<?> roles;
             public String userType;//用户类型 1老师 2学生
             //组织架构列表
-            public ListByAppRsp.DataBean.ListBean organizationItem;
+            public ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO organizationItem;
+            public ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO organizationItem2;
+            public ListByAppRsp3.DataDTO.AdlistDTO.ElternListDTO organizationItem3;
+            public ListByAppRsp3.DataDTO.AdlistDTO.StudentListDTO organizationItem4;
+
             public int itemType; //0 成员 1 组织
 
             @Override
             public int getItemType() {
                 return itemType;
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+
             }
 
             public static class DepartmentsBean {
