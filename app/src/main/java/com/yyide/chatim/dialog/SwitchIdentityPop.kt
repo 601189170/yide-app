@@ -17,6 +17,7 @@ import com.yyide.chatim.SpData
 import com.yyide.chatim.adapter.SwitchIdentityAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.EventMessage
+import com.yyide.chatim.model.IdentityBean
 import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.model.UserInfo
 import com.yyide.chatim.utils.DemoLog
@@ -32,7 +33,7 @@ class SwitchIdentityPop(var context: Activity) : PopupWindow() {
     var mWindow: Window? = null
     var mOkHttpClient = OkHttpClient()
     var loadingTools: LoadingTools? = null
-    var identityBean: SchoolRsp.IdentityBean? = null
+    var identityBean: IdentityBean? = null
     private var mOnCheckCallBack: OnCheckCallBack? = null
     fun setOnCheckCallBack(mOnCheckCallBack: OnCheckCallBack?) {
         this.mOnCheckCallBack = mOnCheckCallBack
@@ -59,7 +60,7 @@ class SwitchIdentityPop(var context: Activity) : PopupWindow() {
             val children = SpData.Schoolinfo().children
             val mAdapter = SwitchIdentityAdapter()
             recyclerView.layoutManager =
-                GridLayoutManager(context, children.size)
+                GridLayoutManager(context, children!!.size)
             recyclerView.adapter = mAdapter
             mAdapter.setList(children)
             mAdapter.setSelectIndex(0)

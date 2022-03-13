@@ -153,7 +153,11 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     private val HELP_TYPE = 5
 
     override fun initView() {
-        binding.tab1Layout.setOnClickListener { setFragment(HOME_TYPE, homeFragment) }
+        binding.tab1Layout.setOnClickListener {
+            binding.ivHome.visibility = View.VISIBLE
+            binding.tab1.visibility = View.INVISIBLE
+            setFragment(HOME_TYPE, homeFragment)
+        }
         binding.tab2Layout.setOnClickListener { setFragment(MESSAGE_TYPE, messageFragment) }
         binding.tab3Layout.setOnClickListener { setFragment(SCHEDULE_TYPE, scheduleFragment) }
         binding.tab4Layout.setOnClickListener { setFragment(APP_TYPE, appFragment) }
@@ -163,6 +167,13 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     }
 
     private fun setFragment(type: Int, fragment: Fragment) {
+        if (type != HOME_TYPE) {
+            binding.ivHome.visibility = View.INVISIBLE
+            binding.tab1.visibility = View.VISIBLE
+        } else {
+            binding.ivHome.visibility = View.VISIBLE
+            binding.tab1.visibility = View.INVISIBLE
+        }
         binding.tab1.isChecked = type == HOME_TYPE
         binding.tab2.isChecked = type == MESSAGE_TYPE
         binding.tab3.isChecked = type == SCHEDULE_TYPE
@@ -173,57 +184,63 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     private fun prepareThirdPushToken() {
         ThirdPushTokenMgr.getInstance().setPushTokenToTIM()
-        if (BrandUtil.isBrandHuawei()) {
-            // 华为离线推送
-            object : Thread() {
-                override fun run() {
-                    try {
-                        // read from agconnect-services.json
-                        val appId = AGConnectServicesConfig.fromContext(this@NewMainActivity)
-                            .getString("client/app_id")
-                        val token =
-                            HmsInstanceId.getInstance(this@NewMainActivity).getToken(appId, "HCM")
-                        DemoLog.i(TAG, "huawei get token:$token")
-                        if (!TextUtils.isEmpty(token)) {
-                            ThirdPushTokenMgr.getInstance().thirdPushToken = token
-                            ThirdPushTokenMgr.getInstance().setPushTokenToTIM()
+        when {
+            BrandUtil.isBrandHuawei() -> {
+                // 华为离线推送
+                object : Thread() {
+                    override fun run() {
+                        try {
+                            // read from agconnect-services.json
+                            val appId = AGConnectServicesConfig.fromContext(this@NewMainActivity)
+                                .getString("client/app_id")
+                            val token =
+                                HmsInstanceId.getInstance(this@NewMainActivity)
+                                    .getToken(appId, "HCM")
+                            DemoLog.i(TAG, "huawei get token:$token")
+                            if (!TextUtils.isEmpty(token)) {
+                                ThirdPushTokenMgr.getInstance().thirdPushToken = token
+                                ThirdPushTokenMgr.getInstance().setPushTokenToTIM()
+                            }
+                        } catch (e: ApiException) {
+                            DemoLog.e(TAG, "huawei get token failed, $e")
                         }
-                    } catch (e: ApiException) {
-                        DemoLog.e(TAG, "huawei get token failed, $e")
+                    }
+                }.start()
+            }
+            BrandUtil.isBrandVivo() -> {
+                // vivo离线推送
+                DemoLog.i(
+                    TAG,
+                    "vivo support push: " + PushClient.getInstance(applicationContext).isSupport
+                )
+                PushClient.getInstance(applicationContext).turnOnPush { state ->
+                    if (state == 0) {
+                        val regId = PushClient.getInstance(
+                            applicationContext
+                        ).regId
+                        DemoLog.i(TAG, "vivopush open vivo push success regId = $regId")
+                        ThirdPushTokenMgr.getInstance().thirdPushToken = regId
+                        ThirdPushTokenMgr.getInstance().setPushTokenToTIM()
+                    } else {
+                        // 根据vivo推送文档说明，state = 101 表示该vivo机型或者版本不支持vivo推送，链接：https://dev.vivo.com.cn/documentCenter/doc/156
+                        DemoLog.i(TAG, "vivopush open vivo push fail state = $state")
                     }
                 }
-            }.start()
-        } else if (BrandUtil.isBrandVivo()) {
-            // vivo离线推送
-            DemoLog.i(
-                TAG,
-                "vivo support push: " + PushClient.getInstance(applicationContext).isSupport
-            )
-            PushClient.getInstance(applicationContext).turnOnPush { state ->
-                if (state == 0) {
-                    val regId = PushClient.getInstance(
-                        applicationContext
-                    ).regId
-                    DemoLog.i(TAG, "vivopush open vivo push success regId = $regId")
-                    ThirdPushTokenMgr.getInstance().thirdPushToken = regId
-                    ThirdPushTokenMgr.getInstance().setPushTokenToTIM()
-                } else {
-                    // 根据vivo推送文档说明，state = 101 表示该vivo机型或者版本不支持vivo推送，链接：https://dev.vivo.com.cn/documentCenter/doc/156
-                    DemoLog.i(TAG, "vivopush open vivo push fail state = $state")
-                }
             }
-        } else if (HeytapPushManager.isSupportPush()) {
-            // oppo离线推送
-            val oppo = OPPOPushImpl()
-            oppo.createNotificationChannel(this)
-            HeytapPushManager.register(
-                this,
-                PrivateConstants.OPPO_PUSH_APPKEY,
-                PrivateConstants.OPPO_PUSH_APPSECRET,
-                oppo
-            )
-        } else if (BrandUtil.isGoogleServiceSupport()) {
-            // 谷歌推送
+            HeytapPushManager.isSupportPush() -> {
+                // oppo离线推送
+                val oppo = OPPOPushImpl()
+                oppo.createNotificationChannel(this)
+                HeytapPushManager.register(
+                    this,
+                    PrivateConstants.OPPO_PUSH_APPKEY,
+                    PrivateConstants.OPPO_PUSH_APPSECRET,
+                    oppo
+                )
+            }
+            BrandUtil.isGoogleServiceSupport() -> {
+                // 谷歌推送
+            }
         }
     }
 
@@ -332,7 +349,6 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     private var noticeCount = 0 //消息通知数量
 
     private var todoCount = 0 //代办数量
-
 
     private fun setMessageCount(count: Int) {
         //Log.e("Chatim", "setMessageCount==>: " + count);

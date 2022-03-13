@@ -2,13 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme_bg"
-    android:orientation="vertical">
-
-    <include
-        layout="@layout/home_title_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:background="#F9FAF9">
 
     <com.yyide.chatim.widget.VpSwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -22,13 +16,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="2dp"
                 android:orientation="vertical">
+
+                <include
+                    layout="@layout/home_title_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_8"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginEnd="@dimen/dp_8"
                     android:orientation="horizontal">
 

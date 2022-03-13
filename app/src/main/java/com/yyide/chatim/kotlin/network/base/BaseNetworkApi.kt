@@ -16,12 +16,14 @@ import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.apache.http.conn.ConnectTimeoutException
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.ParameterizedType
 import java.net.SocketException
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 /**
  * 网络请求封装
@@ -82,9 +84,10 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
             if ((throwable is HttpException && throwable.code() == ErrorCode.UNAUTHORIZED)) {
                 // 这里刷新token，然后重试
             }
+
         }
 //        }
-        return Result.failure(NetworkException.of(ErrorCode.VALUE_IS_NULL, "unknown"))
+        return Result.failure(NetworkException.of(ErrorCode.VALUE_IS_NULL, "请求超时"))
     }
 
     companion object {

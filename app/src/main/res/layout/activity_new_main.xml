@@ -30,12 +30,24 @@
             android:layout_weight="1"
             android:background="@drawable/ripple_corrugated">
 
+            <ImageView
+                android:id="@+id/ivHome"
+                android:layout_width="@dimen/dp_38"
+                android:layout_height="@dimen/dp_38"
+                android:src="@mipmap/home_tab1_check"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <CheckedTextView
                 android:id="@+id/tab1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/home_tab1"
                 android:text="@string/tab_home"
+                android:textColor="@drawable/home_tab_textcolor"
                 android:textSize="@dimen/text_10"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -58,6 +70,7 @@
                 android:drawableTop="@drawable/home_tab5"
                 android:gravity="center"
                 android:text="@string/tab_schedule"
+                android:textColor="@drawable/home_tab_textcolor"
                 android:textSize="@dimen/text_10"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -79,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/home_tab2"
                 android:text="@string/tab_message"
+                android:textColor="@drawable/home_tab_textcolor"
                 android:textSize="@dimen/text_10"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -117,6 +131,7 @@
                 android:layout_gravity="center"
                 android:drawableTop="@drawable/home_tab3"
                 android:text="@string/tab_workbench"
+                android:textColor="@drawable/home_tab_textcolor"
                 android:textSize="@dimen/text_10"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -140,6 +155,7 @@
                 android:drawableTop="@drawable/home_tab4"
                 android:gravity="center"
                 android:text="@string/tab_help"
+                android:textColor="@drawable/home_tab_textcolor"
                 android:textSize="@dimen/text_10"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

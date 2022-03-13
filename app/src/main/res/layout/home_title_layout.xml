@@ -1,115 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/icon_home_top_bg"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
-            android:id="@+id/user_img"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"
+        <org.raphets.roundimageview.RoundImageView
+            android:id="@+id/head_img"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="@dimen/dp_15"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_head"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.yyide.chatim.widget.RadiusImageView
-                android:id="@+id/head_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="right|center_vertical"
-                android:scaleType="centerCrop"
-                android:src="@drawable/default_head"
-                app:left_bottom_radius="6dp"
-                app:left_top_radius="6dp"
-                app:right_bottom_radius="6dp"
-                app:right_top_radius="6dp" />
-
-            <TextView
-                android:id="@+id/user_name"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/corners4"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:visibility="gone" />
-        </FrameLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:left_bottom_radius="6dp"
+            app:left_top_radius="6dp"
+            app:right_bottom_radius="6dp"
+            app:right_top_radius="6dp" />
 
         <TextView
             android:id="@+id/school_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"
-            android:textColor="#222222"
-            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_17"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/user_img"
+            app:layout_constraintBottom_toBottomOf="@+id/head_img"
             app:layout_constraintEnd_toStartOf="@+id/scan"
-            app:layout_constraintStart_toEndOf="@+id/user_img"
-            app:layout_constraintTop_toTopOf="@+id/user_img" />
+            app:layout_constraintStart_toEndOf="@+id/head_img"
+            app:layout_constraintTop_toTopOf="@+id/head_img" />
 
         <ImageView
             android:id="@+id/scan"
-            android:layout_width="21dp"
-            android:layout_height="21dp"
+            android:layout_width="@dimen/dp_22"
+            android:layout_height="@dimen/dp_22"
             android:layout_marginRight="12dp"
-            android:background="@drawable/scan"
+            android:background="@mipmap/scan"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <FrameLayout
-        android:id="@+id/layout_message"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#FFF0F0">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_10"
+        app:cardCornerRadius="@dimen/dp_10"
+        app:cardElevation="@dimen/dp_2"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="11dp"
-            android:background="@drawable/bg_gradite"
-            android:gravity="center"
-            android:text="待办"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_12" />
-
-        <com.yyide.chatim.view.VerticalTextView
-            android:id="@+id/verticalTextView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="56dp"
-            android:layout_marginRight="45dp"
-            android:inAnimation="@anim/in_animation"
-            android:outAnimation="@anim/out_animation" />
+            android:layout_height="match_parent">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vpBanner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_home_notify_banner"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_15"
+                android:ellipsize="end"
+                android:lines="2"
+                android:text="这里是通知公告的简介，最多只展示两行，超过的内容用…"
+                android:textColor="#ff333333"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="黄老师 发布于2012-12-03 10:48"
+                android:textColor="#ff666666"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvContent"
+                app:layout_constraintTop_toBottomOf="@+id/tvContent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_30"
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
 
         <TextView
-            android:id="@+id/tv_todo"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginEnd="14dp"
-            android:background="@drawable/bg_gradite2"
+            android:id="@+id/tvMenu1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_4"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
             android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="9sp"
-            android:visibility="invisible" />
-    </FrameLayout>
+            android:text="云食堂"
+            android:textColor="#ff666666"
+            android:textSize="13sp"
+            app:drawableTopCompat="@mipmap/icon_home_menu1"
+            app:layout_constraintEnd_toStartOf="@+id/tvMenu2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvMenu2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_4"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:text="学生成绩"
+            android:textColor="#ff666666"
+            android:textSize="13sp"
+            app:drawableTopCompat="@mipmap/icon_home_menu2"
+            app:layout_constraintEnd_toStartOf="@+id/tvMenu3"
+            app:layout_constraintStart_toEndOf="@+id/tvMenu1"
+            app:layout_constraintTop_toTopOf="@+id/tvMenu1" />
+
+        <TextView
+            android:id="@+id/tvMenu3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_4"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:text="会议"
+            android:textColor="#ff666666"
+            android:textSize="13sp"
+            app:drawableTopCompat="@mipmap/icon_home_menu3"
+            app:layout_constraintEnd_toStartOf="@+id/tvMenu4"
+            app:layout_constraintStart_toEndOf="@+id/tvMenu2"
+            app:layout_constraintTop_toTopOf="@+id/tvMenu2" />
+
+        <TextView
+            android:id="@+id/tvMenu4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_4"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:text="网络教研"
+            android:textColor="#ff666666"
+            android:textSize="13sp"
+            app:drawableTopCompat="@mipmap/icon_home_menu4"
+            app:layout_constraintEnd_toStartOf="@+id/tvMenu5"
+            app:layout_constraintStart_toEndOf="@+id/tvMenu3"
+            app:layout_constraintTop_toTopOf="@+id/tvMenu3" />
+
+        <TextView
+            android:id="@+id/tvMenu5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_4"
+            android:foreground="?android:attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:text="周报"
+            android:textColor="#ff666666"
+            android:textSize="13sp"
+            app:drawableTopCompat="@mipmap/icon_home_menu5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvMenu4"
+            app:layout_constraintTop_toTopOf="@+id/tvMenu4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

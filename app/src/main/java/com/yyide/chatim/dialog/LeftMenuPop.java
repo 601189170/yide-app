@@ -60,13 +60,12 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
     private TextView user_class;
     private TextView head_name;
     private TextView user_identity;
-    private TextView user_name;
     private TextView tv_cache;
     private TextView tvVersion;
     private ImageView head_img;
     private ImageView ivClass, ivIdentity;
     private TextView my_info;
-    private LinearLayout layout1, layout2;
+    private LinearLayout layout1, layout2, layoutStu;
 
     public LeftMenuPop(Activity context) {
         this.context = context;
@@ -86,7 +85,6 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         head_name = mView.findViewById(R.id.head_name);
         user_identity = mView.findViewById(R.id.user_sf);
         user_class = mView.findViewById(R.id.user_class);
-        user_name = mView.findViewById(R.id.user_name);
         head_img = mView.findViewById(R.id.head_img);
         tv_cache = mView.findViewById(R.id.tv_cache);
         my_info = mView.findViewById(R.id.my_info);
@@ -100,27 +98,20 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         });
         layout1 = mView.findViewById(R.id.layout1);
         layout2 = mView.findViewById(R.id.layout2);
-        LinearLayout layout3 = mView.findViewById(R.id.layout3);
-        LinearLayout layout4 = mView.findViewById(R.id.layout4);
-        LinearLayout layout5 = mView.findViewById(R.id.layout5);
-        LinearLayout layout6 = mView.findViewById(R.id.layout6);
-        LinearLayout layout7 = mView.findViewById(R.id.layout7);
-        LinearLayout layout8 = mView.findViewById(R.id.layout8);
-        LinearLayout layout9 = mView.findViewById(R.id.layout9);
-        LinearLayout layout10 = mView.findViewById(R.id.layout10);
-        LinearLayout layoutPush = mView.findViewById(R.id.layout_push);
+        mView.findViewById(R.id.layout3).setOnClickListener(this);
+        mView.findViewById(R.id.layout4).setOnClickListener(this);
+        mView.findViewById(R.id.layout5).setOnClickListener(this);
+        mView.findViewById(R.id.layout6).setOnClickListener(this);
+        mView.findViewById(R.id.layout7).setOnClickListener(this);
+        mView.findViewById(R.id.layout8).setOnClickListener(this);
+        mView.findViewById(R.id.layout9).setOnClickListener(this);
+        mView.findViewById(R.id.layout10).setOnClickListener(this);
+        mView.findViewById(R.id.layout_push).setOnClickListener(this);
         mView.findViewById(R.id.exit).setOnClickListener(this);
+        layoutStu = mView.findViewById(R.id.layoutStu);
+        layoutStu.setOnClickListener(this);
         layout1.setOnClickListener(this);
         layout2.setOnClickListener(this);
-        layout3.setOnClickListener(this);
-        layout4.setOnClickListener(this);
-        layout5.setOnClickListener(this);
-        layout6.setOnClickListener(this);
-        layout7.setOnClickListener(this);
-        layout8.setOnClickListener(this);
-        layout9.setOnClickListener(this);
-        layout10.setOnClickListener(this);
-        layoutPush.setOnClickListener(this);
         head_img.setOnClickListener(this);
         setData();
 //        new BottomMenuPop(context);
@@ -193,7 +184,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             }
 
             if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-                my_info.setText("学生信息");
+                layoutStu.setVisibility(View.VISIBLE);
             } else {
                 my_info.setText("我的信息");
             }
@@ -277,6 +268,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
             case R.id.layout3://我的信息
                 hide();
                 context.startActivity(new Intent(context, UserActivity.class));
+                break;
+            case R.id.layoutStu:
                 break;
             case R.id.layout4://修改密码
                 context.startActivity(new Intent(context, ResetPassWordActivity.class));

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -127,11 +128,8 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
 
     @OnClick({R.id.note})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.note:
-                startActivity(new Intent(mActivity, NoteBookActivity.class));
-                startActivity(new Intent(mActivity, NewBookActivity.class));
-                break;
+        if (view.getId() == R.id.note) {//                startActivity(new Intent(mActivity, NoteBookActivity.class));
+            startActivity(new Intent(mActivity, NewBookActivity.class));
         }
     }
 

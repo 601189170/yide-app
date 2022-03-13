@@ -1,34 +1,36 @@
 package com.yyide.chatim.model
 
 import com.alibaba.fastjson.annotation.JSONField
-
+import java.io.Serializable
 
 data class SchoolRsp(
-    val id: Long = 0,
-    val isInit: Boolean = false,
-    val schoolLogo: String = "",
-    val schoolName: String = "",
-    val isEnabled: Boolean = false,
-    val children: List<IdentityBean> = mutableListOf<IdentityBean>(),
+    @JSONField(name = "children")
+    var children: List<IdentityBean> = mutableListOf(),
+    @JSONField(name = "enabled")
+    var enabled: Boolean = false,
+    @JSONField(name = "id")
+    var id: Long = 0,
+    @JSONField(name = "init")
+    var `init`: Boolean = false,
+    @JSONField(name = "schoolLogo")
+    var schoolLogo: String = "",
+    @JSONField(name = "schoolName")
+    var schoolName: String = ""
+)
+
+data class IdentityBean(
+    @JSONField(name = "enabled")
+    var enabled: Boolean = false,
+    @JSONField(name = "id")
+    var id: Long = 0,
+    @JSONField(name = "identity")
+    var identity: String = "",
+    @JSONField(name = "identityName")
+    var identityName: String = ""
 ) {
-    //    children	array	身份信息
-//    children.id	string	身份ID
-//    children.identity	string	身份
-//    children.identityName	string	身份名称
-//    id	string	学校ID
-//    isInit	string	是否初始化
-//    schoolLogo	string	学校Logo
-//    schoolName	string	学校名称
-    data class IdentityBean(
-        val id: Long = 0,
-        val identity: String = "",// 1 教职工 -  2 家长
-        val identityName: String = "",
-        val isEnabled: Boolean = false,
-    ) {
-        companion object{
-            val IDENTITY_TEACHER = "1"
-            val IDENTITY_PARENTS = "2"
-        }
+    companion object {
+        val IDENTITY_TEACHER = "1"
+        val IDENTITY_PARENTS = "2"
     }
 }
 
@@ -44,24 +46,15 @@ data class UserBean(
     @JSONField(name = "identity")
     var identity: Int,
     @JSONField(name = "identitys")
-    var identitys: List<Identity>,
+    var identitys: List<IdentityBean>,
     @JSONField(name = "name")
     var name: String,
     @JSONField(name = "phone")
     var phone: String,
     @JSONField(name = "username")
     var username: String
-)
+) : Serializable
 
-data class Identity(
-    @JSONField(name = "id")
-    var id: String,
-    @JSONField(name = "identity")
-    var identity: Int,
-    @JSONField(name = "identityName")
-    var identityName: String,
-    @JSONField(name = "isEnabled")
-    var isEnabled: Boolean
-)
+
 
 

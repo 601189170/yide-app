@@ -40,11 +40,6 @@ public class AppClient {
     public static Retrofit mDingRetrofit2;
     private static OkHttpClient okHttpClient;
     private static OkHttpClient okHttpClient2;
-//    public static String token="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNTI2MzU1NTEwMCIsInNjb3BlIjpbImFsbCJdLCJyb2xlcyI6WyI1NDYzMjVfZGVwdF9oZWFkIiwiNTQ2MzI1X2RlcHRfaGVhZCIsIjU0NjMyNV9jYW1wdXNfaGVhZCIsIjU0NjMyNV90ZWFjaGVyIiwiNTQ2MzI1X3RlYWNoZXIiLCI1NDYzMjVfdGVhY2hlciJdLCJuYW1lIjoi546L5LqM6bq75a2QMTAwIiwiaWQiOjE0OTk1NjU4MjEyNjU1MzQ5NzgsImV4cCI6MTY0Nzg1MDgzNCwiYmlkIjoxNDU4MjU3NjI0MDQxNTQ2MzI1LCJhdXRob3JpdGllcyI6WyI1NDYzMjVfY2FtcHVzX2hlYWQiLCI1NDYzMjVfZGVwdF9oZWFkIiwiNTQ2MzI1X3RlYWNoZXIiXSwianRpIjoiZTBkNTk1NzYtZDY5MC00YjBmLThlNGEtMDZhZDgxYWNjMWZhIiwiY2xpZW50X2lkIjoieWlkZS1jbG91ZCIsInVzZXJuYW1lIjoiMTUyNjM1NTUxMDAifQ.Y7sj_yPz-nhD96vsgqoZMWXFGVYX33KVCjcjYoDHjibllFTO8CHFyFS726phZOG1YJM-YsYWSNj58FaEOOTx2SJr2lu0k1TDtLkoh9yqQGxMnNqglDtn85O4Qvp19RK0pkhFkn4ugRxc15YUQzrRLuFdXKjva7XErjG5baf3fJTA0cZNVeSyqV_9g2z3mvERsFJCBXMw8-nDxwlMg6e8xJbxyYcqIhmb8PmFYV1ndfhiIE6ucpwh88PLnoxhHLhlFwZprECHFDonmxstS1C43OwVUP8p5f0fDBukopCFA-9WuOtdcXg7Dk963lDK6DNCzZH91Na3XFF2Fk0dyxK-Pw";
-//    public static String token="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxNzk5OTY4NTQyNSIsInNjb3BlIjpbImFsbCJdLCJyb2xlcyI6WyI1NDYzMjVfdGVhY2hlciIsIjU0NjMyNV90ZWFjaGVyIiwiNTQ2MzI1X3RlYWNoZXIiLCI1NDYzMjVfdGVhY2hlciIsIjU0NjMyNV90ZWFjaGVyIiwiNTQ2MzI1X3RlYWNoZXIiXSwibmFtZSI6IuWwj-WFieiAgeW4iCIsImlkIjoxNTAxMTE2OTcyMTYyMTAxMjQ5LCJleHAiOjE2NDc3NjkwMjIsImJpZCI6MTQ1ODI1NzYyNDA0MTU0NjMyNSwiYXV0aG9yaXRpZXMiOlsiNTQ2MzI1X3RlYWNoZXIiXSwianRpIjoiODJiMzU5YzktZjlkZC00MDljLWI2M2UtOTkzNjFlZmVhNzE5IiwiY2xpZW50X2lkIjoieWlkZS1jbG91ZCIsInVzZXJuYW1lIjoiMTc5OTk2ODU0MjUifQ.isYtQh2ghkk0BKLA7f-SxSDu3VEenF76rTGTqTY7v0K7DgD9I6kpysvGXpcLCZqxsb9_Jl8csfbkYPwSkEdvjgZqTR9R_kqubQr_OtNLt0zjM38ylrhAblBGGqFw9nDm4NIUhmtKw1kEGAdXriLNzVDbtwnVJedrhlSYXrNmJLP0g1smmvg_S-vxmoXcrNPGhxewIsLjfa8PAkEKY_voQKVyJFslXj8ZBy8idSfgOtCX6IM9i2JbJVARVMs6VazuASQW_OWA-FS6s2RSJtljlNNyn2v03zmV8Mmpx_FfgVcnnfLFJH0cJBf78K4j6qlL50mtKryHTIgvvYPp8BVB1Q";
-    public static String token="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJyb2xlcyI6WyI1NDYzMjVfcHJpbmNpcGFsIiwiNTQ2MzI1X2RlcHRfaGVhZCIsIjU0NjMyNV9jYW1wdXNfaGVhZCIsIjU0NjMyNV9hY2FkZW1pY3MiLCI1NDYzMjVfZ3JhZGVfaGVhZCIsIjU0NjMyNV9oZWFkbWFzdGVyIiwiNTQ2MzI1X3RlYWNoZXIiLCI1NDYzMjVfY3JlYXRvciJdLCJuYW1lIjoi566h55CG5ZGYIiwiaWQiOjE0MjU0NTg2NjIzNTE2Mzk5NTIsImV4cCI6MTY0Nzc3MDkzMiwiYmlkIjoxNDU4MjU3NjI0MDQxNTQ2MzI1LCJhdXRob3JpdGllcyI6WyI1NDYzMjVfZ3JhZGVfaGVhZCIsIjU0NjMyNV9hY2FkZW1pY3MiLCI1NDYzMjVfaGVhZG1hc3RlciIsIjU0NjMyNV9kZXB0X2hlYWQiLCI1NDYzMjVfdGVhY2hlciIsIjU0NjMyNV9jYW1wdXNfaGVhZCIsIjU0NjMyNV9wcmluY2lwYWwiLCI1NDYzMjVfY3JlYXRvciJdLCJqdGkiOiIwZjNkNjJmZC03YTE0LTRlYTAtYjJhYy0zNTVhNWY5Y2E3MDAiLCJjbGllbnRfaWQiOiJ5aWRlLWNsb3VkIiwidXNlcm5hbWUiOiJhZG1pbiJ9.hWMqdd_WYwDKqaCYdGSFXhCmFBHl79YeNtlrx2pjMweqCaCK7fH0Z3IDOEBDDIDfp9pHVPzXWYjtv99RyJqTqR3TuVefiW_94CL_d34dAmynrYVpn4T9z20XwPjEp-ipFzxc-Ch7YoShDumCyZ4DnhAbndZTSI9QTIIavQbR59wGBiZupuA95io4Uex11cxF0lj2sr77seZQo2fo8FV6mRK3uDebEcio83tdkwqkpEhXI1u4ouM-N83kFj0E0Zi_qO5ulMw-hiUsj-dYH---JrGHB_WNalleJrFjzmi4xzLalBwFusWozHtO6t73NusvTBEdULzfTTTEUyaApFKPCA";
-
-//    public static String token="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJyb2xlcyI6WyI1NDYzMjVfcHJpbmNpcGFsIiwiNTQ2MzI1X2RlcHRfaGVhZCIsIjU0NjMyNV9jYW1wdXNfaGVhZCIsIjU0NjMyNV9hY2FkZW1pY3MiLCI1NDYzMjVfZ3JhZGVfaGVhZCIsIjU0NjMyNV9oZWFkbWFzdGVyIiwiNTQ2MzI1X3RlYWNoZXIiLCI1NDYzMjVfY3JlYXRvciJdLCJuYW1lIjoi566h55CG5ZGYIiwiaWQiOjE0MjU0NTg2NjIzNTE2Mzk5NTIsImV4cCI6MTY0Nzc3MDkzMiwiYmlkIjoxNDU4MjU3NjI0MDQxNTQ2MzI1LCJhdXRob3JpdGllcyI6WyI1NDYzMjVfZ3JhZGVfaGVhZCIsIjU0NjMyNV9hY2FkZW1pY3MiLCI1NDYzMjVfaGVhZG1hc3RlciIsIjU0NjMyNV9kZXB0X2hlYWQiLCI1NDYzMjVfdGVhY2hlciIsIjU0NjMyNV9jYW1wdXNfaGVhZCIsIjU0NjMyNV9wcmluY2lwYWwiLCI1NDYzMjVfY3JlYXRvciJdLCJqdGkiOiIwZjNkNjJmZC03YTE0LTRlYTAtYjJhYy0zNTVhNWY5Y2E3MDAiLCJjbGllbnRfaWQiOiJ5aWRlLWNsb3VkIiwidXNlcm5hbWUiOiJhZG1pbiJ9.hWMqdd_WYwDKqaCYdGSFXhCmFBHl79YeNtlrx2pjMweqCaCK7fH0Z3IDOEBDDIDfp9pHVPzXWYjtv99RyJqTqR3TuVefiW_94CL_d34dAmynrYVpn4T9z20XwPjEp-ipFzxc-Ch7YoShDumCyZ4DnhAbndZTSI9QTIIavQbR59wGBiZupuA95io4Uex11cxF0lj2sr77seZQo2fo8FV6mRK3uDebEcio83tdkwqkpEhXI1u4ouM-N83kFj0E0Zi_qO5ulMw-hiUsj-dYH---JrGHB_WNalleJrFjzmi4xzLalBwFusWozHtO6t73NusvTBEdULzfTTTEUyaApFKPCA";
 
     public static Retrofit getDingRetrofit() {
         if (mDingRetrofit == null) {
@@ -138,17 +133,14 @@ public class AppClient {
 
         Request request = chain.request();
         LoginRsp user = SpData.User();
-//        if (user != null) {
-//            Log.e("TAG", "intercept: " + JSON.toJSONString(user.accessToken));
-//            request = request.newBuilder()
-//                    .addHeader("Authorization", user.accessToken)
-//                    .cacheControl(cacheControl)
-//                    .build();
-//        }
-        request = request.newBuilder()
-                .addHeader("Authorization", token)
-                .cacheControl(cacheControl)
-                .build();
+        if (user != null) {
+            Log.e("TAG", "intercept: " + JSON.toJSONString(user.getAccessToken()));
+            request = request.newBuilder()
+                    .addHeader("Authorization", user.getAccessToken())
+                    .cacheControl(cacheControl)
+                    .build();
+        }
+
         Response originalResponse = chain.proceed(request);
         if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {
             int maxAge = 0; // read from cache

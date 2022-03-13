@@ -1,5 +1,7 @@
 package com.yyide.chatim.model;
 
+import android.text.TextUtils;
+
 import com.yyide.chatim.kotlin.network.base.BaseResponse;
 
 import java.io.Serializable;
@@ -16,7 +18,11 @@ public class LoginRsp extends BaseResponse<LoginRsp> implements Serializable {
     public String expiresIn;
     public String tokenHead;
 
+    //是否登录
+    public boolean isLogin;
+
     public String getAccessToken() {
-        return tokenHead + accessToken;
+        String s = tokenHead + accessToken;
+        return TextUtils.isEmpty(s) ? "token" : s;
     }
 }

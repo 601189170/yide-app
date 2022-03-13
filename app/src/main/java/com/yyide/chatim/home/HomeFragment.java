@@ -49,6 +49,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
@@ -72,8 +73,7 @@ import top.zibin.luban.OnCompressListener;
 
 public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> implements HomeFragmentView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "HomeFragment";
-    @BindView(R.id.user_img)
-    FrameLayout userImg;
+
     @BindView(R.id.scan)
     ImageView scan;
     @BindView(R.id.table_content)
@@ -92,16 +92,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     FrameLayout studentHonorContent;
     @BindView(R.id.head_img)
     ImageView head_img;
-    @BindView(R.id.user_name)
-    TextView userName;
     @BindView(R.id.school_name)
     TextView schoolName;
-    @BindView(R.id.tv_todo)
-    TextView tv_todo;
-    @BindView(R.id.verticalTextView)
-    VerticalTextView mVerticalTextView;
-    @BindView(R.id.layout_message)
-    FrameLayout layoutMessage;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -132,21 +124,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mSwipeRefreshLayout.setRefreshing(true);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        initVerticalTextview();
         replaceFragment();
         setSchoolInfo();
         //mvpPresenter.getUserSchool();
         mvpPresenter.getHomeTodo();
         mvpPresenter.getNotice();
-    }
-
-    void initVerticalTextview() {
-        mVerticalTextView.setResources(list);
-        mVerticalTextView.setTextStillTime(4000);
-        mVerticalTextView.setOnItemClickListener(i -> {
-            //mListener.jumpFragment(1);
-            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
-        });
     }
 
     @Override
@@ -224,10 +206,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.user_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content, R.id.school_name})
+    @OnClick({R.id.head_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content, R.id.school_name})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.user_img:
+            case R.id.head_img:
                 mLeftMenuPop = null;
                 mLeftMenuPop = new LeftMenuPop(mActivity);
                 break;
@@ -411,22 +393,21 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         mSwipeRefreshLayout.setRefreshing(false);
         Log.d("TAG", "getUserSchool==》: " + JSON.toJSONString(rsp));
         if (BaseConstant.REQUEST_SUCCESS == rsp.code) {
-            SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
-            SpData.setIdentityInfo(rsp);
+            //SPUtils.getInstance().put(SpData.SCHOOLINFO, JSON.toJSONString(rsp));
+            //SpData.setIdentityInfo(rsp);
         }
         //setSchoolInfo();
         //replaceFragment();
     }
 
-    void setSchoolInfo() {
+    private void setSchoolInfo() {
+        SchoolRsp schoolinfo = SpData.Schoolinfo();
+        if (schoolinfo != null) {
+            schoolName.setText(schoolinfo.getSchoolName());
+        }
         if (SpData.getIdentityInfo() != null) {
             GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
             GlideUtil.loadImageHead(getActivity(), identityInfo.img, head_img);
-            if (BuildConfig.DEBUG) {
-                schoolName.setText(identityInfo.schoolName);
-            } else {
-                schoolName.setText(identityInfo.schoolName);
-            }
             SPUtils.getInstance().put(SpData.USERNAME, identityInfo.realname);
         }
     }
@@ -476,17 +457,13 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         Log.e(TAG, "getIndexMyNotice: " + rsp.toString());
         if (rsp.getCode() == BaseConstant.REQUEST_SUCCESS) {
             if (rsp.getData() != null && rsp.getData().getRecords() != null && rsp.getData().getRecords().size() > 0) {
-                tv_todo.setVisibility(View.VISIBLE);
-                tv_todo.setText(rsp.getData().getTotal() + "");
                 if (rsp.getData().getRecords() != null) {
                     list.clear();
                     for (TodoRsp.DataBean.RecordsBean item : rsp.getData().getRecords()) {
                         list.add(item.getFirstData());
                     }
                 }
-                mVerticalTextView.setResources(list);
             } else {
-                tv_todo.setVisibility(View.GONE);
                 setData();
             }
         }
@@ -501,7 +478,6 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         for (TodoRsp.DataBean.RecordsBean item : noticeHomeRsps) {
             list.add(item.getFirstData());
         }
-        mVerticalTextView.setResources(list);
     }
 
     public interface FragmentListener {

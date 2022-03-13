@@ -97,7 +97,8 @@
             android:exported="false" />
         <activity
             android:name=".base.KTBaseActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".activity.operation.OperationActivity"
             android:exported="false" />

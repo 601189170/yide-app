@@ -14,13 +14,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="230dp"
             android:background="@mipmap/icon_personal_center_bg">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout11"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_40"
+                android:layout_marginTop="@dimen/dp_30"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -133,7 +134,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginStart="18dp"
                     android:background="@color/line_11"
                     android:visibility="gone" />
@@ -221,7 +222,50 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="18dp"
+                    android:background="@color/line_11" />
+
+                <LinearLayout
+                    android:id="@+id/layoutStu"
+                    android:layout_width="match_parent"
+                    android:layout_height="49dp"
+                    android:background="@color/white"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="18dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/icon_my_student" />
+
+                    <TextView
+                        android:id="@+id/my_infoStu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/my_stu_info"
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_right" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
                     android:layout_marginLeft="18dp"
                     android:background="@color/line_11" />
 
@@ -262,7 +306,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginStart="18dp"
                     android:background="@color/line_11" />
 
@@ -303,7 +347,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginStart="18dp"
                     android:background="@color/line_11"
                     android:visibility="gone" />
@@ -421,7 +465,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginStart="18dp"
                     android:background="@color/line_11" />
 
@@ -464,7 +508,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginStart="18dp"
                     android:background="@color/line_11"
                     android:visibility="gone" />
@@ -507,7 +551,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginStart="18dp"
                     android:background="@color/line_11" />
 

@@ -28,7 +28,7 @@ import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.databinding.ActivityNewLoginBinding
 import com.yyide.chatim.login.viewmodel.LoginViewModel
-import com.yyide.chatim.model.LoginRsp
+import com.yyide.chatim.model.IdentityBean
 import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.model.UserInfo
 import com.yyide.chatim.utils.DemoLog
@@ -69,8 +69,9 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                         .encode(MMKVConstant.YD_USERNAME, binding.etUser.text.toString())
                     MMKV.defaultMMKV()
                         .encode(MMKVConstant.YD_PASSWORD, binding.etPwd.text.toString())
+                    SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean))
                     //获取学校信息
-                    getSchoolInfo(bean)
+                    getSchoolInfo()
                 }
             } else {
                 it.exceptionOrNull()?.localizedMessage?.let { it1 ->
@@ -85,18 +86,18 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
 
     }
 
-    private fun getSchoolInfo(loginRsp: LoginRsp) {
+    private fun getSchoolInfo() {
         //处理选择学校数据
         viewModel.schoolLiveData.observe(this) {
             hideLoading()
             if (it.isSuccess) {
                 val listData = it.getOrNull()
                 if (!listData.isNullOrEmpty()) {
-                    if (listData.size > 1 || (listData.isNotEmpty() && listData[0].children.size > 1)) {
-                        IdentitySelectActivity.start(this, loginRsp)
+                    if (listData.size > 1 || (listData.isNotEmpty() && listData[0].children!!.size > 1)) {
+                        IdentitySelectActivity.start(this)
                     } else {
-                        if (listData.isNotEmpty() && listData[0].children.isNotEmpty()) {
-                            identityLogin(loginRsp, listData[0], listData[0].children[0])
+                        if (listData.isNotEmpty() && listData[0].children!!.isNotEmpty()) {
+                            identityLogin(listData[0], listData[0].children!![0])
                         } else {
                             YDToastUtil.showMessage("无学校或无身份")
                         }
@@ -117,9 +118,8 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
      * 用户学校身份登录
      */
     private fun identityLogin(
-        loginRsp: LoginRsp,
         schoolBean: SchoolRsp,
-        identityBean: SchoolRsp.IdentityBean
+        identityBean: IdentityBean
     ) {
         viewModel.loginLiveData.observe(this) {
             hideLoading()
@@ -128,7 +128,9 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                     .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                 SPUtils.getInstance()
                     .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
-                SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(loginRsp))
+                val user = SpData.User()
+                user.isLogin = true
+                SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(user))
                 startActivity(Intent(this, NewMainActivity::class.java))
                 finish()
             } else {
@@ -139,7 +141,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
             }
         }
         showLoading()
-        viewModel.identityLogin(identityBean!!.id, schoolBean!!.id)
+        viewModel.identityLogin(identityBean.id, schoolBean.id)
     }
 
     private fun login() {

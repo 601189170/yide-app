@@ -19,6 +19,7 @@ import com.yyide.chatim.databinding.ActivityIdentitySelectBinding
 import com.yyide.chatim.login.banner.ScaleTransformer
 import com.yyide.chatim.login.banner.SchoolAdapter
 import com.yyide.chatim.login.viewmodel.LoginViewModel
+import com.yyide.chatim.model.IdentityBean
 import com.yyide.chatim.model.LoginRsp
 import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.utils.loge
@@ -33,13 +34,12 @@ class IdentitySelectActivity :
 
     val viewModel: LoginViewModel by viewModels()
     var schoolBean: SchoolRsp? = null
-    var identityBean: SchoolRsp.IdentityBean? = null
+    var identityBean: IdentityBean? = null
     var schoolList: List<SchoolRsp>? = null
 
     companion object {
-        fun start(context: Context, loginRsp: LoginRsp) {
+        fun start(context: Context) {
             val intent = Intent(context, IdentitySelectActivity::class.java)
-            intent.putExtra("loginRsp", loginRsp)
             context.startActivity(intent)
         }
     }
@@ -131,8 +131,8 @@ class IdentitySelectActivity :
             schoolBean = schoolList?.get(position)
             //选择身份
             schoolList?.get(position)?.let {
-                if (it.children.isNotEmpty()) {
-                    initAdapter(it.children)
+                if (it.children!!.isNotEmpty()) {
+                    initAdapter(it.children!!)
                 }
             }
         }
@@ -142,7 +142,7 @@ class IdentitySelectActivity :
         }
     }
 
-    private fun initAdapter(listData: List<SchoolRsp.IdentityBean>) {
+    private fun initAdapter(listData: List<IdentityBean>) {
         val mAdapter = SwitchIdentityAdapter()
         binding.recyclerView.layoutManager =
             GridLayoutManager(this@IdentitySelectActivity, listData.size)
@@ -171,7 +171,9 @@ class IdentitySelectActivity :
                             .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                         SPUtils.getInstance()
                             .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
-                        SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(intent.getSerializableExtra("loginRsp")))
+                        val user = SpData.User()
+                        user.isLogin = true
+                        SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(user))
                         startActivity(Intent(this, NewMainActivity::class.java))
                         finish()
                     } else {

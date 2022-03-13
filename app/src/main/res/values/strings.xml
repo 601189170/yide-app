@@ -245,6 +245,7 @@
     <string name="weekly_statistical">每周统计</string>
     <string name="monthly_statistical">每月统计</string>
     <string name="my_info">我的信息</string>
+    <string name="my_stu_info">学生信息</string>
     <string name="open_push_notification_permission">开启推送通知</string>
     <string name="open_push_notification_tip">实时获取最新信息，不再错过\n重要通知。</string>
     <string name="open_immediately">立即开启</string>
@@ -268,12 +269,13 @@
     <string name="not_login">未登录</string>
     <string name="select_brand_of_login">请选择登录的班牌</string>
     <string name="select_copyer_tip">请选择抄送人</string>
-    <string name="get_face_data">人脸采集</string>
     <string name="face_classid_null_tip">当前账号学生Id为空不能采集人脸</string>
     <string name="face_username_null_tip">当前账号姓名为空不能采集人脸</string>
     <string name="no_install_camera_tip">您的手机没有安装相机，人脸采集功能暂时不能使用！</string>
-    <string name="face_uploading_tip">人脸上传中...</string>
+    <string name="get_face_data">人脸采集</string>
+    <string name="face_uploading_tip">人脸上传中…</string>
     <string name="again_collect_tip">重新采集</string>
+    <string name="title_student_info">学生信息</string>
     <string name="unable_cut_select_pic_tip">无法剪切选择图片</string>
     <string name="face_upload_success_tip">人脸上传成功</string>
     <string name="face_upload_fail_tip">人脸上传失败</string>

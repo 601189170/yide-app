@@ -7,29 +7,30 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.databinding.ItemSelectIdentityBinding
+import com.yyide.chatim.model.IdentityBean
 import com.yyide.chatim.model.SchoolRsp
 
 /**
  * 选择身份
  */
 class SwitchIdentityAdapter :
-    BaseQuickAdapter<SchoolRsp.IdentityBean, BaseViewHolder>(R.layout.item_select_identity) {
+    BaseQuickAdapter<IdentityBean, BaseViewHolder>(R.layout.item_select_identity) {
     private var selectIndex = 0
     fun setSelectIndex(position: Int) {
         selectIndex = position
         notifyDataSetChanged()
     }
 
-    fun getSelectItem(): SchoolRsp.IdentityBean? {
+    fun getSelectItem(): IdentityBean? {
         if (data != null && data.size > 0) {
             return getItem(selectIndex)
         }
         return null
     }
 
-    override fun convert(holder: BaseViewHolder, item: SchoolRsp.IdentityBean) {
+    override fun convert(holder: BaseViewHolder, item: IdentityBean) {
         val viewbinding = ItemSelectIdentityBinding.bind(holder.itemView)
-        if (item.identity == SchoolRsp.IdentityBean.IDENTITY_PARENTS) {
+        if (item.identity == IdentityBean.IDENTITY_PARENTS) {
             viewbinding.ivHead.setImageResource(R.mipmap.icon_parents_head)
         } else {
             viewbinding.ivHead.setImageResource(R.mipmap.icon_techer_head)

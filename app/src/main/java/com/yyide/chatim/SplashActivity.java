@@ -93,7 +93,7 @@ public class SplashActivity extends AppCompatActivity {
             //第一次打开app
             new Handler().postDelayed(this::startGuidePage, 500);
         } else {
-            if (SpData.User() != null && !TextUtils.isEmpty(SpData.User().refreshToken)) {
+            if (SpData.User() != null && SpData.User().isLogin && !TextUtils.isEmpty(SpData.User().refreshToken)) {
                 toLogin();
             } else {
                 new Handler().postDelayed(this::startLogin, 3000);
@@ -134,8 +134,12 @@ public class SplashActivity extends AppCompatActivity {
                     if (response.code() == BaseConstant.REQUEST_SUCCESS) {
                         LoginRsp bean = JSON.parseObject(data, LoginRsp.class);
                         if (bean.getCode() == BaseConstant.REQUEST_SUCCESS2) {
-                            //存储登录信息
-                            SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(bean));
+                            if (bean.getData() != null) {
+                                LoginRsp loginRsp = bean.getData();
+                                loginRsp.isLogin = true;
+                                //存储登录信息
+                                SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(loginRsp));
+                            }
                             handleData();
                         } else {
                             startLogin();
@@ -270,11 +274,11 @@ public class SplashActivity extends AppCompatActivity {
                 //第一次打开app
                 new Handler().postDelayed(this::startGuidePage, 500);
             } else {
-//                if (SpData.User() != null && SpData.User() != null && !TextUtils.isEmpty(SpData.User().refreshToken)) {
-//                    toLogin();
-//                } else {
-//                    startLogin();
-//                }
+                if (SpData.User() != null && SpData.User().isLogin && !TextUtils.isEmpty(SpData.User().refreshToken)) {
+                    toLogin();
+                } else {
+                    startLogin();
+                }
             }
         });
     }
