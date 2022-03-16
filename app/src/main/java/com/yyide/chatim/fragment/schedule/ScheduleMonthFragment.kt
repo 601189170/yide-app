@@ -1,5 +1,7 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,21 +11,37 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.alibaba.fastjson.JSON
+import com.yanzhenjie.recyclerview.OnItemMenuClickListener
+import com.yanzhenjie.recyclerview.SwipeMenu
+import com.yanzhenjie.recyclerview.SwipeMenuCreator
+import com.yanzhenjie.recyclerview.SwipeMenuItem
+import com.yanzhenjie.recyclerview.SwipeRecyclerView
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.month.MonthCalendarView
+import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.meeting.MeetingSaveActivity
+import com.yyide.chatim.activity.schedule.ScheduleEditActivity
+import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
+import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil.dateTimeJointNowTime
+import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
+import com.yyide.chatim.databinding.FragmentScheduleMonth2Binding
 import com.yyide.chatim.databinding.FragmentScheduleMonthBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
+import com.yyide.chatim.view.SpaceItemDecoration
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.viewmodel.ScheduleMonthViewModel
 import org.greenrobot.eventbus.EventBus
@@ -39,7 +57,7 @@ import org.joda.time.DateTime
  */
 class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
     SwipeRefreshLayout.OnRefreshListener {
-    lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonthBinding
+    lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonth2Binding
     private var list = mutableListOf<ScheduleOuter>()
     private var mcvCalendar: MonthCalendarView? = null
     private var mCurrentSelectYear = 2021
@@ -50,11 +68,16 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val hints = mutableListOf<HintCircle>()
     private var refresh = false
+
+
+    private lateinit var ScheduleMonthAdapter: ScheduleTodayAdapter
+
+    private val todayList = mutableListOf<ScheduleData>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragmentScheduleMonthBinding = FragmentScheduleMonthBinding.inflate(layoutInflater)
+        fragmentScheduleMonthBinding = FragmentScheduleMonth2Binding.inflate(layoutInflater)
         return fragmentScheduleMonthBinding.root
     }
 
@@ -123,15 +146,140 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
-        fragmentScheduleMonthBinding.fab.setOnClickListener {
+
+        fragmentScheduleMonthBinding.layoutCalendar.calendarComposeLayout.setOnClickListener {
             DialogUtil.showAddScheduleDialog(context, this,curDateTime.dateTimeJointNowTime())
         }
         mcvCalendar?.setOnCalendarClickListener(this)
 
         fragmentScheduleMonthBinding.swipeRefreshLayout.setOnRefreshListener(this)
         fragmentScheduleMonthBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+
+
+      val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        fragmentScheduleMonthBinding.rvScheduleList.layoutManager = linearLayoutManager
+        ScheduleMonthAdapter = ScheduleTodayAdapter(ScheduleTodayAdapter.TYPE_WEEK_UNDONE_LIST,todayList)
+        fragmentScheduleMonthBinding.rvScheduleList.setSwipeMenuCreator(mTodaySwipeMenuCreator)
+//        fragmentScheduleMonthBinding.rvScheduleList.setOnItemMenuClickListener(
+//                mTodayMenuItemClickListener
+//        )
+        fragmentScheduleMonthBinding.rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
+        fragmentScheduleMonthBinding.rvScheduleList.adapter = ScheduleMonthAdapter
+        ScheduleMonthAdapter.setOnItemClickListener { adapter, view, position ->
+            loge("本周未完成：$position")
+            val scheduleData = todayList[position]
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE) {
+                MeetingSaveActivity.jumpUpdate(requireContext(), scheduleData.id)
+                return@setOnItemClickListener
+            }
+            if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE) {
+                ScheduleTimetableClassActivity.jump(requireContext(), scheduleData)
+                return@setOnItemClickListener
+            }
+            val intent = Intent(context, ScheduleEditActivity::class.java)
+            intent.putExtra("data", JSON.toJSONString(scheduleData))
+            startActivity(intent)
+        }
+
+
+
+        fragmentScheduleMonthBinding.swipeRefreshLayout.setOnRefreshListener(this)
+        fragmentScheduleMonthBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
 
+//    private val mTodayMenuItemClickListener =
+//            OnItemMenuClickListener { menuBridge, position ->
+//                menuBridge.closeMenu()
+//                val direction = menuBridge.direction // 左侧还是右侧菜单。
+//                val menuPosition = menuBridge.position // 菜单在RecyclerView的Item中的Position。
+//                if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
+//                    val scheduleData = todayList[position]
+//                    val type = scheduleData.type
+//                    when(type.toInt()){
+//                        Schedule.SCHEDULE_TYPE_SCHEDULE ->{
+//                            if (menuPosition == 0) {
+//                                loge("修改")
+//                                curModifySchedule = scheduleData
+//                                scheduleEditViewModel.changeScheduleState(scheduleData)
+//                                return@OnItemMenuClickListener
+//                            }
+//                            if (menuPosition == 1) {
+//                                loge("删除")
+//                                curModifySchedule = scheduleData
+//                                scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+//                                return@OnItemMenuClickListener
+//                            }
+//                        }
+//                        Schedule.SCHEDULE_TYPE_CONFERENCE ->{
+//                            if (menuPosition == 0) {
+//                                loge("删除")
+//                                curModifySchedule = scheduleData
+//                                scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+//                                return@OnItemMenuClickListener
+//                            }
+//                        }
+//                    }
+//
+//                } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
+//                    loge("list第$position; 左侧菜单第$menuPosition")
+//                }
+//            }
+    private val mTodaySwipeMenuCreator: SwipeMenuCreator = object : SwipeMenuCreator {
+        override fun onCreateMenu(
+                swipeLeftMenu: SwipeMenu,
+                swipeRightMenu: SwipeMenu,
+                position: Int
+        ) {
+            loge("position: $position")
+            val scheduleData = todayList[position]
+            ////日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
+            val type = scheduleData.type
+            val promoterSelf = scheduleData.promoterSelf()
+            if (promoterSelf){
+                run {
+                    when(type.toInt()){
+                        Schedule.SCHEDULE_TYPE_SCHEDULE ->{
+                            if (scheduleData.status == "1") {
+                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+                            } else {
+                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
+                            }
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                        Schedule.SCHEDULE_TYPE_CONFERENCE ->{
+                            swipeRightMenu.addMenuItem(delMenuItem)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    val width = DisplayUtils.dip2px(BaseApplication.getInstance(), 63f)
+    val height = ViewGroup.LayoutParams.MATCH_PARENT
+    private val markCompletedMenuItem: SwipeMenuItem =
+            SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_blue)
+                    //.setImage(R.drawable.ic_action_delete)
+                    .setText("标为\n完成")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height)
+
+    private val markUnCompletedMenuItem: SwipeMenuItem =
+            SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_orange)
+                    //.setImage(R.drawable.ic_action_delete)
+                    .setText("标为\n未完成")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height)
+
+    private val delMenuItem: SwipeMenuItem =
+            SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_red)
+                    .setImage(R.drawable.icon_delete_whilte)
+                    .setText("删除")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height)
     private fun initData() {
         mcvCalendar?.currentMonthView?.let {
             mCurrentSelectYear = it.selectYear
@@ -172,6 +320,12 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
         }
 
     }
+
+    private fun setData() {
+
+
+    }
+
 
     override fun onPageChange(year: Int, month: Int, day: Int) {
         loge("onPageChange year=$year,month=$month,day=$day")

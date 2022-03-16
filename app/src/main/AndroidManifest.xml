@@ -645,6 +645,12 @@
             android:name=".activity.schedule.ScheduleEditActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.schedule.ScheduleEditActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.schedule.ScheduleEditActivity2_edit"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.schedule.ScheduleRemindActivity"
             android:screenOrientation="portrait" />
         <activity

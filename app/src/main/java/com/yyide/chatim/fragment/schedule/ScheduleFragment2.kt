@@ -21,8 +21,8 @@ import com.yyide.chatim.R
 import com.yyide.chatim.activity.schedule.*
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.chat.ConversationFragment
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
-import com.yyide.chatim.databinding.FragmentSchedule2Binding
 import com.yyide.chatim.databinding.FragmentScheduleBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.LabelListRsp
@@ -40,7 +40,7 @@ import java.util.ArrayList
  * @date 2021/9/7 14:19
  * @description 日程主页
  */
-class ScheduleFragment : Fragment() {
+class ScheduleFragment2 : Fragment() {
     lateinit var fragmentScheduleBinding: FragmentScheduleBinding
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
@@ -60,7 +60,7 @@ class ScheduleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //initFragmentContainer()
 //        setFragment(0)
-        setTab(0)
+        setTab(0);
         fragmentScheduleBinding.btnSearch.setOnClickListener {
             startActivity(Intent(activity, ScheduleSearchActivity::class.java))
         }
@@ -124,8 +124,6 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
-
-
     fun setTab(position: Int) {
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add("今日清单")
@@ -136,10 +134,10 @@ class ScheduleFragment : Fragment() {
 
                 when (position) {
                     0 -> {
-                        return ScheduleTodayFragment()
+                            return ScheduleTodayFragment()
                     }
                     2 -> {
-                        return ScheduleListFragment()
+                            return ScheduleListFragment()
                     }
                     1 -> {
                         return ScheduleMonthFragment()
@@ -160,7 +158,6 @@ class ScheduleFragment : Fragment() {
         fragmentScheduleBinding.slidingTabLayout.setViewPager(fragmentScheduleBinding.viewPager)
         fragmentScheduleBinding.slidingTabLayout.setCurrentTab(position) // todo  默认选中 //第一次加载设置默认
     }
-
     //日程新增监听
     private val onScheduleAddListener = object :DialogUtil.OnScheduleAddListener{
         override fun onFinish(view: View?) {

@@ -55,7 +55,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/slidingTabLayout"
         android:layout_width="match_parent"
@@ -84,18 +83,19 @@
         app:layout_constraintHeight_default="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_default="wrap" />
+
     <FrameLayout
+        android:visibility="gone"
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
         android:orientation="vertical"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_default="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_top_tab"
+        app:layout_constraintTop_toBottomOf="@id/slidingTabLayout"
         app:layout_constraintWidth_default="wrap"
         />
 

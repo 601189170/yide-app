@@ -3,6 +3,7 @@ package com.yyide.chatim.adapter.schedule
 import android.content.Intent
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -47,7 +48,7 @@ class ScheduleTodayAdapter(type: Int,data: List<ScheduleData>) :
             DateUtils.dateExpired(item.moreDayEndTime?:item.endTime),
             holder.getView(R.id.iv_schedule_type_img)
         )
-        holder.getView<ImageView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE
+        holder.getView<TextView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE
         //今日清单：
         //全天不跨天   全天
         //全天跨天     全天 第1天，共3天

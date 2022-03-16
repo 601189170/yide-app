@@ -330,6 +330,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val delMenuItem: SwipeMenuItem =
         SwipeMenuItem(BaseApplication.getInstance()).setBackground(R.drawable.selector_red)
+                .setImage(R.drawable.icon_delete_whilte)
             .setText("删除")
             .setTextColor(Color.WHITE)
             .setWidth(width)

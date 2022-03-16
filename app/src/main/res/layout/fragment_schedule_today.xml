@@ -40,7 +40,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
-                    android:drawableStart="@drawable/schedule_title_indicate_vertical_line_shape"
                     android:drawableEnd="@drawable/schedule_fold_down_icon"
                     android:drawablePadding="@dimen/dp_10"
                     android:text="今日清单"
@@ -67,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_30"
-                    android:drawableStart="@drawable/schedule_title_indicate_vertical_line_shape"
+
                     android:drawableEnd="@drawable/schedule_fold_down_icon"
                     android:drawablePadding="@dimen/dp_10"
                     android:text="本周未完成"
