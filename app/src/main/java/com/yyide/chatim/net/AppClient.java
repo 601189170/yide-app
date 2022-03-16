@@ -40,6 +40,8 @@ public class AppClient {
     public static Retrofit mDingRetrofit2;
     private static OkHttpClient okHttpClient;
     private static OkHttpClient okHttpClient2;
+    public static String token="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxMzcwMDk5ODg5OSIsInNjb3BlIjpbImFsbCJdLCJyb2xlcyI6WyI1NDYzMjVfdGVhY2hlciIsIjU0NjMyNV90ZWFjaGVyIiwiNTQ2MzI1X3RlYWNoZXIiLCI1NDYzMjVfdGVhY2hlciIsIjU0NjMyNV90ZWFjaGVyIiwiNTQ2MzI1X3RlYWNoZXIiLCI1NDYzMjVfdGVhY2hlciIsIjU0NjMyNV9hY2FkZW1pY3MiLCI1NDYzMjVfYWNhZGVtaWNzIl0sIm5hbWUiOiLlvKDkuInlvKDkuInogIHluIjlvKDkuInlvKDkuInogIHluIjlvKDkuInlvKDkuInogIHluIjlvKDkuIkiLCJpZCI6MTUwMzY0ODY1NzE4NDk0MDAzMywiZXhwIjoxNjQ4MjY4NjM3LCJiaWQiOjE0NTgyNTc2MjQwNDE1NDYzMjUsImF1dGhvcml0aWVzIjpbIjU0NjMyNV9hY2FkZW1pY3MiLCI1NDYzMjVfdGVhY2hlciJdLCJqdGkiOiI4YmM5NDBmYS1hOWFhLTRmNTEtOWZkNi1hNjZhZjkxOTI1MjIiLCJjbGllbnRfaWQiOiJ5aWRlLWNsb3VkIiwidXNlcm5hbWUiOiIxMzcwMDk5ODg5OSJ9.GclbUuGfVwQ8Gflde_K8egNAkP8qgqrPI28aGxvq1dQ5JQgNLQ2eE8RGLlhd0rIXtz-1v7l5qzg_h6Ff9wLBgL9JMAw2jL34M31OU1dZROQbeDJRClm5T9syUqx4WE1BkNqKL1OSavake6lkbz1UfPZjzMo-6mEqnW5VMV4dQPDMuJM73eLgCKQYTowhEW3h8yb4xbvrJ_wbAHII8Aav62ssSv-1N84TsDuC4JLiyC-avc34LbwwueM6RzdoUa5qyq6TnbS7AXiUMoGBeFPtqUhx_CJUQcwe-LWIcHbiiORylNscI9pxin9fAC1XBVlfp4MuumUfDN3l4omUNC0gWg";
+//    public static String token="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFsbCJdLCJyb2xlcyI6WyI1NDYzMjVfY3JlYXRvciJdLCJuYW1lIjoi566h55CG5ZGYIiwiaWQiOjE0MjU0NTg2NjIzNTE2Mzk5NTIsImV4cCI6MTY0ODI2MzkxMiwiYmlkIjoxNDU4MjU3NjI0MDQxNTQ2MzI1LCJhdXRob3JpdGllcyI6WyI1NDYzMjVfY3JlYXRvciJdLCJqdGkiOiJlZmRmMGZiMS01YmE3LTRhN2YtOTk2Zi0wYWIyYzQ2OGRjMjUiLCJjbGllbnRfaWQiOiJ5aWRlLWNsb3VkIiwidXNlcm5hbWUiOiJhZG1pbiJ9.U9ZV-ricDcYRol6w7ju1BFV6EY9fN-y4sE9XsqJjMHxM5MdwdJqacZFgAQKjnv8iz1gSTJXlJcRwyDV6-jmQTQrpm4mmC0I4yZateykVDQwmW2DW3I09Fb3L3zkERm4-a2I2PMdCaS4VU7e8OMaDeNrW0BpzlGFaCC4Z4lT1rMa85ij56h_JC_hGc0o4EYxQ0dRHIiEeCFgK4l7op2VezJoh0Qn1r7fR2go_u829taXEQIj7B9MUnPoEm85BKeppA7IrFkjhFlrncmGzGK_ojMt4lrGfglsNVr6T7CfrHZnpPxmBFuObka2hHfTkt9kG4ImHjrljXM_1uU6XY2pEIw";
 
     public static Retrofit getDingRetrofit() {
         if (mDingRetrofit == null) {
@@ -133,13 +135,18 @@ public class AppClient {
 
         Request request = chain.request();
         LoginRsp user = SpData.User();
-        if (user != null) {
-            Log.e("TAG", "intercept: " + JSON.toJSONString(user.getAccessToken()));
+//        if (user != null) {
+//            Log.e("TAG", "intercept: " + JSON.toJSONString(user.getAccessToken()));
+//            request = request.newBuilder()
+//                    .addHeader("Authorization", user.getAccessToken())
+//                    .cacheControl(cacheControl)
+//                    .build();
+//        }else {
             request = request.newBuilder()
-                    .addHeader("Authorization", user.getAccessToken())
+                    .addHeader("Authorization", token)
                     .cacheControl(cacheControl)
                     .build();
-        }
+//        }
 
         Response originalResponse = chain.proceed(request);
         if (BaseApplication.isNetworkAvailable(BaseApplication.getInstance())) {

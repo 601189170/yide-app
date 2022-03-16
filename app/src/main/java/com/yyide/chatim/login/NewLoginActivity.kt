@@ -80,8 +80,8 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 }
             }
         }
-//        startActivity(Intent(this, NoteBookActivity::class.java))
-        startActivity(Intent(this, SchoolCalendarActivity::class.java))
+        startActivity(Intent(this, NoteBookActivity::class.java))
+//        startActivity(Intent(this, SchoolCalendarActivity::class.java))
 
 
     }
