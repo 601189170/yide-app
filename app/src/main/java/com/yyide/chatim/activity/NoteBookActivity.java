@@ -99,9 +99,9 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         super.onCreate(savedInstanceState);
         title.setText("通讯录");
 
-        mvpPresenter.listByApp();
-        layout_jz_all.setVisibility(View.GONE);
-//        mvpPresenter.universitySelectListByApp();
+//        mvpPresenter.listByApp();
+        layout_jz_all.setVisibility(View.VISIBLE);
+        mvpPresenter.universitySelectListByApp();
         GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
         if (identityInfo != null) {
             schoolType = identityInfo.schoolType;

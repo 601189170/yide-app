@@ -40,6 +40,8 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     private Map<String, Object> rrule;
     private String remindType;
     private String remindTypeInfo;
+    private String historyShow;
+    private String timeShow;
     private String startTime;
     private String endTime;
     private String moreDayStartTime;
@@ -49,8 +51,8 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     private int moreDayCount;
     private String iconImg;
     private String isAllDay;
-    private List<LabelListRsp.DataBean> label;
-    private List<ParticipantRsp.DataBean.ParticipantListBean> participant;
+    public List<LabelListRsp.DataBean> labelList;
+    public List<ParticipantRsp.DataBean.ParticipantListBean> participantList;
     private String siteName;
     private String updateType;
     private String updateDate;
@@ -204,20 +206,20 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
         this.isAllDay = isAllDay;
     }
 
-    public List<LabelListRsp.DataBean> getLabel() {
-        return label;
+    public List<LabelListRsp.DataBean> getLabelList() {
+        return labelList;
     }
 
-    public void setLabel(List<LabelListRsp.DataBean> label) {
-        this.label = label;
+    public void setLabel(List<LabelListRsp.DataBean> labelList) {
+        this.labelList = labelList;
     }
 
-    public List<ParticipantRsp.DataBean.ParticipantListBean> getParticipant() {
-        return participant;
+    public List<ParticipantRsp.DataBean.ParticipantListBean> getParticipantlist() {
+        return participantList;
     }
 
-    public void setParticipant(List<ParticipantRsp.DataBean.ParticipantListBean> participant) {
-        this.participant = participant;
+    public void setParticipant(List<ParticipantRsp.DataBean.ParticipantListBean> participantList) {
+        this.participantList = participantList;
     }
 
     public boolean isTimeAxis() {

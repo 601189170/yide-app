@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/top"
-        layout="@layout/title_layout3"
+        layout="@layout/title_layout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
         android:id="@+id/cl_date"
         android:layout_width="match_parent"
         android:layout_height="74dp"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="1dp"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/cl_all_day">
 
@@ -253,7 +253,7 @@
             android:layout_width="@dimen/dp_16"
             android:layout_height="@dimen/dp_16"
             android:layout_marginStart="20dp"
-            android:src="@drawable/schedule_remind_icon"
+            android:src="@drawable/icon_rc_tx"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

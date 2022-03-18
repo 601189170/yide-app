@@ -14,11 +14,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.fastjson.JSON
-import com.yanzhenjie.recyclerview.OnItemMenuClickListener
 import com.yanzhenjie.recyclerview.SwipeMenu
 import com.yanzhenjie.recyclerview.SwipeMenuCreator
 import com.yanzhenjie.recyclerview.SwipeMenuItem
-import com.yanzhenjie.recyclerview.SwipeRecyclerView
 import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
@@ -33,7 +31,6 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.database.ScheduleDaoUtil.dateTimeJointNowTime
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.databinding.FragmentScheduleMonth2Binding
-import com.yyide.chatim.databinding.FragmentScheduleMonthBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DateUtils

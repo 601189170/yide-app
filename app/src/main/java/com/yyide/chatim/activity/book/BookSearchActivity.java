@@ -32,6 +32,7 @@ import com.yyide.chatim.databinding.EmptyBinding;
 import com.yyide.chatim.model.BookSearchRsp;
 import com.yyide.chatim.model.BookSearchRsp2;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.IdentityBean;
 import com.yyide.chatim.model.Student;
 import com.yyide.chatim.model.Teacher;
 import com.yyide.chatim.presenter.BookSearchPresenter;
@@ -168,11 +169,12 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     }
 
     private void search(String keyWord) {
-        if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+
+//        if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
             mvpPresenter.bookSearch(keyWord, "1",from);
-        } else {
-            mvpPresenter.bookSearch(keyWord, "2",from);
-        }
+//        } else {
+//            mvpPresenter.bookSearch(keyWord, "2",from);
+//        }
     }
 
     private void saveHistory(String keyWord) {
@@ -199,7 +201,17 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
             //将学生数据加入
             if (!model.getData().getStudentList().isEmpty()) {
                 for (Student student : model.getData().getStudentList()) {
-                    Teacher teacher = new Teacher("", null, "", -1, "", "", student, 1);
+//                    var subjectName: String?,
+//                            var userId: String?,
+//                            var gender: String?,
+//                            var phone: String?,
+//                            var id: String?,
+//                            var employeeSubjects: String?,
+//                            var email: String?,
+//                            var departmentName: String?,
+//                            var avatar: String?,
+//                            var concealPhone: String?,
+                    Teacher teacher = new Teacher("", null, student.getName(), student.getType(), student.getTypeName(), student.getTypeName(),null, student.getSubjectName(),student.getUserId(),student.getGender(),student.getPhone(),student.getId(),student.getEmployeeSubjects(),student.getEmail(),student.getDepartmentName(),student.getAvatar(),student.getConcealPhone(),1);
                     teacherList.add(teacher);
                 }
             }

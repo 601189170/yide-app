@@ -45,7 +45,7 @@ class MeetingHomeActivity : BaseActivity() {
         viewBinding = ActivityMeetingHomeBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         EventBus.getDefault().register(this)
-        setStatusBar(Color.parseColor("#F2F7FA"))
+//        setStatusBar(Color.parseColor("#F2F7FA"))
         initView()
     }
 

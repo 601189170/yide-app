@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.notice.NoticeScopeActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
+import com.yyide.chatim.databinding.LayoutScheduleSearchFilter2Binding
 import com.yyide.chatim.databinding.LayoutScheduleSearchFilterBinding
 import com.yyide.chatim.model.schedule.FilterTagCollect
 import com.yyide.chatim.model.schedule.Label
@@ -58,7 +59,7 @@ class ScheduleSearchFilterPop(
     }
 
     private fun init() {
-        val mView = LayoutScheduleSearchFilterBinding.inflate(context!!.layoutInflater)
+        val mView = LayoutScheduleSearchFilter2Binding.inflate(context!!.layoutInflater)
         popupWindow = PopupWindow(
             mView.root,
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -114,11 +115,11 @@ class ScheduleSearchFilterPop(
         mWindow.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         mWindow.attributes = params
         popupWindow.showAtLocation(
-            mView.root, Gravity.RIGHT, 0, 0
+            mView.root, Gravity.BOTTOM, 0, 0
         )
     }
 
-    private fun initView(binding: LayoutScheduleSearchFilterBinding) {
+    private fun initView(binding: LayoutScheduleSearchFilter2Binding) {
         //反选类型 日程类型【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
         filterTagCollect.type?.forEach {
             when (it) {
@@ -179,7 +180,7 @@ class ScheduleSearchFilterPop(
         }
     }
 
-    private fun reset(binding: LayoutScheduleSearchFilterBinding) {
+    private fun reset(binding: LayoutScheduleSearchFilter2Binding) {
         binding.cbTransactionSchedule.isChecked = false
         binding.cbSchoolCalendar.isChecked = false
         binding.cbMeeting.isChecked = false
@@ -207,7 +208,7 @@ class ScheduleSearchFilterPop(
         binding.dateSelect.dateTimePicker.visibility = View.GONE
     }
 
-    private fun commit(binding: LayoutScheduleSearchFilterBinding) {
+    private fun commit(binding: LayoutScheduleSearchFilter2Binding) {
         //日程类型【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
         val types = mutableListOf<Int>()
         val cbTransactionSchedule = binding.cbTransactionSchedule.isChecked
@@ -271,7 +272,7 @@ class ScheduleSearchFilterPop(
         }
     }
 
-    private fun initLabel(binding: LayoutScheduleSearchFilterBinding) {
+    private fun initLabel(binding: LayoutScheduleSearchFilter2Binding) {
         adapter = object :
             BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_search_filter_tag) {
             override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
@@ -295,7 +296,7 @@ class ScheduleSearchFilterPop(
         binding.rvLabelList.adapter = adapter
     }
 
-    private fun initDate(binding: LayoutScheduleSearchFilterBinding) {
+    private fun initDate(binding: LayoutScheduleSearchFilter2Binding) {
         if (TextUtils.isEmpty(dateStart.get())) {
             binding.dateSelect.tvDateStart.text = "请选择"
             binding.dateSelect.tvTimeStart.text = "开始日期"

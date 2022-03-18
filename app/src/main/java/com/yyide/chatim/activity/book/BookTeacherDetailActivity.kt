@@ -61,7 +61,7 @@ class BookTeacherDetailActivity : BaseActivity() {
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)
         viewBinding.tvName.text = teacher.name
         viewBinding.name.text = teacher.name
-        viewBinding.sex.text = if (teacher.sex == "1") "男" else "女"
+        viewBinding.sex.text = if (teacher.gender == "1") "男" else "女"
         viewBinding.phone.text = Utils.setHideMobile(teacher.phone)
         viewBinding.email.text = if (TextUtils.isEmpty(teacher.email)) "无" else teacher.email
         viewBinding.subjectName.text =

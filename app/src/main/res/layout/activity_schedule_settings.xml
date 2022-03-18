@@ -29,7 +29,7 @@
         android:text="课程表"
         android:textColor="#ff333333"
         android:textSize="@dimen/text_16"
-        android:textStyle="bold"
+
         app:layout_constraintBottom_toTopOf="@id/v_line1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/v_line" />
@@ -323,7 +323,7 @@ cb_homework_release_remind,tv_homework_release_remark" />
         android:text="会议"
         android:textColor="#ff333333"
         android:textSize="@dimen/text_16"
-        android:textStyle="bold"
+
         app:layout_constraintBottom_toTopOf="@id/v_line6"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/v_line5" />
@@ -464,7 +464,7 @@ tv_conference_remark,cl_conference_remind_type" />
         android:text="显示历史日程"
         android:textColor="#ff333333"
         android:textSize="@dimen/text_16"
-        android:textStyle="bold"
+
         app:layout_constraintBottom_toTopOf="@id/v_line9"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/v_line8" />
@@ -497,7 +497,6 @@ tv_conference_remark,cl_conference_remind_type" />
         android:text="当前时区"
         android:textColor="#ff333333"
         android:textSize="@dimen/text_16"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/v_line9" />
 

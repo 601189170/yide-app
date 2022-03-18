@@ -274,7 +274,7 @@ public class DialogUtil {
                 colorValue = first.get().getColor();
             }
             List<NewLabel> list = new ArrayList<>();
-            list.add(new NewLabel(labelName, colorValue));
+            list.add(new NewLabel("",labelName, colorValue));
             viewModel.addLabel(list);
             viewModel.getLabelAddOrEditResult().observe(lifecycleOwner, aBoolean -> {
                 if (aBoolean) {
@@ -645,8 +645,8 @@ public class DialogUtil {
         lp.x = widthPixels - DisplayUtils.dip2px(context, 160f) - (widthPixels - right) - DisplayUtils.dip2px(context, 20f); //对 dialog 设置 x 轴坐标
         lp.y = location[1] + view.getHeight() / 2;// - notificationBar; //对dialog设置y轴坐标
 
-        lp.width = DisplayUtils.dip2px(context, 160f);
-        lp.height = DisplayUtils.dip2px(context, 244f);
+        lp.width = DisplayUtils.dip2px(context, 115f);
+        lp.height = DisplayUtils.dip2px(context, 140f);
         rootView.measure(0, 0);
         lp.dimAmount = 0.5f;
         dialogWindow.setAttributes(lp);
@@ -1069,6 +1069,13 @@ public class DialogUtil {
         final InputFilter[] inputFilter = {new MaxTextLengthFilter(20)};
         binding.edit.setFilters(inputFilter);
         binding.tvDate.setText(time);
+        binding.imFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
         binding.btnFinish.setOnClickListener(v -> {
             String title = binding.edit.getText().toString();
             if (TextUtils.isEmpty(title)) {
@@ -1121,11 +1128,13 @@ public class DialogUtil {
         binding.tvEditionSwitch.setOnClickListener(onScheduleAddListener::onSwitch);
         Window dialogWindow = mDialog.getWindow();
         dialogWindow.setGravity(Gravity.BOTTOM);
+
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.height=WindowManager.LayoutParams.MATCH_PARENT;
         //设置宽高
         lp.width = (int) context.getResources().getDisplayMetrics().widthPixels;
         rootView.measure(0, 0);
-        lp.height = rootView.getMeasuredHeight();
+//        lp.height = rootView.getMeasuredHeight();
         lp.dimAmount = 0.75f; //半透明背景的灰度 在0.0f和1.0f之间，0.0f完全不暗，1.0f全暗
         dialogWindow.setAttributes(lp);
         mDialog.setCancelable(true);

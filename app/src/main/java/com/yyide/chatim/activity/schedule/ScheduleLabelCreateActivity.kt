@@ -118,11 +118,14 @@ class ScheduleLabelCreateActivity : BaseActivity() {
             loge("选择默认颜色")
         }
         if (editOps) {
+            val list= ArrayList<OldLabel>();
             val oldLabel = OldLabel(id, labelName, colorValue)
-            labelManageViewModel.editLabel(oldLabel)
+            list.add(oldLabel)
+//            labelManageViewModel.editLabel(oldLabel)
+            labelManageViewModel.editLabel(list)
         } else {
             val labelList = mutableListOf<NewLabel>()
-            labelList.add(NewLabel(labelName, colorValue))
+            labelList.add(NewLabel(id,labelName, colorValue))
             labelManageViewModel.addLabel(labelList)
         }
         labelManageViewModel.getLabelAddOrEditResult().observe(this, {

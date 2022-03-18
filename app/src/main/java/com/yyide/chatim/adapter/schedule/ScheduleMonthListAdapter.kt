@@ -96,7 +96,7 @@ class ScheduleMonthListAdapter: BaseQuickAdapter<ScheduleData, BaseViewHolder>(R
 //        }
 
         //设置日程标签的背景
-        val label = schedule.label
+        val label = schedule.labelList
         if (label.isNotEmpty()) {
             baseViewHolder.getView<TextView>(R.id.tv_label).visibility = View.VISIBLE
             val drawable = GradientDrawable()

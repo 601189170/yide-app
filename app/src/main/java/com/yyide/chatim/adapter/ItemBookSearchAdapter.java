@@ -30,6 +30,8 @@ import com.yyide.chatim.model.Student;
 import com.yyide.chatim.model.Teacher;
 import com.yyide.chatim.utils.GlideUtil;
 
+import java.util.ArrayList;
+
 /**
  * @Description: 通讯录搜索adapter
  * @Author: liu tao
@@ -86,35 +88,50 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                 BookPatriarchDetailActivity.start(getContext(), guardianItem);
             });
             holder.itemView.setOnClickListener(v -> {
-                BookSearchStudent item = student.getList();
+//                BookSearchStudent item = student.getList();
                 if (BookSearchActivity.FROM_GATE.equals(from)){
                     //跳转闸机通行数据详情页
-                    final String userId = item.getUserId();
+                    final String userId = teacher.getUserId();
                     GateDetailInfoActivity.Companion.toDetail(getContext(),1,null,userId,null);
                     return;
                 }
-                BookStudentItem studentItem = new BookStudentItem(item.getId(),
-                        item.getName(),
-                        item.getPhone(),
-                        item.getClassName(),
-                        item.getUserId(),
-                        item.getPrimaryGuardianPhone(),
-                        item.getDeputyGuardianPhone(),
-                        item.getSex(),
-                        item.getAddress(),
-                        item.getFaceInformation(),
-                        item.isOwnChild(),
-                        null);
-                BookStudentDetailActivity.start(getContext(), studentItem);
+//                BookStudentItem studentItem = new BookStudentItem(item.getId(),
+//                        item.getName(),
+//                        item.getPhone(),
+//                        item.getClassName(),
+//                        item.getUserId(),
+//                        item.getPrimaryGuardianPhone(),
+//                        item.getDeputyGuardianPhone(),
+//                        item.getSex(),
+//                        item.getAddress(),
+//                        item.getFaceInformation(),
+//                        item.isOwnChild(),
+//                        null);
+//                BookStudentDetailActivity.start(getContext(), studentItem);
+                BookTeacherItem studentItem = new BookTeacherItem(
+                        teacher.getName(),
+                        teacher.getGender(),
+                        teacher.getPhone(),
+                        teacher.getUserId(),
+                        teacher.getEmail(),
+                        teacher.getSubjectName(),
+                        teacher.getSubjectName(),
+                        teacher.getFaceInformation(),
+                        teacher.getWhitelist());
+                BookTeacherDetailActivity.start(getContext(), studentItem);
             });
         } else {
             ItemBookSearchBinding bind = ItemBookSearchBinding.bind(holder.itemView);
             GlideUtil.loadImageHead(getContext(), teacher.getFaceInformation(), bind.ivHead);
-            if (!SpData.getIdentityInfo().staffIdentity() && teacher.getList() != null) {
+//            if (!SpData.getIdentityInfo().staffIdentity() && teacher.getList() != null) {
+            if (teacher.getList()!=null&&teacher.getList().getTeachingSubjects()!=null){
                 bind.tvName.setText(teacher.getName() + " (" + teacher.getList().getTeachingSubjects() + ")");
-            } else {
-                bind.tvName.setText(teacher.getName() + " (" + teacher.getTypeName() + ")");
+            }else {
+                bind.tvName.setText(teacher.getName());
             }
+//            } else {
+//                bind.tvName.setText(teacher.getName() + " (" + teacher.getTypeName() + ")");
+//            }
 
             holder.itemView.setOnClickListener(v -> {
 
@@ -125,19 +142,21 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                     GateDetailInfoActivity.Companion.toDetail(getContext(),2,null,userId,null);
                     return;
                 }
-                if (teacherItem1!=null){
+
+//                val list= ArrayList();
+//                if (teacherItem1!=null){
                     BookTeacherItem teacherItem = new BookTeacherItem(
-                            teacherItem1.getName(),
-                            teacherItem1.getSex(),
-                            teacherItem1.getPhone(),
-                            teacherItem1.getUserId(),
-                            teacherItem1.getEmail(),
-                            teacherItem1.getSubjectName(),
-                            teacherItem1.getTeachingSubjects(),
-                            teacherItem1.getFaceInformation(),
-                            teacherItem1.getWhitelist());
+                            teacher.getName(),
+                            teacher.getGender(),
+                            teacher.getPhone(),
+                            teacher.getUserId(),
+                            teacher.getEmail(),
+                            teacher.getSubjectName(),
+                            teacher.getSubjectName(),
+                            teacher.getFaceInformation(),
+                            teacher.getWhitelist());
                     BookTeacherDetailActivity.start(getContext(), teacherItem);
-                }
+//                }
 
             });
         }

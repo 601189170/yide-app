@@ -90,9 +90,9 @@ class ScheduleEditActivity2 : BaseActivity() {
             scheduleEditBinding.tvAddress.text = it.siteName
             //日程名称name
             scheduleEditBinding.etScheduleTitle.setText(it.name)
-            scheduleEditViewModel.participantList.value = it.participant
+            scheduleEditViewModel.participantList.value = it.participantList
             val stringBuilder = StringBuilder()
-            it.participant.map { it.realname }.forEach {
+            it.participantList.map { it.realname }.forEach {
                 stringBuilder.append(it).append("  ")
             }
             scheduleEditBinding.tvPerson .setText(stringBuilder)

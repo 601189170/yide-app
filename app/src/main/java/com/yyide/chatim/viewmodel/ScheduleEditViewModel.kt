@@ -22,6 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  *
@@ -124,8 +125,15 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.startTime = startTime
         scheduleData.endTime = endTime
         scheduleData.isAllDay = if (allDay) "1" else "0"
-        scheduleData.label = labelListLiveData.value
-        scheduleData.participant = participantList.value
+        scheduleData.labelList = labelListLiveData.value
+
+        if (participantList.value!=null){
+
+            scheduleData.participantList = participantList.value
+        }else{
+            scheduleData.participantList = ArrayList<ParticipantRsp.DataBean.ParticipantListBean>();
+        }
+
         scheduleData.siteId = siteLiveData.value?.id
         scheduleData.remark = remarkLiveData.value
         //截止日期不能小于开始日期
@@ -155,7 +163,7 @@ class ScheduleEditViewModel : ViewModel() {
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
                 val body1 = response.body()
                 loge("${body1}")
-                if (body1 != null && body1.code == 200){
+                if (body1 != null && body1.code == BaseConstant.REQUEST_SUCCES_0){
                     if (!modify){
                         EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
                         ToastUtils.showShort("日程添加成功")
@@ -202,8 +210,8 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.startTime = startTime?:""
         scheduleData.endTime = endTime?:""
         scheduleData.isAllDay = if (allDay) "1" else "0"
-        scheduleData.label = labelListLiveData.value
-        scheduleData.participant = participantList.value
+        scheduleData.labelList = labelListLiveData.value
+        scheduleData.participantList = participantList.value
         scheduleData.siteId = siteLiveData.value?.id
         scheduleData.remark = remarkLiveData.value
         return scheduleData
@@ -216,7 +224,7 @@ class ScheduleEditViewModel : ViewModel() {
         dingApiStores.deleteScheduleById(id).enqueue(object :Callback<BaseRsp>{
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
                 val body = response.body()
-                if (body != null && body.code == 200){
+                if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0){
                     ToastUtils.showShort("删除日程成功")
                     deleteResult.postValue(true)
                     return
@@ -246,7 +254,7 @@ class ScheduleEditViewModel : ViewModel() {
         dingApiStores.changeScheduleState(requestBody).enqueue(object :Callback<BaseRsp>{
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
                 val body = response.body()
-                if (body != null && body.code == 200){
+                if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0){
                     changeStatusResult.postValue(true)
                     return
                 }

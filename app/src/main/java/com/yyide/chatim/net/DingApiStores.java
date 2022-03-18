@@ -816,7 +816,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/selectLabelList
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/selectLabelList")
+//    @POST("/management/cloud-system/app/schedule/selectLabelList")
+    @GET("/cloud/app/schedule/getLabel")
     Call<LabelListRsp> selectLabelList();
 
     /**
@@ -824,7 +825,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/addLabel
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/addLabel")
+//    @POST("/management/cloud-system/app/schedule/addLabel")
+    @POST("/cloud/app/schedule/createLabelBatch")
     Call<BaseRsp> addLabel(@Body RequestBody requestBody);
 
     /**
@@ -832,7 +834,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/editLabel
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/editLabel")
+//    @POST("/management/cloud-system/app/schedule/editLabel")
+    @POST("/cloud/app/schedule/createLabelBatch")
     Call<BaseRsp> editLabel(@Body RequestBody requestBody);
 
     /**
@@ -840,7 +843,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/deleteLabelById/1437700895651627009
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/deleteLabelById/{id}")
+//    @POST("/management/cloud-system/app/schedule/deleteLabelById/{id}")
+    @POST("/cloud/app/schedule/deleteLabel/{id}")
     Call<BaseRsp> deleteLabelById(@Path("id") String id);
 
     /**
@@ -848,7 +852,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getSiteName
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/getSiteName")
+//    @POST("/management/cloud-system/app/schedule/getSiteName")
+    @GET("/cloud/site/buildingList")
     Call<SiteNameRsp> getSiteName();
 
     /**
@@ -856,7 +861,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/saveSchedule
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/saveSchedule")
+//    @POST("/management/cloud-system/app/schedule/saveSchedule")
+    @POST("/cloud/app/schedule/createSchedule")
     Call<BaseRsp> saveSchedule(@Body RequestBody requestBody);
 
     /**
@@ -864,7 +870,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getScheduleSetting
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/management/cloud-system/app/schedule/getScheduleSetting")
+//    @GET("/management/cloud-system/app/schedule/getScheduleSetting")
+    @GET("/cloud/app/schedule/getScheduleSetting")
     Call<Settings> getScheduleSetting();
 
     /**
@@ -872,7 +879,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/saveScheduleSetting
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/saveScheduleSetting")
+//    @POST("/management/cloud-system/app/schedule/saveScheduleSetting")
+    @POST("/cloud/app/schedule/createScheduleSetting")
     Call<BaseRsp> saveScheduleSetting(@Body RequestBody requestBody);
 
     /**
@@ -915,7 +923,7 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/deleteScheduleById/14
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @DELETE("/management/cloud-system/app/schedule/deleteScheduleById/{id}")
+    @DELETE("/cloud/app/schedule/deleteSchedule/{id}")
     Call<BaseRsp> deleteScheduleById(@Path("id") String id);
 
     /**
@@ -923,7 +931,7 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/searchSchedule
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/searchSchedule")
+    @POST("/cloud/app/schedule/searchSchedule")
     Call<BaseResponse<List<ScheduleData>>> searchSchedule(@Body RequestBody requestBody);
 
     /**
@@ -931,7 +939,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/scheduleList
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/scheduleList")
+//    @POST("/management/cloud-system/app/schedule/scheduleList")
+    @GET("/cloud/app/schedule/selectAllScheduleList")
     Call<ScheduleListRsp> scheduleList(@Body RequestBody requestBody);
 
     /**
@@ -939,7 +948,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/selectAllScheduleList
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/selectAllScheduleList")
+//    @POST("/management/cloud-system/app/schedule/selectAllScheduleList")
+    @GET("/cloud/app/schedule/selectAllScheduleList")
     Call<ScheduleDataRsp> selectAllScheduleList();
 
     /**
@@ -947,7 +957,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/changeScheduleState
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/changeScheduleState")
+//    @POST("/management/cloud-system/app/schedule/changeScheduleState")
+    @POST("/cloud/app/schedule/changeScheduleState")
     Call<BaseRsp> changeScheduleState(@Body RequestBody requestBody);
 
     /**

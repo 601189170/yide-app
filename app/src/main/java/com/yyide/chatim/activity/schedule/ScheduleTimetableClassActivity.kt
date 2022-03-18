@@ -11,7 +11,6 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.databinding.ActivityScheduleTimetableBinding
 import com.yyide.chatim.model.schedule.Remind
-import com.yyide.chatim.model.schedule.Repetition
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.MaxTextLengthFilter

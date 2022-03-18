@@ -67,7 +67,7 @@ class ScheduleAddLabelActivity : BaseActivity() {
             finish()
         }
         labelManageBinding.top.tvRight.visibility = View.VISIBLE
-//        labelManageBinding.top.tvRight.text = "确定"
+        labelManageBinding.top.tvRight.text = "保存"
         labelManageBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         labelManageBinding.top.tvRight.setOnClickListener {
             val checkedLabelList = labelList.filter { it.checked }

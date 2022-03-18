@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
 import com.tencent.mmkv.MMKV
 import com.yyide.chatim.BaseApplication
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.database.AppDatabase
 import com.yyide.chatim.database.ScheduleDaoUtil
@@ -52,7 +53,7 @@ class ScheduleMangeViewModel : ViewModel() {
                 ) {
                     val body = response.body()
                     loge("onResponse $body")
-                    if (body != null && body.code == 200 && body.data != null) {
+                    if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0 && body.data != null) {
                         //查询日程成功 并保存
                         requestAllScheduleResult.postValue(true)
                         insertScheduleToDb(body.data.scheduleList)

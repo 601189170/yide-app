@@ -180,15 +180,15 @@ class MeetingSaveActivity : BaseActivity() {
             viewBinding.top.ivRight.visibility = View.GONE
         }
         viewBinding.etMeetingTitle.text = Editable.Factory.getInstance().newEditable(item.name)
-        if (item.participant != null) {
+        if (item.participantList != null) {
             viewBinding.tvParticipant.setTextColor(resources.getColor(R.color.text_1E1E1E))
-            viewBinding.tvParticipant.text = splitString(item.participant)
+            viewBinding.tvParticipant.text = splitString(item.participantList)
         }
         if (!TextUtils.isEmpty(item.siteName)) {
             viewBinding.tvSite.setTextColor(resources.getColor(R.color.text_1E1E1E))
             viewBinding.tvSite.text = item.siteName
         }
-        viewModel.participantList.value = item.participant
+        viewModel.participantList.value = item.participantList
         viewModel.siteLiveData.value = SiteNameRsp.DataBean(item.siteId, item.siteName, false)
         viewModel.startTimeLiveData.value = item.startTime
         viewModel.endTimeLiveData.value = item.endTime
@@ -288,7 +288,7 @@ class MeetingSaveActivity : BaseActivity() {
                 }
                 scheduleData.name = title
                 if (viewModel.participantList.value != null) {
-                    scheduleData.participant = viewModel.participantList.value
+                    scheduleData.participantList = viewModel.participantList.value
                 }
                 scheduleData.remark = viewBinding.etRemark.text.toString()
                 scheduleData.remindType = if (viewModel.allDayLiveData.value == true) "1" else "0"

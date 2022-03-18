@@ -48,7 +48,7 @@ class ScheduleSearchViewModel : ViewModel() {
                     response: Response<BaseResponse<List<ScheduleData>>>
                 ) {
                     val body = response.body()
-                    if (body != null && body.code == 200 && body.data != null) {
+                    if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0 && body.data != null) {
                         scheduleSearchResultList.postValue(body.data ?: listOf())
                         return
                     }

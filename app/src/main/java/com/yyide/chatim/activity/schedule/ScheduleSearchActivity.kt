@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.schedule
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -14,7 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ToastUtils
@@ -37,12 +37,10 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
-import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityScheduleSearchBinding
 import com.yyide.chatim.dialog.ScheduleSearchFilterPop
 import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.ColorUtil
-import com.yyide.chatim.utils.DatePickerDialogUtil
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.SpaceItemDecoration
@@ -51,7 +49,6 @@ import com.yyide.chatim.viewmodel.LabelManageViewModel
 import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.viewmodel.ScheduleSearchViewModel
-import org.joda.time.DateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -432,6 +429,8 @@ class ScheduleSearchActivity : BaseActivity() {
         BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_schedule_search_history) {
         override fun convert(holder: BaseViewHolder, item: String) {
             holder.setText(R.id.tv_search_value, item)
+            holder.setVisible(R.id.type_img,false)
+
         }
     }
 
@@ -451,17 +450,22 @@ class ScheduleSearchActivity : BaseActivity() {
                     //【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
                     2 -> {
                         holder.setText(R.id.tv_search_value, "事务日程")
+                        holder.setBackgroundResource(R.id.type_img,R.drawable.richeng)
                     }
                     0 -> {
                         holder.setText(R.id.tv_search_value, "校历")
+                        holder.setBackgroundResource(R.id.type_img,R.drawable.xiaoli)
                     }
                     3 -> {
                         holder.setText(R.id.tv_search_value, "会议")
+                        holder.setBackgroundResource(R.id.type_img,R.drawable.huiyi)
                     }
                     1 -> {
                         holder.setText(R.id.tv_search_value, "课表")
+                        holder.setBackgroundResource(R.id.type_img,R.drawable.kebiao)
                     }
                     else -> {
+                        holder.setVisible(R.id.type_img,false)
                     }
                 }
 

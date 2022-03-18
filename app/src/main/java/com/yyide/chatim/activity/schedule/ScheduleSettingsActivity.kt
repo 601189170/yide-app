@@ -90,7 +90,7 @@ class ScheduleSettingsActivity : BaseActivity() {
             finish()
         }
         scheduleSettingsBinding.top.tvRight.visibility = View.VISIBLE
-        scheduleSettingsBinding.top.tvRight.text = "完成"
+        scheduleSettingsBinding.top.tvRight.text = "保存"
         scheduleSettingsBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         scheduleSettingsBinding.top.tvRight.setOnClickListener {
             settingsViewModel.saveSettings()

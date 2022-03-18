@@ -77,7 +77,7 @@ class LabelManageViewModel : ViewModel() {
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
                 loge("addLabel:${response.body()}")
                 val baseRsp: BaseRsp? = response.body()
-                if (baseRsp != null && baseRsp.code == 200) {
+                if (baseRsp != null && baseRsp.code == BaseConstant.REQUEST_SUCCES_0) {
                     labelAddOrEditResult.postValue(true)
                     return
                 }
@@ -93,13 +93,31 @@ class LabelManageViewModel : ViewModel() {
     /**
      * 修改便签
      */
-    fun editLabel(oldLabel: OldLabel) {
+//    fun editLabel(oldLabel: OldLabel) {
+//        val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(oldLabel))
+//        dingApiStores.editLabel(body).enqueue(object : Callback<BaseRsp> {
+//            override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
+//                loge("editLabel:${response.body()}")
+//                val baseRsp: BaseRsp? = response.body()
+//                if (baseRsp != null && baseRsp.code == BaseConstant.REQUEST_SUCCES_0) {
+//                    labelAddOrEditResult.postValue(true)
+//                    return
+//                }
+//                labelAddOrEditResult.postValue(false)
+//            }
+//
+//            override fun onFailure(call: Call<BaseRsp>, t: Throwable) {
+//                labelAddOrEditResult.postValue(false)
+//            }
+//        })
+//    }
+    fun editLabel(oldLabel: ArrayList<OldLabel>) {
         val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(oldLabel))
         dingApiStores.editLabel(body).enqueue(object : Callback<BaseRsp> {
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
                 loge("editLabel:${response.body()}")
                 val baseRsp: BaseRsp? = response.body()
-                if (baseRsp != null && baseRsp.code == 200) {
+                if (baseRsp != null && baseRsp.code == BaseConstant.REQUEST_SUCCES_0) {
                     labelAddOrEditResult.postValue(true)
                     return
                 }
@@ -111,7 +129,6 @@ class LabelManageViewModel : ViewModel() {
             }
         })
     }
-
     /**
      * 删除标签
      */
@@ -121,7 +138,7 @@ class LabelManageViewModel : ViewModel() {
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
                 loge("deleteLabelById:${response.body()}")
                 val baseRsp: BaseRsp? = response.body()
-                if (baseRsp != null && baseRsp.code == 200) {
+                if (baseRsp != null && baseRsp.code == BaseConstant.REQUEST_SUCCES_0) {
                     labelDeleteResult.postValue(true)
                     return
                 }

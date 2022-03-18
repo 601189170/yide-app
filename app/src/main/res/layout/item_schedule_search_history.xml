@@ -7,6 +7,21 @@
     app:cardBackgroundColor="#F3F3F3"
     app:cardCornerRadius="@dimen/dp_2"
     app:cardElevation="0dp">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/type_img"
+            android:visibility="gone"
+            android:layout_marginHorizontal="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </ImageView>
+
+
 
     <TextView
         android:id="@+id/tv_search_value"
@@ -18,4 +33,5 @@
         android:padding="@dimen/dp_8"
         android:textColor="#ff333333"
         android:textSize="14sp" />
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

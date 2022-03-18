@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_30"
         android:visibility="gone"
-        android:layout_marginTop="@dimen/dp_14"
+
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_30"
 
-        android:layout_marginTop="@dimen/dp_14"
+
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/cl_today_list">
 
@@ -104,7 +104,7 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="@dimen/dp_30"
-        android:layout_marginTop="@dimen/dp_14"
+
         app:layout_constraintTop_toBottomOf="@id/cl_month_view">
 
         <ImageView
@@ -135,6 +135,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"
         android:background="#F7F9FA"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/cl_list_view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

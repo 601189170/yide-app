@@ -80,7 +80,8 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 }
             }
         }
-        startActivity(Intent(this, NoteBookActivity::class.java))
+//        startActivity(Intent(this, NoteBookActivity::class.java))
+//        startActivity(Intent(this, SchoolCalendarActivity::class.java))
 //        startActivity(Intent(this, SchoolCalendarActivity::class.java))
 
 
@@ -255,7 +256,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
 //        startActivity(Intent(this, SchoolCalendarActivity::class.java))
-        startActivity(Intent(this, NoteBookActivity::class.java))
+//        startActivity(Intent(this, NoteBookActivity::class.java))
 
 
     }

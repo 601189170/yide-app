@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
             android:text="无"
-            android:textStyle="bold"
             android:textColor="#ff333333"
             android:textSize="@dimen/text_16"
             app:layout_constraintBottom_toBottomOf="parent"

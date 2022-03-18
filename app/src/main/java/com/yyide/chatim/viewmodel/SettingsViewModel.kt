@@ -138,7 +138,7 @@ class SettingsViewModel : ViewModel() {
         apiStores.saveScheduleSetting(requestBody).enqueue(object : Callback<BaseRsp> {
             override fun onResponse(call: Call<BaseRsp>, response: Response<BaseRsp>) {
                 val body = response.body()
-                if (body != null && body.code == 200) {
+                if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0) {
                     modifySettingsResult.postValue(true)
                     return
                 }
@@ -158,7 +158,7 @@ class SettingsViewModel : ViewModel() {
         apiStores.scheduleSetting.enqueue(object : Callback<Settings> {
             override fun onResponse(call: Call<Settings>, response: Response<Settings>) {
                 val body = response.body()
-                if (body != null && body.code == 200) {
+                if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0) {
                     val data = body.data
                     data?.let {
                         it.forEach {

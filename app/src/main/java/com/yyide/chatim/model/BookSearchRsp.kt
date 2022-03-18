@@ -35,7 +35,19 @@ data class Student(
     @JSONField(name = "type")
     var type: Int,
     @JSONField(name = "typeName")
-    var typeName: String
+    var typeName: String,
+
+//    var student: Student?,
+    var subjectName: String?,
+    var userId: String?,
+    var gender: String?,
+    var phone: String?,
+    var id: String?,
+    var employeeSubjects: String?,
+    var email: String?,
+    var departmentName: String?,
+    var avatar: String?,
+    var concealPhone: String?,
 )
 
 data class Teacher(
@@ -52,6 +64,16 @@ data class Teacher(
     @JSONField(name = "whitelist")
     var whitelist: String?,
     var student: Student?,
+    var subjectName: String?,
+    var userId: String?,
+    var gender: String?,
+    var phone: String?,
+    var id: String?,
+    var employeeSubjects: String?,
+    var email: String?,
+    var departmentName: String?,
+    var avatar: String?,
+    var concealPhone: String?,
     override var itemType: Int
 ) : MultiItemEntity
 

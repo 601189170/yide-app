@@ -135,7 +135,7 @@ data class BookTeacherItem(
     @JSONField(name = "name")
     var name: String?,
     @JSONField(name = "sex")
-    var sex: String?,
+    var gender: String?,
     @JSONField(name = "phone")
     var phone: String?,
     @JSONField(name = "userId")

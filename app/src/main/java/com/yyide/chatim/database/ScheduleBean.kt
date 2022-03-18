@@ -138,7 +138,7 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
             participant.myType = it.status
             participantList.add(participant)
         }
-        scheduleData.participant = participantList
+        scheduleData.participantList = participantList
         val labelList = mutableListOf<LabelListRsp.DataBean>()
         it.labelList.forEach {
             val label = LabelListRsp.DataBean()
@@ -147,7 +147,7 @@ fun ScheduleWithParticipantAndLabel.scheduleWithParticipantAndLabelToScheduleDat
             label.colorValue = it.colorValue
             labelList.add(label)
         }
-        scheduleData.label = labelList
+        scheduleData.labelList = labelList
         return scheduleData
     }
 }
@@ -182,7 +182,7 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
         scheduleBean.promoter = it.promoter
         scheduleBean.promoterName = it.promoterName
         val participantList = mutableListOf<ParticipantList>()
-        it.participant.forEach {
+        it.participantList.forEach {
             val participant = ParticipantList()
             participant.id = it.id
             participant.userId = it.userId
@@ -195,7 +195,7 @@ fun ScheduleData.scheduleDataToScheduleWithParticipantAndLabel():ScheduleWithPar
             participantList.add(participant)
         }
         val labelList = mutableListOf<LabelList>()
-        it.label.forEach loop@{
+        it.labelList.forEach loop@{
             if (TextUtils.isEmpty(it.labelName)){
                 return@loop
             }

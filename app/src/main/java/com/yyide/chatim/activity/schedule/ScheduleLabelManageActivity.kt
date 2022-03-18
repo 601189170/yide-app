@@ -89,23 +89,30 @@ class ScheduleLabelManageActivity : BaseActivity() {
             swipeRightMenu: SwipeMenu,
             position: Int
         ) {
-            val width = DisplayUtils.dip2px(this@ScheduleLabelManageActivity, 68f)
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            val width = DisplayUtils.dip2px(this@ScheduleLabelManageActivity, 30f)
+            val height = DisplayUtils.dip2px(this@ScheduleLabelManageActivity, 30f)
+//            val height = ViewGroup.LayoutParams.MATCH_PARENT
             run {
                 val modifyItem: SwipeMenuItem =
                     SwipeMenuItem(this@ScheduleLabelManageActivity).setBackground(R.drawable.selector_blue)
                         //.setImage(R.drawable.ic_action_delete)
-                        .setText("修改")
-                        .setTextColor(Color.WHITE)
+                        .setBackground(R.drawable.icon_rc_bj)
+//                        .setText("修改")
+//                        .setTextColor(Color.WHITE)
                         .setWidth(width)
+
                         .setHeight(height)
                 swipeRightMenu.addMenuItem(modifyItem) // 添加菜单到右侧。
+
                 val delItem: SwipeMenuItem =
                     SwipeMenuItem(this@ScheduleLabelManageActivity).setBackground(R.drawable.selector_red)
-                        .setText("删除")
-                        .setTextColor(Color.WHITE)
+                        .setBackground(R.drawable.icon_rc_sc)
+
+//                        .setText("删除")
+//                        .setTextColor(Color.WHITE)
                         .setWidth(width)
                         .setHeight(height)
+
                 swipeRightMenu.addMenuItem(delItem) // 添加菜单到右侧。
             }
         }

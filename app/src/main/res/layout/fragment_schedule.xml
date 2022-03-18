@@ -58,14 +58,17 @@
 
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/slidingTabLayout"
+        android:layout_marginHorizontal="@dimen/dp_60"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+
+
+        android:layout_height="48dp"
         app:layout_constraintTop_toBottomOf="@+id/cl_top_tab"
-        android:layout_gravity="center"
+
         app:tl_indicator_color="@color/colorPrimary"
         app:tl_indicator_height="3dp"
         app:tl_indicator_width="40dp"
-        app:tl_tab_padding="@dimen/dp_60"
+        app:tl_tab_padding="@dimen/dp_20"
         app:tl_tab_space_equal="false"
         app:tl_textSelectColor="#303133"
         app:tl_textUnselectColor="#909399"

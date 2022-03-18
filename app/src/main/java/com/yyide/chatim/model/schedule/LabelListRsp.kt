@@ -22,6 +22,7 @@ data class LabelListRsp(
         var versionStamp: Any? = null,
         var total: Int = 0,
         var size: Int = 0,
+        var schoolId: String? = null,
         var current: Int = 0,
         var userId: Any? = null,
         var labelName: String? = null,
@@ -35,6 +36,7 @@ data class LabelListRsp(
  * 新增标签
  */
 data class NewLabel(
+    var id:String,
     val labelName: String,
     val colorValue: String
 )
