@@ -48,7 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp_20"
-        android:background="#F5F8FC"
+        android:background=" #F9FAF9
+"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintTop_toBottomOf="@id/tv_title">
 
@@ -100,7 +101,7 @@
             android:layout_width="0.5dp"
             android:layout_height="@dimen/dp_14"
             android:layout_gravity="center"
-            android:background="#DCDFE6"
+            android:background="#F9FAF9"
             app:layout_constraintBottom_toBottomOf="@id/ll_deadline"
             app:layout_constraintLeft_toLeftOf="@id/ll_deadline"
             app:layout_constraintRight_toRightOf="@id/ll_deadline"

@@ -2,7 +2,6 @@ package com.yyide.chatim.kotlin.network.base
 
 import android.util.Log
 import com.alibaba.fastjson.JSON
-import com.blankj.utilcode.util.AppUtils
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.kotlin.network.exception.NetworkException
 import com.yyide.chatim.kotlin.network.interceptor.CommonRequestInterceptor
@@ -10,20 +9,16 @@ import com.yyide.chatim.kotlin.network.interceptor.CommonResponseInterceptor
 import com.yyide.chatim.BuildConfig
 import com.yyide.chatim.SpData
 import com.yyide.chatim.kotlin.network.ErrorCode
-import com.yyide.chatim.model.LoginRsp
-import com.yyide.chatim.net.AppClient
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.apache.http.conn.ConnectTimeoutException
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.reflect.ParameterizedType
 import java.net.SocketException
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 /**
  * 网络请求封装
@@ -119,7 +114,7 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
             cacheBuilder.maxStale(365, TimeUnit.DAYS)
             val cacheControl = cacheBuilder.build()
             var request = chain.request()
-            val user = SpData.User()
+            val user = SpData.getLogin()
             if (user != null) {
                 Log.e("TAG", "intercept: " + JSON.toJSONString(user))
                 request = request.newBuilder()

@@ -35,8 +35,8 @@ import butterknife.ButterKnife;
  * @Version: 1.0
  */
 public class UserNoticeListAdapter extends RecyclerView.Adapter {
-    private Context context;
-    private List<UserMsgNoticeRsp.DataBean.RecordsBean> data;
+    private final Context context;
+    private final List<UserMsgNoticeRsp.DataBean.RecordsBean> data;
     //上拉加载更多布局
     public static final int view_Foot = 1;
     //主要布局
@@ -44,17 +44,17 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
     //是否隐藏
     public boolean isLoadMore = false;
 
-    private View view;
-
     private OnItemOnClickListener onItemOnClickListener;
 
     public boolean isLastPage = false;
+
     public void setOnlyOnePage(boolean onlyOnePage) {
         this.onlyOnePage = onlyOnePage;
     }
 
     //是否是只有一页
     public boolean onlyOnePage = false;
+
     public void setOnItemOnClickListener(OnItemOnClickListener onItemOnClickListener) {
         this.onItemOnClickListener = onItemOnClickListener;
     }
@@ -68,12 +68,11 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == view_Normal) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_message_notice, parent, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.item_message_notice, parent, false);
             return new ViewHolder(view);
         } else {
             FootView view = new FootView(context);
-            FootViewHolder footViewHolder = new FootViewHolder(view);
-            return footViewHolder;
+            return new FootViewHolder(view);
         }
     }
 
@@ -93,7 +92,6 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
             String createdDateTime = recordsBean.getSendTime();
             holder1.tv_date.setText(DateUtils.formatTime(createdDateTime, "", "yyyy-MM-dd HH:mm:ss"));
             holder1.tv_title.setText(recordsBean.getTitle());
-            holder1.tv_leave.setText(recordsBean.getFirstData());
             final String content = recordsBean.getContent();
             final String templateContent = parseTemplateContent(content);
             Log.e("TAG", "onBindViewHolder: " + content);
@@ -123,7 +121,7 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
             for (int i = 0; i < jsonArray.length(); i++) {
                 final String jsonObject = jsonArray.getString(i);
                 if (i != jsonArray.length() - 1) {
-                    buffer.append(jsonObject + "\n" + "\n");
+                    buffer.append(jsonObject).append("\n").append("\n");
                 } else {
                     buffer.append(jsonObject);
                 }
@@ -183,9 +181,6 @@ public class UserNoticeListAdapter extends RecyclerView.Adapter {
 
         @BindView(R.id.tv_title)
         TextView tv_title;
-
-        @BindView(R.id.tv_leave)
-        TextView tv_leave;
 
         @BindView(R.id.tv_msg_type)
         TextView tv_msg_type;

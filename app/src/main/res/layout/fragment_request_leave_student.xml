@@ -11,7 +11,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F5F8FC"
+            android:background=" #F9FAF9
+"
             android:paddingBottom="70dp">
 
             <RadioGroup
@@ -64,7 +65,6 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rg_time_type" />
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_ask_for_leave_time"
                 android:layout_width="match_parent"
@@ -112,7 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginStart="@dimen/dp_20"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintTop_toBottomOf="@id/cl_start_time" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -195,44 +195,45 @@
                     android:id="@+id/tv_leave_course"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
                     android:text="@string/section_for_leave"
                     android:textColor="#ff11C685"
                     android:textSize="14sp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cl_ask_for_leave_date"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_20"/>
+                    app:layout_constraintTop_toBottomOf="@id/cl_ask_for_leave_date" />
+
                 <CheckBox
                     android:id="@+id/checkBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/check_all"
-                    android:textColor="@color/text_212121"
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginEnd="@dimen/dp_20"
+                    android:text="@string/check_all"
+                    android:textColor="@color/text_212121"
                     android:theme="@style/CheckBoxTheme"
-                    app:layout_constraintTop_toTopOf="@id/tv_leave_course"
                     app:layout_constraintBottom_toBottomOf="@id/tv_leave_course"
                     app:layout_constraintRight_toRightOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="@id/tv_leave_course" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerview_course"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/tv_leave_course"
-                    android:background="@color/white"
                     android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/white"
                     android:paddingStart="@dimen/dp_20"
-                    android:paddingEnd="@dimen/dp_20"
                     android:paddingTop="@dimen/dp_16"
-                    android:paddingBottom="@dimen/dp_16"/>
+                    android:paddingEnd="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_16"
+                    app:layout_constraintTop_toBottomOf="@id/tv_leave_course" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/gp_according_course"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
-                    app:constraint_referenced_ids="cl_ask_for_leave_date,tv_leave_course,checkBox,recyclerview_course"/>
+                    app:constraint_referenced_ids="cl_ask_for_leave_date,tv_leave_course,checkBox,recyclerview_course" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -259,7 +260,7 @@
                 <EditText
                     android:id="@+id/et_reason_leave"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_16"
                     android:layout_marginEnd="@dimen/dp_20"
@@ -340,7 +341,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="48dp"
                     android:text="@string/approver_required"
-                    android:textColor="#ff999999"
+                    android:textColor="#ff666666"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toTopOf="@id/line2"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -350,28 +351,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@drawable/icon_add_staff"
+                    android:src="@mipmap/icon_add_staff"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toTopOf="@id/line2"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <LinearLayout
                     android:id="@+id/ll_approver_list"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_50"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginEnd="@dimen/dp_20"
-                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical"/>
+                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/line2"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginStart="48dp"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -381,7 +383,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="48dp"
                     android:text="@string/copy_people"
-                    android:textColor="#ff999999"
+                    android:textColor="#ff666666"
                     android:textSize="@dimen/text_14"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -391,21 +393,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@drawable/icon_add_staff"
+                    android:src="@mipmap/icon_add_staff"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line2"
-                    android:visibility="gone"/>
+                    app:layout_constraintTop_toBottomOf="@id/line2" />
+
                 <LinearLayout
                     android:id="@+id/ll_copyer_list"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_50"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginEnd="@dimen/dp_20"
-                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2" />
+
                 <View
                     android:id="@+id/view_dot"
                     android:layout_width="@dimen/dp_8"

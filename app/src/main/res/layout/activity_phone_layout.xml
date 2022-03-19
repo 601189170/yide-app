@@ -12,7 +12,8 @@
         layout="@layout/title_layout2"
         ></include>
     <FrameLayout
-        android:background="#F5F8FC"
+        android:background=" #F9FAF9
+"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView

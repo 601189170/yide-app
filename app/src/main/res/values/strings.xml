@@ -95,10 +95,11 @@
 
     <!--请假-->
     <string name="ask_for_leave">请假</string>
+    <string name="leave_select_title">选择人员</string>
     <string name="my_ask_for_leave">我要请假</string>
     <string name="leave_record">请假记录</string>
     <string name="approval_text">审批中</string>
-    <string name="pass_text">审批通过</string>
+    <string name="pass_text">已通过</string>
     <string name="refuse_text">审批拒绝</string>
     <string name="repeal_text">已撤销</string>
     <string name="ask_for_leave_time">请假时间</string>
@@ -113,6 +114,7 @@
     <string name="repeal">撤销</string>
     <string name="agree">同意</string>
     <string name="refuse">拒绝</string>
+    <string name="more">更多</string>
     <string name="flow">流程</string>
     <string name="reason_for_leave">请假事由</string>
     <string name="to">至</string>
@@ -125,7 +127,7 @@
     <string name="check_all">全选</string>
     <string name="choose_student">请假人</string>
     <string name="carbon_copy_people">抄送人</string>
-    <string name="select_carbon_copy_people">选择抄送人</string>
+    <string name="select_carbon_copy_people"></string>
     <string name="carbon_copy_people_text">已抄送%s人</string>
 
     <!--考勤-->

@@ -41,7 +41,7 @@ public class AttendanceSchoolTeacherAdapter extends SingleLayoutTreeAdapter<Atte
         holder.setText(R.id.tv_student_time, "");
         holder.getView(R.id.group).setVisibility(View.VISIBLE);
         if (itemParent.getLevel() == 1) {
-            constraintLayout.setBackgroundColor(Color.parseColor("#F5F8FC"));
+            constraintLayout.setBackgroundColor(Color.parseColor("#F9FAF9"));
             if (!TextUtils.isEmpty(item.getAttendanceType())) {
                 //0正常 1缺勤、2迟到 3早退 4 无效打卡 5 请假 6 未打卡
                 tvName.setText(item.getCourseInfo() + " " + item.getCourseName());

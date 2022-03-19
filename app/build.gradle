@@ -111,6 +111,8 @@ dependencies {
 
     debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.2'
     releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+    //Banner 轮播
+    implementation 'io.github.youth5201314:banner:2.2.2'
 
 //    testImplementation 'junit:junit:4.13.2'butterknife
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -123,6 +125,7 @@ dependencies {
 
     //万能适配器
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
+//    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
     //折叠列表
     implementation 'com.github.Jlanglang:TreeRecyclerView:1.3.1.1'
     //日期选择器查看最新版本请前往github，仅支持androidx
@@ -153,6 +156,9 @@ dependencies {
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv5:v8.1.6-jitpack'
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x86:v8.1.6-jitpack'
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-x64:v8.1.6-jitpack'
+
+    //QMUI
+    implementation 'com.qmuiteam:qmui:2.0.0-alpha10'
 
     //日期时间选择
     implementation 'com.github.loperSeven:DateTimePicker:0.3.3'

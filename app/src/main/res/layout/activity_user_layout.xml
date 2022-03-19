@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F8FC"
+    android:background=" #F9FAF9
+"
     android:orientation="vertical">
 
     <include
@@ -60,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="20dp"
-            android:background="#DCDFE6" />
+            android:background="#F9FAF9" />
 
         <FrameLayout
             android:id="@+id/layout2"
@@ -102,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="20dp"
-            android:background="#DCDFE6" />
+            android:background="#F9FAF9" />
 
         <FrameLayout
             android:id="@+id/layout3"
@@ -143,7 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="20dp"
-            android:background="#DCDFE6" />
+            android:background="#F9FAF9" />
 
         <FrameLayout
             android:id="@+id/layout4"
@@ -185,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="20dp"
-            android:background="#DCDFE6" />
+            android:background="#F9FAF9" />
 
         <FrameLayout
             android:id="@+id/layout5"

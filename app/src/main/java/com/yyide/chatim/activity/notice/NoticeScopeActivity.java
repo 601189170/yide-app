@@ -67,7 +67,7 @@ public class NoticeScopeActivity extends BaseMvpActivity<NoticeScopePresenter> i
         sendObj = intent.getIntExtra("sendObj", 1);
         initRecyclerView();
         Log.e(TAG, "onCreate: " + sendObj);
-        schoolType = SpData.getIdentityInfo().schoolType;
+        //schoolType = SpData.getIdentityInfo().schoolType;
         Log.e(TAG, "schoolType: "+ schoolType);
         if (sendObj == 1 || sendObj == 2) {
             //请求数据

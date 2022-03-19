@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.FragmentSchoolAttendanceBinding;
@@ -76,13 +75,13 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
             mViewBinding.tvAttendanceTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }
 
-        if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
-            mViewBinding.tvClassName.setClickable(true);
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-        } else {
-            mViewBinding.tvClassName.setClickable(false);
-            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
-        }
+//        if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
+//            mViewBinding.tvClassName.setClickable(true);
+//            mViewBinding.tvClassName.setCompoundDrawables(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+//        } else {
+//            mViewBinding.tvClassName.setClickable(false);
+//            mViewBinding.tvClassName.setCompoundDrawables(null, null, null, null);
+//        }
 
         //1 学生 2 教职工
         if ("2".equals(attendanceRequestBean.getPeopleType())) {

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackgroundBorderless"
-    app:cardBackgroundColor="@color/white"
     android:layout_marginStart="@dimen/dp_10"
     android:layout_marginEnd="@dimen/dp_10"
     android:layout_marginBottom="@dimen/dp_10"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="10dp"
     app:cardElevation="0dp"
     app:cardPreventCornerOverlap="true">
@@ -22,13 +22,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="39dp">
-
-            <TextView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/icon_xsry" />
 
             <TextView
                 android:layout_width="wrap_content"

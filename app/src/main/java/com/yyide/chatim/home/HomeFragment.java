@@ -32,6 +32,7 @@ import com.yyide.chatim.BuildConfig;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
+import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.operation.OperationActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
@@ -206,7 +207,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         return new HomeFragmentPresenter(this);
     }
 
-    @OnClick({R.id.head_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content, R.id.school_name})
+    @OnClick({R.id.head_img, R.id.scan, R.id.student_honor_content, R.id.class_honor_content, R.id.school_name,
+            R.id.tvMenu1, R.id.tvMenu2, R.id.tvMenu3, R.id.tvMenu4, R.id.tvMenu5})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.head_img:
@@ -232,6 +234,21 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             case R.id.school_name:
                 startActivity(new Intent(getActivity(), OperationActivity.class));
                 break;
+            case R.id.tvMenu1:
+                startActivity(new Intent(getContext(), AskForLeaveActivity.class));
+                break;
+            case R.id.tvMenu2:
+                //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                break;
+            case R.id.tvMenu3:
+                //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                break;
+            case R.id.tvMenu4:
+                //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                break;
+            case R.id.tvMenu5:
+                //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                break;
             default:
                 break;
         }
@@ -252,7 +269,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 
     private void replaceFragment() {
         fragmentTransaction = childFragmentManager.beginTransaction();
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {//校长
             //校长身份
             workContent.setVisibility(View.GONE);
             studentHonorContent.setVisibility(View.GONE);
@@ -272,7 +289,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             fragmentTransaction.replace(R.id.notice_content, noticeFragment);
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, AttendanceSchoolFragment.newInstance());
-        } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+        } else if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             //家长身份
             tableContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
@@ -283,14 +300,14 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             //班级课表
             fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //通知
-            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
+//            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, new AttendancePatriarchFragment());
             //班级作业
             fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级学生荣誉
 //            fragmentTransaction.replace(R.id.student_honor_content, new StudentHonorFragment());
-        } else if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_ADMIN.equals(SpData.getIdentityInfo().status)) {
+        } else if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             //校长身份
             workContent.setVisibility(View.GONE);
             studentHonorContent.setVisibility(View.GONE);
@@ -311,7 +328,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             //班级课表
             fragmentTransaction.replace(R.id.table_content, new TableFragment());
             //通知
-            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
+//            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, new AttendanceTeacherFragment());
             //班级作业
@@ -329,46 +346,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         super.onActivityResult(requestCode, resultCode, data);
         File corpFile = TakePicUtil.onActivityResult(getActivity(), requestCode, resultCode, data);
         if (corpFile != null) {
-            showPicFileByLuban(corpFile);
-        }
-    }
-
-    private void showPicFileByLuban(@NonNull File file) {
-        Luban.with(getContext())
-                .load(file)
-                .ignoreBy(100)
-                //.putGear(Luban.THIRD_GEAR)//压缩等级
-                .setTargetDir(Environment.getExternalStorageDirectory().getAbsolutePath())
-                .filter(path -> !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif")))
-                .setCompressListener(new OnCompressListener() {
-                    @Override
-                    public void onStart() {
-                        showLoading();
-                    }
-
-                    @Override
-                    public void onSuccess(File file) {
-                        mvpPresenter.uploadFile(file);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        hideLoading();
-                        ToastUtils.showShort("图片压缩失败请重试");
-                    }
-                }).launch();
-    }
-
-    @Override
-    public void uploadFileSuccess(String imgUrl) {
-        GetUserSchoolRsp.DataBean userInfo = SpData.getIdentityInfo();
-        if (userInfo != null) {
-            userInfo.img = imgUrl;
-            SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
-            GlideUtil.loadImageHead(getActivity(), imgUrl, head_img);
-        }
-        if (mLeftMenuPop != null) {
-            mLeftMenuPop.setHeadImg(imgUrl);
+            //showPicFileByLuban(corpFile);
         }
     }
 
@@ -406,9 +384,9 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             schoolName.setText(schoolinfo.getSchoolName());
         }
         if (SpData.getIdentityInfo() != null) {
-            GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-            GlideUtil.loadImageHead(getActivity(), identityInfo.img, head_img);
-            SPUtils.getInstance().put(SpData.USERNAME, identityInfo.realname);
+//            GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
+//            GlideUtil.loadImageHead(getActivity(), identityInfo.img, head_img);
+//            SPUtils.getInstance().put(SpData.USERNAME, identityInfo.realname);
         }
     }
 

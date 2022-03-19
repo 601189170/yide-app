@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_16"
         android:text="人脸采集中……"
-        android:textColor="#ff999999"
+        android:textColor="#ff666666"
         android:textSize="@dimen/text_14"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="@id/iv_face"
@@ -102,7 +102,7 @@
             android:layout_marginStart="@dimen/dp_15"
             android:layout_marginTop="@dimen/dp_15"
             android:text="人脸照片要求："
-            android:textColor="#ff999999"
+            android:textColor="#ff666666"
             android:textSize="@dimen/text_12"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

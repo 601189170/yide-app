@@ -32,10 +32,10 @@ public class AttendanceAdapter extends LoopPagerAdapter {
 
     //    -->设置各区块的颜色
     public static final int[] PIE_COLORS2 = {
-            Color.rgb(145, 147, 153),
-            Color.rgb(246, 189, 22),
-            Color.rgb(246, 108, 108),
-            Color.rgb(55, 130, 255)
+            Color.rgb(17, 198, 133),
+            Color.rgb(255, 195, 40),
+            Color.rgb(253, 79, 69),
+            Color.rgb(102, 102, 102)
     };
 
     public List<AttendanceRsp.DataBean.AttendanceListBean> list = new ArrayList<>();

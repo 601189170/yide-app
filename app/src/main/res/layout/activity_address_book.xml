@@ -11,6 +11,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/gp_main_content"
         android:layout_width="wrap_content"
@@ -21,7 +22,7 @@
         android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="#F5F8FC"
+        android:background="#F9FAF9"
         app:layout_constraintTop_toBottomOf="@+id/top" />
 
     <androidx.recyclerview.widget.RecyclerView

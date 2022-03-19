@@ -16,7 +16,6 @@ import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.HelpItemRep;
-import com.yyide.chatim.utils.DisplayUtils;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.SampleCoverVideo;
 

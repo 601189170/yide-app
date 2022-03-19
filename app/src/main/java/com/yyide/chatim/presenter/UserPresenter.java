@@ -68,7 +68,7 @@ public class UserPresenter extends BasePresenter<UserView> {
      * 图片上传
      *
      * @param file
-     * @param isStudent
+     * @param
      */
     public void uploadFile(File file, Long studentId) {
         if (file == null) {
@@ -102,51 +102,28 @@ public class UserPresenter extends BasePresenter<UserView> {
         });
     }
 
-    public void getFaceData(String name, String classId, long depId, String studentId) {
-        Log.e("FaceUploadPresenter", "getFaceData: name=" + name + ",classId=" + classId);
+    public void getFaceData() {
         mvpView.showLoading();
-        if (!SpData.getIdentityInfo().staffIdentity()) {
-            // Map<String, Object> params = new HashMap<>();
-            //params.put("name",name);
-            //params.put("classId",classId);
-            //RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
-            addSubscription(dingApiStores.getStudentOss(studentId), new ApiCallback<FaceOssBean>() {
-                @Override
-                public void onSuccess(FaceOssBean model) {
-                    mvpView.getFaceDataSuccess(model);
-                }
+        Map<String, Object> params = new HashMap<>();
+        //类型 学生：1、老师：2
+        params.put("type", SpData.getIdentityInfo().getIdentity());
+        params.put("userId", SpData.getIdentityInfo().getId());
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
+        addSubscription(dingApiStores.getFaceOss(body), new ApiCallback<FaceOssBean>() {
+            @Override
+            public void onSuccess(FaceOssBean model) {
+                mvpView.getFaceDataSuccess(model);
+            }
 
-                @Override
-                public void onFailure(String msg) {
-                    mvpView.getFaceDataFail(msg);
-                }
+            @Override
+            public void onFailure(String msg) {
+                mvpView.getFaceDataFail(msg);
+            }
 
-                @Override
-                public void onFinish() {
-                    mvpView.hideLoading();
-                }
-            });
-        } else {
-            Map<String, Object> params = new HashMap<>();
-            params.put("name", name);
-            params.put("depId", depId);
-            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(params));
-            addSubscription(dingApiStores.getTeacherOss(body), new ApiCallback<FaceOssBean>() {
-                @Override
-                public void onSuccess(FaceOssBean model) {
-                    mvpView.getFaceDataSuccess(model);
-                }
-
-                @Override
-                public void onFailure(String msg) {
-                    mvpView.getFaceDataFail(msg);
-                }
-
-                @Override
-                public void onFinish() {
-                    mvpView.hideLoading();
-                }
-            });
-        }
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
     }
 }

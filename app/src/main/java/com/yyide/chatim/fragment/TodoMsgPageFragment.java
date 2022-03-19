@@ -89,7 +89,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
     @Override
     public void onStart() {
         super.onStart();
-        if(!EventBus.getDefault().isRegistered(this)){//加上判断
+        if (!EventBus.getDefault().isRegistered(this)) {//加上判断
             EventBus.getDefault().register(this);
         }
     }
@@ -190,10 +190,7 @@ public class TodoMsgPageFragment extends BaseMvpFragment<TodoFragmentPresenter> 
             }
             TextView textView2 = holder.getView(R.id.tv_agree);
             //如果身份是家长隐藏按钮
-            if ("1".equals(o.getIsOperation())
-                    || "2".equals(o.getIsOperation())
-                    || "3".equals(o.getIsOperation())
-                    || (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status))) {
+            if (!SpData.getIdentityInfo().staffIdentity()) {
                 textView2.setVisibility(View.GONE);
             } else {
                 textView2.setVisibility(View.VISIBLE);

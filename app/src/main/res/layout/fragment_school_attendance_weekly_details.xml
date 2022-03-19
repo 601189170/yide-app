@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F8FC">
+    android:background=" #F9FAF9
+">
 
     <com.flyco.tablayout.SlidingTabLayout
         android:id="@+id/slidingTabLayout"
@@ -25,7 +26,8 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#F5F8FC"
+        android:background=" #F9FAF9
+"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slidingTabLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

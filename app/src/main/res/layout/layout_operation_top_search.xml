@@ -122,7 +122,7 @@
             android:id="@+id/view14"
             android:layout_width="@dimen/dp_10"
             android:layout_height="1dp"
-            android:background="#D8D8D8"
+            android:background="#F9FAF9"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

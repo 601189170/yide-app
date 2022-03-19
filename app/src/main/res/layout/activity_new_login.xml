@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".login.NewLoginActivity">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -71,7 +72,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:background="#D8D8D8"
+                        android:background="#F9FAF9"
                         app:layout_constraintEnd_toEndOf="@+id/etUser"
                         app:layout_constraintStart_toStartOf="@+id/etUser"
                         app:layout_constraintTop_toBottomOf="@+id/etUser" />
@@ -121,7 +122,7 @@
                         android:id="@+id/view15"
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:background="#D8D8D8"
+                        android:background="#F9FAF9"
                         app:layout_constraintEnd_toEndOf="@+id/etPwd"
                         app:layout_constraintStart_toStartOf="@+id/etPwd"
                         app:layout_constraintTop_toBottomOf="@+id/etPwd" />

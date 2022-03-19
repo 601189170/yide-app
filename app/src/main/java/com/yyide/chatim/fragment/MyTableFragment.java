@@ -85,11 +85,11 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         adapter.setEmptyView(R.layout.empty);
         timeAdapter = new TableTimeAdapter();
         grid.setAdapter(timeAdapter);
-        if(SpData.getIdentityInfo().weekNum <= 0){
-            tv_week.setText("");
-        } else {
-            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
-        }
+//        if (SpData.getIdentityInfo().weekNum <= 0) {
+//            tv_week.setText("");
+//        } else {
+//            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
+//        }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
         Date date = new Date(System.currentTimeMillis());
         for (int i = 0; i < timeAdapter.list.size(); i++) {
@@ -107,7 +107,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
         adapter.setOnItemClickListener((adapter, view1, position) -> {
             //处理学生无法点击查看备课
-            if (SpData.getIdentityInfo() != null && !GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
                 SelectSchByTeaidRsp.DataBean item = (SelectSchByTeaidRsp.DataBean) adapter.getItem(position);
                 Intent intent = new Intent(mActivity, PreparesLessonActivity.class);
                 intent.putExtra("dateTime", timeAdapter.getItem(timeAdapter.position).dataTime);
@@ -147,7 +147,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     }
 
     private void getData() {
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+        if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             if (SpData.getClassInfo() != null) {
                 mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
             }

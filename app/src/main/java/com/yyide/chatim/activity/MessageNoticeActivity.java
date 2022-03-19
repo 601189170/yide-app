@@ -17,7 +17,6 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.face.FaceCaptureActivity;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
-import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
 import com.yyide.chatim.adapter.UserNoticeListAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
@@ -37,6 +36,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+/**
+ * 消息通知列表
+ */
 public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> implements UserNoticeView, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "MessageNoticeActivity";
     @BindView(R.id.title)
@@ -111,7 +113,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
                     MessageDetailActivity.start(this, recordsBean);
                 }
             } else if ("2".equals(recordsBean.getJumpTarget())) {
-                startActivity(new Intent(this, WeeklyHomeActivity.class));
+                //startActivity(new Intent(this, WeeklyHomeActivity.class));
             }
         });
     }

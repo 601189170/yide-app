@@ -15,11 +15,9 @@ public class BaseConstant {
     public static final int PAGE_SIZE = 20;
 
     /*请求成功消息编码*/
-    public static int REQUEST_SUCCES = 10000;
-    public static int REQUEST_SUCCESS = 10000;
+    public static int REQUEST_SUCCESS = 200;
 
-    public static int REQUEST_SUCCES2 = 200;
-    public static int REQUEST_SUCCESS2 = 200;
+    public static int REQUEST_SUCCESS2 = 0;
 
     public static int REQUEST_SUCCES_0 = 0;
 
@@ -51,9 +49,8 @@ public class BaseConstant {
 //    public static final String API_SERVER_URL_UAT = "http://192.168.3.108:8888";//Dev 环境
     public static final String API_SERVER_URL_RELEASE = "https://api.edu.1d1j.cn";
     //    public static final String API_SERVER_URL_UAT = "https://api.uat.edu.1d1j.cn";
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.16:9528";
-//    public static final String API_SERVER_URL_UAT = "http://192.168.3.148:9528";
     public static final String API_SERVER_URL_UAT = "http://39.108.126.252:9528";
+//    public static final String API_SERVER_URL_UAT = "http://192.168.3.148:9528";
 
     //Http访问地址
     public static String API_SERVER_URL = BuildConfig.DEBUG ? API_SERVER_URL_UAT : API_SERVER_URL_RELEASE;

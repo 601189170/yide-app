@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_F5F8FC"
+    android:background="@color/color_F9FAF9"
     tools:context=".activity.operation.fragment.OperationChartFragment">
 
     <androidx.cardview.widget.CardView

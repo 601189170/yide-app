@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yyide.chatim.R;
+import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveFlowBean;
 
 import java.util.List;
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
  */
 public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.ViewHolder> {
     private Context context;
-    private List<LeaveFlowBean> data;
+    private List<LeaveDetailRsp.DataDTO.HiApprNodeListDTO> data;
 
     public void setOnClickedListener(OnClickedListener onClickedListener) {
         this.onClickedListener = onClickedListener;
@@ -40,7 +41,7 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
 
     private OnClickedListener onClickedListener;
 
-    public LeaveFlowAdapter(Context context, List<LeaveFlowBean> data) {
+    public LeaveFlowAdapter(Context context, List<LeaveDetailRsp.DataDTO.HiApprNodeListDTO> data) {
         this.context = context;
         this.data = data;
 
@@ -49,50 +50,39 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_ask_for_leave_flow,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_ask_for_leave_flow, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        LeaveFlowBean leaveFlowBean = data.get(position);
-        holder.tv_time.setText(leaveFlowBean.getTime());
-        holder.tv_date.setText(leaveFlowBean.getDate());
-        holder.tv_flow_title.setText(leaveFlowBean.getFlowTitle());
-        holder.tv_flow_content.setText(leaveFlowBean.getFlowContent());
-        if (leaveFlowBean.getFlowTitle().contains(context.getString(R.string.already_refused))){
-            holder.iv_flow_checked.setImageResource(R.drawable.icon_flow_refuse);
-        }
-        if (leaveFlowBean.isChecked() && !leaveFlowBean.getFlowTitle().contains(context.getString(R.string.already_undone))) {
-            holder.iv_flow_checked.setVisibility(View.VISIBLE);
-            holder.v_dot.setVisibility(View.INVISIBLE);
-        }else {
-            holder.iv_flow_checked.setVisibility(View.GONE);
-            holder.v_dot.setVisibility(View.VISIBLE);
-        }
-
+        LeaveDetailRsp.DataDTO.HiApprNodeListDTO leaveFlowBean = data.get(position);
+        holder.tv_flow_title.setText(leaveFlowBean.getNodeName());
+        holder.tv_flow_content.setText(leaveFlowBean.getUsreName());
+        holder.tvTime.setText(leaveFlowBean.getApprTime());
         //隐藏最后一条分割线
-        if (position == data.size()-1 && leaveFlowBean.isNopass()){
-            holder.v_line_bottom.setVisibility(View.GONE);
+        if (position == data.size() - 1) {
             holder.v_line2.setVisibility(View.INVISIBLE);
         }
 
-        if (position == 0){
-            holder.v_line1.setVisibility(View.INVISIBLE);
+        if ("2".equals(leaveFlowBean.getStatus())) {
+            holder.iv_user_head.setBackgroundResource(R.drawable.blue_border_1dp);
+            holder.v_line2.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+            holder.iv_flow_checked.setVisibility(View.VISIBLE);
+        } else {
+            holder.v_line2.setBackgroundColor(context.getResources().getColor(R.color.color_B3B3B3));
+            holder.iv_flow_checked.setVisibility(View.INVISIBLE);
         }
 
-        if (!TextUtils.isEmpty(leaveFlowBean.getImage())){
-            Glide.with(context)
-                    .load(leaveFlowBean.getImage())
-                    .placeholder(R.drawable.default_head)
-                    .error(R.drawable.default_head)
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .into(holder.iv_user_head);
-        }
-//        holder.itemView.setOnClickListener(v -> {
-//            onClickedListener.onClicked(position);
-//        });
+//        if (!TextUtils.isEmpty(leaveFlowBean.getImage())) {
+//            Glide.with(context)
+//                    .load(leaveFlowBean.getImage())
+//                    .placeholder(R.drawable.default_head)
+//                    .error(R.drawable.default_head)
+//                    .skipMemoryCache(true)
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .into(holder.iv_user_head);
+//        }
     }
 
     @Override
@@ -102,12 +92,8 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_time_start)
-        TextView tv_time;
-
-        @BindView(R.id.tv_date_start)
-        TextView tv_date;
-
+        @BindView(R.id.tvTime)
+        TextView tvTime;
         @BindView(R.id.tv_flow_title)
         TextView tv_flow_title;
 
@@ -117,16 +103,7 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
         @BindView(R.id.iv_flow_checked)
         ImageView iv_flow_checked;
 
-        @BindView(R.id.v_dot)
-        View v_dot;
-
-        @BindView(R.id.v_line_bottom)
-        View v_line_bottom;
-
-        @BindView(R.id.v_line1)
-        View v_line1;
-
-        @BindView(R.id.v_line2)
+        @BindView(R.id.vEnd)
         View v_line2;
 
         @BindView(R.id.iv_user_head)
@@ -138,7 +115,7 @@ public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.View
         }
     }
 
-    public interface OnClickedListener{
+    public interface OnClickedListener {
         void onClicked(int position);
     }
 }

@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="开学典礼"
-        android:textColor="#ff999999"
+        android:textColor="#ff666666"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
         android:singleLine="true"

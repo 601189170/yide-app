@@ -20,9 +20,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.leave.AskForLeaveListAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.AskForLeaveRecordRsp;
 import com.yyide.chatim.model.LeaveListRsp;
-import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.presenter.leave.AskForLeaveListPresenter;
 import com.yyide.chatim.view.leave.AskForLeaveListView;
 
@@ -96,13 +94,14 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new AskForLeaveListAdapter(getActivity(), list);
         swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
         mRecyclerView.addOnScrollListener(monScrollListener);
         mRecyclerView.setAdapter(adapter);
         adapter.setOnItemOnClickListener(position -> {
             Log.d(TAG, "position: " + list.get(position));
             final Intent intent = new Intent(getActivity(), LeaveFlowDetailActivity.class);
-            intent.putExtra("id", (long) list.get(position).getId());
-            startActivityForResult(intent,REQUEST_CODE);
+            intent.putExtra("id", list.get(position).getId());
+            startActivityForResult(intent, REQUEST_CODE);
         });
 
         refresh = true;
@@ -110,23 +109,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         //initData();
         mvpPresenter.getAskLeaveRecord(curIndex, size);
     }
-
-//    private void initData() {
-//        for (int i = 0; i < 10; i++) {
-//            int status = (int) (Math.random() * 4) + 1;
-//            Log.d(TAG, "initData: " + status);
-//            //i,status,"某某某提交的请假"+i,"2021.03.2"+i
-//            final AskForLeaveRecordRsp askForLeaveRecordRsp = new AskForLeaveRecordRsp();
-//            askForLeaveRecordRsp.setId(i);
-//            askForLeaveRecordRsp.setTitle("某某某提交的请假" + i);
-//            askForLeaveRecordRsp.setDate("2021.03.2" + i);
-//            askForLeaveRecordRsp.setStatus(status);
-//            list.add(askForLeaveRecordRsp);
-//        }
-//        refresh = false;
-//        swipeRefreshLayout.setRefreshing(false);
-//        adapter.notifyDataSetChanged();
-//    }
 
     public void showBlankPage() {
         if (list.isEmpty()) {
@@ -164,8 +146,8 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d(TAG, "onActivityResult: "+requestCode+", "+resultCode);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+        Log.d(TAG, "onActivityResult: " + requestCode + ", " + resultCode);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             refresh = true;
             curIndex = 1;
             swipeRefreshLayout.setRefreshing(true);
@@ -181,16 +163,16 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
             refresh = false;
             swipeRefreshLayout.setRefreshing(false);
         }
-
         // data is null
-        if (leaveListRsp.getData() == null){
-            ToastUtils.showShort(leaveListRsp.getMsg());
+        if (leaveListRsp.getData() == null) {
+            ToastUtils.showShort(leaveListRsp.getMessage());
             showBlankPage();
             return;
         }
 
-        final List<LeaveListRsp.DataBean.RecordsBean> records = leaveListRsp.getData().getRecords();
-        pages = leaveListRsp.getData().getPages();
+        final List<LeaveListRsp.DataBean.RecordsBean> records = leaveListRsp.getData().getList();
+//        pages = leaveListRsp.getData().getPages();
+        pages = 1;
         adapter.setIsLastPage(curIndex == pages);
         adapter.setOnlyOnePage(pages <= 1);
         adapter.setIsLoadMore(!records.isEmpty());

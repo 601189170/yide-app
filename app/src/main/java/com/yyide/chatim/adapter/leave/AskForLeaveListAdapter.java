@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter.leave;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     public static final int view_Normal = 2;
     //是否隐藏
     public boolean isLoadMore = false;
+
     public void setOnlyOnePage(boolean onlyOnePage) {
         this.onlyOnePage = onlyOnePage;
     }
@@ -52,6 +54,7 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     public void setOnItemOnClickListener(OnItemOnClickListener onItemOnClickListener) {
         this.onItemOnClickListener = onItemOnClickListener;
     }
+
     public AskForLeaveListAdapter(Context context, List<LeaveListRsp.DataBean.RecordsBean> data) {
         this.context = context;
         this.data = data;
@@ -60,10 +63,10 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == view_Normal){
+        if (viewType == view_Normal) {
             view = LayoutInflater.from(context).inflate(R.layout.item_ask_for_leave_record, parent, false);
             return new ViewHolder(view);
-        }else {
+        } else {
             FootView view = new FootView(context);
             FootViewHolder footViewHolder = new FootViewHolder(view);
             return footViewHolder;
@@ -71,44 +74,47 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull  RecyclerView.ViewHolder holder, int position) {
-        if (position == getItemCount()-1){
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (position == getItemCount() - 1) {
             FootView itemView = (FootView) holder.itemView;
-            if (isLoadMore && !onlyOnePage){
+            if (isLoadMore && !onlyOnePage) {
                 itemView.setVisibility(View.VISIBLE);
                 itemView.setLoading(!isLastPage);
-            }else {
+            } else {
                 itemView.setVisibility(View.GONE);
             }
-        }else {
-            ViewHolder  holder1= (ViewHolder)holder;
+        } else {
+            ViewHolder holder1 = (ViewHolder) holder;
             LeaveListRsp.DataBean.RecordsBean askForLeaveRecordRsp = data.get(position);
-            holder1.tv_title.setText(askForLeaveRecordRsp.getName());
-            final String formatTime = DateUtils.formatTime(askForLeaveRecordRsp.getInitiateTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd");
-            holder1.tv_time.setText(formatTime);
-            leaveStatus(askForLeaveRecordRsp.getApprovalResult(),holder1.tv_status);
+            holder1.tv_title.setText(askForLeaveRecordRsp.getTitle());
+            LeaveListRsp.DataBean.RecordsBean.LeaveDetail jsonData = askForLeaveRecordRsp.getLeaveDetail();
+            if (jsonData != null && !TextUtils.isEmpty(jsonData.getStartTime())) {
+                holder1.tv_time.setText(jsonData.getStartTime());
+            }
+            leaveStatus(askForLeaveRecordRsp.getStatus(), holder1.tv_status);
             holder1.itemView.setOnClickListener(v -> {
                 onItemOnClickListener.onClicked(position);
             });
         }
     }
 
-    private void leaveStatus(String status,TextView view){
+    private void leaveStatus(String status, TextView view) {
         //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
-        switch (status){
+        //0已拒绝 1待审批 2已通过
+        switch (status) {
             case "0":
                 view.setText(context.getString(R.string.refuse_text));
                 view.setBackgroundResource(R.drawable.ask_for_leave_status_refuse_shape);
                 view.setTextColor(context.getResources().getColor(R.color.black9));
                 break;
             case "1":
-                view.setText(context.getString(R.string.pass_text));
-                view.setBackgroundResource(R.drawable.ask_for_leave_status_pass_shape);
+                view.setText(context.getString(R.string.approval_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
                 view.setTextColor(context.getResources().getColor(R.color.black9));
                 break;
             case "2":
-                view.setText(context.getString(R.string.approval_text));
-                view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
+                view.setText(context.getString(R.string.pass_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_pass_shape);
                 view.setTextColor(context.getResources().getColor(R.color.black9));
                 break;
             case "3":
@@ -123,21 +129,23 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return data.size()+1;
+        return data.size() + 1;
     }
+
     public void setIsLoadMore(boolean loadMore) {
         this.isLoadMore = loadMore;
     }
 
     //设置是最后一页
-    public void setIsLastPage(boolean lastPage){
+    public void setIsLastPage(boolean lastPage) {
         this.isLastPage = lastPage;
     }
+
     @Override
     public int getItemViewType(int position) {
-        if (position == getItemCount()-1){
+        if (position == getItemCount() - 1) {
             return view_Foot;
-        }else {
+        } else {
             return view_Normal;
         }
     }
@@ -164,7 +172,7 @@ public class AskForLeaveListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public interface OnItemOnClickListener{
+    public interface OnItemOnClickListener {
         void onClicked(int position);
     }
 }

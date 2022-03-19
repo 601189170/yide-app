@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F8FC "
+    android:background="#F9FAF9 "
     tools:context=".activity.book.BookTeacherDetailActivity">
 
     <include
@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="20dp"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -158,7 +158,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginStart="20dp"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -199,7 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="20dp"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -238,7 +238,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginLeft="20dp"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

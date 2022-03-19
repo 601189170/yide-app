@@ -92,7 +92,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
     private String startTime;
     private String endTime;
 
-    public TeacherWeekStatisticsFragment(String type,String theme,String serverId,String eventType) {
+    public TeacherWeekStatisticsFragment(String type, String theme, String serverId, String eventType) {
         // Required empty public constructor
         this.type = type;
         this.historyEvent = theme;
@@ -163,7 +163,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
             }
         }
         final String format1 = getActivity().getString(R.string.week);
-        final DateTime firstDayOfWeek = week.minusDays(week.getDayOfWeek() % 7 -1);
+        final DateTime firstDayOfWeek = week.minusDays(week.getDayOfWeek() % 7 - 1);
         final DateTime lastDayOfWeek = firstDayOfWeek.plusDays(6);
         startTime = firstDayOfWeek.toString("yyyy-MM-dd ") + "00:00:00";
         endTime = lastDayOfWeek.toString("yyyy-MM-dd ") + "23:59:59";
@@ -197,7 +197,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
      */
     private void queryAttStatsData() {
         Log.e(TAG, "请求考勤统计数据: currentClass=" + currentClass + ", currentStudentId=" + currentStudentId + ",startTime=" + startTime + ",endTime=" + endTime);
-        if (TextUtils.isEmpty(currentClass)){
+        if (TextUtils.isEmpty(currentClass)) {
             ToastUtils.showShort("当前账号没有班级，不能查询考勤数据！");
             if (refresh) {
                 refresh = false;
@@ -214,37 +214,37 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
         } else {
             dialogType = 4;
         }
-
-        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
-        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-        classList.clear();
-        final String classesStudentName = SpData.getClassesStudentName();
-        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
-            final String classesName = formBean.classesName;
-            final String studentName = formBean.classesStudentName;
-            final String classesId = formBean.classesId;
-            final String studentId = formBean.studentId;
-            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            dataBean.setDeptId(studentId);
-            dataBean.setClassId(classesId);
-            dataBean.setIsDefault(0);
-            if (SpData.getIdentityInfo().staffIdentity()) {
-                dataBean.setDeptName(classesName);
-                if (classesName.equals(classesStudentName)) {
-                    dataBean.setIsDefault(1);
-                    currentClass = dataBean.getClassId();
-                    currentStudentId = dataBean.getDeptId();
-                }
-            } else {
-                dataBean.setDeptName(studentName);
-                if (studentName.equals(classesStudentName)) {
-                    dataBean.setIsDefault(1);
-                    currentClass = dataBean.getClassId();
-                    currentStudentId = dataBean.getDeptId();
-                }
-            }
-            classList.add(dataBean);
-        }
+//
+//        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+//        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+//        classList.clear();
+//        final String classesStudentName = SpData.getClassesStudentName();
+//        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
+//            final String classesName = formBean.classesName;
+//            final String studentName = formBean.classesStudentName;
+//            final String classesId = formBean.classesId;
+//            final String studentId = formBean.studentId;
+//            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+//            dataBean.setDeptId(studentId);
+//            dataBean.setClassId(classesId);
+//            dataBean.setIsDefault(0);
+//            if (SpData.getIdentityInfo().staffIdentity()) {
+//                dataBean.setDeptName(classesName);
+//                if (classesName.equals(classesStudentName)) {
+//                    dataBean.setIsDefault(1);
+//                    currentClass = dataBean.getClassId();
+//                    currentStudentId = dataBean.getDeptId();
+//                }
+//            } else {
+//                dataBean.setDeptName(studentName);
+//                if (studentName.equals(classesStudentName)) {
+//                    dataBean.setIsDefault(1);
+//                    currentClass = dataBean.getClassId();
+//                    currentStudentId = dataBean.getDeptId();
+//                }
+//            }
+//            classList.add(dataBean);
+//        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -277,8 +277,8 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
             Log.e(TAG, "月: " + i);
             //month = i + 1;
             //currentMonth = month;
-             month = DateTime.now();
-             currentMonth = month;
+            month = DateTime.now();
+            currentMonth = month;
             setMonth(false);
         }
 
@@ -467,7 +467,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
                     historyEvent = dataBean1.getDeptName();
                     historyEventId = dataBean1.getDeptId();
                     historyEventType = dataBean1.getType();
-                    showData(dataBean1.getDeptId(), dataBean1.getType()+"");
+                    showData(dataBean1.getDeptId(), dataBean1.getType() + "");
                 });
             });
         }
@@ -502,7 +502,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
 
             if (attendanceWeekStatsRsp.getData() == null || attendanceWeekStatsRsp.getData().getClassroomTeacherAttendanceList() == null) {
                 showBlank(false);
-                showData(null,null);
+                showData(null, null);
                 return;
             }
             showBlank(false);
@@ -522,7 +522,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
                 }
                 dataBean.setDeptName(name);
                 dataBean.setDeptId(serverId);
-                dataBean.setType(classroomTeacherAttendanceListBean.getType()+"");
+                dataBean.setType(classroomTeacherAttendanceListBean.getType() + "");
                 eventList.add(dataBean);
                 if (classroomTeacherAttendanceListBean.getType() == 2) {
                     if (weeksCourseForm != null) {
@@ -561,10 +561,10 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
             if (studentsBeanList.size() != 0) {
                 //showData(TextUtils.isEmpty(historyEvent) ? studentsBeanList.get(0).getTheme() : historyEvent);
                 final TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean weeksEvenListBean = studentsBeanList.get(0);
-                showData(TextUtils.isEmpty(historyEventId)?weeksEvenListBean.getServerId():historyEventId,TextUtils.isEmpty(historyEventType)?weeksEvenListBean.getType()+"":historyEventType);
+                showData(TextUtils.isEmpty(historyEventId) ? weeksEvenListBean.getServerId() : historyEventId, TextUtils.isEmpty(historyEventType) ? weeksEvenListBean.getType() + "" : historyEventType);
             } else {
                 ToastUtils.showShort("未查询到数据");
-                showData(null,null);
+                showData(null, null);
             }
         } else {
             //ToastUtils.showShort("温馨提示：" + attendanceWeekStatsRsp.getMsg());
@@ -576,17 +576,17 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void showData(String serverId,String type) {
+    private void showData(String serverId, String type) {
         //每次更新数据默认选择缺勤rb
         mViewBinding.rgAttendanceType.check(R.id.rb_absence);
         TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean weeksMonthListBean = null;
         for (TeacherAttendanceWeekMonthRsp.DataBean.WeeksEvenListBean weeksMonthListBean1 : studentsBeanList) {
-            if ("2".equals(type) && weeksMonthListBean1.getType() == 2){
+            if ("2".equals(type) && weeksMonthListBean1.getType() == 2) {
                 weeksMonthListBean = weeksMonthListBean1;
                 break;
             }
 
-            if ("2".equals(type)){
+            if ("2".equals(type)) {
                 continue;
             }
 
@@ -707,7 +707,7 @@ public class TeacherWeekStatisticsFragment extends BaseMvpFragment<TeacherWeekMo
     @Override
     public void attendanceStatisticsFail(String msg) {
         Log.e(TAG, "attendanceStatisticsFail: " + msg);
-        if (!TextUtils.isEmpty(msg) && "请检查网络连接".equals(msg)){
+        if (!TextUtils.isEmpty(msg) && "请检查网络连接".equals(msg)) {
             ToastUtils.showShort(msg);
         }
         if (refresh) {

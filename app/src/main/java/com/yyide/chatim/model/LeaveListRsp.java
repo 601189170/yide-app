@@ -1,5 +1,7 @@
 package com.yyide.chatim.model;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.List;
 
 /**
@@ -16,7 +18,7 @@ public class LeaveListRsp {
 
     private int code;
     private boolean success;
-    private String msg;
+    private String message;
     private DataBean data;
 
     public LeaveListRsp() {
@@ -24,6 +26,14 @@ public class LeaveListRsp {
 
     public int getCode() {
         return code;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public void setCode(int code) {
@@ -34,16 +44,8 @@ public class LeaveListRsp {
         return success;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public DataBean getData() {
@@ -55,122 +57,75 @@ public class LeaveListRsp {
     }
 
     public static class DataBean {
-        private List<RecordsBean> records;
-        private int total;
-        private int size;
-        private int current;
-        private List<?> orders;
-        private boolean optimizeCountSql;
-        private boolean hitCount;
-        private long countId;
-        private Object maxLimit;
-        private boolean searchCount;
-        private int pages;
+        private List<RecordsBean> list;
 
-        public DataBean() {
+        public List<RecordsBean> getList() {
+            return list;
         }
 
-        public List<RecordsBean> getRecords() {
-            return records;
-        }
-
-        public void setRecords(List<RecordsBean> records) {
-            this.records = records;
-        }
-
-        public int getTotal() {
-            return total;
-        }
-
-        public void setTotal(int total) {
-            this.total = total;
-        }
-
-        public int getSize() {
-            return size;
-        }
-
-        public void setSize(int size) {
-            this.size = size;
-        }
-
-        public int getCurrent() {
-            return current;
-        }
-
-        public void setCurrent(int current) {
-            this.current = current;
-        }
-
-        public List<?> getOrders() {
-            return orders;
-        }
-
-        public void setOrders(List<?> orders) {
-            this.orders = orders;
-        }
-
-        public boolean isOptimizeCountSql() {
-            return optimizeCountSql;
-        }
-
-        public void setOptimizeCountSql(boolean optimizeCountSql) {
-            this.optimizeCountSql = optimizeCountSql;
-        }
-
-        public boolean isHitCount() {
-            return hitCount;
-        }
-
-        public void setHitCount(boolean hitCount) {
-            this.hitCount = hitCount;
-        }
-
-        public long getCountId() {
-            return countId;
-        }
-
-        public void setCountId(long countId) {
-            this.countId = countId;
-        }
-
-        public Object getMaxLimit() {
-            return maxLimit;
-        }
-
-        public void setMaxLimit(Object maxLimit) {
-            this.maxLimit = maxLimit;
-        }
-
-        public boolean isSearchCount() {
-            return searchCount;
-        }
-
-        public void setSearchCount(boolean searchCount) {
-            this.searchCount = searchCount;
-        }
-
-        public int getPages() {
-            return pages;
-        }
-
-        public void setPages(int pages) {
-            this.pages = pages;
+        public void setList(List<RecordsBean> list) {
+            this.list = list;
         }
 
         public static class RecordsBean {
-            private String name;
             private long id;
-            private String type;
-            private String approvalResult;
-            private String initiateTime;
+            private int identity;
+            private String jsonData;
+            private String name;
+            private String procInstId;
+            private String schoolId;
+            private String status;
+            private String title;
+            private int type;
+            private String userId;
 
-            public String getName() {
-                return name;
-            }
+            public static class LeaveDetail {
+                //                {\"dept\":\"一部\",\"endTime\":\"2022-03-16 18:00\",\"hours\":\"8\",\"reason\":\"身体不适\",\"startTime\":\"2022-03-16 8:00\"}
+                private String dept;
+                private String hours;
+                private String reason;
+                private String startTime;
+                private String endTime;
 
-            public void setName(String name) {
-                this.name = name;
+                public String getDept() {
+                    return dept;
+                }
+
+                public void setDept(String dept) {
+                    this.dept = dept;
+                }
+
+                public String getHours() {
+                    return hours;
+                }
+
+                public void setHours(String hours) {
+                    this.hours = hours;
+                }
+
+                public String getReason() {
+                    return reason;
+                }
+
+                public void setReason(String reason) {
+                    this.reason = reason;
+                }
+
+                public String getStartTime() {
+                    return startTime;
+                }
+
+                public void setStartTime(String startTime) {
+                    this.startTime = startTime;
+                }
+
+                public String getEndTime() {
+                    return endTime;
+                }
+
+                public void setEndTime(String endTime) {
+                    this.endTime = endTime;
+                }
             }
 
             public long getId() {
@@ -181,32 +136,89 @@ public class LeaveListRsp {
                 this.id = id;
             }
 
-            public String getType() {
+            public int getIdentity() {
+                return identity;
+            }
+
+            public void setIdentity(int identity) {
+                this.identity = identity;
+            }
+
+            public String getJsonData() {
+                return jsonData;
+            }
+
+            public LeaveDetail getLeaveDetail() {
+                try {
+                    return JSON.parseObject(jsonData, LeaveDetail.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            public void setJsonData(String jsonData) {
+                this.jsonData = jsonData;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getProcInstId() {
+                return procInstId;
+            }
+
+            public void setProcInstId(String procInstId) {
+                this.procInstId = procInstId;
+            }
+
+            public String getSchoolId() {
+                return schoolId;
+            }
+
+            public void setSchoolId(String schoolId) {
+                this.schoolId = schoolId;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public int getType() {
                 return type;
             }
 
-            public void setType(String type) {
+            public void setType(int type) {
                 this.type = type;
             }
 
-            public String getApprovalResult() {
-                return approvalResult;
+            public String getUserId() {
+                return userId;
             }
 
-            public void setApprovalResult(String approvalResult) {
-                this.approvalResult = approvalResult;
+            public void setUserId(String userId) {
+                this.userId = userId;
             }
 
-            public String getInitiateTime() {
-                return initiateTime;
-            }
 
-            public void setInitiateTime(String initiateTime) {
-                this.initiateTime = initiateTime;
-            }
-
-            public RecordsBean() {
-            }
         }
     }
+
 }

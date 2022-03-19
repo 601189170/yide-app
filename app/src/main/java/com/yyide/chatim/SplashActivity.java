@@ -93,7 +93,7 @@ public class SplashActivity extends AppCompatActivity {
             //第一次打开app
             new Handler().postDelayed(this::startGuidePage, 500);
         } else {
-            if (SpData.User() != null && SpData.User().isLogin && !TextUtils.isEmpty(SpData.User().refreshToken)) {
+            if (SpData.getLogin() != null && SpData.getLogin().isLogin && !TextUtils.isEmpty(SpData.getLogin().refreshToken)) {
                 toLogin();
             } else {
                 new Handler().postDelayed(this::startLogin, 3000);
@@ -108,11 +108,11 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     void toLogin() {
-        if (SpData.User() != null && SpData.User() != null && !TextUtils.isEmpty(SpData.User().refreshToken)) {
+        if (SpData.getLogin() != null && SpData.getLogin() != null && !TextUtils.isEmpty(SpData.getLogin().refreshToken)) {
             RequestBody body = new FormBody.Builder()
                     .add("client_id", "yide-cloud")
                     .add("grant_type", "refresh_token")
-                    .add("refresh_token", SpData.User().refreshToken)
+                    .add("refresh_token", SpData.getLogin().refreshToken)
                     .add("client_secret", "yide1234567")
                     .build();
             //请求组合创建
@@ -274,7 +274,7 @@ public class SplashActivity extends AppCompatActivity {
                 //第一次打开app
                 new Handler().postDelayed(this::startGuidePage, 500);
             } else {
-                if (SpData.User() != null && SpData.User().isLogin && !TextUtils.isEmpty(SpData.User().refreshToken)) {
+                if (SpData.getLogin() != null && SpData.getLogin().isLogin && !TextUtils.isEmpty(SpData.getLogin().refreshToken)) {
                     toLogin();
                 } else {
                     startLogin();
@@ -296,7 +296,7 @@ public class SplashActivity extends AppCompatActivity {
                     return;
                 }
             }
-            if (SpData.User() != null && SpData.User() != null && !TextUtils.isEmpty(SpData.User().accessToken)) {
+            if (SpData.getLogin() != null && SpData.getLogin() != null && !TextUtils.isEmpty(SpData.getLogin().accessToken)) {
                 toLogin();
             } else {
                 startLogin();

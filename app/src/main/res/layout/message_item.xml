@@ -16,7 +16,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:textColor="#C0C4CC"
+            android:textColor="#B3B3B3"
             android:textSize="@dimen/text_12" />
 
         <LinearLayout

@@ -54,10 +54,10 @@ public class ScanLoginActivity extends BaseMvpActivity<ScanLoginPresenter> imple
     void loginScan(String url) {
 
         //请求组合创建
-        if (SpData.User() == null) return;
+        if (SpData.getLogin() == null) return;
         Request request = new Request.Builder()
                 .url(BaseConstant.API_SERVER_URL + url)
-                .addHeader("Authorization", SpData.User() != null ? SpData.User().accessToken : "")
+                .addHeader("Authorization", SpData.getLogin() != null ? SpData.getLogin().accessToken : "")
                 .build();
         showLoading();
         //发起请求

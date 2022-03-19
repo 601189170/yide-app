@@ -37,7 +37,7 @@ class TeacherWeekStatisticsFlatListAdapter :
                 baseViewHolder.setVisible(R.id.child_recyclerview, false)
             }
             EventBean.CHILD_ITEM -> {
-                baseViewHolder.itemView.setBackgroundColor(context.resources.getColor(R.color.color_F5F8FC))
+                baseViewHolder.itemView.setBackgroundColor(context.resources.getColor(R.color.color_F9FAF9))
                 if (!TextUtils.isEmpty(dataBean.sortName)) {
                     val date = DateUtils.formatTime(dataBean.requiredTime, null, "MM.dd")
                     baseViewHolder.setText(R.id.tv_name, date + " " + dataBean.sortName)

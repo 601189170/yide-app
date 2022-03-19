@@ -50,7 +50,7 @@ public class AttendanceActivity extends BaseActivity {
 //        String type = getIntent().getStringExtra("type");
         AttendanceRsp.DataBean.AttendanceListBean item = (AttendanceRsp.DataBean.AttendanceListBean) getIntent().getSerializableExtra("item");
         mViewBinding.top.title.setText(R.string.attendance_title);
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {
+        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo())) {
             mViewBinding.top.tvRight.setVisibility(View.GONE);
         } else {
             mViewBinding.top.tvRight.setVisibility(View.VISIBLE);
@@ -62,12 +62,12 @@ public class AttendanceActivity extends BaseActivity {
         mViewBinding.top.backLayout.setOnClickListener(v -> finish());
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
-            fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(item));
-        } else {
-            //教师教职工 考情详情
-            fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(item));
-        }
+//        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
+//            fragmentTransaction.replace(R.id.fl_content, SchoolAttendanceFragment.newInstance(item));
+//        } else {
+        //教师教职工 考情详情
+        fragmentTransaction.replace(R.id.fl_content, TeacherStudentAttendanceFragment.newInstance(item));
+//        }
         fragmentTransaction.commit();
     }
 }

@@ -116,7 +116,7 @@ public class BannerFragment extends BaseMvpFragment<HomeBannerPresenter> impleme
             Log.d("HomeRefresh", BannerFragment.class.getSimpleName());
 
             //        if (SpData.getClassInfo() != null && !TextUtils.isEmpty(SpData.getClassInfo().classesId)) {
-            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.getIdentityInfo().schoolId);
+            mvpPresenter.getClassPhotoList(SpData.getClassInfo().classesId, SpData.Schoolinfo().getId());
 //        }
         }
     }

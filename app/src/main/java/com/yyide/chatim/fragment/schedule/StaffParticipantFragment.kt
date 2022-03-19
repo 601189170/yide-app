@@ -46,7 +46,7 @@ class StaffParticipantFragment : Fragment() {
             type = it.getInt(ARG_TYPE)
         }
         requestData(null)
-        staffParticipantViewModel.getResponseResult().observe(this, {
+        staffParticipantViewModel.getResponseResult().observe(this) {
             if (it != null) {
                 listCache[it.name ?: "未知"] = it
                 val list = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
@@ -79,7 +79,7 @@ class StaffParticipantFragment : Fragment() {
                 return@observe
             }
             ToastUtils.showShort("当前部门没有数据")
-        })
+        }
     }
 
     override fun onCreateView(
@@ -171,9 +171,9 @@ class StaffParticipantFragment : Fragment() {
                     if (value?.map { it.userId }?.contains(participantListBean.userId) == true) {
                         //value.remove(participantListBean)
                         val iterator = value.iterator()
-                        while (iterator.hasNext()){
+                        while (iterator.hasNext()) {
                             val next = iterator.next()
-                            if (next.userId == participantListBean.userId){
+                            if (next.userId == participantListBean.userId) {
                                 value.remove(next)
                                 break
                             }
@@ -309,7 +309,7 @@ class StaffParticipantFragment : Fragment() {
                     holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
                     holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
 
-                    holder.setText(R.id.tv_guardian_name,guardianName(item.relation))
+                    holder.setText(R.id.tv_guardian_name, guardianName(item.relation))
                 }
             }
             val guardians = item.guardians
@@ -326,9 +326,9 @@ class StaffParticipantFragment : Fragment() {
                 if (value?.map { it.userId }?.contains(participantListBean.userId) == true) {
                     //value.remove(participantListBean)
                     val iterator = value.iterator()
-                    while (iterator.hasNext()){
+                    while (iterator.hasNext()) {
                         val next = iterator.next()
-                        if (next.userId == participantListBean.userId){
+                        if (next.userId == participantListBean.userId) {
                             value.remove(next)
                             break
                         }

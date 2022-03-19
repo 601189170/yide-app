@@ -16,7 +16,6 @@ import androidx.core.app.NotificationCompat;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.sdk.android.push.MessageReceiver;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.NewMainActivity;
@@ -24,7 +23,6 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.SplashActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.activity.newnotice.NoticeConfirmDetailActivity;
-import com.yyide.chatim.activity.weekly.WeeklyHomeActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.jiguang.ExampleUtil;
 import com.yyide.chatim.jiguang.LocalBroadcastManager;
@@ -103,7 +101,7 @@ public class MyMessageReceiver extends MessageReceiver {
                 } else if ("5".equals(pushModel.getPushType())) {
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MAIN, ""));
                 } else if ("7".equals(pushModel.getPushType())) {
-                    context.startActivity(new Intent(context, WeeklyHomeActivity.class));
+                    //context.startActivity(new Intent(context, WeeklyHomeActivity.class));
                 } else if ("8".equals(pushModel.getPushType())) {
                     EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SCHEDULE, ""));
                 } else {

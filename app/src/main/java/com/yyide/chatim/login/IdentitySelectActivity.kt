@@ -19,8 +19,6 @@ import com.yyide.chatim.databinding.ActivityIdentitySelectBinding
 import com.yyide.chatim.login.banner.ScaleTransformer
 import com.yyide.chatim.login.banner.SchoolAdapter
 import com.yyide.chatim.login.viewmodel.LoginViewModel
-import com.yyide.chatim.model.IdentityBean
-import com.yyide.chatim.model.LoginRsp
 import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.utils.loge
 
@@ -34,7 +32,7 @@ class IdentitySelectActivity :
 
     val viewModel: LoginViewModel by viewModels()
     var schoolBean: SchoolRsp? = null
-    var identityBean: IdentityBean? = null
+    var identityBean: SchoolRsp.IdentityBean? = null
     var schoolList: List<SchoolRsp>? = null
 
     companion object {
@@ -142,7 +140,7 @@ class IdentitySelectActivity :
         }
     }
 
-    private fun initAdapter(listData: List<IdentityBean>) {
+    private fun initAdapter(listData: List<SchoolRsp.IdentityBean>) {
         val mAdapter = SwitchIdentityAdapter()
         binding.recyclerView.layoutManager =
             GridLayoutManager(this@IdentitySelectActivity, listData.size)
@@ -171,7 +169,7 @@ class IdentitySelectActivity :
                             .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                         SPUtils.getInstance()
                             .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
-                        val user = SpData.User()
+                        val user = SpData.getLogin()
                         user.isLogin = true
                         SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(user))
                         startActivity(Intent(this, NewMainActivity::class.java))

@@ -101,7 +101,7 @@ public class TeacherWeekStatisticsExpandableListAdapter extends BaseExpandableLi
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_statistics_child_list, parent, false);
         }
-        convertView.setBackgroundColor(mContext.getResources().getColor(R.color.color_F5F8FC));
+        convertView.setBackgroundColor(mContext.getResources().getColor(R.color.color_F9FAF9));
         final TextView tvName = convertView.findViewById(R.id.tv_name);
         final TextView tvCourseName = convertView.findViewById(R.id.tv_course_name);
 

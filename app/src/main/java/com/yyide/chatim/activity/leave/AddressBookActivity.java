@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.AddressBookAdapter;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.databinding.ActivityAddressBookBinding;
 import com.yyide.chatim.model.AddressBookRsp;
@@ -71,12 +72,12 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
         });
 
         adapter.setOnItemClickListener(addressBookBean -> {
-                    Log.e(TAG, "setOnItemClickListener: id=" + addressBookBean.getId() + " ,level=" + addressBookBean.getLevel()+",isExitInd="+addressBookBean.getIsExitInd());
+                    Log.e(TAG, "setOnItemClickListener: id=" + addressBookBean.getId() + " ,level=" + addressBookBean.getLevel() + ",isExitInd=" + addressBookBean.getIsExitInd());
                     this.addressBookBean = addressBookBean;
-                    if (addressBookBean.getDeptMemberList() != null && addressBookBean.getDeptMemberList().isEmpty() && "Y".equals(addressBookBean.getIsExitInd())){
+                    if (addressBookBean.getDeptMemberList() != null && addressBookBean.getDeptMemberList().isEmpty() && "Y".equals(addressBookBean.getIsExitInd())) {
                         mvpPresenter.queryDeptMemberByDeptId(addressBookBean.getId(), addressBookBean.getLevel());
-                    }else {
-                        Log.e(TAG, "setOnItemClickListener: 已经请求过数据不在请求" );
+                    } else {
+                        Log.e(TAG, "setOnItemClickListener: 已经请求过数据不在请求");
                     }
                 }
         );
@@ -91,7 +92,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
         for (DepartmentScopeRsp2.DataBean bean : beanList) {
             final List<AddressBookRsp.DataBean> deptMemberList = bean.getDeptMemberList();
             for (AddressBookRsp.DataBean dataBean : deptMemberList) {
-                if (dataBean.isChecked()){
+                if (dataBean.isChecked()) {
                     ids.add(dataBean);
                 }
             }
@@ -132,7 +133,7 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
 
     @Override
     public void getDepartmentListSuccess2(DepartmentScopeRsp2 departmentScopeRsp2) {
-        if (departmentScopeRsp2.getCode() == 200) {
+        if (departmentScopeRsp2.getCode() == BaseConstant.REQUEST_SUCCESS2) {
             noticeScopeBeans.clear();
             noticeScopeBeans.addAll(departmentScopeRsp2.getData());
             Log.e(TAG, "getStudentScopeSuccess: " + noticeScopeBeans.toString());
@@ -154,13 +155,13 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
     @Override
     public void getDeptMemberListSuccess(AddressBookRsp addressBookRsp) {
         Log.d(TAG, "getDeptMemberListSuccess: " + addressBookRsp.toString());
-        if (addressBookRsp.getCode() == 200) {
+        if (addressBookRsp.getCode() == BaseConstant.REQUEST_SUCCESS2) {
             final List<AddressBookRsp.DataBean> data = addressBookRsp.getData();
-            if (data != null && !data.isEmpty()){
+            if (data != null && !data.isEmpty()) {
                 //final AddressBookBean addressBookBean = currentDeptData(currentPosition, currentLevel, noticeScopeBeans);
-                if (addressBookBean != null){
+                if (addressBookBean != null) {
                     List<AddressBookRsp.DataBean> deptMemberList = addressBookBean.getDeptMemberList();
-                    if (deptMemberList == null){
+                    if (deptMemberList == null) {
                         deptMemberList = new ArrayList<>();
                     }
                     deptMemberList.addAll(data);
@@ -175,8 +176,8 @@ public class AddressBookActivity extends BaseMvpActivity<AddressBookPresenter> i
         Log.e(TAG, "getDeptMemberListFail: " + msg);
     }
 
-    private void showBlank(boolean show){
-        viewBinding.blankPage.setVisibility(show?View.VISIBLE:View.GONE);
-        viewBinding.gpMainContent.setVisibility(show?View.GONE:View.VISIBLE);
+    private void showBlank(boolean show) {
+        viewBinding.blankPage.setVisibility(show ? View.VISIBLE : View.GONE);
+        viewBinding.gpMainContent.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }

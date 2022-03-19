@@ -22,7 +22,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/color_F5F8FC"
+                android:background="@color/color_F9FAF9"
                 android:paddingTop="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout

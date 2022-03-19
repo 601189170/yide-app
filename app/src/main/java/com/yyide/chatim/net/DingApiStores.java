@@ -7,14 +7,12 @@ import com.yyide.chatim.model.AddUserAnnouncementResponse;
 import com.yyide.chatim.model.AddressBookRsp;
 import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.AppItemBean;
-import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.BookRsp;
 import com.yyide.chatim.model.BookSearchRsp;
-import com.yyide.chatim.model.BookSearchRsp2;
 import com.yyide.chatim.model.BrandSearchRsp;
 import com.yyide.chatim.model.ClassBrandInfoRsp;
 import com.yyide.chatim.model.ClassesPhotoRsp;
@@ -28,6 +26,7 @@ import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.HelpItemRep;
 import com.yyide.chatim.model.HomeNoticeRsp;
+import com.yyide.chatim.model.LeaveApprovalBean;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveListRsp;
@@ -78,7 +77,6 @@ import com.yyide.chatim.model.attendance.TeacherAttendanceDayRsp;
 import com.yyide.chatim.model.attendance.TeacherAttendanceWeekMonthRsp;
 import com.yyide.chatim.model.gate.GateDataPermissionRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
-import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.ScheduleData;
@@ -483,10 +481,10 @@ public interface DingApiStores {
     Observable<BaseRsp> toTeacherOss(@PartMap Map<String, RequestBody> map, @Part MultipartBody.Part file);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/getStudentOss
-    //查询学生头像
+    //查询人脸采集头像
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/face/cloud-face/face/getStudentOss/{studentId}")
-    Observable<FaceOssBean> getStudentOss(@Path("studentId") String studentId);
+    @POST("/cloud/app/face/get/{studentId}")
+    Observable<FaceOssBean> getFaceOss(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/teacher/face/getTeacherOss
     //查询老师头像
@@ -514,16 +512,14 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/common/getAskLeaveRecord
     //请假列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/leave-server/cloud-leave/leave/common/getAskLeaveRecord")
-    Observable<LeaveListRsp> getAskLeaveRecord(@QueryMap HashMap<String, Object> map);
+    @POST("/cloud/app/userAppr/page")
+    Observable<LeaveListRsp> getAskLeaveRecord(@Body RequestBody requestBody);
 
-    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/common/queryLeaveDetailsById
     //请假详情
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/leave-server/cloud-leave/leave/common/queryLeaveDetailsById")
+    @GET("/cloud/app/userAppr/getInfo")
     Observable<LeaveDetailRsp> queryLeaveDetailsById(@QueryMap HashMap<String, Object> map);
 
-    //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/student/ondoApplyLeave
     //请假撤销
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @GET("/leave-server/cloud-leave/student/ondoApplyLeave")
@@ -538,14 +534,14 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/leave/common/getApprover?classIdOrdeptId=2076
     //获取流程审批人和抄送人
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/leave-server/cloud-leave/leave/common/getApprover")
-    Observable<ApproverRsp> getApprover(@QueryMap HashMap<String, Object> map);
+    @POST("/cloud/app/procAppr/getApprList")
+    Observable<LeaveApprovalBean> getApprover(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/addTeacherLeave
-    //教职工请假
+    //家长、教职工请假
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/leave-server/cloud-leave/teacher/addTeacherLeave")
-    Observable<BaseRsp> addTeacherLeave(@Body RequestBody requestBody);
+    @POST("/cloud/proc/startInstance")
+    Observable<BaseRsp> addLeave(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/student/addStudentLeave
     //学生请假
@@ -627,6 +623,7 @@ public interface DingApiStores {
     /**
      * 家长查看学生日统计考勤数据
      * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/two/app/v2/queryAppStudentTwoAttendanceData
+     *
      * @param requestBody
      * @return
      */
@@ -637,6 +634,7 @@ public interface DingApiStores {
     /**
      * 家长查看学生周、月考勤数据
      * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/two/app/v2/queryAppStudentTwoAttendanceData
+     *
      * @param requestBody
      * @return
      */
@@ -647,6 +645,7 @@ public interface DingApiStores {
     /**
      * 班主任或任课老师查看日统计信息
      * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/three/app/v2/queryAppTeacherThreeAttendanceData
+     *
      * @param requestBody
      * @return
      */
@@ -657,6 +656,7 @@ public interface DingApiStores {
     /**
      * 班主任或任课老师查看周、月统计信息
      * https://api.uat.edu.1d1j.net/face/cloud-face/attendance/three/app/v2/queryAppTeacherThreeAttendanceData
+     *
      * @param requestBody
      * @return
      */
@@ -894,12 +894,13 @@ public interface DingApiStores {
     /**
      * 获取【家长/学生】人员信息
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getParticipant
+     *
      * @param type  类型【0：学校名称及学段，1：年级】
      * @param scope 范围【1：家长，2：学生】
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/management/cloud-system/app/schedule/getParticipant")
-    Call<StudentGuardianRsp> getParticipant(@Query("id") String id,@Query("type") String type,@Query("scope") String scope);
+    Call<StudentGuardianRsp> getParticipant(@Query("id") String id, @Query("type") String type, @Query("scope") String scope);
 
 
     /**
@@ -989,8 +990,8 @@ public interface DingApiStores {
     /**
      * 查询校历备注
      * {
-     *     "dayOfMonth":"11"，
-     *     "id":"1461949270799777793"
+     * "dayOfMonth":"11"，
+     * "id":"1461949270799777793"
      * }
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/school/calendar/selectSchoolCalendar
      */

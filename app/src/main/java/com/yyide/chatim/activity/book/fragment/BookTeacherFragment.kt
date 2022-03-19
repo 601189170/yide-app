@@ -90,7 +90,7 @@ class BookTeacherFragment : BaseMvpFragment<BookPresenter>(), BookView {
             if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 //处理没有学校名字
                 if (TextUtils.isEmpty(model.data.schoolName_)) {
-                    mViewBinding.tvSchoolName.text = SpData.getIdentityInfo().schoolName
+                    mViewBinding.tvSchoolName.text = SpData.Schoolinfo().schoolName
                 } else {
                     mViewBinding.tvSchoolName.text = model.data.schoolName_
                 }

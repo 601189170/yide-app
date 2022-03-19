@@ -25,8 +25,6 @@ public interface HomeFragmentView extends BaseView {
 
     void getUserSchool(GetUserSchoolRsp rsp);
 
-    void uploadFileSuccess(String imgUrl);
-
     void getFail(String rsp);
 
     void getIndexMyNoticeFail(String rsp);

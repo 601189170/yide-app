@@ -112,24 +112,24 @@ public class TeacherStudentAttendanceFragment extends BaseMvpFragment<Attendance
             classesId = SpData.getClassInfo().classesId;
             mViewBinding.tvClassName.setText(SpData.getClassInfo().classesName);
         }
-        List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
-        if (classList != null && classList.size() > 1) {
-            mViewBinding.tvClassName.setClickable(true);
-            mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
-        } else {
-            mViewBinding.tvClassName.setClickable(false);
-            mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-        }
-        mViewBinding.tvClassName.setOnClickListener(v -> {
-            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterClass, "请选择班级");
-            name = mViewBinding.tvClassName.getText().toString().trim();
-            adapterClass.setList(classList);
-            attendancePop.setOnSelectListener(index -> {
-                mViewBinding.tvClassName.setText(classList.get(index).classesName);
-                classesId = classList.get(index).classesId;
-                getAttendance();
-            });
-        });
+        //List<GetUserSchoolRsp.DataBean.FormBean> classList = SpData.getIdentityInfo().form;
+//        if (classList != null && classList.size() > 1) {
+//            mViewBinding.tvClassName.setClickable(true);
+//            mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_down), null);
+//        } else {
+//            mViewBinding.tvClassName.setClickable(false);
+//            mViewBinding.tvClassName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+//        }
+//        mViewBinding.tvClassName.setOnClickListener(v -> {
+//            AttendancePop attendancePop = new AttendancePop(getActivity(), adapterClass, "请选择班级");
+//            name = mViewBinding.tvClassName.getText().toString().trim();
+//            adapterClass.setList(classList);
+//            attendancePop.setOnSelectListener(index -> {
+//                mViewBinding.tvClassName.setText(classList.get(index).classesName);
+//                classesId = classList.get(index).classesId;
+//                getAttendance();
+//            });
+//        });
 
     }
 

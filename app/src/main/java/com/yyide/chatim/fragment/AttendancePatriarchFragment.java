@@ -69,7 +69,7 @@ public class AttendancePatriarchFragment extends BaseMvpFragment<AttendancePrese
     }
 
     private void getHomeAttendance() {
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PRESIDENT.equals(SpData.getIdentityInfo().status)) {//校长
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {//校长
             isSchool = true;
             mvpPresenter.homeAttendance("", "");
         } else {

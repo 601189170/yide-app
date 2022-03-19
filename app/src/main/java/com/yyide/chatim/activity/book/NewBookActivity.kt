@@ -33,12 +33,11 @@ class NewBookActivity : BaseActivity() {
     private fun initView() {
         mViewBinding.top.title.text = getString(R.string.book_title_yd)
         mViewBinding.top.backLayout.setOnClickListener { finish() }
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS == SpData.getIdentityInfo().status) {
+        if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             supportFragmentManager.beginTransaction().replace(
                 mViewBinding.flContent.id,
                 BookPatriarchFragment.newInstance()
             ).commit()
-
         } else {
             supportFragmentManager.beginTransaction().replace(
                 mViewBinding.flContent.id,

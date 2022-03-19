@@ -27,7 +27,8 @@ public class StudentAskLeavePresenter extends BasePresenter<StudentAskLeaveView>
         final HashMap<String, Object> map = new HashMap<>(1);
         map.put("classIdOrdeptId", classIdOrdeptId);
         mvpView.showLoading();
-        addSubscription(dingApiStores.getApprover(map), new ApiCallback<ApproverRsp>() {
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        addSubscription(dingApiStores.getApprover(body), new ApiCallback<ApproverRsp>() {
             @Override
             public void onSuccess(ApproverRsp model) {
                 mvpView.approver(model);

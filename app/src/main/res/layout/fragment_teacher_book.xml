@@ -20,7 +20,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_10"
-            android:background="@color/color_F5F8FC" />
+            android:background="@color/color_F9FAF9" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

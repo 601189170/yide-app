@@ -45,7 +45,7 @@
                 android:id="@+id/view_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DCDFE6" />
+                android:background="#F9FAF9" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -56,7 +56,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="#F5F8FC"
+            android:background=" #F9FAF9
+"
             android:padding="@dimen/dp_20">
 
             <TextView

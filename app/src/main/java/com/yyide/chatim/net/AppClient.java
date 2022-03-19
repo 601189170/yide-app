@@ -11,8 +11,6 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.model.LoginRsp;
 
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -135,7 +133,7 @@ public class AppClient {
         CacheControl cacheControl = cacheBuilder.build();
 
         Request request = chain.request();
-        LoginRsp user = SpData.User();
+        LoginRsp user = SpData.getLogin();
         if (user != null) {
             Log.e("TAG", "intercept: " + JSON.toJSONString(user.getAccessToken()));
             request = request.newBuilder()
@@ -203,7 +201,7 @@ public class AppClient {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            String token = SpData.User().accessToken;
+            String token = SpData.getLogin().accessToken;
             if (TextUtils.isEmpty(token)) {
                 Request originalRequest = chain.request();
                 return chain.proceed(originalRequest);

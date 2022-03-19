@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_15"
             android:text="人脸信息："
-            android:textColor="#ff999999"
+            android:textColor="#ff666666"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/ivHead"
             app:layout_constraintTop_toBottomOf="@+id/ivHead" />
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/dp_5"
             android:text="采集成功"
-            android:textColor="#ff999999"
+            android:textColor="#ff666666"
             android:textSize="12sp"
             app:drawableStartCompat="@mipmap/icon_gather"
             app:layout_constraintBottom_toBottomOf="@+id/textView43"

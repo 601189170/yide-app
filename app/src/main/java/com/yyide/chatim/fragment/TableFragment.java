@@ -45,8 +45,6 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     TextView className;
     @BindView(R.id.time)
     TextView time;
-    @BindView(R.id.tips)
-    TextView tips;
     @BindView(R.id.table_next)
     TextView table_next;
     @BindView(R.id.table_group)
@@ -129,7 +127,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         className.setText(string);
         subjectName.setText("-");
         time.setText("");
-        tips.setText("");
+//        tips.setText("");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -142,7 +140,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
     }
 
     private void getData() {
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+        if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             if (SpData.getClassInfo() != null) {
                 mvpPresenter.selectClassInfoByClassId(SpData.getClassInfo().classesId);
             } else {
@@ -163,7 +161,7 @@ public class TableFragment extends BaseMvpFragment<TablePresenter> implements li
         subjectName.setText(rsp.subjectName);
         className.setText(rsp.classesName);
         time.setText(rsp.fromDateTime + "-" + rsp.toDateTime);
-        tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
+//        tips.setText(TextUtils.isEmpty(rsp.beforeClass) ? "未设置课前提醒" : rsp.beforeClass);
     }
 
     @Override

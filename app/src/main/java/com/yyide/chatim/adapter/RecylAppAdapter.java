@@ -1,6 +1,8 @@
 package com.yyide.chatim.adapter;
 
 
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,6 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
         return list.get(i);
     }
 
-
     @Override
     public RecylAppAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recy_app_item,
@@ -54,14 +55,13 @@ public class RecylAppAdapter extends RecyclerView.Adapter<RecylAppAdapter.ViewHo
         if (i == index) {
             viewHolder.item.setChecked(true);
             viewHolder.line.setVisibility(View.VISIBLE);
-
         } else {
             viewHolder.line.setVisibility(View.GONE);
             viewHolder.item.setChecked(false);
         }
         viewHolder.item.setText(getItem(i).getName());
         viewHolder.itemView.setOnClickListener(v -> {
-            position = viewHolder.getAdapterPosition();
+            position = viewHolder.getAbsoluteAdapterPosition();
             if (mOnItemClickListener != null) {
                 //注意这里使用getTag方法获取position
                 mOnItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());

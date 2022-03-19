@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/dp_15"
-        android:background="#DCDFE6"
+        android:background="#F9FAF9"
         app:layout_constraintStart_toStartOf="@+id/tv_app_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_app_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

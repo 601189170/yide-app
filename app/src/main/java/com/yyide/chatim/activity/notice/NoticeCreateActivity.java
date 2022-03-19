@@ -59,7 +59,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
     EditText et_input_title;//标题
     @BindView(R.id.et_input_before_class)
     EditText et_input_content;//内容
-   @BindView(R.id.tv_show_ids)
+    @BindView(R.id.tv_show_ids)
     TextView tv_show_ids;//内容
     @BindView(R.id.tv_show_timed_time)
     TextView tv_show_timed_time;//显示定时的时间
@@ -91,7 +91,7 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
 
         Intent intent = getIntent();
         boolean template = intent.getBooleanExtra("template", false);
-        if (template){
+        if (template) {
             //表示从模板过来
             String name = intent.getStringExtra("name");
             String content = intent.getStringExtra("content");
@@ -100,12 +100,12 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         }
     }
 
-    @OnClick({R.id.tv_parents, R.id.tv_faculty,R.id.tv_student, R.id.cl_timing_time, R.id.ll_bottom})
+    @OnClick({R.id.tv_parents, R.id.tv_faculty, R.id.tv_student, R.id.cl_timing_time, R.id.ll_bottom})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.tv_parents:
                 sendObj = 1;
-               showCheckedNumber(classesIds);
+                showCheckedNumber(classesIds);
                 tv_parents.setTextColor(Color.parseColor("#FFFFFF"));
                 tv_parents.setBackground(getDrawable(R.drawable.btn_select_bg));
                 tv_faculty.setTextColor(Color.parseColor("#666666"));
@@ -158,17 +158,17 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
      */
     private void commit() {
         String title = et_input_title.getText().toString();
-        if (TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             ToastUtils.showShort("标题不能为空，请输入标题！");
             return;
         }
         String content = et_input_content.getText().toString();
-        if (TextUtils.isEmpty(content)){
+        if (TextUtils.isEmpty(content)) {
             ToastUtils.showShort("通知内容不能为空，请输入内容！");
             return;
         }
         boolean isTiming = mSwitch.isChecked();
-        if (isTiming && TextUtils.isEmpty(timingTime)){
+        if (isTiming && TextUtils.isEmpty(timingTime)) {
             ToastUtils.showShort("请选择发布时间");
             return;
         }
@@ -177,17 +177,17 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
         body.setTitle(title);
         body.setContent(content);
         body.setEquipmentType("1");
-        body.setSendTarget(""+sendObj);
+        body.setSendTarget("" + sendObj);
         body.setDepartmentIds(departmentIds);
         body.setClassCardIds(classCardIds);
         body.setClassesIds(classesIds);
         body.setIsTiming(isTiming);
-        long schoolId = SpData.getIdentityInfo().schoolId;
+        long schoolId = SpData.Schoolinfo().getId();
         body.setSchoolId(schoolId);
-        if (isTiming){
+        if (isTiming) {
             body.setTimingTime(timingTime);
         }
-        if (classesIds.isEmpty() && departmentIds.isEmpty() && classCardIds.isEmpty()){
+        if (classesIds.isEmpty() && departmentIds.isEmpty() && classCardIds.isEmpty()) {
             ToastUtils.showShort("请选择通知范围");
             return;
         }
@@ -231,26 +231,26 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
 
     @OnClick(R.id.constraintLayout_select)
     public void select() {
-        if (sendObj == 0){
+        if (sendObj == 0) {
             ToastUtils.showShort("请选择通知对象！");
             return;
         }
-        Intent intent = new Intent(this,NoticeScopeActivity.class);
-        intent.putExtra("sendObj",sendObj);
-        startActivityForResult(intent,REQUEST_CODE);
+        Intent intent = new Intent(this, NoticeScopeActivity.class);
+        intent.putExtra("sendObj", sendObj);
+        startActivityForResult(intent, REQUEST_CODE);
         //jupm(this, NoticeScopeActivity.class);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e(TAG, "onActivityResult: requestCode:"+requestCode+", resultCode:"+resultCode );
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            if (data == null){
+        Log.e(TAG, "onActivityResult: requestCode:" + requestCode + ", resultCode:" + resultCode);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data == null) {
                 return;
             }
             ArrayList<String> ids = data.getStringArrayListExtra("ids");
-            Log.e(TAG, "onActivityResult: "+ids );
+            Log.e(TAG, "onActivityResult: " + ids);
             departmentIds.clear();
             classCardIds.clear();
             classesIds.clear();
@@ -261,26 +261,26 @@ public class NoticeCreateActivity extends BaseMvpActivity<NoticeCreatePresenter>
             } else {
                 departmentIds.addAll(ids);
             }
-            if (ids.isEmpty()){
+            if (ids.isEmpty()) {
                 tv_show_ids.setText("未选择");
-            }else {
-                tv_show_ids.setText("已选择("+ids.size()+")");
+            } else {
+                tv_show_ids.setText("已选择(" + ids.size() + ")");
             }
         }
     }
 
-    private void showCheckedNumber(List<String> ids){
-        if (ids.isEmpty()){
+    private void showCheckedNumber(List<String> ids) {
+        if (ids.isEmpty()) {
             tv_show_ids.setText("未选择");
-        }else {
-            tv_show_ids.setText("已选择("+ids.size()+")");
+        } else {
+            tv_show_ids.setText("已选择(" + ids.size() + ")");
         }
     }
 
-    private String list2String(ArrayList<String> list){
+    private String list2String(ArrayList<String> list) {
         StringBuffer buffer = new StringBuffer();
         for (String s : list) {
-            buffer.append(s+" ");
+            buffer.append(s + " ");
         }
         return buffer.toString();
     }

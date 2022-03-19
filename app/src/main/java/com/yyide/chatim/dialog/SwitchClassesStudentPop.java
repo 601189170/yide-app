@@ -77,28 +77,28 @@ public class SwitchClassesStudentPop extends PopupWindow {
         listview.setLayoutManager(new LinearLayoutManager(context));
         listview.setAdapter(adapter);
         //保存班级ID用于切换班级业务逻辑使用
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
-            adapter.setList(SpData.getIdentityInfo().form);
-            List<GetUserSchoolRsp.DataBean.FormBean> list = SpData.getIdentityInfo().form;
-            for (int i = 0; i < list.size(); i++) {
-                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-                    //家长默认选择班级
-                    if (!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName)
-                            && SpData.getClassInfo().classesStudentName.equals(list.get(i).classesStudentName)) {
-                        index = i;
-                        break;
-                    }
-                } else {
-                    //教师默认选择班级
-                    if (!TextUtils.isEmpty(SpData.getClassInfo().classesId)
-                            && SpData.getClassInfo().classesId.equals(list.get(i).classesId)) {
-                        index = i;
-                        break;
-                    }
-                }
-
-            }
-        }
+//        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null) {
+//            adapter.setList(SpData.getIdentityInfo().form);
+//            List<GetUserSchoolRsp.DataBean.FormBean> list = SpData.getIdentityInfo().form;
+//            for (int i = 0; i < list.size(); i++) {
+//                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+//                    //家长默认选择班级
+//                    if (!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName)
+//                            && SpData.getClassInfo().classesStudentName.equals(list.get(i).classesStudentName)) {
+//                        index = i;
+//                        break;
+//                    }
+//                } else {
+//                    //教师默认选择班级
+//                    if (!TextUtils.isEmpty(SpData.getClassInfo().classesId)
+//                            && SpData.getClassInfo().classesId.equals(list.get(i).classesId)) {
+//                        index = i;
+//                        break;
+//                    }
+//                }
+//
+//            }
+//        }
         setIndex(index);
         adapter.setOnItemClickListener((adapter, view, position) -> {
             setIndex(position);
@@ -164,7 +164,7 @@ public class SwitchClassesStudentPop extends PopupWindow {
 
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, GetUserSchoolRsp.DataBean.FormBean item) {
-            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
                 baseViewHolder.setText(R.id.className, item.classesStudentName);
             } else {
                 baseViewHolder.setText(R.id.className, item.classesName);

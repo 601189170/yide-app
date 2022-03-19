@@ -111,35 +111,4 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         });
     }
 
-    public void uploadFile(File file) {
-        if (file == null) {
-            return;
-        }
-        mvpView.showLoading();
-        RequestBody fileRequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//        MultipartBody.Part requestImgPart = MultipartBody.Part.create(fileRequestBody);
-        // 创建MultipartBody.Part，用于封装文件数据
-        MultipartBody.Part requestImgPart =
-                MultipartBody.Part.createFormData("file", "fileName.jpg", fileRequestBody);
-        addSubscription(dingApiStores.uploadImg(requestImgPart, null), new ApiCallback<UploadRep>() {
-            @Override
-            public void onSuccess(UploadRep model) {
-                if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
-                    mvpView.uploadFileSuccess(model.getData());
-                } else {
-                    mvpView.getFail(model.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
 }

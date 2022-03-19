@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.operation.fragment.OperationChildFragment
-import com.yyide.chatim.activity.weekly.details.SchoolStudentChildAttendanceFragment
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityOperationDetailBinding
 import com.yyide.chatim.model.Detail

@@ -17,7 +17,6 @@ import com.yyide.chatim.activity.leave.AskForLeaveActivity
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity
 import com.yyide.chatim.activity.newnotice.NewNoticeAnnouncementActivity
 import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
-import com.yyide.chatim.activity.weekly.WeeklyHomeActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.model.EventMessage
@@ -60,18 +59,6 @@ object JumpUtil {
             "待办" -> {
                 EventBus.getDefault()
                     .post(EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1))
-            }
-            "周报" -> {
-                if (SpData.getIdentityInfo().isSchool) {
-                    mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
-                } else {
-                    //处理教师家长有绑定班级跳转
-                    if (SpData.getClassInfo() != null) {
-                        mActivity.startActivity(Intent(mActivity, WeeklyHomeActivity::class.java))
-                    } else {
-                        ToastUtils.showShort("名下无班级周报");
-                    }
-                }
             }
             "日程" -> {
                 EventBus.getDefault()

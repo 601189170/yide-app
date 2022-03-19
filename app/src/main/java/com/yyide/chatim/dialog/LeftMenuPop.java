@@ -168,7 +168,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         context.runOnUiThread(() -> {
             setCache();
             tvVersion.setText("V" + AppUtils.getAppVersionName());
-            if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 1) {
+            if (SpData.getIdentityInfo() != null) {
                 ivClass.setVisibility(View.VISIBLE);
                 layout1.setEnabled(true);
             } else {
@@ -183,13 +183,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 ivIdentity.setVisibility(View.INVISIBLE);
             }
 
-            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-                layoutStu.setVisibility(View.VISIBLE);
-            } else {
-                my_info.setText("我的信息");
-            }
             //判断是否为家长
-            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
                 if (SpData.getClassInfo() != null) {
                     user_class.setText(!TextUtils.isEmpty(SpData.getClassInfo().classesStudentName) ? SpData.getClassInfo().classesStudentName : "无");
                 } else {
@@ -199,8 +194,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
             }
             setIdentity();
-            head_name.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().realname : "");
-            GlideUtil.loadImageHead(context, SpData.getIdentityInfo().img, head_img);
+            head_name.setText(SpData.getIdentityInfo() != null ? SpData.User().getUsername() : "");
+            GlideUtil.loadImageHead(context, SpData.User().getAvatar(), head_img);
         });
     }
 
@@ -250,17 +245,17 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         //hide();
         switch (v.getId()) {
             case R.id.layout1://切换班级
-                if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0) {
-                    new SwitchClassesStudentPop(context).setOnCheckCallBack(() -> {
-                        setIdentity();
-                        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-                            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesStudentName : "");
-                        } else {
-                            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
-                        }
-                        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
-                    });
-                }
+//                if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0) {
+//                    new SwitchClassesStudentPop(context).setOnCheckCallBack(() -> {
+//                        setIdentity();
+//                        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+//                            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesStudentName : "");
+//                        } else {
+//                            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "");
+//                        }
+//                        EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_HOME, ""));
+//                    });
+//                }
                 break;
             case R.id.layout2://切换身份（学校）
                 new SwitchIdentityPop(context).setOnCheckCallBack(this::setData);
@@ -297,7 +292,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
 //                context.startActivity(new Intent(context, PrivacyActivity.class));
                 break;
             case R.id.head_img:
-                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+                if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
                     //rxPermission();
                 }
                 break;
@@ -362,9 +357,9 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         //切换班级判断老师或班主任
         if (SpData.getIdentityInfo() != null
                 && SpData.getIdentityInfo().staffIdentity()) {
-            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "教师" : "");
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.Schoolinfo().getSchoolName() + "  " + "教师" : "");
         } else {
-            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.getIdentityInfo().schoolName + "  " + "家长" : "");
+            user_identity.setText(SpData.getIdentityInfo() != null ? SpData.Schoolinfo().getSchoolName() + "  " + "家长" : "");
         }
     }
 

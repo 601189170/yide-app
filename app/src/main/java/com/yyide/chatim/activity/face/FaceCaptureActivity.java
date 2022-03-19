@@ -30,7 +30,6 @@ import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.dialog.DeptSelectPop;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.FaceOssBean;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDeptRsp;
 import com.yyide.chatim.presenter.FaceUploadPresenter;
 import com.yyide.chatim.view.FaceUploadView;
@@ -84,7 +83,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         mDestinationUri = Uri.fromFile(new File(getCacheDir(), "cropImage.png"));
         //classesId = SpData.getIdentityInfo().classesId;
         //depId = SpData.getIdentityInfo().teacherDepId;
-        realname = SpData.getIdentityInfo().realname;
+        realname = SpData.getIdentityInfo().getIdentityName();
         Log.e("FaceUploadPresenter", "getFaceData: name=" + realname + ",classId=" + classesId + ",depId=" + depId);
         //人名或者id为空则不能上传人脸
         parmsNull();
@@ -94,19 +93,18 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     private void parmsNull() {
         if (!SpData.getIdentityInfo().staffIdentity()) {
             tvStudentName.setVisibility(View.VISIBLE);
-            initClassData();
             if (TextUtils.isEmpty(studentId) || "0".equals(studentId)) {
                 warnTip(getString(R.string.face_classid_null_tip));
             } else {
                 initClassView();
-                mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+                mvpPresenter.getFaceData();
             }
         } else {
             tvStudentName.setVisibility(View.GONE);
             if (TextUtils.isEmpty(realname)) {
                 warnTip(getString(R.string.face_username_null_tip));
             } else {
-                mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+                mvpPresenter.getFaceData();
             }
         }
     }
@@ -299,7 +297,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         } else {
             tv_face_capture_tip.setText(R.string.face_upload_fail_tip);
         }
-        mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+        mvpPresenter.getFaceData();
     }
 
     @Override
@@ -307,7 +305,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
         Log.e(TAG, "faceUploadFail: " + msg);
         ToastUtils.showShort("提交失败：" + msg);
         tv_face_capture_tip.setText(R.string.face_upload_fail_tip);
-        mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+        mvpPresenter.getFaceData();
     }
 
     @Override
@@ -354,29 +352,6 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
 
     }
 
-    private void initClassData() {
-        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
-        final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-        classList.clear();
-        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
-            final String studentName = formBean.studentName;
-            final String studentId = formBean.studentId;
-            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            dataBean.setDeptId(studentId);
-            dataBean.setDeptName(studentName);
-            dataBean.setIsDefault(0);
-            classList.add(dataBean);
-        }
-        if (!classList.isEmpty()) {
-            final LeaveDeptRsp.DataBean dataBean = classList.get(0);
-            dataBean.setIsDefault(1);
-            studentId = dataBean.getDeptId();
-        } else {
-            warnTip(getString(R.string.face_classid_null_tip));
-            tvStudentName.setVisibility(View.GONE);
-        }
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initClassView() {
         final Optional<LeaveDeptRsp.DataBean> classOptional = classList.stream().filter(it -> it.getIsDefault() == 1).findFirst();
@@ -400,7 +375,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
                                     warnTip(getString(R.string.face_classid_null_tip));
                                 }
                                 studentId = id;
-                                mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+                                mvpPresenter.getFaceData();
                             });
                         }
                 );

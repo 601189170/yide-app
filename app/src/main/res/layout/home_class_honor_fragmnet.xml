@@ -28,8 +28,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/icon_zy" />
+                android:layout_marginLeft="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +57,7 @@
             <com.jude.rollviewpager.RollPagerView
                 android:id="@+id/announRoll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/iv_bg"
@@ -74,7 +73,7 @@
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginEnd="@dimen/dp_20"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp" />
 
         </FrameLayout>
     </LinearLayout>

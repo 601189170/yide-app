@@ -12,14 +12,12 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.widget.MsgView;
 import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
-import com.yyide.chatim.activity.NoteBookActivity;
 import com.yyide.chatim.activity.book.NewBookActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
@@ -45,10 +43,10 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     private static final String TAG = "MessageFragment";
     @BindView(R.id.note)
     LinearLayout note;
-    @BindView(R.id.slidingTabLayout)
-    SlidingTabLayout mSlidingTabLayout;
-    @BindView(R.id.viewPager2)
-    ViewPager viewPager;
+    //    @BindView(R.id.slidingTabLayout)
+//    SlidingTabLayout mSlidingTabLayout;
+//    @BindView(R.id.viewPager2)
+//    ViewPager viewPager;
     private MsgView msgView;
     private View mBaseView;
     private int type = 0;
@@ -66,13 +64,14 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         super.onViewCreated(view, savedInstanceState);
         EventBus.getDefault().register(this);
         type = MMKV.defaultMMKV().decodeInt(MMKVConstant.YD_MAIN_JUMP_TYPE);
-        fragment = new TodoMsgFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("type", type);
-        fragment.setArguments(bundle);
-        Log.e(TAG, "onViewCreated: " + type);
-        setTab(type);
-        mvpPresenter.getMessageNumber();
+//        fragment = new TodoMsgFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putInt("type", type);
+//        fragment.setArguments(bundle);
+//        Log.e(TAG, "onViewCreated: " + type);
+        //setTab(type);
+        //mvpPresenter.getMessageNumber();
+        getChildFragmentManager().beginTransaction().replace(R.id.container, new ConversationFragment()).commit();
     }
 
     @Override
@@ -85,46 +84,46 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         super.onHiddenChanged(hidden);
         Log.e(TAG, "onHiddenChanged: hidden = " + hidden);
         type = MMKV.defaultMMKV().decodeInt(MMKVConstant.YD_MAIN_JUMP_TYPE);
-        if (!hidden && type > 0) {
-            if (mSlidingTabLayout != null) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", type);
-                fragment.setArguments(bundle);
-                mSlidingTabLayout.setCurrentTab(type);
-                fragment.onHiddenChanged(false);
-            }
-        }
+//        if (!hidden && type > 0) {
+//            if (mSlidingTabLayout != null) {
+//                Bundle bundle = new Bundle();
+//                bundle.putInt("type", type);
+//                fragment.setArguments(bundle);
+//                mSlidingTabLayout.setCurrentTab(type);
+//                fragment.onHiddenChanged(false);
+//            }
+//        }
     }
 
-    void setTab(int position) {
-        List<String> mTitles = new ArrayList<>();
-        mTitles.add("消息");
-        mTitles.add("待办");
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-            @Override
-            public Fragment getItem(int position) {
-                if (position == 0) {
-                    return new ConversationFragment();
-                } else {
-                    return fragment;
-                }
-            }
-
-            @Override
-            public int getCount() {
-                return mTitles.size();
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return mTitles.get(position);
-            }
-
-        });
-        mSlidingTabLayout.setViewPager(viewPager);
-        mSlidingTabLayout.setCurrentTab(position);// todo  默认选中 //第一次加载设置默认
-    }
+//    void setTab(int position) {
+//        List<String> mTitles = new ArrayList<>();
+//        mTitles.add("消息");
+//        mTitles.add("待办");
+//        viewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+//
+//            @Override
+//            public Fragment getItem(int position) {
+//                if (position == 0) {
+//                    return new ConversationFragment();
+//                } else {
+//                    return fragment;
+//                }
+//            }
+//
+//            @Override
+//            public int getCount() {
+//                return mTitles.size();
+//            }
+//
+//            @Override
+//            public CharSequence getPageTitle(int position) {
+//                return mTitles.get(position);
+//            }
+//
+//        });
+//        mSlidingTabLayout.setViewPager(viewPager);
+//        mSlidingTabLayout.setCurrentTab(position);// todo  默认选中 //第一次加载设置默认
+//    }
 
     @OnClick({R.id.note})
     public void onViewClicked(View view) {
@@ -136,7 +135,7 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_MESSAGE_TODO_NUM.equals(messageEvent.getCode())) {
-            setNumber(messageEvent.getCount());
+            //setNumber(messageEvent.getCount());
         }
     }
 
@@ -152,23 +151,23 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
         if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
             if (model.getData() != null) {
                 EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", model.getData().getTotal()));
-                setNumber(model.getData().getTotal());
+//                setNumber(model.getData().getTotal());
             }
         }
     }
 
-    private void setNumber(int count) {
-        /**设置未读消息消息的背景*/
-        msgView = mSlidingTabLayout.getMsgView(1);
-        if (msgView != null) {
-            msgView.setBackgroundColor(Color.parseColor("#fb2d24"));
-        }
-        if (count > 0) {
-            mSlidingTabLayout.showMsg(1, count);
-        } else {
-            mSlidingTabLayout.hideMsg(1);
-        }
-    }
+//    private void setNumber(int count) {
+//        /**设置未读消息消息的背景*/
+//        msgView = mSlidingTabLayout.getMsgView(1);
+//        if (msgView != null) {
+//            msgView.setBackgroundColor(Color.parseColor("#fb2d24"));
+//        }
+//        if (count > 0) {
+//            mSlidingTabLayout.showMsg(1, count);
+//        } else {
+//            mSlidingTabLayout.hideMsg(1);
+//        }
+//    }
 
     @Override
     public void messageNumberFail(String msg) {

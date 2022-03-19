@@ -1,323 +1,347 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F9FAF9">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F5F8FC"
-            android:paddingBottom="70dp">
-
-            <TextView
-                android:id="@+id/tv_ask_for_leave_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="19dp"
-                android:text="@string/ask_for_leave_time"
-                android:textColor="#ff11C685"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_start_time"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
-                android:paddingStart="@dimen/dp_20"
-                android:paddingEnd="@dimen/dp_20"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_ask_for_leave_time">
+                android:layout_height="match_parent"
+                android:paddingBottom="30dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/start_time"
-                    android:textColor="@color/text_333333"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_start_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/icon_right"
-                    android:drawablePadding="@dimen/dp_5"
-                    android:text="@string/please_select"
-                    android:textColor="#ff666666"
-                    android:textSize="@dimen/text_12"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/line1"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="@dimen/dp_20"
-                android:background="#DCDFE6"
-                app:layout_constraintTop_toBottomOf="@id/cl_start_time" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_end_time"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:background="@color/white"
-                android:paddingStart="@dimen/dp_20"
-                android:paddingEnd="@dimen/dp_20"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/end_time"
-                    android:textColor="@color/text_333333"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_end_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/icon_right"
-                    android:drawablePadding="@dimen/dp_5"
-                    android:text="@string/please_select"
-                    android:textColor="#ff666666"
-                    android:textSize="@dimen/text_12"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/tv_reason_leave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_20"
-                android:text="@string/reason_for_leave"
-                android:textColor="#ff11C685"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_end_time" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_reason_leave"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/tv_reason_leave">
-
-                <EditText
-                    android:id="@+id/et_reason_leave"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_student"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_16"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:background="@drawable/leave_reason_input_box_bg_shape"
-                    android:hint="@string/input_reason_for_leave"
-                    android:padding="@dimen/dp_10"
-                    android:textColorHint="#BCC1CB"
-                    android:textSize="@dimen/text_13"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="@dimen/dp_50"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_15"
+                    android:paddingEnd="@dimen/dp_15"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_tag_hint"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="请假学生"
+                        android:textColor="#ff333333"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ff666666"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ct_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_20"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:paddingBottom="@dimen/dp_16"
-                    app:layout_constraintTop_toBottomOf="@id/et_reason_leave" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:background="@color/white"
+                    android:paddingBottom="@dimen/dp_15"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_student">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_department"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
-                android:paddingStart="@dimen/dp_20"
-                android:paddingEnd="@dimen/dp_20"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_reason_leave">
+                    <TextView
+                        android:id="@+id/tv_ask_for_leave_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_15"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:gravity="center"
+                        android:text="@string/ask_for_leave_time"
+                        android:textColor="@color/text_666666"
+                        android:textSize="@dimen/text_12"
+                        app:drawableStartCompat="@mipmap/icon_leave_head"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/choose_department"
-                    android:textColor="@color/text_333333"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <EditText
+                        android:id="@+id/etStartTime"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginStart="@dimen/dp_15"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:background="@drawable/radius_f7f7f7_4dp"
+                        android:focusable="false"
+                        android:gravity="center"
+                        android:hint="开始时间"
+                        android:textColorHint="#ff666666"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tvCenter"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_ask_for_leave_time" />
 
-                <TextView
-                    android:id="@+id/tv_department"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dp_5"
-                    android:textColor="#ff666666"
-                    android:textSize="@dimen/text_12"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tvCenter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="至"
+                        android:textColor="#ff666666"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/etStartTime"
+                        app:layout_constraintEnd_toEndOf="@+id/etEndTime"
+                        app:layout_constraintStart_toStartOf="@+id/etStartTime"
+                        app:layout_constraintTop_toTopOf="@+id/etStartTime"
+                        app:layout_constraintVertical_bias="0.483" />
 
-            <TextView
-                android:id="@+id/tv_flow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_20"
-                android:text="@string/flow"
-                android:textColor="#ff11C685"
-                android:textSize="@dimen/text_14"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_department" />
+                    <EditText
+                        android:id="@+id/etEndTime"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_40"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/radius_f7f7f7_4dp"
+                        android:focusable="false"
+                        android:gravity="center"
+                        android:hint="结束时间"
+                        android:textColorHint="#ff666666"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tvCenter"
+                        app:layout_constraintTop_toTopOf="@+id/etStartTime" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_flow"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@id/tv_flow">
+                    <TextView
+                        android:id="@+id/tv_reason_leave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_15"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:text="@string/reason_for_leave"
+                        android:textColor="@color/text_666666"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/etEndTime" />
 
-                <TextView
-                    android:id="@+id/tv_approver"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="48dp"
-                    android:text="@string/approver_required"
-                    android:textColor="#ff999999"
-                    android:textSize="@dimen/text_14"
-                    app:layout_constraintBottom_toTopOf="@id/line2"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_reason_leave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:background="@color/white"
+                        app:layout_constraintTop_toBottomOf="@id/tv_reason_leave">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@drawable/icon_add_staff"
-                    app:layout_constraintBottom_toTopOf="@id/line2"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="invisible"/>
-                <LinearLayout
-                    android:id="@+id/ll_approver_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_50"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    app:layout_constraintBottom_toTopOf="@id/line2"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"/>
+                        <EditText
+                            android:id="@+id/et_reason_leave"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_15"
+                            android:layout_marginEnd="@dimen/dp_15"
+                            android:background="@drawable/leave_reason_input_box_bg_shape"
+                            android:hint="@string/input_reason_for_leave"
+                            android:padding="@dimen/dp_10"
+                            android:textColorHint="#BCC1CB"
+                            android:textSize="@dimen/text_13"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:id="@+id/line2"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerview_tag_hint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_15"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginEnd="@dimen/dp_15"
+                            app:layout_constraintTop_toBottomOf="@id/et_reason_leave" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_department"
                     android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginStart="48dp"
-                    android:background="#DCDFE6"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_copy_people"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="48dp"
-                    android:text="@string/copy_people"
-                    android:textColor="#ff999999"
-                    android:textSize="@dimen/text_15"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line2" />
-
-                <ImageView
-                    android:id="@+id/iv_add_staff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@drawable/icon_add_staff"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line2"
-                    android:visibility="gone"/>
-
-                <LinearLayout
-                    android:id="@+id/ll_copyer_list"
-                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_50"
-                    app:layout_constraintRight_toLeftOf="@id/iv_add_staff"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginEnd="@dimen/dp_20"
-                    app:layout_constraintTop_toBottomOf="@id/line2"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"/>
-
-                <View
-                    android:id="@+id/view_dot"
-                    android:layout_width="@dimen/dp_8"
-                    android:layout_height="@dimen/dp_8"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:background="@drawable/black11_dot_shape"
-                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/white"
+                    android:paddingStart="@dimen/dp_15"
+                    android:paddingEnd="@dimen/dp_15"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/ct_time">
 
-                <View
-                    android:layout_width="@dimen/dp_8"
-                    android:layout_height="@dimen/dp_8"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:background="@drawable/black11_dot_shape"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/line2" />
+                    <TextView
+                        android:id="@+id/tvBranch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@mipmap/icon_leave_approva"
+                        android:drawablePadding="@dimen/dp_2"
+                        android:text="@string/choose_department"
+                        android:textColor="@color/text_333333"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="21dp"
-                    android:layout_marginBottom="21dp"
-                    android:background="@color/black11"
-                    app:layout_constraintLeft_toLeftOf="@id/view_dot"
-                    app:layout_constraintRight_toRightOf="@id/view_dot" />
+                    <TextView
+                        android:id="@+id/tv_department"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/dp_5"
+                        android:textColor="@color/text_999999"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ctProcess"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:background="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/cl_department">
+
+                    <TextView
+                        android:id="@+id/tv_flow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_15"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:text="@string/flow"
+                        android:textColor="@color/text_666666"
+                        android:textSize="@dimen/text_14"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_flow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:background="@color/white"
+                        android:paddingBottom="@dimen/dp_80"
+                        app:layout_constraintTop_toBottomOf="@id/tv_flow">
+
+                        <View
+                            android:id="@+id/viewTop"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginStart="@dimen/dp_15"
+                            android:background="@drawable/black11_dot_shape"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_approver"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_approver" />
+
+                        <View
+                            android:id="@+id/viewLine"
+                            android:layout_width="1dp"
+                            android:layout_height="0dp"
+                            android:background="@color/black11"
+                            app:layout_constraintBottom_toTopOf="@+id/viewCode"
+                            app:layout_constraintEnd_toEndOf="@+id/viewCode"
+                            app:layout_constraintStart_toStartOf="@+id/viewCode"
+                            app:layout_constraintTop_toBottomOf="@+id/viewTop" />
+
+                        <View
+                            android:id="@+id/viewCode"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginStart="@dimen/dp_15"
+                            android:background="@drawable/black11_dot_shape"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_copy_people"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_copy_people" />
+
+                        <TextView
+                            android:id="@+id/tv_approver"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:text="@string/approver_required"
+                            android:textColor="#ff666666"
+                            android:textSize="@dimen/text_14"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/iv_add_approval"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dp_15"
+                            android:src="@mipmap/icon_add_staff"
+                            android:visibility="visible"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/approvalList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toTopOf="@+id/tv_copy_people"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_approver" />
+
+                        <TextView
+                            android:id="@+id/tv_copy_people"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:text="@string/copy_people"
+                            android:textColor="#ff666666"
+                            android:textSize="@dimen/text_15"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/approvalList" />
+
+                        <ImageView
+                            android:id="@+id/iv_add_staff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dp_15"
+                            android:src="@mipmap/icon_add_staff"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_copy_people"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_copy_people" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/ccList"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp_20"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_copy_people" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Button
-                android:id="@+id/btn_commit"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
-                app:layout_constraintTop_toBottomOf="@id/cl_flow"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:background="@drawable/bg_blue"
-                android:text="@string/commit"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_18"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <Button
+        android:id="@+id/btn_commit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:background="@drawable/bg_blue"
+        android:text="@string/commit"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

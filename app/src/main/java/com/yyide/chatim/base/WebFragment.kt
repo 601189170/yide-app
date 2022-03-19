@@ -3,7 +3,6 @@ package com.yyide.chatim.base
 import android.annotation.SuppressLint
 import android.net.http.SslError
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,11 @@ import android.view.ViewGroup
 import android.webkit.*
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
-import com.alibaba.fastjson.JSON
 import com.blankj.utilcode.util.ScreenUtils
 import com.blankj.utilcode.util.SizeUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.blankj.utilcode.util.Utils
 import com.yyide.chatim.SpData
-import com.yyide.chatim.activity.WebViewActivity
 import com.yyide.chatim.databinding.FragmentWebBinding
-import com.yyide.chatim.model.WebModel
 
 private const val ARG_PARAM1 = "param1"
 
@@ -96,7 +91,7 @@ class WebFragment : BaseFragment() {
 
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
-                if (SpData.User() != null) {
+                if (SpData.getLogin() != null) {
                     //Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().data.token)
                     //mWebView!!.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().token + "')")
                 }

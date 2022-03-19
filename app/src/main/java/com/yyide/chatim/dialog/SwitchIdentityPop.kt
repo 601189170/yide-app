@@ -4,20 +4,16 @@ import android.app.Activity
 import android.util.Log
 import android.view.*
 import android.widget.PopupWindow
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.blankj.utilcode.util.ToastUtils
 import com.tencent.qcloud.tim.uikit.TUIKit
 import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.adapter.SwitchIdentityAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.EventMessage
-import com.yyide.chatim.model.IdentityBean
 import com.yyide.chatim.model.SchoolRsp
 import com.yyide.chatim.model.UserInfo
 import com.yyide.chatim.utils.DemoLog
@@ -33,7 +29,7 @@ class SwitchIdentityPop(var context: Activity) : PopupWindow() {
     var mWindow: Window? = null
     var mOkHttpClient = OkHttpClient()
     var loadingTools: LoadingTools? = null
-    var identityBean: IdentityBean? = null
+    var identityBean: SchoolRsp.IdentityBean? = null
     private var mOnCheckCallBack: OnCheckCallBack? = null
     fun setOnCheckCallBack(mOnCheckCallBack: OnCheckCallBack?) {
         this.mOnCheckCallBack = mOnCheckCallBack

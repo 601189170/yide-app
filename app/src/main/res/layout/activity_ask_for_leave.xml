@@ -4,35 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.leave.AskForLeaveActivity">
+    android:background="@color/white">
 
     <include
         android:id="@+id/top"
         layout="@layout/title_layout2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:background="@color/white"
-        app:tabTextColor="#909399"
-        app:tabIndicatorHeight="3dp"
-        app:tabIndicatorColor="@color/colorPrimaryDark"
-        app:tabIndicatorFullWidth="false"
-        app:tabMaxWidth="0dp"
-        app:tabMode="fixed"
-        app:tabGravity="fill"
-        app:tabSelectedTextColor="#303133"
-        app:layout_constraintTop_toBottomOf="@+id/top" />
+        android:layout_height="@dimen/dp_44"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.viewpager2.widget.ViewPager2
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top"
+        app:layout_scrollFlags="scroll|snap|enterAlways"
+        app:tl_indicator_color="@color/colorPrimary"
+        app:tl_indicator_height="2dp"
+        app:tl_indicator_width="20dp"
+        app:tl_tab_padding="@dimen/dp_40"
+        app:tl_tab_space_equal="false"
+        app:tl_textSelectColor="@color/colorAccent"
+        app:tl_textUnselectColor="@color/text_999999"
+        app:tl_textsize="@dimen/text_15" />
+
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#F5F8FC"
+        android:background="#F9FAF9"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tablayout" />
+        app:layout_constraintTop_toBottomOf="@+id/slidingTabLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

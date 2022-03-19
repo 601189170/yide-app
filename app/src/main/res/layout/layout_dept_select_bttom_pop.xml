@@ -78,14 +78,15 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#DCDFE6"
+            android:background="#F9FAF9"
             app:layout_constraintTop_toBottomOf="@id/constraintLayout"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginEnd="@dimen/dp_20"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="#F5F8FC"
+            android:background=" #F9FAF9
+"
             android:padding="@dimen/dp_20"
             app:layout_constraintBottom_toBottomOf="parent">
 

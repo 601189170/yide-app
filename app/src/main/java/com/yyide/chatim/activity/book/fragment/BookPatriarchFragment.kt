@@ -71,7 +71,7 @@ class BookPatriarchFragment : BaseMvpFragment<BookPresenter>(), BookView {
             if (model.code == BaseConstant.REQUEST_SUCCESS) {
                 viewBinding.linearlayout.visibility = View.VISIBLE
                 if (TextUtils.isEmpty(model.data.schoolName_)) {
-                    viewBinding.tvSchoolName.text = SpData.getIdentityInfo().schoolName
+                    viewBinding.tvSchoolName.text = SpData.Schoolinfo().schoolName
                 } else {
                     viewBinding.tvSchoolName.text = model.data.schoolName_
                 }

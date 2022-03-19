@@ -193,11 +193,11 @@ public class WebViewActivity extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                if (SpData.User() != null) {
-                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.User().accessToken);
-                    mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.User().accessToken + "')");
+                if (SpData.getLogin() != null) {
+                    Log.d("onPageFinished", "SpData.User().getToken(:" + SpData.getLogin().accessToken);
+                    mWebView.loadUrl("javascript:sendH5Event('" + "setToken" + "','" + SpData.getLogin().accessToken + "')");
                     if (SpData.getIdentityInfo() != null) {
-                        mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.getIdentityInfo().schoolId + "')");
+                        mWebView.loadUrl("javascript:sendH5Event('" + "setSchoolId" + "','" + SpData.Schoolinfo().getId() + "')");
                     }
                     mWebView.loadUrl("javascript:sendH5Event('" + "setScanJson" + "','" + json + "')");
                 }
@@ -229,23 +229,23 @@ public class WebViewActivity extends BaseActivity {
                 if ("backApp".equalsIgnoreCase(webModel.enentName)) {
                     finish();
                 } else if ("getToken".equalsIgnoreCase(webModel.enentName)) {
-                    return SpData.User() != null ? SpData.User().accessToken : "";
+                    return SpData.getLogin() != null ? SpData.getLogin().accessToken : "";
                 } else if ("getUserInfo".equalsIgnoreCase(webModel.enentName)) {
-                    GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
                     String userId = "";
                     String schoolId = "";
-                    if (identityInfo != null) {
-                        schoolId = identityInfo.schoolId + "";
-                        if (identityInfo.staffIdentity()) {
-                            userId = identityInfo.userId;
-                        } else {
-                            GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-                            if (classInfo != null) {
-                                userId = classInfo.studentUserId;
-                            }
-
-                        }
-                    }
+//                    GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
+//                    if (identityInfo != null) {
+//                        schoolId = identityInfo.schoolId + "";
+//                        if (identityInfo.staffIdentity()) {
+//                            userId = identityInfo.userId;
+//                        } else {
+//                            GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+//                            if (classInfo != null) {
+//                                userId = classInfo.studentUserId;
+//                            }
+//
+//                        }
+//                    }
                     return JSON.toJSONString(new WebParamsUser(userId, schoolId));
                 }
             }

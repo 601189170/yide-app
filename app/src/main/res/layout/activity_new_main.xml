@@ -57,14 +57,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tab5_layout"
+            android:id="@+id/tab2_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
-                android:id="@+id/tab5"
+                android:id="@+id/tab2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/home_tab5"
@@ -80,14 +80,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tab2_layout"
+            android:id="@+id/tab3_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
-                android:id="@+id/tab2"
+                android:id="@+id/tab3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/home_tab2"
@@ -113,19 +113,19 @@
                 android:textColor="#fff"
                 android:textSize="@dimen/text_10"
                 android:visibility="visible"
-                app:layout_constraintLeft_toLeftOf="@id/tab2"
+                app:layout_constraintLeft_toLeftOf="@id/tab3"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tab3_layout"
+            android:id="@+id/tab4_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
-                android:id="@+id/tab3"
+                android:id="@+id/tab4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -142,14 +142,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tab4_layout"
+            android:id="@+id/tab5_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/ripple_corrugated">
 
             <CheckedTextView
-                android:id="@+id/tab4"
+                android:id="@+id/tab5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/home_tab4"

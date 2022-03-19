@@ -32,7 +32,8 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#F5F8FC"
+        android:background=" #F9FAF9
+"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintTop_toBottomOf="@+id/slidingTabLayout" />
 
@@ -52,7 +53,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_12"
             android:text="@string/notice_un_confirm_number"
-            android:textColor="#ff999999"
+            android:textColor="#ff666666"
             android:textSize="@dimen/text_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

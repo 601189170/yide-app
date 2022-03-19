@@ -121,7 +121,7 @@ public class AttendancePop extends PopupWindow {
 
         @Override
         protected void convert(@NonNull BaseViewHolder baseViewHolder, GetUserSchoolRsp.DataBean.FormBean item) {
-            if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+            if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
                 baseViewHolder.setText(R.id.className, item.classesStudentName);
             } else {
                 baseViewHolder.setText(R.id.className, item.classesName);

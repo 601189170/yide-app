@@ -57,6 +57,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
+/**
+ * 消息列表
+ */
 public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> implements UserNoticeView {
 
     private View mBaseView;
@@ -71,6 +74,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
     @BindView(R.id.cl_message)
     ConstraintLayout cl_message;
+    @BindView(R.id.cl_todo)
+    ConstraintLayout cl_todo;
     @BindView(R.id.tv_user_notice_content)
     TextView tv_user_notice_content;
     @BindView(R.id.tv_unNum)
@@ -104,6 +109,11 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         constraintLayout.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), MessageNoticeActivity.class));
         });
+
+        cl_todo.setOnClickListener(v -> {
+            //待办跳转
+        });
+
         ll_search.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), BookSearchActivity.class));
         });

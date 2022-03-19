@@ -69,7 +69,7 @@
             android:maxEms="14"
             android:singleLine="true"
             android:text="开学典礼"
-            android:textColor="#ff999999"
+            android:textColor="#ff666666"
             android:textSize="@dimen/text_16"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"

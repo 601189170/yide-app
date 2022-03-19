@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F8FC"
+    android:background=" #F9FAF9
+"
     tools:context=".activity.PreparesLessonActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -79,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp_12"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_class_name" />
 
@@ -421,7 +422,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/dp_10"
-                    android:background="#DCDFE6"
+                    android:background="#F9FAF9"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_after_class_name" />
 

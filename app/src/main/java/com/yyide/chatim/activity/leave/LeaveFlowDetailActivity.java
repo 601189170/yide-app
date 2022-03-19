@@ -1,11 +1,14 @@
 package com.yyide.chatim.activity.leave;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +24,11 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.qmuiteam.qmui.skin.QMUISkinManager;
+import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.popup.QMUIPopup;
+import com.qmuiteam.qmui.widget.popup.QMUIPopups;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.LeaveFlowAdapter;
@@ -29,18 +37,17 @@ import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveFlowBean;
 import com.yyide.chatim.presenter.leave.LeaveDetailPresenter;
 import com.yyide.chatim.utils.ButtonUtils;
 import com.yyide.chatim.utils.DateUtils;
-import com.yyide.chatim.utils.StatusBarUtils;
 import com.yyide.chatim.view.leave.LeaveDetailView;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,18 +110,13 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @BindView(R.id.tv_flow_content)
     TextView tv_flow_content;
 
-//    @BindView(R.id.tv_date)
-//    TextView tv_date;
-//
-//    @BindView(R.id.tv_time)
-//    TextView tv_time;
-
     @BindView(R.id.iv_flow_checked)
     ImageView iv_flow_checked;
 
     @BindView(R.id.iv_unfold)
     ImageView iv_unfold;
-
+    @BindView(R.id.btn_more)
+    Button btn_more;
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
     private boolean unfold = false;
@@ -132,7 +134,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        title.setText(R.string.detail);
+        title.setText(R.string.ask_for_leave);
         //type 1请假人 2审批人
         final int type = getIntent().getIntExtra("type", 1);
         if (type == 1) {
@@ -166,7 +168,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         finish();
     }
 
-    @OnClick({R.id.btn_refuse, R.id.btn_pass})
+    @OnClick({R.id.btn_refuse, R.id.btn_pass, R.id.btn_more})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.btn_refuse:
@@ -179,10 +181,77 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                     mvpPresenter.processExaminationApproval(id, 0);
                 }
                 break;
+            case R.id.btn_more:
+                showGlobalActionPopup(btn_more);
+                break;
             default:
                 break;
         }
     }
+
+    private void showGlobalActionPopup(View v) {
+        String[] listItems = new String[]{
+                "Change Skin"
+        };
+        List<String> data = new ArrayList<>();
+        Collections.addAll(data, listItems);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.simple_list_item, data);
+        AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) {
+                    final String[] items = new String[]{"转交", "回退"};
+                    new QMUIDialog.MenuDialogBuilder(LeaveFlowDetailActivity.this)
+                            .addItems(items, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //QDSkinManager.changeSkin(which + 1);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setSkinManager(QMUISkinManager.defaultInstance(LeaveFlowDetailActivity.this))
+                            .create()
+                            .show();
+                }
+                if (mGlobalAction != null) {
+                    mGlobalAction.dismiss();
+                }
+            }
+        };
+        mGlobalAction = QMUIPopups.listPopup(this,
+                QMUIDisplayHelper.dp2px(this, 100),
+                QMUIDisplayHelper.dp2px(this, 110),
+                adapter,
+                onItemClickListener)
+                .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
+                .preferredDirection(QMUIPopup.DIRECTION_TOP)
+                .shadow(true)
+                .edgeProtection(QMUIDisplayHelper.dp2px(this, 10))
+                .offsetYIfTop(QMUIDisplayHelper.dp2px(this, 5))
+                .skinManager(QMUISkinManager.defaultInstance(this))
+                .show(v);
+    }
+
+    private QMUIPopup mGlobalAction;
+    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            if (i == 0) {
+                final String[] items = new String[]{"蓝色（默认）", "黑色", "白色"};
+                new QMUIDialog.MenuDialogBuilder(LeaveFlowDetailActivity.this)
+                        .addItems(items, (dialog, which) -> {
+                            //QDSkinManager.changeSkin(which + 1);
+                            dialog.dismiss();
+                        })
+                        .setSkinManager(QMUISkinManager.defaultInstance(LeaveFlowDetailActivity.this))
+                        .create()
+                        .show();
+            }
+            if (mGlobalAction != null) {
+                mGlobalAction.dismiss();
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -211,146 +280,33 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     public void leaveDetail(LeaveDetailRsp leaveDetailRsp) {
         Log.e(TAG, "leaveDetail: " + leaveDetailRsp.toString());
         showBlankPage(leaveDetailRsp.getData() == null);
-        if (leaveDetailRsp.getCode() != 200) {
-            ToastUtils.showShort(leaveDetailRsp.getMsg());
+        if (leaveDetailRsp.getCode() != BaseConstant.REQUEST_SUCCESS2) {
+            ToastUtils.showShort(leaveDetailRsp.getMessage());
             return;
         }
-        final LeaveDetailRsp.DataBean data = leaveDetailRsp.getData();
+        final LeaveDetailRsp.DataDTO data = leaveDetailRsp.getData();
         leaveFlowBeanList.clear();
-        if ("2".equals(data.getLeaveType())) {
+        LeaveDetailRsp.DataDTO.ApprJsonDTO apprJson = data.getApprJson();
+        if (SpData.getIdentityInfo().staffIdentity()) {
             //教职工
             tv_department.setText(R.string.in_department);
-            tv_department_name.setText(data.getDeptOrClassName());
+            tv_department_name.setText(apprJson.getDept());
         } else {
             //监护人
             tv_department.setText(getString(R.string.choose_student));
-            tv_department_name.setText(data.getStudentName());
+            tv_department_name.setText(data.getName());
         }
-
-        tv_leave_title.setText(data.getName());
-        String initiateTime = data.getInitiateTime();
-        tv_leave_time.setText(DateUtils.formatTime(initiateTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd"));
-        final String starttime = DateUtils.formatTime(data.getStartTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
-        tv_start_time.setText(starttime);
-        final String endtime = DateUtils.formatTime(data.getEndTime(), "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
-        tv_end_time.setText(endtime);
-        tv_reason_for_leave_content.setText(data.getReason());
-
+        tv_leave_title.setText(data.getTitle());
+        tv_start_time.setText(apprJson.getStartTime());
+        tv_end_time.setText(apprJson.getEndTime());
+        tv_reason_for_leave_content.setText(apprJson.getReason());
         //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
-        final String approvalResult = data.getApprovalResult();
-        leaveStatus(approvalResult, tv_leave_flow_status);
-        final String approverName = data.getApproverName();
-        String approvalTime = data.getApprovalTime();
-        String[] initiateTimes = {"", ""};
-        if (initiateTime != null) {
-            initiateTime = DateUtils.formatTime(initiateTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
-            initiateTimes = initiateTime.split(" ");
-        }
-        //"2021.05.19 13:54" to "05.19 13:54"
-        String[] approvalTimes = {"", ""};
-        if (approvalTime != null) {
-            //"2021-05-19 14:17:36" to "05.19 13:54"
-            approvalTime = DateUtils.formatTime(approvalTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
-            approvalTimes = approvalTime.split(" ");
-        }
+        leaveStatus(data.getStatus(), tv_leave_flow_status);
 
-        String undoTime = data.getUndoTime();
-        String[] undoTimes = {"", ""};
-        if (undoTime != null) {
-            //"2021-05-19 14:17:36" to "05.19 13:54"
-            undoTime = DateUtils.formatTime(undoTime, "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm");
-            undoTimes = undoTime.split(" ");
-        }
-//        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-//            leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getInitName(), true, false, null));
-//        } else {
-            leaveFlowBeanList.add(new LeaveFlowBean("" + initiateTimes[1], "" + initiateTimes[0], "发起申请", data.getInitName(), true, false, data.getInitImage()));
-//        }
-        switch (approvalResult) {
-            case "0":
-                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, true, true, data.getApproverImage()));
-                break;
-            case "1":
-            case "2":
-                final List<LeaveDetailRsp.DataBean.ListBean> list = data.getList();
-                leaveFlowBeanList.add(new LeaveFlowBean("" + approvalTimes[1], "" + approvalTimes[0], "审批人", "" + approverName, "1".equals(approvalResult), list.isEmpty(), data.getApproverImage()));
-                if (!list.isEmpty()) {
-                    //leaveFlowCopyerList.addAll(list);
-                    for (LeaveDetailRsp.DataBean.ListBean listBean : list) {
-                        //leaveFlowBeanList.add(new LeaveFlowBean("", "", "抄送人", "" + listBean.getName(), "1".equals(approvalResult)));
-                        final ApproverRsp.DataBean.ListBean bean = new ApproverRsp.DataBean.ListBean();
-                        bean.setImage(listBean.getImage());
-                        bean.setName(listBean.getName());
-                        bean.setUserId(listBean.getUserId());
-                        leaveFlowCopyerList.add(bean);
-                    }
-                }
-                break;
-            case "3":
-                gp_copyer_list.setVisibility(View.GONE);
-                leaveFlowBeanList.add(new LeaveFlowBean("" + undoTimes[1], "" + undoTimes[0], "我", "" + data.getName(), true, true, null));
-                break;
-            default:
-                break;
-        }
-        leaveFlowAdapter = new LeaveFlowAdapter(this, leaveFlowBeanList);
+        //审批流程
+        leaveFlowAdapter = new LeaveFlowAdapter(this, data.getHiApprNodeList());
         recyclerViewFlow.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFlow.setAdapter(leaveFlowAdapter);
-        //显示抄送人列表
-        if (!leaveFlowCopyerList.isEmpty() && !"3".equals(approvalResult)) {
-            gp_copyer_list.setVisibility(View.VISIBLE);
-            tv_flow_content.setText(String.format(getString(R.string.carbon_copy_people_text), "" + leaveFlowCopyerList.size()));
-            //tv_date.setText(approvalTimes[0]);
-            //tv_time.setText(approvalTimes[1]);
-            iv_unfold.setOnClickListener(v -> {
-                        if (unfold) {
-                            ll_copyer_list.setVisibility(View.GONE);
-                            iv_unfold.setImageResource(R.drawable.icon_arrow_down);
-                            unfold = false;
-                            //滚动到底部
-                            nestedScrollView.fullScroll(NestedScrollView.FOCUS_UP);
-                        } else {
-                            ll_copyer_list.setVisibility(View.VISIBLE);
-                            iv_unfold.setImageResource(R.drawable.icon_arrow_up);
-                            unfold = true;
-                            //滚动到底部
-                            nestedScrollView.fullScroll(NestedScrollView.FOCUS_DOWN);
-                        }
-                    }
-            );
-            if (Objects.equals(approvalResult, "2")) {
-                iv_flow_checked.setVisibility(View.INVISIBLE);
-            }
-
-            for (int i = 0; i < leaveFlowCopyerList.size(); i++) {
-                if (i < 3) {
-                    final ApproverRsp.DataBean.ListBean listBean = leaveFlowCopyerList.get(i);
-                    final View view1 = LayoutInflater.from(this).inflate(R.layout.item_approver_head, null);
-                    final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
-                    final ImageView iv_user_head = view1.findViewById(R.id.iv_user_head);
-                    tv_copyer_name.setText(listBean.getName());
-                    showImage(listBean.getImage(), iv_user_head);
-                    ll_copyer_list.addView(view1);
-                    //setViewLayoutParams(view1, StatusBarUtils.dip2px(this, 45), 0);
-                }
-            }
-            if (leaveFlowCopyerList.size() > 3) {
-                final View view1 = LayoutInflater.from(this).inflate(R.layout.item_approver_head, null);
-                final TextView tv_copyer_name = view1.findViewById(R.id.tv_approver_name);
-                final ImageView userHeadImage = view1.findViewById(R.id.iv_user_head);
-                tv_copyer_name.setText(R.string.look_over_all);
-                userHeadImage.setImageResource(R.drawable.icon_read_more);
-                view1.setOnClickListener(v -> {
-                    final Intent intent = new Intent(LeaveFlowDetailActivity.this, LeaveCarbonCopyPeopleActivity.class);
-                    intent.putExtra("carbonCopyPeople", JSON.toJSONString(leaveFlowCopyerList));
-                    intent.putExtra("type", 2);
-                    startActivity(intent);
-                });
-                ll_copyer_list.addView(view1);
-            }
-
-        }
-
     }
 
     private void showImage(String url, ImageView imageView) {
@@ -374,7 +330,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @Override
     public void repealResult(BaseRsp baseRsp) {
         Log.e(TAG, "repealResult: " + baseRsp.toString());
-        if (baseRsp.getCode() == 200) {
+        if (baseRsp.getCode() == BaseConstant.REQUEST_SUCCESS2) {
             mvpPresenter.queryLeaveDetailsById(id);
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
@@ -390,7 +346,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @Override
     public void processApproval(BaseRsp baseRsp) {
         Log.e(TAG, "processApproval: " + baseRsp.toString());
-        if (baseRsp.getCode() == 200) {
+        if (baseRsp.getCode() == BaseConstant.REQUEST_SUCCESS2) {
             ToastUtils.showShort("审批成功");
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
@@ -416,16 +372,16 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 cl_repeal.setVisibility(View.GONE);
                 break;
             case "1":
-                view.setText(getString(R.string.pass_text));
-                view.setBackgroundResource(R.drawable.ask_for_leave_status_pass_shape);
-                view.setTextColor(getResources().getColor(R.color.black9));
-                cl_repeal.setVisibility(View.GONE);
-                break;
-            case "2":
                 view.setText(getString(R.string.approval_text));
                 view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
                 view.setTextColor(getResources().getColor(R.color.black9));
                 cl_repeal.setVisibility(View.VISIBLE);
+                break;
+            case "2":
+                view.setText(getString(R.string.pass_text));
+                view.setBackgroundResource(R.drawable.ask_for_leave_status_pass_shape);
+                view.setTextColor(getResources().getColor(R.color.black9));
+                cl_repeal.setVisibility(View.GONE);
                 break;
             case "3":
                 view.setText(getString(R.string.repeal_text));
@@ -447,7 +403,6 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             cl_content.setVisibility(View.VISIBLE);
         }
     }
-
 
     /**
      * 重设 view 的宽高

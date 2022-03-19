@@ -80,12 +80,18 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".activity.leave.AddApprovalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.leave.AddCcActivity"
+            android:exported="false" />
+        <activity
             android:name=".login.IdentitySelectActivity"
             android:exported="false" />
         <activity
             android:name=".login.NewLoginActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".NewMainActivity"
             android:exported="false" />
@@ -276,9 +282,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" /> <!-- android:theme="@style/AppTheme" -->
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" />
-
-        <!-- <meta-data -->
+            android:required="false" /> <!-- <meta-data -->
         <!-- android:name="design_width_in_dp" -->
         <!-- android:value="1080" /> -->
         <!-- <meta-data -->

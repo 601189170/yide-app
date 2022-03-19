@@ -9,7 +9,8 @@
         android:id="@+id/view6"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_12"
-        android:background="#F5F8FC"
+        android:background=" #F9FAF9
+"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

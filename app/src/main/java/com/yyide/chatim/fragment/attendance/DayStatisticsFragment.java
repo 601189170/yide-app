@@ -120,32 +120,32 @@ public class DayStatisticsFragment extends BaseMvpFragment<DayStatisticsPresente
         } else {
             dialogType = 4;
         }
-        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
-        //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
-        classList.clear();
-        final String classesStudentName = SpData.getClassesStudentName();
-        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
-            final String classesName = formBean.classesName;
-            final String studentName = formBean.classesStudentName;
-            final String classesId = formBean.classesId;
-            final String studentId = formBean.studentId;
-            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
-            dataBean.setDeptId(studentId);
-            dataBean.setClassId(classesId);
-            dataBean.setIsDefault(0);
-            if (SpData.getIdentityInfo().staffIdentity()) {
-                dataBean.setDeptName(classesName);
-                if (classesName.equals(classesStudentName)){
-                    dataBean.setIsDefault(1);
-                }
-            } else {
-                dataBean.setDeptName(studentName);
-                if (studentName.equals(classesStudentName)){
-                    dataBean.setIsDefault(1);
-                }
-            }
-            classList.add(dataBean);
-        }
+//        final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+//        //final GetUserSchoolRsp.DataBean.FormBean classInfo = SpData.getClassInfo();
+//        classList.clear();
+//        final String classesStudentName = SpData.getClassesStudentName();
+//        for (GetUserSchoolRsp.DataBean.FormBean formBean : form) {
+//            final String classesName = formBean.classesName;
+//            final String studentName = formBean.classesStudentName;
+//            final String classesId = formBean.classesId;
+//            final String studentId = formBean.studentId;
+//            final LeaveDeptRsp.DataBean dataBean = new LeaveDeptRsp.DataBean();
+//            dataBean.setDeptId(studentId);
+//            dataBean.setClassId(classesId);
+//            dataBean.setIsDefault(0);
+//            if (SpData.getIdentityInfo().staffIdentity()) {
+//                dataBean.setDeptName(classesName);
+//                if (classesName.equals(classesStudentName)){
+//                    dataBean.setIsDefault(1);
+//                }
+//            } else {
+//                dataBean.setDeptName(studentName);
+//                if (studentName.equals(classesStudentName)){
+//                    dataBean.setIsDefault(1);
+//                }
+//            }
+//            classList.add(dataBean);
+//        }
 
         if (classList.isEmpty()) {
             Log.e(TAG, "initClassData: 当前账号没有学生" );

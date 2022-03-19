@@ -128,11 +128,10 @@ object Base64Utils {
         return pwd.toString()
     }
 
-//    @RequiresApi(Build.VERSION_CODES.O)
+    //    @RequiresApi(Build.VERSION_CODES.O)
     fun getData(): String {
-        val identityInfo = SpData.getIdentityInfo()
         val data =
-            "{\"userId\":${identityInfo.userId},\"schoolId\":${identityInfo.schoolId},\"timestamp\":${System.currentTimeMillis()}}"
+            "{\"userId\":${SpData.getIdentityInfo().id},\"schoolId\":${SpData.Schoolinfo().id},\"timestamp\":${System.currentTimeMillis()}}"
         // 8位字符(随机⽣成，采⽤Base64 urlSafe模式编码)
 //        val decode = Base64.getUrlDecoder().decode(genRandomNum(6))
 //        val ivParam = Base64.getUrlEncoder().encodeToString(decode)

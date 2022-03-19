@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="#F5F8FC" />
+                android:background="#F9FAF9" />
 
             <FrameLayout
                 android:layout_width="match_parent"

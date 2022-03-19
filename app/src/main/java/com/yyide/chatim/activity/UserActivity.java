@@ -31,6 +31,7 @@ import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.FaceOssBean;
 import com.yyide.chatim.model.FaceProtocolBean;
 import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.UserBean;
 import com.yyide.chatim.presenter.UserPresenter;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.GlideUtil;
@@ -89,7 +90,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @BindView(R.id.tv_head_desc)
     TextView tvHeadDesc;
 
-    private GetUserSchoolRsp.DataBean userInfo;
+    private UserBean userInfo;
     private GetUserSchoolRsp.DataBean.FormBean studentInfo;
     private String classesId;
     private String realname;
@@ -110,28 +111,28 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
         mmkv = MMKV.defaultMMKV();
         userId = SpData.getUserId();
         EventBus.getDefault().register(this);
-        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
-            title.setText("学生信息");
-            setStudentInfo();
-        } else {
-            title.setText("我的信息");
-            setUserInfo();
-        }
+//        if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
+//            title.setText("学生信息");
+//            setStudentInfo();
+//        } else {
+        title.setText("我的信息");
+        setUserInfo();
+//        }
 //        classesId = SpData.getIdentityInfo().classesId;
-        if (!SpData.getIdentityInfo().staffIdentity()) {
-            final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
-            if (!form.isEmpty()) {
-                final GetUserSchoolRsp.DataBean.FormBean formBean = form.get(0);
-                try {
-                    studentId = formBean.studentId;
-                    classesId = formBean.classesId;
-                } catch (NumberFormatException exception) {
-                    Log.e(TAG, "studentId=" + formBean.studentId);
-                }
-            }
-        }
-        realname = SpData.getIdentityInfo().realname;
-        depId = SpData.getIdentityInfo().teacherDepId;
+//        if (!SpData.getIdentityInfo().staffIdentity()) {
+//            final List<GetUserSchoolRsp.DataBean.FormBean> form = SpData.getIdentityInfo().form;
+//            if (!form.isEmpty()) {
+//                final GetUserSchoolRsp.DataBean.FormBean formBean = form.get(0);
+//                try {
+//                    studentId = formBean.studentId;
+//                    classesId = formBean.classesId;
+//                } catch (NumberFormatException exception) {
+//                    Log.e(TAG, "studentId=" + formBean.studentId);
+//                }
+//            }
+//        }
+        realname = SpData.getIdentityInfo().getIdentityName();
+        depId = 0;
         Log.e(TAG, "getFaceData: name=" + realname + ",classId=" + classesId);
     }
 
@@ -141,45 +142,45 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     }
 
     private void setUserInfo() {
-        userInfo = SpData.getIdentityInfo();
+        userInfo = SpData.User();
         if (userInfo != null) {
-            GlideUtil.loadImageHead(this, userInfo.img, img);
-            sex.setText(!TextUtils.isEmpty(userInfo.sex) ? ("1".equals(userInfo.sex) ? "男" : "女") : "未设置");
-            phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
-            date.setText(!TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "未设置");
-            email.setText(!TextUtils.isEmpty(userInfo.email) ? userInfo.email : "未设置");
-            face.setText("未设置");
+//            GlideUtil.loadImageHead(this, userInfo.img, img);
+//            sex.setText(!TextUtils.isEmpty(userInfo.sex) ? ("1".equals(userInfo.sex) ? "男" : "女") : "未设置");
+//            phone.setText(!TextUtils.isEmpty(userInfo.username) ? userInfo.username : "未设置");
+//            date.setText(!TextUtils.isEmpty(userInfo.birthdayDate) ? userInfo.birthdayDate : "未设置");
+//            email.setText(!TextUtils.isEmpty(userInfo.email) ? userInfo.email : "未设置");
+//            face.setText("未设置");
         }
     }
 
     private void setStudentInfo() {
-        tvHeadDesc.setText("学生头像");
-        studentInfo = SpData.getClassInfo();
-        userInfo = SpData.getIdentityInfo();
-        fl_patriarch.setVisibility(View.VISIBLE);
-        fl_patriarch.setOnClickListener(v -> {
-            isStudent = true;
-            rxPermission();
-        });
-        if (studentInfo != null) {
-            GlideUtil.loadImageHead(this, studentInfo.studentPic, img);
-            sex.setText(!TextUtils.isEmpty(studentInfo.studentSex) ? ("1".equals(studentInfo.studentSex) ? "男" : "女") : "未设置");
-            phone.setText(!TextUtils.isEmpty(studentInfo.studentPhone) ? studentInfo.studentPhone : "未设置");
-            date.setText(!TextUtils.isEmpty(studentInfo.studentBirthdayDate) ? studentInfo.studentBirthdayDate : "未设置");
-            layout5.setVisibility(View.GONE);
-            email_line.setVisibility(View.GONE);
-            face.setText("未设置");
-        }
-        userInfo = SpData.getIdentityInfo();
-        if (userInfo != null) {
-            GlideUtil.loadImageHead(this, userInfo.img, patriarchImg);
-        }
+//        tvHeadDesc.setText("学生头像");
+//        studentInfo = SpData.getClassInfo();
+//        userInfo = SpData.getIdentityInfo();
+//        fl_patriarch.setVisibility(View.VISIBLE);
+//        fl_patriarch.setOnClickListener(v -> {
+//            isStudent = true;
+//            rxPermission();
+//        });
+//        if (studentInfo != null) {
+//            GlideUtil.loadImageHead(this, studentInfo.studentPic, img);
+//            sex.setText(!TextUtils.isEmpty(studentInfo.studentSex) ? ("1".equals(studentInfo.studentSex) ? "男" : "女") : "未设置");
+//            phone.setText(!TextUtils.isEmpty(studentInfo.studentPhone) ? studentInfo.studentPhone : "未设置");
+//            date.setText(!TextUtils.isEmpty(studentInfo.studentBirthdayDate) ? studentInfo.studentBirthdayDate : "未设置");
+//            layout5.setVisibility(View.GONE);
+//            email_line.setVisibility(View.GONE);
+//            face.setText("未设置");
+//        }
+//        userInfo = SpData.getIdentityInfo();
+//        if (userInfo != null) {
+//            GlideUtil.loadImageHead(this, userInfo.img, patriarchImg);
+//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mvpPresenter.getFaceData(realname, classesId, depId, studentId);
+        mvpPresenter.getFaceData();
     }
 
     @Override
@@ -191,13 +192,13 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout1://头像
-                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)
-                        && studentInfo == null) {
-                    ToastUtils.showShort("未绑定学生信息");
-                } else {
-                    isStudent = false;
-                    rxPermission();
-                }
+//                if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)
+//                        && studentInfo == null) {
+//                    ToastUtils.showShort("未绑定学生信息");
+//                } else {
+//                    isStudent = false;
+//                    rxPermission();
+//                }
                 break;
             case R.id.layout2://手机号
                 //startActivity(new Intent(this, CheckPhoneActivity.class));
@@ -247,32 +248,33 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     /**
      * 保存当前用户同意人脸采集协议
      */
-    private void saveUserAgreedFaceProtocol(){
+    private void saveUserAgreedFaceProtocol() {
         final String decodeString = mmkv.decodeString(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS);
-        if (!TextUtils.isEmpty(decodeString)){
+        if (!TextUtils.isEmpty(decodeString)) {
             final List<FaceProtocolBean> faceProtocolBeans = JSON.parseArray(decodeString, FaceProtocolBean.class);
-            faceProtocolBeans.add(new FaceProtocolBean(userId,true));
-            mmkv.encode(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS,JSON.toJSONString(faceProtocolBeans));
+            faceProtocolBeans.add(new FaceProtocolBean(userId, true));
+            mmkv.encode(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS, JSON.toJSONString(faceProtocolBeans));
             return;
         }
         final List<FaceProtocolBean> faceProtocolBeans = new ArrayList<>();
-        faceProtocolBeans.add(new FaceProtocolBean(userId,true));
-        mmkv.encode(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS,JSON.toJSONString(faceProtocolBeans));
+        faceProtocolBeans.add(new FaceProtocolBean(userId, true));
+        mmkv.encode(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS, JSON.toJSONString(faceProtocolBeans));
     }
 
     /**
      * 判断当前用户是否同意过人脸采集协议
+     *
      * @return
      */
-    private boolean getUserAgreedProtocol(){
-        if (TextUtils.isEmpty(userId)){
+    private boolean getUserAgreedProtocol() {
+        if (TextUtils.isEmpty(userId)) {
             return false;
         }
         final String decodeString = mmkv.decodeString(MMKVConstant.YD_FACE_PROTOCOL_AGREED_STATUS);
-        if (!TextUtils.isEmpty(decodeString)){
+        if (!TextUtils.isEmpty(decodeString)) {
             final List<FaceProtocolBean> faceProtocolBeans = JSON.parseArray(decodeString, FaceProtocolBean.class);
             for (FaceProtocolBean faceProtocolBean : faceProtocolBeans) {
-                if (Objects.equals(faceProtocolBean.getUserId(), userId)){
+                if (Objects.equals(faceProtocolBean.getUserId(), userId)) {
                     return faceProtocolBean.getAgreed();
                 }
             }
@@ -288,16 +290,16 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     public void Event(EventMessage messageEvent) {
         if (BaseConstant.TYPE_UPDATE_USER_EMAIL.equals(messageEvent.getCode())) {
             email.setText(messageEvent.getMessage());
-            userInfo.email = messageEvent.getMessage();
+            userInfo.setEmail(messageEvent.getMessage());
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             updateInfo();
         } else if (BaseConstant.TYPE_UPDATE_USER_SEX.equals(messageEvent.getCode())) {
             if ("1".equals(messageEvent.getMessage())) {//男
                 sex.setText("男");
-                userInfo.sex = "1";
+//                userInfo.sex = "1";
             } else if ("0".equals(messageEvent.getMessage())) {//女
                 sex.setText("女");
-                userInfo.sex = "0";
+//                userInfo.sex = "0";
             }
             SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             updateInfo();
@@ -305,12 +307,12 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     }
 
     private void updateInfo() {
-        if (userInfo != null) {
-            mvpPresenter.update(userInfo.userId + "",
-                    TextUtils.isEmpty(userInfo.sex) ? "" : userInfo.sex,
-                    TextUtils.isEmpty(userInfo.birthdayDate) ? "" : userInfo.birthdayDate,
-                    TextUtils.isEmpty(userInfo.email) ? "" : userInfo.email);
-        }
+//        if (userInfo != null) {
+//            mvpPresenter.update(userInfo.userId + "",
+//                    TextUtils.isEmpty(userInfo.sex) ? "" : userInfo.sex,
+//                    TextUtils.isEmpty(userInfo.birthdayDate) ? "" : userInfo.birthdayDate,
+//                    TextUtils.isEmpty(userInfo.email) ? "" : userInfo.email);
+//        }
     }
 
     @Override
@@ -342,7 +344,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
                         Long studentId = null;
                         if (!isStudent) {
                             if (SpData.getIdentityInfo() != null
-                                    && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)
+                                    && !SpData.getIdentityInfo().staffIdentity()
                                     && studentInfo != null && !TextUtils.isEmpty(studentInfo.studentId)) {
                                 studentId = Long.parseLong(SpData.getClassInfo().studentId);
                             }
@@ -397,10 +399,10 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     public void uploadFileSuccess(String imgUrl) {
         if (SpData.getClassInfo() != null
                 && SpData.getIdentityInfo() != null
-                && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+                && !SpData.getIdentityInfo().staffIdentity()) {
             if (isStudent) {//家长身份头像
                 if (userInfo != null) {//设置身份头像
-                    userInfo.img = imgUrl;
+//                    userInfo.img = imgUrl;
                     SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
                 }
                 GlideUtil.loadImageHead(this, imgUrl, patriarchImg);
@@ -414,7 +416,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
             }
         } else {//除家长身份外其他身份头像
             if (userInfo != null) {
-                userInfo.img = imgUrl;
+//                userInfo.img = imgUrl;
                 SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
             }
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_UPDATE_IMG, imgUrl));
@@ -454,7 +456,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
         date.setText(DateUtils.stampToDate(millseconds));
-        userInfo.birthdayDate = DateUtils.stampToDate(millseconds);
+//        userInfo.birthdayDate = DateUtils.stampToDate(millseconds);
         SPUtils.getInstance().put(SpData.IDENTIY_INFO, JSON.toJSONString(userInfo));
         updateInfo();
     }

@@ -126,22 +126,19 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 //        }
         //暂时使用固定班级id测试
         mvpPresenter.listTimeDataByApp("1491675357620822017");
-        GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-        if (identityInfo != null) {
-            if ("Y".equalsIgnoreCase(identityInfo.schoolType)) {
-                mvpPresenter.selectClassByAllSchool();
-            } else if ("N".equalsIgnoreCase(identityInfo.schoolType)) {
-                mvpPresenter.selectListBySchoolAll();
-            }
-        }
+//        GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
+//        if (identityInfo != null) {
+//            if ("Y".equalsIgnoreCase(identityInfo.schoolType)) {
+//                mvpPresenter.selectClassByAllSchool();
+//            } else if ("N".equalsIgnoreCase(identityInfo.schoolType)) {
+//                mvpPresenter.selectListBySchoolAll();
+//            }
+//        }
     }
 
     @OnClick(R.id.classlayout)
     public void click() {
-        if (SpData.getIdentityInfo() != null &&
-                (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status) ||
-                        GetUserSchoolRsp.DataBean.TYPE_CLASS_TEACHER.equals(SpData.getIdentityInfo().status) ||
-                        GetUserSchoolRsp.DataBean.TYPE_TEACHER.equals(SpData.getIdentityInfo().status))) {
+        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {
             if (classInfo != null) {
                 SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
                 classPopNew.setOnCheckCallBack(classBean -> {
@@ -196,9 +193,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 int earlyReading = sectionList.getEarlySelfStudyList() != null ? sectionList.getEarlySelfStudyList().size() : 0;
                 int morning = sectionList.getMorningList() != null ? sectionList.getMorningList().size() : 0;
                 int afternoon = sectionList.getAfternoonList() != null ? sectionList.getAfternoonList().size() : 0;
-                int night = sectionList.getNightList()!= null ? sectionList.getNightList().size() : 0;
+                int night = sectionList.getNightList() != null ? sectionList.getNightList().size() : 0;
                 int eveningStudy = sectionList.getLateSelfStudyList() != null ? sectionList.getLateSelfStudyList().size() : 0;
-                int sectionCount = earlyReading+morning+afternoon+night+eveningStudy;
+                int sectionCount = earlyReading + morning + afternoon + night + eveningStudy;
                 List<String> sectionlist = new ArrayList<>();
                 if (rsp.getData().getTimetableList() != null && rsp.getData().getTimetableList().size() > 0) {
                     List<SiteTableRsp.DataBean.TimetableListBean> subListBeans = new ArrayList<>();
@@ -221,8 +218,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                         final List<SiteTableRsp.DataBean.TimetableListBean> timetableList = rsp.getData().getTimetableList();
                         for (int j = 0; j < timetableList.size(); j++) {
                             final SiteTableRsp.DataBean.TimetableListBean timetableListBean = timetableList.get(j);
-                            if (i ==((timetableListBean.getSection() - 1) * 7 + timetableListBean.getWeek() % 7 - 1)){
-                                subListBeans.set(i,timetableListBean);
+                            if (i == ((timetableListBean.getSection() - 1) * 7 + timetableListBean.getWeek() % 7 - 1)) {
+                                subListBeans.set(i, timetableListBean);
                                 break;
                             }
                         }
@@ -239,11 +236,11 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 if (afternoon > 0) {
                     createLeftTypeView(earlyReading + morning, 3, afternoon);//下午
                 }
-                if (night>0){
+                if (night > 0) {
                     createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚上
                 }
                 if (eveningStudy > 0) {
-                    createLeftTypeView(morning + afternoon + earlyReading+night, 5, eveningStudy);//晚自习
+                    createLeftTypeView(morning + afternoon + earlyReading + night, 5, eveningStudy);//晚自习
                 }
 //                for (int i = 0; i < sectionCount; i++) {
 //                    if (earlyReading > 0 && i == 0) {

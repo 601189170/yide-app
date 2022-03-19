@@ -1,101 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/dp_10"
-    android:layout_marginTop="@dimen/dp_5"
-    android:layout_marginEnd="@dimen/dp_10"
-    android:layout_marginBottom="@dimen/dp_10"
-    android:clickable="true"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="0dp"
-    app:cardPreventCornerOverlap="false">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="教师考勤"
+        android:textColor="#1E232A"
+        android:textSize="@dimen/text_15"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:clickable="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="false"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="39dp">
-
-            <TextView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/kq_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:text="@string/home_attendance"
-                android:textColor="#1E232A"
-                android:textSize="@dimen/text_15"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/line_10" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-            <com.jude.rollviewpager.RollPagerView
-                android:id="@+id/announRoll"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                <com.jude.rollviewpager.RollPagerView
+                    android:id="@+id/announRoll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-                <ImageView
-                    android:id="@+id/imageView4"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/icon_no_data"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="暂无考勤"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+                        app:layout_constraintStart_toStartOf="@+id/imageView4"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/grid"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/icon_no_data"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="6dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/transparent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:text="暂无考勤"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView4"
-                    app:layout_constraintStart_toStartOf="@+id/imageView4"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView4" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.recyclerview.widget.RecyclerView>
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/grid"
-                android:layout_width="wrap_content"
-                android:layout_height="6dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginEnd="@dimen/dp_20"
-                android:layout_marginBottom="10dp"
-                android:background="@color/transparent">
-
-            </androidx.recyclerview.widget.RecyclerView>
-        </FrameLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>

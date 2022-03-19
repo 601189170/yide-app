@@ -56,7 +56,7 @@
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_20"
         android:text="你可能想找"
-        android:textColor="#ff999999"
+        android:textColor="#ff666666"
         android:textSize="@dimen/text_15"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_search" />
@@ -114,7 +114,8 @@
                 android:id="@+id/v_line1"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="#F5F8FC"
+                android:background=" #F9FAF9
+"
                 android:layout_marginTop="@dimen/dp_20"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/rv_staff" />

@@ -47,7 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/cl_main_list"
-        android:background="#F5F8FC"
+        android:background=" #F9FAF9
+"
         tools:listitem="@layout/item_statistics_child_list"
         android:visibility="gone"/>
     <View

@@ -74,7 +74,7 @@
             android:layout_height="1dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="60dp"
-            android:background="#DCDFE6" />
+            android:background="#F9FAF9" />
     </FrameLayout>
 
 

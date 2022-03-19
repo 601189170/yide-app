@@ -18,7 +18,8 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#F5F8FC"
+            android:background=" #F9FAF9
+"
             android:paddingStart="@dimen/dp_16"
             app:layout_constraintBottom_toTopOf="@+id/fl_bottom"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +55,8 @@
             android:id="@+id/fl_bottom"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="#F5F8FC"
+            android:background=" #F9FAF9
+"
             android:padding="@dimen/dp_10"
             app:layout_constraintBottom_toBottomOf="parent">
 

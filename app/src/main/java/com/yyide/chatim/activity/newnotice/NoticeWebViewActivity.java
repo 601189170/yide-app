@@ -40,7 +40,6 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.Utils;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.WebModel;
 
 public class NoticeWebViewActivity extends AppCompatActivity {
@@ -254,7 +253,7 @@ public class NoticeWebViewActivity extends AppCompatActivity {
                 if ("backApp".equalsIgnoreCase(webModel.enentName)) {
                     finish();
                 } else if ("getToken".equalsIgnoreCase(webModel.enentName)) {
-                    return SpData.User() != null ? SpData.User().accessToken : "";
+                    return SpData.getLogin() != null ? SpData.getLogin().accessToken : "";
                 } else if ("save".equalsIgnoreCase(webModel.enentName)) {
                     runOnUiThread(() -> {
                         Intent intent = new Intent(NoticeWebViewActivity.this, NoticeTemplatePushActivity.class);

@@ -40,23 +40,37 @@ class RegisterActivity : BaseMvpActivity<RegisterPresenter>(), RegisterView {
         registerBinding.tvConfirm.setOnClickListener { submit() }
         registerBinding.postCode.setOnClickListener { getCode() }
         registerBinding.tvAgreement.setOnClickListener {
-            WebViewActivity.startTitle(this@RegisterActivity, BaseConstant.AGREEMENT_URL, getString(R.string.agreement_title))
+            WebViewActivity.startTitle(
+                this@RegisterActivity,
+                BaseConstant.AGREEMENT_URL,
+                getString(R.string.agreement_title)
+            )
         }
         registerBinding.tvPrivacy.setOnClickListener {
-            WebViewActivity.startTitle(this@RegisterActivity, BaseConstant.PRIVACY_URL, getString(R.string.privacy_title))
+            WebViewActivity.startTitle(
+                this@RegisterActivity,
+                BaseConstant.PRIVACY_URL,
+                getString(R.string.privacy_title)
+            )
         }
         registerBinding.eye.setOnClickListener {
             if (!registerBinding.eye.isSelected) {
                 registerBinding.eye.isSelected = true
-                registerBinding.newPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                registerBinding.newPassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
             } else {
                 registerBinding.eye.isSelected = false
-                registerBinding.newPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                registerBinding.newPassword.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
             }
         }
     }
 
-    internal class TimeCount(millisInFuture: Long, countDownInterval: Long, private val postCode: TextView) : CountDownTimer(millisInFuture, countDownInterval) {
+    internal class TimeCount(
+        millisInFuture: Long,
+        countDownInterval: Long,
+        private val postCode: TextView
+    ) : CountDownTimer(millisInFuture, countDownInterval) {
         override fun onFinish() { // 计时完毕
             postCode.text = "获取验证码"
             postCode.isClickable = true
@@ -115,14 +129,14 @@ class RegisterActivity : BaseMvpActivity<RegisterPresenter>(), RegisterView {
 
     override fun registerSuccess(model: ResultBean?) {
         ToastUtils.showShort(model?.msg)
-        if (model?.code == BaseConstant.REQUEST_SUCCES) {
+        if (model?.code == BaseConstant.REQUEST_SUCCESS2) {
             finish()
         }
     }
 
     override fun getSmsSuccess(model: ResultBean) {
         ToastUtils.showShort(model.msg)
-        if (model.code == BaseConstant.REQUEST_SUCCES) {
+        if (model.code == BaseConstant.REQUEST_SUCCESS2) {
             time!!.start()
         }
     }
