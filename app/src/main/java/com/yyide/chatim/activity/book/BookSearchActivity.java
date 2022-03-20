@@ -165,9 +165,13 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     }
 
     private void search(String keyWord) {
-
-//        if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            mvpPresenter.bookSearch(keyWord, "2",from);
+        }else{
             mvpPresenter.bookSearch(keyWord, "1",from);
+        }
+//        if (GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
+//            mvpPresenter.bookSearch(keyWord, "1",from);
 //        } else {
 //            mvpPresenter.bookSearch(keyWord, "2",from);
 //        }

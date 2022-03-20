@@ -100,9 +100,9 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         super.onCreate(savedInstanceState);
         title.setText("通讯录");
 
-//        mvpPresenter.listByApp();
-        layout_jz_all.setVisibility(View.VISIBLE);
-        mvpPresenter.universitySelectListByApp();
+
+
+
         SchoolRsp schoolRsp = SpData.Schoolinfo();
         if (schoolRsp != null) {
             mSchoolName = schoolRsp.getSchoolName();
@@ -198,6 +198,13 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            mvpPresenter.listByApp();
+            layout_jz_all.setVisibility(View.GONE);
+        }else {
+            layout_jz_all.setVisibility(View.VISIBLE);
+            mvpPresenter.universitySelectListByApp();
+        }
     }
 
     @Override

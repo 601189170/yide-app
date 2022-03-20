@@ -11,15 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_20">
+        >
 
         <org.raphets.roundimageview.RoundImageView
             android:id="@+id/img"
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30"
             android:layout_gravity="center_vertical"
-            android:background="@color/blue"
-            android:visibility="gone"
             app:leftBottom_corner_radius="12dp"
             app:leftTop_corner_radius="12dp"
             app:rightBottom_corner_radius="12dp"
@@ -29,6 +27,7 @@
         <TextView
             android:id="@+id/tv_name_title"
             android:layout_width="30dp"
+            android:visibility="gone"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/corners4"
@@ -42,15 +41,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dp_14"
-            android:textColor="@color/text_212121"
+            android:textColor="@color/text_333333"
             android:textSize="@dimen/text_14" />
 
     </LinearLayout>
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginStart="@dimen/dp_44"
         android:background="@color/color_DCDFE6" />
 
 </LinearLayout>

@@ -65,7 +65,7 @@ class ScheduleSearchFilterPop(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT
         )
-        popupWindow.animationStyle = R.style.popwin_anim_right_style
+        popupWindow.animationStyle = R.style.popwin_anim_style2
         mView.clBg.setOnClickListener { v ->
             popupWindow.dismiss()
         }
@@ -120,6 +120,11 @@ class ScheduleSearchFilterPop(
     }
 
     private fun initView(binding: LayoutScheduleSearchFilter2Binding) {
+        binding.imgFinish.setOnClickListener {
+            if (popupWindow.isShowing) {
+                popupWindow.dismiss()
+            }
+        }
         //反选类型 日程类型【0：校历日程，1：课表日程，2：事务日程, 3：会议日程】
         filterTagCollect.type?.forEach {
             when (it) {

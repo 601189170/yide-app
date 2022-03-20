@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -38,6 +39,8 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit.MessageUnreadWatcher
 import com.vivo.push.PushClient
+import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
+import com.yyide.chatim.activity.schedule.ScheduleSettingsActivity
 import com.yyide.chatim.alipush.AliasUtil
 import com.yyide.chatim.alipush.MyMessageReceiver
 import com.yyide.chatim.alipush.NotifyUtil
@@ -47,6 +50,7 @@ import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager
 import com.yyide.chatim.databinding.ActivityNewMainBinding
 import com.yyide.chatim.fragment.schedule.ScheduleFragment
+import com.yyide.chatim.fragment.schedule.ScheduleFragment2
 import com.yyide.chatim.home.AppFragment
 import com.yyide.chatim.home.HelpFragment
 import com.yyide.chatim.home.HomeFragment
@@ -95,7 +99,8 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     //身份切换
     private val homeFragment = HomeFragment()
     private val messageFragment = MessageFragment()
-    private val scheduleFragment = ScheduleFragment()
+//    private val scheduleFragment = ScheduleFragment()
+    private val scheduleFragment = ScheduleFragment2()
     private val appFragment = AppFragment()
     private val helpFragment = HelpFragment()
 
@@ -144,6 +149,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             }
         }
         initView()
+//        startActivity(Intent(this, ScheduleSearchActivity::class.java))
     }
 
     private val HOME_TYPE = 1
@@ -159,9 +165,10 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             setFragment(HOME_TYPE, homeFragment)
         }
         binding.tab2Layout.setOnClickListener { setFragment(MESSAGE_TYPE, messageFragment) }
-        binding.tab3Layout.setOnClickListener { setFragment(SCHEDULE_TYPE, scheduleFragment) }
-        binding.tab4Layout.setOnClickListener { setFragment(APP_TYPE, appFragment) }
-        binding.tab5Layout.setOnClickListener { setFragment(HELP_TYPE, helpFragment) }
+        binding.tab3Layout.setOnClickListener { setFragment(APP_TYPE, appFragment) }
+        binding.tab4Layout.setOnClickListener { setFragment(HELP_TYPE, helpFragment) }
+        binding.tab5Layout.setOnClickListener { setFragment(SCHEDULE_TYPE, scheduleFragment) }
+
         //默认选中Home
         setFragment(HOME_TYPE, homeFragment)
     }
@@ -176,9 +183,9 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         }
         binding.tab1.isChecked = type == HOME_TYPE
         binding.tab2.isChecked = type == MESSAGE_TYPE
-        binding.tab3.isChecked = type == SCHEDULE_TYPE
-        binding.tab4.isChecked = type == APP_TYPE
-        binding.tab5.isChecked = type == HELP_TYPE
+        binding.tab3.isChecked = type == APP_TYPE
+        binding.tab4.isChecked = type == HELP_TYPE
+        binding.tab5.isChecked = type == SCHEDULE_TYPE
         supportFragmentManager.beginTransaction().replace(binding.content.id, fragment).commit()
     }
 

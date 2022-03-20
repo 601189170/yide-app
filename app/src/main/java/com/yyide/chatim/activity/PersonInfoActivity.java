@@ -26,6 +26,7 @@ import com.tbruyelle.rxpermissions3.RxPermissions;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.model.TeacherlistRsp;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
 
 import butterknife.BindView;
@@ -83,6 +84,9 @@ public class PersonInfoActivity extends BaseActivity {
     ImageView iv_phone_master;
     @BindView(R.id.iv_phone_vice)
     ImageView iv_phone_vice;
+
+    @BindView(R.id.iv_head)
+    ImageView iv_head;
     int type = 1;
     int type2 = 1;
     int type3 = 1;
@@ -102,8 +106,12 @@ public class PersonInfoActivity extends BaseActivity {
         String data = getIntent().getStringExtra("data");
         String organization = getIntent().getStringExtra("organization");
         title.setText("个人信息");
+
         bean = JSON.parseObject(data, TeacherlistRsp.DataBean.RecordsBean.class);
         Log.e("TAG", "PersonInfoActivity: " + JSON.toJSONString(bean));
+
+
+
         setData(organization);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +154,12 @@ public class PersonInfoActivity extends BaseActivity {
                     }
                 }
             }
+
+            GlideUtil.loadImageHead(
+                    this,
+                    bean.avatar,iv_head
+
+            );
             subject.setText(TextUtils.isEmpty(stringBuffer.toString()) ? "暂无科目" : stringBuffer.toString());
             sex.setText(!TextUtils.isEmpty(bean.sex) ? "1".equals(bean.sex) ? "男" : "女" : "无");
             tv_class_name.setText(TextUtils.isEmpty(bean.classesName) ? "未知班级" : bean.classesName);

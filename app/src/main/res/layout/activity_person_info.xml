@@ -33,11 +33,12 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginLeft="24dp"
-                    android:visibility="gone" />
+                     />
 
                 <TextView
                     android:id="@+id/tv_name_title"
                     android:layout_width="60dp"
+                    android:visibility="gone"
                     android:layout_height="60dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="24dp"
