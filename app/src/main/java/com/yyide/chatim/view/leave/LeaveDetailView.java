@@ -7,9 +7,16 @@ import com.yyide.chatim.model.LeaveListRsp;
 
 public interface LeaveDetailView extends BaseView {
     void leaveDetail(LeaveDetailRsp leaveDetailRsp);
+
     void leaveDetailFail(String msg);
+
     void repealResult(BaseRsp baseRsp);
+
     void repealFail(String msg);
+
     void processApproval(BaseRsp baseRsp);
+
     void processApprovalFail(String msg);
+
+    void leaveBack(BaseRsp baseRsp);
 }

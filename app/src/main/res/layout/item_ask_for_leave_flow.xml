@@ -7,10 +7,9 @@
 
     <View
         android:id="@+id/vEnd"
-        android:layout_width="0.5dp"
-        android:layout_height="0dp"
+        android:layout_width="1dp"
+        android:layout_height="30dp"
         android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/iv_user_head"
         app:layout_constraintRight_toRightOf="@id/iv_user_head"
         app:layout_constraintTop_toBottomOf="@+id/iv_user_head" />
@@ -20,11 +19,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="@dimen/dp_15"
-        android:layout_marginBottom="@dimen/dp_30"
-        android:padding="1.5dp"
-        android:scaleType="center"
+        android:scaleType="fitXY"
         android:src="@mipmap/icon_head"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:left_bottom_radius="4dp"
@@ -34,11 +30,11 @@
 
     <ImageView
         android:id="@+id/iv_flow_checked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_14"
+        android:layout_height="@dimen/dp_14"
         android:layout_marginStart="@dimen/dp_32"
         android:src="@drawable/icon_flow_checked"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/iv_user_head"
         app:layout_constraintStart_toStartOf="@+id/iv_user_head" />
 
@@ -76,12 +72,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_flow_title" />
 
+    <ImageView
+        android:id="@+id/ivUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:src="@mipmap/icon_arraw_up"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_flow_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_flow_title" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:layout_marginEnd="@dimen/dp_6"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_flow_checked"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/iv_flow_checked"
         app:layout_constraintTop_toBottomOf="@+id/iv_user_head" />
 </androidx.constraintlayout.widget.ConstraintLayout>

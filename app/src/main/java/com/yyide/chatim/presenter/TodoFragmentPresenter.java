@@ -20,8 +20,8 @@ public class TodoFragmentPresenter extends BasePresenter<TodoFragmentView> {
 
     public void getMessageTransaction(int current, int size, String status) {
         HashMap<String, Object> map = new HashMap();
-        map.put("current", current);
-        map.put("size", size);
+        map.put("pageNo", current);
+        map.put("pageSize", size);
         map.put("isOperation", status);
         addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
             @Override

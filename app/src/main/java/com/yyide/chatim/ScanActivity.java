@@ -20,7 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tbruyelle.rxpermissions3.RxPermissions;
-import com.yyide.chatim.activity.ScanLoginActivity;
+import com.yyide.chatim.activity.user.ScanLoginActivity;
 import com.yyide.chatim.activity.WebViewActivity;
 import com.yyide.chatim.activity.scancode.BindingEquipmentActivity;
 import com.yyide.chatim.activity.scancode.ConfirmLoginActivity;

@@ -28,14 +28,20 @@ public class LeaveDetailRsp {
         private ApprJsonDTO apprJson;
         @SerializedName("hiApprNodeList")
         private List<HiApprNodeListDTO> hiApprNodeList;
+        @SerializedName("ccList")
+        private List<Cc> ccList;
         @SerializedName("id")
         private String id;
+        @SerializedName("procInstId")
+        private String procInstId;
         @SerializedName("name")
         private String name;
         @SerializedName("status")
         private String status;
         @SerializedName("title")
         private String title;
+        @SerializedName("taskId")
+        private String taskId;
 
         public static class ApprJsonDTO {
             @SerializedName("dept")
@@ -90,6 +96,47 @@ public class LeaveDetailRsp {
             }
         }
 
+        public static class Cc {
+            @SerializedName("avatar")
+            private String avatar;
+            @SerializedName("name")
+            private String name;
+            @SerializedName("userId")
+            private String userId;
+
+            public String getAvatar() {
+                return avatar;
+            }
+
+            public void setAvatar(String avatar) {
+                this.avatar = avatar;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getUserId() {
+                return userId;
+            }
+
+            public void setUserId(String userId) {
+                this.userId = userId;
+            }
+        }
+
+        public List<Cc> getCcList() {
+            return ccList;
+        }
+
+        public void setCcList(List<Cc> ccList) {
+            this.ccList = ccList;
+        }
+
         public static class HiApprNodeListDTO {
             @SerializedName("apprTime")
             private String apprTime;
@@ -103,6 +150,34 @@ public class LeaveDetailRsp {
             private String userId;
             @SerializedName("usreName")
             private String usreName;
+            @SerializedName("avatar")
+            private String avatar;
+            private boolean isCc;
+            private List<Cc> ccList;
+
+            public List<Cc> getCcList() {
+                return ccList;
+            }
+
+            public void setCcList(List<Cc> ccList) {
+                this.ccList = ccList;
+            }
+
+            public String getAvatar() {
+                return avatar;
+            }
+
+            public void setAvatar(String avatar) {
+                this.avatar = avatar;
+            }
+
+            public boolean isCc() {
+                return isCc;
+            }
+
+            public void setCc(boolean cc) {
+                isCc = cc;
+            }
 
             public String getApprTime() {
                 return apprTime;
@@ -153,6 +228,14 @@ public class LeaveDetailRsp {
             }
         }
 
+        public String getProcInstId() {
+            return procInstId;
+        }
+
+        public void setProcInstId(String procInstId) {
+            this.procInstId = procInstId;
+        }
+
         public ApprJsonDTO getApprJson() {
             return apprJson;
         }
@@ -167,6 +250,14 @@ public class LeaveDetailRsp {
 
         public void setHiApprNodeList(List<HiApprNodeListDTO> hiApprNodeList) {
             this.hiApprNodeList = hiApprNodeList;
+        }
+
+        public String getTaskId() {
+            return taskId;
+        }
+
+        public void setTaskId(String taskId) {
+            this.taskId = taskId;
         }
 
         public String getId() {

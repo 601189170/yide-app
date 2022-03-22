@@ -35,6 +35,7 @@ import com.tencent.qcloud.tim.uikit.utils.PopWindowUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.TodoActivity;
 import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.activity.MessageNoticeActivity;
 import com.yyide.chatim.base.BaseConstant;
@@ -112,6 +113,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
 
         cl_todo.setOnClickListener(v -> {
             //待办跳转
+            Intent intent = new Intent(getActivity(), TodoActivity.class);
+            startActivity(intent);
         });
 
         ll_search.setOnClickListener(view -> {

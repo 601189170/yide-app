@@ -465,7 +465,7 @@ public interface DingApiStores {
 
     //获取消息代办列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/message/cloud-message/user/notice/getMessage/android")
+    @GET("/cloud/app/procAppr/runTask")
     Observable<TodoRsp> getMessageTransaction(@QueryMap HashMap<String, Object> map);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
@@ -522,8 +522,8 @@ public interface DingApiStores {
 
     //请假撤销
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/leave-server/cloud-leave/student/ondoApplyLeave")
-    Observable<BaseRsp> ondoApplyLeave(@QueryMap HashMap<String, Object> map);
+    @POST("/cloud/app/procAppr/deleteInstance")
+    Observable<BaseRsp> ondoApplyLeave(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/queryDeptInfoByTeacherId
     //获取所在部门
@@ -543,6 +543,11 @@ public interface DingApiStores {
     @POST("/cloud/proc/startInstance")
     Observable<BaseRsp> addLeave(@Body RequestBody requestBody);
 
+    //请假回退上一级
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/cloud/proc/changeActivityState")
+    Observable<BaseRsp> backLeave(@Body RequestBody requestBody);
+
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/student/addStudentLeave
     //学生请假
     @Headers({"Content-Type: application/json", "Accept: application/json"})
@@ -550,9 +555,9 @@ public interface DingApiStores {
     Observable<BaseRsp> addStudentLeave(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/processExaminationApproval
-    //请假审批确认
+    //请假审批确认-拒绝
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/leave-server/cloud-leave/teacher/processExaminationApproval")
+    @GET("/cloud/proc/completeTask")
     Observable<BaseRsp> processExaminationApproval(@QueryMap HashMap<String, Object> map);
 
     //获取代办数量

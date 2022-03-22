@@ -80,6 +80,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
+            android:name=".activity.TodoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.leave.AddApprovalActivity"
             android:exported="false" />
         <activity
@@ -160,13 +163,13 @@
             android:name=".activity.book.NewBookActivity"
             android:screenOrientation="portrait" /> <!-- 如果您项目中的所有页面都只需要以高或宽中的一个作为基准进行适配的话, 那就只需要填写高或宽中的一个设计图尺寸即可 -->
         <activity
-            android:name=".activity.RegisterActivity"
+            android:name=".activity.user.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AgreementActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PrivacyActivity"
+            android:name=".activity.user.PrivacyActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.newnotice.NoticeUnConfirmListActivity" />
         <activity
@@ -240,7 +243,7 @@
             android:name=".activity.book.BookSearchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ScanLoginActivity"
+            android:name=".activity.user.ScanLoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
@@ -254,7 +257,7 @@
                 android:resource="@xml/filepaths" />
         </provider> <!-- 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 -->
         <activity
-            android:name=".activity.EmailActivity"
+            android:name=".activity.user.EmailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.notice.NoticeTemplateActivity"
@@ -369,7 +372,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ResetPassWordActivity"
+            android:name=".activity.user.ResetPassWordActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -377,7 +380,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".activity.SexActivity"
+            android:name=".activity.user.SexActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity

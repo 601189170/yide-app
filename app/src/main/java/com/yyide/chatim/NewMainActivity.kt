@@ -99,7 +99,8 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     //身份切换
     private val homeFragment = HomeFragment()
     private val messageFragment = MessageFragment()
-//    private val scheduleFragment = ScheduleFragment()
+
+    //    private val scheduleFragment = ScheduleFragment()
     private val scheduleFragment = ScheduleFragment2()
     private val appFragment = AppFragment()
     private val helpFragment = HelpFragment()
@@ -164,10 +165,10 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             binding.tab1.visibility = View.INVISIBLE
             setFragment(HOME_TYPE, homeFragment)
         }
-        binding.tab2Layout.setOnClickListener { setFragment(MESSAGE_TYPE, messageFragment) }
-        binding.tab3Layout.setOnClickListener { setFragment(APP_TYPE, appFragment) }
-        binding.tab4Layout.setOnClickListener { setFragment(HELP_TYPE, helpFragment) }
-        binding.tab5Layout.setOnClickListener { setFragment(SCHEDULE_TYPE, scheduleFragment) }
+        binding.tab2Layout.setOnClickListener { setFragment(SCHEDULE_TYPE, scheduleFragment) }
+        binding.tab3Layout.setOnClickListener { setFragment(MESSAGE_TYPE, messageFragment) }
+        binding.tab4Layout.setOnClickListener { setFragment(APP_TYPE, appFragment) }
+        binding.tab5Layout.setOnClickListener { setFragment(HELP_TYPE, helpFragment) }
 
         //默认选中Home
         setFragment(HOME_TYPE, homeFragment)
@@ -182,10 +183,10 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             binding.tab1.visibility = View.INVISIBLE
         }
         binding.tab1.isChecked = type == HOME_TYPE
-        binding.tab2.isChecked = type == MESSAGE_TYPE
-        binding.tab3.isChecked = type == APP_TYPE
-        binding.tab4.isChecked = type == HELP_TYPE
-        binding.tab5.isChecked = type == SCHEDULE_TYPE
+        binding.tab2.isChecked = type == SCHEDULE_TYPE
+        binding.tab3.isChecked = type == MESSAGE_TYPE
+        binding.tab4.isChecked = type == APP_TYPE
+        binding.tab5.isChecked = type == HELP_TYPE
         supportFragmentManager.beginTransaction().replace(binding.content.id, fragment).commit()
     }
 

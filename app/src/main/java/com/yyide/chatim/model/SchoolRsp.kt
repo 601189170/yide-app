@@ -43,23 +43,23 @@ data class SchoolRsp(
 
 data class UserBean(
     @JSONField(name = "avatar")
-    var avatar: String,
+    var avatar: String = "",
     @JSONField(name = "email")
-    var email: String,
+    var email: String = "",
     @JSONField(name = "gender")
-    var gender: Int,
+    var gender: Int = -1,
     @JSONField(name = "id")
-    var id: String,
+    var id: String = "",
     @JSONField(name = "identity")
-    var identity: Int,
+    var identity: Int = -1,
     @JSONField(name = "identitys")
-    var identitys: List<SchoolRsp.IdentityBean>,
+    var identitys: List<SchoolRsp.IdentityBean>? = null,
     @JSONField(name = "name")
-    var name: String,
+    var name: String = "",
     @JSONField(name = "phone")
-    var phone: String,
+    var phone: String = "",
     @JSONField(name = "username")
-    var username: String
+    var username: String = ""
 ) : Serializable
 
 

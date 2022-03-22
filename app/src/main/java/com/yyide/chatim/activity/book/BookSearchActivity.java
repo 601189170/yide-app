@@ -23,6 +23,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.ItemBookSearchAdapter;
 import com.yyide.chatim.adapter.ItemBookSearchHistoryAdapter;
 import com.yyide.chatim.base.BaseConstant;

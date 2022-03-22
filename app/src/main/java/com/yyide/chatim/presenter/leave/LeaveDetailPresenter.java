@@ -1,5 +1,7 @@
 package com.yyide.chatim.presenter.leave;
 
+import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.LeaveDetailRsp;
@@ -8,18 +10,21 @@ import com.yyide.chatim.view.leave.LeaveDetailView;
 
 import java.util.HashMap;
 
+import okhttp3.RequestBody;
+
 public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
     public LeaveDetailPresenter(LeaveDetailView view) {
         attachView(view);
     }
-    public void queryLeaveDetailsById(long id){
+
+    public void queryLeaveDetailsById(long id) {
         mvpView.showLoading();
         final HashMap<String, Object> map = new HashMap<>(1);
-        map.put("id",id);
+        map.put("id", id);
         addSubscription(dingApiStores.queryLeaveDetailsById(map), new ApiCallback<LeaveDetailRsp>() {
             @Override
             public void onSuccess(LeaveDetailRsp model) {
-                    mvpView.leaveDetail(model);
+                mvpView.leaveDetail(model);
             }
 
             @Override
@@ -34,11 +39,13 @@ public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
         });
     }
 
-    public void ondoApplyLeave(long id){
+    public void ondoApplyLeave(String id) {
         mvpView.showLoading();
         final HashMap<String, Object> map = new HashMap<>(1);
-        map.put("id",id);
-        addSubscription(dingApiStores.ondoApplyLeave(map), new ApiCallback<BaseRsp>() {
+        map.put("processInstanceId", id);
+        map.put("deleteReason", id);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        addSubscription(dingApiStores.ondoApplyLeave(body), new ApiCallback<BaseRsp>() {
             @Override
             public void onSuccess(BaseRsp model) {
                 mvpView.repealResult(model);
@@ -58,14 +65,15 @@ public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
 
     /**
      * 请假审批确认
-     * @param id long
-     * @param type 0 同意 1 拒绝
+     *
+     * @param taskId  long
+     * @param outcome 0 同意 2 拒绝
      */
-    public void processExaminationApproval(long id,int type){
+    public void processExaminationApproval(String taskId, int outcome) {
         mvpView.showLoading();
-        HashMap<String, Object> map = new HashMap<>(1);
-        map.put("id",id);
-        map.put("type",type);
+        HashMap<String, Object> map = new HashMap<>(2);
+        map.put("taskId", taskId);
+        map.put("outcome", outcome);
         addSubscription(dingApiStores.processExaminationApproval(map), new ApiCallback<BaseRsp>() {
             @Override
             public void onSuccess(BaseRsp model) {
@@ -75,6 +83,34 @@ public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
             @Override
             public void onFailure(String msg) {
                 mvpView.processApprovalFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    /**
+     * 请假回退
+     *
+     * @param taskId
+     */
+    public void backLeave(String taskId) {
+        mvpView.showLoading();
+        HashMap<String, Object> map = new HashMap<>(1);
+        map.put("taskId", taskId);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        addSubscription(dingApiStores.backLeave(body), new ApiCallback<BaseRsp>() {
+            @Override
+            public void onSuccess(BaseRsp model) {
+                mvpView.leaveBack(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.repealFail(msg);
             }
 
             @Override

@@ -1,5 +1,6 @@
 package com.yyide.chatim.fragment.schedule
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Build
@@ -75,15 +76,15 @@ class ScheduleFragment : Fragment() {
                     return@showScheduleMenuDialog
                 }
 
-                if (it == 5){
-                    startActivity(Intent(requireContext(),ScheduleSettingsActivity::class.java))
+                if (it == 5) {
+                    startActivity(Intent(requireContext(), ScheduleSettingsActivity::class.java))
                     return@showScheduleMenuDialog
                 }
                 setFragment(it)
             }
         }
         fragmentScheduleBinding.tvCurrentDate.text = DateTime.now().toStringTime("yyyy年MM月")
-        scheduleViewModel.curDateTime.observe(requireActivity(),{
+        scheduleViewModel.curDateTime.observe(requireActivity(), {
             loge("更新日期：${it.toStringTime()}")
             fragmentScheduleBinding.tvCurrentDate.text = it.toStringTime("yyyy年MM月")
         })
@@ -105,13 +106,13 @@ class ScheduleFragment : Fragment() {
 
         //日程修改监听
         scheduleEditViewModel.saveOrModifyResult.observe(requireActivity(), {
-            if (it){
+            if (it) {
                 scheduleEditViewModel.clearData()
             }
         })
 
         //收到新增日程
-        scheduleViewModel.monthAddSchedule.observe(requireActivity()){
+        scheduleViewModel.monthAddSchedule.observe(requireActivity()) {
             showAddScheduleV2Dialog = DialogUtil.showAddScheduleV2Dialog(
                 context,
                 this,
@@ -131,7 +132,10 @@ class ScheduleFragment : Fragment() {
         mTitles.add("今日清单")
         mTitles.add("月视图")
         mTitles.add("列表视图")
-        fragmentScheduleBinding.viewPager.setAdapter(object : FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        fragmentScheduleBinding.viewPager.isSaveEnabled = false
+        fragmentScheduleBinding.viewPager.adapter = @SuppressLint("WrongConstant")
+        object :
+            FragmentStatePagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int): Fragment {
 
                 when (position) {
@@ -156,13 +160,13 @@ class ScheduleFragment : Fragment() {
             override fun getPageTitle(position: Int): CharSequence? {
                 return mTitles[position]
             }
-        })
+        }
         fragmentScheduleBinding.slidingTabLayout.setViewPager(fragmentScheduleBinding.viewPager)
         fragmentScheduleBinding.slidingTabLayout.setCurrentTab(position) // todo  默认选中 //第一次加载设置默认
     }
 
     //日程新增监听
-    private val onScheduleAddListener = object :DialogUtil.OnScheduleAddListener{
+    private val onScheduleAddListener = object : DialogUtil.OnScheduleAddListener {
         override fun onFinish(view: View?) {
             loge("onFinish")
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
@@ -174,14 +178,17 @@ class ScheduleFragment : Fragment() {
             loge("onDate")
             val intent = Intent(context, ScheduleSimpleEditionActivity::class.java)
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
-            intent.putExtra("data",JSON.toJSONString(toScheduleDataBean))
+            intent.putExtra("data", JSON.toJSONString(toScheduleDataBean))
             dateLauncher.launch(intent)
         }
 
         override fun onLabel(view: View?) {
             loge("onLabel")
             val intent = Intent(context, ScheduleAddLabelActivity::class.java)
-            intent.putExtra("labelList", JSON.toJSONString(scheduleEditViewModel.labelListLiveData.value))
+            intent.putExtra(
+                "labelList",
+                JSON.toJSONString(scheduleEditViewModel.labelListLiveData.value)
+            )
             labelLauncher.launch(intent)
         }
 
@@ -189,10 +196,11 @@ class ScheduleFragment : Fragment() {
             loge("onSwitch")
             val intent = Intent(context, ScheduleFullEditionActivity::class.java)
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
-            intent.putExtra("data",JSON.toJSONString(toScheduleDataBean))
+            intent.putExtra("data", JSON.toJSONString(toScheduleDataBean))
             fullEditionScheduleLauncher.launch(intent)
         }
     }
+
     //日期回调
     private val dateLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -210,16 +218,18 @@ class ScheduleFragment : Fragment() {
             if (it.resultCode == AppCompatActivity.RESULT_OK) {
                 val stringExtra = it.data?.getStringExtra("labelList")
                 loge("$stringExtra")
-                val labelListSource = JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
+                val labelListSource =
+                    JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
                 scheduleEditViewModel.labelListLiveData.value = labelListSource
             }
         }
+
     //完整版返回数据
     private val fullEditionScheduleLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == AppCompatActivity.RESULT_OK) {
-                val booleanExtra = it.data?.getBooleanExtra("saveOrModifyResult", false)?:false
-                if (booleanExtra){
+                val booleanExtra = it.data?.getBooleanExtra("saveOrModifyResult", false) ?: false
+                if (booleanExtra) {
                     loge("日程添加成功")
                     if (showAddScheduleV2Dialog != null && showAddScheduleV2Dialog?.isShowing == true) {
                         showAddScheduleV2Dialog?.dismiss()
@@ -302,6 +312,6 @@ class ScheduleFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loge("onResume")
-        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+        EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
     }
 }

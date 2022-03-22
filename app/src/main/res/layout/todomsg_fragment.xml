@@ -1,51 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/theme_bg"
-    android:orientation="vertical"
-    android:paddingLeft="12dp"
-    android:paddingTop="10dp"
-    android:paddingRight="12dp">
+    android:background="#F9FAF9"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slidingTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:background="@drawable/bg_corners14">
-
-        <CheckedTextView
-            android:id="@+id/tab1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/to_do_msg_tab"
-            android:gravity="center"
-            android:text="全部"
-            android:textAlignment="center"
-            android:textColor="@color/blue_white_color" />
-
-        <CheckedTextView
-            android:id="@+id/tab2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/to_do_msg_tab"
-            android:gravity="center"
-            android:text="待办"
-            android:textAlignment="center"
-            android:textColor="@color/blue_white_color" />
-
-        <CheckedTextView
-            android:id="@+id/tab3"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/to_do_msg_tab"
-            android:gravity="center"
-            android:text="已办"
-            android:textAlignment="center"
-            android:textColor="@color/blue_white_color" />
-    </LinearLayout>
+        android:layout_height="@dimen/dp_38"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top"
+        app:layout_scrollFlags="scroll|snap|enterAlways"
+        app:tl_indicator_color="@color/colorPrimary"
+        app:tl_indicator_height="2dp"
+        app:tl_indicator_width="20dp"
+        app:tl_tab_padding="@dimen/dp_30"
+        app:tl_tab_space_equal="true"
+        app:tl_textSelectColor="@color/colorAccent"
+        app:tl_textUnselectColor="@color/text_999999"
+        app:tl_textsize="@dimen/text_15" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"

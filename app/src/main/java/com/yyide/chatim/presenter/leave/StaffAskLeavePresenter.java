@@ -82,7 +82,7 @@ public class StaffAskLeavePresenter extends BasePresenter<StaffAskLeaveView> {
      * @param approverList
      */
     public void addLeave(String procId, String startTime, String endTime, String sponsorType, String reason,
-                         String deptId, String deptName, String hours, List<LeaveApprovalBean.LeaveCommitBean> approverList, List<Long> ccIds) {
+                         String deptId, String deptName, String hours, List<LeaveApprovalBean.LeaveCommitBean> approverList, String ccIds) {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("procId", procId);
         map.put("startTime", startTime);

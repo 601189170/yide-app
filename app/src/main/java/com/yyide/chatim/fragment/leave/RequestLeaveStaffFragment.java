@@ -278,15 +278,16 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     }
 
     //获取抄送人ids
-    private List<Long> getCCList() {
+    private String getCCList() {
         List<LeaveApprovalBean.Cc> data = mCCAdapter.getData();
-        List<Long> ids = new ArrayList<>();
-        if (data != null && data.size() > 0) {
+        StringBuilder ids = new StringBuilder();
+        if (data.size() > 0) {
             for (LeaveApprovalBean.Cc item : data) {
-                ids.add(item.getCcId());
+                ids.append(item.getCcId()).append(",");
             }
+            return ids.toString();
         }
-        return ids;
+        return "";
     }
 
     @Override

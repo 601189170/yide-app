@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity
+package com.yyide.chatim.activity.user
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.TextView
 import com.blankj.utilcode.util.ToastUtils
 import com.yyide.chatim.R
+import com.yyide.chatim.activity.WebViewActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseMvpActivity
 import com.yyide.chatim.databinding.ActivityRegisterBinding

@@ -1,11 +1,9 @@
 package com.yyide.chatim.activity.leave;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,7 +18,6 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,14 +31,12 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.LeaveFlowAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveFlowBean;
 import com.yyide.chatim.presenter.leave.LeaveDetailPresenter;
 import com.yyide.chatim.utils.ButtonUtils;
-import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.leave.LeaveDetailView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,7 +44,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -121,9 +115,10 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     NestedScrollView nestedScrollView;
     private boolean unfold = false;
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
-    List<ApproverRsp.DataBean.ListBean> leaveFlowCopyerList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
     private long id;
+    private String taskId;
+    private String processId;
     private boolean updateList = false;
 
     @Override
@@ -136,7 +131,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         super.onCreate(savedInstanceState);
         title.setText(R.string.ask_for_leave);
         //type 1请假人 2审批人
-        final int type = getIntent().getIntExtra("type", 1);
+        int type = getIntent().getIntExtra("type", 1);
         if (type == 1) {
             btn_repeal.setVisibility(View.VISIBLE);
             gp_approver.setVisibility(View.GONE);
@@ -153,12 +148,10 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         }
     }
 
-
     @Override
     protected LeaveDetailPresenter createPresenter() {
         return new LeaveDetailPresenter(this);
     }
-
 
     @OnClick(R.id.back_layout)
     public void click() {
@@ -168,21 +161,30 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         finish();
     }
 
-    @OnClick({R.id.btn_refuse, R.id.btn_pass, R.id.btn_more})
+    @OnClick({R.id.btn_refuse, R.id.btn_pass, R.id.btn_more, R.id.btn_repeal})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.btn_refuse:
                 if (!ButtonUtils.isFastDoubleClick(R.id.btn_refuse)) {
-                    mvpPresenter.processExaminationApproval(id, 1);
+                    mvpPresenter.processExaminationApproval(taskId, 2);
                 }
                 break;
             case R.id.btn_pass:
                 if (!ButtonUtils.isFastDoubleClick(R.id.btn_refuse)) {
-                    mvpPresenter.processExaminationApproval(id, 0);
+                    mvpPresenter.processExaminationApproval(taskId, 0);
                 }
                 break;
             case R.id.btn_more:
-                showGlobalActionPopup(btn_more);
+//                showGlobalActionPopup(btn_more);
+                if (!ButtonUtils.isFastDoubleClick(R.id.btn_more)) {
+                    mvpPresenter.backLeave(taskId);
+                }
+                break;
+            case R.id.btn_repeal:
+                if (!ButtonUtils.isFastDoubleClick(R.id.btn_repeal)) {
+                    updateList = true;
+                    mvpPresenter.ondoApplyLeave(processId);
+                }
                 break;
             default:
                 break;
@@ -263,14 +265,6 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         }
     }
 
-    @OnClick(R.id.btn_repeal)
-    public void repeal() {
-        if (!ButtonUtils.isFastDoubleClick(R.id.btn_repeal)) {
-            updateList = true;
-            mvpPresenter.ondoApplyLeave(id);
-        }
-    }
-
     @Override
     public void showError() {
 
@@ -296,30 +290,27 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             tv_department.setText(getString(R.string.choose_student));
             tv_department_name.setText(data.getName());
         }
+
+        taskId = data.getTaskId();
+        processId = data.getProcInstId();
+
         tv_leave_title.setText(data.getTitle());
         tv_start_time.setText(apprJson.getStartTime());
         tv_end_time.setText(apprJson.getEndTime());
         tv_reason_for_leave_content.setText(apprJson.getReason());
         //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
         leaveStatus(data.getStatus(), tv_leave_flow_status);
-
+        if (data.getHiApprNodeList() != null) {
+            LeaveDetailRsp.DataDTO.HiApprNodeListDTO listDTO = new LeaveDetailRsp.DataDTO.HiApprNodeListDTO();
+            listDTO.setCc(true);
+            listDTO.setCcList(data.getCcList());
+            data.getHiApprNodeList().add(listDTO);
+        }
         //审批流程
-        leaveFlowAdapter = new LeaveFlowAdapter(this, data.getHiApprNodeList());
+        leaveFlowAdapter = new LeaveFlowAdapter();
         recyclerViewFlow.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewFlow.setAdapter(leaveFlowAdapter);
-    }
-
-    private void showImage(String url, ImageView imageView) {
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
-        Glide.with(this)
-                .load(url)
-                .placeholder(R.drawable.default_head)
-                .error(R.drawable.default_head)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(imageView);
+        leaveFlowAdapter.setList(data.getHiApprNodeList());
     }
 
     @Override
@@ -362,8 +353,18 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         finish();
     }
 
+    @Override
+    public void leaveBack(BaseRsp baseRsp) {
+        if (baseRsp.getCode() == BaseConstant.REQUEST_SUCCESS2) {
+            ToastUtils.showShort("回退成功");
+            EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
+        } else {
+            ToastUtils.showShort("回退失败：" + baseRsp.getMsg());
+        }
+    }
+
     private void leaveStatus(String status, TextView view) {
-        //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
+        //审核结果: 0 审批拒绝 1 审批中 2 审批通过  3 已撤销
         switch (status) {
             case "0":
                 view.setText(getString(R.string.refuse_text));

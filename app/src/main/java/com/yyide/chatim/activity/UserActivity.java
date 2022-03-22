@@ -23,6 +23,7 @@ import com.tencent.mmkv.MMKV;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.face.FaceCaptureActivity;
+import com.yyide.chatim.activity.user.EmailActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.base.MMKVConstant;

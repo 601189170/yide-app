@@ -36,16 +36,6 @@ class AddCcActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBinding::inf
                 mAdapter.setList(dataList)
             }
         }
-        mAdapter.setOnItemClickListener { adapter, view, position ->
-            val bind = ItemLeaveApprovaBinding.bind(view)
-            bind.cbCheck.isChecked = !bind.cbCheck.isChecked
-            if (bind.cbCheck.isChecked) {
-                selectList.add(mAdapter.data[position])
-            } else {
-                selectList.remove(mAdapter.data[position])
-            }
-            binding.tvCount.text = "${selectList.size}人"
-        }
 
         binding.btnCommit.setOnClickListener {
             //返回上一页
@@ -60,11 +50,20 @@ class AddCcActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBinding::inf
         object :
             BaseQuickAdapter<LeaveApprovalBean.Cc, BaseViewHolder>(R.layout.item_leave_approva) {
             override fun convert(holder: BaseViewHolder, item: LeaveApprovalBean.Cc) {
-                val binding = ItemLeaveApprovaBinding.bind(holder.itemView)
-                binding.tvName.text = item.name
+                val viewbinding = ItemLeaveApprovaBinding.bind(holder.itemView)
+                viewbinding.tvName.text = item.name
+                viewbinding.itemView.setOnClickListener {
+                    viewbinding.cbCheck.isChecked = !viewbinding.cbCheck.isChecked
+                    if (viewbinding.cbCheck.isChecked) {
+                        selectList.add(item)
+                    } else {
+                        selectList.remove(item)
+                    }
+                    binding.tvCount.text = "${selectList.size}人"
+                }
 //                binding.tvDesc.text = item.get
                 if (holder.absoluteAdapterPosition == (dataList.size - 1)) {
-                    binding.viewLine.visibility = View.INVISIBLE
+                    viewbinding.viewLine.visibility = View.INVISIBLE
                 }
             }
         }

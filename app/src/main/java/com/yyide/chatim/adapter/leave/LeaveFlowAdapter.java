@@ -1,26 +1,18 @@
 package com.yyide.chatim.adapter.leave;
 
-import android.content.Context;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.LeaveDetailRsp;
-import com.yyide.chatim.model.LeaveFlowBean;
-
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.yyide.chatim.utils.GlideUtil;
+import com.yyide.chatim.widget.RadiusImageView;
 
 /**
  * @Description: adapter
@@ -31,91 +23,84 @@ import butterknife.ButterKnife;
  * @UpdateRemark: 更新说明
  * @Version: 1.0
  */
-public class LeaveFlowAdapter extends RecyclerView.Adapter<LeaveFlowAdapter.ViewHolder> {
-    private Context context;
-    private List<LeaveDetailRsp.DataDTO.HiApprNodeListDTO> data;
+public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.HiApprNodeListDTO, BaseViewHolder> {
 
-    public void setOnClickedListener(OnClickedListener onClickedListener) {
-        this.onClickedListener = onClickedListener;
-    }
-
-    private OnClickedListener onClickedListener;
-
-    public LeaveFlowAdapter(Context context, List<LeaveDetailRsp.DataDTO.HiApprNodeListDTO> data) {
-        this.context = context;
-        this.data = data;
-
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_ask_for_leave_flow, parent, false);
-        return new ViewHolder(view);
+    public LeaveFlowAdapter() {
+        super(R.layout.item_ask_for_leave_flow);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        LeaveDetailRsp.DataDTO.HiApprNodeListDTO leaveFlowBean = data.get(position);
-        holder.tv_flow_title.setText(leaveFlowBean.getNodeName());
-        holder.tv_flow_content.setText(leaveFlowBean.getUsreName());
-        holder.tvTime.setText(leaveFlowBean.getApprTime());
-        //隐藏最后一条分割线
-        if (position == data.size() - 1) {
-            holder.v_line2.setVisibility(View.INVISIBLE);
-        }
+    protected void convert(@NonNull BaseViewHolder holder, LeaveDetailRsp.DataDTO.HiApprNodeListDTO leaveFlowBean) {
+        if (!leaveFlowBean.isCc()) {
+            holder.setText(R.id.tv_flow_title, leaveFlowBean.getNodeName());
+            if (getItemPosition(leaveFlowBean) == 0) {
+                holder.setText(R.id.tv_flow_content, "我");
+            } else {
+                holder.setText(R.id.tv_flow_content, leaveFlowBean.getUsreName());
+            }
+            holder.setText(R.id.tvTime, leaveFlowBean.getApprTime());
+            //隐藏最后一条分割线
+            if (getItemPosition(leaveFlowBean) == getData().size() - 1) {
+                holder.getView(R.id.vEnd).setVisibility(View.INVISIBLE);
+            }
+            RadiusImageView imageView = holder.getView(R.id.iv_user_head);
 
-        if ("2".equals(leaveFlowBean.getStatus())) {
-            holder.iv_user_head.setBackgroundResource(R.drawable.blue_border_1dp);
-            holder.v_line2.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-            holder.iv_flow_checked.setVisibility(View.VISIBLE);
+            if ("2".equals(leaveFlowBean.getStatus())) {
+                imageView.setPadding(4, 4, 4, 4);
+                holder.getView(R.id.iv_user_head).setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
+                holder.getView(R.id.iv_flow_checked).setVisibility(View.VISIBLE);
+                holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
+            } else {
+                holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.color_B3B3B3));
+                holder.getView(R.id.iv_flow_checked).setVisibility(View.INVISIBLE);
+            }
+            GlideUtil.loadImageHead(getContext(), leaveFlowBean.getAvatar(), imageView);
         } else {
-            holder.v_line2.setBackgroundColor(context.getResources().getColor(R.color.color_B3B3B3));
-            holder.iv_flow_checked.setVisibility(View.INVISIBLE);
+            ((ImageView) holder.getView(R.id.iv_user_head)).setImageResource(R.mipmap.icon_leave_cc);
+            ((ImageView) holder.getView(R.id.iv_user_head)).setBackground(getContext().getResources().getDrawable(R.drawable.bg_blue));
+            holder.setText(R.id.tv_flow_title, "抄送人");
+            if (leaveFlowBean.getCcList() != null) {
+                holder.setText(R.id.tv_flow_content, "共抄送" + leaveFlowBean.getCcList().size() + "人");
+            } else {
+                holder.setText(R.id.tv_flow_content, "共抄送" + 0 + "人");
+            }
+            holder.getView(R.id.iv_flow_checked).setVisibility(View.INVISIBLE);
+            holder.getView(R.id.vEnd).setVisibility(View.INVISIBLE);
+
+            RecyclerView recyclerView = holder.getView(R.id.recyclerView);
+            recyclerView.setVisibility(View.VISIBLE);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 6));
+            recyclerView.setAdapter(mAdapter);
+            if (leaveFlowBean.getCcList() != null && leaveFlowBean.getCcList().size() > 6) {
+                mAdapter.setList(leaveFlowBean.getCcList().subList(0, 6));
+                ImageView ivOpen = holder.getView(R.id.ivUp);
+                ivOpen.setVisibility(View.VISIBLE);
+                //展开查看全部抄送人
+                ivOpen.setOnClickListener(v -> {
+                    if (mAdapter.getData().size() > 6) {
+                        ivOpen.setRotation(0);
+                        mAdapter.setList(leaveFlowBean.getCcList().subList(0, 6));
+                    } else {
+                        ivOpen.setRotation(-180);
+                        mAdapter.setList(leaveFlowBean.getCcList());
+                    }
+
+                });
+            } else {
+                mAdapter.setList(leaveFlowBean.getCcList());
+            }
         }
 
-//        if (!TextUtils.isEmpty(leaveFlowBean.getImage())) {
-//            Glide.with(context)
-//                    .load(leaveFlowBean.getImage())
-//                    .placeholder(R.drawable.default_head)
-//                    .error(R.drawable.default_head)
-//                    .skipMemoryCache(true)
-//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                    .into(holder.iv_user_head);
-//        }
     }
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
+    private BaseQuickAdapter<LeaveDetailRsp.DataDTO.Cc, BaseViewHolder> mAdapter =
+            new BaseQuickAdapter<LeaveDetailRsp.DataDTO.Cc, BaseViewHolder>(R.layout.item_leave_detail_cc) {
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.tvTime)
-        TextView tvTime;
-        @BindView(R.id.tv_flow_title)
-        TextView tv_flow_title;
-
-        @BindView(R.id.tv_flow_content)
-        TextView tv_flow_content;
-
-        @BindView(R.id.iv_flow_checked)
-        ImageView iv_flow_checked;
-
-        @BindView(R.id.vEnd)
-        View v_line2;
-
-        @BindView(R.id.iv_user_head)
-        ImageView iv_user_head;
-
-        public ViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public interface OnClickedListener {
-        void onClicked(int position);
-    }
+                @Override
+                protected void convert(@NonNull BaseViewHolder holder, LeaveDetailRsp.DataDTO.Cc item) {
+                    holder.setText(R.id.tvName, item.getName());
+                    ImageView imageView = holder.getView(R.id.iv_user_head);
+                    GlideUtil.loadImageHead(getContext(), item.getAvatar(), imageView);
+                }
+            };
 }

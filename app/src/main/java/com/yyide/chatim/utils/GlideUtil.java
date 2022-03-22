@@ -47,7 +47,7 @@ public class GlideUtil {
 
     public static void loadImageHead(Context context, String url, ImageView imageView) {
         RequestOptions roundOptions = new RequestOptions()
-                .transform(new RoundedCorners(12));
+                .transform(new RoundedCorners(6));
         Glide.with(context).load(url)
                 .centerCrop()
                 .apply(roundOptions)
