@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,8 +37,10 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.leave.AddApprovalActivity;
 import com.yyide.chatim.activity.leave.AddCcActivity;
+import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.leave.LeaveReasonTagAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
@@ -97,6 +100,12 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     TextView tv_approver;
     @BindView(R.id.iv_add_approval)
     ImageView ivApproval;
+    @BindView(R.id.tvBranch)
+    TextView tvBranch;
+    @BindView(R.id.tvName)
+    TextView tvStudentName;
+    @BindView(R.id.groupTop)
+    Group groupTop;
     private static int REQUEST_CODE = 100;
     private List<LeaveDeptRsp.DataBean> deptList = new ArrayList<>();
     private List<LeaveApprovalBean.Cc> ccDataList = new ArrayList<>();
@@ -105,7 +114,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String endTime;
     private String sponsorType = "";
     private String reason = "";
-    private String deptId;
     private String hours;
     private String procId;
     private List<Long> carbonCopyPeopleId = new ArrayList<>();
@@ -154,6 +162,17 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         flexboxLayoutManager.setJustifyContent(JustifyContent.FLEX_START);//交叉轴的起点对齐。
         etStartTime.setKeyListener(null);//不可粘贴，长按不会弹出粘贴框
         etEndTime.setKeyListener(null);//不可粘贴，长按不会弹出粘贴框
+
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            tvBranch.setText("所选部门");
+            groupTop.setVisibility(View.GONE);
+        } else {
+            tvBranch.setText("所在班级");
+            //目前使用的身份名称- 暂无学生姓名
+            tvStudentName.setText(SpData.getIdentityInfo().getIdentityName());
+            groupTop.setVisibility(View.VISIBLE);
+            tv_department.setText(SpData.getIdentityInfo().getIdentityName());
+        }
 
         recyclerviewTagHint.setLayoutManager(flexboxLayoutManager);
         recyclerviewTagHint.addItemDecoration(new SpacesItemDecoration(SpacesItemDecoration.dip2px(5)));
@@ -228,7 +247,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                     final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 1, deptList);
                     deptSelectPop.setOnCheckedListener((id, dept) -> {
                         deptName = dept;
-                        deptId = id;
                         tv_department.setText(dept);
                         //mvpPresenter.getApprover(id);
                     });
@@ -274,7 +292,15 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             ToastUtils.showShort(R.string.ask_for_leave_reason_null_tip);
             return;
         }
-        mvpPresenter.addLeave(procId, startTime, endTime, sponsorType, reason, deptId, deptName, hours, mAdapter.getData(), getCCList());
+        LeaveApprovalBean.LeaveRequestBean leaveRequestBean = new LeaveApprovalBean.LeaveRequestBean();
+        leaveRequestBean.setStartTime(startTime);
+        leaveRequestBean.setEndTime(endTime);
+        leaveRequestBean.setReason(reason);
+        leaveRequestBean.setHours(hours);
+        if (!SpData.getIdentityInfo().staffIdentity()) {
+            leaveRequestBean.setStudent(hours);
+        }
+        mvpPresenter.addLeave(leaveRequestBean, procId, sponsorType, deptName, mAdapter.getData(), getCCList());
     }
 
     //获取抄送人ids
@@ -333,11 +359,14 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         if (ccDataList != null && ccDataList.size() > 0) {
             iv_add_staff.setVisibility(View.VISIBLE);
         }
+
         hours = data.getHours();
         deptName = data.getDept();
         sponsorType = data.getSponsorType();
         procId = data.getProcId();
-        tv_department.setText(data.getDept());
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            tv_department.setText(data.getDept());
+        }
         btn_commit.setAlpha(1f);
         btn_commit.setClickable(true);
         iv_add_staff.setVisibility(View.VISIBLE);
@@ -385,7 +414,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             }
             holder.getView(R.id.ivDel).setOnClickListener(v -> {
                 mAdapter.remove(approver);
-                //mAdapter.notifyDataSetChanged();
             });
         }
     };
@@ -399,19 +427,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             });
         }
     };
-
-    private void showImage(String url, ImageView imageView) {
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
-        Glide.with(this)
-                .load(url)
-                .placeholder(R.drawable.default_head)
-                .error(R.drawable.default_head)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(imageView);
-    }
 
     @Override
     public void approverFail(String msg) {
@@ -431,10 +446,10 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     public void addLeave(BaseRsp baseRsp) {
         Log.e(TAG, "addTeacherLeave: " + baseRsp.toString());
         if (baseRsp.getCode() == BaseConstant.REQUEST_SUCCESS2) {
-//            final Long id = Long.valueOf(baseRsp.getData());
-//            final Intent intent = new Intent(getActivity(), LeaveFlowDetailActivity.class);
-//            intent.putExtra("id", id);
-//            startActivity(intent);
+            final String id = baseRsp.getData();
+            final Intent intent = new Intent(getActivity(), LeaveFlowDetailActivity.class);
+            intent.putExtra("id", id);
+            startActivity(intent);
             getActivity().finish();
         } else {
             ToastUtils.showShort("提交失败：" + baseRsp.getMsg());

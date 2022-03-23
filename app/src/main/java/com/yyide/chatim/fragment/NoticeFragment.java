@@ -29,6 +29,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 
 
+/**
+ * 通知公告
+ */
 public class NoticeFragment extends BaseMvpFragment<NoticeHomePresenter> implements NoticeHomeView {
     private static final String TAG = "NoticeFragment";
     private View mBaseView;

@@ -149,13 +149,13 @@ public class MessageFragment extends BaseMvpFragment<MessagePresenter> implement
 
     @Override
     public void messageNumberSuccess(TodoRsp model) {
-        Log.d(TAG, "messageNumberSuccess>>:" + model.getData().getTotal());
-        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
-            if (model.getData() != null) {
-                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", model.getData().getTotal()));
-//                setNumber(model.getData().getTotal());
-            }
-        }
+//        Log.d(TAG, "messageNumberSuccess>>:" + model.getData().getTotal());
+//        if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
+//            if (model.getData() != null) {
+//                EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_MESSAGE_TODO_NUM, "", model.getData().getTotal()));
+////                setNumber(model.getData().getTotal());
+//            }
+//        }
     }
 
 //    private void setNumber(int count) {

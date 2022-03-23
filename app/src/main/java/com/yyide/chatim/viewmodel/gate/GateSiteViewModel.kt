@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blankj.utilcode.util.NetworkUtils
+import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.model.gate.ClassListOfTeacherBean
 import com.yyide.chatim.model.gate.GateBaseRsp
 import com.yyide.chatim.model.gate.Result
@@ -35,7 +36,7 @@ class GateSiteViewModel : ViewModel() {
                     _siteDataList.value = Result.Error(exception)
                 }
                 .collect {
-                    if (it.code == 200 && it.data != null) {
+                    if (it.code == BaseConstant.REQUEST_SUCCESS2 && it.data != null) {
                         _siteDataList.value = Result.Success(it.data)
                     } else {
                         _siteDataList.value = Result.Error(Exception("${it.msg}"))

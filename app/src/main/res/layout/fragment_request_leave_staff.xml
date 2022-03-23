@@ -21,6 +21,12 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="30dp">
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupTop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="cl_student" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_student"
                     android:layout_width="match_parent"
@@ -32,6 +38,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        android:id="@+id/tvLeaveTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="请假学生"

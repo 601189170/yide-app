@@ -9,6 +9,18 @@ import retrofit2.http.*
 interface INetworkService {
 
     /**
+     * 待办列表
+     */
+    @POST("/cloud/app/procAppr/pageTask")
+    suspend fun todoList(@Body requestBody: RequestBody): BaseResponse<TodoRsp>
+
+    /**
+     * 请假拒绝、同意
+     */
+    @POST("/cloud/proc/completeTask")
+    suspend fun leaveRefuseOrPass(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
      * 登录
      */
     @POST("/auth/oauth/token")

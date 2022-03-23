@@ -116,7 +116,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     private boolean unfold = false;
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
-    private long id;
+    private String id;
     private String taskId;
     private String processId;
     private boolean updateList = false;
@@ -139,9 +139,9 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             btn_repeal.setVisibility(View.GONE);
             gp_approver.setVisibility(View.VISIBLE);
         }
-        id = getIntent().getLongExtra("id", -1);
+        id = getIntent().getStringExtra("id");
         Log.e(TAG, "id: " + id);
-        if (id == -1) {
+        if (TextUtils.isEmpty(id)) {
             showBlankPage(true);
         } else {
             mvpPresenter.queryLeaveDetailsById(id);
@@ -357,6 +357,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     public void leaveBack(BaseRsp baseRsp) {
         if (baseRsp.getCode() == BaseConstant.REQUEST_SUCCESS2) {
             ToastUtils.showShort("回退成功");
+            mvpPresenter.queryLeaveDetailsById(id);
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
             ToastUtils.showShort("回退失败：" + baseRsp.getMsg());

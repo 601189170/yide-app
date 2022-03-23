@@ -17,7 +17,7 @@ public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
         attachView(view);
     }
 
-    public void queryLeaveDetailsById(long id) {
+    public void queryLeaveDetailsById(String id) {
         mvpView.showLoading();
         final HashMap<String, Object> map = new HashMap<>(1);
         map.put("id", id);

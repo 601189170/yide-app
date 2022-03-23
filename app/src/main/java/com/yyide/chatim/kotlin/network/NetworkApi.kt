@@ -17,6 +17,21 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
         service.login(requestBody)
     }
 
+
+    /**
+     * 请假拒接或同意
+     */
+    suspend fun leaveRefuseOrPass(requestBody: RequestBody) = getResult {
+        service.leaveRefuseOrPass(requestBody)
+    }
+
+    /**
+     * 待办列表
+     */
+    suspend fun todoList(requestBody: RequestBody) = getResult {
+        service.todoList(requestBody)
+    }
+
     /**
      * 获取学校和身份信息
      */

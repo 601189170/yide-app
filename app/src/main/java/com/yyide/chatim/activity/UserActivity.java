@@ -143,7 +143,7 @@ public class UserActivity extends BaseMvpActivity<UserPresenter> implements User
     }
 
     private void setUserInfo() {
-        userInfo = SpData.User();
+        userInfo = SpData.getUser();
         if (userInfo != null) {
 //            GlideUtil.loadImageHead(this, userInfo.img, img);
 //            sex.setText(!TextUtils.isEmpty(userInfo.sex) ? ("1".equals(userInfo.sex) ? "男" : "女") : "未设置");

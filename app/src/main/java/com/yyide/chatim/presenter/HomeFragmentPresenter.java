@@ -1,6 +1,7 @@
 package com.yyide.chatim.presenter;
 
 
+import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
 import com.yyide.chatim.model.GetUserSchoolRsp;
@@ -39,30 +40,6 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
             @Override
             public void onFailure(String msg) {
                 mvpView.getFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
-    }
-
-    public void getHomeTodo() {
-//        mvpView.showLoading();
-        HashMap<String, Object> map = new HashMap();
-        map.put("current", 1);
-        map.put("size", 5);
-        map.put("isOperation", 0);
-        addSubscription(dingApiStores.getMessageTransaction(map), new ApiCallback<TodoRsp>() {
-            @Override
-            public void onSuccess(TodoRsp model) {
-                mvpView.getIndexMyNotice(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getIndexMyNoticeFail(msg);
             }
 
             @Override

@@ -100,7 +100,7 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         adapter.setOnItemOnClickListener(position -> {
             Log.d(TAG, "position: " + list.get(position));
             final Intent intent = new Intent(getActivity(), LeaveFlowDetailActivity.class);
-            intent.putExtra("id", list.get(position).getId());
+            intent.putExtra("id", list.get(position).getId() + "");
             startActivityForResult(intent, REQUEST_CODE);
         });
 

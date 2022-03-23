@@ -192,8 +192,8 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
                 user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesName : "无");
             }
             setIdentity();
-            head_name.setText(SpData.getIdentityInfo() != null ? SpData.User().getUsername() : "");
-            GlideUtil.loadImageHead(context, SpData.User().getAvatar(), head_img);
+            head_name.setText(SpData.getIdentityInfo() != null ? SpData.getUser().getUsername() : "");
+            GlideUtil.loadImageHead(context, SpData.getUser().getAvatar(), head_img);
         });
     }
 

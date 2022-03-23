@@ -27,9 +27,9 @@ class TodoMsgFragment : KTBaseFragment<TodomsgFragmentBinding>(TodomsgFragmentBi
     }
 
     private fun initViewPager() {
-        fragments.add(TodoMsgPageFragment.newInstance(3))
         fragments.add(TodoMsgPageFragment.newInstance(0))
         fragments.add(TodoMsgPageFragment.newInstance(1))
+        fragments.add(TodoMsgPageFragment.newInstance(2))
         val mTitles: MutableList<String> = ArrayList()
         mTitles.add("全部")
         mTitles.add("待办")

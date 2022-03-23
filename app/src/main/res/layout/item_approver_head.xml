@@ -73,7 +73,7 @@
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_4"
         android:src="@mipmap/icon_leave_del"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="@+id/iv_user_head"
         app:layout_constraintTop_toTopOf="parent" />
 

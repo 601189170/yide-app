@@ -73,24 +73,15 @@ public class StaffAskLeavePresenter extends BasePresenter<StaffAskLeaveView> {
     /**
      * 老师请假
      *
-     * @param startTime
-     * @param endTime
      * @param sponsorType
-     * @param reason
-     * @param deptId
      * @param deptName
      * @param approverList
      */
-    public void addLeave(String procId, String startTime, String endTime, String sponsorType, String reason,
-                         String deptId, String deptName, String hours, List<LeaveApprovalBean.LeaveCommitBean> approverList, String ccIds) {
+    public void addLeave(LeaveApprovalBean.LeaveRequestBean requestBean, String procId, String sponsorType, String deptName, List<LeaveApprovalBean.LeaveCommitBean> approverList, String ccIds) {
         final HashMap<String, Object> map = new HashMap<>();
+        map.put("jsonData", JSON.toJSONString(requestBean));
         map.put("procId", procId);
-        map.put("startTime", startTime);
-        map.put("endTime", endTime);
-        map.put("reason", reason);
-        map.put("deptId", deptId);
         map.put("dept", deptName);
-        map.put("hours", hours);
         map.put("sponsorType", sponsorType);
         map.put("apprs", approverList);
         map.put("ccIds", ccIds);

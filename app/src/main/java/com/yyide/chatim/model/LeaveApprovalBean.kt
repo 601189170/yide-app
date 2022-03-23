@@ -50,6 +50,20 @@ data class LeaveApprovalBean(
         var approverId: String,
         var name: String
     )
+
+    data class LeaveRequestBean(
+        @JSONField(name = "startTime")
+        var startTime: String = "",
+        @JSONField(name = "endTime")
+        var endTime: String = "",
+        @JSONField(name = "hours")
+        var hours: String = "",
+        @JSONField(name = "reason")
+        var reason: String = "",
+        @JSONField(name = "student")
+        var student: String = ""
+    )
+
 }
 
 

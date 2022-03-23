@@ -32,7 +32,7 @@ public class SpData {
         return JSON.parseObject(SPUtils.getInstance().getString(LOGINDATA, ""), LoginRsp.class);
     }
 
-    public static UserBean User() {
+    public static UserBean getUser() {
         return JSON.parseObject(SPUtils.getInstance().getString(USER, ""), UserBean.class);
     }
 
