@@ -3,14 +3,12 @@ package com.yyide.chatim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,28 +19,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.book.BookSearchActivity;
+import com.yyide.chatim.activity.book.BookTeacherDetailActivity;
 import com.yyide.chatim.adapter.NoBookItemAdapter;
-import com.yyide.chatim.adapter.NoteItemAdapter;
+import com.yyide.chatim.adapter.NoBookItemAdapter2;
+import com.yyide.chatim.adapter.NoBookItemAdapter_student_By_Parent;
+import com.yyide.chatim.adapter.NoBookItemAdapter_student_By_Teacher;
+import com.yyide.chatim.adapter.NoteBookItemAdapter2;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
-import com.yyide.chatim.fragment.NoteByListFragment;
-import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.model.BookTeacherItem;
 import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.ListByAppRsp2;
 import com.yyide.chatim.model.ListByAppRsp3;
 import com.yyide.chatim.model.SchoolRsp;
-import com.yyide.chatim.model.TeacherlistRsp;
-import com.yyide.chatim.model.TemplateListRsp;
 import com.yyide.chatim.model.selectListByAppRsp;
 import com.yyide.chatim.presenter.NoteBookPresenter;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.NoteBookView;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,14 +56,14 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     ImageView img;
     @BindView(R.id.listview)
     ListView listview;
-    NoBookItemAdapter adapter;
+
+    NoBookItemAdapter adapterjzg;
+    NoBookItemAdapter_student_By_Parent adapter_student_by_parent;
+    NoBookItemAdapter_student_By_Teacher adapter_student_by_teacher;
     @BindView(R.id.listview2)
     ListView listview2;
-    NoBookItemAdapter adapter2;
-    @BindView(R.id.original)
-    FrameLayout original;
-    @BindView(R.id.student)
-    FrameLayout student;
+
+
 
     @BindView(R.id.pName)
     TextView pName;
@@ -75,20 +71,10 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     private String schoolType = "";
     private String mSchoolName = "";
 
-    @BindView(R.id.layout_jz_all)
-    LinearLayout layout_jz_all;
 
-    @BindView(R.id.recyclerView_teacher)
-    RecyclerView recyclerView_teacher;
-    @BindView(R.id.recyclerView_student)
-    RecyclerView recyclerView_student;
 
-    NoteItemAdapter noteItemAdapter_teacher, noteItemAdapter_student;
 
-    @BindView(R.id.teacher_btn)
-    TextView teacher_btn;
-    @BindView(R.id.student_btn)
-    TextView student_btn;
+
 
     @Override
     public int getContentViewID() {
@@ -108,34 +94,43 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             mSchoolName = schoolRsp.getSchoolName();
             pName.setText(schoolRsp.getSchoolName());
         }
-        adapter = new NoBookItemAdapter();
-        adapter2 = new NoBookItemAdapter();
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener((parent, view, position, id) -> setPostData((ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO>) adapter.getItem(position).children, adapter.getItem(position).employeeAddBookDTOList, adapter.getItem(position).name, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name, "staff", ""));
-//        listview.setOnItemClickListener((parent, view, position, id) -> setPostData(adapter.getItem(position),adapter.getItem(position).employeeAddBookDTOList, adapter.getItem(position).name, String.valueOf(adapter.getItem(position).id), adapter.getItem(position).name, "staff", ""));
-//        listview2.setOnItemClickListener((parent, view, position, id) -> setPostData((ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO>) adapter2.getItem(position).children,adapter2.getItem(position).employeeAddBookDTOList, adapter2.getItem(position).name, String.valueOf(adapter2.getItem(position).id), adapter2.getItem(position).name, "student", ""));
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(this);
-        linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView_teacher.setLayoutManager(linearLayoutManager);
-        recyclerView_student.setLayoutManager(linearLayoutManager2);
-        noteItemAdapter_student = new NoteItemAdapter();
-        noteItemAdapter_teacher = new NoteItemAdapter();
-        recyclerView_student.setAdapter(noteItemAdapter_student);
-        recyclerView_teacher.setAdapter(noteItemAdapter_teacher);
-        noteItemAdapter_teacher.setOnItemClickListener(new OnItemClickListener() {
+        adapterjzg = new NoBookItemAdapter();
+        adapter_student_by_parent = new NoBookItemAdapter_student_By_Parent();
+        adapter_student_by_teacher = new NoBookItemAdapter_student_By_Teacher();
+
+        listview.setAdapter(adapterjzg);
+//        listview2.setAdapter(adapter_student_by_parent);
+
+
+        //教职工
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                setPostData2(noteItemAdapter_teacher.getItem(position));
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (adapterjzg.getItem(position).isperson){
+                    BookTeacherItem teacherItem = new BookTeacherItem(
+                            adapterjzg.getItem(position).name,
+                            adapterjzg.getItem(position).gender,
+                            adapterjzg.getItem(position).phone,
+                            adapterjzg.getItem(position).userId,
+                            adapterjzg.getItem(position).email,
+                            adapterjzg.getItem(position).subjectName,
+                            adapterjzg.getItem(position).employeeSubjects,
+                            "",
+                            "",
+                            adapterjzg.getItem(position).avatar);
+
+                    Intent intent = new Intent(NoteBookActivity.this, BookTeacherDetailActivity.class);
+                    intent.putExtra("teacher", teacherItem);
+                    startActivity(intent);
+                }else {
+                    setPostData((ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO>) adapterjzg.getItem(position).children, adapterjzg.getItem(position).employeeAddBookDTOList, mSchoolName, String.valueOf(adapterjzg.getItem(position).id), adapterjzg.getItem(position).name, "staff", "");
+                }
             }
         });
-        noteItemAdapter_student.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                setPostData2(noteItemAdapter_student.getItem(position));
-            }
-        });
+
+
+
+
 
     }
 
@@ -163,30 +158,28 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         startActivity(intent);
     }
 
-    //    void setPostData(ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO childrenDTO, ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO employeeAddBookDTOListDTO,String schoolName, String id, String name, String organization, String type) {
-//        Intent intent = new Intent();
-//
-//        intent.putExtra(NoteByListFragment.PARAMS_NAME,JSON.toJSONString(childrenDTO));
-//        intent.putExtra(NoteByListFragment.PARAMS_NAME2,JSON.toJSONString(employeeAddBookDTOListDTO));
-//        Log.e(TAG, "setPostData: "+JSON.toJSONString(childrenDTO) );
-//        Log.e(TAG, "setPostData==>: "+JSON.toJSONString(employeeAddBookDTOListDTO) );
-//        intent.putExtra("id", id);
-//        intent.putExtra("name", name);
-//        intent.putExtra("schoolName", mSchoolName);
-//        intent.putExtra("schoolType", schoolType);
-//        intent.putExtra("type", type);
-//        intent.putExtra("organization", organization);
-//        intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
-//        startActivity(intent);
-//    }
-    void setPostData2(TeacherlistRsp.DataBean.RecordsBean itemBean) {
 
+    void setPostStudentDataByParent(List<ListByAppRsp3.DataDTO.AdlistDTO> list) {
 
         Intent intent = new Intent();
-        Log.e("TAG", "initView: " + JSON.toJSONString(itemBean));
-        intent.putExtra("data", JSON.toJSONString(itemBean));
-        intent.putExtra("organization", "student");
-        intent.setClass(mActivity, PersonInfoActivity.class);
+        intent.putExtra(NoteByListActivity.TAGStudentlistBeanByJz, JSON.toJSONString(list));
+        intent.putExtra("schoolName", mSchoolName);
+        intent.putExtra("schoolType", schoolType);
+        intent.putExtra("id", "");
+        intent.putExtra("name", list.get(0).name);
+        intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
+        startActivity(intent);
+    }
+
+    void setPostStudentDataByTeacher(List<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO> list) {
+
+        Intent intent = new Intent();
+        intent.putExtra(NoteByListActivity.TAGStudentlistBeanByTeacher, JSON.toJSONString(list));
+        intent.putExtra("schoolName", mSchoolName);
+        intent.putExtra("schoolType", schoolType);
+        intent.putExtra("id", list.get(0).id);
+        intent.putExtra("name", list.get(0).name);
+        intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
         startActivity(intent);
     }
 
@@ -200,9 +193,8 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         super.onResume();
         if (SpData.getIdentityInfo().staffIdentity()) {
             mvpPresenter.listByApp();
-            layout_jz_all.setVisibility(View.GONE);
+
         }else {
-            layout_jz_all.setVisibility(View.VISIBLE);
             mvpPresenter.universitySelectListByApp();
         }
     }
@@ -232,131 +224,97 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
 
     }
 
-    //    @Override
-//    public void listByApp(ListByAppRsp rsp) {
-//        Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
-//        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-//            //学校组织结构
-//            ArrayList<ListByAppRsp.DataBean.ListBean> listBeans1 = new ArrayList<>();
-//            if (rsp.data.size() > 0) {
-//                if (!TextUtils.isEmpty(rsp.data.get(0).schoolLogo)) {
-//                    GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.get(0).schoolLogo, img);
-//                }
-//                for (ListByAppRsp.DataBean.ListBean listBean : rsp.data.get(0).list) {
-//                    listBeans1.add(listBean);
-//                }
-//                original.setOnClickListener(v -> setPostData(listBeans1, rsp.data.get(0).parentName, String.valueOf(rsp.data.get(0).id), rsp.data.get(0).name, "staff", "origin"));
-//            }
-//            adapter.notifyData(listBeans1);
-//        }
-//    }
     @Override
     public void listByApp(ListByAppRsp2 rsp) {
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES_0) {
             //学校组织结构
             ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBeans1 = new ArrayList<>();
-            ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO> listBeans2 = new ArrayList<>();
+            ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBeans111 = new ArrayList<>();
+
             if (rsp.data.deptVOList.size() > 0) {
                 pName.setText(rsp.data.schoolName);
                 if (!TextUtils.isEmpty(rsp.data.schoolBadgeUrl)) {
                     GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
                 }
                 for (ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO listBean : rsp.data.deptVOList.get(0).children) {
+                    listBean.itemType=1;
                     listBeans1.add(listBean);
                 }
                 for (ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO listBean : rsp.data.deptVOList.get(0).employeeAddBookDTOList) {
-                    listBeans2.add(listBean);
+
+                    ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO bean=new ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO();
+                    bean.children=new ArrayList<>();
+                    bean.isperson=true;
+                    bean.id=listBean.id;
+                    bean.name=listBean.name;
+                    bean.concealPhone=listBean.concealPhone;
+                    bean.email=listBean.email;
+                    bean.avatar=listBean.avatar;
+                    bean.employeeSubjects=listBean.employeeSubjects;
+                    bean.phone=listBean.phone;
+                    bean.userId=listBean.userId;
+                    bean.subjectName=listBean.subjectName;
+                    bean.gender=listBean.gender;
+                    bean.itemType=0;
+
+
+                    listBeans111.add(bean);
                 }
-                original.setOnClickListener(v -> setPostData(listBeans1, listBeans2, rsp.data.deptVOList.get(0).name, String.valueOf(rsp.data.deptVOList.get(0).id), rsp.data.deptVOList.get(0).name, "staff", "origin"));
+//                original.setOnClickListener(v -> setPostData(listBeans1, listBeans2, rsp.data.deptVOList.get(0).name, String.valueOf(rsp.data.deptVOList.get(0).id), rsp.data.deptVOList.get(0).name, "staff", "origin"));
             }
-            Log.e("TAG", "listBeans1: " + JSON.toJSONString(listBeans1));
-            adapter.notifyData(listBeans1);
+            listBeans1.addAll(listBeans111);
+            listview2.setAdapter(adapter_student_by_teacher);
+            adapter_student_by_teacher.notifyData(rsp.data.classAddBookDTOList);
+            listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    setPostStudentDataByTeacher(adapter_student_by_teacher.list);
+                }
+            });
+
+
+            if (listBeans1!=null&&listBeans1.size()>0)
+            adapterjzg.notifyData(listBeans1);
+            if (adapter_student_by_teacher.list.size()>0){
+                listview2.setVisibility(View.VISIBLE);
+            }else {
+                listview2.setVisibility(View.GONE);
+            }
+//            listview2.setVisibility(View.GONE);
+
+
+            Log.e(TAG, "adapter_student_by_teacher: "+JSON.toJSONString(adapter_student_by_teacher.list.size()) );
+            Log.e(TAG, "adapterjzg: "+JSON.toJSONString(adapterjzg.list.size()) );
         }
     }
 
     @Override
     public void selectListByApp(ListByAppRsp rsp) {
-        Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
-//        if (rsp.code == BaseConstant.REQUEST_SUCCES2) {
-//            //小初高组织结构
-//            ArrayList<ListByAppRsp.DataBean.ListBean> listBeans = new ArrayList<>();
-//            if (rsp.data != null && rsp.data.size() > 0) {
-//                for (ListByAppRsp.DataBean listBean : rsp.data) {
-//                    ListByAppRsp.DataBean.ListBean item = new ListByAppRsp.DataBean.ListBean();
-//                    item.name = listBean.name;
-//                    item.id = listBean.id;
-//                    item.list = listBean.list;
-//                    listBeans.add(item);
-//                }
-//                student.setOnClickListener(v -> setPostData(listBeans, mSchoolName, rsp.data.get(0).id + "", mSchoolName, "student", "origin"));
-//            }
-//            listview2.setAdapter(adapter2);
-//            adapter2.notifyData(listBeans);
-//        }
+
+
     }
 
     @Override
     public void universityListByApp(ListByAppRsp3 rsp) {
+
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES_0) {
-            List<TeacherlistRsp.DataBean.RecordsBean> list_teacher = new ArrayList<>();
-            List<TeacherlistRsp.DataBean.RecordsBean> list_student = new ArrayList<>();
-            pName.setText(rsp.data.schoolName);
-            if (!TextUtils.isEmpty(rsp.data.schoolBadgeUrl)) {
-                GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
+            listview2.setAdapter(adapter_student_by_parent);
+            adapter_student_by_parent.notifyData(rsp.data.adlist);
+            if (adapter_student_by_parent.list.size()>0){
+                listview2.setVisibility(View.VISIBLE);
+            }else {
+                listview2.setVisibility(View.GONE);
             }
-            if (rsp.data.adlist.size() > 0) {
-
-                for (ListByAppRsp3.DataDTO.AdlistDTO adlistDTO : rsp.data.adlist) {
-                    for (ListByAppRsp3.DataDTO.AdlistDTO.ElternListDTO item : adlistDTO.elternList) {
-                        TeacherlistRsp.DataBean.RecordsBean bean = new TeacherlistRsp.DataBean.RecordsBean();
-                        bean.organizationItem3 = item;
-                        bean.itemType = 0;
-                        bean.name = item.name;
-                        bean.subjectName = item.subjectName;
-                        bean.phone = item.phone;
-                        bean.sex = item.gender;
-                        bean.employeeSubjects = item.employeeSubjects;
-                        bean.userId = Long.parseLong(item.userId);
-                        bean.id = Long.parseLong(item.id);
-                        list_teacher.add(bean);
-                    }
-
-                    for (ListByAppRsp3.DataDTO.AdlistDTO.StudentListDTO item : adlistDTO.studentList) {
-                        TeacherlistRsp.DataBean.RecordsBean bean = new TeacherlistRsp.DataBean.RecordsBean();
-                        bean.organizationItem4 = item;
-                        bean.itemType = 0;
-                        bean.name = item.name;
-                        bean.phone = item.phone;
-                        bean.address = item.address;
-                        bean.sex = String.valueOf(item.gender);
-//                        bean.userId = Long.parseLong(item.userId);
-
-                        bean.id = Long.parseLong(item.id);
-                        list_student.add(bean);
-                    }
+//            listview2.setVisibility(View.GONE);
+            listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    setPostStudentDataByParent(adapter_student_by_parent.list);
                 }
-            }
-            noteItemAdapter_teacher.addData(list_teacher);
-            noteItemAdapter_student.addData(list_student);
+            });
 
-
-//            List<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBeans1 = new ArrayList<>();
-//            ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO> listBeans2 = new ArrayList<>();
-//            if (rsp.data.deptVOList.size() > 0) {
-//                for (ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO listBean : rsp.data.deptVOList.get(0).children) {
-//                    listBeans1.add(listBean);
-//                }
-//                for (ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO listBean : rsp.data.deptVOList.get(0).employeeAddBookDTOList) {
-//                    listBeans2.add(listBean);
-//                }
-//                original.setOnClickListener(v -> setPostData2(listBeans1,listBeans2, rsp.data.deptVOList.get(0).name, String.valueOf(rsp.data.deptVOList.get(0).id), rsp.data.deptVOList.get(0).name, "student", "origin"));
-//
-//
-//            }
-//            listview2.setAdapter(adapter2);
-//            adapter2.notifyData(listBeans1);
         }
     }
 

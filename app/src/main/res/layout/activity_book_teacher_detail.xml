@@ -54,11 +54,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_16"
-                    android:layout_marginTop="@dimen/dp_4"
+
                     android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/ivHead"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/ivHead"
+
                     app:layout_constraintTop_toTopOf="@+id/ivHead" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -74,11 +76,12 @@
                     android:id="@+id/textView16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginStart="@dimen/dp_15"
+
                     android:text="姓名"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,19 +89,14 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:textColor="#212121"
+                    android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView16"
-                    app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                    android:layout_marginLeft="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="#F9FAF9"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -112,11 +110,11 @@
                     android:id="@+id/textView17"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_15"
-                    android:text="手机"
+                    android:layout_marginStart="@dimen/dp_15"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
+                    android:text="手机"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -124,12 +122,12 @@
                     android:id="@+id/phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:textColor="#212121"
-                    android:textSize="@dimen/text_15"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView17"
-                    app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                    android:textColor="@color/text_333333"
+                    android:textSize="@dimen/text_14"
+                    android:layout_marginLeft="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/set"
@@ -173,11 +171,11 @@
                     android:id="@+id/textView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginStart="@dimen/dp_15"
                     android:text="邮箱"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -185,25 +183,20 @@
                     android:id="@+id/email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:textColor="#212121"
-                    android:textSize="@dimen/text_15"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView1"
-                    app:layout_constraintTop_toBottomOf="@+id/textView1" />
+                    android:textColor="@color/text_333333"
+                    android:textSize="@dimen/text_14"
+                    android:layout_marginLeft="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="#F9FAF9"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout5"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
 
@@ -211,11 +204,12 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginStart="@dimen/dp_15"
+
                     android:text="性别"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -223,25 +217,20 @@
                     android:id="@+id/sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:textColor="#212121"
-                    android:textSize="@dimen/text_15"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView2"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                    android:textColor="@color/text_333333"
+                    android:textSize="@dimen/text_14"
+                    android:layout_marginLeft="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="#F9FAF9"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout6"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
 
@@ -249,11 +238,12 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginStart="@dimen/dp_15"
+
                     android:text="教授科目"
                     android:textColor="#666666"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -261,16 +251,12 @@
                     android:id="@+id/subjectName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_10"
-                    android:layout_marginBottom="@dimen/dp_10"
-                    android:textColor="#212121"
-                    android:textSize="@dimen/text_15"
-                    android:textStyle="bold"
+                    android:textColor="@color/text_333333"
+                    android:textSize="@dimen/text_14"
+                    android:layout_marginLeft="100dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -283,14 +269,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/dp_10"
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_height="50dp"
+
                     android:gravity="center"
                     android:text="发消息"
-                    android:textColor="#ff11C685"
-                    android:textSize="18sp"
-                    app:drawableLeftCompat="@mipmap/icon_message"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:background="@drawable/person_bg"
+
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

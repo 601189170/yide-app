@@ -59,16 +59,25 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
         if (holder.getItemViewType() == ITEM_TYPE_STUDENT) {
             Student student = teacher.getStudent();
             ItemNewBookStudentSearchBinding bind = ItemNewBookStudentSearchBinding.bind(holder.itemView);
-            bind.tvName.setText(TextUtils.isEmpty(student.getName()) ? "未知姓名" : student.getName() + "（" + student.getTypeName() + "）");
+//            bind.tvName.setText(TextUtils.isEmpty(student.getName()) ? "未知姓名" : student.getName() + "（" + student.getTypeName() + "）");
+            if (!TextUtils.isEmpty(teacher.getName())){
+                if (SpData.getIdentityInfo().staffIdentity()) {
+                    bind.tvName.setText(student.getName()+"（"+teacher.getEmployeeSubjects()+")");
+                }else {
+                    bind.tvName.setText(student.getName());
+                }
+            }
             GlideUtil.loadImageHead(
                     getContext(),
-                    student.getFaceInformation(),
+                    student.getAvatar(),
                     bind.img
             );
             GuardianAdapter guardianAdapter = new GuardianAdapter();
             bind.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             bind.recyclerView.setAdapter(guardianAdapter);
-            guardianAdapter.setList(student.getParentList());
+
+//            guardianAdapter.setList(student);
+            guardianAdapter.setList(student.getElternAddBookDTOList());
             guardianAdapter.setOnItemClickListener((adapter, view, position1) -> {
                 Parent item1 = guardianAdapter.getItem(position1);
                 if (BookSearchActivity.FROM_GATE.equals(from)){
@@ -95,43 +104,44 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                     GateDetailInfoActivity.Companion.toDetail(getContext(),1,null,userId,null);
                     return;
                 }
-//                BookStudentItem studentItem = new BookStudentItem(item.getId(),
-//                        item.getName(),
-//                        item.getPhone(),
-//                        item.getClassName(),
-//                        item.getUserId(),
-//                        item.getPrimaryGuardianPhone(),
-//                        item.getDeputyGuardianPhone(),
-//                        item.getSex(),
-//                        item.getAddress(),
-//                        item.getFaceInformation(),
-//                        item.isOwnChild(),
-//                        null);
-//                BookStudentDetailActivity.start(getContext(), studentItem);
-                BookTeacherItem studentItem = new BookTeacherItem(
-                        teacher.getName(),
-                        teacher.getGender(),
-                        teacher.getPhone(),
-                        teacher.getUserId(),
-                        teacher.getEmail(),
-                        teacher.getSubjectName(),
-                        teacher.getSubjectName(),
-                        teacher.getFaceInformation(),
-                        teacher.getWhitelist());
-                BookTeacherDetailActivity.start(getContext(), studentItem);
+                String main="";
+                String fu="";
+                if (student.getElternAddBookDTOList().size()>0){
+                    main=student.getElternAddBookDTOList().get(0).getPhone();
+                }
+                if (student.getElternAddBookDTOList().size()>1){
+                    fu=student.getElternAddBookDTOList().get(1).getPhone();
+                }
+
+                BookStudentItem studentItem = new BookStudentItem(
+                        student.getId(),
+                        student.getName(),
+                        student.getPhone(),
+                        student.getClassName(),
+                        student.getUserId(),
+                        main,
+                        fu,
+                        student.getGender(),
+                        student.getAddress(),
+                        student.getFaceInformation(),
+                        student.getEmail(),
+                        student.getElternAddBookDTOList(),
+                        student.getAvatar()
+                       );
+                BookStudentDetailActivity.start(getContext(), studentItem);
             });
+
         } else {
             ItemBookSearchBinding bind = ItemBookSearchBinding.bind(holder.itemView);
             GlideUtil.loadImageHead(getContext(), teacher.getFaceInformation(), bind.ivHead);
-//            if (!SpData.getIdentityInfo().staffIdentity() && teacher.getList() != null) {
-            if (teacher.getList()!=null&&teacher.getList().getTeachingSubjects()!=null){
-                bind.tvName.setText(teacher.getName() + " (" + teacher.getList().getTeachingSubjects() + ")");
-            }else {
-                bind.tvName.setText(teacher.getName());
+            if (!TextUtils.isEmpty(teacher.getName())){
+                if (SpData.getIdentityInfo().staffIdentity()) {
+                    bind.tvName.setText(teacher.getName()+"（"+teacher.getDepartmentName()+")");
+                }else {
+                    bind.tvName.setText(teacher.getName()+"（"+teacher.getEmployeeSubjects()+")");
+                }
             }
-//            } else {
-//                bind.tvName.setText(teacher.getName() + " (" + teacher.getTypeName() + ")");
-//            }
+
 
             holder.itemView.setOnClickListener(v -> {
 
@@ -154,7 +164,8 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                             teacher.getSubjectName(),
                             teacher.getSubjectName(),
                             teacher.getFaceInformation(),
-                            teacher.getWhitelist());
+                            teacher.getWhitelist(),
+                            teacher.getAvatar());
                     BookTeacherDetailActivity.start(getContext(), teacherItem);
 //                }
 
@@ -172,13 +183,59 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
         protected void convert(@NonNull BaseViewHolder baseViewHolder, Parent item) {
             ItemNewBookGuardianSearchBinding bind = ItemNewBookGuardianSearchBinding.bind(baseViewHolder.itemView);
             bind.tvName.setText(item.getName());
-            bind.tvGuardianName.setText(TextUtils.isEmpty(item.getRelationType())?"":item.getRelationType());
+            switch (item.getRelation()){
+                case "0":
+                    bind.tvGuardianName.setText("父亲");
+                    break;
+                case "1":
+                    bind.tvGuardianName.setText("母亲");
+                    break;
+                case "2":
+                    bind.tvGuardianName.setText("爷爷");
+                    break;
+                case "3":
+                    bind.tvGuardianName.setText("奶奶");
+                    break;
+                case "4":
+                    bind.tvGuardianName.setText("外公");
+                    break;
+                case "5":
+                    bind.tvGuardianName.setText("外婆");
+                    break;
+                case "6":
+                    bind.tvGuardianName.setText("其他监护人");
+                    break;
+                default:
+                    bind.tvGuardianName.setText("其他监护人");
+                    break;
+            }
+//            switch (item.getRelation()){
+//
+//                case :"0"
+//                "父亲"
+//            "1" ->
+//                "母亲"
+//            "2" ->
+//                "爷爷"
+//            "3" ->
+//                "奶奶"
+//            "4" ->
+//                "外公"
+//            "5" ->
+//                "外婆"
+//            "6" ->
+//                "其他监护人"
+//            else ->
+//                "其他监护人"
+//        }
+            }
+//            bind.tvGuardianName.setText(TextUtils.isEmpty(item.getRelationType())?"":item.getRelationType());
 //            if (!TextUtils.isEmpty(item.getRelationType())){
 //                bind.tvGuardianName.setText(item.getRelationType());
 //            }else {
 //                bind.tvGuardianName.setText(item.getRelationType());
 //            }
 
-        }
+
     }
 }

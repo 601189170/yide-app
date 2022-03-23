@@ -43,7 +43,7 @@ public class TeacherlistRsp implements Serializable {
         public List<RecordsBean> records;
 
 
-        public static class RecordsBean  implements MultiItemEntity,Parcelable{
+        public static class RecordsBean  implements MultiItemEntity,Serializable{
             /**
              * id : 585
              * delInd : 0
@@ -131,7 +131,7 @@ public class TeacherlistRsp implements Serializable {
             public String address;
             public String specialty;
             public long schoolId;
-            public long userId;
+            public String userId;
             public String remarks;
             public Object departmentName;
             public long departmentId;
@@ -140,12 +140,16 @@ public class TeacherlistRsp implements Serializable {
             public String subjectName;
             public String adress;
             public List<?> roles;
+            public List<Parent> elternAddBookDTOList=new ArrayList<>();
             public String userType;//用户类型 1老师 2学生
             //组织架构列表
             public ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO organizationItem;
             public ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO organizationItem2;
-            public ListByAppRsp3.DataDTO.AdlistDTO.ElternListDTO organizationItem3;
-            public ListByAppRsp3.DataDTO.AdlistDTO.StudentListDTO organizationItem4;
+
+            public List<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO.StudentListDTO> StudentData_by_Teacher=new ArrayList<>();
+
+            public List<ListByAppRsp3.DataDTO.AdlistDTO.ElternListDTO>  TeacherData_by_Parent=new ArrayList();
+            public List<ListByAppRsp3.DataDTO.AdlistDTO.StudentListDTO> StudentData_by_Parent=new ArrayList<>();
 
             public int itemType; //0 成员 1 组织
 
@@ -154,15 +158,7 @@ public class TeacherlistRsp implements Serializable {
                 return itemType;
             }
 
-            @Override
-            public int describeContents() {
-                return 0;
-            }
 
-            @Override
-            public void writeToParcel(Parcel dest, int flags) {
-
-            }
 
             public static class DepartmentsBean {
                 /**

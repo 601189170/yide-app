@@ -23,9 +23,14 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.tbruyelle.rxpermissions3.Permission;
 import com.tbruyelle.rxpermissions3.RxPermissions;
+import com.tencent.imsdk.v2.V2TIMConversation;
+import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
+import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.base.BaseActivity;
+import com.yyide.chatim.chat.ChatActivity;
 import com.yyide.chatim.model.TeacherlistRsp;
+import com.yyide.chatim.utils.Constants;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.StringUtils;
 
@@ -116,7 +121,15 @@ public class PersonInfoActivity extends BaseActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ChatInfo chatInfo = new ChatInfo();
+                chatInfo.setType(V2TIMConversation.V2TIM_C2C);
+                chatInfo.setId(String.valueOf(bean.userId));
+                chatInfo.setChatName(bean.name);
 
+                Intent intent = new Intent(BaseApplication.getInstance(), ChatActivity.class);
+                intent.putExtra(Constants.CHAT_INFO, chatInfo);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                BaseApplication.getInstance().startActivity(intent);
             }
         });
     }

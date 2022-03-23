@@ -39,8 +39,10 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit.MessageUnreadWatcher
 import com.vivo.push.PushClient
+import com.yyide.chatim.activity.NoteBookActivity
 import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
 import com.yyide.chatim.activity.schedule.ScheduleSettingsActivity
+import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.alipush.AliasUtil
 import com.yyide.chatim.alipush.MyMessageReceiver
 import com.yyide.chatim.alipush.NotifyUtil
@@ -150,7 +152,9 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             }
         }
         initView()
-//        startActivity(Intent(this, ScheduleSearchActivity::class.java))
+//        startActivity(Intent(this, SchoolCalendarActivity::class.java))
+
+//        startActivity(Intent(this, NoteBookActivity::class.java))
     }
 
     private val HOME_TYPE = 1

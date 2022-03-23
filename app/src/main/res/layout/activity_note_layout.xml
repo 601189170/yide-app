@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -66,6 +66,7 @@
                 android:background="#F9FAF9" />
 
             <FrameLayout
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="62dp">
 
@@ -93,87 +94,31 @@
 
             </FrameLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:visibility="gone"
-                android:layout_marginStart="62dp"
-                android:background="@color/line_11" />
-
-            <FrameLayout
-                android:visibility="gone"
-                android:id="@+id/original"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:foreground="?android:attr/selectableItemBackground">
-
-                <TextView
-                    android:layout_width="@dimen/dp_20"
-                    android:layout_height="@dimen/dp_20"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/dp_18"
-                    android:background="@drawable/icon_zzjg" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="62dp"
-                    android:text="组织架构"
-                    android:textColor="@color/text_212121"
-                    android:textSize="@dimen/text_16" />
-
-            </FrameLayout>
 
             <ListView
+
                 android:id="@+id/listview"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+
                 android:divider="@color/transparent"
-                android:dividerHeight="0dp">
 
-            </ListView>
-
-            <FrameLayout
-                android:visibility="gone"
-                android:id="@+id/student"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:foreground="?android:attr/selectableItemBackground">
-
-                <TextView
-                    android:layout_width="@dimen/dp_20"
-                    android:layout_height="@dimen/dp_20"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/dp_18"
-                    android:background="@drawable/icon_zzjg" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="62dp"
-                    android:text="学生"
-                    android:textColor="@color/text_212121"
-                    android:textSize="@dimen/text_16" />
-
-            </FrameLayout>
-
-            <com.yyide.chatim.widget.MyListView
-                android:id="@+id/listview2"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                android:visibility="visible" />
+
+
+
+            <ListView
+                android:background="@color/white"
+                android:id="@+id/listview2"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
                 android:divider="@color/transparent"
                 android:dividerHeight="0dp" />
 
-                <include
-                    layout="@layout/note_jz_layout">
 
-                </include>
 
         </LinearLayout>
 <!--    </ScrollView>-->

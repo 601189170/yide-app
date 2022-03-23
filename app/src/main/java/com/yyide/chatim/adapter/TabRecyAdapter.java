@@ -48,9 +48,10 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(final TabRecyAdapter.ViewHolder viewHolder, final int i) {
+
         if (getItem(i).islast.equals("2")) {
             if (!TextUtils.isEmpty(getItem(i).name)) {
-                viewHolder.item.setText(getItem(i).name + " >");
+                viewHolder.item.setText(getItem(i).name );
             }
             viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.blue11));
             viewHolder.lastright.setVisibility(View.VISIBLE);
@@ -58,9 +59,16 @@ public class TabRecyAdapter extends RecyclerView.Adapter<TabRecyAdapter.ViewHold
             if (!TextUtils.isEmpty(getItem(i).name)) {
                 viewHolder.item.setText(getItem(i).name);
             }
-            viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.black10));
+
             viewHolder.lastright.setVisibility(View.GONE);
         }
+
+        if (i==list.size()-1){
+            viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.black10));
+        }else {
+            viewHolder.item.setTextColor(viewHolder.item.getContext().getResources().getColor(R.color.blue11));
+        }
+
     }
 
     @Override

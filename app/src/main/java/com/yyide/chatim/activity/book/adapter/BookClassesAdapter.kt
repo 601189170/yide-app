@@ -110,9 +110,9 @@ class BookClassesAdapter :
             student.student = bookStudentItem
             student.itemType = ITEM_TYPE_STUDNET
             resultData.add(student)
-            bookStudentItem.guardianList?.forEach { guardianItem ->
+            bookStudentItem.elternAddBookDTOList?.forEach { guardianItem ->
                 val guardian = BookClassesItem()
-                guardian.guardian = guardianItem
+                guardian.guardian2 = guardianItem
                 guardian.itemType = ITEM_TYPE_GUARDIAN
                 resultData.add(guardian)
             }

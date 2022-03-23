@@ -12,6 +12,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.chat.ChatActivity
 import com.yyide.chatim.databinding.ActivityBookPatriarchDetailBinding
+import com.yyide.chatim.databinding.ActivityPersonInfoBinding
 import com.yyide.chatim.model.BookGuardianItem
 import com.yyide.chatim.utils.Constants
 import com.yyide.chatim.utils.GlideUtil
@@ -21,6 +22,8 @@ import com.yyide.chatim.utils.Utils
 class BookPatriarchDetailActivity : BaseActivity() {
 
     private lateinit var viewBinding: ActivityBookPatriarchDetailBinding
+//    activity_person_info
+//    private lateinit var viewBinding: ActivityPersonInfoBinding
     private var type: Int = 1
 
     companion object {
@@ -35,6 +38,7 @@ class BookPatriarchDetailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityBookPatriarchDetailBinding.inflate(layoutInflater)
+//        viewBinding = ActivityPersonInfoBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initView()
     }
@@ -53,7 +57,7 @@ class BookPatriarchDetailActivity : BaseActivity() {
         )
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)
-        viewBinding.tvName.text = guardianItem.name
+//        viewBinding.tvName.text = guardianItem.name
         viewBinding.name.text = guardianItem.name
         viewBinding.tvFamilyRelations.text = guardianItem.getRelation()
         viewBinding.tvSingleGuardianship.text = if (guardianItem.singleParent == "1") "是" else "否"

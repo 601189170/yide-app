@@ -8,6 +8,7 @@
     tools:context="com.yyide.chatim.ScanActivity">
 
     <include
+        android:id="@+id/top"
         layout="@layout/title_layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -30,24 +30,27 @@ data class Student(
     var list: BookSearchStudent,
     @JSONField(name = "name")
     var name: String,
-    @JSONField(name = "parentList")
-    var parentList: MutableList<Parent>,
+    @JSONField(name = "elternAddBookDTOList")
+    var elternAddBookDTOList: MutableList<Parent>,
     @JSONField(name = "type")
     var type: Int,
     @JSONField(name = "typeName")
     var typeName: String,
+    var address: String,
 
 //    var student: Student?,
-    var subjectName: String?,
-    var userId: String?,
+//    var subjectName: String?,
+//    var userId: String?,
     var gender: String?,
     var phone: String?,
-    var id: String?,
-    var employeeSubjects: String?,
+    var ClassName: String?,
+    var id: Long?,
+    var UserId: String?,
+//    var employeeSubjects: String?,
     var email: String?,
     var departmentName: String?,
     var avatar: String?,
-    var concealPhone: String?,
+//    var concealPhone: String?,
 )
 
 data class Teacher(
@@ -68,13 +71,17 @@ data class Teacher(
     var userId: String?,
     var gender: String?,
     var phone: String?,
-    var id: String?,
+    var id: Long?,
     var employeeSubjects: String?,
+    @JSONField(name = "elternAddBookDTOList")
+    var elternAddBookDTOList: MutableList<Parent>,
     var email: String?,
     var departmentName: String?,
     var avatar: String?,
     var concealPhone: String?,
+    var className: String?,
     override var itemType: Int
+
 ) : MultiItemEntity
 
 data class BookSearchStudent(
@@ -102,50 +109,59 @@ data class BookSearchStudent(
     var srarchAddressBook: String,
     @JSONField(name = "userId")
     var userId: String
+
+
 ) {
 
 }
 
-data class Parent(
+data class Parent (
     @JSONField(name = "className")
-    var className: String,
+    var className: String="",
     @JSONField(name = "faceInformation")
-    var faceInformation: String,
+    var faceInformation: String="",
     @JSONField(name = "id")
-    var id: Long,
+    var id: Long=0,
     @JSONField(name = "name")
-    var name: String,
+    var name: String="",
     @JSONField(name = "phone")
-    var phone: String,
+    var phone: String="",
     @JSONField(name = "relation")
-    var relation: String,
+    var relation: String="",
     @JSONField(name = "singleParent")
-    var singleParent: String,
+    var singleParent: String="",
     @JSONField(name = "type")
-    var type: String,
+    var type: String="",
     @JSONField(name = "userId")
-    var userId: String,
+    var userId: String="",
     @JSONField(name = "workUnit")
-    var workUnit: String
-) {
-    fun getRelationType(): String {
-        return when (relation) {//	与监护人关系（0:父亲，1:母亲，2:爷爷，3:奶奶，4:外公，5:外婆，6:其它）
-            "0" ->
-                "父亲"
-            "1" ->
-                "母亲"
-            "2" ->
-                "爷爷"
-            "3" ->
-                "奶奶"
-            "4" ->
-                "外公"
-            "5" ->
-                "外婆"
-            "6" ->
-                "其他监护人"
-            else ->
-                "其他监护人"
-        }
-    }
-}
+    var workUnit: String="",
+
+):Serializable
+
+
+
+
+
+//{
+//    fun getRelationType(): String {
+//        return when (relation) {//	与监护人关系（0:父亲，1:母亲，2:爷爷，3:奶奶，4:外公，5:外婆，6:其它）
+//            "0" ->
+//                "父亲"
+//            "1" ->
+//                "母亲"
+//            "2" ->
+//                "爷爷"
+//            "3" ->
+//                "奶奶"
+//            "4" ->
+//                "外公"
+//            "5" ->
+//                "外婆"
+//            "6" ->
+//                "其他监护人"
+//            else ->
+//                "其他监护人"
+//        }
+//    }
+//}

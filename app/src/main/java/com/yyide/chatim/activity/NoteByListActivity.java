@@ -27,6 +27,7 @@ import com.yyide.chatim.base.BaseActivity;
 import com.yyide.chatim.fragment.NoteByListFragment;
 import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.ListByAppRsp2;
+import com.yyide.chatim.model.ListByAppRsp3;
 import com.yyide.chatim.model.NoteTabBean;
 
 import java.util.ArrayList;
@@ -47,12 +48,15 @@ public class NoteByListActivity extends BaseActivity {
     List<NoteTabBean> listTab = new ArrayList<>();
     ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBean = new ArrayList<>();
     ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO> nowBean = new ArrayList<>();
+    ArrayList<ListByAppRsp3.DataDTO.AdlistDTO> studentlistbeanByJz = new ArrayList<>();
+    ArrayList<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO> studentlistbeanByTeacher = new ArrayList<>();
     List<Fragment> fragments = new ArrayList<>();
     private String id;
     private String name;
     private String organization;
     private String type;
-
+    public static  String TAGStudentlistBeanByJz="TAGStudentlistBeanByJz";
+    public static  String TAGStudentlistBeanByTeacher="TAGStudentlistBeanByTeacher";
     @Override
     public int getContentViewID() {
         return R.layout.activity_notebylist_layout;
@@ -71,10 +75,18 @@ public class NoteByListActivity extends BaseActivity {
         listBean= (ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO>) JSON.parseObject(str,new TypeReference<List<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO>>(){});
         nowBean= (ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO>) JSON.parseObject(str2,new TypeReference<List<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO>>(){});
 
+        String Jzdata = getIntent().getStringExtra(NoteByListActivity.TAGStudentlistBeanByJz);
+        String teacherdata = getIntent().getStringExtra(NoteByListActivity.TAGStudentlistBeanByTeacher);
+        studentlistbeanByJz=(ArrayList<ListByAppRsp3.DataDTO.AdlistDTO>) JSON.parseObject(Jzdata,new TypeReference<ArrayList<ListByAppRsp3.DataDTO.AdlistDTO>>(){});
+        studentlistbeanByTeacher=(ArrayList<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>) JSON.parseObject(teacherdata,new TypeReference<ArrayList<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>>(){});
 
         title.setText("通讯录");
         Log.e("TAG", "NoteByListActivity: "+ JSON.toJSONString(listBean));
         Log.e("TAG", "NoteByListActivity==>: "+ JSON.toJSONString(nowBean));
+        Log.e("TAG", "Jzdata==》: "+ JSON.toJSONString(Jzdata));
+        Log.e("TAG", "teacherdata==》: "+ JSON.toJSONString(Jzdata));
+        Log.e("TAG", "NoteByListActivity==>: "+ JSON.toJSONString(studentlistbeanByJz));
+        Log.e("TAG", "NoteByListActivity==>: "+ JSON.toJSONString(studentlistbeanByTeacher));
         tabRecyAdapter = new TabRecyAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -85,6 +97,7 @@ public class NoteByListActivity extends BaseActivity {
             if (position == 0) {//点击回到一级部门,清除所有回退栈
                 finish();
             } else {
+                Log.e("TAG", "fragment.size==>: "+JSON.toJSONString(fragments.size()) );
                 listTab = tabRecyAdapter.remove(position + 1);
                 fragments = remove(position + 1);
             }
@@ -101,9 +114,17 @@ public class NoteByListActivity extends BaseActivity {
                 recyclerview.smoothScrollToPosition(tabRecyAdapter.getItemCount());
             }
         });
+
+//        initSutdentData();
         initDeptFragment();
     }
 
+    void initSutdentData(){
+        String student_by_parent = getIntent().getStringExtra(TAGStudentlistBeanByJz);
+        String student_by_teacher = getIntent().getStringExtra(TAGStudentlistBeanByTeacher);
+        studentlistbeanByJz=(ArrayList<ListByAppRsp3.DataDTO.AdlistDTO>) JSON.parseObject(student_by_parent,new TypeReference<List<ListByAppRsp3.DataDTO.AdlistDTO>>(){});
+        studentlistbeanByTeacher=(ArrayList<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>) JSON.parseObject(student_by_teacher,new TypeReference<List<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>>(){});
+    }
 
     public List<Fragment> remove(int position) {
         List<Fragment> noteTabBeans = new ArrayList<>();
@@ -153,6 +174,13 @@ public class NoteByListActivity extends BaseActivity {
             bundle.putString("id", id);
             bundle.putParcelableArrayList("listBean", listBean);
             bundle.putParcelableArrayList("nowBean", nowBean);
+            bundle.putParcelableArrayList("StudentlistBeanByJz", studentlistbeanByJz);
+            bundle.putParcelableArrayList("StudentlistBeanByTeacher", studentlistbeanByTeacher);
+
+
+//            bundle.putString("StudentlistBeanByJz", JSON.toJSONString(studentlistbeanByJz));
+//            bundle.putString("StudentlistBeanByTeacher", JSON.toJSONString(studentlistbeanByTeacher));
+
             noteTab.islast = "2";
             bundle.putString("islast", noteTab.islast);
             bundle.putString("organization", organization);
@@ -165,13 +193,23 @@ public class NoteByListActivity extends BaseActivity {
         }
         Fragment noteByListFragment = new NoteByListFragment();
         NoteTabBean noteTabBean = new NoteTabBean();
-        noteTabBean.name = name;
+//        if (studentlistbeanByJz!=null&&studentlistbeanByJz.size()>0){
+//            noteTabBean.name = studentlistbeanByJz.get(0).name;
+//        }
+//        if (studentlistbeanByTeacher!=null&&studentlistbeanByTeacher.size()>0){
+//            noteTabBean.name=studentlistbeanByTeacher.get(0).name;
+//        }
+        noteTabBean.name=name;
         noteTabBean.organization = organization;
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         bundle.putParcelableArrayList("listBean", listBean);
         bundle.putParcelableArrayList("nowBean", nowBean);
-        if (listBean.size() == 0) {
+//        bundle.putString("StudentlistBeanByJz", JSON.toJSONString(studentlistbeanByJz));
+//        bundle.putString("StudentlistBeanByTeacher", JSON.toJSONString(studentlistbeanByTeacher));
+        bundle.putParcelableArrayList("StudentlistBeanByJz", studentlistbeanByJz);
+        bundle.putParcelableArrayList("StudentlistBeanByTeacher", studentlistbeanByTeacher);
+        if (listBean!=null&&listBean.size() == 0) {
             noteTabBean.islast = "1";
         } else {
             noteTabBean.islast = "2";
@@ -187,6 +225,8 @@ public class NoteByListActivity extends BaseActivity {
         fragments.add(noteByListFragment);
         tabRecyAdapter.notifydata(listTab);
     }
+
+
 
     public void initDeptFragmentNew(Bundle bundle) {
         Fragment noteByListFragment = new NoteByListFragment();
@@ -232,4 +272,8 @@ public class NoteByListActivity extends BaseActivity {
             }
         }
     }
+
+
+
+
 }

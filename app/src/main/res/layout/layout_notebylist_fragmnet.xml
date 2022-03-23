@@ -8,8 +8,47 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/teacher_recyclerview_teacher"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+         />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/teacher_recyclerview_student"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/teacher_recyclerview_all"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/parent_recyclerview_all"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/parent_recyclerView_teacher"
+
+        android:visibility="gone"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:visibility="gone"
+        android:id="@+id/parent_recyclerView_student"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

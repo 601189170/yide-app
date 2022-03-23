@@ -44,9 +44,11 @@ data class BookClassesItem(
     var teacherList: List<BookTeacherItem> = emptyList(),
     var guardianList: List<BookGuardianItem> = emptyList(),
     var departmentList: List<BookDepartmentItem> = emptyList(),//部门
+    var elternAddBookDTOList: List<Parent> = emptyList(),//部门
     var unfold: Boolean = false,//是否展开
     var student: BookStudentItem? = null,
     var guardian: BookGuardianItem? = null,
+    var guardian2: Parent? = null,
     override var itemType: Int = 0
 ) : MultiItemEntity {
 }
@@ -77,12 +79,16 @@ data class BookStudentItem(
     var faceInformation: String?,
     @JSONField(name = "isOwnChild")
     var isOwnChild: String?,
-    @JSONField(name = "guardianList")
-    var guardianList: MutableList<BookGuardianItem>?
+//    @JSONField(name = "guardianList")
+//    var guardianList: MutableList<BookGuardianItem>,
+        @JSONField(name = "guardianList")
+var elternAddBookDTOList: MutableList<Parent>,
+        @JSONField(name = "avatar")
+var avatar: String?,
     //学生监护人信息){}){}){}
-) : Serializable {
+) : Serializable
 
-}
+
 
 /**
  * 监护人实体
@@ -149,7 +155,10 @@ data class BookTeacherItem(
     @JSONField(name = "faceInformation")
     var faceInformation: String?,
     @JSONField(name = "whitelist")
-    var whitelist: String?
+    var whitelist: String?,
+    @JSONField(name = "avatar")
+    var avatar: String?
+
 ) : Serializable
 
 /**

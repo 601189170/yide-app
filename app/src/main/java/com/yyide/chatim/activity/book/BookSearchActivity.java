@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,16 +59,21 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     @BindView(R.id.cl_search_history)
     ConstraintLayout cl_search_history;
 
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
-
+    @BindView(R.id.recyclerview_teacher)
+    RecyclerView recyclerview_teacher;
+    @BindView(R.id.recyclerview_student11)
+    RecyclerView recyclerview_student11;
     @BindView(R.id.recyclerview_search_history)
     RecyclerView recyclerviewHistory;
 
     @BindView(R.id.btn_delete_search)
     Button btnDeleteSearch;
-
-    private ItemBookSearchAdapter adapter;
+    @BindView(R.id.studentlayout)
+    LinearLayout studentlayout;
+    @BindView(R.id.teacherlayout)
+    LinearLayout teacherlayout;
+    private ItemBookSearchAdapter adapterTeacher;
+    private ItemBookSearchAdapter adapterStudent;
     private ItemBookSearchHistoryAdapter itemBookSearchHistoryAdapter;
 
     @Override
@@ -89,13 +95,20 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         from = getIntent().getStringExtra("from");
-        recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ItemBookSearchAdapter();
-        adapter.setFrom(from);
+        recyclerview_teacher.setLayoutManager(new LinearLayoutManager(this));
+        recyclerview_student11.setLayoutManager(new LinearLayoutManager(this));
+        adapterTeacher = new ItemBookSearchAdapter();
+        adapterStudent = new ItemBookSearchAdapter();
+        adapterTeacher.setFrom(from);
+        adapterStudent.setFrom(from);
         EmptyBinding emptyBinding = EmptyBinding.inflate(getLayoutInflater());
         emptyBinding.tvDesc.setText("未找到该人员");
-        recyclerview.setAdapter(adapter);
-        adapter.setEmptyView(emptyBinding.getRoot());
+        recyclerview_teacher.setAdapter(adapterTeacher);
+        recyclerview_student11.setAdapter(adapterStudent);
+//        adapterTeacher.setEmptyView(emptyBinding.getRoot());
+//        adapterStudent.setEmptyView(emptyBinding.getRoot());
+
+
 
         //初始化标签
         Set<String> search_history = MMKV.defaultMMKV().decodeStringSet(BOOK_SEARCH_HISTORY, new HashSet<String>());
@@ -198,7 +211,9 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
         if (model.getCode() == BaseConstant.REQUEST_SUCCES_0) {
             hideHistory();
             List<Teacher> teacherList = model.getData().getElternList();
-            recyclerview.scrollToPosition(0);
+            List<Teacher> studentlist = new ArrayList();
+            recyclerview_teacher.scrollToPosition(0);
+            recyclerview_student11.scrollToPosition(0);
             //将学生数据加入
             if (!model.getData().getStudentList().isEmpty()) {
                 for (Student student : model.getData().getStudentList()) {
@@ -212,11 +227,14 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
 //                            var departmentName: String?,
 //                            var avatar: String?,
 //                            var concealPhone: String?,
-                    Teacher teacher = new Teacher("", null, student.getName(), student.getType(), student.getTypeName(), student.getTypeName(),null, student.getSubjectName(),student.getUserId(),student.getGender(),student.getPhone(),student.getId(),student.getEmployeeSubjects(),student.getEmail(),student.getDepartmentName(),student.getAvatar(),student.getConcealPhone(),1);
-                    teacherList.add(teacher);
+                    Teacher student1 = new Teacher("", null, student.getName(), student.getType(), student.getTypeName(), student.getTypeName(),student, "","",student.getGender(),student.getPhone(),student.getId(),"",student.getElternAddBookDTOList(),student.getEmail(),student.getDepartmentName(),student.getAvatar(),"",student.getClassName(),1);
+                    studentlist.add(student1);
                 }
             }
-            adapter.setList(teacherList);
+            adapterTeacher.setList(teacherList);
+            adapterStudent.setList(studentlist);
+            studentlayout.setVisibility(studentlist.size()>0?View.VISIBLE:View.GONE);
+            teacherlayout.setVisibility(teacherList.size()>0?View.VISIBLE:View.GONE);
         }
     }
 
