@@ -19,6 +19,7 @@ import com.yyide.chatim.databinding.ActivityMeetingHistoryBinding
 import com.yyide.chatim.databinding.ItemMeetingHomeBinding
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.logd
 
 /**
  * 历史会议-搜索
@@ -57,15 +58,15 @@ class MeetingHistoryActivity : BaseActivity() {
             adapter.loadMoreModule.isEnableLoadMore = true
             //请求数据
             current++
-            viewModel.requestMeetingHomeList(size, current, searchName, 0)
+            viewModel.requestMeetingListData(size, current, searchName, 0)
         }
         adapter.loadMoreModule.isAutoLoadMore = true
         //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
         adapter.loadMoreModule.isEnableLoadMoreIfNotFullPage = false
-//        adapter.setOnItemClickListener { adapter, view, position ->
-//            val item = adapter.getItem(position) as ScheduleData
-//            MeetingCreateUpdateActivity.jumpUpdate(this, item.id)
-//        }
+        /*adapter.setOnItemClickListener { adapter, view, position ->
+            val item = adapter.getItem(position) as ScheduleData
+            MeetingDetailActivity.jump(this, item)
+        }*/
         viewBinding.edit.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -74,10 +75,12 @@ class MeetingHistoryActivity : BaseActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (s!!.isEmpty()) {
-                    searchName = ""
-                    current = 1
-                    request()
+                s?.let {
+                    if (it.isEmpty()) {
+                        searchName = ""
+                        current = 1
+                        request()
+                    }
                 }
             }
 
@@ -96,20 +99,17 @@ class MeetingHistoryActivity : BaseActivity() {
             }
             false
         })
-    }
 
-    private fun request() {
-        showLoading()
-        viewModel.meetingHistoryLiveData.observe(this) {
+        viewModel.meetingListData.observe(this) {
             hideLoading()
             val result = it.getOrNull()
             if (result != null) {
                 if (current == 1) {
-                    adapter.setList(result)
+                    adapter.setList(result.list)
                 } else {
-                    adapter.addData(result)
+                    adapter.addData(result.list)
                 }
-                if (result.size < size) {
+                if (result.list.size < size) {
                     //如果不够一页,显示没有更多数据布局
                     adapter.loadMoreModule.loadMoreEnd()
                 } else {
@@ -117,7 +117,11 @@ class MeetingHistoryActivity : BaseActivity() {
                 }
             }
         }
-        viewModel.requestMeetingHomeList(size, current, searchName, 0)
+    }
+
+    private fun request() {
+        showLoading()
+        viewModel.requestMeetingListData(size, current, searchName, 0)
     }
 
     private val adapter =
@@ -130,11 +134,11 @@ class MeetingHistoryActivity : BaseActivity() {
                 viewBind.tvTime.text = DateUtils.formatTime(
                     item.startTime,
                     "",
-                    "yyyy.MM.dd HH:mm"
+                    "HH:mm"
                 ) + " - " + DateUtils.formatTime(
                     item.endTime,
                     "",
-                    "yyyy.MM.dd HH:mm"
+                    "HH:mm"
                 )
             }
         }

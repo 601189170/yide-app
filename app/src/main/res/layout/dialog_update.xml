@@ -49,7 +49,7 @@
             android:layout_height="40dp"
             android:layout_margin="@dimen/dp_16"
             android:gravity="center"
-            app:background="@drawable/bg_corners_blue_20"
+            app:background="@drawable/bg_corners_blue_5"
             app:progressColor="@android:color/white"
             app:text="立即升级"
             app:textColor="@color/white"

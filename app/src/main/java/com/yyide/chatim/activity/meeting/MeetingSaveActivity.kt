@@ -7,19 +7,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.PopupWindow
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.blankj.utilcode.util.ToastUtils
-import com.huawei.hms.push.utils.DateUtil
+import com.jzxiang.pickerview.TimePickerDialog
+import com.jzxiang.pickerview.listener.OnDateSetListener
+import com.taobao.accs.ACCSManager
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.meeting.viewmodel.MeetingSaveViewModel
 import com.yyide.chatim.activity.schedule.*
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.constant.ResultCodeStr
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityMeetingCreateBinding
@@ -28,10 +35,13 @@ import com.yyide.chatim.model.schedule.ParticipantRsp
 import com.yyide.chatim.model.schedule.Remind
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.model.schedule.SiteNameRsp
+import com.yyide.chatim.utils.DatePickerDialogUtil.showDateTime
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import org.greenrobot.eventbus.EventBus
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -43,8 +53,14 @@ class MeetingSaveActivity : BaseActivity() {
 
     private lateinit var viewBinding: ActivityMeetingCreateBinding
     private val viewModel: MeetingSaveViewModel by viewModels()
-    private var id = ""
+    private var id: String = ""
     private var resultCode = 0
+
+
+    private val timeFormat = "MM月dd日 HH:mm"
+    private val allDayTimeFormat = "yyyy-MM-dd"
+    private val requestServerTimeFormat = "yyyy-MM-dd HH:mm:ss"
+
     override fun getContentViewID(): Int {
         return R.layout.activity_meeting_create
     }
@@ -70,6 +86,13 @@ class MeetingSaveActivity : BaseActivity() {
             context.startActivity(intent)
         }
 
+        fun jumpUpdateWithCode(context: Context, id: String, launcher: ActivityResultLauncher<Intent>) {
+            val intent = Intent(context, MeetingSaveActivity::class.java)
+            intent.putExtra("type", UPDATE_TYPE)
+            intent.putExtra("id", id)
+            launcher.launch(intent)
+        }
+
         fun jumpCreate(context: Context) {
             val intent = Intent(context, MeetingSaveActivity::class.java)
             intent.putExtra("type", CREATE_TYPE)
@@ -88,6 +111,7 @@ class MeetingSaveActivity : BaseActivity() {
     private fun initView() {
         val type = intent.getIntExtra("type", -1)
         viewBinding.top.title.text = getString(R.string.meeting_create_title)
+
         val defaultTwoTimeListOfDateTime = ScheduleDaoUtil.defaultTwoTimeListOfDateTime()
         if (defaultTwoTimeListOfDateTime.size == 2) {
             val startTime = defaultTwoTimeListOfDateTime[0].toStringTime()
@@ -96,7 +120,76 @@ class MeetingSaveActivity : BaseActivity() {
             viewModel.endTimeLiveData.value = endTime
         }
 
-        viewBinding.tvTime.text =
+        viewBinding.meetingAddAllDayCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.allDayLiveData.value = isChecked
+        }
+
+        // 监听开始时间变化
+        viewModel.startTimeLiveData.observe(this) {
+            viewBinding.meetingAddEtStartTime.setText(
+                DateUtils.formatTime(
+                    it,
+                    requestServerTimeFormat,
+                    timeFormat
+                )
+            )
+        }
+
+        // 监听结束时间变化
+        viewModel.endTimeLiveData.observe(this) {
+            viewBinding.meetingAddEtEndTime.setText(
+                DateUtils.formatTime(
+                    it,
+                    requestServerTimeFormat,
+                    timeFormat
+                )
+            )
+        }
+
+        // 监听checkout按钮的变化
+        viewModel.allDayLiveData.observe(this) {
+            if (it) {
+                val startTime = "${
+                    DateUtils.formatTime(
+                        viewModel.startTimeLiveData.value,
+                        requestServerTimeFormat,
+                        allDayTimeFormat
+                    )
+                } 00:00:00"
+                val endTime = "${
+                    DateUtils.formatTime(
+                        viewModel.startTimeLiveData.value,
+                        requestServerTimeFormat,
+                        allDayTimeFormat
+                    )
+                } 23:59:59"
+                viewModel.startTimeLiveData.value = startTime
+                viewModel.endTimeLiveData.value = endTime
+            }
+        }
+
+        viewBinding.meetingAddEtStartTime.setOnClickListener {
+            showDateTime(
+                this,
+                getString(R.string.select_begin_time),
+                viewModel.startTimeLiveData.value,
+                startTimeListener,
+                isAllDay = viewModel.allDayLiveData.value == true
+            )
+        }
+
+        viewBinding.meetingAddEtEndTime.setOnClickListener {
+            showDateTime(
+                this,
+                getString(R.string.select_end_time),
+                viewModel.endTimeLiveData.value,
+                endTimeListener,
+                isAllDay = viewModel.allDayLiveData.value == true
+            )
+        }
+
+
+        /*viewBinding.tvTime.text =
             DateUtils.formatTime(
                 viewModel.startTimeLiveData.value,
                 "",
@@ -105,14 +198,15 @@ class MeetingSaveActivity : BaseActivity() {
                 viewModel.endTimeLiveData.value,
                 "",
                 "MM月dd日 HH:mm"
-            )
+            )*/
+
         if (type == UPDATE_TYPE) {
-            id = intent.getStringExtra("id")
+            id = intent.getStringExtra("id") ?: ""
             viewModel.scheduleId.value = id
             getDetail()
             viewBinding.top.ivRight.visibility = View.VISIBLE
             viewBinding.top.title.text = getString(R.string.meeting_update_title)
-            viewBinding.btnConfirm.text = getString(R.string.meeting_update_title)
+            viewBinding.btnConfirm.text = getString(R.string.meeting_update_save)
             viewBinding.top.ivRight.setOnClickListener {
                 DialogUtil.showScheduleDelDialog(
                     this,
@@ -147,7 +241,7 @@ class MeetingSaveActivity : BaseActivity() {
 
         }
 
-        //选择时间
+        /*//选择时间
         viewBinding.clTime.setOnClickListener {
             val intent = Intent(this, ScheduleDateIntervalActivity::class.java)
             val allDay = viewModel.allDayLiveData.value
@@ -158,7 +252,7 @@ class MeetingSaveActivity : BaseActivity() {
             intent.putExtra("endTime", endTime)
             startActivity.launch(intent)
             resultCode = REQUEST_CODE_DATE_SELECT
-        }
+        }*/
 
         viewBinding.clRemind.setOnClickListener {
             val intent = Intent(this, ScheduleRemindActivity::class.java)
@@ -175,7 +269,9 @@ class MeetingSaveActivity : BaseActivity() {
             viewBinding.btnConfirm.visibility = View.GONE
             viewBinding.tvParticipant.isClickable = false
             viewBinding.tvSite.isClickable = false
-            viewBinding.clTime.isClickable = false
+            //viewBinding.clTime.isClickable = false
+            viewBinding.meetingAddEtStartTime.isClickable = false
+            viewBinding.meetingAddEtEndTime.isClickable = false
             viewBinding.etMeetingTitle.isFocusable = false
             viewBinding.top.ivRight.visibility = View.GONE
         }
@@ -193,13 +289,14 @@ class MeetingSaveActivity : BaseActivity() {
         viewModel.startTimeLiveData.value = item.startTime
         viewModel.endTimeLiveData.value = item.endTime
         viewModel.allDayLiveData.value = item.isAllDay == "1"
-        viewBinding.tvTime.setTextColor(resources.getColor(R.color.text_1E1E1E))
+        /*viewBinding.tvTime.setTextColor(resources.getColor(R.color.text_1E1E1E))
         viewBinding.tvTime.text =
             DateUtils.formatTime(item.startTime, "", "MM月dd日 HH:mm") + " - " + DateUtils.formatTime(
                 item.endTime,
                 "",
                 "MM月dd日 HH:mm"
-            )
+            )*/
+
         viewBinding.etRemark.setText(item.remark)
         //日程提醒remind
         if (item.remindTypeInfo == "10") {
@@ -240,11 +337,14 @@ class MeetingSaveActivity : BaseActivity() {
 
     private fun del(scheduleId: String) {
         showLoading()
-        viewModel.meetingSaveLiveData.observe(this) {
+        viewModel.meetingDelLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
+            // 从会议详情里面进入的需要携带返回值
+            setResult(Activity.RESULT_OK, Intent().apply {
+                putExtra(ResultCodeStr.NORMAL_TYPE_CODE, ResultCodeStr.MEETING_DETAIL_EDIT_DEL)
+            })
             finish()
         }
         viewModel.requestDel(scheduleId)
@@ -255,12 +355,15 @@ class MeetingSaveActivity : BaseActivity() {
      */
     private fun sava() {
         val title = viewBinding.etMeetingTitle.text.toString().trim()
-        val time = viewBinding.tvTime.text.toString().trim()
+        //val time = viewBinding.tvTime.text.toString().trim()
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
+            // 从会议详情里面进入的需要携带返回值
+            setResult(Activity.RESULT_OK, Intent().apply {
+                putExtra(ResultCodeStr.NORMAL_TYPE_CODE, ResultCodeStr.MEETING_DETAIL_EDIT_UPDATE)
+            })
             finish()
         }
         val startTime = viewModel.startTimeLiveData.value ?: ""
@@ -269,9 +372,15 @@ class MeetingSaveActivity : BaseActivity() {
             TextUtils.isEmpty(title) -> {
                 ToastUtils.showShort("请输入会议标题")
             }
-            time == getString(R.string.meeting_please_input_time) -> {
-                ToastUtils.showShort(getString(R.string.meeting_please_input_time))
+            TextUtils.isEmpty(startTime) -> {
+                ToastUtils.showShort(R.string.select_ask_for_leave_begin_time_tip)
             }
+            TextUtils.isEmpty(endTime) -> {
+                ToastUtils.showShort(R.string.select_ask_for_leave_end_time_tip)
+            }
+            /*time == getString(R.string.meeting_please_input_time) -> {
+                ToastUtils.showShort(getString(R.string.meeting_please_input_time))
+            }*/
             DateUtils.parseTimestamp(startTime, null) >= DateUtils.parseTimestamp(
                 endTime,
                 null
@@ -313,7 +422,7 @@ class MeetingSaveActivity : BaseActivity() {
             //此处是跳转的result回调方法
             if (it.data != null && it.resultCode == Activity.RESULT_OK) {
                 when (resultCode) {//选择日期
-                    REQUEST_CODE_DATE_SELECT -> {
+                    /*REQUEST_CODE_DATE_SELECT -> {
                         val allDay = it.data!!.getBooleanExtra("allDay", false)
                         val startTime = it.data!!.getStringExtra("startTime")
                         val endTime = it.data!!.getStringExtra("endTime")
@@ -351,7 +460,7 @@ class MeetingSaveActivity : BaseActivity() {
                                 viewBinding.tvRemind.text = Remind.getNotRemind().title
                             }
                         }
-                    }
+                    }*/
                     REQUEST_CODE_PARTICIPANT_SELECT -> {//选择参与人
                         val stringExtra = it.data!!.getStringExtra("data")
                         loge("onActivityResult:$stringExtra")
@@ -403,5 +512,31 @@ class MeetingSaveActivity : BaseActivity() {
         }
         return sb.toString()
     }
+
+    private val startTimeListener =
+        OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->
+            var startTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
+            viewModel.allDayLiveData.value?.let {
+                if (it) {
+                    startTime =
+                        "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 00:00:00"
+                }
+            }
+            logd("startTimeListener: $startTime")
+            viewModel.startTimeLiveData.value = startTime
+        }
+
+    private val endTimeListener =
+        OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->
+            var endTime = DateUtils.switchTime(Date(millSeconds), requestServerTimeFormat)
+            viewModel.allDayLiveData.value?.let {
+                if (it) {
+                    endTime =
+                        "${DateUtils.switchTime(Date(millSeconds), allDayTimeFormat)} 23:59:59"
+                }
+            }
+            logd("endTimeListener: $endTime")
+            viewModel.endTimeLiveData.value = endTime
+        }
 
 }

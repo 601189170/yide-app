@@ -61,6 +61,58 @@ object DatePickerDialogUtil {
             }.build().show()
     }
 
+    /**
+     * 时间选择控件
+     * @param context Context
+     * @param title String 标题
+     * @param currentMillseconds String? 所选时间毫秒数
+     * @param onDateSetListener OnDateSetListener 监听器
+     * @param isAllDay Boolean 是否显示时分
+     */
+    fun showDateTime(
+        context: Context,
+        title: String,
+        currentMillseconds: String?,
+        onDateSetListener: OnDateSetListener,
+        isAllDay: Boolean = false
+    ) {
+        val displayList: MutableList<Int> = mutableListOf()
+        displayList.add(DateTimeConfig.YEAR)
+        displayList.add(DateTimeConfig.MONTH)
+        displayList.add(DateTimeConfig.DAY)
+        if (!isAllDay) {
+            logd("not is AllDay")
+            displayList.add(DateTimeConfig.HOUR)
+            displayList.add(DateTimeConfig.MIN)
+        }
+        val model = CardDatePickerDialog.STACK
+        val maxDate: Long = 0
+        val minDate: Long = 0
+        val pickerLayout = 0
+        var defaultDate: Long = 0
+        if (!TextUtils.isEmpty(currentMillseconds)) {
+            defaultDate = DateUtils.parseTimestamp(currentMillseconds, "")
+        }
+
+        CardDatePickerDialog.builder(context)
+            .setTitle(title)
+            .setDisplayType(displayList)
+            .setBackGroundModel(model)
+            .setMaxTime(maxDate)
+            .setPickerLayout(pickerLayout)
+            .setMinTime(minDate)
+            .setDefaultTime(defaultDate)
+            .setWrapSelectorWheel(false)
+            .showBackNow(false)
+            .showDateLabel(true)
+            .showFocusDateInfo(true)
+            .setOnChoose("确定") {
+                onDateSetListener.onDateSet(null, it)
+            }
+            .setOnCancel("取消") {
+            }.build().show()
+    }
+
     fun showDate(
         context: Context,
         title: String,
@@ -152,7 +204,7 @@ object DatePickerDialogUtil {
     fun showDateYearAndMonth(
         context: Context,
         title: String = "选择日期",
-        curDateTime:DateTime,
+        curDateTime: DateTime,
         startDate: DateTime,
         endDate: DateTime,
         onDateSetListener: (datetime: DateTime) -> Unit
@@ -164,7 +216,7 @@ object DatePickerDialogUtil {
         var yearIndex = 0
         var monthIndex = 0
         val yearList = CalendarYear.getYearList(startDate, endDate)
-        if (curDateTime in startDate .. endDate){
+        if (curDateTime in startDate..endDate) {
             //日期回显
             val year = curDateTime.year
             val monthOfYear = curDateTime.monthOfYear
@@ -173,7 +225,7 @@ object DatePickerDialogUtil {
                     yearIndex = index
                     val months = yearList[index].months
                     for (index1 in months.indices) {
-                        if (months[index1].month.toInt() == monthOfYear){
+                        if (months[index1].month.toInt() == monthOfYear) {
                             monthIndex = index1
                             break
                         }
@@ -232,11 +284,11 @@ object DatePickerDialogUtil {
                     dayOfMonth = 28
                 }
             }
-            if (listOf("4","6","9","11").contains(calendarMonth.month) && dayOfMonth == 31){
+            if (listOf("4", "6", "9", "11").contains(calendarMonth.month) && dayOfMonth == 31) {
                 dayOfMonth = 30
             }
             //不是当前年月，默认显示当前月的第一天
-            if (calendarYear.year.toInt() != year || calendarMonth.month.toInt() != monthOfYear){
+            if (calendarYear.year.toInt() != year || calendarMonth.month.toInt() != monthOfYear) {
                 dayOfMonth = 1
             }
             var toDateTime =

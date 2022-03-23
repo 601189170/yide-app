@@ -7,6 +7,8 @@ import static com.yyide.chatim.model.schedule.Schedule.TYPE_TIME_AXIS;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_COMPLETED;
 import static com.yyide.chatim.model.schedule.Schedule.TYPE_UNEXPIRED_NOT_COMPLETED;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -26,7 +28,7 @@ import java.util.Objects;
  * @date 2021/9/24 10:08
  * @description 描述
  */
-public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<ScheduleData> {
+public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<ScheduleData>, Parcelable {
     private String id;
     private String name;
     private String siteId;
@@ -69,6 +71,58 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
 
     //日程创建时间
     private String createdDateTime;
+
+    public ScheduleData(){
+
+    }
+
+    protected ScheduleData(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        siteId = in.readString();
+        type = in.readString();
+        scheduleStatus = in.readString();
+        isTop = in.readString();
+        remark = in.readString();
+        filePath = in.readString();
+        isRepeat = in.readString();
+        status = in.readString();
+        remindType = in.readString();
+        remindTypeInfo = in.readString();
+        historyShow = in.readString();
+        timeShow = in.readString();
+        startTime = in.readString();
+        endTime = in.readString();
+        moreDayStartTime = in.readString();
+        moreDayEndTime = in.readString();
+        moreDay = in.readInt();
+        moreDayIndex = in.readInt();
+        moreDayCount = in.readInt();
+        iconImg = in.readString();
+        isAllDay = in.readString();
+        siteName = in.readString();
+        updateType = in.readString();
+        updateDate = in.readString();
+        dayOfMonth = in.readString();
+        promoter = in.readString();
+        promoterName = in.readString();
+        timeAxis = in.readByte() != 0;
+        monthHead = in.readByte() != 0;
+        firstDayOfMonth = in.readByte() != 0;
+        createdDateTime = in.readString();
+    }
+
+    public static final Creator<ScheduleData> CREATOR = new Creator<ScheduleData>() {
+        @Override
+        public ScheduleData createFromParcel(Parcel in) {
+            return new ScheduleData(in);
+        }
+
+        @Override
+        public ScheduleData[] newArray(int size) {
+            return new ScheduleData[size];
+        }
+    };
 
     public String getIsRepeat() {
         return isRepeat;
@@ -387,5 +441,90 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
             return dateTime2.compareTo(dateTimeOther2);
         }
         return compareTo;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(siteId);
+        dest.writeString(type);
+        dest.writeString(scheduleStatus);
+        dest.writeString(isTop);
+        dest.writeString(remark);
+        dest.writeString(filePath);
+        dest.writeString(isRepeat);
+        dest.writeString(status);
+        dest.writeString(remindType);
+        dest.writeString(remindTypeInfo);
+        dest.writeString(historyShow);
+        dest.writeString(timeShow);
+        dest.writeString(startTime);
+        dest.writeString(endTime);
+        dest.writeString(moreDayStartTime);
+        dest.writeString(moreDayEndTime);
+        dest.writeInt(moreDay);
+        dest.writeInt(moreDayIndex);
+        dest.writeInt(moreDayCount);
+        dest.writeString(iconImg);
+        dest.writeString(isAllDay);
+        dest.writeString(siteName);
+        dest.writeString(updateType);
+        dest.writeString(updateDate);
+        dest.writeString(dayOfMonth);
+        dest.writeString(promoter);
+        dest.writeString(promoterName);
+        dest.writeByte((byte) (timeAxis ? 1 : 0));
+        dest.writeByte((byte) (monthHead ? 1 : 0));
+        dest.writeByte((byte) (firstDayOfMonth ? 1 : 0));
+        dest.writeString(createdDateTime);
+    }
+
+
+    @Override
+    public String toString() {
+        return "ScheduleData{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", siteId='" + siteId + '\'' +
+                ", type='" + type + '\'' +
+                ", scheduleStatus='" + scheduleStatus + '\'' +
+                ", isTop='" + isTop + '\'' +
+                ", remark='" + remark + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", isRepeat='" + isRepeat + '\'' +
+                ", status='" + status + '\'' +
+                ", rrule=" + rrule +
+                ", remindType='" + remindType + '\'' +
+                ", remindTypeInfo='" + remindTypeInfo + '\'' +
+                ", historyShow='" + historyShow + '\'' +
+                ", timeShow='" + timeShow + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", moreDayStartTime='" + moreDayStartTime + '\'' +
+                ", moreDayEndTime='" + moreDayEndTime + '\'' +
+                ", moreDay=" + moreDay +
+                ", moreDayIndex=" + moreDayIndex +
+                ", moreDayCount=" + moreDayCount +
+                ", iconImg='" + iconImg + '\'' +
+                ", isAllDay='" + isAllDay + '\'' +
+                ", labelList=" + labelList +
+                ", participantList=" + participantList +
+                ", siteName='" + siteName + '\'' +
+                ", updateType='" + updateType + '\'' +
+                ", updateDate='" + updateDate + '\'' +
+                ", dayOfMonth='" + dayOfMonth + '\'' +
+                ", promoter='" + promoter + '\'' +
+                ", promoterName='" + promoterName + '\'' +
+                ", timeAxis=" + timeAxis +
+                ", monthHead=" + monthHead +
+                ", firstDayOfMonth=" + firstDayOfMonth +
+                ", createdDateTime='" + createdDateTime + '\'' +
+                '}';
     }
 }

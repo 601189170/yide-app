@@ -276,7 +276,7 @@ public class DateUtils {
         if (TextUtils.isEmpty(format)) {
             format = "yyyy-MM-dd HH:mm:ss";
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format,Locale.getDefault());
         return simpleDateFormat.format(time);
     }
 

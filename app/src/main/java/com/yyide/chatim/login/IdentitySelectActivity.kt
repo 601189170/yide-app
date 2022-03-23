@@ -183,6 +183,11 @@ class IdentitySelectActivity :
                 }
                 showLoading()
                 viewModel.identityLogin(identityBean!!.id, schoolBean!!.id)
+                viewModel.identityLoginLiveData.observe(this){
+                    if (it.isSuccess) {
+                        SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
+                    }
+                }
             }
         }
     }

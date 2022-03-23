@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9FAF9">
+
+    <include
+        android:id="@+id/meeting_detail_top"
+        layout="@layout/title_layout5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/meeting_detail_constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintTop_toBottomOf="@id/meeting_detail_top">
+
+        <ImageView
+            android:id="@+id/meeting_detail_title_logo"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@mipmap/icon_meeting_start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/meeting_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="#333333"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/meeting_detail_title_logo"
+            app:layout_constraintStart_toEndOf="@id/meeting_detail_title_logo"
+            app:layout_constraintTop_toTopOf="@id/meeting_detail_title_logo" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/meeting_detail_content_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_detail_constraintLayout">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/meeting_detail_content_constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:paddingHorizontal="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/meeting_detail_content_scrollView">
+
+            <ImageView
+                android:id="@+id/meeting_detail_time_logo"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginVertical="15dp"
+                android:src="@mipmap/meeting_detail_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/meeting_detail_time_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/meeting_detail_time_logo"
+                app:layout_constraintStart_toEndOf="@id/meeting_detail_time_logo"
+                app:layout_constraintTop_toTopOf="@id/meeting_detail_time_logo" />
+
+
+            <ImageView
+                android:id="@+id/meeting_detail_remind_logo"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginVertical="15dp"
+                android:src="@mipmap/meeting_detail_remind"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/meeting_detail_time_logo" />
+
+            <TextView
+                android:id="@+id/meeting_detail_remind_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/meeting_detail_remind_logo"
+                app:layout_constraintStart_toEndOf="@id/meeting_detail_remind_logo"
+                app:layout_constraintTop_toTopOf="@id/meeting_detail_remind_logo" />
+
+
+            <ImageView
+                android:id="@+id/meeting_detail_people_logo"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginVertical="15dp"
+                android:src="@mipmap/meeting_detail_people"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/meeting_detail_remind_logo" />
+
+            <TextView
+                android:id="@+id/meeting_detail_people_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/meeting_detail_people_logo"
+                app:layout_constraintStart_toEndOf="@id/meeting_detail_people_logo"
+                app:layout_constraintTop_toTopOf="@id/meeting_detail_people_logo" />
+
+
+            <ImageView
+                android:id="@+id/meeting_detail_address_logo"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginVertical="15dp"
+                android:src="@mipmap/meeting_detail_address"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/meeting_detail_people_logo" />
+
+            <TextView
+                android:id="@+id/meeting_detail_address_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/meeting_detail_address_logo"
+                app:layout_constraintStart_toEndOf="@id/meeting_detail_address_logo"
+                app:layout_constraintTop_toTopOf="@id/meeting_detail_address_logo" />
+
+
+            <ImageView
+                android:id="@+id/meeting_detail_remark_logo"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginVertical="15dp"
+                android:src="@mipmap/meeting_detail_remark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/meeting_detail_address_logo" />
+
+            <TextView
+                android:id="@+id/meeting_detail_remark_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:maxLines="2"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/meeting_detail_remark_logo"
+                app:layout_constraintStart_toEndOf="@id/meeting_detail_remark_logo"
+                app:layout_constraintTop_toTopOf="@id/meeting_detail_remark_logo" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

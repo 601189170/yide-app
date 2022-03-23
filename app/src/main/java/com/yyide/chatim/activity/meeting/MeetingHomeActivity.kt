@@ -2,7 +2,6 @@ package com.yyide.chatim.activity.meeting
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,9 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
-import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.meeting.viewmodel.MeetingHistoryViewModel
-import com.yyide.chatim.activity.meeting.viewmodel.MeetingHomeViewModel
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityMeetingHomeBinding
@@ -20,9 +17,11 @@ import com.yyide.chatim.databinding.ItemMeetingHomeBinding
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
+import com.yyide.chatim.utils.logd
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.*
 
 /**
  * 会议首页
@@ -50,16 +49,21 @@ class MeetingHomeActivity : BaseActivity() {
     }
 
     private fun initView() {
-        viewModel.meetingHistoryLiveData.observe(this) {
+
+        val subStr = "${DateUtils.switchTime(Date(),"MM月dd日")} 今日"
+        viewBinding.meetingHomeSubTitle.text = subStr
+
+
+        viewModel.meetingListData.observe(this) {
             viewBinding.swipeRefreshLayout.isRefreshing = false
             val result = it.getOrNull()
             if (result != null) {
                 if (current == 1) {
-                    adapter.setList(result)
+                    adapter.setList(result.list)
                 } else {
-                    adapter.addData(result)
+                    adapter.addData(result.list)
                 }
-                if (result.size < size) {
+                if (result.list.size < size) {
                     //如果不够一页,显示没有更多数据布局
                     adapter.loadMoreModule.loadMoreEnd()
                 } else {
@@ -91,14 +95,15 @@ class MeetingHomeActivity : BaseActivity() {
             request()
         }
         adapter.setOnItemClickListener { adapter, view, position ->
+            logd("setOnItemClickListener jump")
             val item = adapter.getItem(position) as ScheduleData
-            MeetingSaveActivity.jumpUpdate(this, item.id)
+            MeetingDetailActivity.jump(this,item.id)
         }
         request()
     }
 
     private fun request() {
-        viewModel.requestMeetingHomeList(size, current, "", 3)
+        viewModel.requestMeetingListData(size, current, "", 1)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -119,11 +124,11 @@ class MeetingHomeActivity : BaseActivity() {
                 viewBind.tvTime.text = DateUtils.formatTime(
                     item.startTime,
                     "",
-                    "yyyy.MM.dd HH:mm"
+                    "HH:mm"
                 ) + " - " + DateUtils.formatTime(
                     item.endTime,
                     "",
-                    "yyyy.MM.dd HH:mm"
+                    "HH:mm"
                 )
             }
         }

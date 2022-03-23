@@ -1,22 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="100dp"
-    android:layout_height="55dp"
-    android:background="@drawable/schedule_menu_dialog_bg_shape">
+    android:layout_width="88dp"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_delete"
+
+    <ImageView
+        android:id="@+id/iv_triangle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="删除"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_16"
-        android:drawablePadding="5dp"
-        android:drawableStart="@drawable/icon_delete_dialog"
-        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/pop_window_menu_bg"
+        android:layout_marginEnd="3dp"
+        app:layout_constraintEnd_toEndOf="@id/del_content_cl"
+        app:layout_constraintBottom_toTopOf="@id/del_content_cl"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/del_content_cl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/schedule_menu_dialog_bg_shape">
+
+        <ImageView
+            android:id="@+id/tv_delete_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/icon_delete_dialog"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_delete"
+            app:layout_constraintTop_toTopOf="@id/tv_delete"/>
+
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_delete_logo"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

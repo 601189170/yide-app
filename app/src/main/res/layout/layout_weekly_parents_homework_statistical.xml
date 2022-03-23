@@ -219,7 +219,7 @@
                     android:layout_width="9dp"
                     android:layout_height="9dp"
                     android:layout_marginEnd="@dimen/dp_4"
-                    android:background="@drawable/bg_corners_blue_20"
+                    android:background="@drawable/bg_corners_blue_5"
                     app:layout_constraintBottom_toBottomOf="@+id/textView26"
                     app:layout_constraintEnd_toStartOf="@+id/textView26"
                     app:layout_constraintTop_toTopOf="@+id/textView26" />
@@ -305,7 +305,7 @@
                     android:layout_width="9dp"
                     android:layout_height="9dp"
                     android:layout_marginEnd="@dimen/dp_4"
-                    android:background="@drawable/bg_corners_blue_20"
+                    android:background="@drawable/bg_corners_blue_5"
                     app:layout_constraintBottom_toBottomOf="@+id/textView23"
                     app:layout_constraintEnd_toStartOf="@+id/textView23"
                     app:layout_constraintTop_toTopOf="@+id/textView23" />

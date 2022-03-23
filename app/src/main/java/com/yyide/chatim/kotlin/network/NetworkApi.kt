@@ -146,7 +146,7 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
      * 会议详情
      */
     suspend fun requestMeetingDel(scheduleId: String) =
-        getResult {
+        getResult{
             service.requestMeetingDel(scheduleId)
         }
 }

@@ -135,27 +135,27 @@ interface INetworkService {
      * 会议首页列表
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("/management/cloud-system/app/schedule/today/meetingList")
-    suspend fun requestMeetingHomeList(@Body requestBody: RequestBody): BaseResponse<List<ScheduleData>>
+    @POST("/cloud/app/schedule/meetingList")
+    suspend fun requestMeetingHomeList(@Body requestBody: RequestBody): BaseResponse<MeetingListData>
 
     /**
      * 会议创建/修改
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("/management/cloud-system/app/schedule/saveSchedule")
+    @POST("/cloud/app/schedule/createSchedule")
     suspend fun requestMeetingSave(@Body requestBody: RequestBody): BaseResponse<ResultBean>
 
     /**
      * 会议列表
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("/management/cloud-system/app/schedule/meetingList")
-    suspend fun requestMeetingList(@Body requestBody: RequestBody): BaseResponse<List<ScheduleData>>
+    @POST("/cloud/app/schedule/meetingList")
+    suspend fun requestMeetingList(@Body requestBody: RequestBody): BaseResponse<MeetingListData>
 
     /**
      * 查看会议详情
      */
-    @POST("/management/cloud-system/app/schedule/findMeetingDetails/{id}")
+    @GET("/cloud/app/schedule/findMeetingDetails/{id}")
     suspend fun requestMeetingDetail(
         @Path("id") id: String
     ): BaseResponse<ScheduleData>
@@ -163,7 +163,7 @@ interface INetworkService {
     /**
      * 删除会议
      */
-    @DELETE("/management/cloud-system/app/schedule/deleteScheduleById/{scheduleId}")
+    @GET("/cloud/app/schedule/deleteSchedule/{scheduleId}")
     suspend fun requestMeetingDel(
         @Path("scheduleId") id: String
     ): BaseResponse<ResultBean>
