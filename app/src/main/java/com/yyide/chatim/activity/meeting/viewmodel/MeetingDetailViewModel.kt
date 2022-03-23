@@ -20,9 +20,9 @@ import okhttp3.RequestBody
 class MeetingDetailViewModel : ViewModel(){
 
     // 删除会议结果
-    private val _meetingDelResultLiveData = MutableLiveData<String>()
+    private val _meetingDelResultLiveData = MutableLiveData<Boolean>()
 
-    val delResultListData: LiveData<String> get() = _meetingDelResultLiveData
+    val delResultListData: LiveData<Boolean> get() = _meetingDelResultLiveData
 
     // 会议详情内容
     private val _meetingDetailLiveData = MutableLiveData<Result<ScheduleData>>()
@@ -44,17 +44,12 @@ class MeetingDetailViewModel : ViewModel(){
 
     /**
      * 删除会议
-     * @param id String 会议id
      */
     fun requestDeleteMeeting() {
         viewModelScope.launch {
             val result = NetworkApi.requestMeetingDel(detailID)
             val resultData = result.getOrNull()
-            if (resultData == null){
-                _meetingDelResultLiveData.value = result.exceptionOrNull().toString()
-            }else {
-                _meetingDelResultLiveData.value = resultData.message
-            }
+            _meetingDelResultLiveData.value = resultData != null
         }
     }
 }

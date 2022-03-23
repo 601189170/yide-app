@@ -178,5 +178,5 @@ interface INetworkService {
     @GET("/cloud/app/schedule/deleteSchedule/{scheduleId}")
     suspend fun requestMeetingDel(
         @Path("scheduleId") id: String
-    ): BaseResponse<ResultBean>
+    ): BaseResponse<Boolean>
 }

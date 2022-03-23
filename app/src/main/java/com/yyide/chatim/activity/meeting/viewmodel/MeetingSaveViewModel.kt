@@ -18,7 +18,7 @@ class MeetingSaveViewModel : BaseViewModel() {
 
     val meetingSaveLiveData = MutableLiveData<Result<ResultBean>>()
 
-    val meetingDelLiveData = MutableLiveData<Result<ResultBean>>()
+    val meetingDelLiveData = MutableLiveData<Result<Boolean>>()
 
     val meetingDetailLiveData = MutableLiveData<Result<ScheduleData>>()
 

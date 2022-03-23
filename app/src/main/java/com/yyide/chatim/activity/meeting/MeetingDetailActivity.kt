@@ -72,10 +72,8 @@ class MeetingDetailActivity :
 
         viewModel.delResultListData.observe(this) {
             hideLoading()
-            if (it != "")
-                showLongToast(it)
-            EventBus.getDefault()
-                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            logd("delResult = $it")
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             finish()
         }
