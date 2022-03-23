@@ -163,7 +163,7 @@ class NoticeConfirmDetailActivity : BaseActivity() {
             if (!model.data.confirmOrRead) {
                 confirmDetailBinding.btnConfirm.isClickable = true
                 confirmDetailBinding.btnConfirm.setBackgroundResource(
-                    R.drawable.bg_corners_blue_20
+                    R.drawable.bg_corners_blue_5
                 )
                 confirmDetailBinding.btnConfirm.text =
                     getString(R.string.notice_confirm_roger_that)

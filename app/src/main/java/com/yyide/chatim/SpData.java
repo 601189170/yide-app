@@ -53,8 +53,8 @@ public class SpData {
     }
 
     public static String getUserId() {
-        if (SpData.getIdentityInfo() != null) {
-            return SpData.getIdentityInfo().getId() + "";
+        if (SpData.User() != null) {
+            return SpData.User().getId() + "";
         }
         return "";
     }

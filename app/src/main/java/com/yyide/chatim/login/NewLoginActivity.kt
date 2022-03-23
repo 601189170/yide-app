@@ -127,7 +127,6 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 val user = SpData.getLogin()
                 user.isLogin = true
                 SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(user))
-                SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
                 startActivity(Intent(this, NewMainActivity::class.java))
                 finish()
             } else {
@@ -139,6 +138,11 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
         }
         showLoading()
         viewModel.identityLogin(identityBean.id, schoolBean.id)
+        viewModel.identityLoginLiveData.observe(this){
+            if (it.isSuccess) {
+                SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
+            }
+        }
     }
 
     private fun login() {

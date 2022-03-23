@@ -56,7 +56,8 @@
 
     <!--会议-->
     <string name="meeting_create_title">创建会议</string>
-    <string name="meeting_update_title">修改会议</string>
+    <string name="meeting_update_title">编辑详情</string>
+    <string name="meeting_update_save">保存</string>
     <string name="meeting_please_input_time">请选择会议时间</string>
 
     // 主页Tab相关
@@ -333,5 +334,14 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    
+    // 会议
+    <string name="meeting_home_list">会议列表</string>
+    <string name="meeting_home_tv">会议</string>
+    <string name="meeting_home_history">历史会议</string>
+
+    <string name="meeting_history_search_tv">请输入会议名称</string>
+    <string name="meeting_detail_title">会议详情</string>
+    <string name="meeting_add_remark_tip">这里是备注的内容</string>
 
 </resources>

@@ -18,10 +18,12 @@ class MeetingSaveViewModel : BaseViewModel() {
 
     val meetingSaveLiveData = MutableLiveData<Result<ResultBean>>()
 
+    val meetingDelLiveData = MutableLiveData<Result<ResultBean>>()
+
     val meetingDetailLiveData = MutableLiveData<Result<ScheduleData>>()
 
     //是否是全天日程
-    val allDayLiveData = MutableLiveData<Boolean>()
+    val allDayLiveData = MutableLiveData<Boolean>(false)
 
     //日程开始时间
     val startTimeLiveData = MutableLiveData<String>()
@@ -66,7 +68,7 @@ class MeetingSaveViewModel : BaseViewModel() {
     fun requestDel(scheduleId: String) {
         viewModelScope.launch {
             val result = NetworkApi.requestMeetingDel(scheduleId)
-            meetingSaveLiveData.value = result
+            meetingDelLiveData.value = result
         }
     }
 }

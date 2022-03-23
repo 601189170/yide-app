@@ -18,19 +18,19 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/dp_5"
-        android:paddingBottom="@dimen/dp_10"
+        android:paddingVertical="7dp"
         android:visibility="visible"
+        android:background="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_35"
+            android:layout_height="30dp"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_weight="1"
-            android:background="@drawable/border_1dp_radius_18"
+            android:background="@drawable/border_1dp_radius_18_2"
             android:gravity="center_vertical">
 
             <TextView
@@ -47,7 +47,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="搜索"
+                android:hint="@string/meeting_history_search_tv"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textColor="@color/text_333333"
@@ -75,14 +75,6 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <View
-        android:id="@+id/view_line"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_10"
-        android:background="#F7F9FA"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/ll_search" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
@@ -90,8 +82,9 @@
         android:paddingStart="@dimen/dp_20"
         android:paddingTop="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_20"
+        android:background="#F9FAF9"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_line"
+        app:layout_constraintTop_toBottomOf="@+id/ll_search"
         tools:itemCount="6"
         tools:listitem="@layout/item_meeting_home" />
 

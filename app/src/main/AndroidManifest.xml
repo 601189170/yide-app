@@ -124,6 +124,10 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.meeting.MeetingDetailActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.weekly.WeeklyDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
