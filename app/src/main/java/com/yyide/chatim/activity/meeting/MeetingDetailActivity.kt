@@ -201,8 +201,6 @@ class MeetingDetailActivity :
             logd("shen jumpType = $jumpType")
             when (jumpType) {
                 ResultCodeStr.MEETING_DETAIL_EDIT_DEL -> {
-                    EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
-                    EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
                     finish()
                 }
                 ResultCodeStr.MEETING_DETAIL_EDIT_UPDATE -> {
