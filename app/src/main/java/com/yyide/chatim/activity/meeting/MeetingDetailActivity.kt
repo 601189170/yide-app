@@ -180,7 +180,11 @@ class MeetingDetailActivity :
         // 参与人
         val stringBuilder = StringBuilder()
         data.participantList.forEachIndexed { index, participantListBean ->
-            stringBuilder.append(participantListBean.realname)
+            if (participantListBean.realname.isNullOrEmpty()){
+                stringBuilder.append(participantListBean.name)
+            }else{
+                stringBuilder.append(participantListBean.realname)
+            }
             if (index != data.participantList.lastIndex) {
                 stringBuilder.append("、")
             }
