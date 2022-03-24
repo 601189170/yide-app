@@ -112,7 +112,7 @@ class ScheduleFullEditionActivity : BaseActivity() {
 
     private fun showSelectedParticipant(list: List<ParticipantRsp.DataBean.ParticipantListBean>?) {
         val stringBuilder = StringBuilder()
-        list?.map { it.realname }?.forEach {
+        list?.map { it.name }?.forEach {
             stringBuilder.append(it).append("  ")
         }
         if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {

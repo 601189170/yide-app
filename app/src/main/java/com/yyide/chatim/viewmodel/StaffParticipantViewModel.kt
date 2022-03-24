@@ -17,6 +17,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.HashMap
 
 /**
  *
@@ -51,7 +52,10 @@ class StaffParticipantViewModel : ViewModel() {
     }
 
     fun getTeacherParticipant(departmentId: String = "") {
-        apiStores.getTeacherParticipant(departmentId).enqueue(object : Callback<ParticipantRsp> {
+        val map = HashMap<String, Any>(2)
+        map["id"] = departmentId
+        val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
+        apiStores.getTeacherParticipant(body).enqueue(object : Callback<ParticipantRsp> {
             override fun onFailure(call: Call<ParticipantRsp>, t: Throwable) {
                 responseResult.postValue(null)
             }
@@ -61,15 +65,16 @@ class StaffParticipantViewModel : ViewModel() {
                 response: Response<ParticipantRsp>
             ) {
                 val body = response.body()
-                if (body != null && body.code == 200 && body.data != null) {
+                if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0 && body.data != null) {
                     val data = body.data
-                    data.participantList?.let {
+                    data[0].list?.let {
                         it.forEach {
-                            it.name = it.realname
+                            it.name = it.name
                             it.realname = it.realname
                         }
                     }
-                    responseResult.postValue(data)
+//                    if (data.size>0)
+                    responseResult.postValue(data[0])
                 } else {
                     responseResult.postValue(null)
                 }
@@ -81,13 +86,18 @@ class StaffParticipantViewModel : ViewModel() {
      * 查询学生或家长
      */
     fun getStudentGuardianParticipant(id: String = "", type: String = "0", scope: String = "1") {
-        apiStores.getParticipant(id, type, scope).enqueue(object : Callback<StudentGuardianRsp> {
+        val map = HashMap<String, Any>(2)
+        map["id"] = id
+        map["type"] = type
+        map["scope"] = scope
+        val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
+        apiStores.getParticipant(body).enqueue(object : Callback<StudentGuardianRsp> {
             override fun onResponse(
                 call: Call<StudentGuardianRsp>,
                 response: Response<StudentGuardianRsp>
             ) {
                 val body = response.body()
-                if (body != null && body.code == 200 && body.data != null) {
+                if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0 && body.data != null) {
                     val data = body.data
                     val dataBean = ParticipantRsp.DataBean()
 
@@ -95,8 +105,8 @@ class StaffParticipantViewModel : ViewModel() {
                         mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
                     val participantList =
                         mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
-                    dataBean.name = data.name
-                    data.childList?.list?.forEach {
+                    dataBean.name = data[0].name
+                    data[0].childList?.list?.forEach {
                         val participantListBean =
                             ParticipantRsp.DataBean.ParticipantListBean()
                         participantListBean.department = true
@@ -107,12 +117,12 @@ class StaffParticipantViewModel : ViewModel() {
                         departmentList.add(participantListBean)
                     }
 
-                    data.participantList?.forEach {
+                    data[0].participantList?.forEach {
                         val participantListBean =
                             ParticipantRsp.DataBean.ParticipantListBean()
                         participantListBean.id = it.id
                         participantListBean.userId = it.userId
-                        participantListBean.name = it.realname
+                        participantListBean.name = it.name
                         participantListBean.realname = it.realname
                         //participantListBean.userName = it.realname
                         participantListBean.department = false
@@ -123,8 +133,8 @@ class StaffParticipantViewModel : ViewModel() {
 
                     if (participantList.isNotEmpty() || departmentList.isNotEmpty()) {
                         //学生或家长
-                        dataBean.departmentList = departmentList
-                        dataBean.participantList = participantList
+                        dataBean.list = departmentList
+                        dataBean.personList = participantList
                         responseResult.postValue(dataBean)
                     } else {
                         responseResult.postValue(null)
@@ -167,11 +177,11 @@ class StaffParticipantViewModel : ViewModel() {
             ) {
                 val body = response.body()
                 loge("查询参与人结果：$body")
-                if (body != null && body.code == 200 && body.data != null) {
+                if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0 && body.data != null) {
                     //查询参与人成功
                     body.data?.let {
-                        teacherList.postValue(it.teacherList?: listOf())
-                        studentList.postValue(it.studentList?: listOf())
+                        teacherList.postValue(it.personList?: listOf())
+                        studentList.postValue(it.list?: listOf())
                     }
                     return
                 }

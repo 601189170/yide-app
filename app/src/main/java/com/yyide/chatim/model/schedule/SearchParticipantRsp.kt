@@ -12,21 +12,23 @@ data class SearchParticipantRsp(
     var data: DataBean? = null
 ) {
     data class DataBean(
-        var teacherList: List<TeacherListBean>? = null,
-        var studentList: List<StudentListBean>? = null
+        var personList: List<TeacherListBean>? = null,
+        var list: List<StudentListBean>? = null
     ) {
         data class TeacherListBean(
             val id:String? = null,
             var name: String? = null,
             var userId: String? = null,
             var checked: Boolean = false,
-            var departmentName: String? = null
+            var departmentName: String? = null,
+            var showName: String? = null
         )
 
         data class StudentListBean(
             var name: String? = null,
             var userId: String? = null,
             var classesName: String? = null,
+            var showName: String? = null,
             var guardians: List<GuardiansBean> = mutableListOf()
         ) {
             data class GuardiansBean(

@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="@dimen/dp_40"
-            tools:context=".activity.schedule.ScheduleEditActivity">
+            tools:context=".activity.schedule.ScheduleEditActivityMain">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_schedule_title"

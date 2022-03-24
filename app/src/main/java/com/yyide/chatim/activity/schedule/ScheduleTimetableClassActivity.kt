@@ -84,7 +84,7 @@ class ScheduleTimetableClassActivity : BaseActivity() {
             val intent = Intent(this, ScheduleRemindActivity::class.java)
             intent.putExtra("data", "")
             intent.putExtra("allDay", "")
-            startActivityForResult(intent, ScheduleEditActivity.REQUEST_CODE_REMIND_SELECT)
+            startActivityForResult(intent, ScheduleEditActivityMain.REQUEST_CODE_REMIND_SELECT)
         }
 
         //日程修改监听
@@ -122,7 +122,7 @@ class ScheduleTimetableClassActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         //选择提醒
-        if (requestCode == ScheduleEditActivity.REQUEST_CODE_REMIND_SELECT && resultCode == RESULT_OK && data != null) {
+        if (requestCode == ScheduleEditActivityMain.REQUEST_CODE_REMIND_SELECT && resultCode == RESULT_OK && data != null) {
             val stringExtra = data.getStringExtra("data")
             remind = JSON.parseObject(stringExtra, Remind::class.java)
             loge("id=${remind.id},name=${remind.title}")

@@ -894,8 +894,10 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/getTeacherParticipant
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/getTeacherParticipant")
-    Call<ParticipantRsp> getTeacherParticipant(@Query("departmentId") String departmentId);
+//    @POST("/management/cloud-system/app/schedule/getTeacherParticipant")
+    @POST("/cloud/selectPerson/getDeptPerson")
+//    Call<ParticipantRsp> getTeacherParticipant(@Query("departmentId") String departmentId);
+    Call<ParticipantRsp> getTeacherParticipant(@Body RequestBody requestBody);
 
     /**
      * 获取【家长/学生】人员信息
@@ -905,8 +907,10 @@ public interface DingApiStores {
      * @param scope 范围【1：家长，2：学生】
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/getParticipant")
-    Call<StudentGuardianRsp> getParticipant(@Query("id") String id, @Query("type") String type, @Query("scope") String scope);
+//    @POST("/management/cloud-system/app/schedule/getParticipant")
+    @POST("/cloud/selectPerson/getRollPerson")
+//    Call<StudentGuardianRsp> getParticipant(@Query("id") String id, @Query("type") String type, @Query("scope") String scope);
+    Call<StudentGuardianRsp> getParticipant(@Body RequestBody requestBody);
 
 
     /**
@@ -914,7 +918,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/searchParticipant
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/management/cloud-system/app/schedule/searchParticipant")
+//    @POST("/management/cloud-system/app/schedule/searchParticipant")
+    @POST("/cloud/selectPerson/searchPerson")
     Call<SearchParticipantRsp> searchParticipant(@Body RequestBody requestBody);
 
     /**
@@ -930,7 +935,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/management/cloud-system/app/schedule/deleteScheduleById/14
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @DELETE("/cloud/app/schedule/deleteSchedule/{id}")
+//    @DELETE("/cloud/app/schedule/deleteSchedule/{id}")
+    @GET("/cloud/app/schedule/deleteSchedule/{id}")
     Call<BaseRsp> deleteScheduleById(@Path("id") String id);
 
     /**

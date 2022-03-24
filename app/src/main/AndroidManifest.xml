@@ -653,10 +653,10 @@
             android:name=".activity.scancode.ConfirmSuccessActivity"
             android:screenOrientation="portrait" /> <!-- 日程编辑 -->
         <activity
-            android:name=".activity.schedule.ScheduleEditActivity"
+            android:name=".activity.schedule.ScheduleEditActivityMain"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.schedule.ScheduleEditActivity2"
+            android:name=".activity.schedule.ScheduleEditActivitySimple"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.schedule.ScheduleEditActivity2_edit"

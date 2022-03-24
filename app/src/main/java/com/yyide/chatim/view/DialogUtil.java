@@ -47,7 +47,7 @@ import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.face.FaceCaptureProtocolActivity;
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
-import com.yyide.chatim.activity.schedule.ScheduleEditActivity;
+import com.yyide.chatim.activity.schedule.ScheduleEditActivityMain;
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
 import com.yyide.chatim.database.ScheduleDaoUtil;
@@ -541,7 +541,7 @@ public class DialogUtil {
                         ScheduleTimetableClassActivity.Companion.jump(context, scheduleData);
                         return;
                     }
-                    final Intent intent = new Intent(context, ScheduleEditActivity.class);
+                    final Intent intent = new Intent(context, ScheduleEditActivityMain.class);
                     intent.putExtra("data", JSON.toJSONString(scheduleList.get(position)));
                     context.startActivity(intent);
                 }

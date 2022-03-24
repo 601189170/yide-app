@@ -3,6 +3,7 @@ package com.yyide.chatim.activity.schedule
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -41,7 +42,7 @@ import com.yyide.chatim.viewmodel.ScheduleEditViewModel
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import java.util.concurrent.atomic.AtomicReference
 
-class ScheduleEditActivity2 : BaseActivity() {
+class ScheduleEditActivitySimple : BaseActivity() {
     lateinit var scheduleEditBinding: ActivityScheduleEdit2Binding
     private var labelList = mutableListOf<LabelListRsp.DataBean>()
     private val scheduleEditViewModel: ScheduleEditViewModel by viewModels()
@@ -74,15 +75,38 @@ class ScheduleEditActivity2 : BaseActivity() {
 
 
 
+        scheduleEditBinding.top.title.text =  "日程详情"
+        scheduleEditBinding.top.backLayout.setOnClickListener {
+            finish()
+        }
+        //删除
+        scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
+        scheduleEditBinding.top.ivRight.setOnClickListener {
+            DialogUtil.showScheduleDelDialog(
+                    this,
+                    scheduleEditBinding.top.ivRight,
+                    object : DialogUtil.OnClickListener {
+                        override fun onCancel(view: View?) {
 
-        scheduleEditBinding.etScheduleTitle.isEnabled = false;
+                        }
+
+                        override fun onEnsure(view: View?) {
+                            val scheduleId = scheduleEditViewModel.scheduleIdLiveData.value ?: ""
+                            scheduleEditViewModel.deleteScheduleById(scheduleId)
+                        }
+
+                    })
+        }
+        scheduleEditBinding.top.ivEdit.visibility=View.VISIBLE;
+
         val stringExtra = intent.getStringExtra("data")
 
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
         scheduleEditBinding.top.ivEdit.setOnClickListener {
-            val intent = Intent(this, ScheduleEditActivity2_edit::class.java)
+            val intent = Intent(this, ScheduleEditActivityMain::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
+            finish()
         }
 
         scheduleData?.let {
@@ -92,7 +116,9 @@ class ScheduleEditActivity2 : BaseActivity() {
             scheduleEditBinding.etScheduleTitle.setText(it.name)
             scheduleEditViewModel.participantList.value = it.participantList
             val stringBuilder = StringBuilder()
-            it.participantList.map { it.realname }.forEach {
+            it.participantList.map {
+                it.name
+            }.forEach {
                 stringBuilder.append(it).append("  ")
             }
             scheduleEditBinding.tvPerson .setText(stringBuilder)

@@ -7,21 +7,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.*
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.schedule.*
-import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
-import com.yyide.chatim.chat.ConversationFragment
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentScheduleBinding
 import com.yyide.chatim.model.EventMessage
@@ -191,9 +185,12 @@ class ScheduleFragment2 : Fragment() {
 
         override fun onSwitch(view: View?) {
             loge("onSwitch")
-            val intent = Intent(context, ScheduleFullEditionActivity::class.java)
+//            val intent = Intent(context, ScheduleFullEditionActivity::class.java)
+            val intent = Intent(context, ScheduleEditActivityMain::class.java)
             val toScheduleDataBean = scheduleEditViewModel.toScheduleDataBean()
             intent.putExtra("data", JSON.toJSONString(toScheduleDataBean))
+            //type:1 新增 type空 创建
+            intent.putExtra("type", "1")
             fullEditionScheduleLauncher.launch(intent)
         }
     }

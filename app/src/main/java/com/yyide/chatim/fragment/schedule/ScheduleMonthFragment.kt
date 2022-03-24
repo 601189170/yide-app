@@ -24,7 +24,8 @@ import com.yide.calendar.month.MonthCalendarView
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
-import com.yyide.chatim.activity.schedule.ScheduleEditActivity
+import com.yyide.chatim.activity.schedule.ScheduleEditActivityMain
+import com.yyide.chatim.activity.schedule.ScheduleEditActivitySimple
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
@@ -54,6 +55,7 @@ import org.joda.time.DateTime
  */
 class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
     SwipeRefreshLayout.OnRefreshListener {
+//    lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonth2Binding
     lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonth2Binding
     private var list = mutableListOf<ScheduleOuter>()
     private var mcvCalendar: MonthCalendarView? = null
@@ -99,7 +101,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
                 if (value != null){
                     val hintCircle = HintCircle(dateTime,dateTime.dayOfMonth, value.size)
                     hints.add(hintCircle)
-                    addTaskHint(hintCircle)
+//                    addTaskHint(hintCircle)
                 }
             }
             if (refresh){
@@ -174,7 +176,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
                 ScheduleTimetableClassActivity.jump(requireContext(), scheduleData)
                 return@setOnItemClickListener
             }
-            val intent = Intent(context, ScheduleEditActivity::class.java)
+            val intent = Intent(context, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }

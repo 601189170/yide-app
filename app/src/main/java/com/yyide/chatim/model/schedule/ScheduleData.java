@@ -19,6 +19,7 @@ import com.yyide.chatim.utils.DateUtils;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,8 +54,8 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
     private int moreDayCount;
     private String iconImg;
     private String isAllDay;
-    public List<LabelListRsp.DataBean> labelList;
-    public List<ParticipantRsp.DataBean.ParticipantListBean> participantList;
+    public List<LabelListRsp.DataBean> labelList=new ArrayList<>();
+    public List<ParticipantRsp.DataBean.ParticipantListBean> participantList=new ArrayList<>();
     private String siteName;
     private String updateType;
     private String updateDate;

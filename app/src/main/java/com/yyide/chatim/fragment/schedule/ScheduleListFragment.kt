@@ -30,7 +30,7 @@ import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.viewmodel.ScheduleListViewViewModel
 import org.joda.time.DateTime
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
-import com.yyide.chatim.activity.schedule.ScheduleEditActivity
+import com.yyide.chatim.activity.schedule.ScheduleEditActivitySimple
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ScheduleListAdapter
 import com.yyide.chatim.base.BaseConstant
@@ -184,7 +184,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                     ScheduleTimetableClassActivity.jump(requireContext(), scheduleData)
                     return@setOnItemClickListener
                 }
-                val intent = Intent(context, ScheduleEditActivity::class.java)
+                val intent = Intent(context, ScheduleEditActivitySimple::class.java)
                 intent.putExtra("data", JSON.toJSONString(scheduleData))
                 startActivity(intent)
             }

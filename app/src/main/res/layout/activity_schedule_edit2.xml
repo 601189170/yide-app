@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#F7F9FA"
-            tools:context=".activity.schedule.ScheduleEditActivity">
+            tools:context=".activity.schedule.ScheduleEditActivityMain">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_schedule_title"
@@ -71,7 +71,7 @@
                     android:textStyle="bold"
                     />
                 </LinearLayout>
-                <EditText
+                <TextView
                     android:layout_marginTop="@dimen/dp_15"
                     app:layout_constraintTop_toBottomOf="@+id/top_layout"
                     android:id="@+id/edit"

@@ -9,7 +9,8 @@ data class StudentGuardianRsp(
     val code: Int = 0,
     val success: Boolean = false,
     val msg: String? = null,
-    val data: DataBean? = null
+//    val data: DataBean? = null,
+    val data: List<DataBean>? = null
 ) {
     data class DataBean(
         val name: String? = null,

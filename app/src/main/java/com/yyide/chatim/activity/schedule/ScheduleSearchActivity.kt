@@ -3,7 +3,6 @@ package com.yyide.chatim.activity.schedule
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -232,7 +231,7 @@ class ScheduleSearchActivity : BaseActivity() {
                 return@setOnItemClickListener
             }
 
-            val intent = Intent(this@ScheduleSearchActivity, ScheduleEditActivity::class.java)
+            val intent = Intent(this@ScheduleSearchActivity, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }

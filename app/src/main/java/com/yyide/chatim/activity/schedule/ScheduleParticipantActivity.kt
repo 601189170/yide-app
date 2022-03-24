@@ -1,6 +1,7 @@
 package com.yyide.chatim.activity.schedule
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -53,6 +54,12 @@ class ScheduleParticipantActivity : BaseActivity() {
             scheduleParticipantBinding.clSearchResult.visibility =
                 if (it.isEmpty()) View.GONE else View.VISIBLE
             adapter.setList(it)
+            if (it.size>0){
+                scheduleParticipantBinding.tvYx.visibility=View.VISIBLE
+            }else{
+                scheduleParticipantBinding.tvYx.visibility=View.GONE
+            }
+
         })
     }
 
@@ -63,9 +70,10 @@ class ScheduleParticipantActivity : BaseActivity() {
         flexboxLayoutManager.justifyContent = JustifyContent.FLEX_START
         scheduleParticipantBinding.rvParticipant.layoutManager = flexboxLayoutManager
         scheduleParticipantBinding.rvParticipant.addItemDecoration(
-            SpacesFlowItemDecoration(DisplayUtils.dip2px(this, 20f), DisplayUtils.dip2px(this, 8f))
+            SpacesFlowItemDecoration(DisplayUtils.dip2px(this, 10f), DisplayUtils.dip2px(this, 5f))
         )
         adapter.setList(participantSharedViewModel.curStaffParticipantList.value)
+
         scheduleParticipantBinding.rvParticipant.adapter = adapter
         adapter.setOnItemClickListener { _, _, position ->
             //更新view model里的数据源
@@ -122,7 +130,7 @@ class ScheduleParticipantActivity : BaseActivity() {
         )
         if (participantDataList != null) {
             participantDataList.forEach {
-                it.name = it.realname
+                it.name = it.name
                 it.realname = it.realname
                 //it.realname = it.userName
                 //it.teacherId = it.userId
@@ -174,7 +182,7 @@ class ScheduleParticipantActivity : BaseActivity() {
                             participantSharedViewModel.curStaffParticipantList.value
                                 ?: mutableListOf()
                         participantDataList.forEach { data ->
-                            if (curStaffParticipantList.find { it.realname == data.realname } == null) {
+                            if (curStaffParticipantList.find { it.name == data.name } == null) {
                                 curStaffParticipantList.add(data)
                             }
                         }

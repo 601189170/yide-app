@@ -25,7 +25,8 @@ import com.yyide.chatim.activity.gate.GateClassTeacherActivity
 import com.yyide.chatim.activity.gate.GateDetailInfoActivity
 import com.yyide.chatim.activity.gate.GateStudentStaffActivity
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
-import com.yyide.chatim.activity.schedule.ScheduleEditActivity
+import com.yyide.chatim.activity.schedule.ScheduleEditActivityMain
+import com.yyide.chatim.activity.schedule.ScheduleEditActivitySimple
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
@@ -199,7 +200,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 ScheduleTimetableClassActivity.jump(requireContext(), scheduleData)
                 return@setOnItemClickListener
             }
-            val intent = Intent(context, ScheduleEditActivity::class.java)
+            val intent = Intent(context, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }
@@ -225,7 +226,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 ScheduleTimetableClassActivity.jump(requireContext(), scheduleData)
                 return@setOnItemClickListener
             }
-            val intent = Intent(context, ScheduleEditActivity::class.java)
+            val intent = Intent(context, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
             startActivity(intent)
         }

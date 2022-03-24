@@ -204,7 +204,7 @@ class ScheduleParticipantSearchActivity : BaseActivity() {
             holder: BaseViewHolder,
             item: SearchParticipantRsp.DataBean.TeacherListBean
         ) {
-            holder.setText(R.id.tv_name, "${item.name} (${item.departmentName})")
+            holder.setText(R.id.tv_name, "${item.name} (${item.showName})")
             holder.getView<CheckBox>(R.id.checkBox).isEnabled = true
             holder.getView<CheckBox>(R.id.checkBox).isChecked = item.checked
         }

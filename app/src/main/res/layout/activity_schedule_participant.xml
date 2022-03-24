@@ -18,27 +18,28 @@
         android:id="@+id/cl_search"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="#F7F9FA"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/top">
 
         <TextView
             android:id="@+id/edit"
+
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_35"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginEnd="@dimen/dp_12"
             android:background="@drawable/schedule_participant_search_edit_bg_shape"
-            android:text="搜索参与人"
-            android:paddingStart="36dp"
-            android:textColor="#333333"
-            android:textSize="@dimen/text_13"
+            android:text="请输入要搜索的内容"
+            android:paddingStart="45dp"
+            android:textColor="#999999"
+            android:textSize="@dimen/text_14"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:layout_width="@dimen/dp_12"
-            android:layout_height="@dimen/dp_12"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
             android:layout_marginStart="@dimen/dp_17"
             android:src="@drawable/schedule_participant_search_icon"
             app:layout_constraintBottom_toBottomOf="@id/edit"
@@ -49,14 +50,29 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search_result"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:background="#F7F9FA"
+        android:layout_height="100dp"
+        android:background="@color/white"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/cl_search">
+        <TextView
+            android:id="@+id/tv_yx"
+            android:text="已选"
+            android:visibility="gone"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:paddingStart="@dimen/dp_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+        </TextView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_participant"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_yx"
+            app:layout_constraintTop_toBottomOf="@+id/tv_yx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:paddingStart="@dimen/dp_16"
             android:paddingEnd="@dimen/dp_16"
             android:paddingBottom="@dimen/dp_10"

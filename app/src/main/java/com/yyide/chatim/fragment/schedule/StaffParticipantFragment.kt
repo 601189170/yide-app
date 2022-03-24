@@ -50,11 +50,11 @@ class StaffParticipantFragment : Fragment() {
             if (it != null) {
                 listCache[it.name ?: "未知"] = it
                 val list = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
-                it.departmentList?.let {
+                it.list?.let {
                     it.forEach { it.department = true }
                     list.addAll(it)
                 }
-                it.participantList?.let {
+                it.personList?.let {
                     it.forEach { it.department = false }
                     list.addAll(it)
                 }
@@ -64,7 +64,7 @@ class StaffParticipantFragment : Fragment() {
                 if (type == PARTICIPANT_TYPE_STAFF) {
                     staffAdapter.setList(list)
                 } else {
-                    if (it.departmentList?.isNotEmpty() == true) {
+                    if (it.list?.isNotEmpty() == true) {
                         staffAdapter.setList(list)
                     } else {
                         val linearLayoutManager3 = LinearLayoutManager(requireContext())
@@ -121,8 +121,8 @@ class StaffParticipantFragment : Fragment() {
                 val dataBean = it[position]
                 val curList = staffParticipantViewModel.curParticipantList.value
                 curList?.clear()
-                dataBean.departmentList?.let { curList?.addAll(it) }
-                dataBean.participantList?.let { curList?.addAll(it) }
+                dataBean.list?.let { curList?.addAll(it) }
+                dataBean.personList?.let { curList?.addAll(it) }
                 //和选中的一致
                 synParticipantListSelectedStatus()
                 staffParticipantBinding.rvList.adapter = staffAdapter
@@ -144,13 +144,13 @@ class StaffParticipantFragment : Fragment() {
                     val dataBean = listCache[participantListBean.name]
                     if (dataBean != null) {
                         curList.clear()
-                        dataBean.departmentList?.let { curList.addAll(it) }
-                        dataBean.participantList?.let { curList.addAll(it) }
+                        dataBean.list?.let { curList.addAll(it) }
+                        dataBean.personList?.let { curList.addAll(it) }
                         synParticipantListSelectedStatus()
                         if (type == PARTICIPANT_TYPE_STAFF) {
                             staffAdapter.setList(curList)
                         } else {
-                            if (dataBean.departmentList?.isNotEmpty() == true) {
+                            if (dataBean.list?.isNotEmpty() == true) {
                                 staffAdapter.setList(curList)
                             } else {
                                 val linearLayoutManager3 = LinearLayoutManager(requireContext())
@@ -266,11 +266,16 @@ class StaffParticipantFragment : Fragment() {
                     //最后一个tab置灰不可点击
                     holder.getView<ImageView>(R.id.iv_right).visibility = View.GONE
                     if (list.size != 1) {
-                        holder.setTextColor(R.id.tv_name, resources.getColor(R.color.black11))
+                        holder.setTextColor(R.id.tv_name, resources.getColor(R.color.black9))
                     }
                 } else {
                     holder.getView<ImageView>(R.id.iv_right).visibility = View.VISIBLE
-                    holder.setTextColor(R.id.tv_name, resources.getColor(R.color.black9))
+                    holder.setTextColor(R.id.tv_name, resources.getColor(R.color.colorPrimary))
+                }
+                if(item==list[0]){
+                    holder.getView<ImageView>(R.id.home_img).visibility=View.VISIBLE
+                }else{
+                    holder.getView<ImageView>(R.id.home_img).visibility=View.GONE
                 }
             }
         }
