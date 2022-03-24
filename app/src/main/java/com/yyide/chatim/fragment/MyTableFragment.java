@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ import com.yyide.chatim.adapter.MyTableAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.databinding.LayoutMytableFragmnetBinding;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.GetUserSchoolRsp;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
@@ -44,47 +46,31 @@ import butterknife.OnClick;
 
 public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implements MyTableView {
 
-    @BindView(R.id.listview)
-    RecyclerView listview;
-    @BindView(R.id.grid)
-    GridView grid;
-    @BindView(R.id.classlayout)
-    FrameLayout classlayout;
-    @BindView(R.id.className)
-    TextView className;
-    @BindView(R.id.tv_week)
-    TextView tv_week;
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    private View mBaseView;
-
     MyTableAdapter adapter;
     TableTimeAdapter timeAdapter;
     private List<SelectSchByTeaidRsp.DataBean> list = new ArrayList<>();
     private int weekDay;
 
+    private LayoutMytableFragmnetBinding binding;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
-        mBaseView = inflater.inflate(R.layout.layout_mytable_fragmnet, container, false);
-        return mBaseView;
+        binding = LayoutMytableFragmnetBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
-    @OnClick(R.id.tv_week)
-    public void send() {
-        //EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_SELECT_MESSAGE_TODO, "", 1));
-    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         adapter = new MyTableAdapter(R.layout.mytable_item);
-        listview.setLayoutManager(new LinearLayoutManager(getContext()));
-        listview.setAdapter(adapter);
+        binding.listview.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.listview.setAdapter(adapter);
         adapter.setEmptyView(R.layout.empty);
         timeAdapter = new TableTimeAdapter();
-        grid.setAdapter(timeAdapter);
+        binding.tableMyTop.grid.setAdapter(timeAdapter);
 //        if (SpData.getIdentityInfo().weekNum <= 0) {
 //            tv_week.setText("");
 //        } else {
@@ -99,7 +85,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
                 weekDay = i + 1;
             }
         }
-        grid.setOnItemClickListener((parent, view12, position, id) -> {
+        binding.tableMyTop.grid.setOnItemClickListener((parent, view12, position, id) -> {
             timeAdapter.setPosition(position);
             weekDay = position + 1;
             adapter.setList(getTableList(list, position + 1));
@@ -115,10 +101,13 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
                 startActivity(intent);
             }
         });
-        mSwipeRefreshLayout.setOnRefreshListener(this::getData);
-        mSwipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+        binding.swipeRefreshLayout.setOnRefreshListener(this::getData);
+        binding.swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
 
-        classlayout.setVisibility(View.GONE);
+
+        binding.tableMyReturnCurrent.setOnClickListener(v -> {
+            getData();
+        });
         getData();
     }
 
@@ -164,7 +153,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @Override
     public void SelectSchByTeaid(SelectSchByTeaidRsp rsp) {
-        mSwipeRefreshLayout.setRefreshing(false);
+        binding.swipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaid: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCESS && rsp.data != null) {
             list = rsp.data;
@@ -174,7 +163,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     @Override
     public void SelectSchByTeaidFail(String msg) {
-        mSwipeRefreshLayout.setRefreshing(false);
+        binding.swipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaidFail: " + JSON.toJSONString(msg));
     }
 }

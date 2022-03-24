@@ -52,7 +52,8 @@ public class MyTableAdapter extends BaseQuickAdapter<SelectSchByTeaidRsp.DataBea
         }
 
         desc.setText(TextUtils.isEmpty(item.beforeClass) ? "暂无课前提醒" : item.beforeClass);
-        //开始时间
+        dateS.setImageResource(R.mipmap.table_item_logo);
+/*        //开始时间
         long fromDataTime = DateUtils.getWhenPoint(item.fromDateTime);
         //结束时间
         long toDateTime = DateUtils.getWhenPoint(item.toDateTime);
@@ -77,7 +78,7 @@ public class MyTableAdapter extends BaseQuickAdapter<SelectSchByTeaidRsp.DataBea
             dateS.setImageResource(R.drawable.icon_table);
         } else {
             dateS.setImageResource(R.drawable.icon_table_un);
-        }
+        }*/
 
         className.setText(item.classesName + " \t" + item.subjectName);
         seciton.setText("0".equals(item.section) ? "早读" : "第" + item.section + "节");

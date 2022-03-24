@@ -34,6 +34,7 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity;
 import com.yyide.chatim.activity.operation.OperationActivity;
+import com.yyide.chatim.activity.table.TableActivity;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
@@ -253,7 +254,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 startActivity(new Intent(getContext(), MeetingHomeActivity.class));
                 break;
             case R.id.tvMenu4:
-                //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));
+                startActivity(new Intent(getContext(), TableActivity.class));
                 break;
             case R.id.tvMenu5:
                 //startActivity(new Intent(getContext(), ClassesHonorPhotoListActivity.class));

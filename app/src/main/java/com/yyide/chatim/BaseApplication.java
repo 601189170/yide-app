@@ -195,7 +195,7 @@ public class BaseApplication extends Application {
         // bugly上报
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(getApplicationContext());
         strategy.setAppVersion(V2TIMManager.getInstance().getVersion());
-        //CrashReport.initCrashReport(getApplicationContext(), PrivateConstants.BUGLY_APPID, true, strategy);
+        CrashReport.initCrashReport(getApplicationContext(), PrivateConstants.BUGLY_APPID, true, strategy);
         //TXLiveBase.getInstance().setLicence(instance, licenceUrl, licenseKey);
         /**
          * TUIKit的初始化函数

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
         android:paddingEnd="@dimen/dp_12">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,33 +34,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="11dp"
-                    android:drawableEnd="@drawable/icon_right"
+                    android:layout_marginStart="11dp"
+                    app:drawableEndCompat="@mipmap/table_week_button"
                     android:drawablePadding="@dimen/dp_10"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:textColor="#333333"
-                    android:textSize="@dimen/text_12" />
+                    android:textColor="#666666"
+                    android:textSize="14sp" />
             </FrameLayout>
+
 
             <TextView
                 android:id="@+id/back_current_week"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_12"
-                android:text="回到当前周"
-                android:textColor="#ff11C685"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:textColor="#666666"
+                android:textSize="14sp"
                 android:visibility="gone"
+                app:drawableEndCompat="@mipmap/table_week_button"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/ll_week"
             android:layout_width="match_parent"
+            android:background="#F3FCF9"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp">
 
@@ -68,8 +69,8 @@
                 android:id="@+id/tv_week"
                 android:layout_width="50dp"
                 android:layout_height="39dp"
-                android:background="@drawable/bg_corners3"
                 android:gravity="center"
+                android:text="@string/school_table_time_tv"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp"
                 android:textStyle="bold" />

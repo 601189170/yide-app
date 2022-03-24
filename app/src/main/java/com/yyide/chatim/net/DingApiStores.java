@@ -55,6 +55,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
+import com.yyide.chatim.model.address.ScheduleAddressBean;
 import com.yyide.chatim.model.attendance.StudentAttendanceDayRsp;
 import com.yyide.chatim.model.StudentHonorRsp;
 import com.yyide.chatim.model.StudentScopeRsp;
@@ -859,7 +860,7 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
 //    @POST("/management/cloud-system/app/schedule/getSiteName")
     @GET("/cloud/site/buildingList")
-    Call<SiteNameRsp> getSiteName();
+    Call<BaseResponse<List<ScheduleAddressBean>>> getSiteName();
 
     /**
      * 日程新增修改

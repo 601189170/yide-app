@@ -75,7 +75,7 @@ class SiteTableViewModel : ViewModel() {
         val toJSONString = JSON.toJSONString(param)
         loge("查询场地课表数据:$toJSONString")
         val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)
-        apiStores2.sites(requestBody).enqueue(object :Callback<SiteTableRsp>{
+        apiStores.sites(requestBody).enqueue(object :Callback<SiteTableRsp>{
             override fun onResponse(call: Call<SiteTableRsp>, response: Response<SiteTableRsp>) {
                 val body = response.body()
                 val data = body?.data
