@@ -125,7 +125,7 @@
                 android:layout_marginVertical="15dp"
                 android:src="@mipmap/meeting_detail_address"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/meeting_detail_people_logo" />
+                app:layout_constraintTop_toBottomOf="@id/meeting_detail_people_describe" />
 
             <TextView
                 android:id="@+id/meeting_detail_address_describe"
