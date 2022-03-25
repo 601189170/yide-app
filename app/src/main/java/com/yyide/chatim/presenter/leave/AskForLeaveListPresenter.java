@@ -24,7 +24,7 @@ public class AskForLeaveListPresenter extends BasePresenter<AskForLeaveListView>
      * @param pageSize
      */
     public void getAskLeaveRecord(int pageNo, int pageSize) {
-        final HashMap<String, Object> map = new HashMap<>(2);
+        final HashMap<String, Object> map = new HashMap<>();
         map.put("pageSize", pageSize);
         map.put("pageNo", pageNo);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));

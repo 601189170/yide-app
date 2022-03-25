@@ -281,7 +281,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         final LeaveDetailRsp.DataDTO data = leaveDetailRsp.getData();
         leaveFlowBeanList.clear();
         LeaveDetailRsp.DataDTO.ApprJsonDTO apprJson = data.getApprJson();
-        if (SpData.getIdentityInfo().staffIdentity()) {
+        if ("1".equals(data.getIdentity())) {
             //教职工
             tv_department.setText(R.string.in_department);
             tv_department_name.setText(apprJson.getDept());

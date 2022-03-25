@@ -11,14 +11,35 @@ data class LeaveApprovalBean(
     data class DataBean(
         var approver: List<Approver>,
         var ccList: List<Cc>,
-        var dept: String,
+        var classList: List<LeaveClassBean>,
+        var dept: DeptBean,
         var hours: String,
         var procId: String,
         var procKey: String,
         var sponsorType: String
     )
 
-    data class LeaveCommitBean(val id: String = "", val name: String = "", val userId: String = "")
+    data class DeptBean(
+        @JSONField(name = "id")
+        var id: String = "",
+        @JSONField(name = "name")
+        var name: String = "",
+        @JSONField(name = "avatar")
+        var avatar: String = ""
+    )
+
+    data class LeaveCommitBean(
+        @JSONField(name = "id")
+        var id: String = "",
+        @JSONField(name = "name")
+        var name: String = "",
+        @JSONField(name = "approverName")
+        var approverName: String = "",
+        @JSONField(name = "userId")
+        var userId: String = "",
+        @JSONField(name = "avatar")
+        var avatar: String = ""
+    ) : Serializable
 
     data class Approver(
         var apprType: Int,
@@ -43,12 +64,15 @@ data class LeaveApprovalBean(
         @JSONField(name = "name")
         var name: String = "",
         @JSONField(name = "procApprId")
-        var procApprId: String = ""
+        var procApprId: String = "",
+        @JSONField(name = "avatar")
+        var avatar: String = ""
     ) : Serializable
 
     data class Branappr(
-        var approverId: String,
-        var name: String
+        var id: String = "",
+        var name: String = "",
+        var avatar: String = ""
     )
 
     data class LeaveRequestBean(
@@ -61,7 +85,20 @@ data class LeaveApprovalBean(
         @JSONField(name = "reason")
         var reason: String = "",
         @JSONField(name = "student")
-        var student: String = ""
+        var student: String = "",
+        @JSONField(name = "studentId")
+        var studentId: String = "",
+    )
+
+    data class LeaveClassBean(
+        @JSONField(name = "id")
+        var id: String = "",
+        @JSONField(name = "name")
+        var name: String = "",
+        @JSONField(name = "studentId")
+        var studentId: String = "",
+        @JSONField(name = "studentName")
+        var studentName: String = ""
     )
 
 }

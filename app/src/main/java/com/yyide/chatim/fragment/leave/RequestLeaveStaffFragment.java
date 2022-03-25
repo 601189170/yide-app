@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -45,6 +46,8 @@ import com.yyide.chatim.adapter.leave.LeaveReasonTagAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.dialog.DeptSelectPop;
+import com.yyide.chatim.dialog.OnCheckCallBack;
+import com.yyide.chatim.dialog.SwitchStudentPop;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.LeaveApprovalBean;
@@ -54,8 +57,11 @@ import com.yyide.chatim.presenter.leave.StaffAskLeavePresenter;
 import com.yyide.chatim.utils.ButtonUtils;
 import com.yyide.chatim.utils.DatePickerDialogUtil;
 import com.yyide.chatim.utils.DateUtils;
+import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.SpacesItemDecoration;
 import com.yyide.chatim.view.leave.StaffAskLeaveView;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,6 +112,8 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     TextView tvStudentName;
     @BindView(R.id.groupTop)
     Group groupTop;
+    @BindView(R.id.cl_student)
+    ConstraintLayout cl_student;
     private static int REQUEST_CODE = 100;
     private List<LeaveDeptRsp.DataBean> deptList = new ArrayList<>();
     private List<LeaveApprovalBean.Cc> ccDataList = new ArrayList<>();
@@ -163,15 +171,17 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         etStartTime.setKeyListener(null);//不可粘贴，长按不会弹出粘贴框
         etEndTime.setKeyListener(null);//不可粘贴，长按不会弹出粘贴框
 
+        //隐藏审批人 抄送人  按钮
+        ivApproval.setVisibility(View.INVISIBLE);
+        iv_add_staff.setVisibility(View.INVISIBLE);
+
         if (SpData.getIdentityInfo().staffIdentity()) {
             tvBranch.setText("所选部门");
             groupTop.setVisibility(View.GONE);
         } else {
             tvBranch.setText("所在班级");
             //目前使用的身份名称- 暂无学生姓名
-            tvStudentName.setText(SpData.getIdentityInfo().getIdentityName());
             groupTop.setVisibility(View.VISIBLE);
-            tv_department.setText(SpData.getIdentityInfo().getIdentityName());
         }
 
         recyclerviewTagHint.setLayoutManager(flexboxLayoutManager);
@@ -179,7 +189,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         recyclerviewTagHint.setAdapter(leaveReasonTagAdapter);
         leaveReasonTagAdapter.setOnClickedListener(position -> {
             LeavePhraseRsp.DataBean tag = tags.get(position);
-            //editLeaveReason.setText(tag.getTag());
             if (!tag.isChecked()) {
                 reason += tag.getTag();
             } else {
@@ -212,6 +221,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             }
         });
         initCC();
+        mvpPresenter.getClassList();
     }
 
     private void initCC() {
@@ -243,14 +253,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                 }
                 break;
             case R.id.tv_department:
-                if (deptList.size() > 1) {
-                    final DeptSelectPop deptSelectPop = new DeptSelectPop(getActivity(), 1, deptList);
-                    deptSelectPop.setOnCheckedListener((id, dept) -> {
-                        deptName = dept;
-                        tv_department.setText(dept);
-                        //mvpPresenter.getApprover(id);
-                    });
-                }
+
                 break;
             case R.id.iv_add_staff:
                 Intent intent1 = new Intent(getActivity(), AddCcActivity.class);
@@ -297,8 +300,11 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         leaveRequestBean.setEndTime(endTime);
         leaveRequestBean.setReason(reason);
         leaveRequestBean.setHours(hours);
-        if (!SpData.getIdentityInfo().staffIdentity()) {
-            leaveRequestBean.setStudent(hours);
+
+        if (classBean != null) {
+            leaveRequestBean.setStudent(classBean.getStudentName());
+            leaveRequestBean.setStudentId(classBean.getStudentId());
+            deptName = classBean.getId();
         }
         mvpPresenter.addLeave(leaveRequestBean, procId, sponsorType, deptName, mAdapter.getData(), getCCList());
     }
@@ -343,7 +349,11 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
 
     private void requestApprover() {
         if (!TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime)) {
-            mvpPresenter.getApprover(startTime, endTime);
+            String classId = "";
+            if (classBean != null) {
+                classId = classBean.getId();
+            }
+            mvpPresenter.getApprover(startTime, endTime, classId);
         }
     }
 
@@ -361,29 +371,32 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         }
 
         hours = data.getHours();
-        deptName = data.getDept();
         sponsorType = data.getSponsorType();
         procId = data.getProcId();
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            tv_department.setText(data.getDept());
-        }
         btn_commit.setAlpha(1f);
         btn_commit.setClickable(true);
-        iv_add_staff.setVisibility(View.VISIBLE);
 
         //数据处理逻辑
         final List<LeaveApprovalBean.Approver> peopleForm = data.getApprover();
         List<LeaveApprovalBean.LeaveCommitBean> dataList = new ArrayList<>();
+        if (approvalData != null) {
+            approvalData.clear();
+        }
         for (LeaveApprovalBean.Approver approver : peopleForm) {
-            //需要默认显示审批人
-            if (approver.getUserType() == LeaveApprovalBean.Approver.DESIGNATED_MEMBER) {
-                if (approver.getBranapprList().size() > 0) {
-                    LeaveApprovalBean.Branappr item = approver.getBranapprList().get(0);
-                    dataList.add(new LeaveApprovalBean.LeaveCommitBean(approver.getId(), approver.getName(), item.getApproverId()));
-                }
-            } else {
-                for (LeaveApprovalBean.Branappr item : approver.getBranapprList()) {
-                    approvalData.add(new LeaveApprovalBean.LeaveCommitBean(approver.getId(), approver.getName(), item.getApproverId()));
+            if (approver.getBranapprList() != null) {
+                //需要默认显示审批人
+                if (approver.getUserType() == LeaveApprovalBean.Approver.DESIGNATED_MEMBER) {
+                    if (approver.getBranapprList().size() > 0) {
+                        LeaveApprovalBean.Branappr item = approver.getBranapprList().get(0);
+                        dataList.add(new LeaveApprovalBean.LeaveCommitBean(approver.getId(), approver.getName(), item.getName(), item.getId(), item.getAvatar()));
+                    }
+//                    for (LeaveApprovalBean.Branappr item : approver.getBranapprList()) {
+//                        dataList.add(new LeaveApprovalBean.LeaveCommitBean(approver.getId(), approver.getName(), item.getId()));
+//                    }
+                } else {
+                    for (LeaveApprovalBean.Branappr item : approver.getBranapprList()) {
+                        approvalData.add(new LeaveApprovalBean.LeaveCommitBean(approver.getId(), approver.getName(), item.getName(), item.getId(), item.getAvatar()));
+                    }
                 }
             }
         }
@@ -392,31 +405,36 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     }
 
     private void addApprovalList(List<LeaveApprovalBean.LeaveCommitBean> dataList) {
-        ivApproval.setVisibility(View.VISIBLE);
+        if (approvalData != null && approvalData.size() > 0) {
+            ivApproval.setVisibility(View.VISIBLE);
+        }
         tv_approver.setVisibility(View.VISIBLE);
         approvalList.setLayoutManager(new LinearLayoutManager(getContext()));
         approvalList.setAdapter(mAdapter);
         mAdapter.setList(dataList);
     }
 
-    private final BaseQuickAdapter<LeaveApprovalBean.LeaveCommitBean, BaseViewHolder> mAdapter = new BaseQuickAdapter<LeaveApprovalBean.LeaveCommitBean, BaseViewHolder>(R.layout.item_approver_head) {
-        @Override
-        protected void convert(@NonNull BaseViewHolder holder, LeaveApprovalBean.LeaveCommitBean approver) {
-            holder.setText(R.id.tv_approver_name, approver.getName());
-            if (mAdapter.getItemPosition(approver) == 0) {
-                holder.getView(R.id.viewTop).setVisibility(View.INVISIBLE);
-            } else if (mAdapter.getItemPosition(approver) == mAdapter.getData().size() - 1) {
-                holder.getView(R.id.viewLine).setVisibility(View.INVISIBLE);
-                //holder.getView(R.id.viewEnd).setVisibility(View.INVISIBLE);
-            }
-            if (mAdapter.getData().size() == 1) {
-                holder.getView(R.id.viewLine).setVisibility(View.INVISIBLE);
-            }
-            holder.getView(R.id.ivDel).setOnClickListener(v -> {
-                mAdapter.remove(approver);
-            });
-        }
-    };
+    private final BaseQuickAdapter<LeaveApprovalBean.LeaveCommitBean, BaseViewHolder> mAdapter =
+            new BaseQuickAdapter<LeaveApprovalBean.LeaveCommitBean, BaseViewHolder>(R.layout.item_approver_head) {
+                @Override
+                protected void convert(@NonNull BaseViewHolder holder, LeaveApprovalBean.LeaveCommitBean approver) {
+                    holder.setText(R.id.tv_approver_name, approver.getApproverName());
+                    if (mAdapter.getItemPosition(approver) == 0) {
+                        holder.getView(R.id.viewTop).setVisibility(View.INVISIBLE);
+                    } else if (mAdapter.getItemPosition(approver) == mAdapter.getData().size() - 1) {
+                        holder.getView(R.id.viewLine).setVisibility(View.INVISIBLE);
+                        //holder.getView(R.id.viewEnd).setVisibility(View.INVISIBLE);
+                    }
+                    if (mAdapter.getData().size() == 1) {
+                        holder.getView(R.id.viewLine).setVisibility(View.INVISIBLE);
+                    }
+                    holder.getView(R.id.ivDel).setOnClickListener(v -> {
+                        mAdapter.remove(approver);
+                    });
+                    ImageView imageView = holder.getView(R.id.iv_user_head);
+                    GlideUtil.loadImageHead(getContext(), approver.getAvatar(), imageView);
+                }
+            };
 
     private final BaseQuickAdapter<LeaveApprovalBean.Cc, BaseViewHolder> mCCAdapter = new BaseQuickAdapter<LeaveApprovalBean.Cc, BaseViewHolder>(R.layout.item_leave_cc) {
         @Override
@@ -479,6 +497,54 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     public void leavePhraseFail(String msg) {
         Log.e(TAG, "leavePhraseFail: " + msg);
         ToastUtils.showLong(msg);
+    }
+
+    @Override
+    public void getClass(LeaveApprovalBean leaveApprovalBean) {
+        LeaveApprovalBean.DataBean data = leaveApprovalBean.getData();
+        if (leaveApprovalBean.getCode() != BaseConstant.REQUEST_SUCCESS2) {
+            ToastUtils.showShort(leaveApprovalBean.getMessage());
+            return;
+        }
+
+        LeaveApprovalBean.DeptBean dept = data.getDept();
+        if (dept != null && !TextUtils.isEmpty(dept.getName())) {
+            deptName = dept.getName();
+            tv_department.setText(deptName);
+        }
+
+        //家长身份
+        List<LeaveApprovalBean.LeaveClassBean> classList = data.getClassList();
+        if (classList != null && classList.size() > 0) {
+            classBean = classList.get(0);
+            setClassName(classBean);
+            if (classList.size() > 1) {
+                tvStudentName.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(R.mipmap.icon_right), null);
+                //选择班学生
+                cl_student.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new SwitchStudentPop(getActivity(), classList, index).setOnSelectCallBack(new SwitchStudentPop.OnSelectCallBack() {
+                            @Override
+                            public void onSelectCallBacks(int position) {
+                                index = position;
+                                classBean = classList.get(position);
+                                setClassName(classBean);
+                                requestApprover();
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }
+
+    private int index = 0;
+    private LeaveApprovalBean.LeaveClassBean classBean;
+
+    private void setClassName(LeaveApprovalBean.LeaveClassBean leaveClassBean) {
+        tvStudentName.setText(leaveClassBean.getStudentName());
+        tv_department.setText(leaveClassBean.getName());
     }
 
     @Override

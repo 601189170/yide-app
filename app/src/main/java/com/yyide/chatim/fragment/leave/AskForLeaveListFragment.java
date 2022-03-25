@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.adapter.leave.AskForLeaveListAdapter;
@@ -57,7 +59,7 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
     private boolean refresh = false;
     private int curIndex = 1;
     private int pages = 1;
-    private int size = 10;
+    private int size = 15;
 
     public AskForLeaveListFragment() {
         // Required empty public constructor
@@ -92,22 +94,40 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         super.onViewCreated(view, savedInstanceState);
         list = new ArrayList<>();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AskForLeaveListAdapter(getActivity(), list);
+        adapter = new AskForLeaveListAdapter(list);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
-        mRecyclerView.addOnScrollListener(monScrollListener);
         mRecyclerView.setAdapter(adapter);
-        adapter.setOnItemOnClickListener(position -> {
-            Log.d(TAG, "position: " + list.get(position));
-            final Intent intent = new Intent(getActivity(), LeaveFlowDetailActivity.class);
-            intent.putExtra("id", list.get(position).getId() + "");
-            startActivityForResult(intent, REQUEST_CODE);
+        adapter.setEmptyView(R.layout.empty);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                Log.d(TAG, "position: " + list.get(position));
+                final Intent intent = new Intent(getActivity(), LeaveFlowDetailActivity.class);
+                intent.putExtra("id", list.get(position).getId() + "");
+                startActivityForResult(intent, REQUEST_CODE);
+            }
         });
 
         refresh = true;
         swipeRefreshLayout.setRefreshing(true);
         //initData();
         mvpPresenter.getAskLeaveRecord(curIndex, size);
+        initLoadMore();
+    }
+
+    private void initLoadMore() {
+        adapter.getLoadMoreModule().setOnLoadMoreListener(() -> {
+            //上拉加载时取消下拉刷新
+            swipeRefreshLayout.setRefreshing(false);
+            adapter.getLoadMoreModule().setEnableLoadMore(true);
+            //请求数据
+            curIndex++;
+            mvpPresenter.getAskLeaveRecord(curIndex, size);
+        });
+        adapter.getLoadMoreModule().setAutoLoadMore(true);
+        //当自动加载开启，同时数据不满一屏时，是否继续执行自动加载更多(默认为true)
+        adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
     }
 
     public void showBlankPage() {
@@ -123,7 +143,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         return new AskForLeaveListPresenter(this);
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -134,9 +153,10 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
     public void onRefresh() {
         curIndex = 1;
         refresh = true;
+        // 这里的作用是防止下拉刷新的时候还可以上拉加载
+        adapter.getLoadMoreModule().setEnableLoadMore(false);
         mvpPresenter.getAskLeaveRecord(curIndex, size);
     }
-
 
     @Override
     public void onResume() {
@@ -171,14 +191,17 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         }
 
         final List<LeaveListRsp.DataBean.RecordsBean> records = leaveListRsp.getData().getList();
-//        pages = leaveListRsp.getData().getPages();
-        pages = 1;
-        adapter.setIsLastPage(curIndex == pages);
-        adapter.setOnlyOnePage(pages <= 1);
-        adapter.setIsLoadMore(!records.isEmpty());
-
-        list.addAll(records);
-        adapter.notifyDataSetChanged();
+        if (curIndex == 1) {
+            adapter.setList(records);
+        } else {
+            adapter.addData(records);
+        }
+        if (records.size() < size) {
+            //如果不够一页,显示没有更多数据布局
+            adapter.getLoadMoreModule().loadMoreEnd();
+        } else {
+            adapter.getLoadMoreModule().loadMoreComplete();
+        }
         showBlankPage();
     }
 
@@ -188,28 +211,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         refresh = false;
         swipeRefreshLayout.setRefreshing(false);
         showBlankPage();
-        adapter.setIsLoadMore(false);
-        adapter.notifyDataSetChanged();
     }
 
-    private int mLastVisibleItemPosition;
-    private RecyclerView.OnScrollListener monScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-            if (layoutManager instanceof LinearLayoutManager) {
-                mLastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-            }
-            if (adapter != null) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == adapter.getItemCount()) {
-                    if (curIndex >= pages) {
-                        //ToastUtils.showShort("没有更多数据了！");
-                        return;
-                    }
-                    //发送网络请求获取更多数据
-                    mvpPresenter.getAskLeaveRecord(++curIndex, size);
-                }
-            }
-        }
-    };
 }

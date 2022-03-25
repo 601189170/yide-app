@@ -21,16 +21,37 @@ public class StaffAskLeavePresenter extends BasePresenter<StaffAskLeaveView> {
         attachView(view);
     }
 
-    public void getApprover(String startDate, String endDate) {
+    public void getApprover(String startDate, String endDate, String classesId) {
         final HashMap<String, Object> map = new HashMap<>(1);
         map.put("startDate", startDate);
         map.put("endDate", endDate);
+        map.put("classesId", classesId);
         mvpView.showLoading();
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         addSubscription(dingApiStores.getApprover(body), new ApiCallback<LeaveApprovalBean>() {
             @Override
             public void onSuccess(LeaveApprovalBean model) {
                 mvpView.approver(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.approverFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void getClassList() {
+        mvpView.showLoading();
+        addSubscription(dingApiStores.getDeptOrClass(), new ApiCallback<LeaveApprovalBean>() {
+            @Override
+            public void onSuccess(LeaveApprovalBean model) {
+                mvpView.getClass(model);
             }
 
             @Override
@@ -74,14 +95,14 @@ public class StaffAskLeavePresenter extends BasePresenter<StaffAskLeaveView> {
      * 老师请假
      *
      * @param sponsorType
-     * @param deptName
+     * @param dept
      * @param approverList
      */
-    public void addLeave(LeaveApprovalBean.LeaveRequestBean requestBean, String procId, String sponsorType, String deptName, List<LeaveApprovalBean.LeaveCommitBean> approverList, String ccIds) {
+    public void addLeave(LeaveApprovalBean.LeaveRequestBean requestBean, String procId, String sponsorType, String dept, List<LeaveApprovalBean.LeaveCommitBean> approverList, String ccIds) {
         final HashMap<String, Object> map = new HashMap<>();
         map.put("jsonData", JSON.toJSONString(requestBean));
         map.put("procId", procId);
-        map.put("dept", deptName);
+        map.put("dept", dept);
         map.put("sponsorType", sponsorType);
         map.put("apprs", approverList);
         map.put("ccIds", ccIds);

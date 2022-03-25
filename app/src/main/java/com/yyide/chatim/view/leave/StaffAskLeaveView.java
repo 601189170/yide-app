@@ -17,4 +17,6 @@ public interface StaffAskLeaveView extends BaseView {
     void leavePhrase(LeavePhraseRsp leavePhraseRsp);
 
     void leavePhraseFail(String msg);
+
+    void getClass(LeaveApprovalBean leaveApprovalBean);
 }

@@ -48,19 +48,19 @@ class ScheduleParticipantActivity : BaseActivity() {
         initData()
         initParticipantSelected()
         initViewPager()
-        participantSharedViewModel.curStaffParticipantList.observe(this, {
+        participantSharedViewModel.curStaffParticipantList.observe(this) {
             loge("当前选中参与人数据发生变化：${it.size}")
             loge("当前选中参与人数据发生变化${JSON.toJSONString(it)}")
             scheduleParticipantBinding.clSearchResult.visibility =
                 if (it.isEmpty()) View.GONE else View.VISIBLE
             adapter.setList(it)
-            if (it.size>0){
-                scheduleParticipantBinding.tvYx.visibility=View.VISIBLE
-            }else{
-                scheduleParticipantBinding.tvYx.visibility=View.GONE
+            if (it.size > 0) {
+                scheduleParticipantBinding.tvYx.visibility = View.VISIBLE
+            } else {
+                scheduleParticipantBinding.tvYx.visibility = View.GONE
             }
 
-        })
+        }
     }
 
     private fun initParticipantSelected() {

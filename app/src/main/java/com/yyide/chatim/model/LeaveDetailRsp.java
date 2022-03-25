@@ -42,6 +42,8 @@ public class LeaveDetailRsp {
         private String title;
         @SerializedName("taskId")
         private String taskId;
+        @SerializedName("identity")
+        private String identity;
 
         public static class ApprJsonDTO {
             @SerializedName("dept")
@@ -250,6 +252,14 @@ public class LeaveDetailRsp {
 
         public void setHiApprNodeList(List<HiApprNodeListDTO> hiApprNodeList) {
             this.hiApprNodeList = hiApprNodeList;
+        }
+
+        public String getIdentity() {
+            return identity;
+        }
+
+        public void setIdentity(String identity) {
+            this.identity = identity;
         }
 
         public String getTaskId() {

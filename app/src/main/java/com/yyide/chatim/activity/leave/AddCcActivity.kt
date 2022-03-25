@@ -11,6 +11,7 @@ import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityAddBinding
 import com.yyide.chatim.databinding.ItemLeaveApprovaBinding
 import com.yyide.chatim.model.LeaveApprovalBean
+import com.yyide.chatim.utils.GlideUtil
 
 /**
  * 添加抄送人
@@ -65,6 +66,7 @@ class AddCcActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBinding::inf
                 if (holder.absoluteAdapterPosition == (dataList.size - 1)) {
                     viewbinding.viewLine.visibility = View.INVISIBLE
                 }
+                GlideUtil.loadImageHead(context, item.avatar, viewbinding.ivHead)
             }
         }
 }

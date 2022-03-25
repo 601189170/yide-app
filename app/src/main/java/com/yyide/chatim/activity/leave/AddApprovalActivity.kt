@@ -11,7 +11,7 @@ import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityAddBinding
 import com.yyide.chatim.databinding.ItemLeaveApprovaBinding
 import com.yyide.chatim.model.LeaveApprovalBean
-import com.yyide.chatim.model.LeaveApprovalBean.Cc
+import com.yyide.chatim.utils.GlideUtil
 
 /**
  * 添加审批人
@@ -52,7 +52,7 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
             BaseQuickAdapter<LeaveApprovalBean.LeaveCommitBean, BaseViewHolder>(R.layout.item_leave_approva) {
             override fun convert(holder: BaseViewHolder, item: LeaveApprovalBean.LeaveCommitBean) {
                 val viewbinding = ItemLeaveApprovaBinding.bind(holder.itemView)
-                viewbinding.tvName.text = item.name
+                viewbinding.tvName.text = item.approverName
 //                binding.tvDesc.text = item.get
                 viewbinding.itemView.setOnClickListener {
                     viewbinding.cbCheck.isChecked = !viewbinding.cbCheck.isChecked
@@ -66,6 +66,7 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
                 if (holder.absoluteAdapterPosition == (dataList.size - 1)) {
                     viewbinding.viewLine.visibility = View.INVISIBLE
                 }
+                GlideUtil.loadImageHead(context, item.avatar, viewbinding.ivHead)
             }
         }
 }

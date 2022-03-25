@@ -126,12 +126,12 @@ public class AttendancePop extends PopupWindow {
             } else {
                 baseViewHolder.setText(R.id.className, item.classesName);
             }
-            if (adapter.getItemCount() - 1 == baseViewHolder.getAdapterPosition()) {
+            if (adapter.getItemCount() - 1 == getItemPosition(item)) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);
             }
-            baseViewHolder.getView(R.id.select).setVisibility(index == baseViewHolder.getAdapterPosition() ? View.VISIBLE : View.GONE);
+            baseViewHolder.getView(R.id.select).setVisibility(index == getItemPosition(item) ? View.VISIBLE : View.GONE);
         }
     };
 

@@ -58,6 +58,8 @@ public class LeaveListRsp {
 
     public static class DataBean {
         private List<RecordsBean> list;
+        public int total;
+        public int pageNo;
 
         public List<RecordsBean> getList() {
             return list;

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.yyide.chatim.R;
 import com.yyide.chatim.model.LeavePhraseRsp;
+import com.yyide.chatim.utils.GlideUtil;
 
 import java.util.List;
 

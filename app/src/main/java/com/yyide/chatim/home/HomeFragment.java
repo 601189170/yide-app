@@ -26,7 +26,8 @@ import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.youth.banner.Banner;
-import com.youth.banner.adapter.BannerAdapter;
+import com.youth.banner.indicator.DrawableIndicator;
+import com.youth.banner.indicator.RectangleIndicator;
 import com.youth.banner.listener.OnBannerListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
@@ -39,9 +40,9 @@ import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.dialog.LeftMenuPop;
-import com.yyide.chatim.fragment.AttendanceTeacherFragment;
 import com.yyide.chatim.fragment.AttendancePatriarchFragment;
 import com.yyide.chatim.fragment.AttendanceSchoolFragment;
+import com.yyide.chatim.fragment.AttendanceTeacherFragment;
 import com.yyide.chatim.fragment.ClassHonorFragment;
 import com.yyide.chatim.fragment.NoticeFragment;
 import com.yyide.chatim.fragment.StudentHonorFragment;
@@ -64,6 +65,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -94,7 +96,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     TextView schoolName;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.vpBanner)
+    @BindView(R.id.homeBanner)
     Banner banner;
     private View mBaseView;
     public FragmentListener mListener;
@@ -128,12 +130,21 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         setSchoolInfo();
         //mvpPresenter.getUserSchool();
         mvpPresenter.getNotice();
-        //initBanner();
+        initBanner();
     }
 
     private void initBanner() {
+        List<String> banners = new ArrayList<>();
+        banners.add("");
+        banners.add("");
+        banners.add("");
+        banner.addBannerLifecycleObserver(this);//添加生命周期观察者
+        banner.setAdapter(new BannerExampleAdapter(banners));
+        DrawableIndicator indicator = new DrawableIndicator(getContext(), R.mipmap.icon_banner_nomral, R.mipmap.icon_banner_select);
+
+        banner.setIndicator(indicator);
         banner.isAutoLoop(true);
-        banner.setLoopTime(2000);
+        banner.setLoopTime(3000);
         banner.start();
         banner.setOnBannerListener(new OnBannerListener() {
             @Override

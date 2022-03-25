@@ -60,13 +60,13 @@
                 android:textSize="@dimen/text_13" />
         </LinearLayout>
 
-        <TextView
+        <ImageView
             android:id="@+id/select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/icon_true" />
+            android:background="@mipmap/icon_true" />
 
         <View
             android:id="@+id/view_line"

@@ -538,6 +538,11 @@ public interface DingApiStores {
     @POST("/cloud/app/procAppr/getApprList")
     Observable<LeaveApprovalBean> getApprover(@Body RequestBody requestBody);
 
+    //获取部门或班级
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @GET("/cloud/app/procAppr/getDept")
+    Observable<LeaveApprovalBean> getDeptOrClass();
+
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/addTeacherLeave
     //家长、教职工请假
     @Headers({"Content-Type: application/json", "Accept: application/json"})

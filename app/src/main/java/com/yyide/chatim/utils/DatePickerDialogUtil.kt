@@ -48,7 +48,7 @@ object DatePickerDialogUtil {
             .setBackGroundModel(model)
             .setMaxTime(maxDate)
             .setPickerLayout(pickerLayout)
-            .setMinTime(minDate)
+            .setMinTime(defaultDate)
             .setDefaultTime(defaultDate)
             .setWrapSelectorWheel(false)
             .showBackNow(false)
@@ -171,7 +171,7 @@ object DatePickerDialogUtil {
     ) {
         val model = CardDatePickerDialog.STACK
         val pickerLayout = 0
-        var defaultDate: Long = 0
+        val defaultDate: Long = 0
         if (!TextUtils.isEmpty(currentMillseconds)) {
             //defaultDate = DateUtils.parseTimestamp(currentMillseconds, "yyyy-MM-dd")
         }

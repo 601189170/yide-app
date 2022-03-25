@@ -173,6 +173,7 @@ class TodoMsgPageFragment :
                     dialog!!.dismiss()
                 }
                 YDToastUtil.showMessage("审核完成")
+                onRefresh()
             } else {
                 it.exceptionOrNull()?.localizedMessage?.let { it1 ->
                     loge(it1)

@@ -244,7 +244,7 @@ public class LeftMenuPop extends PopupWindow implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.layout1://切换班级
 //                if (SpData.getIdentityInfo().form != null && SpData.getIdentityInfo().form.size() > 0) {
-//                    new SwitchClassesStudentPop(context).setOnCheckCallBack(() -> {
+//                    new SwitchStudentPop(context).setOnCheckCallBack(() -> {
 //                        setIdentity();
 //                        if (SpData.getIdentityInfo() != null && GetUserSchoolRsp.DataBean.TYPE_PARENTS.equals(SpData.getIdentityInfo().status)) {
 //                            user_class.setText(SpData.getClassInfo() != null ? SpData.getClassInfo().classesStudentName : "");

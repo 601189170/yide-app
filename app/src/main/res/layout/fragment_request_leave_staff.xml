@@ -52,8 +52,10 @@
                         android:id="@+id/tvName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_5"
                         android:textColor="#ff666666"
                         android:textSize="14sp"
+                        android:drawablePadding="@dimen/dp_5"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -200,13 +202,18 @@
 
                     <TextView
                         android:id="@+id/tv_department"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
                         android:drawablePadding="@dimen/dp_5"
+                        android:ellipsize="end"
+                        android:gravity="right"
+                        android:lines="1"
                         android:textColor="@color/text_999999"
                         android:textSize="@dimen/text_14"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tvBranch"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
