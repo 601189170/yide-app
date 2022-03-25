@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:padding="10dp"
-    android:layout_height="72dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_type"
@@ -73,13 +73,12 @@
         android:text="阅读"
         android:singleLine="true"
         android:textColor="#ffffffff"
-        android:textSize="@dimen/text_14"
         android:visibility="gone"
+        android:textSize="@dimen/text_14"
+
         android:background="#BF57DA"
         android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/tv_label_number"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date"
         android:layout_marginEnd="@dimen/dp_6"
-        />
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

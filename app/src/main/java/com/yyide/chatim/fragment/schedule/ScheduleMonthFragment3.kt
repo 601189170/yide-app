@@ -216,7 +216,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         rvScheduleList.adapter = ScheduleMonthAdapter
         ScheduleMonthAdapter.setOnItemClickListener { _, _, position ->
-            val scheduleData = list[position]
+            val scheduleData = ScheduleMonthAdapter.data[position]
             if (!scheduleData.isMonthHead) {
                 loge("点击日程 $scheduleData")
                 curModifySchedule = scheduleData
