@@ -126,13 +126,12 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.endTime = endTime
         scheduleData.isAllDay = if (allDay) "1" else "0"
         scheduleData.labelList = labelListLiveData.value
+        loge("ScheduleEditViewModel==> "+JSON.toJSONString(scheduleData))
 
         if (participantList.value!=null){
-
             scheduleData.participantList = participantList.value
-        }else{
-            scheduleData.participantList = ArrayList<ParticipantRsp.DataBean.ParticipantListBean>();
         }
+        loge("ScheduleEditViewModel2==> "+JSON.toJSONString(scheduleData))
 
         scheduleData.siteId = siteLiveData.value?.id
         scheduleData.remark = remarkLiveData.value

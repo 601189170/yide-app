@@ -10,6 +10,7 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -53,7 +54,8 @@ class ScheduleEditActivitySimple : BaseActivity() {
     val list2 = getList2()
     var repetition:Boolean = false
 
-
+    //否是是发起人
+    private var promoter = true
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +74,6 @@ class ScheduleEditActivitySimple : BaseActivity() {
      * @param enable true设置可编辑 false设置不可编辑
      */
     private fun initView(){
-
 
 
         scheduleEditBinding.top.title.text =  "日程详情"
@@ -102,6 +103,7 @@ class ScheduleEditActivitySimple : BaseActivity() {
         val stringExtra = intent.getStringExtra("data")
 
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
+        Log.e("TAG", "scheduleData: "+JSON.toJSONString(scheduleData) )
         scheduleEditBinding.top.ivEdit.setOnClickListener {
             val intent = Intent(this, ScheduleEditActivityMain::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
@@ -110,13 +112,18 @@ class ScheduleEditActivitySimple : BaseActivity() {
         }
 
         scheduleData?.let {
+            promoter = it.promoterSelf()
+            scheduleEditBinding.top.ivEdit.isEnabled=promoter;
+            scheduleEditBinding.top.ivRight.isEnabled=promoter;
             scheduleEditBinding.edit.setText(it.remark)
             scheduleEditBinding.tvAddress.text = it.siteName
             //日程名称name
             scheduleEditBinding.etScheduleTitle.setText(it.name)
             scheduleEditViewModel.participantList.value = it.participantList
+            scheduleEditViewModel.scheduleIdLiveData.value = it.id
             val stringBuilder = StringBuilder()
             it.participantList.map {
+                if (it!=null)
                 it.name
             }.forEach {
                 stringBuilder.append(it).append("  ")

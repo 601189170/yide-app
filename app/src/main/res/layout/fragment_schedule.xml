@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F7FA"
+    android:background="@color/white"
     android:paddingTop="@dimen/dp_40"
     tools:context=".fragment.schedule.ScheduleFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +36,7 @@
             android:paddingEnd="@dimen/dp_20"
             android:paddingTop="@dimen/dp_18"
             android:paddingBottom="@dimen/dp_18"
-            android:background="#F2F7FA"
+            android:background="@color/white"
             tools:ignore="MissingConstraints" />
 
         <ImageButton
@@ -51,7 +51,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="#F2F7FA"/>
+            android:background="@color/white"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.yyide.chatim.adapter.schedule
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import com.alibaba.fastjson.JSON
@@ -50,14 +51,14 @@ class ScheduleListAdapter :
     fun commonConvert(holder: BaseViewHolder, item: ScheduleData) {
         loge("ScheduleData ${JSON.toJSONString(item)}")
         holder.setText(R.id.tv_schedule_name, item.name)
-        holder.getView<ImageView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE
+        holder.getView<TextView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE
         if (item.isFirstDayOfMonth) {
             holder.getView<Group>(R.id.group_day).visibility = View.VISIBLE
             val dateTime = ScheduleDaoUtil.toDateTime(item.moreDayStartTime)
             val day = dateTime.dayOfMonth
             val week = dateTime.dayOfWeek + 1
-            holder.setText(R.id.tv_title_day, "${day}日")
-            holder.setText(R.id.tv_title_week, DateUtils.getWeek(week))
+//            holder.setText(R.id.tv_title_day, "${day}日")
+//            holder.setText(R.id.tv_title_week, DateUtils.getWeek(week))
         } else {
             holder.getView<Group>(R.id.group_day).visibility = View.INVISIBLE
         }

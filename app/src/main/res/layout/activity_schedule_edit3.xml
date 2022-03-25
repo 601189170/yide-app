@@ -217,6 +217,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/cl_start_time"
                         android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -264,6 +265,7 @@
 
                     </TextView>
                     <LinearLayout
+                        android:id="@+id/cl_end_time"
                         android:orientation="horizontal"
                         android:gravity="center"
                         android:layout_width="0dp"

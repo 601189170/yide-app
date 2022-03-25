@@ -25,7 +25,7 @@ data class ParticipantRsp(
         data class ParticipantListBean(
             var id: String? = null,
             var userId:String?=null,
-            var name: String? = null,
+            var name: String? = "",
             var realname: String? = "",
             //var status:String? = null,
             @SerializedName("status")

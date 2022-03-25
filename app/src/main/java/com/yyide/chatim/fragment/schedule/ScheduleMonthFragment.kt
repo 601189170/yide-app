@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.alibaba.fastjson.JSON
 import com.yanzhenjie.recyclerview.SwipeMenu
@@ -21,14 +22,18 @@ import com.yide.calendar.CalendarUtils
 import com.yide.calendar.HintCircle
 import com.yide.calendar.OnCalendarClickListener
 import com.yide.calendar.month.MonthCalendarView
+import com.yide.calendar.schedule.CalendarComposeLayout
+import com.yide.calendar.schedule.CustomCalendarLayout
 import com.yyide.chatim.BaseApplication
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivityMain
 import com.yyide.chatim.activity.schedule.ScheduleEditActivitySimple
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
+import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.dateTimeJointNowTime
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
 import com.yyide.chatim.databinding.FragmentScheduleMonth2Binding
@@ -37,6 +42,7 @@ import com.yyide.chatim.model.schedule.*
 import com.yyide.chatim.utils.DateUtils
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
+import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import com.yyide.chatim.view.SpaceItemDecoration
@@ -46,6 +52,8 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.format.DateTimeFormatter
 
 /**
  *
@@ -58,7 +66,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
 //    lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonth2Binding
     lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonth2Binding
     private var list = mutableListOf<ScheduleOuter>()
-    private var mcvCalendar: MonthCalendarView? = null
+//    private var mcvCalendar: MonthCalendarView? = null
     private var mCurrentSelectYear = 2021
     private var mCurrentSelectMonth = 8
     private var mCurrentSelectDay = 12
@@ -67,9 +75,12 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val hints = mutableListOf<HintCircle>()
     private var refresh = false
+    private lateinit var swipeRefreshLayout:SwipeRefreshLayout
 
 
-    private lateinit var ScheduleMonthAdapter: ScheduleTodayAdapter
+    private lateinit var ScheduleMonthAdapter: ScheduleMonthListAdapter
+
+    private lateinit var calendarComposeLayout: CustomCalendarLayout
 
     private val todayList = mutableListOf<ScheduleData>()
     override fun onCreateView(
@@ -85,8 +96,13 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
         super.onViewCreated(view, savedInstanceState)
         loge("onViewCreated")
         EventBus.getDefault().register(this)
-        mcvCalendar = view.findViewById(R.id.mcvCalendar)
-        initData()
+//        mcvCalendar = view.findViewById(R.id.mcvCalendar)
+        calendarComposeLayout = fragmentScheduleMonthBinding.layoutCalendar.calendarComposeLayout
+
+//        calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+
+//        initData()
         initView()
         //计算当前的年月日
         mCurrentSelectYear = DateTime.now().year
@@ -101,7 +117,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
                 if (value != null){
                     val hintCircle = HintCircle(dateTime,dateTime.dayOfMonth, value.size)
                     hints.add(hintCircle)
-//                    addTaskHint(hintCircle)
+                    addTaskHint(hintCircle)
                 }
             }
             if (refresh){
@@ -115,8 +131,10 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
             loge("刷新数据列表 $it")
             updateData()
         }
-        //addTaskHint(HintCircle(5, 3))
-        //addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
+
+
+//        addTaskHint(HintCircle(5, 3))
+//        addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -130,9 +148,9 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
         }
     }
     override fun onDestroy() {
-        removeTaskHints(hints)
         super.onDestroy()
-        EventBus.getDefault().unregister(this)
+        removeTaskHints(hints)
+        CalendarUtils.getInstance(activity).clearAllTask()
     }
 
     private fun updateData(){
@@ -146,19 +164,18 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
 
-        fragmentScheduleMonthBinding.layoutCalendar.calendarComposeLayout.setOnClickListener {
-            DialogUtil.showAddScheduleDialog(context, this,curDateTime.dateTimeJointNowTime())
-        }
-        mcvCalendar?.setOnCalendarClickListener(this)
+//        fragmentScheduleMonthBinding.layoutCalendar.calendarComposeLayout.setOnClickListener {
+//            DialogUtil.showAddScheduleDialog(context, this,curDateTime.dateTimeJointNowTime())
+//        }
+        calendarComposeLayout?.setOnCalendarClickListener(this)
 
-        fragmentScheduleMonthBinding.swipeRefreshLayout.setOnRefreshListener(this)
-        fragmentScheduleMonthBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+
 
 
       val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         fragmentScheduleMonthBinding.rvScheduleList.layoutManager = linearLayoutManager
-        ScheduleMonthAdapter = ScheduleTodayAdapter(ScheduleTodayAdapter.TYPE_WEEK_UNDONE_LIST,todayList)
+        ScheduleMonthAdapter = ScheduleMonthListAdapter()
         fragmentScheduleMonthBinding.rvScheduleList.setSwipeMenuCreator(mTodaySwipeMenuCreator)
 //        fragmentScheduleMonthBinding.rvScheduleList.setOnItemMenuClickListener(
 //                mTodayMenuItemClickListener
@@ -182,9 +199,15 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
         }
 
 
+        calendarComposeLayout.setOnCalendarClickListener(this)
 
-        fragmentScheduleMonthBinding.swipeRefreshLayout.setOnRefreshListener(this)
-        fragmentScheduleMonthBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+
+
+
+
+
     }
 
 //    private val mTodayMenuItemClickListener =
@@ -280,7 +303,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
                     .setWidth(width)
                     .setHeight(height)
     private fun initData() {
-        mcvCalendar?.currentMonthView?.let {
+        calendarComposeLayout?.currentMonthView?.let {
             mCurrentSelectYear = it.selectYear
             mCurrentSelectMonth = it.selectMonth
             mCurrentSelectDay = if (it.selectDay == -1) 1 else it.selectDay
@@ -361,37 +384,72 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
      *
      * @param day
      */
+//    fun addTaskHint(day: HintCircle) {
+//        CalendarUtils.getInstance(context).addTaskHint(mCurrentSelectYear, mCurrentSelectMonth, day)
+//        if (calendarComposeLayout!!.currentMonthView != null) {
+//            calendarComposeLayout!!.currentMonthView.invalidate()
+//        }
+//    }
+    /**
+     * 添加一个圆点提示
+     *
+     * @param day
+     */
     fun addTaskHint(day: HintCircle) {
-        CalendarUtils.getInstance(context).addTaskHint(mCurrentSelectYear, mCurrentSelectMonth, day)
-        if (mcvCalendar!!.currentMonthView != null) {
-            mcvCalendar!!.currentMonthView.invalidate()
+        val mCurrentSelectYear = day.dateTime.year
+        val mCurrentSelectMonth = day.dateTime.monthOfYear -1
+        CalendarUtils.getInstance(activity).addTaskHint(mCurrentSelectYear, mCurrentSelectMonth, day)
+        if (calendarComposeLayout.currentMonthView != null) {
+            calendarComposeLayout.currentMonthView.invalidate()
+        }
+
+        if (calendarComposeLayout.currentWeekView != null){
+            calendarComposeLayout.currentWeekView.invalidate()
         }
     }
-
     /**
      * 删除一个圆点提示
      *
      * @param day
      */
     fun removeTaskHint(day: HintCircle) {
-        mcvCalendar?.currentMonthView?.removeTaskHint(day)
+        calendarComposeLayout?.currentMonthView?.removeTaskHint(day)
     }
 
     /**
-     * 移除任务点
+     * 移除任务点 #FFFF4140
+     */
+//    fun removeTaskHints(hints:List<HintCircle>){
+//        hints.forEach {
+//            val dateTime = it.dateTime
+//            if (CalendarUtils.getInstance(activity).removeTaskHint(dateTime.year,dateTime.monthOfYear-1,it)) {
+//                if (calendarComposeLayout.currentMonthView != null) {
+//                    calendarComposeLayout.currentMonthView.invalidate()
+//                }
+//                if (calendarComposeLayout.currentWeekView != null){
+//                    calendarComposeLayout.currentWeekView.invalidate()
+//                }
+//            }
+//        }
+//        this.hints.clear()
+//    }
+    /**
+     * 移除任务点 #FFFF4140
      */
     fun removeTaskHints(hints:List<HintCircle>){
         hints.forEach {
             val dateTime = it.dateTime
-            if (CalendarUtils.getInstance(context).removeTaskHint(dateTime.year,dateTime.monthOfYear-1,it)) {
-                if (mcvCalendar!!.currentMonthView != null) {
-                    mcvCalendar!!.currentMonthView.invalidate()
+            if (CalendarUtils.getInstance(activity).removeTaskHint(dateTime.year,dateTime.monthOfYear-1,it)) {
+                if (calendarComposeLayout.currentMonthView != null) {
+                    calendarComposeLayout.currentMonthView.invalidate()
+                }
+                if (calendarComposeLayout.currentWeekView != null){
+                    calendarComposeLayout.currentWeekView.invalidate()
                 }
             }
         }
         this.hints.clear()
     }
-
     /**
      * 添加多个圆点提示
      *
@@ -400,13 +458,65 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
     fun addTaskHints(hints: List<HintCircle>) {
         CalendarUtils.getInstance(context)
             .addTaskHints(mCurrentSelectYear, mCurrentSelectMonth, hints)
-        if (mcvCalendar!!.currentMonthView != null) {
-            mcvCalendar!!.currentMonthView.invalidate()
+        if (calendarComposeLayout!!.currentMonthView != null) {
+            calendarComposeLayout!!.currentMonthView.invalidate()
         }
     }
 
     override fun onRefresh() {
         refresh = true
         EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+    }
+
+
+    fun moveToPosition(position: Int, recyclerView: RecyclerView?) {
+        if (recyclerView == null || position == -1) {
+            return
+        }
+        val firstItem: Int = recyclerView.getChildLayoutPosition(recyclerView.getChildAt(0))
+        val lastItem: Int =
+                recyclerView.getChildLayoutPosition(recyclerView.getChildAt(recyclerView.getChildCount() - 1))
+        loge("moveToPosition:firstItem=$firstItem,lastItem=$lastItem")
+        if (position < firstItem || position > lastItem) {
+            //recyclerView.smoothScrollToPosition(position)
+            logd("scrollToPosition=$position")
+            //recyclerView.scrollToPosition(position)
+            val manager = recyclerView.layoutManager as LinearLayoutManager
+            manager.scrollToPositionWithOffset(position,0)
+        } else {
+            val movePosition = position - firstItem
+            val top: Int = recyclerView.getChildAt(movePosition).getTop()
+            logd("scrollBy=$top")
+            //recyclerView.smoothScrollBy(0, top)
+            recyclerView.scrollBy(0,top)
+        }
+    }
+
+    fun scrollToPosition(year: Int, month: Int, day: Int) {
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        //定位到指定日期
+        val dateTime = DateTime.parse("$year-${month + 1}-$day 00:00:00", dateTimeFormatter)
+                .simplifiedDataTime()
+        var scrollOuter: Int = -1
+//        dateTime.let {
+//            for (i in 0 until schoolCalendarList.size - 1) {
+//                val scheduleData1 = schoolCalendarList[i]
+//                val scheduleData2 = schoolCalendarList[i + 1]
+//                val dateTime1 = ScheduleDaoUtil.toDateTime((scheduleData1.startTime
+//                        ?: "2000-01-01"), "yyyy-MM-dd").simplifiedDataTime()
+//                val dateTime2 = ScheduleDaoUtil.toDateTime((scheduleData2.startTime
+//                        ?: "2000-01-01"), "yyyy-MM-dd").simplifiedDataTime()
+//                if (i != 0 && i != schoolCalendarList.size - 1 && it in dateTime1..dateTime2) {
+//                    loge("----找到定位的位置----")
+//                    if (scheduleData1.type != 1) {
+//                        scrollOuter = i
+//                        return@let
+//                    }
+//                    return@let
+//                }
+//            }
+//        }
+//        loge("需要滚动到 scrollOuter=$scrollOuter,dateTime=$dateTime")
+//        moveToPosition(scrollOuter, rvScheduleList)
     }
 }

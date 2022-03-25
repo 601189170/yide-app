@@ -362,35 +362,33 @@ class ScheduleEditActivityMain : BaseActivity() {
         }
 
         //日期操作
-//        scheduleEditBinding.clStartTime.setOnClickListener {
-//            if (scheduleEditBinding.llVLine.visibility == View.GONE) {
-//                scheduleEditBinding.llVLine.visibility = View.VISIBLE
-//                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
-//            }
-//            scheduleEditBinding.vDateTopMarkLeft.visibility = View.VISIBLE
-//            scheduleEditBinding.vDateTopMarkRight.visibility = View.INVISIBLE
-//            scheduleEditBinding.dateTimePicker.setDefaultMillisecond(
-//                DateUtils.formatTime(
-//                    dateStart.get(),
-//                    ""
-//                )
-//            )
-//        }
+        scheduleEditBinding.clStartTime.setOnClickListener {
 
-//        scheduleEditBinding.clEndTime.setOnClickListener {
+                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
+
+
+            scheduleEditBinding.dateTimePicker.setDefaultMillisecond(
+                DateUtils.formatTime(
+                    dateStart.get(),
+                    ""
+                )
+            )
+        }
+
+        scheduleEditBinding.clEndTime.setOnClickListener {
 //            if (scheduleEditBinding.llVLine.visibility == View.GONE) {
 //                scheduleEditBinding.llVLine.visibility = View.VISIBLE
-//                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
+                scheduleEditBinding.dateTimePicker.visibility = View.VISIBLE
 //            }
 //            scheduleEditBinding.vDateTopMarkLeft.visibility = View.INVISIBLE
 //            scheduleEditBinding.vDateTopMarkRight.visibility = View.VISIBLE
-//            scheduleEditBinding.dateTimePicker.setDefaultMillisecond(
-//                DateUtils.formatTime(
-//                    dateEnd.get(),
-//                    ""
-//                )
-//            )
-//        }
+            scheduleEditBinding.dateTimePicker.setDefaultMillisecond(
+                DateUtils.formatTime(
+                    dateEnd.get(),
+                    ""
+                )
+            )
+        }
 
         val allDay = scheduleEditViewModel.allDayLiveData.value
         val startTime = scheduleEditViewModel.startTimeLiveData.value
@@ -398,8 +396,8 @@ class ScheduleEditActivityMain : BaseActivity() {
         if (allDay != null && allDay) {
             scheduleEditBinding.checkBoxAllDay.isChecked = true
             scheduleEditBinding.dateTimePicker.setLayout(R.layout.layout_date_picker_segmentation2)
-//            scheduleEditBinding.tvTimeStart.visibility = View.GONE
-//            scheduleEditBinding.tvTimeEnd.visibility = View.GONE
+            scheduleEditBinding.tvTimeStart.visibility = View.GONE
+            scheduleEditBinding.tvTimeEnd.visibility = View.GONE
         }
         scheduleEditBinding.checkBoxAllDay.setOnCheckedChangeListener { _, isChecked ->
             //设置是否全天

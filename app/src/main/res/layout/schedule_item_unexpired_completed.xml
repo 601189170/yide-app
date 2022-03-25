@@ -4,27 +4,29 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/schedule_list_item_bg_shape"
-    android:paddingStart="@dimen/dp_10"
-    android:paddingBottom="@dimen/dp_14">
+
+    android:paddingBottom="@dimen/dp_5">
 
     <ImageView
         android:id="@+id/iv_finish_tag"
         android:layout_width="@dimen/dp_16"
         android:layout_height="@dimen/dp_16"
+        android:layout_marginRight="15dp"
         android:src="@drawable/checkbox_finished_icon"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
-        app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <ImageView
         android:id="@+id/iv_schedule_type_img"
         android:layout_width="@dimen/dp_20"
         android:layout_height="@dimen/dp_20"
-        app:layout_constraintLeft_toRightOf="@id/iv_finish_tag"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:src="@drawable/default_user_icon"
         android:layout_marginStart="@dimen/dp_10"
-        android:layout_marginTop="@dimen/dp_14"
+
         />
     <com.yyide.chatim.widget.StrikeThruTextView
         android:id="@+id/tv_schedule_name"

@@ -80,6 +80,8 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
     //当前滚动方向是 0没滚动 1 向下滚动底部 -1向上滚动打顶部
     private var scrollOrientation: Int = 0
     private var curModifySchedule: ScheduleData? = null
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

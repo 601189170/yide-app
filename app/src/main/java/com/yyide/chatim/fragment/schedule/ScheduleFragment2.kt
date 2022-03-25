@@ -137,7 +137,9 @@ class ScheduleFragment2 : Fragment() {
                         return ScheduleListFragment()
                     }
                     1 -> {
-                        return ScheduleMonthFragment()
+//                        return ScheduleMonthFragment()
+                        return ScheduleMonthFragment3()
+
                     }
 
                 }
@@ -282,7 +284,8 @@ class ScheduleFragment2 : Fragment() {
 
             2 -> {
                 if (fg3 == null) {
-                    fg3 = ScheduleMonthFragment()
+//                    fg3 = ScheduleMonthFragment()
+                    fg3 = ScheduleMonthFragment3()
                     ft.add(R.id.fl_content, fg3, "f3")
                 } else {
                     ft.show(fg3)
