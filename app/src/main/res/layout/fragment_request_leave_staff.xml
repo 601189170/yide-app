@@ -53,9 +53,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/dp_5"
+                        android:drawablePadding="@dimen/dp_5"
                         android:textColor="#ff666666"
                         android:textSize="14sp"
-                        android:drawablePadding="@dimen/dp_5"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -301,6 +301,7 @@
                             android:id="@+id/approvalList"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_10"
                             app:layout_constraintBottom_toTopOf="@+id/tv_copy_people"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_approver" />
@@ -310,7 +311,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="35dp"
-                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginTop="@dimen/dp_15"
                             android:text="@string/copy_people"
                             android:textColor="#ff666666"
                             android:textSize="@dimen/text_15"

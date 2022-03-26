@@ -44,10 +44,12 @@ public class LeaveDetailRsp {
         private String taskId;
         @SerializedName("identity")
         private String identity;
+        @SerializedName("dept")
+        private String dept;
+        @SerializedName("createTime")
+        private String createTime;
 
         public static class ApprJsonDTO {
-            @SerializedName("dept")
-            private String dept;
             @SerializedName("endTime")
             private String endTime;
             @SerializedName("hours")
@@ -56,14 +58,6 @@ public class LeaveDetailRsp {
             private String reason;
             @SerializedName("startTime")
             private String startTime;
-
-            public String getDept() {
-                return dept;
-            }
-
-            public void setDept(String dept) {
-                this.dept = dept;
-            }
 
             public String getEndTime() {
                 return endTime;
@@ -150,8 +144,8 @@ public class LeaveDetailRsp {
             private String status;
             @SerializedName("userId")
             private String userId;
-            @SerializedName("usreName")
-            private String usreName;
+            @SerializedName("userName")
+            private String userName;
             @SerializedName("avatar")
             private String avatar;
             private boolean isCc;
@@ -221,12 +215,12 @@ public class LeaveDetailRsp {
                 this.userId = userId;
             }
 
-            public String getUsreName() {
-                return usreName;
+            public String getUserName() {
+                return userName;
             }
 
-            public void setUsreName(String usreName) {
-                this.usreName = usreName;
+            public void setUserName(String userName) {
+                this.userName = userName;
             }
         }
 
@@ -252,6 +246,22 @@ public class LeaveDetailRsp {
 
         public void setHiApprNodeList(List<HiApprNodeListDTO> hiApprNodeList) {
             this.hiApprNodeList = hiApprNodeList;
+        }
+
+        public String getDept() {
+            return dept;
+        }
+
+        public void setDept(String dept) {
+            this.dept = dept;
+        }
+
+        public String getCreateTime() {
+            return createTime;
+        }
+
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
         }
 
         public String getIdentity() {

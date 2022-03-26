@@ -82,7 +82,7 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
 
         }
 //        }
-        return Result.failure(NetworkException.of(ErrorCode.VALUE_IS_NULL, "请求超时"))
+        return Result.failure(NetworkException.of(ErrorCode.VALUE_IS_NULL, "请求异常"))
     }
 
     companion object {

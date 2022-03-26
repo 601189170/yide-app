@@ -31,7 +31,7 @@ class TodoRsp {
         @JSONField(name = "realName")
         var realName: String = "",
         @JSONField(name = "startTime")
-        var startTime: Long = 0,
+        var startTime: String = "",
         @JSONField(name = "status")
         var status: Int = -1,//status; //0 已拒绝  1待审批 2 已通过
         @JSONField(name = "taskId")

@@ -1,10 +1,10 @@
 package com.yyide.chatim.login.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseViewModel
+import com.yyide.chatim.base.SingleLiveEvent
 import com.yyide.chatim.kotlin.network.NetworkApi
 import com.yyide.chatim.model.LoginRsp
 import com.yyide.chatim.model.SchoolRsp
@@ -14,9 +14,9 @@ import okhttp3.FormBody
 import okhttp3.RequestBody
 
 class LoginViewModel : BaseViewModel() {
-    val loginLiveData = MutableLiveData<Result<LoginRsp>>()
-    val schoolLiveData = MutableLiveData<Result<List<SchoolRsp>>>()
-    val identityLoginLiveData = MutableLiveData<Result<UserBean>>()
+    val loginLiveData = SingleLiveEvent<Result<LoginRsp>>()
+    val schoolLiveData = SingleLiveEvent<Result<List<SchoolRsp>>>()
+    val identityLoginLiveData = SingleLiveEvent<Result<UserBean>>()
 
     fun login(userName: String, pwd: String) {
         viewModelScope.launch {

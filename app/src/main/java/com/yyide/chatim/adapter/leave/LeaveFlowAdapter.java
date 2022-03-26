@@ -32,12 +32,8 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
     @Override
     protected void convert(@NonNull BaseViewHolder holder, LeaveDetailRsp.DataDTO.HiApprNodeListDTO leaveFlowBean) {
         if (!leaveFlowBean.isCc()) {
-            holder.setText(R.id.tv_flow_title, leaveFlowBean.getNodeName());
-            if (getItemPosition(leaveFlowBean) == 0) {
-                holder.setText(R.id.tv_flow_content, "我");
-            } else {
-                holder.setText(R.id.tv_flow_content, leaveFlowBean.getUsreName());
-            }
+            holder.setText(R.id.tv_flow_title, leaveFlowBean.getUserName());
+            holder.setText(R.id.tv_flow_content, leaveFlowBean.getNodeName());
             holder.setText(R.id.tvTime, leaveFlowBean.getApprTime());
             //隐藏最后一条分割线
             if (getItemPosition(leaveFlowBean) == getData().size() - 1) {

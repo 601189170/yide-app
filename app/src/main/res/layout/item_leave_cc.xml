@@ -38,12 +38,12 @@
 
     <ImageView
         android:id="@+id/ivDel"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:layout_marginStart="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_4"
         android:src="@mipmap/icon_leave_del"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="@+id/iv_user_head"
         app:layout_constraintTop_toTopOf="parent" />
 

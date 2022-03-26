@@ -56,6 +56,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
         binding.btnLogin.setOnClickListener {
             login()
         }
+
         viewModel.loginLiveData.observe(this) {
             val bean = it.getOrNull()
             hideLoading()
@@ -89,11 +90,11 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
             if (it.isSuccess) {
                 val listData = it.getOrNull()
                 if (!listData.isNullOrEmpty()) {
-                    if (listData.size > 1 || (listData.isNotEmpty() && listData[0].children!!.size > 1)) {
+                    if (listData.size > 1 || (listData.isNotEmpty() && listData[0].children.size > 1)) {
                         IdentitySelectActivity.start(this)
                     } else {
-                        if (listData.isNotEmpty() && listData[0].children!!.isNotEmpty()) {
-                            identityLogin(listData[0], listData[0].children!![0])
+                        if (listData.isNotEmpty() && listData[0].children.isNotEmpty()) {
+                            identityLogin(listData[0], listData[0].children[0])
                         } else {
                             YDToastUtil.showMessage("无学校或无身份")
                         }
@@ -136,13 +137,18 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 }
             }
         }
-        showLoading()
-        viewModel.identityLogin(identityBean.id, schoolBean.id)
-        viewModel.identityLoginLiveData.observe(this){
+        viewModel.identityLoginLiveData.observe(this) {
+            hideLoading()
             if (it.isSuccess) {
                 SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
+            } else {
+                it.exceptionOrNull()?.localizedMessage?.let { it1 ->
+                    loge(it1)
+                    ToastUtils.showLong(it1)
+                }
             }
         }
+        viewModel.identityLogin(identityBean.id, schoolBean.id)
     }
 
     private fun login() {

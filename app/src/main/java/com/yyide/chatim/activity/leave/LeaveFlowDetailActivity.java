@@ -284,13 +284,13 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         if ("1".equals(data.getIdentity())) {
             //教职工
             tv_department.setText(R.string.in_department);
-            tv_department_name.setText(apprJson.getDept());
+            tv_department_name.setText(data.getDept());
         } else {
             //监护人
             tv_department.setText(getString(R.string.choose_student));
             tv_department_name.setText(data.getName());
         }
-
+        tv_leave_time.setText(data.getCreateTime());
         taskId = data.getTaskId();
         processId = data.getProcInstId();
 

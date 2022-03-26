@@ -19,8 +19,9 @@ import com.yyide.chatim.utils.GlideUtil
  * lrz
  */
 class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBinding::inflate) {
-    private val selectList = arrayListOf<LeaveApprovalBean.LeaveCommitBean>()
-    private var dataList = mutableListOf<LeaveApprovalBean.LeaveCommitBean>()
+    private val selectList = arrayListOf<LeaveApprovalBean.Branappr>()
+    private var itemSelect = LeaveApprovalBean.Branappr()
+    private var dataList = mutableListOf<LeaveApprovalBean.Branappr>()
     private var isApproval = false
     override fun initView() {
         super.initView()
@@ -33,7 +34,7 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
             val json = getStringExtra("dataList")
             isApproval = getBooleanExtra("isApproval", false)
             if (!TextUtils.isEmpty(json)) {
-                dataList = JSON.parseArray(json, LeaveApprovalBean.LeaveCommitBean::class.java)
+                dataList = JSON.parseArray(json, LeaveApprovalBean.Branappr::class.java)
                 mAdapter.setList(dataList)
             }
         }
@@ -41,32 +42,35 @@ class AddApprovalActivity : KTBaseActivity<ActivityAddBinding>(ActivityAddBindin
         binding.btnCommit.setOnClickListener {
             //返回上一页
             val intent = intent
-            intent.putExtra("approverList", JSON.toJSONString(selectList))
+            intent.putExtra("approverList", JSON.toJSONString(itemSelect))
             this.setResult(RESULT_OK, intent)
             finish()
         }
     }
 
+    private var position = -1
+
     private var mAdapter =
         object :
-            BaseQuickAdapter<LeaveApprovalBean.LeaveCommitBean, BaseViewHolder>(R.layout.item_leave_approva) {
-            override fun convert(holder: BaseViewHolder, item: LeaveApprovalBean.LeaveCommitBean) {
+            BaseQuickAdapter<LeaveApprovalBean.Branappr, BaseViewHolder>(R.layout.item_leave_approva) {
+            override fun convert(holder: BaseViewHolder, item: LeaveApprovalBean.Branappr) {
                 val viewbinding = ItemLeaveApprovaBinding.bind(holder.itemView)
-                viewbinding.tvName.text = item.approverName
+                viewbinding.tvName.text = item.name
 //                binding.tvDesc.text = item.get
-                viewbinding.itemView.setOnClickListener {
-                    viewbinding.cbCheck.isChecked = !viewbinding.cbCheck.isChecked
-                    if (viewbinding.cbCheck.isChecked) {
-                        selectList.add(item)
-                    } else {
-                        selectList.remove(item)
-                    }
-                    binding.tvCount.text = "${selectList.size}人"
-                }
+                viewbinding.cbCheck.isChecked = position == getItemPosition(item)
+
                 if (holder.absoluteAdapterPosition == (dataList.size - 1)) {
                     viewbinding.viewLine.visibility = View.INVISIBLE
                 }
                 GlideUtil.loadImageHead(context, item.avatar, viewbinding.ivHead)
+                viewbinding.itemView.setOnClickListener {
+                    viewbinding.cbCheck.isChecked = !viewbinding.cbCheck.isChecked
+                    itemSelect = item
+                    position = getItemPosition(item)
+                    binding.tvCount.text = "${1}人"
+                    notifyDataSetChanged()
+                }
+
             }
         }
 }

@@ -48,7 +48,7 @@ object DatePickerDialogUtil {
             .setBackGroundModel(model)
             .setMaxTime(maxDate)
             .setPickerLayout(pickerLayout)
-            .setMinTime(defaultDate)
+            .setMinTime(System.currentTimeMillis())
             .setDefaultTime(defaultDate)
             .setWrapSelectorWheel(false)
             .showBackNow(false)

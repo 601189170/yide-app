@@ -162,9 +162,11 @@ class IdentitySelectActivity :
                 ToastUtils.showShort("请选择身份")
             }
             else -> {
-                viewModel.loginLiveData.observe(this) {
+                showLoading()
+                viewModel.identityLoginLiveData.observe(this) {
                     hideLoading()
                     if (it.isSuccess) {
+                        SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
                         SPUtils.getInstance()
                             .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                         SPUtils.getInstance()
@@ -181,13 +183,7 @@ class IdentitySelectActivity :
                         }
                     }
                 }
-                showLoading()
                 viewModel.identityLogin(identityBean!!.id, schoolBean!!.id)
-                viewModel.identityLoginLiveData.observe(this){
-                    if (it.isSuccess) {
-                        SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
-                    }
-                }
             }
         }
     }

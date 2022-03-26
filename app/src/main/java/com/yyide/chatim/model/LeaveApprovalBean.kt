@@ -1,5 +1,6 @@
 package com.yyide.chatim.model
 
+import androidx.room.Ignore
 import com.alibaba.fastjson.annotation.JSONField
 import java.io.Serializable
 
@@ -13,7 +14,7 @@ data class LeaveApprovalBean(
         var ccList: List<Cc>,
         var classList: List<LeaveClassBean>,
         var dept: DeptBean,
-        var hours: String,
+        var hours: Float,
         var procId: String,
         var procKey: String,
         var sponsorType: String
@@ -33,12 +34,11 @@ data class LeaveApprovalBean(
         var id: String = "",
         @JSONField(name = "name")
         var name: String = "",
-        @JSONField(name = "approverName")
         var approverName: String = "",
         @JSONField(name = "userId")
         var userId: String = "",
-        @JSONField(name = "avatar")
-        var avatar: String = ""
+        var avatar: String = "",
+        var branapprList: List<Branappr>? = null,
     ) : Serializable
 
     data class Approver(
@@ -75,13 +75,19 @@ data class LeaveApprovalBean(
         var avatar: String = ""
     )
 
+    data class RequestParam(
+        var id: String = "",
+        var name: String = "",
+        var userId: String = ""
+    )
+
     data class LeaveRequestBean(
         @JSONField(name = "startTime")
         var startTime: String = "",
         @JSONField(name = "endTime")
         var endTime: String = "",
         @JSONField(name = "hours")
-        var hours: String = "",
+        var hours: Float = 0f,
         @JSONField(name = "reason")
         var reason: String = "",
         @JSONField(name = "student")

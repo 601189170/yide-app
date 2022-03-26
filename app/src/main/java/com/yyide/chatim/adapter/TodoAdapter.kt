@@ -26,6 +26,7 @@ class TodoAdapter : BaseMultiItemQuickAdapter<TodoRsp.TodoItemBean, BaseViewHold
 
     private fun setLeaveItem(holder: BaseViewHolder, item: TodoRsp.TodoItemBean) {
         val vb = ItemTodoLeaveBinding.bind(holder.itemView)
+        vb.tvDate.text = item.startTime
         vb.tvContent.text = item.title
         val leaveBean = item.getJsonData()
         if (leaveBean != null) {
