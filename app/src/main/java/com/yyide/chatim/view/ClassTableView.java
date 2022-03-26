@@ -2,13 +2,11 @@ package com.yyide.chatim.view;
 
 
 import com.yyide.chatim.base.BaseView;
-import com.yyide.chatim.model.DeviceUpdateRsp;
-import com.yyide.chatim.model.GetStuasRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
-import com.yyide.chatim.model.listAllBySchoolIdRsp;
-import com.yyide.chatim.model.listTimeDataByAppRsp;
-import com.yyide.chatim.model.listTimeDataRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
+import com.yyide.chatim.model.table.ClassInfoBean;
+
+import java.util.List;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -16,7 +14,7 @@ import com.yyide.chatim.model.sitetable.SiteTableRsp;
  */
 public interface ClassTableView extends BaseView {
 
-    void listAllBySchoolId(listAllBySchoolIdRsp rsp);
+    void listAllBySchoolId(List<ClassInfoBean> rsp);
 
     void listAllBySchoolIdFail(String msg);
 

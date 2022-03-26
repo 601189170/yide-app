@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,17 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.blankj.utilcode.util.SizeUtils;
 import com.yyide.chatim.R;
+import com.yyide.chatim.database.ScheduleDaoUtil;
+import com.yyide.chatim.dialog.TextPopUp;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
 import com.yyide.chatim.utils.VHUtil;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +32,7 @@ public class TableItemAdapter extends BaseAdapter {
     public List<SiteTableRsp.DataBean.TimetableListBean> list = new ArrayList<>();
 
     public int position = -1;
+    private OnItemClickListener mOnItemClickListener;
 
     @Override
     public int getCount() {
@@ -47,28 +55,72 @@ public class TableItemAdapter extends BaseAdapter {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_card, null, false);
         TextView text_view = VHUtil.ViewHolder.get(view, R.id.text_view);
-        LinearLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
+        ConstraintLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
 //        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(80));
 //        layout.setLayoutParams(layoutParams);
         //text_view.setText(getItem(position).subjectName + "\n" + getItem(position).fromDateTime + "\n" + getItem(position).toDateTime);
-        text_view.setText(getItem(position).getSubjectName());
+        String subjectName = getItem(position).getSubjectName();
+        if (subjectName == null || subjectName.isEmpty()) {
+            subjectName = "/";
+        }
+        text_view.setText(subjectName);
+
+        if (!subjectName.equals("/")) {
+            String finalSubjectName = subjectName;
+            text_view.setOnClickListener(v -> {
+                if (mOnItemClickListener != null){
+                    mOnItemClickListener.onItemClick(v, finalSubjectName);
+                }
+            });
+        }
+
+
+        if (position % 7 < this.position) {
+            text_view.setTextColor(view.getContext().getResources().getColor(R.color.black11));
+        } else {
+            text_view.setTextColor(view.getContext().getResources().getColor(R.color.black9));
+        }
 
         if (position % 7 == this.position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_ls));
         } else {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_white2));
         }
+        final SiteTableRsp.DataBean.TimetableListBean item = getItem(position);
+        final String kssj = item.getStartTime();
+        final String jssj = item.getEndTime();
+        final String date = item.getDate();
+        if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(kssj) && !TextUtils.isEmpty(jssj)) {
+            DateTime startTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " " + kssj, "yyyy-MM-dd HH:mm");
+            DateTime endTime = ScheduleDaoUtil.INSTANCE.toDateTime(date + " " + jssj, "yyyy-MM-dd HH:mm");
+            final DateTime now = DateTime.now();
+            if (now.compareTo(startTime) >= 0 && now.compareTo(endTime) <= 0) {
+                //当前课程
+                layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_current));
+                text_view.setTextColor(view.getContext().getResources().getColor(R.color.white));
+            }
+        }
         return view;
     }
 
     public void notifyData(List<SiteTableRsp.DataBean.TimetableListBean> list) {
-        this.list = list;
+        this.list.clear();
+        this.list.addAll(list);
         notifyDataSetChanged();
     }
 
     public void setIndex(int position) {
         this.position = position;
         notifyDataSetChanged();
+    }
+
+    // 自定义点击事件
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, String content);
     }
 
 }

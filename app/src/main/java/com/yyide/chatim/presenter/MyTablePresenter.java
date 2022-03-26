@@ -1,10 +1,18 @@
 package com.yyide.chatim.presenter;
 
 
+import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.kotlin.network.base.BaseResponse;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
+import com.yyide.chatim.model.table.MyTableBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.MyTableView;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.RequestBody;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -25,7 +33,7 @@ public class MyTablePresenter extends BasePresenter<MyTableView> {
         addSubscription(dingApiStores.selectSchByTeaid(), new ApiCallback<SelectSchByTeaidRsp>() {
             @Override
             public void onSuccess(SelectSchByTeaidRsp model) {
-                mvpView.SelectSchByTeaid(model);
+                //mvpView.SelectSchByTeaid(model);
             }
 
             @Override
@@ -41,11 +49,32 @@ public class MyTablePresenter extends BasePresenter<MyTableView> {
     }
 
     public void selectClassInfoByClassId(String classId) {
-//        mvpView.showLoading();
         addSubscription(dingApiStores.selectClassInfoByClassId(classId), new ApiCallback<SelectSchByTeaidRsp>() {
             @Override
             public void onSuccess(SelectSchByTeaidRsp model) {
-                mvpView.SelectSchByTeaid(model);
+                //mvpView.SelectSchByTeaid(model);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                mvpView.SelectSchByTeaidFail(msg);
+            }
+
+            @Override
+            public void onFinish() {
+                mvpView.hideLoading();
+            }
+        });
+    }
+
+    public void getMyTimeTable(String weekTime){
+        mvpView.showLoading();
+        addSubscription(dingApiStores.getMyTableData(weekTime), new ApiCallback<BaseResponse<MyTableBean>>() {
+            @Override
+            public void onSuccess(BaseResponse<MyTableBean> model) {
+                if (model.getCode() == 0){
+                    mvpView.SelectSchByTeaid(model.getData());
+                }
             }
 
             @Override

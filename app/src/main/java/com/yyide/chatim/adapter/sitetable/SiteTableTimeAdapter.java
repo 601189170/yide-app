@@ -68,7 +68,8 @@ public class SiteTableTimeAdapter extends BaseAdapter {
     }
 
     public void notifyData(List<TimeUtil.WeekDay> list) {
-        this.list = list;
+        this.list.clear();
+        this.list.addAll(list);
         notifyDataSetChanged();
     }
 

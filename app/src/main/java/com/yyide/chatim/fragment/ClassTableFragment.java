@@ -7,107 +7,107 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SizeUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.TableItemAdapter;
 import com.yyide.chatim.adapter.TableSectionAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
+import com.yyide.chatim.databinding.ClassTableFragmnet2Binding;
 import com.yyide.chatim.dialog.SwitchTableClassPop;
-import com.yyide.chatim.dialog.SwitchClassPopNew;
-import com.yyide.chatim.model.GetUserSchoolRsp;
+import com.yyide.chatim.dialog.TableClassPopUp;
+import com.yyide.chatim.dialog.TablePopUp;
+import com.yyide.chatim.dialog.TextPopUp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
-import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
+import com.yyide.chatim.model.table.ChildrenItem;
+import com.yyide.chatim.model.table.ClassInfoBean;
 import com.yyide.chatim.presenter.ClassTablePresenter;
+import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.view.ClassTableView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import androidx.annotation.Nullable;
-
-import butterknife.BindView;
-import butterknife.OnClick;
+import java.util.Locale;
 
 
-public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> implements ClassTableView, SwitchTableClassPop.SelectClasses {
+public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> implements ClassTableView {
 
-    @BindView(R.id.grid)
-    GridView grid;
-    @BindView(R.id.tablegrid)
-    GridView tablegrid;
-    @BindView(R.id.listsection)
-    GridView listsection;
-    @BindView(R.id.left_layout)
-    RelativeLayout leftLayout;
-    @BindView(R.id.className)
-    TextView className;
-    @BindView(R.id.tv_week)
-    TextView tv_week;
-    @BindView(R.id.classlayout)
-    FrameLayout classlayout;
-    @BindView(R.id.empty)
-    View empty;
-    @BindView(R.id.svContent)
-    ScrollView mScrollView;
-    private View mBaseView;
+
     TableTimeAdapter timeAdapter;
     TableItemAdapter tableItemAdapter;
     TableSectionAdapter tableSectionAdapter;
     int index = -1;
-    private List<SelectTableClassesRsp.DataBean> data;
-    private GetUserSchoolRsp.DataBean.FormBean classInfo;
-    private SwitchTableClassPop swichTableClassPop;
+    //private List<SelectTableClassesRsp.DataBean> data;
+    //private GetUserSchoolRsp.DataBean.FormBean classInfo;
+    //private SwitchTableClassPop swichTableClassPop;
+
+    private ClassTableFragmnet2Binding binding;
+    // 当前所选周数
+    private ChildrenItem selectWeek;
+    // 班级列表
+    List<ChildrenItem> classList = new ArrayList<>();
+    // 当前所选班级
+    ChildrenItem selectClassInfo = new ChildrenItem();
+
+    private TablePopUp weekPopUp;
+    private TableClassPopUp classPopUp;
+    private TextPopUp textPopUp;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mBaseView = inflater.inflate(R.layout.class_table_fragmnet2, container, false);
-        return mBaseView;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        binding = ClassTableFragmnet2Binding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        initView();
+
+        binding.tableClassTop.tableTopWeekTv.setVisibility(View.VISIBLE);
+
         tableItemAdapter = new TableItemAdapter();
-        tablegrid.setAdapter(tableItemAdapter);
+        tableItemAdapter.setOnItemClickListener((view13, content) -> {
+            textPopUp.setText(content,view13);
+        });
+        binding.tablegrid.setAdapter(tableItemAdapter);
+
         tableSectionAdapter = new TableSectionAdapter();
-        listsection.setAdapter(tableSectionAdapter);
-        TextView tvDesc = empty.findViewById(R.id.tv_desc);
+        binding.listsection.setAdapter(tableSectionAdapter);
+        TextView tvDesc = binding.empty.tvDesc;
         tvDesc.setText("本周暂无课表数据");
         timeAdapter = new TableTimeAdapter();
-        grid.setAdapter(timeAdapter);
+        binding.tableClassTop.grid.setAdapter(timeAdapter);
 //        if (SpData.getIdentityInfo().weekNum <= 0) {
 //            tv_week.setText("");
 //        } else {
 //            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
 //        }
-        grid.setOnItemClickListener((parent, view1, position, id) -> {
+        binding.tableClassTop.grid.setOnItemClickListener((parent, view1, position, id) -> {
             timeAdapter.setPosition(position);
             index = position;
             tableItemAdapter.setIndex(index);
         });
-        tablegrid.setOnItemClickListener((parent, view12, position, id) -> {
+        binding.tablegrid.setOnItemClickListener((parent, view12, position, id) -> {
             index = position % 7;
             tableItemAdapter.setIndex(index);
             timeAdapter.setPosition(index);
         });
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");// HH:mm:ss
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd", Locale.getDefault());// HH:mm:ss
         Date date = new Date(System.currentTimeMillis());
         for (int i = 0; i < timeAdapter.list.size(); i++) {
             if (timeAdapter.list.get(i).day.equals(simpleDateFormat.format(date))) {
@@ -116,16 +116,20 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 tableItemAdapter.setIndex(i);
             }
         }
+
         mvpPresenter.listAllBySchoolId();
+        /*
         classInfo = SpData.getClassInfo();
-//        if (classInfo != null) {
-//            className.setText(classInfo.classesName);
-//            mvpPresenter.listTimeDataByApp(classInfo.classesId);
-//        } else {
-//            className.setText("暂无班级");
-//        }
+        if (classInfo != null) {
+            binding.tableClassTop.className.setText(classInfo.classesName);
+            mvpPresenter.listTimeDataByApp(classInfo.classesId,selectWeek);
+        } else {
+            binding.tableClassTop.className.setText("暂无班级");
+        }*/
+
         //暂时使用固定班级id测试
-        mvpPresenter.listTimeDataByApp("1491675357620822017");
+        //mvpPresenter.listTimeDataByApp("1491675357620822017",selectWeek);
+
 //        GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
 //        if (identityInfo != null) {
 //            if ("Y".equalsIgnoreCase(identityInfo.schoolType)) {
@@ -134,30 +138,80 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 //                mvpPresenter.selectListBySchoolAll();
 //            }
 //        }
+
+        initClickListener();
     }
 
-    @OnClick(R.id.classlayout)
-    public void click() {
-        if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {
-            if (classInfo != null) {
-                SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
-                classPopNew.setOnCheckCallBack(classBean -> {
-                    this.classInfo = classBean;
-                    className.setText(classBean.classesName);
-//                    mvpPresenter.listTimeDataByApp(classBean.classesId);
-                });
-            } else {
-                ToastUtils.showShort("您没有其他班级");
+    private void initView() {
+        weekPopUp = new TablePopUp(this);
+        weekPopUp.setPopupGravity(Gravity.BOTTOM);
+        weekPopUp.setSubmitCallBack(data -> {
+            if (data != null) {
+                selectWeek = data;
+                binding.tableClassTop.tableTopWeekTv.setText(selectWeek.getName());
+                mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
             }
-        } else {//校长取全校班级列表
-            if (data != null && data.size() > 0) {
-                swichTableClassPop = new SwitchTableClassPop(getActivity(), data);
-                swichTableClassPop.setSelectClasses(this);
-            } else {
-                ToastUtils.showShort("您没有其他班级");
+        });
+
+        classPopUp = new TableClassPopUp(this);
+        classPopUp.setPopupGravity(Gravity.BOTTOM);
+        classPopUp.setSubmitCallBack(data -> {
+            if (data != null) {
+                selectClassInfo = data;
+                String showName = selectClassInfo.getParentName() + selectClassInfo.getName();
+                binding.tableClassTop.className.setText(showName);
+                mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
             }
-        }
+        });
+
+        textPopUp = new TextPopUp(this);
     }
+
+    public void initClickListener() {
+        binding.tableClassTop.classlayout.setOnClickListener(v -> {
+            /*if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {
+                if (classInfo != null) {
+                    SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
+                    classPopNew.setOnCheckCallBack(classBean -> {
+                        this.classInfo = classBean;
+                        className.setText(classBean.classesName);
+                        mvpPresenter.listTimeDataByApp(classBean.classesId);
+                    });
+                } else {
+                    ToastUtils.showShort("您没有其他班级");
+                }
+            } else {//校长取全校班级列表
+                if (data != null && data.size() > 0) {
+                    swichTableClassPop = new SwitchTableClassPop(getActivity(), data);
+                    swichTableClassPop.setSelectClasses(this);
+                } else {
+                    ToastUtils.showShort("您没有其他班级");
+                }
+            }*/
+            if (classPopUp.isShowing()) {
+                classPopUp.dismiss();
+            } else {
+                classPopUp.showPopupWindow(v);
+            }
+        });
+
+
+        binding.tableClassTop.tableTopWeekTv.setOnClickListener(v -> {
+            if (weekPopUp.isShowing()) {
+                weekPopUp.dismiss();
+            } else {
+                weekPopUp.showPopupWindow(v);
+            }
+        });
+
+
+        binding.tableClassReturnCurrent.setOnClickListener(v -> {
+            index = -1;
+            selectWeek = null;
+            mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
+        });
+    }
+
 
     @Override
     protected ClassTablePresenter createPresenter() {
@@ -165,11 +219,28 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     }
 
     @Override
-    public void listAllBySchoolId(listAllBySchoolIdRsp rsp) {
-        Log.e("TAG", "listAllBySchoolId==>: " + JSON.toJSONString(rsp));
-        if (rsp.code == BaseConstant.REQUEST_SUCCESS) {
-
+    public void listAllBySchoolId(List<ClassInfoBean> classInfo) {
+        Log.e("TAG", "listAllBySchoolId==>: " + JSON.toJSONString(classInfo));
+        classList.clear();
+        if (classInfo.isEmpty()) {
+            binding.tableClassTop.className.setText("暂无班级");
+            return;
         }
+        for (int i = 0; i < classInfo.size(); i++) {
+            List<ChildrenItem> childrenData = classInfo.get(i).getChildren();
+            String outerName = classInfo.get(i).getName();
+            for (int j = 0; j < childrenData.size(); j++) {
+                /*String name = childrenData.get(j).getName();
+                childrenData.get(j).setName(outerName + name);*/
+                childrenData.get(j).setParentName(outerName);
+            }
+            classList.addAll(childrenData);
+        }
+        selectClassInfo = classList.get(0);
+        classPopUp.setData(classList, selectClassInfo);
+        String showName = selectClassInfo.getParentName() + selectClassInfo.getName();
+        binding.tableClassTop.className.setText(showName);
+        mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
     }
 
     @Override
@@ -182,13 +253,26 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
         if (rsp.getCode() == 0) {
             if (rsp.getData() != null) {
-                empty.setVisibility(View.GONE);
-                mScrollView.setVisibility(View.VISIBLE);
+                binding.empty.getRoot().setVisibility(View.GONE);
+                binding.svContent.setVisibility(View.VISIBLE);
                 //String jc = rsp.data.timetableStructure;
                 //String s = jc.replaceAll("节课", "");
                 //int num = Integer.parseInt(s);
                 final int thisWeek = rsp.getData().getThisWeek();
-                tv_week.setText(getString(R.string.weekNum, thisWeek + ""));
+                // 设置总周数
+                List<ChildrenItem> data = new ArrayList<>();
+                for (int i = 0; i < rsp.getData().getWeekTotal(); i++) {
+                    String weekNum = String.valueOf(i + 1);
+                    ChildrenItem bean = new ChildrenItem( "第" + weekNum + "周","",weekNum);
+                    data.add(bean);
+                }
+                selectWeek = data.get(thisWeek - 1);
+                weekPopUp.setData(data, selectWeek);
+                binding.tableClassTop.tableTopWeekTv.setText(selectWeek.getName());
+                if (rsp.getData().getWeekList() != null) {
+                    List<TimeUtil.WeekDay> toWeekDayList = TimeUtil.getWeekDay(rsp.getData().getWeekList());
+                    timeAdapter.notifyData(toWeekDayList);
+                }
                 final SiteTableRsp.DataBean.SectionListBean sectionList = rsp.getData().getSectionList();
                 int earlyReading = sectionList.getEarlySelfStudyList() != null ? sectionList.getEarlySelfStudyList().size() : 0;
                 int morning = sectionList.getMorningList() != null ? sectionList.getMorningList().size() : 0;
@@ -196,9 +280,18 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 int night = sectionList.getNightList() != null ? sectionList.getNightList().size() : 0;
                 int eveningStudy = sectionList.getLateSelfStudyList() != null ? sectionList.getLateSelfStudyList().size() : 0;
                 int sectionCount = earlyReading + morning + afternoon + night + eveningStudy;
+
+                // 数量为0
+                if (sectionCount == 0){
+                    binding.svContent.setVisibility(View.GONE);
+                    binding.empty.getRoot().setVisibility(View.VISIBLE);
+                    return;
+                }
+
+
                 List<String> sectionlist = new ArrayList<>();
+                List<SiteTableRsp.DataBean.TimetableListBean> subListBeans = new ArrayList<>();
                 if (rsp.getData().getTimetableList() != null && rsp.getData().getTimetableList().size() > 0) {
-                    List<SiteTableRsp.DataBean.TimetableListBean> subListBeans = new ArrayList<>();
                     //val courseBoxCount = sectionCount * 7
                     //            for (index in 0 until courseBoxCount) {
                     //                val listBean = SiteTableRsp.DataBean.TimetableListBean()
@@ -224,8 +317,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                             }
                         }
                     }
-                    tableItemAdapter.notifyData(subListBeans);
                 }
+                tableItemAdapter.notifyData(subListBeans);
 
                 if (earlyReading > 0) {
                     createLeftTypeView(0, 1, earlyReading);//早读
@@ -237,7 +330,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     createLeftTypeView(earlyReading + morning, 3, afternoon);//下午
                 }
                 if (night > 0) {
-                    createLeftTypeView(morning + afternoon + earlyReading, 4, eveningStudy);//晚上
+                    createLeftTypeView(morning + afternoon + earlyReading, 4, night);//晚上
                 }
                 if (eveningStudy > 0) {
                     createLeftTypeView(morning + afternoon + earlyReading + night, 5, eveningStudy);//晚自习
@@ -274,9 +367,10 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     sectionlist.add(listBean.getName());
                 }
                 tableSectionAdapter.notifyData(sectionlist);
+
             } else {
-                mScrollView.setVisibility(View.GONE);
-                empty.setVisibility(View.VISIBLE);
+                binding.svContent.setVisibility(View.GONE);
+                binding.empty.getRoot().setVisibility(View.VISIBLE);
             }
         }
     }
@@ -321,7 +415,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         }
         params.gravity = Gravity.CENTER;
         text.setLayoutParams(params);
-        leftLayout.addView(view);
+        binding.leftLayout.addView(view);
     }
 
     @SuppressLint("LongLogTag")
@@ -333,7 +427,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void selectTableClassListSuccess(SelectTableClassesRsp model) {
         if (model.getCode() == BaseConstant.REQUEST_SUCCESS) {
-            data = model.getData();
+            //data = model.getData();
         }
     }
 
@@ -342,9 +436,17 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     public void selectTableClassListFail(String msg) {
     }
 
-    @Override
+    /*@Override
     public void OnSelectClassesListener(long classesId, String classesName) {
-        className.setText(classesName);
-        //mvpPresenter.listTimeDataByApp(classesId + "");
+        binding.tableClassTop.className.setText(classesName);
+        mvpPresenter.listTimeDataByApp(classesId + "",selectWeek);
+    }*/
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        weekPopUp.setSubmitCallBack(null);
+        classPopUp.setSubmitCallBack(null);
+        tableItemAdapter.setOnItemClickListener(null);
     }
 }

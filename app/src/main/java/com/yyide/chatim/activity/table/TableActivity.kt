@@ -18,10 +18,10 @@ import com.yyide.chatim.fragment.SiteTableFragment
  * @Author lrz
  * @Version 2.0
  */
-class TableActivity :
-    KTBaseActivity<ActivityTableTitleBinding>(ActivityTableTitleBinding::inflate) {
+class TableActivity : KTBaseActivity<ActivityTableTitleBinding>(ActivityTableTitleBinding::inflate) {
 
     var fragmentList = mutableListOf<Fragment>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +53,7 @@ class TableActivity :
                 return fragmentList.size
             }
         }
+
         TabLayoutMediator(binding.tablayout, binding.viewpager, true, false) { tab, position ->
             when (position) {
                 0 -> {

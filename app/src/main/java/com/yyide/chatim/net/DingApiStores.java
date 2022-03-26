@@ -77,7 +77,6 @@ import com.yyide.chatim.model.attendance.StudentAttendanceWeekMonthRsp;
 import com.yyide.chatim.model.attendance.TeacherAttendanceDayRsp;
 import com.yyide.chatim.model.attendance.TeacherAttendanceWeekMonthRsp;
 import com.yyide.chatim.model.gate.GateDataPermissionRsp;
-import com.yyide.chatim.model.listAllBySchoolIdRsp;
 import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.ParticipantRsp;
 import com.yyide.chatim.model.schedule.ScheduleData;
@@ -87,11 +86,12 @@ import com.yyide.chatim.model.schedule.SchoolCalendarRsp;
 import com.yyide.chatim.model.schedule.SchoolSemesterRsp;
 import com.yyide.chatim.model.schedule.SearchParticipantRsp;
 import com.yyide.chatim.model.schedule.Settings;
-import com.yyide.chatim.model.schedule.SiteNameRsp;
 import com.yyide.chatim.model.schedule.StudentGuardianRsp;
 import com.yyide.chatim.model.schedule.TodayListRsp;
 import com.yyide.chatim.model.sitetable.SiteBuildingsRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
+import com.yyide.chatim.model.table.ClassInfoBean;
+import com.yyide.chatim.model.table.MyTableBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -102,7 +102,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -165,13 +164,17 @@ public interface DingApiStores {
     @GET("/timetable/cloud-timetable/schedule/selectClassInfoByClassId?")
     Observable<SelectSchByTeaidRsp> selectClassInfoByClassId(@Query("classId") String classId);
 
+    //查询我的课表
+    @GET("cloud/app/timetable/getTeacherTimetable")
+    Observable<BaseResponse<MyTableBean>> getMyTableData(@Query("weekTime") String weekTime);
+
     //查询该老师教哪几个班级
     @POST("/timetable/cloud-timetable/schedule/listAllScheduleByTeacherId")
     Observable<ListAllScheduleByTeacherIdRsp> listAllScheduleByTeacherId();
 
     //班级列表接口
-    @POST("/management/cloud-system/classes/listAllBySchoolId")
-    Observable<listAllBySchoolIdRsp> listAllBySchoolId();
+    @GET("/cloud/app/timetable/getClassList")
+    Observable<BaseResponse<List<ClassInfoBean>>> listAllBySchoolId();
 
     //通过班级查询班级课表
     @Headers({"Content-Type: application/json", "Accept: application/json"})//需要添加头
@@ -1022,8 +1025,8 @@ public interface DingApiStores {
      * https://api.uat.edu.1d1j.net/timetable/cloud-timetable/v1/app/kcb/buildings
      */
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @POST("/timetable/cloud-timetable/v1/app/kcb/buildings")
-    Call<SiteBuildingsRsp> buildings();
+    @GET("/cloud/app/timetable/getSiteList")
+    Call<BaseResponse<List<ClassInfoBean>>> buildings();
 
     /**
      * 查询场地课表

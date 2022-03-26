@@ -9,7 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.yyide.chatim.R;
+import com.yyide.chatim.adapter.TableItemAdapter;
 import com.yyide.chatim.database.ScheduleDaoUtil;
 import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
@@ -29,6 +32,8 @@ public class SiteTableItemAdapter extends BaseAdapter {
     public List<SiteTableRsp.DataBean.TimetableListBean> list = new ArrayList<>();
 
     public int position = -1;
+
+    private OnItemClickListener mOnItemClickListener;
 
     @Override
     public int getCount() {
@@ -51,11 +56,33 @@ public class SiteTableItemAdapter extends BaseAdapter {
         if (view == null)
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_card, null, false);
         TextView text_view = VHUtil.ViewHolder.get(view, R.id.text_view);
-        LinearLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
+        ConstraintLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
 //        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(80));
 //        layout.setLayoutParams(layoutParams);
         //text_view.setText(getItem(position).subjectName + "\n" + getItem(position).fromDateTime + "\n" + getItem(position).toDateTime);
-        text_view.setText(getItem(position).getSubjectName());
+        String subjectName = getItem(position).getSubjectName();
+        if (subjectName == null || subjectName.isEmpty()){
+            subjectName = "/";
+        }
+        text_view.setText(subjectName);
+
+        if (!subjectName.equals("/")) {
+            String finalSubjectName = subjectName;
+            text_view.setOnClickListener(v -> {
+                if (mOnItemClickListener != null){
+                    mOnItemClickListener.onItemClick(v, finalSubjectName);
+                }
+            });
+        }
+
+
+
+        if (position % 7 < this.position){
+            text_view.setTextColor(view.getContext().getResources().getColor(R.color.black11));
+        }else {
+            text_view.setTextColor(view.getContext().getResources().getColor(R.color.black9));
+        }
+
         final SiteTableRsp.DataBean.TimetableListBean item = getItem(position);
         if (position % 7 == this.position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_ls));
@@ -73,11 +100,7 @@ public class SiteTableItemAdapter extends BaseAdapter {
                 //当前课程
                 layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_table_current));
                 text_view.setTextColor(view.getContext().getResources().getColor(R.color.white));
-            } else {
-                text_view.setTextColor(view.getContext().getResources().getColor(R.color.black9));
             }
-        } else {
-            text_view.setTextColor(view.getContext().getResources().getColor(R.color.black9));
         }
         return view;
     }
@@ -88,7 +111,8 @@ public class SiteTableItemAdapter extends BaseAdapter {
     }
 
     public void notifyData(List<SiteTableRsp.DataBean.TimetableListBean> list, int position) {
-        this.list = list;
+        this.list.clear();
+        this.list.addAll(list);
         this.position = position;
         notifyDataSetChanged();
     }
@@ -96,6 +120,15 @@ public class SiteTableItemAdapter extends BaseAdapter {
     public void setIndex(int position) {
         this.position = position;
         notifyDataSetChanged();
+    }
+
+    // 自定义点击事件
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, String content);
     }
 
 }

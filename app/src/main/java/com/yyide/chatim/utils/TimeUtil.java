@@ -5,6 +5,10 @@ import android.text.format.Time;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.database.ScheduleDaoUtil;
+import com.yyide.chatim.model.sitetable.SiteTableRsp;
+
+import org.joda.time.DateTime;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -198,6 +202,7 @@ public class TimeUtil {
 
         Calendar calendar = Calendar.getInstance();
 
+
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
 
         // 获取本周的第一天
@@ -209,13 +214,98 @@ public class TimeUtil {
             WeekDay weekDay = new WeekDay();
             // 获取星期的显示名称，例如：周一、星期一、Monday等等
             weekDay.week = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.CHINA);
-            weekDay.day = new SimpleDateFormat("MM/dd").format(calendar.getTime());
+            weekDay.day = new SimpleDateFormat("MM-dd").format(calendar.getTime());
             weekDay.dataTime = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
             list.add(weekDay);
         }
 
         return list;
     }
+
+    public static List<WeekDay> getWeekDay(SiteTableRsp.DataBean.WeekListBean bean) {
+        List<TimeUtil.WeekDay> weekDayList = new ArrayList<>();
+        WeekDay mondayWeekDay = new WeekDay();
+        DateTime mondayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getMonday(), "yyyy-MM-dd");
+        mondayWeekDay.week = DateUtils.getWeek(mondayDateTime, true);
+        mondayWeekDay.day =  DateUtils.formatTime(
+                bean.getMonday(),
+                "yyyy-MM-dd",
+                "MM-dd"
+        );
+        mondayWeekDay.dataTime = bean.getMonday();
+        weekDayList.add(mondayWeekDay);
+
+        WeekDay tuesdayWeekDay = new WeekDay();
+        DateTime tuesdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getTuesday(), "yyyy-MM-dd");
+        tuesdayWeekDay.week = DateUtils.getWeek(tuesdayDateTime, true);
+        tuesdayWeekDay.day =  DateUtils.formatTime(
+                bean.getTuesday(),
+                "yyyy-MM-dd",
+                "MM-dd"
+        );
+        tuesdayWeekDay.dataTime = bean.getTuesday();
+        weekDayList.add(tuesdayWeekDay);
+
+        WeekDay wednesdayWeekDay = new WeekDay();
+        DateTime wednesdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getWednesday(), "yyyy-MM-dd");
+        wednesdayWeekDay.week = DateUtils.getWeek(wednesdayDateTime, true);
+        wednesdayWeekDay.day =  DateUtils.formatTime(
+                bean.getWednesday(),
+                "yyyy-MM-dd",
+                "MM-dd"
+        );
+        wednesdayWeekDay.dataTime = bean.getWednesday();
+        weekDayList.add(wednesdayWeekDay);
+
+        WeekDay thursdayWeekDay = new WeekDay();
+        DateTime thursdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getThursday(), "yyyy-MM-dd");
+        thursdayWeekDay.week = DateUtils.getWeek(thursdayDateTime, true);
+        thursdayWeekDay.day =  DateUtils.formatTime(
+                bean.getThursday(),
+                "yyyy-MM-dd",
+                "MM-dd"
+        );
+
+        thursdayWeekDay.dataTime = bean.getThursday();
+        weekDayList.add(thursdayWeekDay);
+
+        WeekDay fridayWeekDay = new WeekDay();
+        DateTime fridayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getFriday(), "yyyy-MM-dd");
+        fridayWeekDay.week =  DateUtils.getWeek(fridayDateTime, true);
+        fridayWeekDay.day =  DateUtils.formatTime(
+                bean.getFriday(),
+                "yyyy-MM-dd",
+                "MM-dd"
+        );
+
+        fridayWeekDay.dataTime = bean.getFriday();
+        weekDayList.add(fridayWeekDay);
+
+        WeekDay saturdayWeekDay = new WeekDay();
+        DateTime saturdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getSaturday(), "yyyy-MM-dd");
+        saturdayWeekDay.week = DateUtils.getWeek(saturdayDateTime, true);
+        saturdayWeekDay.day =  DateUtils.formatTime(
+                bean.getSaturday(),
+                "yyyy-MM-dd",
+                "MM-dd"
+        );
+
+        saturdayWeekDay.dataTime = bean.getSaturday();
+        weekDayList.add(saturdayWeekDay);
+
+        WeekDay sundayWeekDay = new WeekDay();
+        DateTime sundayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getSunday(), "yyyy-MM-dd");
+        sundayWeekDay.week = DateUtils.getWeek(sundayDateTime, true);
+        sundayWeekDay.day =  DateUtils.formatTime(
+                bean.getSunday(),
+                "yyyy-MM-dd",
+                "MM-dd"
+        );
+        sundayWeekDay.dataTime = bean.getSunday();
+        weekDayList.add(sundayWeekDay);
+        return weekDayList;
+    }
+
 
 
     public static String stampToDate10(long timeMillis) {

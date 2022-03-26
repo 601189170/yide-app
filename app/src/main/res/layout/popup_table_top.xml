@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#504F4F">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/table_top_expandable_rv"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:paddingTop="5dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintHeight_percent="0.8"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/table_top_expandable_cancel"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/table_expandable_button_left"
+        android:text="@string/cancel"
+        android:textColor="#11C685"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/table_top_expandable_rv"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/table_top_expandable_submit"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/table_expandable_button_right"
+        android:text="@string/confirm"
+        android:textColor="#11C685"
+        app:layout_constraintStart_toEndOf="@id/table_top_expandable_cancel"
+        app:layout_constraintTop_toBottomOf="@id/table_top_expandable_rv"
+        app:layout_constraintWidth_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

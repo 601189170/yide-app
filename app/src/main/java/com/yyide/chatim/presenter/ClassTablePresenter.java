@@ -3,15 +3,15 @@ package com.yyide.chatim.presenter;
 
 import com.alibaba.fastjson.JSON;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.kotlin.network.base.BaseResponse;
 import com.yyide.chatim.model.SelectTableClassesRsp;
-import com.yyide.chatim.model.TableJSON;
-import com.yyide.chatim.model.listAllBySchoolIdRsp;
-import com.yyide.chatim.model.listTimeDataByAppRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
+import com.yyide.chatim.model.table.ClassInfoBean;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.ClassTableView;
 
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.RequestBody;
 
@@ -28,11 +28,14 @@ public class ClassTablePresenter extends BasePresenter<ClassTableView> {
     public void listAllBySchoolId() {
 
         mvpView.showLoading();
-        addSubscription(dingApiStores.listAllBySchoolId(), new ApiCallback<listAllBySchoolIdRsp>() {
+        addSubscription(dingApiStores.listAllBySchoolId(), new ApiCallback<BaseResponse<List<ClassInfoBean>>>() {
             @Override
-            public void onSuccess(listAllBySchoolIdRsp model) {
-//                mvpView.hideLoading();
-                mvpView.listAllBySchoolId(model);
+            public void onSuccess(BaseResponse<List<ClassInfoBean>> model) {
+                if (model.getCode() == 0) {
+                    mvpView.listAllBySchoolId(model.getData());
+                }else {
+                    mvpView.listAllBySchoolIdFail(model.getMessage());
+                }
             }
 
             @Override
@@ -47,15 +50,17 @@ public class ClassTablePresenter extends BasePresenter<ClassTableView> {
         });
     }
 
-    public void listTimeDataByApp(String classid) {
+    public void listTimeDataByApp(String classId,String weekTime) {
         mvpView.showLoading();
 //        TableJSON info = new TableJSON(classid);
         final HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("type","1");
-        hashMap.put("typeId",classid);
-        //hashMap.put("weekTime",weekTime);
+        hashMap.put("typeId",classId);
+        if (weekTime != null) {
+            hashMap.put("weekTime", weekTime);
+        }
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(hashMap));
-        addSubscription(dingApiStores2.listTimeDataByApp(body), new ApiCallback<SiteTableRsp>() {
+        addSubscription(dingApiStores.listTimeDataByApp(body), new ApiCallback<SiteTableRsp>() {
             @Override
             public void onSuccess(SiteTableRsp model) {
                 mvpView.listTimeDataByApp(model);

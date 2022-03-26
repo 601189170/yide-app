@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alibaba.fastjson.JSON
 import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.sitetable.SiteBuildingsRsp
 import com.yyide.chatim.model.sitetable.SiteTableRsp
+import com.yyide.chatim.model.table.ClassInfoBean
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.loge
@@ -23,36 +25,30 @@ import retrofit2.Response
  */
 class SiteTableViewModel : ViewModel() {
     private var apiStores: DingApiStores = AppClient.getDingRetrofit().create(DingApiStores::class.java)
-    //临时使用token
-    private var apiStores2: DingApiStores = AppClient.getDingRetrofit2().create(DingApiStores::class.java)
 
-    val siteBuildingLiveData = MutableLiveData<SiteBuildingsRsp.DataBean>()
+    val siteBuildingLiveData = MutableLiveData<List<ClassInfoBean>>()
     val siteTableLiveData = MutableLiveData<SiteTableRsp.DataBean?>()
 
     /**
      * 查询场地建筑物列表
      */
     fun getBuildings(){
-        apiStores.buildings().enqueue(object :Callback<SiteBuildingsRsp>{
+        apiStores.buildings().enqueue(object :Callback<BaseResponse<List<ClassInfoBean>>>{
             override fun onResponse(
-                call: Call<SiteBuildingsRsp>,
-                response: Response<SiteBuildingsRsp>
+                call: Call<BaseResponse<List<ClassInfoBean>>>,
+                response: Response<BaseResponse<List<ClassInfoBean>>>
             ) {
                 val body = response.body()
                 val data = body?.data
-                if (body != null && body.code == 200 && data != null) {
+                if (body != null && body.code == 0 && data != null) {
                     siteBuildingLiveData.postValue(data!!)
                     return
                 }
-                val dataBean = SiteBuildingsRsp.DataBean()
-                dataBean.isExistsSiteKcb = false
-                siteBuildingLiveData.postValue(dataBean)
+                siteBuildingLiveData.postValue(emptyList())
             }
 
-            override fun onFailure(call: Call<SiteBuildingsRsp>, t: Throwable) {
-                val dataBean = SiteBuildingsRsp.DataBean()
-                dataBean.isExistsSiteKcb = false
-                siteBuildingLiveData.postValue(dataBean)
+            override fun onFailure(call: Call<BaseResponse<List<ClassInfoBean>>>, t: Throwable) {
+                siteBuildingLiveData.postValue(emptyList())
             }
         })
     }
@@ -69,9 +65,9 @@ class SiteTableViewModel : ViewModel() {
             return
         }
         val param = mutableMapOf<String, Any?>()
-        param.put("type",type)
-        param.put("typeId",typeId)
-        param.put("weekTime",weekTime)
+        param["type"] = type
+        param["typeId"] = typeId
+        param["weekTime"] = weekTime
         val toJSONString = JSON.toJSONString(param)
         loge("查询场地课表数据:$toJSONString")
         val requestBody = RequestBody.create(BaseConstant.JSON, toJSONString)

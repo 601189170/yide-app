@@ -4,6 +4,7 @@ package com.yyide.chatim.view;
 import com.yyide.chatim.base.BaseView;
 import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.listAllBySchoolIdRsp;
+import com.yyide.chatim.model.table.MyTableBean;
 
 /**
  * 作者：Rance on 2016/10/25 15:19
@@ -11,7 +12,7 @@ import com.yyide.chatim.model.listAllBySchoolIdRsp;
  */
 public interface MyTableView extends BaseView {
 
-    void SelectSchByTeaid(SelectSchByTeaidRsp rsp);
+    void SelectSchByTeaid(MyTableBean rsp);
 
     void SelectSchByTeaidFail(String msg);
 

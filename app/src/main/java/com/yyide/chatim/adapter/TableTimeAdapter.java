@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yyide.chatim.R;
@@ -52,11 +54,15 @@ public class TableTimeAdapter extends BaseAdapter {
         time.setText(getItem(position).day);
         String week = getItem(position).week;
         String neek = week.replaceAll("星期", "");
-
-        day.setText("周" + neek);
-        if (position == today) {
-            day.setText("今天");
+        if (!neek.contains("周") && !neek.equals("今日")) {
+            day.setText("周" + neek);
+        } else {
+            day.setText(neek);
         }
+
+        /* if (position == today) {
+            day.setText("今天");
+        }*/
 
         if (this.position == position) {
             layout.setBackground(view.getContext().getResources().getDrawable(R.drawable.bg_blue_conners2));
@@ -72,7 +78,8 @@ public class TableTimeAdapter extends BaseAdapter {
     }
 
     public void notifyData(List<TimeUtil.WeekDay> list) {
-        this.list = list;
+        this.list.clear();
+        this.list.addAll(list);
         notifyDataSetChanged();
     }
 

@@ -14,6 +14,8 @@ import com.yyide.chatim.database.ScheduleDaoUtil;
 import net.sf.saxon.functions.Data;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -26,7 +28,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
 
 
 public class DateUtils {
@@ -83,6 +84,25 @@ public class DateUtils {
         try {
             SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             time = sDateFormat.format(new Date(dateTime + 0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return time;
+    }
+
+    /**
+     * 将时间戳转换为时间
+     * <p>
+     * s就是时间戳
+     */
+    public static String getDate(DateTime dateTime, String format) {
+        String time = "";
+        try {
+            if (format == null) {
+                format = "yyyy-MM-dd HH:mm:ss";
+            }
+            SimpleDateFormat sDateFormat = new SimpleDateFormat(format, Locale.getDefault());
+            time = sDateFormat.format(dateTime);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -276,7 +296,7 @@ public class DateUtils {
         if (TextUtils.isEmpty(format)) {
             format = "yyyy-MM-dd HH:mm:ss";
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format,Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
         return simpleDateFormat.format(time);
     }
 
@@ -296,6 +316,7 @@ public class DateUtils {
         }
         return 0;
     }
+
     /**
      * 日期转换
      *
@@ -341,7 +362,7 @@ public class DateUtils {
     }
 
 
-    public static String formatTime(String time, String source, String target,boolean week){
+    public static String formatTime(String time, String source, String target, boolean week) {
         if (TextUtils.isEmpty(time)) {
             return "";
         }
@@ -351,17 +372,17 @@ public class DateUtils {
         if (TextUtils.isEmpty(target)) {
             target = "MM月dd日";
         }
-        if (week){
+        if (week) {
             SimpleDateFormat resourceFormat = new SimpleDateFormat(source);
             Date date = null;
             try {
                 date = resourceFormat.parse(time);
-                if (date != null){
+                if (date != null) {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(new Date(date.getTime()));
                     //1是星期日、2是星期一、3是星期二、4是星期三、5是星期四、6是星期五、7是星期六
                     final int i = cal.get(Calendar.DAY_OF_WEEK);
-                    return formatTime(time, source, target)+" "+getWeek(i);
+                    return formatTime(time, source, target) + " " + getWeek(i);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -370,13 +391,18 @@ public class DateUtils {
         return formatTime(time, source, target);
     }
 
-    public static String getWeek(DateTime dateTime,boolean showToday){
-        final int today = DateTime.now().getDayOfWeek() % 7;
+    public static DateTime simplifiedDataTime(DateTime source) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        return DateTime.parse(source.toString("yyyy-MM-dd"), dateTimeFormatter);
+    }
+
+    public static String getWeek(DateTime dateTime, boolean showToday) {
+        final DateTime today = DateTime.now();
         final int dayOfWeek = dateTime.getDayOfWeek() % 7;
-        if (showToday && today == dayOfWeek){
+        if (showToday && today.toString("yyyy-MM-dd").equals(dateTime.toString("yyyy-MM-dd"))) {
             return "今日";
         }
-        switch (dayOfWeek){
+        switch (dayOfWeek) {
             case 0:
                 return "周日";
             case 1:
@@ -394,8 +420,9 @@ public class DateUtils {
         }
         return "";
     }
-    public static String getWeek(int week){
-        switch (week){
+
+    public static String getWeek(int week) {
+        switch (week) {
             case 1:
                 return "周日";
             case 2:
@@ -526,7 +553,7 @@ public class DateUtils {
             final String date1 = simpleDateFormat2.format(calendar.getTime());
             calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek() + 6); // Sunday
             final String date2 = simpleDateFormat2.format(calendar.getTime());
-            Log.e(TAG, "getFirstDayAndLastDayByMonthWeek: date1 "+date1+", date2 "+date2 );
+            Log.e(TAG, "getFirstDayAndLastDayByMonthWeek: date1 " + date1 + ", date2 " + date2);
             dates[0] = date1;
             dates[1] = date2;
         }
@@ -633,13 +660,14 @@ public class DateUtils {
         return false;
     }
 
-    public static boolean minMonth(String beginDate, DateTime currentMonth){
+    public static boolean minMonth(String beginDate, DateTime currentMonth) {
         return ScheduleDaoUtil.INSTANCE.toDateTime(beginDate).compareTo(currentMonth) > 0;
     }
 
-    public static boolean minWeek(String beginDate, DateTime currentMinWeekDate){
+    public static boolean minWeek(String beginDate, DateTime currentMinWeekDate) {
         return ScheduleDaoUtil.INSTANCE.toDateTime(beginDate).compareTo(currentMinWeekDate) > 0;
     }
+
     /**
      * 判断beginDate是否是最小的时间限制
      *
@@ -674,15 +702,15 @@ public class DateUtils {
         return false;
     }
 
-    public static boolean dateExpired(String date){
-        if (TextUtils.isEmpty(date)){
+    public static boolean dateExpired(String date) {
+        if (TextUtils.isEmpty(date)) {
             return false;
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         try {
             final Date parse = dateFormat.parse(date);
-            if (parse != null){
-                return new Date().getTime() - parse.getTime() >0;
+            if (parse != null) {
+                return new Date().getTime() - parse.getTime() > 0;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -691,18 +719,17 @@ public class DateUtils {
     }
 
     /**
-     *
-     * @param eq true判断相等 false 判断大小
+     * @param eq          true判断相等 false 判断大小
      * @param nowDate
      * @param compareDate
      * @return
      */
-    public static boolean compareDate(String nowDate, String compareDate,boolean eq) {
+    public static boolean compareDate(String nowDate, String compareDate, boolean eq) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         try {
             Date now = df.parse(nowDate);
             Date compare = df.parse(compareDate);
-            if (eq){
+            if (eq) {
                 return now.getTime() == compare.getTime();
             }
             if (now.before(compare)) {
