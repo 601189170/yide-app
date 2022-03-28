@@ -98,15 +98,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         });
 
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
-        Date date = new Date(System.currentTimeMillis());
-        for (int i = 0; i < timeAdapter.list.size(); i++) {
-            if (timeAdapter.list.get(i).day.equals(simpleDateFormat.format(date))) {
-                timeAdapter.setPosition(i);
-                timeAdapter.setToday(i);
-                weekDay = i;
-            }
-        }
+        setToday();
 
         /*binding.tableMyTop.grid.setOnItemClickListener((parent, view12, position, id) -> {
             Log.d("grid click", "onViewCreated: table click");
@@ -135,6 +127,18 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             getData();
         });
         getData();
+    }
+
+    private void setToday() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+        Date date = new Date(System.currentTimeMillis());
+        for (int i = 0; i < timeAdapter.list.size(); i++) {
+            if (timeAdapter.list.get(i).day.equals(simpleDateFormat.format(date))) {
+                timeAdapter.setPosition(i);
+                timeAdapter.setToday(i);
+                weekDay = i;
+            }
+        }
     }
 
 
@@ -225,6 +229,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             binding.tableMyTop.className.setText(selectWeek.getName());
             List<TimeUtil.WeekDay> toWeekDayList = TimeUtil.getWeekDay(rsp.getWeekList());
             timeAdapter.notifyData(toWeekDayList);
+            setToday();
             adapter.setList(getTableList(list, weekDay));
         }
     }

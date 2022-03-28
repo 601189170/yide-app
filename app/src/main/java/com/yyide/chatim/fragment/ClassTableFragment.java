@@ -111,15 +111,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             timeAdapter.setPosition(index);
         });
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd", Locale.getDefault());// HH:mm:ss
-        Date date = new Date(System.currentTimeMillis());
-        for (int i = 0; i < timeAdapter.list.size(); i++) {
-            if (timeAdapter.list.get(i).day.equals(simpleDateFormat.format(date))) {
-                timeAdapter.setPosition(i);
-                timeAdapter.setToday(i);
-                tableItemAdapter.setIndex(i);
-            }
-        }
+        setToday();
 
         mvpPresenter.listAllBySchoolId();
         /*
@@ -144,6 +136,18 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 //        }
 
         initClickListener();
+    }
+
+    private void setToday() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd", Locale.getDefault());// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        for (int i = 0; i < timeAdapter.list.size(); i++) {
+            if (timeAdapter.list.get(i).day.equals(simpleDateFormat.format(date))) {
+                timeAdapter.setPosition(i);
+                timeAdapter.setToday(i);
+                tableItemAdapter.setIndex(i);
+            }
+        }
     }
 
     private void initView() {
@@ -281,6 +285,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 if (rsp.getData().getWeekList() != null) {
                     List<TimeUtil.WeekDay> toWeekDayList = TimeUtil.getWeekDay(rsp.getData().getWeekList());
                     timeAdapter.notifyData(toWeekDayList);
+                    setToday();
                 }
                 final SiteTableRsp.DataBean.SectionListBean sectionList = rsp.getData().getSectionList();
                 int earlyReading = sectionList.getEarlySelfStudyList() != null ? sectionList.getEarlySelfStudyList().size() : 0;

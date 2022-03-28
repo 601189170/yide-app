@@ -40,8 +40,8 @@ public class MyTableAdapter extends BaseQuickAdapter<ListItem, BaseViewHolder> {
         TextView title = baseViewHolder.getView(R.id.item_table_my_title);
 
         desc.setText("课前提醒:暂无提醒");
-        className.setText(item.getSubjectName());
-        title.setText(item.getName());
+        className.setText(item.getName());
+        title.setText(item.getSubjectName());
         String timeStr = item.getStartTime() + "-" + item.getEndTime();
         time.setText(timeStr);
     }
