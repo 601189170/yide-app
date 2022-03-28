@@ -77,7 +77,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/dp_12"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/icon_leave"
                     app:left_bottom_radius="6dp"
                     app:right_bottom_radius="6dp"
                     app:right_top_radius="6dp"

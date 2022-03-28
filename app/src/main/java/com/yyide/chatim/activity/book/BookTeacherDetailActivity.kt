@@ -45,11 +45,17 @@ class BookTeacherDetailActivity : BaseActivity() {
 
     private fun initView() {
         val teacher: BookTeacherItem = intent.getSerializableExtra("teacher") as BookTeacherItem
+//        GlideUtil.loadImageHead(
+//            this,
+//            teacher.faceInformation,
+//            viewBinding.ivHead
+//        )
         GlideUtil.loadImageHead(
-            this,
-            teacher.faceInformation,
-            viewBinding.ivHead
+                this,
+                teacher.avatar,
+                viewBinding.ivHead
         )
+
         if ("1" == teacher.whitelist) {
             viewBinding.ivPhone.visibility = View.GONE
             viewBinding.set.visibility = View.GONE

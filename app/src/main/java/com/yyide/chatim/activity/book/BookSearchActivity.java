@@ -54,7 +54,7 @@ public class BookSearchActivity extends BaseMvpActivity<BookSearchPresenter> imp
     EditText editText;
 
     @BindView(R.id.cl_search_content)
-    ConstraintLayout cl_search_content;
+    LinearLayout cl_search_content;
 
     @BindView(R.id.cl_search_history)
     ConstraintLayout cl_search_history;

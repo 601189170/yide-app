@@ -32,5 +32,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/tv_name"
         app:layout_constraintStart_toEndOf="@+id/tv_name"
         app:layout_constraintTop_toTopOf="@+id/tv_name" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#ffe4e7ed"
+        android:layout_marginStart="55dp"
+        android:layout_marginRight="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

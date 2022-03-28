@@ -28,7 +28,6 @@
                 android:id="@+id/constraintLayout1"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="center_vertical">
 
@@ -67,7 +66,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="65dp"
                 android:layout_marginTop="@dimen/dp_10"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout1">
@@ -91,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginLeft="85dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -102,7 +101,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout3"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="65dp"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
@@ -124,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginLeft="85dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -163,7 +162,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout4"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="65dp"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
@@ -185,7 +184,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginLeft="85dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -196,7 +195,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout5"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="65dp"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
 
@@ -219,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginLeft="85dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -230,7 +229,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout6"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="65dp"
                 android:background="@color/white"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
 
@@ -249,11 +248,12 @@
 
                 <TextView
                     android:id="@+id/subjectName"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
+                    android:layout_marginRight="@dimen/dp_10"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_333333"
                     android:textSize="@dimen/text_14"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginLeft="85dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

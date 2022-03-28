@@ -50,10 +50,15 @@ class BookPatriarchDetailActivity : BaseActivity() {
     private fun initView() {
         val guardianItem: BookGuardianItem =
             intent.getSerializableExtra("guardianItem") as BookGuardianItem
+//        GlideUtil.loadImageHead(
+//            this,
+//            guardianItem.faceInformation,
+//            viewBinding.ivHead
+//        )
         GlideUtil.loadImageHead(
-            this,
-            guardianItem.faceInformation,
-            viewBinding.ivHead
+                this,
+                guardianItem.faceInformation,
+                viewBinding.ivHead
         )
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)

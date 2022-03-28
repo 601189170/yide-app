@@ -156,6 +156,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                     bundle.putString("StudentData_by_Parent", JSON.toJSONString(parent_noteItemAdapter_all.getItem(position).StudentData_by_Parent));
                     bundle.putString("TeacherData_by_Parent", JSON.toJSONString(parent_noteItemAdapter_all.getItem(position).TeacherData_by_Parent));
                     bundle.putString("islast", "1");
+                    Log.e("TAG", "parent_noteItemAdapter_all: "+JSON.toJSONString(bundle) );
                     activity.initDeptFragmentNew(bundle);
                 }
             });
@@ -271,6 +272,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                     bundle.putString("organization", organization);
                     bundle.putString("StudentData_by_Teacher", JSON.toJSONString(teacher_noteItemAdapter_all.getItem(position).StudentData_by_Teacher));
                     bundle.putString("islast", "1");
+                    Log.e("TAG", "teacher_noteItemAdapter_all: "+JSON.toJSONString(bundle) );
                     activity.initDeptFragmentNew(bundle);
                 }else {
                     TeacherlistRsp.DataBean.RecordsBean student=teacher_noteItemAdapter_all.getItem(position);
@@ -302,7 +304,102 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 TeacherlistRsp.DataBean.RecordsBean student=teacher_noteItemAdapter_student.getItem(position);
+                Log.e("TAG", "onItemClick: "+JSON.toJSONString(student) );
 
+                BookStudentItem studentItem = new BookStudentItem(
+                        student.id,
+                        student.name,
+                        student.phone,
+                        student.classesName,
+                        student.userId,
+                        student.primaryGuardianPhone,
+                        student.primaryGuardianPhone,
+                        student.sex,
+                        student.address,
+                        student.faceInformation,
+                        student.email,
+                        student.elternAddBookDTOList,
+                        student.avatar);
+                BookStudentDetailActivity.start(mActivity, studentItem);
+            }
+        });
+        if (teacher_list_student!=null&&teacher_list_student.size()>0){
+//            teacher_recyclerview_student.setVisibility(View.VISIBLE);
+            teacher_noteItemAdapter_student.setList(teacher_list_student);
+
+        }
+
+    }
+
+    void setStudentData3(){
+
+        Log.e("TAG", "list_student: "+JSON.toJSONString(teacher_list_student) );
+        if (studentlistbeanByTeacher!=null&&studentlistbeanByTeacher.size()>0){
+            String studentDataByTeacher=JSON.toJSONString(studentlistbeanByTeacher.get(0).studentList);
+
+
+            teacher_list_student=(ArrayList<TeacherlistRsp.DataBean.RecordsBean>) JSON.parseObject(studentDataByTeacher,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
+//            TeacherlistRsp.DataBean.RecordsBean bean=new TeacherlistRsp.DataBean.RecordsBean();
+//            bean.itemType = 1;
+//            bean.name = "学生";
+//            bean.StudentData_by_Teacher =studentlistbeanByTeacher.get(0).studentList;
+//            teacher_ALLlist.add(bean);
+//
+////            Log.e("TAG", "setStudentData2: "+JSON.toJSONString(ALLlist) );
+//            Log.e("TAG", "setStudentData2: "+JSON.toJSONString(teacher_ALLlist.get(0).name) );
+//
+//            if (teacher_ALLlist!=null&&teacher_ALLlist.size()>0){
+////                teacher_recyclerview_all.setVisibility(View.VISIBLE);
+////                teacher_recyclerview_student.setVisibility(View.GONE);
+//                teacher_noteItemAdapter_all.setList(teacher_ALLlist);
+//            }
+
+
+        }
+        teacher_noteItemAdapter_all.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                if (teacher_noteItemAdapter_all.getItem(position).getItemType() == 1){
+                    NoteByListActivity activity = (NoteByListActivity) getActivity();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", String.valueOf(teacher_noteItemAdapter_all.getItem(position).id));
+                    bundle.putString("name", String.valueOf(teacher_noteItemAdapter_all.getItem(position).name));
+                    bundle.putString("organization", organization);
+                    bundle.putString("StudentData_by_Teacher", JSON.toJSONString(teacher_noteItemAdapter_all.getItem(position).StudentData_by_Teacher));
+                    bundle.putString("islast", "1");
+                    Log.e("TAG", "teacher_noteItemAdapter_all: "+JSON.toJSONString(bundle) );
+                    activity.initDeptFragmentNew(bundle);
+                }else {
+                    TeacherlistRsp.DataBean.RecordsBean student=teacher_noteItemAdapter_all.getItem(position);
+
+
+                    BookStudentItem studentItem = new BookStudentItem(
+                            student.id,
+                            student.name,
+                            student.phone,
+                            student.classesName,
+                            student.userId,
+                            student.primaryGuardianPhone,
+                            student.primaryGuardianPhone,
+                            student.sex,
+                            student.address,
+                            student.faceInformation,
+                            student.email,
+                            student.elternAddBookDTOList,
+                            student.avatar);
+                    BookStudentDetailActivity.start(mActivity, studentItem);
+//                    Intent intent = new Intent(mActivity, BookStudentDetailActivity.class);
+//                    intent.putExtra("student", studentItem);
+//                    startActivity(intent);
+                }
+
+            }
+        });
+        teacher_noteItemAdapter_student.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                TeacherlistRsp.DataBean.RecordsBean student=teacher_noteItemAdapter_student.getItem(position);
+                Log.e("TAG", "onItemClick: "+JSON.toJSONString(student) );
 
                 BookStudentItem studentItem = new BookStudentItem(
                         student.id,
@@ -337,7 +434,8 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         //家长视角==》学生数据和教职工数据
         setStudentData();
         //老师视角==》学生数据
-        setStudentData2();
+//        setStudentData2();
+        setStudentData3();
 
         setVG();
 
@@ -505,12 +603,28 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 //                }
                 activity.initDeptFragmentNew(bundle);
             } else {
-                Intent intent = new Intent();
-                teacher_noteItemAdapter_teacher.getItem(position);
-                Log.e("TAG", "initView: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
-                intent.putExtra("data", JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)));
-                intent.putExtra("organization", organization);
-                intent.setClass(mActivity, PersonInfoActivity.class);
+//                Intent intent = new Intent();
+//                teacher_noteItemAdapter_teacher.getItem(position);
+//                Log.e("TAG", "initView: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
+//                intent.putExtra("data", JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)));
+//                intent.putExtra("organization", organization);
+//                intent.setClass(mActivity, PersonInfoActivity.class);
+//                startActivity(intent);
+
+                BookTeacherItem teacherItem = new BookTeacherItem(
+                        teacher_noteItemAdapter_teacher.getItem(position).name,
+                        teacher_noteItemAdapter_teacher.getItem(position).sex,
+                        teacher_noteItemAdapter_teacher.getItem(position).phone,
+                        teacher_noteItemAdapter_teacher.getItem(position).userId,
+                        teacher_noteItemAdapter_teacher.getItem(position).email,
+                        teacher_noteItemAdapter_teacher.getItem(position).subjectName,
+                        teacher_noteItemAdapter_teacher.getItem(position).employeeSubjects,
+                        "",
+                        "",
+                        teacher_noteItemAdapter_teacher.getItem(position).avatar);
+
+                Intent intent = new Intent(mActivity, BookTeacherDetailActivity.class);
+                intent.putExtra("teacher", teacherItem);
                 startActivity(intent);
             }
 

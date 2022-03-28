@@ -62,7 +62,11 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
 //            bind.tvName.setText(TextUtils.isEmpty(student.getName()) ? "未知姓名" : student.getName() + "（" + student.getTypeName() + "）");
             if (!TextUtils.isEmpty(teacher.getName())){
                 if (SpData.getIdentityInfo().staffIdentity()) {
-                    bind.tvName.setText(student.getName()+"（"+teacher.getEmployeeSubjects()+")");
+                    if (!TextUtils.isEmpty(teacher.getEmployeeSubjects())){
+                        bind.tvName.setText(student.getName()+"（"+teacher.getEmployeeSubjects()+")");
+                    }else {
+                        bind.tvName.setText(student.getName());
+                    }
                 }else {
                     bind.tvName.setText(student.getName());
                 }
@@ -89,7 +93,7 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                         item1.getId(),
                         item1.getPhone(),
                         item1.getUserId(),
-                        item1.getRelation(),
+                        item1.getRelations(),
                         item1.getWorkUnit(),
                         item1.getFaceInformation(),
                         item1.getSingleParent()
@@ -136,9 +140,17 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
             GlideUtil.loadImageHead(getContext(), teacher.getFaceInformation(), bind.ivHead);
             if (!TextUtils.isEmpty(teacher.getName())){
                 if (SpData.getIdentityInfo().staffIdentity()) {
-                    bind.tvName.setText(teacher.getName()+"（"+teacher.getDepartmentName()+")");
+                    if (!TextUtils.isEmpty(teacher.getDepartmentName())){
+                        bind.tvName.setText(teacher.getName()+"（"+teacher.getDepartmentName()+")");
+                    }else {
+                        bind.tvName.setText(teacher.getName());
+                    }
                 }else {
-                    bind.tvName.setText(teacher.getName()+"（"+teacher.getEmployeeSubjects()+")");
+                    if (!TextUtils.isEmpty(teacher.getEmployeeSubjects())){
+                        bind.tvName.setText(teacher.getName()+"（"+teacher.getEmployeeSubjects()+")");
+                    }else {
+                        bind.tvName.setText(teacher.getName());
+                    }
                 }
             }
 
@@ -164,7 +176,7 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                             teacher.getSubjectName(),
                             teacher.getSubjectName(),
                             teacher.getFaceInformation(),
-                            teacher.getWhitelist(),
+                            teacher.getConcealPhone(),
                             teacher.getAvatar());
                     BookTeacherDetailActivity.start(getContext(), teacherItem);
 //                }
@@ -183,7 +195,7 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
         protected void convert(@NonNull BaseViewHolder baseViewHolder, Parent item) {
             ItemNewBookGuardianSearchBinding bind = ItemNewBookGuardianSearchBinding.bind(baseViewHolder.itemView);
             bind.tvName.setText(item.getName());
-            switch (item.getRelation()){
+            switch (item.getRelations()){
                 case "0":
                     bind.tvGuardianName.setText("父亲");
                     break;

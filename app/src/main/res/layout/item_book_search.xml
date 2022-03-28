@@ -39,5 +39,6 @@
         android:layout_height="0.5dp"
         android:layout_marginStart="20dp"
         android:background="#F9FAF9"
+        android:layout_marginRight="15dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

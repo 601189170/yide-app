@@ -126,8 +126,8 @@ data class Parent (
     var name: String="",
     @JSONField(name = "phone")
     var phone: String="",
-    @JSONField(name = "relation")
-    var relation: String="",
+    @JSONField(name = "relations")
+    var relations: String="",
     @JSONField(name = "singleParent")
     var singleParent: String="",
     @JSONField(name = "type")
