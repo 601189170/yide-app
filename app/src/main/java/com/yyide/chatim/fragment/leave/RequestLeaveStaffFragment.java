@@ -323,7 +323,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         StringBuilder ids = new StringBuilder();
         if (data.size() > 0) {
             for (LeaveApprovalBean.Cc item : data) {
-                ids.append(item.getCcId()).append(",");
+                ids.append(item.getId()).append(",");
             }
             return ids.toString();
         }

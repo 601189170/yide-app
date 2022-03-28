@@ -125,11 +125,6 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                     .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                 SPUtils.getInstance()
                     .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
-                val user = SpData.getLogin()
-                user.isLogin = true
-                SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(user))
-                startActivity(Intent(this, NewMainActivity::class.java))
-                finish()
             } else {
                 it.exceptionOrNull()?.localizedMessage?.let { it1 ->
                     loge(it1)
@@ -137,10 +132,17 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 }
             }
         }
+
+        //身份登录应用
         viewModel.identityLoginLiveData.observe(this) {
             hideLoading()
             if (it.isSuccess) {
                 SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
+                val user = SpData.getLogin()
+                user.isLogin = true
+                SPUtils.getInstance().put(SpData.LOGINDATA, JSON.toJSONString(user))
+                startActivity(Intent(this, NewMainActivity::class.java))
+                finish()
             } else {
                 it.exceptionOrNull()?.localizedMessage?.let { it1 ->
                     loge(it1)
