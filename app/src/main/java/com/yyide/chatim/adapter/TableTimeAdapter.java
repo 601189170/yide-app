@@ -28,6 +28,8 @@ public class TableTimeAdapter extends BaseAdapter {
     public int position = -1;
     public int today = -1;
 
+    private OnItemClickListener mOnItemClickListener;
+
     @Override
     public int getCount() {
         return list.size();
@@ -50,6 +52,12 @@ public class TableTimeAdapter extends BaseAdapter {
         CheckedTextView day = VHUtil.ViewHolder.get(view, R.id.day);
         CheckedTextView time = VHUtil.ViewHolder.get(view, R.id.time);
         FrameLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
+
+        layout.setOnClickListener(v -> {
+            if (mOnItemClickListener != null){
+                mOnItemClickListener.onItemClick(v, position);
+            }
+        });
 
         time.setText(getItem(position).day);
         String week = getItem(position).week;
@@ -92,5 +100,16 @@ public class TableTimeAdapter extends BaseAdapter {
         this.today = today;
         notifyDataSetChanged();
     }
+
+    // 自定义点击事件
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+
 
 }

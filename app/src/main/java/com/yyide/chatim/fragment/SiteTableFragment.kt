@@ -3,6 +3,7 @@ package com.yyide.chatim.fragment
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ import com.yyide.chatim.utils.loge
 import com.yyide.chatim.utils.show
 import com.yyide.chatim.viewmodel.SiteTableViewModel
 import org.joda.time.DateTime
+import razerdp.basepopup.BasePopupWindow
 
 
 class SiteTableFragment : Fragment() {
@@ -91,7 +93,7 @@ class SiteTableFragment : Fragment() {
             if (buildings == null || buildings.isEmpty()) {
                 //没有查询数据
                 siteTableFragmentBinding.top.className.text = "暂无场地"
-                siteTableFragmentBinding.top.classlayout.isEnabled = false
+                siteTableFragmentBinding.top.tableTopCl1.isEnabled = false
                 //siteTableFragmentBinding.empty.root.visibility = View.VISIBLE
                 return@observe
             }
@@ -101,7 +103,7 @@ class SiteTableFragment : Fragment() {
             val children = buildingsBean.children
             if (children.isEmpty()) {
                 siteTableFragmentBinding.top.className.text = "暂无场地"
-                siteTableFragmentBinding.top.classlayout.isEnabled = false
+                siteTableFragmentBinding.top.tableTopCl1.isEnabled = false
                 return@observe
             }
 
@@ -120,7 +122,8 @@ class SiteTableFragment : Fragment() {
                 //默认查询第一个场地的课表
                 selectClassInfo = newClassList[0]
                 classPopUp.setData(newClassList, selectClassInfo)
-                siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
+                siteTableFragmentBinding.top.className.text =
+                    "${selectClassInfo.parentName}${selectClassInfo.name}"
                 siteTableViewModel.getSites(type, selectClassInfo.id)
             }
         }
@@ -152,8 +155,13 @@ class SiteTableFragment : Fragment() {
                 val toWeekDayList = it.toWeekDayList()
                 loge("周数据$toWeekDayList")
                 weekdayList.addAll(toWeekDayList)
-                //adapter.notifyData(weekdayList)
+                //adapter.notifyData(toWeekDayList)
                 adapter = SiteTableTimeAdapter(weekdayList)
+                adapter.setOnItemClickListener { view, position ->
+                    adapter.setPosition(position)
+                    index = position
+                    siteTableItemAdapter.setIndex(index)
+                }
                 siteTableFragmentBinding.top.grid.adapter = adapter
             }
             //早读 上午 下午 晚上 晚自习
@@ -244,8 +252,11 @@ class SiteTableFragment : Fragment() {
             if (weekdayList.isNotEmpty()) {
                 val dataTime = weekdayList[0].dataTime
                 val nowDateTime = DateTime.now()
-                val firstDayOfWeek = nowDateTime.minusDays(nowDateTime.dayOfWeek % 7 - 1).simplifiedDataTime()
-                if (ScheduleDaoUtil.toDateTime(dataTime, "yyyy-MM-dd").simplifiedDataTime() == firstDayOfWeek) {
+                val firstDayOfWeek =
+                    nowDateTime.minusDays(nowDateTime.dayOfWeek % 7 - 1).simplifiedDataTime()
+                if (ScheduleDaoUtil.toDateTime(dataTime, "yyyy-MM-dd")
+                        .simplifiedDataTime() == firstDayOfWeek
+                ) {
                     val dayOfWeek = DateTime.now().dayOfWeek
                     index = dayOfWeek % 7 - 1
                     for (i in courseList.indices) {
@@ -267,10 +278,18 @@ class SiteTableFragment : Fragment() {
 
     private fun initView() {
         siteTableFragmentBinding.top.tableTopWeekTv.show()
+        siteTableFragmentBinding.top.tableTopWeekLogo.show()
+
         leftLayout = siteTableFragmentBinding.leftLayout
 
-        adapter = SiteTableTimeAdapter(weekdayList)
-        siteTableFragmentBinding.top.grid.adapter = adapter
+        /*adapter = SiteTableTimeAdapter(weekdayList)
+        adapter.setOnItemClickListener { view, position ->
+            Log.d("grid click", "onViewCreated: site click")
+            adapter.setPosition(position)
+            index = position
+            siteTableItemAdapter.setIndex(index)
+        }
+        siteTableFragmentBinding.top.grid.adapter = adapter*/
 
         weekPopUp = TablePopUp(this)
         weekPopUp.popupGravity = Gravity.BOTTOM
@@ -284,42 +303,39 @@ class SiteTableFragment : Fragment() {
             }
         })
 
+
+
         classPopUp = TableClassPopUp(this)
         classPopUp.popupGravity = Gravity.BOTTOM
         classPopUp.setSubmitCallBack(object : TableClassPopUp.SubmitCallBack {
             override fun getSubmitData(data: ChildrenItem?) {
                 if (data != null) {
                     selectClassInfo = data
-                    siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
+                    siteTableFragmentBinding.top.className.text =
+                        "${selectClassInfo.parentName}${selectClassInfo.name}"
                     siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
                 }
             }
         })
 
+
+
         textPopUp = TextPopUp(this);
 
-        siteTableFragmentBinding.top.classlayout.setOnClickListener {
-            /*val switchTableClassPop = SwitchTableClassPop(requireActivity(), data)
-            switchTableClassPop.setSelectClasses { id, classesName ->
-                loge("id=$id,classesName=$classesName")
-                var parentName = ""
-                data.forEach {
-                    val name = it.name
-                    for (dataBean in it.list) {
-                        if (classesName == dataBean.showName){
-                            parentName = name
-                            return@forEach
-                        }
-                    }
-                }
-                this.id = id.toString()
-                siteTableFragmentBinding.top.className.text = parentName.plus("-").plus(classesName)
-                siteTableViewModel.getSites(type,id.toString())
-            }*/
+        siteTableFragmentBinding.top.className.setOnClickListener {
             if (classPopUp.isShowing) {
                 classPopUp.dismiss()
             } else {
+                siteTableFragmentBinding.top.className.setTextColor(-0xee397b)
+                siteTableFragmentBinding.top.classNameLogo.setImageResource(R.mipmap.table_week_button_pack)
                 classPopUp.showPopupWindow(it)
+            }
+        }
+
+        classPopUp.onDismissListener = object : BasePopupWindow.OnDismissListener() {
+            override fun onDismiss() {
+                siteTableFragmentBinding.top.className.setTextColor(-0x99999a)
+                siteTableFragmentBinding.top.classNameLogo.setImageResource(R.mipmap.table_week_button)
             }
         }
 
@@ -327,7 +343,16 @@ class SiteTableFragment : Fragment() {
             if (weekPopUp.isShowing) {
                 weekPopUp.dismiss()
             } else {
+                siteTableFragmentBinding.top.tableTopWeekTv.setTextColor(-0xee397b)
+                siteTableFragmentBinding.top.tableTopWeekLogo.setImageResource(R.mipmap.table_week_button_pack)
                 weekPopUp.showPopupWindow(v)
+            }
+        }
+
+        weekPopUp.onDismissListener = object : BasePopupWindow.OnDismissListener() {
+            override fun onDismiss() {
+                siteTableFragmentBinding.top.tableTopWeekTv.setTextColor(-0x99999a)
+                siteTableFragmentBinding.top.tableTopWeekLogo.setImageResource(R.mipmap.table_week_button)
             }
         }
 
@@ -342,11 +367,14 @@ class SiteTableFragment : Fragment() {
             siteTableItemAdapter.setIndex(index)
             adapter.setPosition(index)
         }
-        siteTableFragmentBinding.top.grid.setOnItemClickListener { _, _, position, _ ->
+
+        /*siteTableFragmentBinding.top.grid.setOnItemClickListener { _, _, position, _ ->
+            Log.d("grid click", "onViewCreated: site click")
             adapter.setPosition(position)
             index = position
             siteTableItemAdapter.setIndex(index)
-        }
+        }*/
+
         //回调本周
         siteTableFragmentBinding.tableSiteReturnCurrent.setOnClickListener {
             index = -1
@@ -442,5 +470,6 @@ class SiteTableFragment : Fragment() {
         weekPopUp.setSubmitCallBack(null)
         classPopUp.setSubmitCallBack(null)
         siteTableItemAdapter.setOnItemClickListener(null)
+        adapter.setOnItemClickListener(null)
     }
 }

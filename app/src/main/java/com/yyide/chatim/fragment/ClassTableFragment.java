@@ -40,6 +40,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import razerdp.basepopup.BasePopupWindow;
+
 
 public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> implements ClassTableView {
 
@@ -77,7 +79,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
         initView();
 
-        binding.tableClassTop.tableTopWeekTv.setVisibility(View.VISIBLE);
 
         tableItemAdapter = new TableItemAdapter();
         tableItemAdapter.setOnItemClickListener((view13, content) -> {
@@ -90,17 +91,20 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         TextView tvDesc = binding.empty.tvDesc;
         tvDesc.setText("本周暂无课表数据");
         timeAdapter = new TableTimeAdapter();
-        binding.tableClassTop.grid.setAdapter(timeAdapter);
-//        if (SpData.getIdentityInfo().weekNum <= 0) {
-//            tv_week.setText("");
-//        } else {
-//            tv_week.setText(getString(R.string.weekNum, SpData.getIdentityInfo().weekNum + ""));
-//        }
-        binding.tableClassTop.grid.setOnItemClickListener((parent, view1, position, id) -> {
+        timeAdapter.setOnItemClickListener((view12, position) -> {
             timeAdapter.setPosition(position);
             index = position;
             tableItemAdapter.setIndex(index);
         });
+        binding.tableClassTop.grid.setAdapter(timeAdapter);
+
+        /*binding.tableClassTop.grid.setOnItemClickListener((parent, view1, position, id) -> {
+            Log.d("grid click", "onViewCreated: class click");
+            timeAdapter.setPosition(position);
+            index = position;
+            tableItemAdapter.setIndex(index);
+        });*/
+
         binding.tablegrid.setOnItemClickListener((parent, view12, position, id) -> {
             index = position % 7;
             tableItemAdapter.setIndex(index);
@@ -143,6 +147,10 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     }
 
     private void initView() {
+
+        binding.tableClassTop.tableTopWeekTv.setVisibility(View.VISIBLE);
+        binding.tableClassTop.tableTopWeekLogo.setVisibility(View.VISIBLE);
+
         weekPopUp = new TablePopUp(this);
         weekPopUp.setPopupGravity(Gravity.BOTTOM);
         weekPopUp.setSubmitCallBack(data -> {
@@ -164,33 +172,32 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             }
         });
 
+        weekPopUp.setOnDismissListener(new BasePopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                binding.tableClassTop.tableTopWeekTv.setTextColor(0xFF666666);
+                binding.tableClassTop.tableTopWeekLogo.setImageResource(R.mipmap.table_week_button);
+            }
+        });
+
+        classPopUp.setOnDismissListener(new BasePopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                binding.tableClassTop.className.setTextColor(0xFF666666);
+                binding.tableClassTop.classNameLogo.setImageResource(R.mipmap.table_week_button);
+            }
+        });
+
         textPopUp = new TextPopUp(this);
     }
 
     public void initClickListener() {
-        binding.tableClassTop.classlayout.setOnClickListener(v -> {
-            /*if (SpData.getIdentityInfo() != null && SpData.getIdentityInfo().staffIdentity()) {
-                if (classInfo != null) {
-                    SwitchClassPopNew classPopNew = new SwitchClassPopNew(getActivity(), classInfo);
-                    classPopNew.setOnCheckCallBack(classBean -> {
-                        this.classInfo = classBean;
-                        className.setText(classBean.classesName);
-                        mvpPresenter.listTimeDataByApp(classBean.classesId);
-                    });
-                } else {
-                    ToastUtils.showShort("您没有其他班级");
-                }
-            } else {//校长取全校班级列表
-                if (data != null && data.size() > 0) {
-                    swichTableClassPop = new SwitchTableClassPop(getActivity(), data);
-                    swichTableClassPop.setSelectClasses(this);
-                } else {
-                    ToastUtils.showShort("您没有其他班级");
-                }
-            }*/
+        binding.tableClassTop.className.setOnClickListener(v -> {
             if (classPopUp.isShowing()) {
                 classPopUp.dismiss();
             } else {
+                binding.tableClassTop.className.setTextColor(0xFF11C685);
+                binding.tableClassTop.classNameLogo.setImageResource(R.mipmap.table_week_button_pack);
                 classPopUp.showPopupWindow(v);
             }
         });
@@ -200,6 +207,8 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             if (weekPopUp.isShowing()) {
                 weekPopUp.dismiss();
             } else {
+                binding.tableClassTop.tableTopWeekTv.setTextColor(0xFF11C685);
+                binding.tableClassTop.tableTopWeekLogo.setImageResource(R.mipmap.table_week_button_pack);
                 weekPopUp.showPopupWindow(v);
             }
         });
@@ -448,5 +457,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         weekPopUp.setSubmitCallBack(null);
         classPopUp.setSubmitCallBack(null);
         tableItemAdapter.setOnItemClickListener(null);
+        timeAdapter.setOnItemClickListener(null);
     }
 }

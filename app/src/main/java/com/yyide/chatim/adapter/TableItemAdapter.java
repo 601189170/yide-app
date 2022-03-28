@@ -44,6 +44,7 @@ public class TableItemAdapter extends BaseAdapter {
         return list.get(position);
     }
 
+
     @Override
     public long getItemId(int position) {
         return 0;
@@ -53,7 +54,7 @@ public class TableItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         if (view == null)
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_card, null, false);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_card, viewGroup, false);
         TextView text_view = VHUtil.ViewHolder.get(view, R.id.text_view);
         ConstraintLayout layout = VHUtil.ViewHolder.get(view, R.id.layout);
 //        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, SizeUtils.dp2px(80));

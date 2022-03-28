@@ -17,10 +17,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="15dp"
+            android:paddingVertical="15dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <FrameLayout
+            <TextView
+                android:id="@+id/className"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="11dp"
+
+                android:ellipsize="end"
+                android:lines="1"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <ImageView
+                android:id="@+id/className_logo"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@mipmap/table_week_button"
+                app:layout_constraintStart_toEndOf="@id/className"
+                app:layout_constraintTop_toTopOf="@id/className"
+                app:layout_constraintBottom_toBottomOf="@id/className"/>
+
+            <!--<FrameLayout
                 android:id="@+id/classlayout"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -30,20 +56,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-                <!--android:background="@drawable/bg_stoke_gray_corners2"-->
 
-                <TextView
-                    android:id="@+id/className"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="11dp"
-                    app:drawableEndCompat="@mipmap/table_week_button"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:textColor="#666666"
-                    android:textSize="14sp" />
-            </FrameLayout>
+            </FrameLayout>-->
 
 
             <TextView
@@ -53,11 +67,22 @@
                 android:layout_marginEnd="@dimen/dp_12"
                 android:textColor="#666666"
                 android:textSize="14sp"
-                android:visibility="gone"
-                app:drawableEndCompat="@mipmap/table_week_button"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/table_top_week_logo"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:visibility="invisible"
+                android:src="@mipmap/table_week_button"
+                app:layout_constraintStart_toEndOf="@id/table_top_week_tv"
+                app:layout_constraintTop_toTopOf="@id/table_top_week_tv"
+                app:layout_constraintBottom_toBottomOf="@id/table_top_week_tv"/>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -77,7 +102,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/school_table_time_tv"
-                android:textColor="@color/colorAccent"
+                android:textColor="#999999"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

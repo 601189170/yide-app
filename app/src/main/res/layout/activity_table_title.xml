@@ -18,6 +18,7 @@
         app:tabTextColor="#909399"
         app:tabSelectedTextColor="@color/colorPrimaryDark"
         app:tabIndicatorHeight="2dp"
+        app:tabIndicatorColor="@color/colorAccent"
         app:tabIndicator="@drawable/table_tab_layout_indicator"
         app:tabIndicatorGravity="bottom"
         app:tabIndicatorFullWidth="false"

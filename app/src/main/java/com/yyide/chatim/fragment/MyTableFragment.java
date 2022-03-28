@@ -78,16 +78,25 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         binding.listview.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.listview.setAdapter(adapter);
         adapter.setEmptyView(R.layout.empty);
+
         timeAdapter = new TableTimeAdapter();
+        timeAdapter.setOnItemClickListener((view12, position) -> {
+            timeAdapter.setPosition(position);
+            weekDay = position;
+            adapter.setList(getTableList(list, weekDay));
+        });
         binding.tableMyTop.grid.setAdapter(timeAdapter);
 
-        binding.tableMyTop.classlayout.setOnClickListener(v -> {
+        binding.tableMyTop.className.setOnClickListener(v -> {
             if (weekPopUp.isShowing()) {
                 weekPopUp.dismiss();
             } else {
-                weekPopUp.showPopupWindow(binding.tableMyTop.classlayout);
+                binding.tableMyTop.className.setTextColor(0xFF11C685);
+                binding.tableMyTop.classNameLogo.setImageResource(R.mipmap.table_week_button_pack);
+                weekPopUp.showPopupWindow(v);
             }
         });
+
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
         Date date = new Date(System.currentTimeMillis());
@@ -98,11 +107,14 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
                 weekDay = i;
             }
         }
-        binding.tableMyTop.grid.setOnItemClickListener((parent, view12, position, id) -> {
+
+        /*binding.tableMyTop.grid.setOnItemClickListener((parent, view12, position, id) -> {
+            Log.d("grid click", "onViewCreated: table click");
             timeAdapter.setPosition(position);
             weekDay = position;
             adapter.setList(getTableList(list, weekDay));
-        });
+        });*/
+
 
         adapter.setOnItemClickListener((adapter, view1, position) -> {
             //处理学生无法点击查看备课
@@ -138,6 +150,14 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             }
         });
 
+        weekPopUp.setOnDismissListener(new BasePopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                binding.tableMyTop.className.setTextColor(0xFF666666);
+                binding.tableMyTop.classNameLogo.setImageResource(R.mipmap.table_week_button);
+            }
+        });
+
     }
 
     private List<ListItem> getTableList(List<MyTableListItem> list, int weekTime) {
@@ -147,11 +167,6 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             if (itemList != null && itemList.getList() != null){
                 dataBeans.addAll(itemList.getList());
             }
-            /*for (MyTableListItem item : list) {
-                if (item.weekTime == weekTime) {
-                    dataBeans.add(item);
-                }
-            }*/
         }
         return dataBeans;
     }
@@ -188,14 +203,16 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         weekPopUp.setSubmitCallBack(null);
+        timeAdapter.setOnItemClickListener(null);
     }
 
     @Override
     public void SelectSchByTeaid(MyTableBean rsp) {
         binding.swipeRefreshLayout.setRefreshing(false);
         Log.e("TAG", "SelectSchByTeaid: " + JSON.toJSONString(rsp));
-        if (rsp != null) {
-            list = rsp.getList();
+        if (rsp != null && rsp.getList() != null) {
+            list.clear();
+            list.addAll(rsp.getList());
             // 设置总周数
             List<ChildrenItem> data = new ArrayList<>();
             for (int i = 0; i < rsp.getWeekTotal(); i++) {
