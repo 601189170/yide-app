@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -78,6 +79,8 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         binding.listview.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.listview.setAdapter(adapter);
         adapter.setEmptyView(R.layout.empty);
+        TextView tipTextView = adapter.getEmptyLayout().findViewById(R.id.tv_desc);
+        tipTextView.setText("您今天没有课程");
 
         timeAdapter = new TableTimeAdapter();
         timeAdapter.setOnItemClickListener((view12, position) -> {
@@ -97,15 +100,18 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             }
         });
 
+        binding.tableMyTop.classNameLogo.setOnClickListener(v -> {
+            if (weekPopUp.isShowing()) {
+                weekPopUp.dismiss();
+            } else {
+                binding.tableMyTop.className.setTextColor(0xFF11C685);
+                binding.tableMyTop.classNameLogo.setImageResource(R.mipmap.table_week_button_pack);
+                weekPopUp.showPopupWindow(v);
+            }
+        });
+
 
         setToday();
-
-        /*binding.tableMyTop.grid.setOnItemClickListener((parent, view12, position, id) -> {
-            Log.d("grid click", "onViewCreated: table click");
-            timeAdapter.setPosition(position);
-            weekDay = position;
-            adapter.setList(getTableList(list, weekDay));
-        });*/
 
 
         adapter.setOnItemClickListener((adapter, view1, position) -> {

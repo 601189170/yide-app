@@ -82,7 +82,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
         tableItemAdapter = new TableItemAdapter();
         tableItemAdapter.setOnItemClickListener((view13, content) -> {
-            textPopUp.setText(content,view13);
+            textPopUp.setText(content, view13);
         });
         binding.tablegrid.setAdapter(tableItemAdapter);
 
@@ -114,17 +114,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         setToday();
 
         mvpPresenter.listAllBySchoolId();
-        /*
-        classInfo = SpData.getClassInfo();
-        if (classInfo != null) {
-            binding.tableClassTop.className.setText(classInfo.classesName);
-            mvpPresenter.listTimeDataByApp(classInfo.classesId,selectWeek);
-        } else {
-            binding.tableClassTop.className.setText("暂无班级");
-        }*/
-
-        //暂时使用固定班级id测试
-        //mvpPresenter.listTimeDataByApp("1491675357620822017",selectWeek);
 
 //        GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
 //        if (identityInfo != null) {
@@ -152,8 +141,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     private void initView() {
 
-        binding.tableClassTop.tableTopWeekTv.setVisibility(View.VISIBLE);
-        binding.tableClassTop.tableTopWeekLogo.setVisibility(View.VISIBLE);
+        binding.empty.tvDesc.setText("本周暂无课表数据");
 
         weekPopUp = new TablePopUp(this);
         weekPopUp.setPopupGravity(Gravity.BOTTOM);
@@ -161,7 +149,11 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             if (data != null) {
                 selectWeek = data;
                 binding.tableClassTop.tableTopWeekTv.setText(selectWeek.getName());
-                mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
+                if (!selectClassInfo.getId().equals("")) {
+                    mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
+                }else {
+                    mvpPresenter.listTimeDataByApp("0", selectWeek.getId());
+                }
             }
         });
 
@@ -172,7 +164,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 selectClassInfo = data;
                 String showName = selectClassInfo.getParentName() + selectClassInfo.getName();
                 binding.tableClassTop.className.setText(showName);
-                mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
+                if (!selectClassInfo.getId().equals("")) {
+                    mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
+                }
             }
         });
 
@@ -206,8 +200,28 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             }
         });
 
+        binding.tableClassTop.classNameLogo.setOnClickListener(v -> {
+            if (classPopUp.isShowing()) {
+                classPopUp.dismiss();
+            } else {
+                binding.tableClassTop.className.setTextColor(0xFF11C685);
+                binding.tableClassTop.classNameLogo.setImageResource(R.mipmap.table_week_button_pack);
+                classPopUp.showPopupWindow(v);
+            }
+        });
+
 
         binding.tableClassTop.tableTopWeekTv.setOnClickListener(v -> {
+            if (weekPopUp.isShowing()) {
+                weekPopUp.dismiss();
+            } else {
+                binding.tableClassTop.tableTopWeekTv.setTextColor(0xFF11C685);
+                binding.tableClassTop.tableTopWeekLogo.setImageResource(R.mipmap.table_week_button_pack);
+                weekPopUp.showPopupWindow(v);
+            }
+        });
+
+        binding.tableClassTop.tableTopWeekLogo.setOnClickListener(v -> {
             if (weekPopUp.isShowing()) {
                 weekPopUp.dismiss();
             } else {
@@ -221,7 +235,11 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         binding.tableClassReturnCurrent.setOnClickListener(v -> {
             index = -1;
             selectWeek = null;
-            mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
+            if (!selectClassInfo.getId().equals("")) {
+                mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
+            }else {
+                mvpPresenter.listTimeDataByApp("0", null);
+            }
         });
     }
 
@@ -235,16 +253,22 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     public void listAllBySchoolId(List<ClassInfoBean> classInfo) {
         Log.e("TAG", "listAllBySchoolId==>: " + JSON.toJSONString(classInfo));
         classList.clear();
+
         if (classInfo.isEmpty()) {
+            binding.tableClassTop.className.setEnabled(false);
             binding.tableClassTop.className.setText("暂无班级");
+            binding.tableClassTop.classNameLogo.setVisibility(View.INVISIBLE);
+            mvpPresenter.listTimeDataByApp("0", null);
             return;
         }
+
+
+        binding.tableClassTop.className.setEnabled(true);
+        binding.tableClassTop.classNameLogo.setVisibility(View.VISIBLE);
         for (int i = 0; i < classInfo.size(); i++) {
             List<ChildrenItem> childrenData = classInfo.get(i).getChildren();
             String outerName = classInfo.get(i).getName();
             for (int j = 0; j < childrenData.size(); j++) {
-                /*String name = childrenData.get(j).getName();
-                childrenData.get(j).setName(outerName + name);*/
                 childrenData.get(j).setParentName(outerName);
             }
             classList.addAll(childrenData);
@@ -253,7 +277,9 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         classPopUp.setData(classList, selectClassInfo);
         String showName = selectClassInfo.getParentName() + selectClassInfo.getName();
         binding.tableClassTop.className.setText(showName);
-        mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
+        if (!selectClassInfo.getId().equals("")) {
+            mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
+        }
     }
 
     @Override
@@ -268,15 +294,18 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             if (rsp.getData() != null) {
                 binding.empty.getRoot().setVisibility(View.GONE);
                 binding.svContent.setVisibility(View.VISIBLE);
-                //String jc = rsp.data.timetableStructure;
-                //String s = jc.replaceAll("节课", "");
-                //int num = Integer.parseInt(s);
+
+                if (rsp.getData().getWeekTotal() != 0){
+                    binding.tableClassTop.tableTopWeekTv.setVisibility(View.VISIBLE);
+                    binding.tableClassTop.tableTopWeekLogo.setVisibility(View.VISIBLE);
+                }
+
                 final int thisWeek = rsp.getData().getThisWeek();
                 // 设置总周数
                 List<ChildrenItem> data = new ArrayList<>();
                 for (int i = 0; i < rsp.getData().getWeekTotal(); i++) {
                     String weekNum = String.valueOf(i + 1);
-                    ChildrenItem bean = new ChildrenItem( "第" + weekNum + "周","",weekNum);
+                    ChildrenItem bean = new ChildrenItem("第" + weekNum + "周", "", weekNum);
                     data.add(bean);
                 }
                 selectWeek = data.get(thisWeek - 1);
@@ -296,7 +325,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 int sectionCount = earlyReading + morning + afternoon + night + eveningStudy;
 
                 // 数量为0
-                if (sectionCount == 0){
+                if (sectionCount == 0) {
                     binding.svContent.setVisibility(View.GONE);
                     binding.empty.getRoot().setVisibility(View.VISIBLE);
                     return;

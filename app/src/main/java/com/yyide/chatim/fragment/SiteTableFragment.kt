@@ -31,6 +31,7 @@ import com.yyide.chatim.model.sitetable.toWeekDayList
 import com.yyide.chatim.model.table.ChildrenItem
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.TimeUtil
+import com.yyide.chatim.utils.hide
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.utils.show
 import com.yyide.chatim.viewmodel.SiteTableViewModel
@@ -44,7 +45,7 @@ class SiteTableFragment : Fragment() {
 
     //private var data = mutableListOf<SelectTableClassesRsp.DataBean>()
     private var weekdayList = mutableListOf<TimeUtil.WeekDay>()
-    private lateinit var adapter: SiteTableTimeAdapter
+    private var adapter: SiteTableTimeAdapter ?= null
     var tableSectionAdapter: TableSectionAdapter? = null
     lateinit var siteTableItemAdapter: SiteTableItemAdapter
     private lateinit var leftLayout: RelativeLayout
@@ -85,16 +86,16 @@ class SiteTableFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //"2", "1493486638053486593"
-        //id = "1493486638053486593"
         initView()
         siteTableViewModel.siteBuildingLiveData.observe(requireActivity()) {
             val buildings = it
             if (buildings == null || buildings.isEmpty()) {
                 //没有查询数据
                 siteTableFragmentBinding.top.className.text = "暂无场地"
-                siteTableFragmentBinding.top.tableTopCl1.isEnabled = false
+                siteTableFragmentBinding.top.classNameLogo.hide()
+                siteTableFragmentBinding.top.className.isEnabled = false
                 //siteTableFragmentBinding.empty.root.visibility = View.VISIBLE
+                siteTableViewModel.getSites(type,"0")
                 return@observe
             }
 
@@ -103,7 +104,9 @@ class SiteTableFragment : Fragment() {
             val children = buildingsBean.children
             if (children.isEmpty()) {
                 siteTableFragmentBinding.top.className.text = "暂无场地"
-                siteTableFragmentBinding.top.tableTopCl1.isEnabled = false
+                siteTableFragmentBinding.top.classNameLogo.hide()
+                siteTableFragmentBinding.top.className.isEnabled = false
+                siteTableViewModel.getSites(type,"0")
                 return@observe
             }
 
@@ -113,17 +116,14 @@ class SiteTableFragment : Fragment() {
                     val childrenData: List<ChildrenItem> = buildingItem.children
                     val outerName: String = buildingItem.name
                     childrenData.forEach { childrenItem ->
-                        //val name = childrenItem.name
-                        //childrenItem.name = outerName + name
-                        childrenItem.parentName = outerName;
+                        childrenItem.parentName = outerName
                     }
                     newClassList.addAll(childrenData)
                 }
                 //默认查询第一个场地的课表
                 selectClassInfo = newClassList[0]
                 classPopUp.setData(newClassList, selectClassInfo)
-                siteTableFragmentBinding.top.className.text =
-                    "${selectClassInfo.parentName}${selectClassInfo.name}"
+                siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
                 siteTableViewModel.getSites(type, selectClassInfo.id)
             }
         }
@@ -132,13 +132,12 @@ class SiteTableFragment : Fragment() {
             if (it == null) {
                 return@observe
             }
-            /*//本周次
-            siteTableFragmentBinding.top.tvWeek.text = "${it.thisWeek}周"
-            week = it.thisWeek
-            if (first){
-                first = false
-                thisWeek = week
-            }*/
+
+            if (it.weekTotal != 0){
+                siteTableFragmentBinding.top.tableTopWeekTv.show()
+                siteTableFragmentBinding.top.tableTopWeekLogo.show()
+            }
+
             // 设置总周数
             val data: MutableList<ChildrenItem> = java.util.ArrayList()
             for (i in 0 until it.weekTotal) {
@@ -157,8 +156,8 @@ class SiteTableFragment : Fragment() {
                 weekdayList.addAll(toWeekDayList)
                 //adapter.notifyData(toWeekDayList)
                 adapter = SiteTableTimeAdapter(weekdayList)
-                adapter.setOnItemClickListener { view, position ->
-                    adapter.setPosition(position)
+                adapter?.setOnItemClickListener { view, position ->
+                    adapter?.setPosition(position)
                     index = position
                     siteTableItemAdapter.setIndex(index)
                 }
@@ -239,6 +238,7 @@ class SiteTableFragment : Fragment() {
             }
             loge("${courseList.size}")
             siteTableItemAdapter.notifyData(courseList, -1)
+
             //空数据
             siteTableFragmentBinding.empty2.root.visibility =
                 if (it.timetableList?.isEmpty() == true) View.VISIBLE else View.GONE
@@ -265,23 +265,19 @@ class SiteTableFragment : Fragment() {
                         }
                     }
                     siteTableItemAdapter.setIndex(index)
-                    adapter.setPosition(index)
+                    adapter?.setPosition(index)
                 }
             }
         }
         // TODO: 场地列表接口暂时没有，直接使用指定场地id访问场地课表接口
         siteTableViewModel.getBuildings()
-        //直接访问课表接口，场地列表后端写好后注释下面代码
-        //siteTableViewModel.getSites(type, id)
 
     }
 
     private fun initView() {
-        siteTableFragmentBinding.top.tableTopWeekTv.show()
-        siteTableFragmentBinding.top.tableTopWeekLogo.show()
-
         leftLayout = siteTableFragmentBinding.leftLayout
 
+        siteTableFragmentBinding.empty2.tvDesc.text = "场地未设置课表"
         /*adapter = SiteTableTimeAdapter(weekdayList)
         adapter.setOnItemClickListener { view, position ->
             Log.d("grid click", "onViewCreated: site click")
@@ -298,7 +294,11 @@ class SiteTableFragment : Fragment() {
                 if (data != null) {
                     selectWeek = data
                     siteTableFragmentBinding.top.tableTopWeekTv.text = selectWeek?.name ?: ""
-                    siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
+                    if (selectClassInfo.id != "") {
+                        siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
+                    }else{
+                        siteTableViewModel.getSites(type,"0", selectWeek?.id)
+                    }
                 }
             }
         })
@@ -311,8 +311,7 @@ class SiteTableFragment : Fragment() {
             override fun getSubmitData(data: ChildrenItem?) {
                 if (data != null) {
                     selectClassInfo = data
-                    siteTableFragmentBinding.top.className.text =
-                        "${selectClassInfo.parentName}${selectClassInfo.name}"
+                    siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
                     siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
                 }
             }
@@ -323,6 +322,16 @@ class SiteTableFragment : Fragment() {
         textPopUp = TextPopUp(this);
 
         siteTableFragmentBinding.top.className.setOnClickListener {
+            if (classPopUp.isShowing) {
+                classPopUp.dismiss()
+            } else {
+                siteTableFragmentBinding.top.className.setTextColor(-0xee397b)
+                siteTableFragmentBinding.top.classNameLogo.setImageResource(R.mipmap.table_week_button_pack)
+                classPopUp.showPopupWindow(it)
+            }
+        }
+
+        siteTableFragmentBinding.top.classNameLogo.setOnClickListener {
             if (classPopUp.isShowing) {
                 classPopUp.dismiss()
             } else {
@@ -349,6 +358,16 @@ class SiteTableFragment : Fragment() {
             }
         }
 
+        siteTableFragmentBinding.top.tableTopWeekLogo.setOnClickListener { v ->
+            if (weekPopUp.isShowing) {
+                weekPopUp.dismiss()
+            } else {
+                siteTableFragmentBinding.top.tableTopWeekTv.setTextColor(-0xee397b)
+                siteTableFragmentBinding.top.tableTopWeekLogo.setImageResource(R.mipmap.table_week_button_pack)
+                weekPopUp.showPopupWindow(v)
+            }
+        }
+
         weekPopUp.onDismissListener = object : BasePopupWindow.OnDismissListener() {
             override fun onDismiss() {
                 siteTableFragmentBinding.top.tableTopWeekTv.setTextColor(-0x99999a)
@@ -365,7 +384,7 @@ class SiteTableFragment : Fragment() {
         siteTableFragmentBinding.tablegrid.setOnItemClickListener { parent, view, position, id ->
             index = position % 7
             siteTableItemAdapter.setIndex(index)
-            adapter.setPosition(index)
+            adapter?.setPosition(index)
         }
 
         /*siteTableFragmentBinding.top.grid.setOnItemClickListener { _, _, position, _ ->
@@ -379,7 +398,11 @@ class SiteTableFragment : Fragment() {
         siteTableFragmentBinding.tableSiteReturnCurrent.setOnClickListener {
             index = -1
             selectWeek = null
-            siteTableViewModel.getSites(type, selectClassInfo.id)
+            if (selectClassInfo.id != "") {
+                siteTableViewModel.getSites(type, selectClassInfo.id)
+            }else{
+                siteTableViewModel.getSites(type, "0")
+            }
         }
 
     }
@@ -470,6 +493,6 @@ class SiteTableFragment : Fragment() {
         weekPopUp.setSubmitCallBack(null)
         classPopUp.setSubmitCallBack(null)
         siteTableItemAdapter.setOnItemClickListener(null)
-        adapter.setOnItemClickListener(null)
+        adapter?.setOnItemClickListener(null)
     }
 }
