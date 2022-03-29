@@ -101,7 +101,7 @@
     <string name="leave_record">请假记录</string>
     <string name="approval_text">审批中</string>
     <string name="pass_text">已通过</string>
-    <string name="refuse_text">审批拒绝</string>
+    <string name="refuse_text">已拒绝</string>
     <string name="repeal_text">已撤销</string>
     <string name="ask_for_leave_time">请假时间</string>
     <string name="start_time">开始时间</string>
@@ -127,6 +127,7 @@
     <string name="section_for_leave">请假节次</string>
     <string name="check_all">全选</string>
     <string name="choose_student">请假人</string>
+    <string name="leave_class">所在班级</string>
     <string name="carbon_copy_people">抄送人</string>
     <string name="select_carbon_copy_people"></string>
     <string name="carbon_copy_people_text">已抄送%s人</string>
@@ -334,7 +335,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    
+
     // 会议
     <string name="meeting_home_list">会议列表</string>
     <string name="meeting_home_tv">会议</string>

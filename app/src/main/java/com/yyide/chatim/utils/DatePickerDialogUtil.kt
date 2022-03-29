@@ -35,7 +35,7 @@ object DatePickerDialogUtil {
         displayList.add(DateTimeConfig.MIN)
         val model = CardDatePickerDialog.STACK
         val maxDate: Long = 0
-        val minDate: Long = 0
+        var minDate: Long = 0
         val pickerLayout = 0
         var defaultDate: Long = 0
         if (!TextUtils.isEmpty(currentMillseconds)) {
@@ -48,7 +48,7 @@ object DatePickerDialogUtil {
             .setBackGroundModel(model)
             .setMaxTime(maxDate)
             .setPickerLayout(pickerLayout)
-            .setMinTime(System.currentTimeMillis())
+            .setMinTime(minDate)
             .setDefaultTime(defaultDate)
             .setWrapSelectorWheel(false)
             .showBackNow(false)

@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.github.mikephil.charting.utils.FSize;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -129,7 +130,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String deptName;
     private String dept;//部门-班级= ID
 
-
     public RequestLeaveStaffFragment() {
         // Required empty public constructor
     }
@@ -162,7 +162,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //initTags();
-        leaveReasonTagAdapter = new LeaveReasonTagAdapter(getActivity(), tags);
         FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(getActivity());
         //flexDirection 属性决定主轴的方向（即项目的排列方向）。类似 LinearLayout 的 vertical 和 horizontal。
         flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);//主轴为水平方向，起点在左端。
@@ -186,9 +185,22 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             groupTop.setVisibility(View.VISIBLE);
         }
 
+        //默认请假理由
+        LeavePhraseRsp.DataBean item = new LeavePhraseRsp.DataBean();
+        item.setTag("小孩生病了");
+        tags.add(item);
+        LeavePhraseRsp.DataBean item2 = new LeavePhraseRsp.DataBean();
+        item2.setTag("家里有急事");
+        tags.add(item2);
+        LeavePhraseRsp.DataBean item3 = new LeavePhraseRsp.DataBean();
+        item3.setTag("身体不舒服");
+        tags.add(item3);
+
+        leaveReasonTagAdapter = new LeaveReasonTagAdapter(getActivity(), tags);
         recyclerviewTagHint.setLayoutManager(flexboxLayoutManager);
         recyclerviewTagHint.addItemDecoration(new SpacesItemDecoration(SpacesItemDecoration.dip2px(5)));
         recyclerviewTagHint.setAdapter(leaveReasonTagAdapter);
+
         leaveReasonTagAdapter.setOnClickedListener(position -> {
             LeavePhraseRsp.DataBean tag = tags.get(position);
             if (!tag.isChecked()) {
@@ -198,7 +210,6 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             }
             Log.e(TAG, "onViewCreated: " + reason);
             editLeaveReason.setText(reason);
-
             //修改状态
             tag.setChecked(!tag.isChecked());
             leaveReasonTagAdapter.notifyDataSetChanged();
@@ -237,7 +248,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         switch (view.getId()) {
             case R.id.etStartTime:
                 //showTime(getString(R.string.select_begin_time),startTime,startTimeListener);
-                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(), getString(R.string.select_begin_time), startTime, startTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(), getString(R.string.select_begin_time), "", startTimeListener);
                 break;
             case R.id.etEndTime:
                 if (TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(startTime)) {
@@ -361,6 +372,8 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             if (classBean != null) {
                 classId = classBean.getId();
             }
+            mCCAdapter.setList(null);
+            mAdapter.setList(null);
             mvpPresenter.getApprover(startTime, endTime, classId);
         }
     }
@@ -389,6 +402,14 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         List<LeaveApprovalBean.LeaveCommitBean> dataList = new ArrayList<>();
         if (approvalData != null) {
             approvalData.clear();
+        }
+
+        if (data.getCcList() != null && data.getCcList().size() > 0) {
+            if (data.getCcList().size() == 1) {
+                mCCAdapter.setList(data.getCcList());
+            } else {
+                iv_add_staff.setVisibility(View.VISIBLE);
+            }
         }
         if (peopleForm != null) {
             for (int i = 0; i < peopleForm.size(); i++) {
@@ -429,6 +450,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
                     if (mAdapter.getData().size() == 1) {
                         holder.getView(R.id.viewLine).setVisibility(View.INVISIBLE);
                     }
+
                     List<LeaveApprovalBean.Branappr> branapprList = approver.getBranapprList();
                     ImageView ivDel = holder.getView(R.id.ivDel);
                     ImageView iv_Add = holder.getView(R.id.iv_add_approval);
@@ -493,7 +515,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             startActivity(intent);
             getActivity().finish();
         } else {
-            ToastUtils.showShort("提交失败：" + baseRsp.getMsg());
+            ToastUtils.showShort("提交失败：" + baseRsp.getMessage());
         }
     }
 

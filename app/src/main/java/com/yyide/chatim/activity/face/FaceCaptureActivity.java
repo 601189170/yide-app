@@ -291,7 +291,7 @@ public class FaceCaptureActivity extends BaseMvpActivity<FaceUploadPresenter> im
     @Override
     public void faceUploadSuccess(BaseRsp baseRsp) {
         Log.e(TAG, "faceUploadSuccess: " + baseRsp.toString());
-        ToastUtils.showShort("" + baseRsp.getMsg());
+        ToastUtils.showShort("" + baseRsp.getMessage());
         if (baseRsp.getCode() == 200) {
             tv_face_capture_tip.setText(R.string.face_upload_success_tip);
         } else {

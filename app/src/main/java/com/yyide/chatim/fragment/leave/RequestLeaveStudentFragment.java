@@ -523,7 +523,7 @@ public class RequestLeaveStudentFragment extends BaseMvpFragment<StudentAskLeave
             startActivity(intent);
             getActivity().finish();
         } else {
-            ToastUtils.showShort("提交失败：" + baseRsp.getMsg());
+            ToastUtils.showShort("提交失败：" + baseRsp.getMessage());
         }
     }
 

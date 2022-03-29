@@ -28,14 +28,14 @@ class TodoAdapter : BaseMultiItemQuickAdapter<TodoRsp.TodoItemBean, BaseViewHold
         val vb = ItemTodoLeaveBinding.bind(holder.itemView)
         vb.tvDate.text = item.startTime
         vb.tvContent.text = item.title
-        val leaveBean = item.getJsonData()
-        if (leaveBean != null) {
-            vb.tvStartTime.text = "开始时间：${leaveBean.startTime}"
-            vb.tvEndTime.text = "结束时间：${leaveBean.endTime}"
-        }
         if (item.identity == "2") {// 2 家长
-            vb.tvLeaveName.text = "请假学生：${item.realName}"
             vb.group.visibility = View.VISIBLE
+            val leaveBean = item.getJsonData()
+            if (leaveBean != null) {
+                vb.tvStartTime.text = "开始时间：${leaveBean.startTime}"
+                vb.tvEndTime.text = "结束时间：${leaveBean.endTime}"
+                vb.tvLeaveName.text = "请假学生：${leaveBean.student}"
+            }
         } else {
             vb.group.visibility = View.GONE
         }

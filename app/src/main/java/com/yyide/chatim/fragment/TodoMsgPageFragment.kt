@@ -3,6 +3,7 @@ package com.yyide.chatim.fragment
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.tencent.qcloud.tim.uikit.utils.ToastUtil
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity
 import com.yyide.chatim.adapter.TodoAdapter
@@ -118,19 +120,24 @@ class TodoMsgPageFragment :
                 dialog!!.setCanceledOnTouchOutside(true)
                 val vb = DialogTodoLeaveRefuseBinding.inflate(layoutInflater)
                 dialog!!.setContentView(vb.root)
-                val reason = vb.editText.text.toString().trim()
                 vb.tvCancel.setOnClickListener {
                     dialog!!.dismiss()
                 }
                 vb.tvConfirm.setOnClickListener {
-                    loading()
-                    viewModel.leaveRefuseOrPass(id, "0", reason)
+                    val reason = vb.etInput.text.toString().trim()
+                    if (TextUtils.isEmpty(reason)) {
+                        YDToastUtil.showMessage("请输入拒绝理由")
+                    } else {
+                        loading()
+                        dialog!!.dismiss()
+                        viewModel.leaveRefuseOrPass(id, "0", reason)
+                    }
                 }
                 dialog!!.show()
                 dialog!!.window?.setLayout(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.WRAP_CONTENT
-                );
+                )
             }
 
         })
@@ -169,7 +176,7 @@ class TodoMsgPageFragment :
         viewModel.leaveRefuseOrPassLiveData.observe(requireActivity(), Observer {
             dismiss()
             if (it.isSuccess) {
-                if (dialog!!.isShowing) {
+                if (dialog != null && dialog!!.isShowing) {
                     dialog!!.dismiss()
                 }
                 YDToastUtil.showMessage("审核完成")

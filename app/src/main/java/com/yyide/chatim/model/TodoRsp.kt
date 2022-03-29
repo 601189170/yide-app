@@ -53,7 +53,9 @@ class TodoRsp {
             @JSONField(name = "reason")
             var reason: String = "",
             @JSONField(name = "startTime")
-            var startTime: String = ""
+            var startTime: String = "",
+            @JSONField(name = "student")
+            var student: String = ""
         )
 
         fun getJsonData(): LeaveBean? {

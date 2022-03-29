@@ -58,6 +58,16 @@ public class LeaveDetailRsp {
             private String reason;
             @SerializedName("startTime")
             private String startTime;
+            @SerializedName("student")
+            private String student;
+
+            public String getStudent() {
+                return student;
+            }
+
+            public void setStudent(String student) {
+                this.student = student;
+            }
 
             public String getEndTime() {
                 return endTime;
@@ -141,15 +151,25 @@ public class LeaveDetailRsp {
             @SerializedName("nodeName")
             private String nodeName;
             @SerializedName("status")
-            private String status;
+            private String status;//状态:0已拒绝 1待审批 2已通过
             @SerializedName("userId")
             private String userId;
             @SerializedName("userName")
             private String userName;
             @SerializedName("avatar")
             private String avatar;
+            @SerializedName("comment")
+            private String comment;
             private boolean isCc;
             private List<Cc> ccList;
+
+            public String getComment() {
+                return comment;
+            }
+
+            public void setComment(String comment) {
+                this.comment = comment;
+            }
 
             public List<Cc> getCcList() {
                 return ccList;

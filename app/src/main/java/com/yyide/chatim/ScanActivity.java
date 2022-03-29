@@ -258,7 +258,7 @@ public class ScanActivity extends BaseMvpActivity<BindingEquipmentPresenter> imp
                 Log.e(TAG, "onResponse: " + response.body());
                 final BaseRsp baseRsp = response.body();
                 if (baseRsp != null) {
-                    ToastUtils.showShort(baseRsp.getMsg());
+                    ToastUtils.showShort(baseRsp.getMessage());
                 } else {
                     ToastUtils.showShort("验证失败!");
                 }

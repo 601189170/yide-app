@@ -39,17 +39,42 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
             if (getItemPosition(leaveFlowBean) == getData().size() - 1) {
                 holder.getView(R.id.vEnd).setVisibility(View.INVISIBLE);
             }
+            holder.getView(R.id.tvComment).setVisibility(View.GONE);
             RadiusImageView imageView = holder.getView(R.id.iv_user_head);
-
+            ImageView ivCheck = holder.getView(R.id.iv_flow_checked);
             if ("2".equals(leaveFlowBean.getStatus())) {
                 imageView.setPadding(4, 4, 4, 4);
-                holder.getView(R.id.iv_user_head).setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
-                holder.getView(R.id.iv_flow_checked).setVisibility(View.VISIBLE);
+                imageView.setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
+                ivCheck.setVisibility(View.VISIBLE);
+                ivCheck.setImageResource(R.drawable.icon_flow_checked);
                 holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
+            } else if ("0".equals(leaveFlowBean.getStatus())) {
+                holder.getView(R.id.tvComment).setVisibility(View.VISIBLE);
+                holder.setText(R.id.tv_flow_content, leaveFlowBean.getNodeName() + "  已拒绝");
+                holder.setText(R.id.tvComment, leaveFlowBean.getComment());
+                ivCheck.setVisibility(View.VISIBLE);
+                ivCheck.setImageResource(R.mipmap.icon_leave_cancel);
+                imageView.setPadding(4, 4, 4, 4);
+                imageView.setBackground(getContext().getResources().getDrawable(R.drawable.red_border_1dp));
+                holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.color_B3B3B3));
+            } else if ("4".equals(leaveFlowBean.getStatus())) {
+                holder.setText(R.id.tv_flow_content, "审批人  已退回");
+                holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.color_B3B3B3));
+                ivCheck.setVisibility(View.INVISIBLE);
             } else {
                 holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.color_B3B3B3));
-                holder.getView(R.id.iv_flow_checked).setVisibility(View.INVISIBLE);
+                ivCheck.setVisibility(View.INVISIBLE);
             }
+
+            //第一条线默认高亮
+            if (getItemPosition(leaveFlowBean) == 0) {
+                imageView.setPadding(4, 4, 4, 4);
+                ivCheck.setVisibility(View.VISIBLE);
+                ivCheck.setImageResource(R.drawable.icon_flow_checked);
+                imageView.setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
+                holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
+            }
+
             GlideUtil.loadImageHead(getContext(), leaveFlowBean.getAvatar(), imageView);
         } else {
             ((ImageView) holder.getView(R.id.iv_user_head)).setImageResource(R.mipmap.icon_leave_cc);

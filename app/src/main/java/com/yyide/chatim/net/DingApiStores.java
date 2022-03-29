@@ -566,8 +566,8 @@ public interface DingApiStores {
     //https://api.uat.edu.1d1j.net/leave-server/cloud-leave/teacher/processExaminationApproval
     //请假审批确认-拒绝
     @Headers({"Content-Type: application/json", "Accept: application/json"})
-    @GET("/cloud/proc/completeTask")
-    Observable<BaseRsp> processExaminationApproval(@QueryMap HashMap<String, Object> map);
+    @POST("/cloud/app/procAppr/completeTask")
+    Observable<BaseRsp> processExaminationApproval(@Body RequestBody requestBody);
 
     //获取代办数量
     @Headers({"Content-Type: application/json", "Accept: application/json"})

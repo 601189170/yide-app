@@ -1,10 +1,12 @@
 package com.yyide.chatim.activity.leave;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,12 +33,14 @@ import com.yyide.chatim.SpData;
 import com.yyide.chatim.adapter.leave.LeaveFlowAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpActivity;
+import com.yyide.chatim.databinding.DialogTodoLeaveRefuseBinding;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.LeaveDetailRsp;
 import com.yyide.chatim.model.LeaveFlowBean;
 import com.yyide.chatim.presenter.leave.LeaveDetailPresenter;
 import com.yyide.chatim.utils.ButtonUtils;
+import com.yyide.chatim.utils.YDToastUtil;
 import com.yyide.chatim.view.leave.LeaveDetailView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -113,6 +117,11 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     Button btn_more;
     @BindView(R.id.nestedScrollView)
     NestedScrollView nestedScrollView;
+    @BindView(R.id.groupStudent)
+    Group groupStudent;
+    @BindView(R.id.tvStudentName)
+    TextView tvStudentName;
+
     private boolean unfold = false;
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
@@ -139,6 +148,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             btn_repeal.setVisibility(View.GONE);
             gp_approver.setVisibility(View.VISIBLE);
         }
+        cl_content.setVisibility(View.INVISIBLE);
         id = getIntent().getStringExtra("id");
         Log.e(TAG, "id: " + id);
         if (TextUtils.isEmpty(id)) {
@@ -166,12 +176,12 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         switch (view.getId()) {
             case R.id.btn_refuse:
                 if (!ButtonUtils.isFastDoubleClick(R.id.btn_refuse)) {
-                    mvpPresenter.processExaminationApproval(taskId, 2);
+                    showReason(1);
                 }
                 break;
             case R.id.btn_pass:
-                if (!ButtonUtils.isFastDoubleClick(R.id.btn_refuse)) {
-                    mvpPresenter.processExaminationApproval(taskId, 0);
+                if (!ButtonUtils.isFastDoubleClick(R.id.btn_pass)) {
+                    mvpPresenter.processExaminationApproval(taskId, 2, "");
                 }
                 break;
             case R.id.btn_more:
@@ -183,12 +193,40 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             case R.id.btn_repeal:
                 if (!ButtonUtils.isFastDoubleClick(R.id.btn_repeal)) {
                     updateList = true;
-                    mvpPresenter.ondoApplyLeave(processId);
+                    showReason(2);
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private void showReason(int type) {
+        Dialog dialog = new Dialog(this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        DialogTodoLeaveRefuseBinding vb = DialogTodoLeaveRefuseBinding.inflate(getLayoutInflater());
+        dialog.setContentView(vb.getRoot());
+        vb.tvCancel.setOnClickListener(v -> dialog.dismiss());
+        vb.tvConfirm.setOnClickListener(v ->
+                {
+                    String reason = vb.etInput.getText().toString().trim();
+                    if (TextUtils.isEmpty(reason)) {
+                        YDToastUtil.showMessage("请输入拒绝理由");
+                    } else {
+                        if (type == 1) {
+                            mvpPresenter.processExaminationApproval(taskId, 0, reason);
+                        } else {
+                            mvpPresenter.ondoApplyLeave(processId, reason);
+                        }
+                    }
+                }
+        );
+        dialog.show();
+        dialog.getWindow().setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+        );
     }
 
     private void showGlobalActionPopup(View v) {
@@ -278,6 +316,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             ToastUtils.showShort(leaveDetailRsp.getMessage());
             return;
         }
+        cl_content.setVisibility(View.VISIBLE);
         final LeaveDetailRsp.DataDTO data = leaveDetailRsp.getData();
         leaveFlowBeanList.clear();
         LeaveDetailRsp.DataDTO.ApprJsonDTO apprJson = data.getApprJson();
@@ -285,10 +324,13 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             //教职工
             tv_department.setText(R.string.in_department);
             tv_department_name.setText(data.getDept());
+            groupStudent.setVisibility(View.GONE);
         } else {
             //监护人
-            tv_department.setText(getString(R.string.choose_student));
-            tv_department_name.setText(data.getName());
+            tv_department.setText(getString(R.string.leave_class));
+            tv_department_name.setText(data.getDept());
+            groupStudent.setVisibility(View.VISIBLE);
+            tvStudentName.setText(apprJson.getStudent());
         }
         tv_leave_time.setText(data.getCreateTime());
         taskId = data.getTaskId();
@@ -325,7 +367,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             mvpPresenter.queryLeaveDetailsById(id);
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
-            ToastUtils.showShort("撤销失败：" + baseRsp.getMsg());
+            ToastUtils.showShort("撤销失败：" + baseRsp.getMessage());
         }
     }
 
@@ -341,7 +383,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             ToastUtils.showShort("审批成功");
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
-            ToastUtils.showShort("审批失败：" + baseRsp.getMsg());
+            ToastUtils.showShort("审批失败：" + baseRsp.getMessage());
         }
         finish();
     }
@@ -360,7 +402,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             mvpPresenter.queryLeaveDetailsById(id);
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
-            ToastUtils.showShort("回退失败：" + baseRsp.getMsg());
+            ToastUtils.showShort("回退失败：" + baseRsp.getMessage());
         }
     }
 

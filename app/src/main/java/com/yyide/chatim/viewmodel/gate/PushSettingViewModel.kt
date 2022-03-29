@@ -85,7 +85,7 @@ class PushSettingViewModel : BaseViewModel() {
                         _updatePushSettingList.value = Result.Success(it)
                     } else {
                         _updatePushSettingList.value =
-                            Result.Error(Exception("${it.code},${it.msg}"))
+                            Result.Error(Exception("${it.code},${it.message}"))
                     }
                 }
         }

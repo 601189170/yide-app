@@ -166,7 +166,7 @@ public class ConfirmLoginActivity extends BaseMvpActivity<ConfirmLoginPresenter>
     @Override
     public void loginSuccess(BaseRsp baseRsp) {
         Log.e(TAG, "loginSuccess: "+baseRsp.toString() );
-        ToastUtils.showShort(baseRsp.getMsg());
+        ToastUtils.showShort(baseRsp.getMessage());
         if (baseRsp.getCode() == 200){
             jupm(this, ConfirmSuccessActivity.class);
             finish();

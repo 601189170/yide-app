@@ -78,6 +78,7 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
                 }
             }
         }
+
 //        startActivity(Intent(this, NoteBookActivity::class.java))
 //        startActivity(Intent(this, SchoolCalendarActivity::class.java))
 //        startActivity(Intent(this, SchoolCalendarActivity::class.java))
@@ -118,25 +119,14 @@ class NewLoginActivity : KTBaseActivity<ActivityNewLoginBinding>(ActivityNewLogi
         schoolBean: SchoolRsp,
         identityBean: SchoolRsp.IdentityBean
     ) {
-        viewModel.loginLiveData.observe(this) {
+        //身份登录应用
+        viewModel.identityLoginLiveData.observe(this) {
             hideLoading()
             if (it.isSuccess) {
                 SPUtils.getInstance()
                     .put(SpData.SCHOOLINFO, JSON.toJSONString(schoolBean))
                 SPUtils.getInstance()
                     .put(SpData.IDENTIY_INFO, JSON.toJSONString(identityBean))
-            } else {
-                it.exceptionOrNull()?.localizedMessage?.let { it1 ->
-                    loge(it1)
-                    ToastUtils.showLong(it1)
-                }
-            }
-        }
-
-        //身份登录应用
-        viewModel.identityLoginLiveData.observe(this) {
-            hideLoading()
-            if (it.isSuccess) {
                 SPUtils.getInstance().put(SpData.USER, JSON.toJSONString(it.getOrNull()))
                 val user = SpData.getLogin()
                 user.isLogin = true

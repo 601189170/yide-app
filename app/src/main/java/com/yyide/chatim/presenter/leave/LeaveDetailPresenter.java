@@ -39,11 +39,11 @@ public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
         });
     }
 
-    public void ondoApplyLeave(String id) {
+    public void ondoApplyLeave(String id, String reason) {
         mvpView.showLoading();
         final HashMap<String, Object> map = new HashMap<>(1);
         map.put("processInstanceId", id);
-        map.put("deleteReason", id);
+        map.put("deleteReason", reason);
         RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
         addSubscription(dingApiStores.ondoApplyLeave(body), new ApiCallback<BaseRsp>() {
             @Override
@@ -69,12 +69,14 @@ public class LeaveDetailPresenter extends BasePresenter<LeaveDetailView> {
      * @param taskId  long
      * @param outcome 0 同意 2 拒绝
      */
-    public void processExaminationApproval(String taskId, int outcome) {
+    public void processExaminationApproval(String taskId, int outcome, String reason) {
         mvpView.showLoading();
-        HashMap<String, Object> map = new HashMap<>(2);
+        HashMap<String, Object> map = new HashMap<>();
         map.put("taskId", taskId);
         map.put("outcome", outcome);
-        addSubscription(dingApiStores.processExaminationApproval(map), new ApiCallback<BaseRsp>() {
+        map.put("comment", reason);
+        RequestBody body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map));
+        addSubscription(dingApiStores.processExaminationApproval(body), new ApiCallback<BaseRsp>() {
             @Override
             public void onSuccess(BaseRsp model) {
                 mvpView.processApproval(model);

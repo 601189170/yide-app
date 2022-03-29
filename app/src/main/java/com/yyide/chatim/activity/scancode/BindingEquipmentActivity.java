@@ -141,7 +141,7 @@ public class BindingEquipmentActivity extends BaseMvpActivity<BindingEquipmentPr
             //绑定成功，进入选择
             toConfirmLogin();
         } else {
-            ToastUtils.showShort(baseRsp.getMsg());
+            ToastUtils.showShort(baseRsp.getMessage());
         }
     }
 

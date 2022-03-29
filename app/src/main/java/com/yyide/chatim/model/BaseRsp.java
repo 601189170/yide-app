@@ -20,7 +20,7 @@ public class BaseRsp {
 
     private int code;
     private boolean success;
-    private String msg;
+    private String message;
     private String data;
 
     public int getCode() {
@@ -39,12 +39,12 @@ public class BaseRsp {
         this.success = success;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getData() {
@@ -60,7 +60,7 @@ public class BaseRsp {
         return "BaseRsp{" +
                 "code=" + code +
                 ", success=" + success +
-                ", msg='" + msg + '\'' +
+                ", msg='" + message + '\'' +
                 ", data=" + data +
                 '}';
     }

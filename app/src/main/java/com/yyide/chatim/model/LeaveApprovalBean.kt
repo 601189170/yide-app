@@ -48,6 +48,7 @@ data class LeaveApprovalBean(
         var name: String,
         var pid: String,
         var sort: Int,
+        var status: String,
         var userType: Int
     ) {
         companion object {
