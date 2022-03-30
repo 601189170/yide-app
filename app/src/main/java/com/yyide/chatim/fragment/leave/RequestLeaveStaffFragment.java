@@ -248,7 +248,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         switch (view.getId()) {
             case R.id.etStartTime:
                 //showTime(getString(R.string.select_begin_time),startTime,startTimeListener);
-                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(), getString(R.string.select_begin_time), "", startTimeListener);
+                DatePickerDialogUtil.INSTANCE.showDateTime(getContext(), getString(R.string.select_begin_time), startTime, startTimeListener);
                 break;
             case R.id.etEndTime:
                 if (TextUtils.isEmpty(endTime) && !TextUtils.isEmpty(startTime)) {

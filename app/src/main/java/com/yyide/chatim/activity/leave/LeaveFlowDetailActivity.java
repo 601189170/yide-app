@@ -129,6 +129,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     private String taskId;
     private String processId;
     private boolean updateList = false;
+    private int status;
 
     @Override
     public int getContentViewID() {
@@ -141,6 +142,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         title.setText(R.string.ask_for_leave);
         //type 1请假人 2审批人
         int type = getIntent().getIntExtra("type", 1);
+        status = getIntent().getIntExtra("status", -1);
         if (type == 1) {
 //            btn_repeal.setVisibility(View.VISIBLE);
             gp_approver.setVisibility(View.GONE);
@@ -342,12 +344,15 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         tv_reason_for_leave_content.setText(apprJson.getReason());
         //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
         leaveStatus(data.getStatus(), tv_leave_flow_status);
+
         if (data.getHiApprNodeList() != null) {
             LeaveDetailRsp.DataDTO.HiApprNodeListDTO listDTO = new LeaveDetailRsp.DataDTO.HiApprNodeListDTO();
             listDTO.setCc(true);
             listDTO.setCcList(data.getCcList());
             data.getHiApprNodeList().add(listDTO);
+            String userId = SpData.getIdentityInfo().getId() + "";
         }
+
         //审批流程
         leaveFlowAdapter = new LeaveFlowAdapter();
         recyclerViewFlow.setLayoutManager(new LinearLayoutManager(this));
@@ -406,9 +411,9 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         }
     }
 
-    private void leaveStatus(String status, TextView view) {
+    private void leaveStatus(String leaveStatus, TextView view) {
         //审核结果: 0 审批拒绝 1 审批中 2 审批通过  3 已撤销
-        switch (status) {
+        switch (leaveStatus) {
             case "0":
                 view.setText(getString(R.string.refuse_text));
                 view.setBackgroundResource(R.drawable.ask_for_leave_status_refuse_shape);
@@ -419,7 +424,11 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 view.setText(getString(R.string.approval_text));
                 view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
                 view.setTextColor(getResources().getColor(R.color.black9));
-                cl_repeal.setVisibility(View.VISIBLE);
+                if (status == 1) {
+                    cl_repeal.setVisibility(View.VISIBLE);
+                } else {
+                    cl_repeal.setVisibility(View.GONE);
+                }
                 break;
             case "2":
                 view.setText(getString(R.string.pass_text));

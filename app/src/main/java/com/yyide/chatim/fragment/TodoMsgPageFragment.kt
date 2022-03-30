@@ -99,6 +99,7 @@ class TodoMsgPageFragment :
             val item = adapter.getItem(position) as TodoRsp.TodoItemBean
             val intent = Intent(context, LeaveFlowDetailActivity::class.java)
             intent.putExtra("type", 2)
+            intent.putExtra("status", item.status)
             intent.putExtra("id", item.id)
             startActivity(intent)
         }
