@@ -142,10 +142,10 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         //type 1请假人 2审批人
         int type = getIntent().getIntExtra("type", 1);
         if (type == 1) {
-            btn_repeal.setVisibility(View.VISIBLE);
+//            btn_repeal.setVisibility(View.VISIBLE);
             gp_approver.setVisibility(View.GONE);
         } else {
-            btn_repeal.setVisibility(View.GONE);
+//            btn_repeal.setVisibility(View.GONE);
             gp_approver.setVisibility(View.VISIBLE);
         }
         cl_content.setVisibility(View.INVISIBLE);
@@ -439,12 +439,14 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     }
 
     public void showBlankPage(boolean show) {
-        if (show) {
-            blank_page.setVisibility(View.VISIBLE);
-            cl_content.setVisibility(View.GONE);
-        } else {
-            blank_page.setVisibility(View.GONE);
-            cl_content.setVisibility(View.VISIBLE);
+        if (blank_page != null && cl_content != null) {
+            if (show) {
+                blank_page.setVisibility(View.VISIBLE);
+                cl_content.setVisibility(View.GONE);
+            } else {
+                blank_page.setVisibility(View.GONE);
+                cl_content.setVisibility(View.VISIBLE);
+            }
         }
     }
 

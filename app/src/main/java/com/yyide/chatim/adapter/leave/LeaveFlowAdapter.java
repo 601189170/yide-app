@@ -33,8 +33,8 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
     protected void convert(@NonNull BaseViewHolder holder, LeaveDetailRsp.DataDTO.HiApprNodeListDTO leaveFlowBean) {
         if (!leaveFlowBean.isCc()) {
             holder.setText(R.id.tv_flow_title, leaveFlowBean.getUserName());
-            holder.setText(R.id.tv_flow_content, leaveFlowBean.getNodeName());
             holder.setText(R.id.tvTime, leaveFlowBean.getApprTime());
+            holder.setText(R.id.tv_flow_content, leaveFlowBean.getNodeName());
             //隐藏最后一条分割线
             if (getItemPosition(leaveFlowBean) == getData().size() - 1) {
                 holder.getView(R.id.vEnd).setVisibility(View.INVISIBLE);
@@ -47,6 +47,7 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
                 imageView.setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
                 ivCheck.setVisibility(View.VISIBLE);
                 ivCheck.setImageResource(R.drawable.icon_flow_checked);
+                holder.setText(R.id.tv_flow_content, leaveFlowBean.getNodeName() + "  已同意");
                 holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
             } else if ("0".equals(leaveFlowBean.getStatus())) {
                 holder.getView(R.id.tvComment).setVisibility(View.VISIBLE);
@@ -74,7 +75,6 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
                 imageView.setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
                 holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
             }
-
             GlideUtil.loadImageHead(getContext(), leaveFlowBean.getAvatar(), imageView);
         } else {
             ((ImageView) holder.getView(R.id.iv_user_head)).setImageResource(R.mipmap.icon_leave_cc);

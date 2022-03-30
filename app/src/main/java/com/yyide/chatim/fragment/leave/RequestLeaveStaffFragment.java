@@ -488,6 +488,8 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             holder.getView(R.id.ivDel).setOnClickListener(v -> {
                 mCCAdapter.remove(item);
             });
+            ImageView imageView = holder.getView(R.id.iv_user_head);
+            GlideUtil.loadImageHead(getContext(), item.getAvatar(), imageView);
         }
     };
 

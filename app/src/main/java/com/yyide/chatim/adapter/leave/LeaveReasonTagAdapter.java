@@ -40,13 +40,12 @@ public class LeaveReasonTagAdapter extends RecyclerView.Adapter<LeaveReasonTagAd
     public LeaveReasonTagAdapter(Context context, List<LeavePhraseRsp.DataBean> data) {
         this.context = context;
         this.data = data;
-
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_leave_reason_tag,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_leave_reason_tag, parent, false);
         return new ViewHolder(view);
     }
 
@@ -54,9 +53,9 @@ public class LeaveReasonTagAdapter extends RecyclerView.Adapter<LeaveReasonTagAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LeavePhraseRsp.DataBean tag = data.get(position);
         holder.tv_tag.setText(tag.getTag());
-        if (tag.isChecked()){
+        if (tag.isChecked()) {
             holder.itemView.setBackgroundResource(R.drawable.leave_reason_tag_selected_bg_shape);
-        }else {
+        } else {
             holder.itemView.setBackgroundResource(R.drawable.leave_reason_tag_bg_shape);
         }
         holder.itemView.setOnClickListener(v -> {
@@ -80,7 +79,7 @@ public class LeaveReasonTagAdapter extends RecyclerView.Adapter<LeaveReasonTagAd
         }
     }
 
-    public interface OnClickedListener{
+    public interface OnClickedListener {
         void onClicked(int position);
     }
 }
