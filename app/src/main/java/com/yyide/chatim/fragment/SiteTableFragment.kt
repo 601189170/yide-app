@@ -3,7 +3,6 @@ package com.yyide.chatim.fragment
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -26,9 +25,11 @@ import com.yyide.chatim.dialog.TableClassPopUp
 import com.yyide.chatim.dialog.TablePopUp
 import com.yyide.chatim.dialog.TablePopUp.SubmitCallBack
 import com.yyide.chatim.dialog.TextPopUp
+import com.yyide.chatim.model.LeaveDeptRsp
 import com.yyide.chatim.model.sitetable.SiteTableRsp
 import com.yyide.chatim.model.sitetable.toWeekDayList
 import com.yyide.chatim.model.table.ChildrenItem
+import com.yyide.chatim.model.table.ClassInfo
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
 import com.yyide.chatim.utils.TimeUtil
 import com.yyide.chatim.utils.hide
@@ -53,9 +54,9 @@ class SiteTableFragment : Fragment() {
     //周次
     //private var week = 1
     //private var weekTotal = 1
-    //private var thisWeek = 1
-    //private var first = true
-    //private val classList = mutableListOf<LeaveDeptRsp.DataBean>()
+    private var thisWeek = 1
+    private var first = true
+    private val classList = mutableListOf<LeaveDeptRsp.DataBean>()
     //private var id: String? = null
 
     private val type = "2"
@@ -64,11 +65,9 @@ class SiteTableFragment : Fragment() {
     // 当前所选周数
     private var selectWeek: ChildrenItem? = null
 
-    // 场地列表
-    private var newClassList = arrayListOf<ChildrenItem>()
 
     // 当前所选场地
-    private var selectClassInfo = ChildrenItem()
+    private var selectClassInfo = ClassInfo()
 
     private lateinit var weekPopUp: TablePopUp
     private lateinit var classPopUp: TableClassPopUp
@@ -99,7 +98,7 @@ class SiteTableFragment : Fragment() {
                 return@observe
             }
 
-            siteTableFragmentBinding.empty.root.visibility = View.GONE
+            //siteTableFragmentBinding.empty.root.visibility = View.GONE
             val buildingsBean = buildings[0]
             val children = buildingsBean.children
             if (children.isEmpty()) {
@@ -110,27 +109,33 @@ class SiteTableFragment : Fragment() {
                 return@observe
             }
 
-            newClassList.clear()
-            if (!buildings.isNullOrEmpty()) {
-                buildings.forEach { buildingItem ->
-                    val childrenData: List<ChildrenItem> = buildingItem.children
-                    val outerName: String = buildingItem.name
-                    childrenData.forEach { childrenItem ->
-                        childrenItem.parentName = outerName
-                    }
-                    newClassList.addAll(childrenData)
-                }
-                //默认查询第一个场地的课表
-                selectClassInfo = newClassList[0]
-                classPopUp.setData(newClassList, selectClassInfo)
-                siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
-                siteTableViewModel.getSites(type, selectClassInfo.id)
-            }
+
+            val firstData = ClassInfo()
+            firstData.parentId = buildingsBean.id
+            firstData.parentName = buildingsBean.name
+            firstData.id = children[0].id
+            firstData.name = children[0].name
+            //默认查询第一个场地的课表
+            selectClassInfo = firstData
+            classPopUp.setData(buildings, selectClassInfo)
+            siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
+            siteTableViewModel.getSites(type, selectClassInfo.id)
         }
         //场地课表数据
         siteTableViewModel.siteTableLiveData.observe(requireActivity()) {
             if (it == null) {
                 return@observe
+            }
+
+            if (first){
+                thisWeek = it.thisWeek
+                first = false
+            }
+
+            if (it.thisWeek == thisWeek){
+                siteTableFragmentBinding.tableSiteReturnCurrent.hide()
+            }else{
+                siteTableFragmentBinding.tableSiteReturnCurrent.show()
             }
 
             if (it.weekTotal != 0){
@@ -308,12 +313,10 @@ class SiteTableFragment : Fragment() {
         classPopUp = TableClassPopUp(this)
         classPopUp.popupGravity = Gravity.BOTTOM
         classPopUp.setSubmitCallBack(object : TableClassPopUp.SubmitCallBack {
-            override fun getSubmitData(data: ChildrenItem?) {
-                if (data != null) {
-                    selectClassInfo = data
-                    siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
-                    siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
-                }
+            override fun getSubmitData(data: ClassInfo) {
+                selectClassInfo = data
+                siteTableFragmentBinding.top.className.text = "${selectClassInfo.parentName}${selectClassInfo.name}"
+                siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
             }
         })
 

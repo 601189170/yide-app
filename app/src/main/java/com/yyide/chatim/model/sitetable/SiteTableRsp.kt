@@ -71,49 +71,49 @@ fun SiteTableRsp.DataBean.WeekListBean.toWeekDayList(): List<TimeUtil.WeekDay> {
     val weekDayList = mutableListOf<TimeUtil.WeekDay>()
     val mondayWeekDay = TimeUtil.WeekDay()
     val mondayDateTime = ScheduleDaoUtil.toDateTime(monday, "yyyy-MM-dd")
-    mondayWeekDay.week = getWeek(mondayDateTime, true)
+    mondayWeekDay.week = getWeek(mondayDateTime, false)
     mondayWeekDay.day = mondayDateTime.toStringTime("MM-dd")
     mondayWeekDay.dataTime = monday
     weekDayList.add(mondayWeekDay)
 
     val tuesdayWeekDay = TimeUtil.WeekDay()
     val tuesdayDateTime = ScheduleDaoUtil.toDateTime(tuesday, "yyyy-MM-dd")
-    tuesdayWeekDay.week = getWeek(tuesdayDateTime, true)
+    tuesdayWeekDay.week = getWeek(tuesdayDateTime, false)
     tuesdayWeekDay.day = tuesdayDateTime.toStringTime("MM-dd")
     tuesdayWeekDay.dataTime = tuesday
     weekDayList.add(tuesdayWeekDay)
 
     val wednesdayWeekDay = TimeUtil.WeekDay()
     val wednesdayDateTime = ScheduleDaoUtil.toDateTime(wednesday, "yyyy-MM-dd")
-    wednesdayWeekDay.week = getWeek(wednesdayDateTime, true)
+    wednesdayWeekDay.week = getWeek(wednesdayDateTime, false)
     wednesdayWeekDay.day = wednesdayDateTime.toStringTime("MM-dd")
     wednesdayWeekDay.dataTime = wednesday
     weekDayList.add(wednesdayWeekDay)
 
     val thursdayWeekDay = TimeUtil.WeekDay()
     val thursdayDateTime = ScheduleDaoUtil.toDateTime(thursday, "yyyy-MM-dd")
-    thursdayWeekDay.week = getWeek(thursdayDateTime, true)
+    thursdayWeekDay.week = getWeek(thursdayDateTime, false)
     thursdayWeekDay.day = thursdayDateTime.toStringTime("MM-dd")
     thursdayWeekDay.dataTime = thursday
     weekDayList.add(thursdayWeekDay)
 
     val fridayWeekDay = TimeUtil.WeekDay()
     val fridayDateTime = ScheduleDaoUtil.toDateTime(friday, "yyyy-MM-dd")
-    fridayWeekDay.week = getWeek(fridayDateTime, true)
+    fridayWeekDay.week = getWeek(fridayDateTime, false)
     fridayWeekDay.day = fridayDateTime.toStringTime("MM-dd")
     fridayWeekDay.dataTime = friday
     weekDayList.add(fridayWeekDay)
 
     val saturdayWeekDay = TimeUtil.WeekDay()
     val saturdayDateTime = ScheduleDaoUtil.toDateTime(saturday, "yyyy-MM-dd")
-    saturdayWeekDay.week = getWeek(saturdayDateTime, true)
+    saturdayWeekDay.week = getWeek(saturdayDateTime, false)
     saturdayWeekDay.day = saturdayDateTime.toStringTime("MM-dd")
     saturdayWeekDay.dataTime = saturday
     weekDayList.add(saturdayWeekDay)
 
     val sundayWeekDay = TimeUtil.WeekDay()
     val sundayDateTime = ScheduleDaoUtil.toDateTime(sunday, "yyyy-MM-dd")
-    sundayWeekDay.week = getWeek(sundayDateTime, true)
+    sundayWeekDay.week = getWeek(sundayDateTime, false)
     sundayWeekDay.day = sundayDateTime.toStringTime("MM-dd")
     sundayWeekDay.dataTime = sunday
     weekDayList.add(sundayWeekDay)

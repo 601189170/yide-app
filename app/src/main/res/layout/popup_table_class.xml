@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#504F4F">
+
+    <TextView
+        android:id="@+id/tv_popup_table_class"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="#F3FCF9"
+        android:paddingTop="5dp"
+        android:text="年级"
+        android:textColor="#ff999999"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+    <TextView
+        android:id="@+id/tv_popup_table_class_item"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="#F3FCF9"
+        android:paddingTop="5dp"
+        android:text="班级"
+        android:textColor="#ff999999"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/tv_popup_table_class"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/color_F3FCF9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_popup_table_class"
+        app:layout_constraintBottom_toTopOf="@id/btn_popup_table_class_cancel"/>
+
+    <View
+        android:id="@+id/view_popup_table_class_select_bg"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:layout_marginHorizontal="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rv_popup_table_class"
+        app:layout_constraintBottom_toBottomOf="@id/rv_popup_table_class"/>
+
+
+
+    <com.contrarywind.view.WheelView
+        android:id="@+id/rv_popup_table_class"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:paddingTop="5dp"
+        app:normalTextSize="14sp"
+        app:lineColorWv="@color/white"
+        app:selectedTextSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_popup_table_class"
+        app:layout_constraintWidth_percent="0.5" />
+
+
+    <com.contrarywind.view.WheelView
+        android:id="@+id/rv_popup_table_class_item"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:paddingTop="5dp"
+        app:lineColorWv="@color/white"
+        app:selectedTextSize="16sp"
+        app:normalTextSize="14sp"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_popup_table_class_item" />
+
+
+
+
+    <Button
+        android:id="@+id/btn_popup_table_class_cancel"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/table_expandable_button_left"
+        android:text="@string/cancel"
+        android:textColor="#11C685"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rv_popup_table_class"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/btn_popup_table_class_submit"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@drawable/table_expandable_button_right"
+        android:text="@string/confirm"
+        android:textColor="#11C685"
+        app:layout_constraintStart_toEndOf="@id/btn_popup_table_class_cancel"
+        app:layout_constraintTop_toBottomOf="@id/rv_popup_table_class"
+        app:layout_constraintWidth_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

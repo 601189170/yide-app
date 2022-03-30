@@ -348,4 +348,25 @@
     // 课表
     <string name="school_table_time_tv">时间</string>
 
+    //教师考勤
+    <string name="statistics">统计</string>
+    <string name="watch_rule">查看规则</string>
+    <string name="warn_out_of_range">超出管理员指定打卡范围</string>
+    <string name="sign_in">签到</string>
+    <string name="sign_out">签退</string>
+    <string name="not_punched">未打卡</string>
+    <string name="not_function_punched">无法打卡</string>
+    <string name="can_punched_tip">签到打卡</string>
+    <string name="attendance_in_range">已进入考勤范围: %s</string>
+
+    <string name="attendance_time_title">考勤时间</string>
+    <string name="range_title">打卡范围</string>
+    <string name="wifi_title">办公室Wi-Fi</string>
+    <string name="ble_title">设备蓝牙名称</string>
+
+    <string name="absence_title">缺勤</string>
+    <string name="late_title">迟到</string>
+    <string name="leave_early_title">早退</string>
+    <string name="ask_for_leave_title">请假</string>
+
 </resources>

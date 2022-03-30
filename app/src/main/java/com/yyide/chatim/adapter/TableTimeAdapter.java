@@ -16,6 +16,8 @@ import com.yyide.chatim.model.WeekTime;
 import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.utils.VHUtil;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +61,13 @@ public class TableTimeAdapter extends BaseAdapter {
             }
         });
 
-        time.setText(getItem(position).day);
+        final DateTime today = DateTime.now();
+        if (today.toString("yyyy-MM-dd").equals(getItem(position).dataTime)) {
+            time.setText("今日");
+        }else {
+            time.setText(getItem(position).day);
+        }
+
         String week = getItem(position).week;
         String neek = week.replaceAll("星期", "");
         if (!neek.contains("周") && !neek.equals("今日")) {
@@ -67,6 +75,7 @@ public class TableTimeAdapter extends BaseAdapter {
         } else {
             day.setText(neek);
         }
+
 
         /* if (position == today) {
             day.setText("今天");

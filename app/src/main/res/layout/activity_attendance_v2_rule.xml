@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/teacher_attendance_rule_top"
+            layout="@layout/title_layout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_teacher_attendance_rule_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_white2"
+            android:padding="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/teacher_attendance_rule_top">
+
+
+            <com.yyide.chatim.widget.RadiusImageView
+                android:id="@+id/riv_teacher_attendance_rule_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_head"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:left_bottom_radius="10dp"
+                app:left_top_radius="10dp"
+                app:right_bottom_radius="10dp"
+                app:right_top_radius="10dp" />
+
+
+            <TextView
+                android:id="@+id/tv_teacher_attendance_rule_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="某某某"
+                android:textColor="#333333"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/riv_teacher_attendance_rule_img"
+                app:layout_constraintTop_toTopOf="@id/riv_teacher_attendance_rule_img" />
+
+
+            <TextView
+                android:id="@+id/tv_teacher_attendance_job"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="教职工考勤组"
+                android:textColor="#333333"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/riv_teacher_attendance_rule_img"
+                app:layout_constraintStart_toStartOf="@id/tv_teacher_attendance_rule_name" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_teacher_attendance_rule_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_white2"
+            android:padding="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_teacher_attendance_rule_user">
+
+
+            <TextView
+                android:id="@+id/tv_teacher_attendance_rule_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/attendance_time_title"
+                android:textColor="#666666"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_teacher_attendance_rule_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_punched"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_time_title"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_teacher_attendance_rule_range"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_white2"
+        android:padding="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_teacher_attendance_rule_time">
+
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_rule_range_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/range_title"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_rule_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_punched"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_range_title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_rule_wifi_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wifi_title"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_range" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_rule_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_punched"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_wifi_title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_rule_ble_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ble_title"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_wifi" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_rule_ble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_punched"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_ble_title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

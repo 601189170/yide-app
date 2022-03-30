@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <include
+        android:id="@+id/teacher_attendance_statistics_top"
+        layout="@layout/title_layout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_teacher_attendance_statistics_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="2021年12月"
+        android:textColor="#666666"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/teacher_attendance_statistics_top" />
+
+    <ImageView
+        android:id="@+id/iv_teacher_attendance_statistics_time_logo"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@mipmap/table_week_button"
+        app:layout_constraintBottom_toBottomOf="@id/tv_teacher_attendance_statistics_time"
+        app:layout_constraintStart_toEndOf="@id/tv_teacher_attendance_statistics_time"
+        app:layout_constraintTop_toTopOf="@id/tv_teacher_attendance_statistics_time" />
+
+
+    <TextView
+        android:id="@+id/tv_teacher_attendance_statistics_time_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="30dp"
+        android:text="12月汇总"
+        android:textColor="#333333"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_teacher_attendance_statistics_time_logo" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_teacher_attendance_pool"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_gray_10"
+        app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_statistics_time_title">
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_absence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#333333"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_teacher_attendance_absence_title"
+            app:layout_constraintEnd_toStartOf="@id/tv_teacher_attendance_late"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_late"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#333333"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_teacher_attendance_absence_title"
+            app:layout_constraintEnd_toStartOf="@id/tv_teacher_attendance_leave_early"
+            app:layout_constraintStart_toEndOf="@id/tv_teacher_attendance_absence"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_leave_early"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#333333"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_teacher_attendance_absence_title"
+            app:layout_constraintEnd_toStartOf="@id/tv_teacher_attendance_leave"
+            app:layout_constraintStart_toEndOf="@id/tv_teacher_attendance_late"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#333333"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_teacher_attendance_absence_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_teacher_attendance_leave_early"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_absence_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/absence_title"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_teacher_attendance_absence"
+            app:layout_constraintStart_toStartOf="@id/tv_teacher_attendance_absence"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_absence" />
+
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_late_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/late_title"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_teacher_attendance_late"
+            app:layout_constraintStart_toStartOf="@id/tv_teacher_attendance_late"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_late" />
+
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_leave_early_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/leave_early_title"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_teacher_attendance_leave_early"
+            app:layout_constraintStart_toStartOf="@id/tv_teacher_attendance_leave_early"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_leave_early" />
+
+        <TextView
+            android:id="@+id/tv_teacher_attendance_leave_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ask_for_leave"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_teacher_attendance_leave"
+            app:layout_constraintStart_toStartOf="@id/tv_teacher_attendance_leave"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_absence" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.haibin.calendarview.CalendarLayout
+        android:id="@+id/calendarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:background="#F3FCF9"
+        android:orientation="vertical"
+        app:calendar_content_view_id="@id/cl_teacher_attendance_calendar_bottom"
+        app:calendar_show_mode="both_month_week_view"
+        app:default_status="shrink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_teacher_attendance_pool">
+
+        <com.haibin.calendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F3FCF9"
+            app:calendar_padding="10dp"
+            app:current_day_text_color="#11C685"
+            app:current_month_lunar_text_color="#CFCFCF"
+            app:current_month_text_color="#333333"
+            app:min_year="2004"
+            app:month_view="com.yyide.chatim.view.calendar.AttendanceMonthView"
+            app:month_view_show_mode="mode_fix"
+            app:selected_lunar_text_color="#FFFFFF"
+            app:selected_text_color="#FFFFFF"
+            app:selected_theme_color="#11C685"
+            app:scheme_text_color="#333333"
+            app:scheme_month_text_color="#333333"
+            app:week_background="#F3FCF9"
+            app:week_text_color="#333333"
+            app:week_view="com.yyide.chatim.view.calendar.AttendanceWeekView" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_teacher_attendance_calendar_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/calendarLayout">
+
+            <ImageView
+                android:id="@+id/iv_teacher_attendance_calendar_expand"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:background="#F3FCF9"
+                android:paddingVertical="15dp"
+                android:src="@drawable/calendar_down_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_teacher_attendance_rule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ff333333"
+                android:layout_marginStart="15dp"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/iv_teacher_attendance_calendar_expand"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_teacher_attendance_punch_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule" />
+
+            <include
+                android:id="@+id/teacher_attendance_empty"
+                layout="@layout/empty"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.haibin.calendarview.CalendarLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

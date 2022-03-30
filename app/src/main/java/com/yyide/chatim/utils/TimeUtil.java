@@ -226,7 +226,7 @@ public class TimeUtil {
         List<TimeUtil.WeekDay> weekDayList = new ArrayList<>();
         WeekDay mondayWeekDay = new WeekDay();
         DateTime mondayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getMonday(), "yyyy-MM-dd");
-        mondayWeekDay.week = DateUtils.getWeek(mondayDateTime, true);
+        mondayWeekDay.week = DateUtils.getWeek(mondayDateTime, false);
         mondayWeekDay.day =  DateUtils.formatTime(
                 bean.getMonday(),
                 "yyyy-MM-dd",
@@ -237,7 +237,7 @@ public class TimeUtil {
 
         WeekDay tuesdayWeekDay = new WeekDay();
         DateTime tuesdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getTuesday(), "yyyy-MM-dd");
-        tuesdayWeekDay.week = DateUtils.getWeek(tuesdayDateTime, true);
+        tuesdayWeekDay.week = DateUtils.getWeek(tuesdayDateTime, false);
         tuesdayWeekDay.day =  DateUtils.formatTime(
                 bean.getTuesday(),
                 "yyyy-MM-dd",
@@ -248,7 +248,7 @@ public class TimeUtil {
 
         WeekDay wednesdayWeekDay = new WeekDay();
         DateTime wednesdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getWednesday(), "yyyy-MM-dd");
-        wednesdayWeekDay.week = DateUtils.getWeek(wednesdayDateTime, true);
+        wednesdayWeekDay.week = DateUtils.getWeek(wednesdayDateTime, false);
         wednesdayWeekDay.day =  DateUtils.formatTime(
                 bean.getWednesday(),
                 "yyyy-MM-dd",
@@ -259,7 +259,7 @@ public class TimeUtil {
 
         WeekDay thursdayWeekDay = new WeekDay();
         DateTime thursdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getThursday(), "yyyy-MM-dd");
-        thursdayWeekDay.week = DateUtils.getWeek(thursdayDateTime, true);
+        thursdayWeekDay.week = DateUtils.getWeek(thursdayDateTime, false);
         thursdayWeekDay.day =  DateUtils.formatTime(
                 bean.getThursday(),
                 "yyyy-MM-dd",
@@ -271,7 +271,7 @@ public class TimeUtil {
 
         WeekDay fridayWeekDay = new WeekDay();
         DateTime fridayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getFriday(), "yyyy-MM-dd");
-        fridayWeekDay.week =  DateUtils.getWeek(fridayDateTime, true);
+        fridayWeekDay.week =  DateUtils.getWeek(fridayDateTime, false);
         fridayWeekDay.day =  DateUtils.formatTime(
                 bean.getFriday(),
                 "yyyy-MM-dd",
@@ -283,7 +283,7 @@ public class TimeUtil {
 
         WeekDay saturdayWeekDay = new WeekDay();
         DateTime saturdayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getSaturday(), "yyyy-MM-dd");
-        saturdayWeekDay.week = DateUtils.getWeek(saturdayDateTime, true);
+        saturdayWeekDay.week = DateUtils.getWeek(saturdayDateTime, false);
         saturdayWeekDay.day =  DateUtils.formatTime(
                 bean.getSaturday(),
                 "yyyy-MM-dd",
@@ -295,7 +295,7 @@ public class TimeUtil {
 
         WeekDay sundayWeekDay = new WeekDay();
         DateTime sundayDateTime = ScheduleDaoUtil.INSTANCE.toDateTime(bean.getSunday(), "yyyy-MM-dd");
-        sundayWeekDay.week = DateUtils.getWeek(sundayDateTime, true);
+        sundayWeekDay.week = DateUtils.getWeek(sundayDateTime, false);
         sundayWeekDay.day =  DateUtils.formatTime(
                 bean.getSunday(),
                 "yyyy-MM-dd",

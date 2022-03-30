@@ -1,9 +1,12 @@
 package com.yyide.chatim.utils
 
+import android.app.Application
 import android.content.Context
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.yyide.chatim.BaseApplication
 
 /**
  *
@@ -52,4 +55,8 @@ fun View.snackBarWithAction(
             block()
         }.show()
 }
+
+//Extensions
+fun Int.asColor() = ContextCompat.getColor(BaseApplication.getInstance(), this)
+fun Int.asDrawable() = ContextCompat.getDrawable(BaseApplication.getInstance(), this)
 

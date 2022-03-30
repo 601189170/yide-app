@@ -70,4 +70,11 @@
     <color name="orange_pressed">#FF9E6B</color>
     <color name="default_item_decoration_color">#EBEBEB</color>
     <color name="school_calendar_bg_color">#F2F7FA</color>
+    
+    <!--教师考勤 -->
+    <color name="not_punch_color">#333333</color>
+    <color name="leave_early">#FD4F45</color>
+    <color name="late">#FFC328</color>
+    <color name="punch_normal">#11C685</color>
+    
 </resources>

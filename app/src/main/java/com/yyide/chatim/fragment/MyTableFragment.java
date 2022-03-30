@@ -54,6 +54,9 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     private List<MyTableListItem> list = new ArrayList<>();
     private int weekDay = 0;
 
+    private boolean first = true;
+    private int thisWeek = 1;
+
     private LayoutMytableFragmnetBinding binding;
 
     // 当前所选周数
@@ -223,6 +226,20 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         if (rsp != null && rsp.getList() != null) {
             list.clear();
             list.addAll(rsp.getList());
+
+
+            final int getThisWeek = rsp.getThisWeek();
+            if (first){
+                thisWeek = getThisWeek;
+                first = false;
+            }
+
+            if (getThisWeek == thisWeek){
+                binding.tableMyReturnCurrent.setVisibility(View.INVISIBLE);
+            }else{
+                binding.tableMyReturnCurrent.setVisibility(View.VISIBLE);
+            }
+
             // 设置总周数
             List<ChildrenItem> data = new ArrayList<>();
             for (int i = 0; i < rsp.getWeekTotal(); i++) {
@@ -230,7 +247,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
                 ChildrenItem bean = new ChildrenItem( "第" + weekNum + "周","",weekNum);
                 data.add(bean);
             }
-            selectWeek = data.get(rsp.getThisWeek() - 1);
+            selectWeek = data.get(getThisWeek - 1);
             weekPopUp.setData(data, selectWeek);
             binding.tableMyTop.className.setText(selectWeek.getName());
             List<TimeUtil.WeekDay> toWeekDayList = TimeUtil.getWeekDay(rsp.getWeekList());

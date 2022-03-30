@@ -731,6 +731,10 @@
         <activity
             android:name=".activity.gate.GateDataSearchActivity"
             android:screenOrientation="portrait" />
+
+        <!--教师考勤-->
+        <activity android:name=".activity.attendance.teacher.TeacherStatisticsActivity"/>
+        <activity android:name=".activity.attendance.teacher.NAttendanceActivity"/>
     </application>
 
 </manifest>

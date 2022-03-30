@@ -3,15 +3,16 @@ package com.yyide.chatim.dialog
 import android.content.Context
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.blankj.utilcode.util.SizeUtils
+import com.contrarywind.listener.OnItemSelectedListener
+import com.contrarywind.view.WheelView
 import com.yyide.chatim.R
-import com.yyide.chatim.databinding.PopupTableTopBinding
+import com.yyide.chatim.adapter.table.TableClassWheelAdapter
+import com.yyide.chatim.databinding.PopupTableClassBinding
 import com.yyide.chatim.model.table.ChildrenItem
-import com.yyide.chatim.utils.hide
+import com.yyide.chatim.model.table.ClassInfo
+import com.yyide.chatim.model.table.ClassInfoBean
 import com.yyide.chatim.utils.logd
-import com.yyide.chatim.utils.show
 import razerdp.basepopup.BasePopupWindow
 
 /**
@@ -20,18 +21,22 @@ import razerdp.basepopup.BasePopupWindow
  * @date 2022/3/26 10:55
  * @description Table 班级(场地) popUp
  */
-class TableClassPopUp: BasePopupWindow {
+class TableClassPopUp : BasePopupWindow {
 
 
-    lateinit var binding: PopupTableTopBinding
+    lateinit var binding: PopupTableClassBinding
     private var mSubmitCallback: SubmitCallBack? = null
-    private lateinit var expandableAdapter: BaseQuickAdapter<ChildrenItem, BaseViewHolder>
+    private var expandableParentAdapter: TableClassWheelAdapter? = null
+    private var expandableAdapter: TableClassWheelAdapter? = null
 
-    var selectData: ChildrenItem? = null
-    var tempSelectData: ChildrenItem? = null
+    val selectData: ClassInfo = ClassInfo()
+
+    var classList: MutableList<ClassInfoBean> = mutableListOf()
+    var classItemList: MutableList<ChildrenItem> = mutableListOf()
+
 
     interface SubmitCallBack {
-        fun getSubmitData(data: ChildrenItem?)
+        fun getSubmitData(data: ClassInfo)
     }
 
 
@@ -41,64 +46,156 @@ class TableClassPopUp: BasePopupWindow {
 
 
     init {
-        setContentView(R.layout.popup_table_top)
+        setContentView(R.layout.popup_table_class)
         setBackground(0)
         //setOutSideDismiss(false)
     }
 
     override fun onViewCreated(contentView: View) {
-        binding = PopupTableTopBinding.bind(contentView)
-        binding.tableTopExpandableRv.setBackgroundResource(R.color.color_F3FCF9)
+        binding = PopupTableClassBinding.bind(contentView)
+        /*binding.rvPopupTableClass.setBackgroundResource(R.color.color_F3FCF9)
+        binding.rvPopupTableClassItem.setBackgroundResource(R.color.color_F3FCF9)*/
         initListener()
     }
 
     private fun initListener() {
-        binding.tableTopExpandableRv.layoutManager = LinearLayoutManager(context)
 
-        expandableAdapter = object : BaseQuickAdapter<ChildrenItem, BaseViewHolder>(R.layout.item_table_class_popup) {
-            override fun convert(holder: BaseViewHolder, item: ChildrenItem) {
-                holder.setText(R.id.item_class_popup_firstTv, item.parentName)
-                holder.setText(R.id.item_class_popup_secondTv, item.name)
-                holder.getView<View>(R.id.item_class_popup_cl).setBackgroundResource(R.color.color_F3FCF9)
-                tempSelectData?.let {
-                    if (item.id == it.id) {
-                        holder.getView<View>(R.id.item_class_popup_cl).setBackgroundResource(R.color.colorWhite)
+
+        binding.rvPopupTableClass.setCyclic(false)
+        binding.rvPopupTableClassItem.setCyclic(false)
+
+        binding.rvPopupTableClass.setDividerColor(0xffffff)
+        binding.rvPopupTableClassItem.setDividerColor(0xffffff)
+
+        binding.rvPopupTableClass.setDividerType(WheelView.DividerType.WRAP)
+        binding.rvPopupTableClassItem.setDividerType(WheelView.DividerType.WRAP)
+
+        binding.rvPopupTableClass.setLineSpacingMultiplier(2f)
+        binding.rvPopupTableClassItem.setLineSpacingMultiplier(2f)
+
+
+        /*expandableParentAdapter = object :
+            BaseQuickAdapter<ClassInfoBean, BaseViewHolder>(R.layout.item_table_class_popup) {
+            override fun convert(holder: BaseViewHolder, item: ClassInfoBean) {
+                val binding = ItemTableClassPopupBinding.bind(holder.itemView)
+                binding.itemClassPopupFirstTv.text = item.name
+                binding.itemClassPopupCl.setBackgroundResource(R.color.color_F3FCF9)
+                if (tempSelectData.parentId.isNotEmpty()) {
+                    if (item.id == tempSelectData.parentId) {
+                        binding.itemClassPopupCl.setBackgroundResource(R.color.colorWhite)
                     }
                 }
-
             }
         }
 
+        expandableAdapter = object :
+            BaseQuickAdapter<ChildrenItem, BaseViewHolder>(R.layout.item_table_class_item) {
+            override fun convert(holder: BaseViewHolder, item: ChildrenItem) {
+                val binding = ItemTableClassItemBinding.bind(holder.itemView)
+                binding.itemClassPopupTv.text = item.name
+                binding.itemClassPopupCl.setBackgroundResource(R.color.color_F3FCF9)
+                if (tempSelectData.parentId.isNotEmpty()) {
+                    if (item.id == tempSelectData.parentId) {
+                        binding.itemClassPopupCl.setBackgroundResource(R.color.colorWhite)
+                    }
+                }
+            }
+        }
+
+        expandableParentAdapter.setOnItemClickListener { adapter, _, position ->
+            val temp = adapter.data[position] as ClassInfoBean
+            tempSelectData.parentId = temp.id
+            tempSelectData.parentName = temp.name
+            expandableParentAdapter.notifyDataSetChanged()
+            expandableAdapter.setList(temp.children)
+        }
+
         expandableAdapter.setOnItemClickListener { adapter, _, position ->
-            tempSelectData = adapter.data[position] as ChildrenItem
+            val temp = adapter.data[position] as ChildrenItem
+            tempSelectData.id = temp.id
+            tempSelectData.name = temp.name
             expandableAdapter.notifyDataSetChanged()
+        }*/
+
+
+        /*binding.rvPopupTableClass.adapter = expandableParentAdapter
+        binding.rvPopupTableClassItem.adapter = expandableAdapter*/
+
+
+
+        binding.rvPopupTableClass.setOnItemSelectedListener {
+            val temp = classList[it]
+            logd("item parent select = ${temp.name}")
+            classItemList.clear()
+            classItemList.addAll(temp.children)
+            val stringList = mutableListOf<String>()
+            classItemList.forEach { childrenItem ->
+                stringList.add(childrenItem.name)
+            }
+            expandableAdapter = TableClassWheelAdapter(stringList)
+            binding.rvPopupTableClassItem.adapter = expandableAdapter
         }
 
-        binding.tableTopExpandableRv.adapter = expandableAdapter
+        binding.rvPopupTableClassItem.setOnItemSelectedListener {
+            val temp = classItemList[it]
+            logd("item select = ${temp.name}")
+        }
 
 
-        binding.tableTopExpandableCancel.setOnClickListener { _ ->
+
+
+        binding.btnPopupTableClassCancel.setOnClickListener { _ ->
             dismiss()
         }
 
-        binding.tableTopExpandableSubmit.setOnClickListener { _ ->
-            selectData = tempSelectData
-            mSubmitCallback?.getSubmitData(selectData)
+        binding.btnPopupTableClassSubmit.setOnClickListener { _ ->
+
+            val parentItemIndex = binding.rvPopupTableClass.currentItem
+            val itemIndex = binding.rvPopupTableClassItem.currentItem
+
+            logd("currentItem = $parentItemIndex,$itemIndex")
+            if (!classList.isNullOrEmpty() &&
+                !classItemList.isNullOrEmpty() &&
+                classList.size > parentItemIndex &&
+                classItemList.size > itemIndex
+            ) {
+                selectData.parentId = classList[parentItemIndex].id
+                selectData.parentName = classList[parentItemIndex].name
+                selectData.id = classItemList[itemIndex].id
+                selectData.name = classItemList[itemIndex].name
+                mSubmitCallback?.getSubmitData(selectData)
+            }
             dismiss()
         }
     }
 
-    override fun dismiss() {
-        super.dismiss()
-        tempSelectData = selectData
-        expandableAdapter.notifyDataSetChanged()
-    }
-
-
-    fun setData(data: List<ChildrenItem>, select: ChildrenItem?) {
+    /*fun setData(data: List<ChildrenItem>, select: ChildrenItem?) {
         tempSelectData = select ?: data.first()
         selectData = tempSelectData
         expandableAdapter.setList(data)
+    }*/
+
+    fun setData(data: List<ClassInfoBean>, select: ClassInfo) {
+        classList.clear()
+        classList.addAll(data)
+
+        val stringList = mutableListOf<String>()
+        classList.forEach { children ->
+            stringList.add(children.name)
+        }
+
+        expandableParentAdapter = TableClassWheelAdapter(stringList)
+        binding.rvPopupTableClass.adapter = expandableParentAdapter
+
+        classItemList.clear()
+        classItemList.addAll(data[0].children)
+        val itemStringList = mutableListOf<String>()
+        classItemList.forEach { childrenItem ->
+            itemStringList.add(childrenItem.name)
+        }
+
+        expandableAdapter = TableClassWheelAdapter(itemStringList)
+        binding.rvPopupTableClassItem.adapter = expandableAdapter
     }
 
     fun setSubmitCallBack(callBack: SubmitCallBack?) {

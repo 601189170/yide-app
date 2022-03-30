@@ -12,6 +12,8 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.utils.TimeUtil;
 import com.yyide.chatim.utils.VHUtil;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 /**
@@ -60,7 +62,13 @@ public class SiteTableTimeAdapter extends BaseAdapter {
             }
         });
 
-        time.setText(getItem(position).day);
+        final DateTime today = DateTime.now();
+        if (today.toString("yyyy-MM-dd").equals(getItem(position).dataTime)) {
+            time.setText("今日");
+        }else {
+            time.setText(getItem(position).day);
+        }
+
         String week = getItem(position).week;
         day.setText(week);
         if (this.position == position) {

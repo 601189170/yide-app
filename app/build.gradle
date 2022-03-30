@@ -264,5 +264,6 @@ dependencies {
 
     // base popup
     implementation 'io.github.razerdp:BasePopup:3.2.0'
+    implementation 'com.haibin:calendarview:3.7.1'
 }
 

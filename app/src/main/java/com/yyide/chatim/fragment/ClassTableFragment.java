@@ -29,6 +29,7 @@ import com.yyide.chatim.dialog.TextPopUp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
 import com.yyide.chatim.model.table.ChildrenItem;
+import com.yyide.chatim.model.table.ClassInfo;
 import com.yyide.chatim.model.table.ClassInfoBean;
 import com.yyide.chatim.presenter.ClassTablePresenter;
 import com.yyide.chatim.utils.TimeUtil;
@@ -54,13 +55,16 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //private GetUserSchoolRsp.DataBean.FormBean classInfo;
     //private SwitchTableClassPop swichTableClassPop;
 
+    private boolean first = true;
+    private int thisWeek = 1;
+
     private ClassTableFragmnet2Binding binding;
     // 当前所选周数
     private ChildrenItem selectWeek;
     // 班级列表
-    List<ChildrenItem> classList = new ArrayList<>();
+    //List<ClassInfo> classList = new ArrayList<>();
     // 当前所选班级
-    ChildrenItem selectClassInfo = new ChildrenItem();
+    ClassInfo selectClassInfo = new ClassInfo();
 
     private TablePopUp weekPopUp;
     private TableClassPopUp classPopUp;
@@ -160,13 +164,11 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         classPopUp = new TableClassPopUp(this);
         classPopUp.setPopupGravity(Gravity.BOTTOM);
         classPopUp.setSubmitCallBack(data -> {
-            if (data != null) {
-                selectClassInfo = data;
-                String showName = selectClassInfo.getParentName() + selectClassInfo.getName();
-                binding.tableClassTop.className.setText(showName);
-                if (!selectClassInfo.getId().equals("")) {
-                    mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
-                }
+            selectClassInfo = data;
+            String showName = selectClassInfo.getParentName() + selectClassInfo.getName();
+            binding.tableClassTop.className.setText(showName);
+            if (!selectClassInfo.getId().equals("")) {
+                mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
             }
         });
 
@@ -252,9 +254,18 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void listAllBySchoolId(List<ClassInfoBean> classInfo) {
         Log.e("TAG", "listAllBySchoolId==>: " + JSON.toJSONString(classInfo));
-        classList.clear();
+        //classList.clear();
 
         if (classInfo.isEmpty()) {
+            binding.tableClassTop.className.setEnabled(false);
+            binding.tableClassTop.className.setText("暂无班级");
+            binding.tableClassTop.classNameLogo.setVisibility(View.INVISIBLE);
+            mvpPresenter.listTimeDataByApp("0", null);
+            return;
+        }
+
+        List<ChildrenItem> firstChildren = classInfo.get(0).getChildren();
+        if (firstChildren.isEmpty()){
             binding.tableClassTop.className.setEnabled(false);
             binding.tableClassTop.className.setText("暂无班级");
             binding.tableClassTop.classNameLogo.setVisibility(View.INVISIBLE);
@@ -265,16 +276,24 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
         binding.tableClassTop.className.setEnabled(true);
         binding.tableClassTop.classNameLogo.setVisibility(View.VISIBLE);
-        for (int i = 0; i < classInfo.size(); i++) {
+
+        /*for (int i = 0; i < classInfo.size(); i++) {
             List<ChildrenItem> childrenData = classInfo.get(i).getChildren();
             String outerName = classInfo.get(i).getName();
             for (int j = 0; j < childrenData.size(); j++) {
                 childrenData.get(j).setParentName(outerName);
             }
             classList.addAll(childrenData);
-        }
-        selectClassInfo = classList.get(0);
-        classPopUp.setData(classList, selectClassInfo);
+        }*/
+
+        ClassInfo firstData = new ClassInfo();
+        firstData.setParentId(classInfo.get(0).getId());
+        firstData.setParentName(classInfo.get(0).getName());
+        firstData.setId(firstChildren.get(0).getId());
+        firstData.setName(firstChildren.get(0).getName());
+        selectClassInfo = firstData;
+        classPopUp.setData(classInfo, selectClassInfo);
+
         String showName = selectClassInfo.getParentName() + selectClassInfo.getName();
         binding.tableClassTop.className.setText(showName);
         if (!selectClassInfo.getId().equals("")) {
@@ -300,7 +319,19 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     binding.tableClassTop.tableTopWeekLogo.setVisibility(View.VISIBLE);
                 }
 
-                final int thisWeek = rsp.getData().getThisWeek();
+                final int getThisWeek = rsp.getData().getThisWeek();
+                if (first){
+                    thisWeek = getThisWeek;
+                    first = false;
+                }
+
+                if (getThisWeek == thisWeek){
+                    binding.tableClassReturnCurrent.setVisibility(View.INVISIBLE);
+                }else{
+                    binding.tableClassReturnCurrent.setVisibility(View.VISIBLE);
+                }
+
+
                 // 设置总周数
                 List<ChildrenItem> data = new ArrayList<>();
                 for (int i = 0; i < rsp.getData().getWeekTotal(); i++) {
@@ -308,7 +339,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     ChildrenItem bean = new ChildrenItem("第" + weekNum + "周", "", weekNum);
                     data.add(bean);
                 }
-                selectWeek = data.get(thisWeek - 1);
+                selectWeek = data.get(getThisWeek - 1);
                 weekPopUp.setData(data, selectWeek);
                 binding.tableClassTop.tableTopWeekTv.setText(selectWeek.getName());
                 if (rsp.getData().getWeekList() != null) {
