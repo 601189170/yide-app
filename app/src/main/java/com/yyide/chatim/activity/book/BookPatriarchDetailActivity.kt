@@ -62,8 +62,9 @@ class BookPatriarchDetailActivity : BaseActivity() {
         )
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)
-//        viewBinding.tvName.text = guardianItem.name
+        viewBinding.tvName.text = guardianItem.name
         viewBinding.name.text = guardianItem.name
+        viewBinding.studentName.text=guardianItem.studentName
         viewBinding.tvFamilyRelations.text = guardianItem.getRelation()
         viewBinding.tvSingleGuardianship.text = if (guardianItem.singleParent == "1") "是" else "否"
         viewBinding.ivPhone.setOnClickListener {

@@ -116,7 +116,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
                             adapterjzg.getItem(position).subjectName,
                             adapterjzg.getItem(position).employeeSubjects,
                             "",
-                            "",
+                            adapterjzg.getItem(position).concealPhone,
                             adapterjzg.getItem(position).avatar);
 
                     Intent intent = new Intent(NoteBookActivity.this, BookTeacherDetailActivity.class);
@@ -159,26 +159,29 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     }
 
 
-    void setPostStudentDataByParent(List<ListByAppRsp3.DataDTO.AdlistDTO> list) {
+    void setPostStudentDataByParent(List<ListByAppRsp3.DataDTO.AdlistDTO> list,int index) {
 
         Intent intent = new Intent();
         intent.putExtra(NoteByListActivity.TAGStudentlistBeanByJz, JSON.toJSONString(list));
         intent.putExtra("schoolName", mSchoolName);
         intent.putExtra("schoolType", schoolType);
         intent.putExtra("id", "");
-        intent.putExtra("name", list.get(0).name);
+        intent.putExtra("index", index+"");
+//        intent.putExtra("name", list.get(0).name);
+        intent.putExtra("name", list.get(index).name);
         intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
         startActivity(intent);
     }
 
-    void setPostStudentDataByTeacher(List<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO> list) {
+    void setPostStudentDataByTeacher(List<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO> list,int index ) {
 
         Intent intent = new Intent();
         intent.putExtra(NoteByListActivity.TAGStudentlistBeanByTeacher, JSON.toJSONString(list));
         intent.putExtra("schoolName", mSchoolName);
         intent.putExtra("schoolType", schoolType);
-        intent.putExtra("id", list.get(0).id);
-        intent.putExtra("name", list.get(0).name);
+        intent.putExtra("id", list.get(index).id);
+        intent.putExtra("name", list.get(index).name);
+        intent.putExtra("index", index+"");
         intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
         startActivity(intent);
     }
@@ -231,12 +234,13 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             //学校组织结构
             ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBeans1 = new ArrayList<>();
             ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBeans111 = new ArrayList<>();
-
+            if (!TextUtils.isEmpty(rsp.data.schoolBadgeUrl)) {
+//                    GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
+                GlideUtil.loadImage(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
+            }
             if (rsp.data.deptVOList.size() > 0) {
                 pName.setText(rsp.data.schoolName);
-                if (!TextUtils.isEmpty(rsp.data.schoolBadgeUrl)) {
-                    GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
-                }
+
                 for (ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO listBean : rsp.data.deptVOList.get(0).children) {
                     listBean.itemType=1;
                     listBeans1.add(listBean);
@@ -269,7 +273,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setPostStudentDataByTeacher(adapter_student_by_teacher.list);
+                    setPostStudentDataByTeacher(adapter_student_by_teacher.list,position);
                 }
             });
 
@@ -298,8 +302,12 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
     @Override
     public void universityListByApp(ListByAppRsp3 rsp) {
 
-        Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
+        Log.e("TAG", "universityListByApp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES_0) {
+            if (!TextUtils.isEmpty(rsp.data.schoolBadgeUrl)) {
+//                    GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
+                GlideUtil.loadImage(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
+            }
             listview2.setAdapter(adapter_student_by_parent);
             adapter_student_by_parent.notifyData(rsp.data.adlist);
             if (adapter_student_by_parent.list.size()>0){
@@ -311,7 +319,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
             listview2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setPostStudentDataByParent(adapter_student_by_parent.list);
+                    setPostStudentDataByParent(adapter_student_by_parent.list,position);
                 }
             });
 

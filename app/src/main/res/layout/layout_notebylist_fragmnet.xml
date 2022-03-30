@@ -51,4 +51,11 @@
         android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <include
+        android:visibility="gone"
+
+        layout="@layout/empty2">
+
+    </include>
 </LinearLayout>

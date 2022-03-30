@@ -133,7 +133,7 @@
                     android:id="@+id/set"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_marginLeft="@dimen/dp_10"
                     android:text="显示"
                     android:textColor="#11C685"
                     android:textSize="@dimen/sp_14"
@@ -292,13 +292,14 @@
 
                 <TextView
                     android:id="@+id/address"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     android:textColor="@color/text_333333"
                     android:layout_marginLeft="85dp"
 
                     android:textSize="@dimen/text_14"
+                    android:paddingRight="10dp"
 
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

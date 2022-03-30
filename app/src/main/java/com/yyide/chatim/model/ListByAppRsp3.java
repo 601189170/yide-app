@@ -63,6 +63,7 @@ public class ListByAppRsp3 {
                 public String phone;
                 public String subjectName;
                 public String userId;
+                public String email;
 
            
             }

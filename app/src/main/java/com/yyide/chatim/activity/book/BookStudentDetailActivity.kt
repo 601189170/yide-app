@@ -73,10 +73,18 @@ class BookStudentDetailActivity : BaseActivity() {
         viewBinding.top.backLayout.setOnClickListener { finish() }
         viewBinding.top.title.text = getString(R.string.book_title_info_yd)
         viewBinding.tvClasses.text =
-            if (TextUtils.isEmpty(student.className)) "暂无班级星系" else student.className
+            if (TextUtils.isEmpty(student.classesName)) "暂无班级星系" else student.classesName
         viewBinding.tvName.text = student.name
         viewBinding.name.text = student.name
-        viewBinding.sex.text = if (student.sex == "1") "男" else "女"
+//        viewBinding.sex.text = if (student.sex == "1") "男" else "女"
+        if (student.sex == "1"){
+            viewBinding.sex.text="男"
+        }else if (student.sex == "0"){
+            viewBinding.sex.text="女"
+        }else{
+            viewBinding.sex.text="未知"
+        }
+//        viewBinding.sex.text = if (student.sex == "1") "男" else "女"
         viewBinding.address.text =
             if (!TextUtils.isEmpty(student.address)) student.address else "暂无"
 

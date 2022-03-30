@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.book.BookPatriarchDetailActivity;
 import com.yyide.chatim.activity.book.BookSearchActivity;
 import com.yyide.chatim.databinding.ItemNewBookGuardianSearchBinding;
@@ -47,6 +48,9 @@ public class NoteItemAdapter extends BaseMultiItemQuickAdapter<TeacherlistRsp.Da
                 GuardianAdapter guardianAdapter = new GuardianAdapter();
                 recyclerView_guardian.setAdapter(guardianAdapter);
                 guardianAdapter.setList(itemBean.elternAddBookDTOList);
+                if (!SpData.getIdentityInfo().staffIdentity()) {
+                    recyclerView_guardian.setVisibility(View.GONE);
+                }
                 guardianAdapter.setOnItemClickListener((adapter, view, position1) -> {
                     Parent item1 = guardianAdapter.getItem(position1);
 //                    if (BookSearchActivity.FROM_GATE.equals(from)){
@@ -61,7 +65,8 @@ public class NoteItemAdapter extends BaseMultiItemQuickAdapter<TeacherlistRsp.Da
                             item1.getRelations(),
                             item1.getWorkUnit(),
                             item1.getFaceInformation(),
-                            item1.getSingleParent()
+                            item1.getSingleParent(),
+                            itemBean.name
                     );
                     BookPatriarchDetailActivity.start(getContext(), guardianItem);
                 });
@@ -94,26 +99,17 @@ public class NoteItemAdapter extends BaseMultiItemQuickAdapter<TeacherlistRsp.Da
             ItemNewBookGuardianSearchBinding bind = ItemNewBookGuardianSearchBinding.bind(baseViewHolder.itemView);
             bind.tvName.setText(item.getName());
             switch (item.getRelations()){
-                case "0":
+                case "1":
                     bind.tvGuardianName.setText("父亲");
                     break;
-                case "1":
+                case "2":
                     bind.tvGuardianName.setText("母亲");
                     break;
-                case "2":
+                case "3":
                     bind.tvGuardianName.setText("爷爷");
                     break;
-                case "3":
-                    bind.tvGuardianName.setText("奶奶");
-                    break;
                 case "4":
-                    bind.tvGuardianName.setText("外公");
-                    break;
-                case "5":
-                    bind.tvGuardianName.setText("外婆");
-                    break;
-                case "6":
-                    bind.tvGuardianName.setText("其他监护人");
+                    bind.tvGuardianName.setText("奶奶");
                     break;
                 default:
                     bind.tvGuardianName.setText("其他监护人");

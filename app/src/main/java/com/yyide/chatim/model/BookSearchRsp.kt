@@ -136,7 +136,8 @@ data class Parent (
     var userId: String="",
     @JSONField(name = "workUnit")
     var workUnit: String="",
-
+    @JSONField(name = "studentName")
+    var studentName: String=""
 ):Serializable
 
 

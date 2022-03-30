@@ -55,6 +55,7 @@ public class NoteByListActivity extends BaseActivity {
     private String name;
     private String organization;
     private String type;
+    private String index;
     public static  String TAGStudentlistBeanByJz="TAGStudentlistBeanByJz";
     public static  String TAGStudentlistBeanByTeacher="TAGStudentlistBeanByTeacher";
     @Override
@@ -69,6 +70,7 @@ public class NoteByListActivity extends BaseActivity {
         name = getIntent().getStringExtra("name");
         organization = getIntent().getStringExtra("organization");
         type = getIntent().getStringExtra("type");
+        index = getIntent().getStringExtra("index");
 
         String str = getIntent().getStringExtra("listBean");
         String str2 = getIntent().getStringExtra("nowBean");
@@ -87,6 +89,7 @@ public class NoteByListActivity extends BaseActivity {
         Log.e("TAG", "teacherdata==》: "+ JSON.toJSONString(Jzdata));
         Log.e("TAG", "NoteByListActivity==>: "+ JSON.toJSONString(studentlistbeanByJz));
         Log.e("TAG", "NoteByListActivity==>: "+ JSON.toJSONString(studentlistbeanByTeacher));
+        Log.e("TAG", "index==>: "+ JSON.toJSONString(index));
         tabRecyAdapter = new TabRecyAdapter();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -114,7 +117,7 @@ public class NoteByListActivity extends BaseActivity {
                 recyclerview.smoothScrollToPosition(tabRecyAdapter.getItemCount());
             }
         });
-
+        Log.e("TAG", "NoteByListActivity: "+ JSON.toJSONString(listBean));
 //        initSutdentData();
         initDeptFragment();
     }
@@ -172,6 +175,7 @@ public class NoteByListActivity extends BaseActivity {
             noteTab.islast = "2";
             Bundle bundle = new Bundle();
             bundle.putString("id", id);
+            bundle.putString("index", index);
             bundle.putParcelableArrayList("listBean", listBean);
             bundle.putParcelableArrayList("nowBean", nowBean);
             bundle.putParcelableArrayList("StudentlistBeanByJz", studentlistbeanByJz);
@@ -203,6 +207,7 @@ public class NoteByListActivity extends BaseActivity {
         noteTabBean.organization = organization;
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
+        bundle.putString("index", index);
         bundle.putParcelableArrayList("listBean", listBean);
         bundle.putParcelableArrayList("nowBean", nowBean);
 //        bundle.putString("StudentlistBeanByJz", JSON.toJSONString(studentlistbeanByJz));

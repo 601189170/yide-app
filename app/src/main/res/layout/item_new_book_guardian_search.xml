@@ -34,8 +34,8 @@
         app:layout_constraintTop_toTopOf="@+id/tv_name" />
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#ffe4e7ed"
+        android:layout_height="1dp"
+        android:background="@color/color_DCDFE6"
         android:layout_marginStart="55dp"
         android:layout_marginRight="15dp"
         app:layout_constraintBottom_toBottomOf="parent"

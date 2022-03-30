@@ -70,17 +70,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp">
 
-                <com.yyide.chatim.widget.RadiusImageView
+                <ImageView
                     android:id="@+id/img"
                     android:layout_width="@dimen/dp_30"
                     android:layout_height="@dimen/dp_30"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/dp_12"
-                    android:scaleType="centerCrop"
-                    app:left_bottom_radius="6dp"
-                    app:right_bottom_radius="6dp"
-                    app:right_top_radius="6dp"
-                    app:left_top_radius="6dp" />
+                    />
 
                 <TextView
                     android:id="@+id/pName"

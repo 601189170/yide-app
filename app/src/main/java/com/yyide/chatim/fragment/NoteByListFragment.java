@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -36,6 +37,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -83,6 +85,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 
     @BindView(R.id.parent_recyclerView_student)
     RecyclerView parent_recyclerView_student;
+
+    @BindView(R.id.empty_layout)
+    ConstraintLayout empty_layout;
     //老师视角数据
     List<TeacherlistRsp.DataBean.RecordsBean> teacher_teacher_list = new ArrayList<>();
     List<TeacherlistRsp.DataBean.RecordsBean> teacher_ALLlist = new ArrayList<>();
@@ -92,12 +97,16 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
     List<TeacherlistRsp.DataBean.RecordsBean> parent_ALLlist = new ArrayList<>();
     List<TeacherlistRsp.DataBean.RecordsBean> parent_list_teacher = new ArrayList<>();
     List<TeacherlistRsp.DataBean.RecordsBean> parent_list_student = new ArrayList<>();
+    private String index;
+    private String position;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.layout_notebylist_fragmnet, container, false);
         id = getArguments().getString("id");
         islast = getArguments().getString("islast");
         organization = getArguments().getString("organization");
+        index = getArguments().getString("index");
 
 //        String Jzdata = getArguments().getString(NoteByListActivity.TAGStudentlistBeanByJz);
 //        String teacherdata = getArguments().getString(NoteByListActivity.TAGStudentlistBeanByTeacher);
@@ -105,6 +114,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 //        studentlistbeanByTeacher=(List<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>) JSON.parseObject(teacherdata,new TypeReference<List<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>>(){});
 
         listBean = getArguments().getParcelableArrayList(PARAMS_NAME);
+        nowBean = getArguments().getParcelableArrayList(PARAMS_NAME2);
         nowBean = getArguments().getParcelableArrayList(PARAMS_NAME2);
         studentlistbeanByJz = getArguments().getParcelableArrayList("StudentlistBeanByJz");
         studentlistbeanByTeacher = getArguments().getParcelableArrayList("StudentlistBeanByTeacher");
@@ -114,7 +124,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 //        Log.e("TAG", "teacherdata==》: "+ JSON.toJSONString(teacherdata));
         Log.e("TAG", "studentlistbeanByJz==》: "+ JSON.toJSONString(studentlistbeanByJz));
         Log.e("TAG", "studentlistbeanByTeacher==》: "+ JSON.toJSONString(studentlistbeanByTeacher));
-
+        Log.e("TAG", "setStudentData==index: "+JSON.toJSONString(index) );
         return mBaseView;
     }
 
@@ -125,6 +135,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 
         String studentDataByParent = getArguments().getString("StudentData_by_Parent");
         String TeacherDatabyParent = getArguments().getString("TeacherData_by_Parent");
+
         parent_list_student=(ArrayList<TeacherlistRsp.DataBean.RecordsBean>) JSON.parseObject(studentDataByParent,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
         parent_list_teacher=(ArrayList<TeacherlistRsp.DataBean.RecordsBean>) JSON.parseObject(TeacherDatabyParent,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
 
@@ -137,11 +148,25 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
             TeacherlistRsp.DataBean.RecordsBean bean1=new TeacherlistRsp.DataBean.RecordsBean();
             bean1.itemType = 1;
             bean1.name = "老师";
-            bean1.TeacherData_by_Parent =studentlistbeanByJz.get(0).elternList;
+//            Log.e("TAG", "setStudentData: "+JSON.toJSONString(index) );
+//            Log.e("TAG", "setStudentData_position: "+JSON.toJSONString(position) );
+
+            if (!TextUtils.isEmpty(index)){
+                bean1.TeacherData_by_Parent =studentlistbeanByJz.get(Integer.parseInt(index)).elternList;
+            }else {
+                bean1.TeacherData_by_Parent =studentlistbeanByJz.get(0).elternList;
+            }
+
             TeacherlistRsp.DataBean.RecordsBean bean2=new TeacherlistRsp.DataBean.RecordsBean();
             bean2.itemType = 1;
             bean2.name = "学生";
-            bean2.StudentData_by_Parent =studentlistbeanByJz.get(0).studentList;
+
+            if (!TextUtils.isEmpty(index)){
+                bean2.StudentData_by_Parent =studentlistbeanByJz.get(Integer.parseInt(index)).studentList;
+            }else {
+                bean2.StudentData_by_Parent =studentlistbeanByJz.get(0).studentList;
+            }
+
             parent_ALLlist.add(bean1);
             parent_ALLlist.add(bean2);
             parent_noteItemAdapter_all.setList(parent_ALLlist);
@@ -156,7 +181,8 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                     bundle.putString("StudentData_by_Parent", JSON.toJSONString(parent_noteItemAdapter_all.getItem(position).StudentData_by_Parent));
                     bundle.putString("TeacherData_by_Parent", JSON.toJSONString(parent_noteItemAdapter_all.getItem(position).TeacherData_by_Parent));
                     bundle.putString("islast", "1");
-                    Log.e("TAG", "parent_noteItemAdapter_all: "+JSON.toJSONString(bundle) );
+                    Log.e("TAG", "parent_noteItemAdapter_all: "+JSON.toJSONString(parent_noteItemAdapter_all.getItem(position).StudentData_by_Parent) );
+                    Log.e("TAG", "parent_noteItemAdapter_all: "+JSON.toJSONString(parent_noteItemAdapter_all.getItem(position).TeacherData_by_Parent) );
                     activity.initDeptFragmentNew(bundle);
                 }
             });
@@ -173,7 +199,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                             student.id,
                             student.name,
                             student.phone,
-                            student.classesName,
+                            student.className,
                             student.userId,
                             student.primaryGuardianPhone,
                             student.primaryGuardianPhone,
@@ -204,9 +230,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                         parent_noteItemAdapter_teacher.getItem(position).subjectName,
                         parent_noteItemAdapter_teacher.getItem(position).employeeSubjects,
                         "",
-                        "",
+                        parent_noteItemAdapter_teacher.getItem(position).concealPhone,
                         parent_noteItemAdapter_teacher.getItem(position).avatar);
-
+                Log.e("TAG", "parent_noteItemAdapter_teacher: "+JSON.toJSONString(parent_noteItemAdapter_teacher.getItem(position)) );
                 Intent intent = new Intent(mActivity, BookTeacherDetailActivity.class);
                 intent.putExtra("teacher", teacherItem);
                 startActivity(intent);
@@ -282,7 +308,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                             student.id,
                             student.name,
                             student.phone,
-                            student.classesName,
+                            student.className,
                             student.userId,
                             student.primaryGuardianPhone,
                             student.primaryGuardianPhone,
@@ -310,7 +336,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                         student.id,
                         student.name,
                         student.phone,
-                        student.classesName,
+                        student.className,
                         student.userId,
                         student.primaryGuardianPhone,
                         student.primaryGuardianPhone,
@@ -335,8 +361,12 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 
         Log.e("TAG", "list_student: "+JSON.toJSONString(teacher_list_student) );
         if (studentlistbeanByTeacher!=null&&studentlistbeanByTeacher.size()>0){
-            String studentDataByTeacher=JSON.toJSONString(studentlistbeanByTeacher.get(0).studentList);
-
+            String studentDataByTeacher;
+            if (!TextUtils.isEmpty(index)){
+                studentDataByTeacher =JSON.toJSONString(studentlistbeanByTeacher.get(Integer.parseInt(index)).studentList);
+            }else {
+                studentDataByTeacher =JSON.toJSONString(studentlistbeanByTeacher.get(0).studentList);
+            }
 
             teacher_list_student=(ArrayList<TeacherlistRsp.DataBean.RecordsBean>) JSON.parseObject(studentDataByTeacher,new TypeReference<List<TeacherlistRsp.DataBean.RecordsBean>>(){});
 //            TeacherlistRsp.DataBean.RecordsBean bean=new TeacherlistRsp.DataBean.RecordsBean();
@@ -377,7 +407,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                             student.id,
                             student.name,
                             student.phone,
-                            student.classesName,
+                            student.className,
                             student.userId,
                             student.primaryGuardianPhone,
                             student.primaryGuardianPhone,
@@ -405,7 +435,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                         student.id,
                         student.name,
                         student.phone,
-                        student.classesName,
+                        student.className,
                         student.userId,
                         student.primaryGuardianPhone,
                         student.primaryGuardianPhone,
@@ -457,24 +487,33 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
         parent_list_student.clear();
     }
     public void setVG(){
+        boolean em=true;
         if (teacher_teacher_list!=null&&teacher_teacher_list.size()>0){
             teacher_recyclerview_teacher.setVisibility(View.VISIBLE);
+            em=false;
         }
         if (teacher_list_student!=null&&teacher_list_student.size()>0){
             teacher_recyclerview_student.setVisibility(View.VISIBLE);
+            em=false;
         }
         if (teacher_ALLlist!=null&&teacher_ALLlist.size()>0){
             teacher_recyclerview_all.setVisibility(View.VISIBLE);
+            em=false;
         }
         if (parent_list_teacher!=null&&parent_list_teacher.size()>0){
             parent_recyclerView_teacher.setVisibility(View.VISIBLE);
+            em=false;
         }
         if (parent_list_student!=null&&parent_list_student.size()>0){
             parent_recyclerView_student.setVisibility(View.VISIBLE);
+            em=false;
         }
         if (parent_ALLlist!=null&&parent_ALLlist.size()>0){
             parent_recyclerview_all.setVisibility(View.VISIBLE);
+            em=false;
         }
+
+       empty_layout.setVisibility(em?View.VISIBLE:View.GONE);
 
     }
     private void sendRequset() {
@@ -553,6 +592,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                 bean.email =item2.email;
                 bean.sex =item2.gender;
                 bean.subjectName =item2.subjectName;
+                bean.concealPhone =item2.concealPhone;
 //            bean.sex = String.valueOf(item2.gender);
                 bean.id = Long.parseLong(item2.id);
                 teacher_teacher_list.add(bean);
@@ -586,9 +626,8 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                 ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBean = new ArrayList<>();
                 ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.EmployeeAddBookDTOListDTO> nowBean = new ArrayList<>();
 //                listBean.add(noteItemAdapter.getItem(position).organizationItem);
-                Log.e("TAG", "noteItemAdapter: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
-                Log.e("TAG", "setOnItemClickListener: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position).organizationItem) );
-                Log.e("TAG", "setOnItemClickListener==》employeeAddBookDTOList: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position).organizationItem2) );
+                Log.e("TAG", "teacher_noteItemAdapter_teacher: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
+
                 bundle.putParcelableArrayList(PARAMS_NAME, (ArrayList<? extends Parcelable>) teacher_noteItemAdapter_teacher.getItem(position).organizationItem.children);
                 bundle.putParcelableArrayList(PARAMS_NAME2, (ArrayList<? extends Parcelable>) teacher_noteItemAdapter_teacher.getItem(position).organizationItem.employeeAddBookDTOList);
                 TeacherlistRsp.DataBean.RecordsBean item = teacher_noteItemAdapter_teacher.getItem(position);
@@ -610,6 +649,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
 //                intent.putExtra("organization", organization);
 //                intent.setClass(mActivity, PersonInfoActivity.class);
 //                startActivity(intent);
+                Log.e("TAG", "teacher_noteItemAdapter_teacher: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
 
                 BookTeacherItem teacherItem = new BookTeacherItem(
                         teacher_noteItemAdapter_teacher.getItem(position).name,
@@ -620,7 +660,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                         teacher_noteItemAdapter_teacher.getItem(position).subjectName,
                         teacher_noteItemAdapter_teacher.getItem(position).employeeSubjects,
                         "",
-                        "",
+                        teacher_noteItemAdapter_teacher.getItem(position).concealPhone,
                         teacher_noteItemAdapter_teacher.getItem(position).avatar);
 
                 Intent intent = new Intent(mActivity, BookTeacherDetailActivity.class);

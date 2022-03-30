@@ -82,6 +82,15 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
 
 //            guardianAdapter.setList(student);
             guardianAdapter.setList(student.getElternAddBookDTOList());
+            if (!SpData.getIdentityInfo().staffIdentity()) {
+                bind.recyclerView.setVisibility(View.GONE);
+            }
+            if (getItemPosition(teacher) == (getData().size()-1)) {
+                bind.viewLine.setVisibility(View.GONE);
+            }else {
+                bind.viewLine.setVisibility(View.VISIBLE);
+            }
+
             guardianAdapter.setOnItemClickListener((adapter, view, position1) -> {
                 Parent item1 = guardianAdapter.getItem(position1);
                 if (BookSearchActivity.FROM_GATE.equals(from)){
@@ -96,7 +105,8 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                         item1.getRelations(),
                         item1.getWorkUnit(),
                         item1.getFaceInformation(),
-                        item1.getSingleParent()
+                        item1.getSingleParent(),
+                        student.getName()
                 );
                 BookPatriarchDetailActivity.start(getContext(), guardianItem);
             });
@@ -136,6 +146,7 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
             });
 
         } else {
+
             ItemBookSearchBinding bind = ItemBookSearchBinding.bind(holder.itemView);
             GlideUtil.loadImageHead(getContext(), teacher.getFaceInformation(), bind.ivHead);
             if (!TextUtils.isEmpty(teacher.getName())){
@@ -154,6 +165,17 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
                 }
             }
 
+//隐藏最后一条分割线
+//            if (getItemPosition(teacher) == getData().size() - 1) {
+//                holder.getView(R.id.vEnd).setVisibility(View.INVISIBLE);
+//            }
+
+            if (getItemPosition(teacher) == (getData().size()-1)) {
+                bind.viewLine.setVisibility(View.GONE);
+            }else {
+                bind.viewLine.setVisibility(View.VISIBLE);
+            }
+//            bind.viewLine.setVisibility();
 
             holder.itemView.setOnClickListener(v -> {
 
@@ -196,26 +218,17 @@ public class ItemBookSearchAdapter extends BaseMultiItemQuickAdapter<Teacher, Ba
             ItemNewBookGuardianSearchBinding bind = ItemNewBookGuardianSearchBinding.bind(baseViewHolder.itemView);
             bind.tvName.setText(item.getName());
             switch (item.getRelations()){
-                case "0":
+                case "1":
                     bind.tvGuardianName.setText("父亲");
                     break;
-                case "1":
+                case "2":
                     bind.tvGuardianName.setText("母亲");
                     break;
-                case "2":
+                case "3":
                     bind.tvGuardianName.setText("爷爷");
                     break;
-                case "3":
-                    bind.tvGuardianName.setText("奶奶");
-                    break;
                 case "4":
-                    bind.tvGuardianName.setText("外公");
-                    break;
-                case "5":
-                    bind.tvGuardianName.setText("外婆");
-                    break;
-                case "6":
-                    bind.tvGuardianName.setText("其他监护人");
+                    bind.tvGuardianName.setText("奶奶");
                     break;
                 default:
                     bind.tvGuardianName.setText("其他监护人");

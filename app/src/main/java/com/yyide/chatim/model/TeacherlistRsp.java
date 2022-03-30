@@ -106,7 +106,7 @@ public class TeacherlistRsp implements Serializable {
             public String email;
             public String avatar;
             public String sex; //1 男  0 女
-            public String classesName;//班级名称
+            public String className;//班级名称
             public String employeeSubjects;//班级名称
             public String primaryGuardianPhone;//主监护人
             public String deputyGuardianPhone;//副监护人
@@ -133,6 +133,7 @@ public class TeacherlistRsp implements Serializable {
             public long schoolId;
             public String userId;
             public String remarks;
+            public String concealPhone;
             public Object departmentName;
             public long departmentId;
             public List<DepartmentsBean> departments;

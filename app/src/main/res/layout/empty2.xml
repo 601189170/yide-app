@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_20"
         android:text="暂无数据"
-        android:textColor="@color/text_A60"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"

@@ -63,8 +63,10 @@ data class BookStudentItem(
     var name: String?,
     @JSONField(name = "phone")
     var phone: String?,//监护人ID
-    @JSONField(name = "className")
-    var className: String?,
+//    @JSONField(name = "className")
+//    var className: String?,
+    @JSONField(name = "classesName")
+    var classesName: String?,
     @JSONField(name = "userId")
     var userId: String?,
     @JSONField(name = "primaryGuardianPhone")
@@ -109,25 +111,21 @@ data class BookGuardianItem(
     @JSONField(name = "faceInformation")
     var faceInformation: String?,//头像
     @JSONField(name = "singleParent")
-    var singleParent: String?//是否单亲监护（0:否，1:是）
+    var singleParent: String?,//是否单亲监护（0:否，1:是）
+    @JSONField(name = "studentName")
+    var studentName: String?//是否单亲监护（0:否，1:是）
 ) : Serializable {
     @JvmName("getRelation1")
     fun getRelation(): String {
         return when (relation) {//	与监护人关系（0:父亲，1:母亲，2:爷爷，3:奶奶，4:外公，5:外婆，6:其它）
-            "0" ->
-                "父亲"
             "1" ->
-                "母亲"
+                "父亲"
             "2" ->
-                "爷爷"
+                "母亲"
             "3" ->
-                "奶奶"
+                "爷爷"
             "4" ->
-                "外公"
-            "5" ->
-                "外婆"
-            "6" ->
-                "其他监护人"
+                "奶奶"
             else ->
                 "其他监护人"
         }
