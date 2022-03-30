@@ -63,14 +63,14 @@ public class TableTimeAdapter extends BaseAdapter {
 
         final DateTime today = DateTime.now();
         if (today.toString("yyyy-MM-dd").equals(getItem(position).dataTime)) {
-            time.setText("今日");
+            time.setText("今天");
         }else {
             time.setText(getItem(position).day);
         }
 
         String week = getItem(position).week;
         String neek = week.replaceAll("星期", "");
-        if (!neek.contains("周") && !neek.equals("今日")) {
+        if (!neek.contains("周") && !neek.equals("今天")) {
             day.setText("周" + neek);
         } else {
             day.setText(neek);

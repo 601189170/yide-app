@@ -1,6 +1,7 @@
 package com.yyide.chatim.dialog
 
 import android.content.Context
+import android.view.Gravity
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.blankj.utilcode.util.SizeUtils
@@ -29,7 +30,10 @@ class TableClassPopUp : BasePopupWindow {
     private var expandableParentAdapter: TableClassWheelAdapter? = null
     private var expandableAdapter: TableClassWheelAdapter? = null
 
-    val selectData: ClassInfo = ClassInfo()
+    private val selectData: ClassInfo = ClassInfo()
+
+    private var parentIndex = 0
+    private var childrenIndex = 0
 
     var classList: MutableList<ClassInfoBean> = mutableListOf()
     var classItemList: MutableList<ChildrenItem> = mutableListOf()
@@ -48,6 +52,7 @@ class TableClassPopUp : BasePopupWindow {
     init {
         setContentView(R.layout.popup_table_class)
         setBackground(0)
+        popupGravity = Gravity.BOTTOM
         //setOutSideDismiss(false)
     }
 
@@ -159,6 +164,10 @@ class TableClassPopUp : BasePopupWindow {
                 classList.size > parentItemIndex &&
                 classItemList.size > itemIndex
             ) {
+
+                parentIndex = parentItemIndex;
+                childrenIndex = itemIndex
+
                 selectData.parentId = classList[parentItemIndex].id
                 selectData.parentName = classList[parentItemIndex].name
                 selectData.id = classItemList[itemIndex].id
@@ -169,6 +178,12 @@ class TableClassPopUp : BasePopupWindow {
         }
     }
 
+    override fun dismiss() {
+        binding.rvPopupTableClass.currentItem = parentIndex
+        binding.rvPopupTableClassItem.currentItem = childrenIndex
+        super.dismiss()
+    }
+
     /*fun setData(data: List<ChildrenItem>, select: ChildrenItem?) {
         tempSelectData = select ?: data.first()
         selectData = tempSelectData
@@ -176,6 +191,7 @@ class TableClassPopUp : BasePopupWindow {
     }*/
 
     fun setData(data: List<ClassInfoBean>, select: ClassInfo) {
+        // 构造班级名称
         classList.clear()
         classList.addAll(data)
 
@@ -187,6 +203,7 @@ class TableClassPopUp : BasePopupWindow {
         expandableParentAdapter = TableClassWheelAdapter(stringList)
         binding.rvPopupTableClass.adapter = expandableParentAdapter
 
+        //构造班级子名称
         classItemList.clear()
         classItemList.addAll(data[0].children)
         val itemStringList = mutableListOf<String>()

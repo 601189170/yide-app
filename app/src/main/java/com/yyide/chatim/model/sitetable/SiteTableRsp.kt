@@ -124,7 +124,7 @@ fun getWeek(dateTime: DateTime, showToday: Boolean): String {
     val today = DateTime.now().simplifiedDataTime()
     val dayOfWeek = dateTime.dayOfWeek % 7
     if (showToday && today == dateTime.simplifiedDataTime()) {
-        return "今日"
+        return "今天"
     }
     when (dayOfWeek) {
         0 -> return "周日"

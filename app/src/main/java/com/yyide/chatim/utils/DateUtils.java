@@ -400,7 +400,7 @@ public class DateUtils {
         final DateTime today = DateTime.now();
         final int dayOfWeek = dateTime.getDayOfWeek() % 7;
         if (showToday && today.toString("yyyy-MM-dd").equals(dateTime.toString("yyyy-MM-dd"))) {
-            return "今日";
+            return "今天";
         }
         switch (dayOfWeek) {
             case 0:

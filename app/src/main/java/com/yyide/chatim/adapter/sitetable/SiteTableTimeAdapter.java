@@ -64,7 +64,7 @@ public class SiteTableTimeAdapter extends BaseAdapter {
 
         final DateTime today = DateTime.now();
         if (today.toString("yyyy-MM-dd").equals(getItem(position).dataTime)) {
-            time.setText("今日");
+            time.setText("今天");
         }else {
             time.setText(getItem(position).day);
         }
