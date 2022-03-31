@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.blankj.utilcode.util.SPUtils
 import com.blankj.utilcode.util.SizeUtils
 import com.contrarywind.listener.OnItemSelectedListener
 import com.contrarywind.view.WheelView
@@ -13,6 +14,7 @@ import com.yyide.chatim.databinding.PopupTableClassBinding
 import com.yyide.chatim.model.table.ChildrenItem
 import com.yyide.chatim.model.table.ClassInfo
 import com.yyide.chatim.model.table.ClassInfoBean
+import com.yyide.chatim.utils.asDrawable
 import com.yyide.chatim.utils.logd
 import razerdp.basepopup.BasePopupWindow
 
@@ -75,9 +77,11 @@ class TableClassPopUp : BasePopupWindow {
         binding.rvPopupTableClass.setDividerType(WheelView.DividerType.WRAP)
         binding.rvPopupTableClassItem.setDividerType(WheelView.DividerType.WRAP)
 
-        binding.rvPopupTableClass.setLineSpacingMultiplier(2f)
-        binding.rvPopupTableClassItem.setLineSpacingMultiplier(2f)
+        binding.rvPopupTableClass.setLineSpacingMultiplier(1.4f)
+        binding.rvPopupTableClassItem.setLineSpacingMultiplier(1.4f)
 
+        binding.rvPopupTableClass.setTextSize(14f)
+        binding.rvPopupTableClassItem.setTextSize(14f)
 
         /*expandableParentAdapter = object :
             BaseQuickAdapter<ClassInfoBean, BaseViewHolder>(R.layout.item_table_class_popup) {

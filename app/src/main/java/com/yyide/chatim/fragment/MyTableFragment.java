@@ -81,9 +81,10 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         adapter = new MyTableAdapter(R.layout.mytable_item);
         binding.listview.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.listview.setAdapter(adapter);
-        adapter.setEmptyView(R.layout.empty);
+        binding.empty.tvDesc.setText("您今天没有课程");
+       /* adapter.setEmptyView(R.layout.empty);
         TextView tipTextView = adapter.getEmptyLayout().findViewById(R.id.tv_desc);
-        tipTextView.setText("您今天没有课程");
+        tipTextView.setText("您今天没有课程");*/
 
         timeAdapter = new TableTimeAdapter();
         timeAdapter.setOnItemClickListener((view12, position) -> {
@@ -180,6 +181,13 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
             if (itemList != null && itemList.getList() != null){
                 dataBeans.addAll(itemList.getList());
             }
+        }
+        if (dataBeans.isEmpty()){
+            binding.empty.getRoot().setVisibility(View.VISIBLE);
+            binding.listview.setVisibility(View.INVISIBLE);
+        }else {
+            binding.empty.getRoot().setVisibility(View.GONE);
+            binding.listview.setVisibility(View.VISIBLE);
         }
         return dataBeans;
     }

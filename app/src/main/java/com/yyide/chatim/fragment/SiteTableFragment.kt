@@ -245,7 +245,7 @@ class SiteTableFragment : Fragment() {
             siteTableItemAdapter.notifyData(courseList, -1)
 
             //空数据
-            siteTableFragmentBinding.empty2.root.visibility =
+            siteTableFragmentBinding.empty.root.visibility =
                 if (it.timetableList?.isEmpty() == true) View.VISIBLE else View.GONE
             siteTableFragmentBinding.leftLayout.visibility =
                 if (it.timetableList?.isEmpty() == true) View.GONE else View.VISIBLE
@@ -282,7 +282,7 @@ class SiteTableFragment : Fragment() {
     private fun initView() {
         leftLayout = siteTableFragmentBinding.leftLayout
 
-        siteTableFragmentBinding.empty2.tvDesc.text = "场地未设置课表"
+        siteTableFragmentBinding.empty.tvDesc.text = "场地未设置课表"
         /*adapter = SiteTableTimeAdapter(weekdayList)
         adapter.setOnItemClickListener { view, position ->
             Log.d("grid click", "onViewCreated: site click")

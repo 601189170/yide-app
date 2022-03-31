@@ -98,7 +98,15 @@
         app:layout_constraintTop_toBottomOf="@id/cl_teacher_attendance_user">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_teacher_attendance_punch_record"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_teacher_attendance_signIn"
             android:layout_width="150dp"
             android:layout_height="62dp"
@@ -127,10 +135,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_teacher_attendance_signOut"
             android:layout_width="150dp"
             android:layout_height="62dp"
@@ -159,18 +167,18 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_teacher_attendance_punch"
             android:layout_width="140dp"
             android:layout_height="140dp"
-            android:background="@mipmap/attendance_can_punch"
+            android:background="@mipmap/attendance_fail_bg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_teacher_attendance_signIn"
+            app:layout_constraintTop_toBottomOf="@id/rv_teacher_attendance_punch_record"
             app:layout_constraintVertical_bias="0.3" >
 
             <TextView
@@ -186,17 +194,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TextView
+
+            <TextClock
                 android:id="@+id/tv_teacher_attendance_punch_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="09:00:00"
+                android:format24Hour="@string/format_24H"
+                android:format12Hour="@string/format_24H"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_punch_state" />
+                app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_punch_state"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

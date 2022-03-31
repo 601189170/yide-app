@@ -265,5 +265,9 @@ dependencies {
     // base popup
     implementation 'io.github.razerdp:BasePopup:3.2.0'
     implementation 'com.haibin:calendarview:3.7.1'
+
+    //高德地图
+    //定位功能
+    compile 'com.amap.api:location:latest.integration'
 }
 

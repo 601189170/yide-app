@@ -43,7 +43,7 @@
     <View
         android:id="@+id/view_popup_table_class_select_bg"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="25dp"
         android:background="@color/white"
         android:layout_marginHorizontal="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,15 +51,10 @@
         app:layout_constraintBottom_toBottomOf="@id/rv_popup_table_class"/>
 
 
-
     <com.contrarywind.view.WheelView
         android:id="@+id/rv_popup_table_class"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:paddingTop="5dp"
-        app:normalTextSize="14sp"
-        app:lineColorWv="@color/white"
-        app:selectedTextSize="16sp"
+        android:layout_height="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_popup_table_class"
         app:layout_constraintWidth_percent="0.5" />
@@ -68,11 +63,7 @@
     <com.contrarywind.view.WheelView
         android:id="@+id/rv_popup_table_class_item"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:paddingTop="5dp"
-        app:lineColorWv="@color/white"
-        app:selectedTextSize="16sp"
-        app:normalTextSize="14sp"
+        android:layout_height="80dp"
         app:layout_constraintWidth_percent="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_popup_table_class_item" />

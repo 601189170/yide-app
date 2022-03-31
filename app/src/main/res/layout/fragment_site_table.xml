@@ -61,10 +61,7 @@
                 android:horizontalSpacing="1dp"
                 android:numColumns="7"
                 android:verticalSpacing="1dp" />
-            <include
-                android:id="@+id/empty2"
-                layout="@layout/empty"
-                android:visibility="gone"/>
+
         </LinearLayout>
     </ScrollView>
 

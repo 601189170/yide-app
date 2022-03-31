@@ -1,5 +1,6 @@
 package com.yyide.chatim.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *wifi基本操作工具类
+ * wifi基本操作工具类
  */
 public class WifiTool {
     // 上下文Context对象
@@ -40,9 +41,7 @@ public class WifiTool {
         NetworkInfo.State wifi = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
                 .getState();
 
-        if (info != null && info.isAvailable() && wifi == NetworkInfo.State.CONNECTED)
-
-        {
+        if (info != null && info.isAvailable() && wifi == NetworkInfo.State.CONNECTED) {
             return true;
         } else {
             return false;
@@ -83,6 +82,7 @@ public class WifiTool {
         }
         return ssids;
     }
+
     public List<ScanResult> getScanSSIDsResult2() {
         // 扫描的热点数据
         List<ScanResult> resultList;
@@ -103,7 +103,7 @@ public class WifiTool {
         List<String> s = getScanSSIDsResult();
         List<String> result = new ArrayList<String>();
         for (String str : s) {
-            if (checkDssid(str,"1")) {
+            if (checkDssid(str, "1")) {
                 result.add(str);
             }
         }
@@ -116,13 +116,12 @@ public class WifiTool {
      * @param ssid
      * @return
      */
-    private boolean checkDssid(String ssid,String condition) {
-        if (!TextUtils.isEmpty(ssid)&&!TextUtils.isEmpty(condition)) {
+    private boolean checkDssid(String ssid, String condition) {
+        if (!TextUtils.isEmpty(ssid) && !TextUtils.isEmpty(condition)) {
             //这里条件根据自己的需求来判断，我这里就是随便写的一个条件
             if (ssid.length() > 8 && (ssid.substring(0, 8).equals(condition))) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } else {
@@ -165,6 +164,7 @@ public class WifiTool {
     /**
      * 创建WifiConfiguration对象
      * 分为三种情况：1没有密码;2用wep加密;3用wpa加密
+     *
      * @param SSID
      * @param Password
      * @param Type
@@ -224,14 +224,38 @@ public class WifiTool {
         return config;
     }
 
+    @SuppressLint("MissingPermission")
     public WifiConfiguration IsExsits(String SSID) {
-        List<WifiConfiguration> existingConfigs = mWifiManager
-                .getConfiguredNetworks();
+        List<WifiConfiguration> existingConfigs = mWifiManager.getConfiguredNetworks();
         for (WifiConfiguration existingConfig : existingConfigs) {
             if (existingConfig.SSID.equals("\"" + SSID + "\"")) {
                 return existingConfig;
             }
         }
         return null;
+    }
+
+    /**
+     * 获取已连接的Wifi路由器的Mac地址
+     */
+    public static String getConnectedWifiMacAddress(Context context) {
+        String connectedWifiMacAddress = null;
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        if (wifiManager != null) {
+            WifiInfo result = wifiManager.getConnectionInfo();
+            connectedWifiMacAddress = result.getBSSID();
+        }
+        return connectedWifiMacAddress;
+    }
+
+    /**
+     * 获取已连接的Wifi路由器的Mac地址
+     */
+    public static WifiInfo getConnectedWifiInfo(Context context) {
+        String connectedWifiMacAddress = null;
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo result = wifiManager.getConnectionInfo();
+        return result;
     }
 }

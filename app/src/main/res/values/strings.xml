@@ -368,5 +368,6 @@
     <string name="late_title">迟到</string>
     <string name="leave_early_title">早退</string>
     <string name="ask_for_leave_title">请假</string>
+    <string name="format_24H">HH:mm:ss</string>
 
 </resources>
