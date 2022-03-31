@@ -188,6 +188,39 @@ class MeetingSaveActivity : BaseActivity() {
             )
         }
 
+        // 保存会议
+        viewModel.meetingSaveLiveData.observe(this) {
+            hideLoading()
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
+            // 从会议详情里面进入的需要携带返回值
+            setResult(Activity.RESULT_OK, Intent().apply {
+                putExtra(ResultCodeStr.NORMAL_TYPE_CODE, ResultCodeStr.MEETING_DETAIL_EDIT_UPDATE)
+            })
+            finish()
+        }
+
+        //会议详情
+        viewModel.meetingDetailLiveData.observe(this) {
+            hideLoading()
+            val result = it.getOrNull()
+            if (result != null) {
+                setData(result)
+            }
+        }
+
+        // 会议删除
+        viewModel.meetingDelLiveData.observe(this) {
+            hideLoading()
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
+            // 从会议详情里面进入的需要携带返回值
+            setResult(Activity.RESULT_OK, Intent().apply {
+                putExtra(ResultCodeStr.NORMAL_TYPE_CODE, ResultCodeStr.MEETING_DETAIL_EDIT_DEL)
+            })
+            finish()
+        }
+
 
         /*viewBinding.tvTime.text =
             DateUtils.formatTime(
@@ -325,28 +358,11 @@ class MeetingSaveActivity : BaseActivity() {
 
     private fun getDetail() {
         showLoading()
-        viewModel.meetingDetailLiveData.observe(this) {
-            hideLoading()
-            val result = it.getOrNull()
-            if (result != null) {
-                setData(result)
-            }
-        }
         viewModel.requestMeetingDetail(id)
     }
 
     private fun del(scheduleId: String) {
         showLoading()
-        viewModel.meetingDelLiveData.observe(this) {
-            hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
-            // 从会议详情里面进入的需要携带返回值
-            setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra(ResultCodeStr.NORMAL_TYPE_CODE, ResultCodeStr.MEETING_DETAIL_EDIT_DEL)
-            })
-            finish()
-        }
         viewModel.requestDel(scheduleId)
     }
 
@@ -356,16 +372,7 @@ class MeetingSaveActivity : BaseActivity() {
     private fun sava() {
         val title = viewBinding.etMeetingTitle.text.toString().trim()
         //val time = viewBinding.tvTime.text.toString().trim()
-        viewModel.meetingSaveLiveData.observe(this) {
-            hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
-            // 从会议详情里面进入的需要携带返回值
-            setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra(ResultCodeStr.NORMAL_TYPE_CODE, ResultCodeStr.MEETING_DETAIL_EDIT_UPDATE)
-            })
-            finish()
-        }
+
         val startTime = viewModel.startTimeLiveData.value ?: ""
         val endTime = viewModel.endTimeLiveData.value ?: ""
         when {
