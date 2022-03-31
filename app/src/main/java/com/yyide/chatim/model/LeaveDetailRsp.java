@@ -48,6 +48,16 @@ public class LeaveDetailRsp {
         private String dept;
         @SerializedName("createTime")
         private String createTime;
+        @SerializedName("isBack")
+        private boolean isBack;
+
+        public boolean isBack() {
+            return isBack;
+        }
+
+        public void setBack(boolean back) {
+            isBack = back;
+        }
 
         public static class ApprJsonDTO {
             @SerializedName("endTime")

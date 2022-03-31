@@ -1,6 +1,5 @@
 package com.yyide.chatim.model
 
-import androidx.room.Ignore
 import com.alibaba.fastjson.annotation.JSONField
 import java.io.Serializable
 
@@ -17,6 +16,7 @@ data class LeaveApprovalBean(
         var hours: Float,
         var procId: String,
         var procKey: String,
+        var isBack: Boolean = false,
         var sponsorType: String
     )
 
@@ -48,6 +48,7 @@ data class LeaveApprovalBean(
         var name: String,
         var pid: String,
         var sort: Int,
+        var isBack: Boolean,
         var status: String,
         var userType: Int
     ) {

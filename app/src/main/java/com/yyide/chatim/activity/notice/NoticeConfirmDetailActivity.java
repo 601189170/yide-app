@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.notice.fragment.NoticeItemFragment;
 import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeConfirmDetailPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeConfirmDetailView;

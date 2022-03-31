@@ -169,8 +169,8 @@
     <string name="todo_title">待办</string>
 
 
-    <!--通知模块-->
-    <string name="notice_announcement_title">通知公告</string>
+    <!--信息发布 通知模块-->
+    <string name="notice_announcement_title">信息发布</string>
     <string name="notice_release_title">发布通知</string>
     <string name="notice_un_confirm_title">未确认人员</string>
     <string name="notice_un_read_title">未读人员</string>

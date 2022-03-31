@@ -129,8 +129,8 @@ class IdentitySelectActivity :
             schoolBean = schoolList?.get(position)
             //选择身份
             schoolList?.get(position)?.let {
-                if (it.children!!.isNotEmpty()) {
-                    initAdapter(it.children!!)
+                if (it.children.isNotEmpty()) {
+                    initAdapter(it.children)
                 }
             }
         }
@@ -149,6 +149,7 @@ class IdentitySelectActivity :
         mAdapter.setSelectIndex(0)
         mAdapter.setOnItemClickListener { adapter, view, position ->
             mAdapter.setSelectIndex(position)
+            identityBean = mAdapter.getItem(position)
         }
         identityBean = mAdapter.getSelectItem()
     }

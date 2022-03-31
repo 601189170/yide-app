@@ -125,6 +125,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private String reason = "";
     private float hours;
     private String procId;
+    private boolean isBack;
     private List<Long> carbonCopyPeopleId = new ArrayList<>();
     private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList = new ArrayList<>();
     private String deptName;
@@ -226,11 +227,13 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 reason = s.toString();
+                if (!TextUtils.isEmpty(reason) && reason.length() >= 300) {
+                    ToastUtils.showShort("请假理由最多300字");
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
         initCC();
@@ -314,7 +317,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             leaveRequestBean.setStudentId(classBean.getStudentId());
             dept = classBean.getId();
         }
-        mvpPresenter.addLeave(leaveRequestBean, procId, sponsorType, dept, deptName, getAppList(), getCCList());
+        mvpPresenter.addLeave(leaveRequestBean, isBack, procId, sponsorType, dept, deptName, getAppList(), getCCList());
     }
 
     private List<LeaveApprovalBean.RequestParam> getAppList() {
@@ -394,6 +397,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         hours = data.getHours();
         sponsorType = data.getSponsorType();
         procId = data.getProcId();
+        isBack = data.isBack();
         btn_commit.setAlpha(1f);
         btn_commit.setClickable(true);
 

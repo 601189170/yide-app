@@ -79,7 +79,6 @@ abstract class BaseNetworkApi<I>(private val baseUrl: String) : IService<I> {
             if ((throwable is HttpException && throwable.code() == ErrorCode.UNAUTHORIZED)) {
                 // 这里刷新token，然后重试
             }
-
         }
 //        }
         return Result.failure(NetworkException.of(ErrorCode.VALUE_IS_NULL, "请求异常"))

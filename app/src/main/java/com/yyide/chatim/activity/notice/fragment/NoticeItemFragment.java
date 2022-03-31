@@ -1,10 +1,8 @@
-package com.yyide.chatim.activity.notice;
+package com.yyide.chatim.activity.notice.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,19 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.notice.presenter.NoticeConfirmListFragmentPresenter;
-import com.yyide.chatim.activity.notice.presenter.NoticeTemplateListFragmentPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeConfirmListFragmentView;
-import com.yyide.chatim.activity.notice.view.NoticeTemplateListFragmentView;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.ConfirmDetailRsp;
-import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.FootView;
 
 import org.jetbrains.annotations.NotNull;

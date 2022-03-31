@@ -1,4 +1,4 @@
-package com.yyide.chatim.activity.notice;
+package com.yyide.chatim.activity.notice.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,23 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.notice.NoticeCreateActivity;
 import com.yyide.chatim.activity.notice.presenter.NoticeTemplateListFragmentPresenter;
 import com.yyide.chatim.activity.notice.view.NoticeTemplateListFragmentView;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.model.NoticeAnnouncementModel;
-import com.yyide.chatim.activity.notice.presenter.NoticeAnnouncementFragmentPresenter;
-import com.yyide.chatim.activity.notice.view.NoticeAnnouncementFragmentView;
-import com.yyide.chatim.model.NoticeListRsp;
 import com.yyide.chatim.model.TemplateListRsp;
 
 import org.jetbrains.annotations.NotNull;

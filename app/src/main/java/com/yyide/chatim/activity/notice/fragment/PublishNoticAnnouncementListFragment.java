@@ -1,9 +1,8 @@
-package com.yyide.chatim.activity.notice;
+package com.yyide.chatim.activity.notice.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,26 +10,22 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.yyide.chatim.R;
+import com.yyide.chatim.activity.notice.NoticeAnnouncementActivity;
+import com.yyide.chatim.activity.notice.NoticeDetailActivity;
 import com.yyide.chatim.activity.notice.presenter.PublishAnnouncementFragmentPresenter;
 import com.yyide.chatim.activity.notice.view.PublishAnnouncementFragmentView;
 import com.yyide.chatim.adapter.PublishNoticeAnnouncementListAdapter;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.NoticeListRsp;
-import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.view.DialogUtil;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +115,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
                 intent.putExtra("type", 3);
                 intent.putExtra("id", record.getId());
                 intent.putExtra("status", record.getStatus());
-                intent.putExtra("sendObject",record.getSendObject());
+                intent.putExtra("sendObject", record.getSendObject());
                 startActivity(intent);
             }
 
@@ -145,31 +140,25 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         refresh = true;
         swipeRefreshLayout.setRefreshing(true);
     }
+
     @Override
     public void onStart() {
         super.onStart();
         Log.e(TAG, "onStart: ");
-        if (getActivity() instanceof NoticeAnnouncementActivity){
-            NoticeAnnouncementActivity activity = (NoticeAnnouncementActivity) getActivity();
-            boolean other = activity.other2;
-            Log.e(TAG, "onStart2: "+other );
-            if (other){
-                activity.other2 = false;
-                mvpPresenter.noticeList(2, 1, 10);
-                refresh = true;
-                swipeRefreshLayout.setRefreshing(true);
-            }
+        if (getActivity() instanceof NoticeAnnouncementActivity) {
+            mvpPresenter.noticeList(2, 1, 10);
+            refresh = true;
+            swipeRefreshLayout.setRefreshing(true);
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e(TAG, "onDestroy: " );
-        if (publishNoticeAnnouncementListAdapter != null){
+        Log.e(TAG, "onDestroy: ");
+        if (publishNoticeAnnouncementListAdapter != null) {
             publishNoticeAnnouncementListAdapter.cancelTimer();
         }
-
     }
 
     @Override
@@ -185,7 +174,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         publishNoticeAnnouncementListAdapter.setIsLoadMore(!records.isEmpty());
         publishNoticeAnnouncementListAdapter.setIsLastPage(curIndex == pages);
         publishNoticeAnnouncementListAdapter.setOnlyOnePage(pages <= 1);
-        if (refresh){
+        if (refresh) {
             list.clear();
             refresh = false;
             swipeRefreshLayout.setRefreshing(false);
@@ -194,16 +183,17 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
         if (!records.isEmpty()) {
             list.addAll(records);
         }
-        if (publishNoticeAnnouncementListAdapter != null){
+        if (publishNoticeAnnouncementListAdapter != null) {
             publishNoticeAnnouncementListAdapter.cancelTimer();
             publishNoticeAnnouncementListAdapter.notifyDataSetChanged();
         }
         showBlankPage();
     }
-    public void showBlankPage(){
-        if(list.isEmpty()){
+
+    public void showBlankPage() {
+        if (list.isEmpty()) {
             blank_page.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             blank_page.setVisibility(View.GONE);
         }
     }
@@ -231,14 +221,14 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
 
     @Override
     public void deleteFail(String msg) {
-        ToastUtils.showShort("删除失败:"+msg);
+        ToastUtils.showShort("删除失败:" + msg);
     }
 
     @Override
     public void onRefresh() {
         curIndex = 1;
         refresh = true;
-        mvpPresenter.noticeList(2,1,10);
+        mvpPresenter.noticeList(2, 1, 10);
     }
 
     private int mLastVisibleItemPosition;
@@ -253,7 +243,7 @@ public class PublishNoticAnnouncementListFragment extends BaseMvpFragment<Publis
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItemPosition + 1 == publishNoticeAnnouncementListAdapter.getItemCount()) {
                     loading = true;
                     //发送网络请求获取更多数据
-                    if (curIndex>=pages){
+                    if (curIndex >= pages) {
                         //ToastUtils.showShort("没有更多数据了！");
                         return;
                     }

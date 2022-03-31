@@ -334,10 +334,13 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
             groupStudent.setVisibility(View.VISIBLE);
             tvStudentName.setText(apprJson.getStudent());
         }
+
         tv_leave_time.setText(data.getCreateTime());
         taskId = data.getTaskId();
         processId = data.getProcInstId();
-
+        if (data.isBack()) {
+            btn_more.setVisibility(View.GONE);
+        }
         tv_leave_title.setText(data.getTitle());
         tv_start_time.setText(apprJson.getStartTime());
         tv_end_time.setText(apprJson.getEndTime());
@@ -346,11 +349,19 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         leaveStatus(data.getStatus(), tv_leave_flow_status);
 
         if (data.getHiApprNodeList() != null) {
+            for (int i = 0; i < data.getHiApprNodeList().size(); i++) {
+                LeaveDetailRsp.DataDTO.HiApprNodeListDTO hiApprNodeListDTO = data.getHiApprNodeList().get(i);
+                if (i == 1 && "1".equals(hiApprNodeListDTO.getStatus())) {
+                    btn_more.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        if (data.getHiApprNodeList() != null && data.getCcList() != null && data.getCcList().size() > 0) {
             LeaveDetailRsp.DataDTO.HiApprNodeListDTO listDTO = new LeaveDetailRsp.DataDTO.HiApprNodeListDTO();
             listDTO.setCc(true);
             listDTO.setCcList(data.getCcList());
             data.getHiApprNodeList().add(listDTO);
-            String userId = SpData.getIdentityInfo().getId() + "";
         }
 
         //审批流程
