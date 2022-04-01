@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.schedule
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -54,6 +55,7 @@ class ScheduleEditActivityMain : BaseActivity() {
     private var enableEditMode = true
     private var sourceRepetitionRule: Repetition? = null
     var type: String? = null
+    var from: String? = null
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +77,26 @@ class ScheduleEditActivityMain : BaseActivity() {
     private fun editEnable(enable:Boolean){
         val editable = enable && promoter
         //标题
-        scheduleEditBinding.top.title.text = "编辑日程"
+
+        if (!TextUtils.isEmpty(from)){
+            scheduleEditBinding.top.title.text = "编辑日程"
+            //删除
+            scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
+            scheduleEditBinding.top.tvRight.visibility = View.GONE
+        }else{
+            scheduleEditBinding.top.title.text = "创建日程"
+            scheduleEditBinding.top.ivRight.visibility = View.GONE
+            scheduleEditBinding.top.ivEdit.visibility = View.GONE
+            scheduleEditBinding.top.tvRight.visibility = View.VISIBLE
+            scheduleEditBinding.top.tvRight.setText("简洁版")
+        }
+
+        scheduleEditBinding.top.tvRight.setOnClickListener {
+
+            finish()
+        }
+
+
 
         //日程名称
         //日程完成状态
@@ -96,7 +117,7 @@ class ScheduleEditActivityMain : BaseActivity() {
         adapter.setList(labelList)
         //参与人participant
 //        scheduleEditBinding.clParticipant.isEnabled = editable
-        val participant = scheduleEditViewModel.participantList.value?: mutableListOf()
+//        val participant = scheduleEditViewModel.participantList.value?: mutableListOf()
 //        if (participant.isEmpty()) {
 //            scheduleEditBinding.clParticipant.visibility =
 //                if (editable) View.VISIBLE else View.GONE
@@ -158,6 +179,8 @@ class ScheduleEditActivityMain : BaseActivity() {
     private fun initView() {
 //        scheduleEditBinding.clParticipant.visibility = if (SpData.getIdentityInfo().staffIdentity()) View.VISIBLE else View.GONE
         val stringExtra = intent.getStringExtra("data")
+        from = intent.getStringExtra("from")
+
         type = intent.getStringExtra("type")
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
         val format = getString(R.string.schedule_create_time_and_status)
@@ -237,6 +260,23 @@ class ScheduleEditActivityMain : BaseActivity() {
             scheduleEditViewModel.labelListLiveData.value = labelList
             //参与人participant
             scheduleEditViewModel.participantList.value = it.participantList
+            val stringBuilder = StringBuilder()
+
+            it.participantList.map {
+                it.realname
+            }.forEach {
+                stringBuilder.append(it).append("  ")
+            }
+
+            if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
+                scheduleEditBinding.tvParticipant.text = "添加参与人"
+                scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black11))
+            } else {
+                scheduleEditBinding.tvParticipant.text = stringBuilder.toString()
+                scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
+            }
+            //显示参与人
+//            showSelectedParticipant(it.participantList)
 //            if (SpData.getIdentityInfo().staffIdentity()) {
 //                if (it.participant.isEmpty()) {
 //                    scheduleEditBinding.clParticipant.visibility =
@@ -275,6 +315,8 @@ class ScheduleEditActivityMain : BaseActivity() {
             val statusText = if (it.status == "1") "已完成" else "待完成"
             val bottomText = String.format(format,DateUtils.formatTime(it.createdDateTime, "", "MM月dd日 HH:mm"),statusText)
 //            scheduleEditBinding.tvScheduleCreateTime.text = bottomText
+
+
         }
 
         scheduleEditBinding.top.backLayout.setOnClickListener {
@@ -282,7 +324,7 @@ class ScheduleEditActivityMain : BaseActivity() {
         }
 //        scheduleEditBinding.clBtnCommit.visibility = if (promoter) View.VISIBLE else View.GONE
         scheduleEditBinding.clBtnCommit.setOnClickListener {
-            val title = scheduleEditBinding.etScheduleTitle.text.toString()
+            val title = scheduleEditBinding.etScheduleTitle.text.toString().trim()
             if (TextUtils.isEmpty(title)){
                 ToastUtils.showShort("需要输入日程名称")
                 return@setOnClickListener
@@ -322,8 +364,8 @@ class ScheduleEditActivityMain : BaseActivity() {
 //                scheduleEditViewModel.saveOrModifySchedule(true)
 //            }
         }
-        //删除
-        scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
+
+
         scheduleEditBinding.top.ivRight.setOnClickListener {
             DialogUtil.showScheduleDelDialog(
                 this,
@@ -623,12 +665,19 @@ class ScheduleEditActivityMain : BaseActivity() {
 
     val adapter = object :
         BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_label_flow_list) {
+        @SuppressLint("WrongConstant")
         override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             holder.getView<ImageView>(R.id.iv_del).visibility =
                 if (enableEditMode) View.VISIBLE else View.GONE
             val drawable = GradientDrawable()
-            drawable.cornerRadius = DisplayUtils.dip2px(this@ScheduleEditActivityMain, 2f).toFloat()
-            drawable.setColor(ColorUtil.parseColor(item.colorValue))
+//            drawable.cornerRadius = DisplayUtils.dip2px(this@ScheduleEditActivityMain, 2f).toFloat()
+//            drawable.setColor(ColorUtil.parseColor(item.colorValue))
+            drawable.setStroke(1, ColorUtil.parseColor(item.colorValue))
+
+            drawable.setShape(GradientDrawable.LINEAR_GRADIENT);
+
+            holder.setTextColor(R.id.tv_label,ColorUtil.parseColor(item.colorValue))
+
             holder.getView<TextView>(R.id.tv_label).background = drawable
             holder.setText(R.id.tv_label, item.labelName)
             holder.itemView.setOnClickListener {
@@ -765,12 +814,12 @@ class ScheduleEditActivityMain : BaseActivity() {
         list.map { it.name }.forEach {
             stringBuilder.append(it).append("  ")
         }
-        loge("showSelectedParticipant:$"+stringBuilder.toString())
+//        loge("showSelectedParticipant:$"+stringBuilder.toString())
         if (stringBuilder.isEmpty() || stringBuilder.isBlank()) {
             scheduleEditBinding.tvParticipant.text = "添加参与人"
             scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black11))
         } else {
-            scheduleEditBinding.tvParticipant.text = stringBuilder
+            scheduleEditBinding.tvParticipant.text = stringBuilder.toString()
             scheduleEditBinding.tvParticipant.setTextColor(resources.getColor(R.color.black9))
         }
     }

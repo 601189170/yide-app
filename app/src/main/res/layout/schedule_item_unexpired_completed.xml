@@ -21,6 +21,8 @@
         android:id="@+id/iv_schedule_type_img"
         android:layout_width="@dimen/dp_20"
         android:layout_height="@dimen/dp_20"
+        app:layout_constraintRight_toLeftOf="@+id/tv_schedule_name"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -33,11 +35,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="开学典礼"
+        app:layout_constraintRight_toLeftOf="@+id/iv_mine_label"
+
         android:textColor="#1E1E1E"
         android:textSize="@dimen/text_16"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:maxEms="14"
+
+        android:maxLines="1"
+
+        android:maxEms="12"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"
         app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
@@ -64,6 +69,8 @@
         android:background="@drawable/bg_blue_wdcj"
         android:text="我创建的"
         android:padding="3dp"
+
+
         android:layout_marginLeft="5dp"
         android:textColor="@color/white"
         app:layout_constraintLeft_toRightOf="@id/tv_schedule_name"

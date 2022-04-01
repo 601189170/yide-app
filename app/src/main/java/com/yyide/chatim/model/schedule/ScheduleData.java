@@ -269,11 +269,11 @@ public class ScheduleData implements MultiItemEntity, Cloneable, Comparable<Sche
         this.labelList = labelList;
     }
 
-    public List<ParticipantRsp.DataBean.ParticipantListBean> getParticipantlist() {
+    public List<ParticipantRsp.DataBean.ParticipantListBean> getParticipantList() {
         return participantList;
     }
 
-    public void setParticipant(List<ParticipantRsp.DataBean.ParticipantListBean> participantList) {
+    public void setParticipantList(List<ParticipantRsp.DataBean.ParticipantListBean> participantList) {
         this.participantList = participantList;
     }
 

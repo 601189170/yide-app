@@ -90,7 +90,7 @@ class ScheduleSettingsActivity : BaseActivity() {
             finish()
         }
         scheduleSettingsBinding.top.tvRight.visibility = View.VISIBLE
-        scheduleSettingsBinding.top.tvRight.text = "保存"
+        scheduleSettingsBinding.top.tvRight.text = "完成"
         scheduleSettingsBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         scheduleSettingsBinding.top.tvRight.setOnClickListener {
             settingsViewModel.saveSettings()
@@ -209,18 +209,18 @@ class ScheduleSettingsActivity : BaseActivity() {
     }
 
     private fun showClassSchedule(show: Boolean) {
-        if (SpData.getIdentityInfo().staffIdentity()) {
-            scheduleSettingsBinding.gpClassScheduleClassRemind.visibility =
-                if (show) View.VISIBLE else View.GONE
-            scheduleSettingsBinding.gpClassScheduleHomeworkRelease.visibility =
-                if (show) View.VISIBLE else View.GONE
-            scheduleSettingsBinding.vLine2.visibility = if (show) View.VISIBLE else View.GONE
-        } else {
-            scheduleSettingsBinding.gpClassScheduleClassRemind.visibility =
-                if (show) View.VISIBLE else View.GONE
-            scheduleSettingsBinding.gpClassScheduleHomeworkRelease.visibility = View.GONE
-            scheduleSettingsBinding.vLine2.visibility = if (show) View.INVISIBLE else View.GONE
-        }
+//        if (SpData.getIdentityInfo().staffIdentity()) {
+//            scheduleSettingsBinding.gpClassScheduleClassRemind.visibility =
+//                if (show) View.VISIBLE else View.GONE
+//            scheduleSettingsBinding.gpClassScheduleHomeworkRelease.visibility =
+//                if (show) View.VISIBLE else View.GONE
+//            scheduleSettingsBinding.vLine2.visibility = if (show) View.VISIBLE else View.GONE
+//        } else {
+//            scheduleSettingsBinding.gpClassScheduleClassRemind.visibility =
+//                if (show) View.VISIBLE else View.GONE
+//            scheduleSettingsBinding.gpClassScheduleHomeworkRelease.visibility = View.GONE
+//            scheduleSettingsBinding.vLine2.visibility = if (show) View.INVISIBLE else View.GONE
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

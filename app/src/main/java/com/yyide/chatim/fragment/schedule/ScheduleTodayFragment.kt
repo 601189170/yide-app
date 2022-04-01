@@ -187,7 +187,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fragmentScheduleTodayBinding.rvWeekUndoList.setOnItemMenuClickListener(
             mWeekMenuItemClickListener
         )
-        fragmentScheduleTodayBinding.rvWeekUndoList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
+//        fragmentScheduleTodayBinding.rvWeekUndoList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         fragmentScheduleTodayBinding.rvWeekUndoList.adapter = thisWeekScheduleTodayAdapter
         thisWeekScheduleTodayAdapter.setOnItemClickListener { adapter, view, position ->
             loge("本周未完成：$position")
@@ -202,6 +202,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
             val intent = Intent(context, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
+            intent.putExtra("from", "1")
             startActivity(intent)
         }
 
@@ -213,7 +214,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fragmentScheduleTodayBinding.rvTodayList.setOnItemMenuClickListener(
             mTodayMenuItemClickListener
         )
-        fragmentScheduleTodayBinding.rvTodayList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
+//        fragmentScheduleTodayBinding.rvTodayList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         fragmentScheduleTodayBinding.rvTodayList.adapter = todayScheduleTodayAdapter
         todayScheduleTodayAdapter.setOnItemClickListener { adapter, view, position ->
             loge("今日清单：$position")
@@ -228,6 +229,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
             val intent = Intent(context, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
+            intent.putExtra("from", "1")
             startActivity(intent)
         }
 

@@ -29,8 +29,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_schedule_title"
                 android:layout_width="match_parent"
-                android:layout_height="148dp"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:paddingBottom="@dimen/dp_20"
                 app:layout_constraintTop_toTopOf="parent">
                 <LinearLayout
                     android:layout_marginTop="@dimen/dp_15"
@@ -55,7 +56,7 @@
 
                     tools:ignore="MissingConstraints" />
 
-                <EditText
+                <TextView
                     android:id="@+id/et_schedule_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,6 +81,7 @@
                     android:layout_marginStart="@dimen/dp_20"
                     android:background="@color/white"
                     android:hint="添加备注"
+
                     android:textColor="#333333"
                     android:textColorHint="#999999"
                     android:paddingTop="@dimen/dp_16"

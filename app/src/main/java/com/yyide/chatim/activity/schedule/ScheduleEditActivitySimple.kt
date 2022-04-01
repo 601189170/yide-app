@@ -53,6 +53,8 @@ class ScheduleEditActivitySimple : BaseActivity() {
     val list = getList()
     val list2 = getList2()
     var repetition:Boolean = false
+    var from: String? = null
+
 
     //否是是发起人
     private var promoter = true
@@ -62,7 +64,15 @@ class ScheduleEditActivitySimple : BaseActivity() {
         scheduleEditBinding = ActivityScheduleEdit2Binding.inflate(layoutInflater)
         setContentView(scheduleEditBinding.root)
         initView()
-
+        //日程删除监听
+        scheduleEditViewModel.deleteResult.observe(this, {
+            if (it) {
+                //日程删除成功 并删除本地数据
+                val scheduleId = scheduleEditViewModel.scheduleIdLiveData.value ?: ""
+                ScheduleDaoUtil.deleteScheduleData(scheduleId)
+                finish()
+            }
+        })
     }
 
     override fun getContentViewID(): Int {
@@ -101,12 +111,14 @@ class ScheduleEditActivitySimple : BaseActivity() {
         scheduleEditBinding.top.ivEdit.visibility=View.VISIBLE;
 
         val stringExtra = intent.getStringExtra("data")
+        val from = intent.getStringExtra("from")
 
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
         Log.e("TAG", "scheduleData: "+JSON.toJSONString(scheduleData) )
         scheduleEditBinding.top.ivEdit.setOnClickListener {
             val intent = Intent(this, ScheduleEditActivityMain::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
+            intent.putExtra("from", JSON.toJSONString(from))
             startActivity(intent)
             finish()
         }
@@ -122,13 +134,18 @@ class ScheduleEditActivitySimple : BaseActivity() {
             scheduleEditViewModel.participantList.value = it.participantList
             scheduleEditViewModel.scheduleIdLiveData.value = it.id
             val stringBuilder = StringBuilder()
+//            for (participantListBean in it.participantList) {
+//                if (!TextUtils.isEmpty(it.name)){
+//                    stringBuilder.append(it.name).append("  ")
+//
+//                }
+//            }
             it.participantList.map {
-                if (it!=null)
-                it.name
+                it.realname
             }.forEach {
                 stringBuilder.append(it).append("  ")
             }
-            scheduleEditBinding.tvPerson .setText(stringBuilder)
+            scheduleEditBinding.tvPerson .setText(stringBuilder.toString())
             scheduleEditBinding.tvStartTime.text =
                     DateUtils.formatTime(it.startTime, "", "MM月dd日 HH:mm")
             scheduleEditBinding.tvEndTime.text =

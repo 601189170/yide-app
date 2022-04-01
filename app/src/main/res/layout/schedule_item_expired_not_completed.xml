@@ -6,6 +6,7 @@
     android:background="@drawable/schedule_list_item_bg_shape"
     android:paddingStart="@dimen/dp_10"
     android:paddingBottom="@dimen/dp_14">
+
     <ImageView
         android:id="@+id/iv_schedule_type_img"
         android:layout_width="@dimen/dp_20"
@@ -13,6 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/default_user_icon"
+        app:layout_constraintRight_toLeftOf="@+id/tv_schedule_name"
         android:layout_marginTop="@dimen/dp_14"
         />
     <TextView
@@ -23,8 +25,12 @@
         android:textColor="#ff666666"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"
-        android:singleLine="true"
-        android:maxEms="14"
+
+        android:maxLines="1"
+        android:maxEms="12"
+
+        app:layout_constraintRight_toLeftOf="@+id/iv_mine_label"
+
         app:layout_constraintLeft_toRightOf="@id/iv_schedule_type_img"
         app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
         app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"
@@ -50,8 +56,10 @@
         android:background="@drawable/bg_blue_wdcj"
         android:text="我创建的"
         android:padding="3dp"
-        android:layout_marginLeft="5dp"
+
         android:textColor="@color/white"
+
+        android:layout_marginLeft="5dp"
         app:layout_constraintLeft_toRightOf="@id/tv_schedule_name"
         app:layout_constraintTop_toTopOf="@id/iv_schedule_type_img"
         app:layout_constraintBottom_toBottomOf="@id/iv_schedule_type_img"

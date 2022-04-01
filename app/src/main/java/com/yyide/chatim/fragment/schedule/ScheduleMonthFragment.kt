@@ -195,6 +195,7 @@ class ScheduleMonthFragment : Fragment(), OnCalendarClickListener,
             }
             val intent = Intent(context, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
+            intent.putExtra("from", "1")
             startActivity(intent)
         }
 
