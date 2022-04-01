@@ -233,6 +233,7 @@ class ScheduleSearchActivity : BaseActivity() {
 
             val intent = Intent(this@ScheduleSearchActivity, ScheduleEditActivitySimple::class.java)
             intent.putExtra("data", JSON.toJSONString(scheduleData))
+            intent.putExtra("from", "1")
             startActivity(intent)
         }
         initSearchHistory()

@@ -52,7 +52,10 @@ class ScheduleEditViewModel : ViewModel() {
     //场地
     val siteLiveData = MutableLiveData<SiteNameRsp.DataBean>()
     //参与人选择
-    val participantList = MutableLiveData<List<ParticipantRsp.DataBean.ParticipantListBean>>(mutableListOf())
+//    val participantList = MutableLiveData<List<ParticipantRsp.DataBean.ParticipantListBean>>(mutableListOf())
+    val participantList = MutableLiveData<List<ParticipantRsp.DataBean.ParticipantListBean>>()
+//    val participantList = MutableLiveData<List<LabelListRsp.DataBean>>()
+
     //备注
     val remarkLiveData = MutableLiveData<String>()
     //更新类型
@@ -126,12 +129,13 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.endTime = endTime
         scheduleData.isAllDay = if (allDay) "1" else "0"
         scheduleData.labelList = labelListLiveData.value
+        scheduleData.participantList = participantList.value
         loge("ScheduleEditViewModel==> "+JSON.toJSONString(scheduleData))
 
-        if (participantList.value!=null){
-            scheduleData.participantList = participantList.value
-        }
-        loge("ScheduleEditViewModel2==> "+JSON.toJSONString(scheduleData))
+//        if (participantList.value!=null){
+//            scheduleData.participantList = participantList.value
+//        }
+
 
         scheduleData.siteId = siteLiveData.value?.id
         scheduleData.remark = remarkLiveData.value

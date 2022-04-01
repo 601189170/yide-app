@@ -171,7 +171,7 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
         scheduleListAdapter = ScheduleListAdapter()
         rvScheduleList.setSwipeMenuCreator(swipeMenuCreator)
         rvScheduleList.setOnItemMenuClickListener(mMenuItemClickListener)
-        rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
+//        rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         rvScheduleList.adapter = scheduleListAdapter
         scheduleListAdapter.setOnItemClickListener { _, _, position ->
             val scheduleData = list[position]
@@ -188,9 +188,12 @@ class ScheduleListFragment : Fragment(), OnCalendarClickListener,
                 }
                 val intent = Intent(context, ScheduleEditActivitySimple::class.java)
                 intent.putExtra("data", JSON.toJSONString(scheduleData))
+                intent.putExtra("from", "1")
                 startActivity(intent)
             }
         }
+
+
     }
 
     override fun onClickDate(year: Int, month: Int, day: Int) {

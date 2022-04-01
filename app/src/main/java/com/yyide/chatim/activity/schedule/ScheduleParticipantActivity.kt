@@ -130,8 +130,11 @@ class ScheduleParticipantActivity : BaseActivity() {
         )
         if (participantDataList != null) {
             participantDataList.forEach {
-                it.name = it.name
-                it.realname = it.realname
+                if (it!=null){
+                    it.name = it.name
+                    it.realname = it.realname
+                }
+
                 //it.realname = it.userName
                 //it.teacherId = it.userId
                 //it.participantId = it.userId

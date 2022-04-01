@@ -109,7 +109,8 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 
     private var refresh = false
     private var scroll = true
-    private lateinit var ScheduleMonthAdapter: ScheduleMonthListAdapter
+//    private lateinit var ScheduleMonthAdapter: ScheduleMonthListAdapter
+    private lateinit var ScheduleMonthAdapter: ScheduleListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -126,13 +127,18 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         EventBus.getDefault().register(this)
 
         calendarComposeLayout = view.findViewById(R.id.calendarComposeLayout)
-
-        initView()
-
+        rvScheduleList = calendarComposeLayout.rvScheduleList
+        blankPage = calendarComposeLayout.blankPage
+        swipeRefreshLayout = calendarComposeLayout.swipeRefreshLayout
+        calendarComposeLayout.setOnCalendarClickListener(this)
+//        initView()
+        initScheduleList()
         initData()
+
+
         //计算当前的年月日
         mCurrentSelectYear = DateTime.now().year
-        mCurrentSelectMonth = DateTime.now().monthOfYear-1
+        mCurrentSelectMonth = DateTime.now().monthOfYear
         mCurrentSelectDay = DateTime.now().dayOfMonth
         loge("当前日期：$mCurrentSelectYear-$mCurrentSelectMonth-$mCurrentSelectDay")
         scheduleMonthViewModel.monthDataList.observe(requireActivity(),{
@@ -146,6 +152,17 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                     hints.add(hintCircle)
 //                    addTaskHint(hintCircle)
                 }
+            }
+            val dateTime = DateTime(mCurrentSelectYear,mCurrentSelectMonth+1,mCurrentSelectDay,0,0,0).simplifiedDataTime()
+            curDateTime = dateTime
+            val value = scheduleMonthViewModel.monthDataList.value
+            if (value!=null && value[dateTime] != null){
+
+                val mutableList = value[dateTime]
+
+                mutableList?.sort()
+                ScheduleMonthAdapter.setList(mutableList);
+                list=ScheduleMonthAdapter.data;
             }
             if (refresh){
                 refresh = false
@@ -180,6 +197,11 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
             loge("刷新数据列表 $it")
             updateData()
         }
+        swipeRefreshLayout.setOnRefreshListener(this)
+        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
+//        mCurrentSelectYear = DateTime.now().year
+//        mCurrentSelectMonth = DateTime.now().monthOfYear-1
+//        mCurrentSelectDay = DateTime.now().dayOfMonth
         //addTaskHint(HintCircle(5, 3))
         //addTaskHints(listOf(HintCircle(9, 2), HintCircle(10, 1), HintCircle(13, 5)))
     }
@@ -198,11 +220,15 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 //        list=value;
         if (value!=null && value[dateTime] != null){
             val mutableList = value[dateTime]
+
             mutableList?.sort()
             ScheduleMonthAdapter.setList(mutableList);
+            list=ScheduleMonthAdapter.data;
         }
 
     }
+
+
     private fun initScheduleList() {
         val manager = LinearLayoutManager(activity)
         manager.setOrientation(LinearLayoutManager.VERTICAL)
@@ -210,12 +236,36 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         val itemAnimator = DefaultItemAnimator()
         itemAnimator.supportsChangeAnimations = false
         rvScheduleList.setItemAnimator(itemAnimator)
-        ScheduleMonthAdapter = ScheduleMonthListAdapter()
+        ScheduleMonthAdapter = ScheduleListAdapter()
+//        todayScheduleTodayAdapter = ScheduleListAdapter()
         rvScheduleList.setSwipeMenuCreator(swipeMenuCreator)
         rvScheduleList.setOnItemMenuClickListener(mMenuItemClickListener)
-        rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
+//        rvScheduleList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         rvScheduleList.adapter = ScheduleMonthAdapter
+//        ScheduleMonthAdapter.setOnItemClickListener { _, _, position ->
+//            val scheduleData = ScheduleMonthAdapter.data[position]
+//            if (!scheduleData.isMonthHead) {
+//                loge("点击日程 $scheduleData")
+//                curModifySchedule = scheduleData
+//                if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CONFERENCE) {
+//                    MeetingSaveActivity.jumpUpdate(requireContext(), scheduleData.id)
+//                    return@setOnItemClickListener
+//                }
+//                if (scheduleData.type.toInt() == Schedule.SCHEDULE_TYPE_CLASS_SCHEDULE) {
+//                    ScheduleTimetableClassActivity.jump(requireContext(), scheduleData)
+//                    return@setOnItemClickListener
+//                }
+//                val intent = Intent(context, ScheduleEditActivitySimple::class.java)
+//                intent.putExtra("data", JSON.toJSONString(scheduleData))
+//                intent.putExtra("from", "1")
+//
+//                startActivity(intent)
+//            }
+//        }
+
         ScheduleMonthAdapter.setOnItemClickListener { _, _, position ->
+//            Log.e("TAG", "点击日程==》: "+JSON.toJSONString(list[position]) )
+//            val scheduleData = list[position]
             val scheduleData = ScheduleMonthAdapter.data[position]
             if (!scheduleData.isMonthHead) {
                 loge("点击日程 $scheduleData")
@@ -230,6 +280,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                 }
                 val intent = Intent(context, ScheduleEditActivitySimple::class.java)
                 intent.putExtra("data", JSON.toJSONString(scheduleData))
+                intent.putExtra("from", "1")
                 startActivity(intent)
             }
         }
@@ -243,7 +294,11 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                 val direction = menuBridge.direction // 左侧还是右侧菜单。
                 val menuPosition = menuBridge.position // 菜单在RecyclerView的Item中的Position。
                 if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
-                    val scheduleData = list[position]
+                    Log.e("TAG", "scheduleDatalist==》: "+JSON.toJSONString(ScheduleMonthAdapter.data) )
+
+//                    val scheduleData = list[position]
+                    val scheduleData = ScheduleMonthAdapter.data[position]
+                    ScheduleMonthAdapter.data
                     val type = scheduleData.type
                     when(type.toInt()){
                         Schedule.SCHEDULE_TYPE_SCHEDULE ->{
@@ -314,7 +369,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         swipeRefreshLayout = calendarComposeLayout.swipeRefreshLayout
         calendarComposeLayout.setOnCalendarClickListener(this)
 
-        initScheduleList()
+
         swipeRefreshLayout.setOnRefreshListener(this)
         swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
@@ -366,8 +421,8 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         mCurrentSelectDay = day
         val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
         loge("dateTime=$dateTime")
-        scheduleMonthViewModel.scheduleList(dateTime)
-        scheduleViewModel.curDateTime.postValue(dateTime)
+//        scheduleMonthViewModel.scheduleList(dateTime)
+//        scheduleViewModel.curDateTime.postValue(dateTime)
     }
     fun scrollToPosition(year: Int, month: Int, day: Int) {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
@@ -538,8 +593,11 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                 position: Int
         ) {
             run {
-                if (list.isNotEmpty() && !list[position].isMonthHead) {
-                    val scheduleData = list[position]
+//                if (list.isNotEmpty() && !list[position].isMonthHead) {
+                if (ScheduleMonthAdapter.data.isNotEmpty() && !ScheduleMonthAdapter.data[position].isMonthHead) {
+//                    val scheduleData = list[position]
+                    val scheduleData = ScheduleMonthAdapter.data[position]
+
                     ////日程类型【0：校历日程，1：课表日程，2：事务日程 3：会议日程】
                     val type = scheduleData.type
                     val promoterSelf = scheduleData.promoterSelf()

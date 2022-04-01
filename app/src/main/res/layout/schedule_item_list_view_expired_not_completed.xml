@@ -54,8 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
-            android:maxEms="14"
-            android:singleLine="true"
+            android:maxEms="12"
+            android:maxLines="1"
             android:text="开学典礼"
             android:textColor="#ff666666"
             android:textSize="@dimen/text_16"
@@ -84,6 +84,7 @@
             android:padding="3dp"
             android:layout_marginLeft="5dp"
             android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/tv_schedule_name"
 
             app:layout_constraintLeft_toRightOf="@+id/tv_schedule_name"
             app:layout_constraintTop_toTopOf="@+id/tv_schedule_name"

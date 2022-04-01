@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.schedule
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -53,12 +54,21 @@ class ScheduleLabelManageActivity : BaseActivity() {
 
     private val adapter = object :
         BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_label_manage_list) {
+        @SuppressLint("WrongConstant")
         override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
             holder.setText(R.id.tv_label, item.labelName)
             val drawable = GradientDrawable()
-            drawable.cornerRadius =
-                DisplayUtils.dip2px(this@ScheduleLabelManageActivity, 2f).toFloat()
-            drawable.setColor(ColorUtil.parseColor(item.colorValue))
+
+
+
+            drawable.setStroke(1, ColorUtil.parseColor(item.colorValue))
+
+            drawable.setShape(GradientDrawable.LINEAR_GRADIENT);
+
+            holder.setTextColor(R.id.tv_label,ColorUtil.parseColor(item.colorValue))
+//            drawable.cornerRadius =
+//                DisplayUtils.dip2px(this@ScheduleLabelManageActivity, 2f).toFloat()
+//            drawable.setColor(ColorUtil.parseColor(item.colorValue))
             holder.getView<TextView>(R.id.tv_label).background = drawable
         }
     }

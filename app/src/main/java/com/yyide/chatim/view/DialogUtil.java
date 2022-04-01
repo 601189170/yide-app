@@ -1066,9 +1066,11 @@ public class DialogUtil {
         scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1, "yyyy-MM-dd HH:mm:ss"));
         scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2, "yyyy-MM-dd HH:mm:ss"));
         String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1, "MM月dd日 HH:mm");
+        String toptime = ScheduleDaoUtil.INSTANCE.toStringTime(time1, "MM月dd日");
         final InputFilter[] inputFilter = {new MaxTextLengthFilter(20)};
         binding.edit.setFilters(inputFilter);
         binding.tvDate.setText(time);
+        binding.time.setText(toptime);
         binding.imFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1077,7 +1079,7 @@ public class DialogUtil {
         });
 
         binding.btnFinish.setOnClickListener(v -> {
-            String title = binding.edit.getText().toString();
+            String title = binding.edit.getText().toString().trim();
             if (TextUtils.isEmpty(title)) {
                 ToastUtils.showShort("你还没告诉我您要准备做什么！");
                 return;
