@@ -253,9 +253,18 @@ public class WifiTool {
      * 获取已连接的Wifi路由器的Mac地址
      */
     public static WifiInfo getConnectedWifiInfo(Context context) {
-        String connectedWifiMacAddress = null;
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo result = wifiManager.getConnectionInfo();
-        return result;
+        // 获取ConnectivityManager对象
+        ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        // 获取NetworkInfo对象
+        NetworkInfo info = conMgr.getActiveNetworkInfo();
+        // 获取连接的方式为wifi
+        NetworkInfo.State wifi = conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+
+        if (info != null && info.isAvailable() && wifi == NetworkInfo.State.CONNECTED) {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            return wifiManager.getConnectionInfo();
+        }
+
+        return null;
     }
 }

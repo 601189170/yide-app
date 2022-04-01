@@ -124,6 +124,59 @@ class MeetingHistoryActivity : BaseActivity() {
         viewModel.requestMeetingListData(size, current, searchName, 0)
     }
 
+    fun judgeShowTimeStr(startTime: String, endTime: String): String {
+        val startTamp = DateUtils.parseTimestamp(startTime, "")
+        val endTamp = DateUtils.parseTimestamp(startTime, "")
+
+        val showTime = DateUtils.formatTime(
+            startTime,
+            "",
+            "yyyy-MM-dd HH:mm"
+        ) + " - " + DateUtils.formatTime(
+            endTime,
+            "",
+            "yyyy-MM-dd HH:mm"
+        )
+
+        if (DateUtils.isToday(startTamp) && DateUtils.isToday(endTamp)) {
+            return DateUtils.formatTime(
+                startTime,
+                "",
+                "HH:mm"
+            ) + "-" + DateUtils.formatTime(
+                endTime,
+                "",
+                "HH:mm"
+            )
+        }
+
+        if (DateUtils.isSameDay(startTime, endTime)) {
+            return "${
+                DateUtils.formatTime(
+                    startTime,
+                    "",
+                    "yyyy-MM-dd"
+                )
+            } ${
+                DateUtils.formatTime(
+                    startTime,
+                    "",
+                    "HH:mm"
+                )
+            } - ${
+                DateUtils.formatTime(
+                    endTime,
+                    "",
+                    "HH:mm"
+                )
+            }"
+        }
+
+
+        return showTime
+
+    }
+
     private val adapter =
         object : BaseQuickAdapter<ScheduleData, BaseViewHolder>(R.layout.item_meeting_home),
             LoadMoreModule {
@@ -131,15 +184,7 @@ class MeetingHistoryActivity : BaseActivity() {
             override fun convert(holder: BaseViewHolder, item: ScheduleData) {
                 val viewBind = ItemMeetingHomeBinding.bind(holder.itemView)
                 viewBind.tvTitle.text = item.name
-                viewBind.tvTime.text = DateUtils.formatTime(
-                    item.startTime,
-                    "",
-                    "HH:mm"
-                ) + " - " + DateUtils.formatTime(
-                    item.endTime,
-                    "",
-                    "HH:mm"
-                )
+                viewBind.tvTime.text = judgeShowTimeStr(item.startTime,item.endTime)
             }
         }
 }

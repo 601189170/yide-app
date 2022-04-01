@@ -113,18 +113,18 @@ public class TimeUtil {
 
     }
 
-    public static long gettime10(String str) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");//24小时制
+    public static long getTime10(String str) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());//24小时制
         //      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");//12小时制
         long time2 = 0;
         if (str != null) {
             try {
                 time2 = simpleDateFormat.parse(str).getTime();
             } catch (ParseException e) {
-                e.printStackTrace();
+                Log.e("getTime10:", e.toString());
+                return 0;
             }
         }
-        System.out.println(time2);
         return time2;
 
     }
@@ -193,6 +193,12 @@ public class TimeUtil {
 
     public static String stampToDate8(long timeMillis) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date(timeMillis);
+        return simpleDateFormat.format(date);
+    }
+
+    public static String stampToDate9(long timeMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月");
         Date date = new Date(timeMillis);
         return simpleDateFormat.format(date);
     }

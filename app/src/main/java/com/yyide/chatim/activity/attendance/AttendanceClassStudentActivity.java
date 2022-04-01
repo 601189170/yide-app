@@ -145,7 +145,7 @@ public class AttendanceClassStudentActivity extends BaseMvpActivity<SchoolGradeP
         protected void convert(@NonNull BaseViewHolder baseViewHolder, AttendanceRsp.DataBean.AttendanceListBean item) {
             baseViewHolder.setText(R.id.className, item.getGradeName());
             baseViewHolder.getView(R.id.select).setVisibility(gradeId == item.getGradeId() ? View.VISIBLE : View.GONE);
-            if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAbsoluteAdapterPosition()) {
+            if (adapterEvent.getItemCount() - 1 == getItemPosition(item)) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);

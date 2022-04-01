@@ -451,7 +451,7 @@
         android:layout_marginBottom="@dimen/dp_20"
         android:background="@drawable/bg_corners_blue_5"
         android:gravity="center"
-        android:text="@string/meeting_create_title"
+        android:text="@string/meeting_create_create"
         android:textColor="@color/white"
         android:textSize="@dimen/text_16"
         android:textStyle="bold"

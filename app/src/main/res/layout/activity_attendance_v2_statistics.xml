@@ -18,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:text="2021年12月"
         android:textColor="#666666"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="30dp"
-        android:text="12月汇总"
+
         android:textColor="#333333"
         android:textSize="15sp"
         android:textStyle="bold"

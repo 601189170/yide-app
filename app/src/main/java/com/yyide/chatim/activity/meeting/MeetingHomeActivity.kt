@@ -50,7 +50,7 @@ class MeetingHomeActivity : BaseActivity() {
 
     private fun initView() {
 
-        val subStr = "${DateUtils.switchTime(Date(),"MM月dd日")} 今日"
+        val subStr = "${DateUtils.switchTime(Date(), "MM月dd日")} 今日"
         viewBinding.meetingHomeSubTitle.text = subStr
 
 
@@ -97,13 +97,13 @@ class MeetingHomeActivity : BaseActivity() {
         adapter.setOnItemClickListener { adapter, view, position ->
             logd("setOnItemClickListener jump")
             val item = adapter.getItem(position) as ScheduleData
-            MeetingDetailActivity.jump(this,item.id)
+            MeetingDetailActivity.jump(this, item.id)
         }
         request()
     }
 
     private fun request() {
-        viewModel.requestMeetingListData(size, current, "", 1)
+        viewModel.requestMeetingListData(size, current, "", 3)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -121,17 +121,63 @@ class MeetingHomeActivity : BaseActivity() {
             override fun convert(holder: BaseViewHolder, item: ScheduleData) {
                 val viewBind = ItemMeetingHomeBinding.bind(holder.itemView)
                 viewBind.tvTitle.text = item.name
-                viewBind.tvTime.text = DateUtils.formatTime(
-                    item.startTime,
+                viewBind.tvTime.text = judgeShowTimeStr(item.startTime, item.endTime)
+            }
+        }
+
+
+    fun judgeShowTimeStr(startTime: String, endTime: String): String {
+        val startTamp = DateUtils.parseTimestamp(startTime, "")
+        val endTamp = DateUtils.parseTimestamp(startTime, "")
+
+        val showTime = DateUtils.formatTime(
+            startTime,
+            "",
+            "yyyy-MM-dd HH:mm"
+        ) + " - " + DateUtils.formatTime(
+            endTime,
+            "",
+            "yyyy-MM-dd HH:mm"
+        )
+
+        if (DateUtils.isToday(startTamp) && DateUtils.isToday(endTamp)) {
+            return DateUtils.formatTime(
+                startTime,
+                "",
+                "HH:mm"
+            ) + "-" + DateUtils.formatTime(
+                endTime,
+                "",
+                "HH:mm"
+            )
+        }
+
+        if (DateUtils.isSameDay(startTime, endTime)) {
+            return "${
+                DateUtils.formatTime(
+                    startTime,
                     "",
-                    "HH:mm"
-                ) + " - " + DateUtils.formatTime(
-                    item.endTime,
+                    "yyyy-MM-dd"
+                )
+            } ${
+                DateUtils.formatTime(
+                    startTime,
                     "",
                     "HH:mm"
                 )
-            }
+            } - ${
+                DateUtils.formatTime(
+                    endTime,
+                    "",
+                    "HH:mm"
+                )
+            }"
         }
+
+
+        return showTime
+
+    }
 
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)

@@ -57,7 +57,7 @@ class MeetingSaveActivity : BaseActivity() {
     private var resultCode = 0
 
 
-    private val timeFormat = "MM月dd日 HH:mm"
+    private val timeFormat = "MM月dd日 HH:mm E"
     private val allDayTimeFormat = "yyyy-MM-dd"
     private val requestServerTimeFormat = "yyyy-MM-dd HH:mm:ss"
 

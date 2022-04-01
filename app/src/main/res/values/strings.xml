@@ -56,6 +56,7 @@
 
     <!--会议-->
     <string name="meeting_create_title">创建会议</string>
+    <string name="meeting_create_create">创建</string>
     <string name="meeting_update_title">编辑详情</string>
     <string name="meeting_update_save">保存</string>
     <string name="meeting_please_input_time">请选择会议时间</string>
@@ -369,5 +370,6 @@
     <string name="leave_early_title">早退</string>
     <string name="ask_for_leave_title">请假</string>
     <string name="format_24H">HH:mm:ss</string>
+    <string name="statistics_time_pool">%s汇总</string>
 
 </resources>

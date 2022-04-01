@@ -742,4 +742,19 @@ public class DateUtils {
             return false;
         }
     }
+
+
+    public static boolean isToday(String compareStr) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date(System.currentTimeMillis());
+        String todayStr = simpleDateFormat.format(date);
+        return todayStr.equals(compareStr);
+    }
+
+
+    public static boolean isSameDay(String startDate, String endDate) {
+        String start = formatTime(startDate, "", "yyyy-MM-dd");
+        String end = formatTime(endDate, "", "yyyy-MM-dd");
+        return start.equals(end);
+    }
 }

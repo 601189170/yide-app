@@ -123,7 +123,7 @@ public class SchoolAttendanceFragment extends BaseMvpFragment<AttendanceTwoPrese
             } else {
                 baseViewHolder.getView(R.id.select).setVisibility(View.GONE);
             }
-            if (adapterEvent.getItemCount() - 1 == baseViewHolder.getAbsoluteAdapterPosition()) {
+            if (adapterEvent.getItemCount() - 1 == getItemPosition(item)) {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.GONE);
             } else {
                 baseViewHolder.getView(R.id.view_line).setVisibility(View.VISIBLE);

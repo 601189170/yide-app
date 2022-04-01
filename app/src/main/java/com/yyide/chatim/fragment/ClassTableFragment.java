@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SizeUtils;
@@ -60,7 +61,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
     private ClassTableFragmnet2Binding binding;
     // 当前所选周数
-    private ChildrenItem selectWeek;
+    private ChildrenItem selectWeek = new ChildrenItem();
     // 班级列表
     //List<ClassInfo> classList = new ArrayList<>();
     // 当前所选班级
@@ -233,10 +234,21 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             }
         });
 
+        // 下拉刷新
+        binding.svContent.setOnRefreshListener(() -> {
+            if (!selectClassInfo.getId().equals("")) {
+                mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
+            }else {
+                mvpPresenter.listTimeDataByApp("0", selectWeek.getId());
+            }
+        });
+        binding.svContent.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+
 
         binding.tableClassReturnCurrent.setOnClickListener(v -> {
             index = -1;
-            selectWeek = null;
+            selectWeek = new ChildrenItem();
+            first = true;
             if (!selectClassInfo.getId().equals("")) {
                 mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
             }else {
@@ -255,7 +267,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     public void listAllBySchoolId(List<ClassInfoBean> classInfo) {
         Log.e("TAG", "listAllBySchoolId==>: " + JSON.toJSONString(classInfo));
         //classList.clear();
-
         if (classInfo.isEmpty()) {
             binding.tableClassTop.className.setEnabled(false);
             binding.tableClassTop.className.setText("暂无班级");
@@ -309,6 +320,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void listTimeDataByApp(SiteTableRsp rsp) {
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
+        binding.svContent.setRefreshing(false);
         if (rsp.getCode() == 0) {
             if (rsp.getData() != null) {
                 binding.empty.getRoot().setVisibility(View.GONE);
@@ -366,18 +378,6 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 List<String> sectionlist = new ArrayList<>();
                 List<SiteTableRsp.DataBean.TimetableListBean> subListBeans = new ArrayList<>();
                 if (rsp.getData().getTimetableList() != null && rsp.getData().getTimetableList().size() > 0) {
-                    //val courseBoxCount = sectionCount * 7
-                    //            for (index in 0 until courseBoxCount) {
-                    //                val listBean = SiteTableRsp.DataBean.TimetableListBean()
-                    //                courseList.add(listBean)
-                    //                it.timetableList?.forEach {
-                    //                    //if ((it.skxq - 1) == index % 7 && (it.xh) == ((index % sectionCount)+1)) {
-                    //                    if (index == ((it.section - 1) * 7 + it.week % 7 - 1)) {
-                    //                        courseList[index] = it
-                    //                        return@forEach
-                    //                    }
-                    //                }
-                    //            }
                     int courseBoxCount = sectionCount * 7;
                     for (int i = 0; i < courseBoxCount; i++) {
                         final SiteTableRsp.DataBean.TimetableListBean listBean = new SiteTableRsp.DataBean.TimetableListBean();
@@ -385,7 +385,14 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                         final List<SiteTableRsp.DataBean.TimetableListBean> timetableList = rsp.getData().getTimetableList();
                         for (int j = 0; j < timetableList.size(); j++) {
                             final SiteTableRsp.DataBean.TimetableListBean timetableListBean = timetableList.get(j);
-                            if (i == ((timetableListBean.getSection() - 1) * 7 + timetableListBean.getWeek() % 7 - 1)) {
+                            int week = timetableListBean.getWeek();
+                            int column = week - 1;
+                            /*
+                            int column = timetableListBean.getWeek() % 7 - 1;
+                            if (week == 7){
+                                column = timetableListBean.getWeek() % 7 - 1 + 7;
+                            }*/
+                            if (i == ((timetableListBean.getSection() - 1) * 7 + column)) {
                                 subListBeans.set(i, timetableListBean);
                                 break;
                             }
@@ -496,6 +503,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void listTimeDataByAppFail(String msg) {
         Log.d("selectTableClassListSuccess", msg);
+        binding.svContent.setRefreshing(false);
     }
 
     @Override

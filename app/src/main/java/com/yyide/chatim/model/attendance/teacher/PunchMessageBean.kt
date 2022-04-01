@@ -12,5 +12,5 @@ data class PunchMessageBean(val canSignInOutside: Boolean = false,
                             val groupName: String = "",
                             val canSignByAddress: Boolean = false,
                             val signByDevicesMethod: List<Int>?,
-                            val signTimeList: List<SignTimeListItem>?,
+                            val signTimeList: List<SignTimeListItem>,
                             val canSignByBluetooth: Boolean = false)

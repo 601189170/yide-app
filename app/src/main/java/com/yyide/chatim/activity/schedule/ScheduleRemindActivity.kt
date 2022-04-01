@@ -43,7 +43,7 @@ class ScheduleRemindActivity : BaseActivity() {
             finish()
         }
         scheduleRemindBinding.top.tvRight.visibility = View.VISIBLE
-        scheduleRemindBinding.top.tvRight.text = "完成"
+        scheduleRemindBinding.top.tvRight.text = "保存"
         scheduleRemindBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         scheduleRemindBinding.top.tvRight.setOnClickListener {
             val selectList = list.filter { it.checked }

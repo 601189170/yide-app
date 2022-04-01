@@ -134,6 +134,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
         binding.tableMyReturnCurrent.setOnClickListener(v -> {
             selectWeek = null;
+            first = true;
             getData();
         });
         getData();

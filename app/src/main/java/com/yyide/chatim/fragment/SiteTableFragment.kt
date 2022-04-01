@@ -25,16 +25,12 @@ import com.yyide.chatim.dialog.TableClassPopUp
 import com.yyide.chatim.dialog.TablePopUp
 import com.yyide.chatim.dialog.TablePopUp.SubmitCallBack
 import com.yyide.chatim.dialog.TextPopUp
-import com.yyide.chatim.model.LeaveDeptRsp
 import com.yyide.chatim.model.sitetable.SiteTableRsp
 import com.yyide.chatim.model.sitetable.toWeekDayList
 import com.yyide.chatim.model.table.ChildrenItem
 import com.yyide.chatim.model.table.ClassInfo
+import com.yyide.chatim.utils.*
 import com.yyide.chatim.utils.ScheduleRepetitionRuleUtil.simplifiedDataTime
-import com.yyide.chatim.utils.TimeUtil
-import com.yyide.chatim.utils.hide
-import com.yyide.chatim.utils.loge
-import com.yyide.chatim.utils.show
 import com.yyide.chatim.viewmodel.SiteTableViewModel
 import org.joda.time.DateTime
 import razerdp.basepopup.BasePopupWindow
@@ -56,7 +52,7 @@ class SiteTableFragment : Fragment() {
     //private var weekTotal = 1
     private var thisWeek = 1
     private var first = true
-    private val classList = mutableListOf<LeaveDeptRsp.DataBean>()
+    //private val classList = mutableListOf<LeaveDeptRsp.DataBean>()
     //private var id: String? = null
 
     private val type = "2"
@@ -123,6 +119,9 @@ class SiteTableFragment : Fragment() {
         }
         //场地课表数据
         siteTableViewModel.siteTableLiveData.observe(requireActivity()) {
+
+            siteTableFragmentBinding.svContent.isRefreshing = false
+
             if (it == null) {
                 return@observe
             }
@@ -234,8 +233,13 @@ class SiteTableFragment : Fragment() {
                 val listBean = SiteTableRsp.DataBean.TimetableListBean()
                 courseList.add(listBean)
                 it.timetableList?.forEach {
-                    //if ((it.skxq - 1) == index % 7 && (it.xh) == ((index % sectionCount)+1)) {
-                    if (index == ((it.section - 1) * 7 + it.week % 7 - 1)) {
+                    val week: Int = it.week
+                    val column = week - 1
+                    /*var column: Int = it.week % 7 - 1
+                    if (week == 7) {
+                        column = it.week % 7 - 1 + 7
+                    }*/
+                    if (index == ((it.section - 1) * 7 + column)) {
                         courseList[index] = it
                         return@forEach
                     }
@@ -390,17 +394,21 @@ class SiteTableFragment : Fragment() {
             adapter?.setPosition(index)
         }
 
-        /*siteTableFragmentBinding.top.grid.setOnItemClickListener { _, _, position, _ ->
-            Log.d("grid click", "onViewCreated: site click")
-            adapter.setPosition(position)
-            index = position
-            siteTableItemAdapter.setIndex(index)
-        }*/
+        // 下拉刷新
+        siteTableFragmentBinding.svContent.setOnRefreshListener {
+            if (selectClassInfo.id != "") {
+                siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
+            }else{
+                siteTableViewModel.getSites(type,"0", selectWeek?.id)
+            }
+        }
+        siteTableFragmentBinding.svContent.setColorSchemeColors(R.color.colorPrimary.asColor())
 
         //回调本周
         siteTableFragmentBinding.tableSiteReturnCurrent.setOnClickListener {
             index = -1
             selectWeek = null
+            first = true
             if (selectClassInfo.id != "") {
                 siteTableViewModel.getSites(type, selectClassInfo.id)
             }else{
