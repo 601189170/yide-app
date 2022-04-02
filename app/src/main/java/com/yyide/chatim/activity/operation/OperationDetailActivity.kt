@@ -16,6 +16,7 @@ class OperationDetailActivity :
         super.onCreate(savedInstanceState)
         initView()
         initViewPager()
+
     }
 
     override fun initView() {

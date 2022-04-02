@@ -180,4 +180,24 @@ interface INetworkService {
         @Path("scheduleId") id: String
     ): BaseResponse<Boolean>
 
+    /**
+     * 教职工作业列表
+     */
+    @POST("/cloud/app/work/page")
+    suspend fun requestTeacherWorkList(@Body requestBody: RequestBody): BaseResponse<TeacherWorkListRsp>
+
+    /**
+     * 获取科目
+     */
+    @GET("/cloud/app/work/selectSubjectByUserId")
+    suspend fun requestselectSubjectByUserId(): BaseResponse<List<SubjectBean>>
+
+
+    /**
+     * 获取年级班级科目联动数据
+     */
+    @GET("/cloud/app/work/getClassSubjectList")
+    suspend fun getClassSubjectLis(@Query("isWhole") isWhole: String): BaseResponse<List<getClassSubjectListRsp>>
+
+
 }

@@ -1,19 +1,28 @@
 package com.yyide.chatim.activity.operation.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.fastjson.JSON
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemChildClickListener
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.yyide.chatim.R
 import com.yyide.chatim.activity.operation.viewmodel.OperationTearcherViewModel
+import com.yyide.chatim.base.BaseConstant
+import com.yyide.chatim.constant.ResultCodeStr
 import com.yyide.chatim.databinding.ItemWeeklyAttendanceBinding
 import com.yyide.chatim.databinding.OperationDataFragmentBinding
+import com.yyide.chatim.model.EventMessage
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @Desc 作业-数据
@@ -41,16 +50,22 @@ class OperationDataFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(OperationTearcherViewModel::class.java)
         initView()
+
     }
 
     private fun initView() {
+
         viewBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
         viewBinding.recyclerView.adapter = mAdapter
+        mAdapter.setOnItemChildClickListener(OnItemChildClickListener { adapter, view, position ->
+//            startActivity()
+        })
     }
 
     private val mAdapter =
         object :
-            BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_weekly_attendance) {
+//            BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_weekly_attendance) {
+            BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_operation_bk) {
             override fun convert(holder: BaseViewHolder, item: String) {
                 val viewBind = ItemWeeklyAttendanceBinding.bind(holder.itemView)
                 val read = getString(R.string.operation_read_html, 0, 40)

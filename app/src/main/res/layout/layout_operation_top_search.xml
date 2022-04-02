@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
+    android:paddingTop="@dimen/dp_10"
     android:paddingBottom="@dimen/dp_12">
 
     <TextView
@@ -96,7 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="38dp"
         android:layout_marginStart="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_12"
         android:background="@drawable/white_radius_6dp_border_1dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,14 +106,12 @@
 
         <TextView
             android:id="@+id/tvStartTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="66dp"
+            android:layout_height="25dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:drawablePadding="@dimen/dp_12"
             android:text="2021-08-01"
             android:textColor="#ff909399"
             android:textSize="13sp"
-            app:drawableStartCompat="@drawable/att_tab"
             app:layout_constraintBottom_toBottomOf="@+id/view14"
             app:layout_constraintEnd_toStartOf="@+id/view14"
             app:layout_constraintStart_toStartOf="parent"
@@ -137,10 +136,10 @@
             android:text="2021-08-31"
             android:textColor="#ff909399"
             android:textSize="13sp"
-            app:drawableStartCompat="@drawable/att_tab"
             app:layout_constraintBottom_toBottomOf="@+id/view14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view14"
             app:layout_constraintTop_toTopOf="@+id/view14" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

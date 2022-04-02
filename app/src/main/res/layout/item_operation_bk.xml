@@ -79,8 +79,8 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="08/30作业标题作业标题作业标题作业标题"
-                android:textColor="#ff222222"
-                android:textSize="16sp"
+                android:textColor="#333333"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="@+id/viewLine"
                 app:layout_constraintStart_toStartOf="@+id/viewLine"
                 app:layout_constraintTop_toBottomOf="@+id/viewLine" />

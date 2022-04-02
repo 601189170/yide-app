@@ -153,16 +153,27 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 //                    addTaskHint(hintCircle)
                 }
             }
-            val dateTime = DateTime(mCurrentSelectYear,mCurrentSelectMonth+1,mCurrentSelectDay,0,0,0).simplifiedDataTime()
+//            val dateTime = DateTime(mCurrentSelectYear,mCurrentSelectMonth+1,mCurrentSelectDay,0,0,0).simplifiedDataTime()
+//            curDateTime = dateTime
+//            val value = scheduleMonthViewModel.monthDataList.value
+//            if (value!=null && value[dateTime] != null){
+//
+//                val mutableList = value[dateTime]
+//
+//                mutableList?.sort()
+//                ScheduleMonthAdapter.setList(mutableList);
+//                list.addAll(ScheduleMonthAdapter.data)
+//
+//            }
+
+            val dateTime = DateTime(mCurrentSelectYear,mCurrentSelectMonth+1,mCurrentSelectDay,0,0).simplifiedDataTime()
             curDateTime = dateTime
             val value = scheduleMonthViewModel.monthDataList.value
             if (value!=null && value[dateTime] != null){
-
                 val mutableList = value[dateTime]
-
                 mutableList?.sort()
-                ScheduleMonthAdapter.setList(mutableList);
-                list=ScheduleMonthAdapter.data;
+                ScheduleMonthAdapter.setList(mutableList)
+                list.addAll(ScheduleMonthAdapter.data)
             }
             if (refresh){
                 refresh = false
@@ -170,6 +181,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
             }
         })
         scheduleMonthViewModel.scheduleList(DateTime.now())
+
         //删除监听
         scheduleEditViewModel.deleteResult.observe(requireActivity(), {
             if (it) {
@@ -177,6 +189,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                 updateDate()
             }
         })
+
         //修改日程状态监听
         scheduleEditViewModel.changeStatusResult.observe(requireActivity(), {
             if (it) {
@@ -189,6 +202,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                 ToastUtils.showShort("日程修改失败")
             }
         })
+
         scheduleViewModel.requestAllScheduleResult.observe(requireActivity()){
             loge("刷新数据列表 $it")
             updateDate()
@@ -217,13 +231,11 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         val dateTime = DateTime(year,month+1,day,0,0,0).simplifiedDataTime()
         curDateTime = dateTime
         val value = scheduleMonthViewModel.monthDataList.value
-//        list=value;
         if (value!=null && value[dateTime] != null){
             val mutableList = value[dateTime]
-
             mutableList?.sort()
-            ScheduleMonthAdapter.setList(mutableList);
-            list=ScheduleMonthAdapter.data;
+            ScheduleMonthAdapter.setList(mutableList)
+            list.addAll(ScheduleMonthAdapter.data)
         }
 
     }
@@ -264,7 +276,8 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 //        }
 
         ScheduleMonthAdapter.setOnItemClickListener { _, _, position ->
-//            Log.e("TAG", "点击日程==》: "+JSON.toJSONString(list[position]) )
+//            Log.e("TAG", "点击日程==》: "+JSON.toJSONString(list) )
+            Log.e("TAG", "点击日程==》: "+JSON.toJSONString(ScheduleMonthAdapter.data) )
 //            val scheduleData = list[position]
             val scheduleData = ScheduleMonthAdapter.data[position]
             if (!scheduleData.isMonthHead) {
@@ -298,7 +311,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
 
 //                    val scheduleData = list[position]
                     val scheduleData = ScheduleMonthAdapter.data[position]
-                    ScheduleMonthAdapter.data
+
                     val type = scheduleData.type
                     when(type.toInt()){
                         Schedule.SCHEDULE_TYPE_SCHEDULE ->{
@@ -647,7 +660,8 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         curTopDateTime = DateTime.now()
         curBottomDateTime = DateTime.now().plusMonths(1)
         //timeAxisDateTime = DateTime.now().simplifiedDataTime()
-        scheduleMonthViewModel.scheduleDataList(DateTime.now().plusMonths(1), timeAxisDateTime,false,true)
+//        scheduleMonthViewModel.scheduleDataList(DateTime.now().plusMonths(1), timeAxisDateTime,false,true)
+        scheduleMonthViewModel.scheduleList(DateTime.now())
 
     }
     /**

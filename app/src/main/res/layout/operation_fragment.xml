@@ -16,24 +16,36 @@
         android:id="@+id/constraintLayout1"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/top"
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
-            android:id="@+id/tvClassName"
+            android:id="@+id/tv_1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:drawablePadding="@dimen/dp_6"
             android:gravity="center"
             android:paddingStart="@dimen/dp_12"
-            android:text="一年级1班 全部"
-            android:textColor="#ff1e1e1e"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            android:text="我发布的"
+            android:textColor="@color/text_666666"
+            android:textSize="14sp"
+
             app:drawableEndCompat="@drawable/icon_arrow_down"
             app:layout_constraintStart_toStartOf="parent" />
-
+        <TextView
+            android:id="@+id/tv_2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawablePadding="@dimen/dp_6"
+            android:gravity="center"
+            android:paddingStart="@dimen/dp_12"
+            android:text="一年级1班全部"
+            android:textColor="@color/text_666666"
+            android:textSize="14sp"
+            android:layout_marginRight="5dp"
+            app:drawableEndCompat="@drawable/icon_arrow_down"
+            app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
@@ -46,7 +58,7 @@
     <com.flyco.tablayout.SegmentTabLayout
         android:id="@+id/mTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="32dp"
         android:layout_marginTop="10dp"
         android:paddingLeft="@dimen/dp_12"
         android:paddingRight="@dimen/dp_12"

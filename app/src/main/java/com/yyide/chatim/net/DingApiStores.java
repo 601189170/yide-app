@@ -55,6 +55,7 @@ import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.SelectUserRsp;
 import com.yyide.chatim.model.SmsVerificationRsp;
+import com.yyide.chatim.model.TeacherWorkListRsp;
 import com.yyide.chatim.model.address.ScheduleAddressBean;
 import com.yyide.chatim.model.attendance.StudentAttendanceDayRsp;
 import com.yyide.chatim.model.StudentHonorRsp;
@@ -1037,4 +1038,15 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/cloud/app/timetable/getWeekTime")
     Call<SiteTableRsp> sites(@Body RequestBody requestBody);
+
+
+    //家长端-作业列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/cloud/app/work/workList")
+    Observable<TeacherlistRsp> getworkList(@Body RequestBody requestBody);
+
+    //教职工-作业列表
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/cloud/app/work/page")
+    Observable<TeacherWorkListRsp> getpageList(@Body RequestBody requestBody);
 }

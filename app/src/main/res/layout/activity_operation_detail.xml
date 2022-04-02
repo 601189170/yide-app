@@ -33,7 +33,7 @@
             android:textColor="#ff222222"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:drawableStartCompat="@mipmap/ic_work_day"
+            app:drawableStartCompat="@drawable/icon_zy"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,14 +58,26 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvClassName" />
+            <TextView
+                android:id="@+id/tv_gl"
+                android:textSize="12sp"
+                android:layout_marginTop="@dimen/dp_5"
+                app:layout_constraintLeft_toLeftOf="@+id/tvClassName"
+                app:layout_constraintTop_toBottomOf="@+id/tvClassName"
+                android:text="关联课程：03-13 第一节 08:30"
+                android:textColor="@color/text_666666"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
 
+            </TextView>
         <View
             android:id="@+id/viewLine"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_10"
             android:background="@color/line_E4E7ED"
-            app:layout_constraintTop_toBottomOf="@+id/tvClassName" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_gl" />
 
         <TextView
             android:id="@+id/tvTitle"

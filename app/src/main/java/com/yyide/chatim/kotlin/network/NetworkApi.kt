@@ -164,4 +164,29 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
         getResult {
             service.requestMeetingDel(scheduleId)
         }
+
+    /**
+     * 教职工作业列表
+     */
+    suspend fun requestTeacherWorkList(requestBody: RequestBody) =
+            getResult{
+                service.requestTeacherWorkList(requestBody)
+            }
+
+
+    /**
+     * 获取科目
+     */
+    suspend fun selectSubjectByUserId() =
+            getResult{
+                service.requestselectSubjectByUserId()
+            }
+
+    /**
+     * 获取年级班级科目联动数据
+     */
+    suspend fun getClassSubjectList(isWhole:String) =
+            getResult{
+                service.getClassSubjectLis(isWhole)
+            }
 }

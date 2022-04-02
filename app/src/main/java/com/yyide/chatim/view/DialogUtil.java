@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
@@ -47,6 +48,7 @@ import com.yyide.chatim.BaseApplication;
 import com.yyide.chatim.R;
 import com.yyide.chatim.activity.face.FaceCaptureProtocolActivity;
 import com.yyide.chatim.activity.meeting.MeetingSaveActivity;
+import com.yyide.chatim.activity.operation.viewmodel.OperationViewModel;
 import com.yyide.chatim.activity.schedule.ScheduleEditActivityMain;
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity;
 import com.yyide.chatim.adapter.schedule.ScheduleMonthListAdapter;
@@ -64,6 +66,8 @@ import com.yyide.chatim.databinding.DialogScheduleMenuBinding;
 import com.yyide.chatim.databinding.DialogScheduleMonthListBinding;
 import com.yyide.chatim.databinding.DialogScheduleRemindBinding;
 import com.yyide.chatim.databinding.DialogScheduleRepetitionBinding;
+import com.yyide.chatim.databinding.DialogWorkSelectBinding;
+import com.yyide.chatim.model.SubjectBean;
 import com.yyide.chatim.model.schedule.LabelColor;
 import com.yyide.chatim.model.schedule.LabelListRsp;
 import com.yyide.chatim.model.schedule.MonthBean;
@@ -74,6 +78,7 @@ import com.yyide.chatim.model.schedule.RepetitionDataBean;
 import com.yyide.chatim.model.schedule.Schedule;
 import com.yyide.chatim.model.schedule.ScheduleData;
 import com.yyide.chatim.model.schedule.WeekBean;
+import com.yyide.chatim.model.selectBean;
 import com.yyide.chatim.utils.ColorUtil;
 import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.DisplayUtils;
@@ -1365,6 +1370,182 @@ public class DialogUtil {
 
     }
 
+
+    /**
+     * 我发布的and全部作业
+     */
+    public static void showWorkTypeWorkSelect(Context context, OnClassListener onClassListener,OperationViewModel viewModel) {
+        DialogWorkSelectBinding binding = DialogWorkSelectBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+        selectBean selectBean1=new selectBean();
+        selectBean1.name="我发布的";
+        selectBean1.type="1";
+
+        selectBean selectBean2=new selectBean();
+        selectBean2.name="全部作业";
+        selectBean2.type="0";
+
+        List<selectBean> list=new ArrayList<>();
+        list.add(selectBean1);
+        list.add(selectBean2);
+
+//        viewModel.getTv1data();
+
+         BaseQuickAdapter adapter2 = new BaseQuickAdapter<selectBean, BaseViewHolder>(R.layout.item_dialog_select1) {
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder holder, selectBean item) {
+                 ImageView img = (ImageView) holder.getView(R.id.img);
+                 TextView classname = (TextView) holder.getView(R.id.classname);
+                ConstraintLayout itemView = (ConstraintLayout) holder.getView(R.id.itemView);
+                classname.setText(item.name);
+//                 img.setVisibility(item.check?View.VISIBLE:View.GONE);
+
+                     img.setVisibility(viewModel.getTv1data().getValue().name.equals(item.name)?View.VISIBLE:View.GONE);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (selectBean selectBean : list) {
+                            selectBean.check=false;
+                        }
+                        img.setVisibility(View.VISIBLE);
+                        item.check=true;
+                        onClassListener.onClass(item);
+                        viewModel.getTv1data().setValue(item);
+                        notifyDataSetChanged();
+                        mDialog.dismiss();
+                    }
+                });
+            }
+        };
+        binding.recy.setLayoutManager(new LinearLayoutManager(context));
+        binding.recy.setAdapter(adapter2);
+        adapter2.setList(list);
+
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.TOP);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels );
+        lp.height = DisplayUtils.dip2px(context, 225f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+
+    }
+    /**
+     * 班级科目选择
+     */
+    public static void showSuBjectSelect(Context context,  OnSubjectListener onSubjectListener,List<SubjectBean> listbean,OperationViewModel viewModel) {
+        DialogWorkSelectBinding binding = DialogWorkSelectBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+
+        Log.e(TAG, "showSuBjectSelect: "+JSON.toJSONString(listbean) );
+
+        BaseQuickAdapter adapter2 = new BaseQuickAdapter<SubjectBean, BaseViewHolder>(R.layout.item_dialog_select1) {
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder holder, SubjectBean item) {
+                ImageView img = (ImageView) holder.getView(R.id.img);
+                TextView classname = (TextView) holder.getView(R.id.classname);
+                ConstraintLayout itemView = (ConstraintLayout) holder.getView(R.id.itemView);
+                classname.setText(item.getName());
+                img.setVisibility(item.getChecked()?View.VISIBLE:View.GONE);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (SubjectBean subjectBean : listbean) {
+                            subjectBean.setChecked(false);
+                        }
+                        img.setVisibility(View.VISIBLE);
+                        item.setChecked(true);
+                        onSubjectListener.onSubject(item);
+                        viewModel.getTv2data().setValue(item);
+                        notifyDataSetChanged();
+                        mDialog.dismiss();
+                    }
+                });
+            }
+        };
+        binding.recy.setLayoutManager(new LinearLayoutManager(context));
+//        binding.recy.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 10f), 6));
+        binding.recy.setAdapter(adapter2);
+        adapter2.setList(listbean);
+
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.TOP);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels );
+        lp.height = DisplayUtils.dip2px(context, 325f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+
+    }
+
+    /**
+     * 教职工关联数据
+     */
+    public static void showClassSubjecList(Context context,OnSubjectListener onSubjectListener,List<SubjectBean> listbean) {
+        DialogWorkSelectBinding binding = DialogWorkSelectBinding.inflate(LayoutInflater.from(context));
+        ConstraintLayout rootView = binding.getRoot();
+        Dialog mDialog = new Dialog(context, R.style.dialog);
+        mDialog.setContentView(rootView);
+
+        Log.e(TAG, "showSuBjectSelect: "+JSON.toJSONString(listbean) );
+
+        BaseQuickAdapter adapter2 = new BaseQuickAdapter<SubjectBean, BaseViewHolder>(R.layout.item_dialog_select1) {
+
+            @Override
+            protected void convert(@NonNull BaseViewHolder holder, SubjectBean item) {
+                ImageView img = (ImageView) holder.getView(R.id.img);
+                TextView classname = (TextView) holder.getView(R.id.classname);
+                ConstraintLayout itemView = (ConstraintLayout) holder.getView(R.id.itemView);
+                classname.setText(item.getName());
+                img.setVisibility(item.getChecked()?View.VISIBLE:View.GONE);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        for (SubjectBean subjectBean : listbean) {
+                            subjectBean.setChecked(false);
+                        }
+                        img.setVisibility(View.VISIBLE);
+                        item.setChecked(true);
+                        onSubjectListener.onSubject(item);
+
+                        notifyDataSetChanged();
+                        mDialog.dismiss();
+                    }
+                });
+            }
+        };
+        binding.recy.setLayoutManager(new LinearLayoutManager(context));
+//        binding.recy.addItemDecoration(new SpaceItemDecoration(DisplayUtils.dip2px(context, 10f), 6));
+        binding.recy.setAdapter(adapter2);
+        adapter2.setList(listbean);
+
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.TOP);
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = (int) (context.getResources().getDisplayMetrics().widthPixels );
+        lp.height = DisplayUtils.dip2px(context, 325f);
+        rootView.measure(0, 0);
+        lp.dimAmount = 0.75f;
+        dialogWindow.setAttributes(lp);
+        mDialog.setCancelable(true);
+        mDialog.show();
+
+    }
     private static void setCheckboxTextListener(AtomicBoolean repetitionType1, AtomicBoolean repetitionType2, AtomicBoolean repetitionType3, CheckBox p, CheckBox p2, CheckBox p3) {
         p.setChecked(!repetitionType1.get());
         if (!repetitionType1.get()) {
@@ -1470,7 +1651,12 @@ public class DialogUtil {
     public interface OnLabelItemListener {
         void labelItem(List<LabelListRsp.DataBean> labels);
     }
-
+    public interface OnClassListener {
+        void onClass(selectBean bean);
+    }
+    public interface OnSubjectListener {
+        void onSubject(SubjectBean bean);
+    }
     /**
      * 判断字符串是否含有Emoji表情
      **/
