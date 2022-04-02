@@ -72,7 +72,7 @@
                         android:layout_marginStart="@dimen/dp_6"
                         android:layout_marginEnd="@dimen/dp_10"
                         android:background="@null"
-                        android:hint="请输入会议标题"
+                        android:hint="会议标题"
                         android:maxLength="20"
                         android:textColor="#ff1e1e1e"
                         android:textSize="15sp"
@@ -305,7 +305,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginEnd="@dimen/dp_20"
-                    android:src="@mipmap/icon_meeting_right"
+                    android:src="@mipmap/icon_right"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -344,7 +344,7 @@
 
     <string name="meeting_history_search_tv">请输入会议名称</string>
     <string name="meeting_detail_title">会议详情</string>
-    <string name="meeting_add_remark_tip">这里是备注的内容</string>
+    <string name="meeting_add_remark_tip">添加备注</string>
 
     // 课表
     <string name="school_table_time_tv">时间</string>

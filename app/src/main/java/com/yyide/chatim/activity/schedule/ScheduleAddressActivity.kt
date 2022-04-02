@@ -78,7 +78,7 @@ class ScheduleAddressActivity : BaseActivity() {
             finish()
         }
         scheduleAddressBinding.top.tvRight.visibility = View.VISIBLE
-        scheduleAddressBinding.top.tvRight.text = "完成"
+        scheduleAddressBinding.top.tvRight.text = "保存"
         scheduleAddressBinding.top.tvRight.setTextColor(resources.getColor(R.color.colorPrimary))
         scheduleAddressBinding.top.tvRight.setOnClickListener {
             val intent1 = intent
