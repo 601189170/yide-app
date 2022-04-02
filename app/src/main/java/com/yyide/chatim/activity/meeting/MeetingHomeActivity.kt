@@ -14,6 +14,7 @@ import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.databinding.ActivityMeetingHomeBinding
 import com.yyide.chatim.databinding.ItemMeetingHomeBinding
+import com.yyide.chatim.dialog.TimeSelectDialog
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.ScheduleData
 import com.yyide.chatim.utils.DateUtils
@@ -76,7 +77,9 @@ class MeetingHomeActivity : BaseActivity() {
         viewBinding.swipeRefreshLayout.setOnRefreshListener {
             request()
         }
-        viewBinding.ivAdd.setOnClickListener { MeetingSaveActivity.jumpCreate(this) }
+        viewBinding.ivAdd.setOnClickListener {
+            MeetingSaveActivity.jumpCreate(this)
+        }
         viewBinding.clHistory.setOnClickListener {
             startActivity(
                 Intent(

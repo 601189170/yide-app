@@ -15,6 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.fastjson.JSON;
+import com.scwang.smart.refresh.header.ClassicsHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
 import com.yyide.chatim.activity.PreparesLessonActivity;
@@ -130,7 +133,6 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
         });
         binding.swipeRefreshLayout.setOnRefreshListener(this::getData);
         binding.swipeRefreshLayout.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
-
 
         binding.tableMyReturnCurrent.setOnClickListener(v -> {
             selectWeek = null;

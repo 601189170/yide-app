@@ -120,7 +120,7 @@ class SiteTableFragment : Fragment() {
         //场地课表数据
         siteTableViewModel.siteTableLiveData.observe(requireActivity()) {
 
-            siteTableFragmentBinding.svContent.isRefreshing = false
+            siteTableFragmentBinding.slContent.isRefreshing = false
 
             if (it == null) {
                 return@observe
@@ -395,14 +395,14 @@ class SiteTableFragment : Fragment() {
         }
 
         // 下拉刷新
-        siteTableFragmentBinding.svContent.setOnRefreshListener {
+        siteTableFragmentBinding.slContent.setOnRefreshListener {
             if (selectClassInfo.id != "") {
                 siteTableViewModel.getSites(type, selectClassInfo.id, selectWeek?.id)
             }else{
                 siteTableViewModel.getSites(type,"0", selectWeek?.id)
             }
         }
-        siteTableFragmentBinding.svContent.setColorSchemeColors(R.color.colorPrimary.asColor())
+        siteTableFragmentBinding.slContent.setColorSchemeColors(R.color.colorPrimary.asColor())
 
         //回调本周
         siteTableFragmentBinding.tableSiteReturnCurrent.setOnClickListener {

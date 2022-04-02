@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white">
+    
+    
+    <TextView
+        android:id="@+id/tv_dialog_time_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="时间选择"
+        android:textColor="#ff333333"
+        android:textSize="17sp"
+        android:layout_marginVertical="15dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_dialog_time_yearMonth"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/color_F3FCF9"
+        android:layout_marginTop="15dp"
+        android:textColor="#ff11c685"
+        android:textSize="14sp"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_time_title"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <View
+        android:id="@+id/bl_dialog_yearMonth_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/btn_dialog_time_yearMonth"
+        app:layout_constraintStart_toStartOf="@id/btn_dialog_time_yearMonth"
+        app:layout_constraintEnd_toEndOf="@id/btn_dialog_time_yearMonth"/>
+
+    <Button
+        android:id="@+id/btn_dialog_time_hour"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/color_F3FCF9"
+        android:layout_marginTop="15dp"
+        android:textColor="#ff11c685"
+        android:textSize="14sp"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/tv_dialog_time_title"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <View
+        android:id="@+id/bl_dialog_hour_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/btn_dialog_time_hour"
+        app:layout_constraintStart_toStartOf="@id/btn_dialog_time_hour"
+        app:layout_constraintEnd_toEndOf="@id/btn_dialog_time_hour"/>
+
+    <com.haibin.calendarview.CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:calendar_height="50dp"
+        android:background="@color/color_F3FCF9"
+        app:week_background="@color/color_F3FCF9"
+        app:month_view="com.yyide.chatim.view.calendar.DialogTimeMonthView"
+        app:month_view_show_mode="mode_fix"
+        app:selected_lunar_text_color="#FFFFFF"
+        app:selected_text_color="#FFFFFF"
+        app:selected_theme_color="#11C685"
+        app:min_year="2004"
+        app:current_day_text_color="#11C685"
+        app:current_month_lunar_text_color="#CFCFCF"
+        app:current_month_text_color="#333333"
+        app:layout_constraintTop_toBottomOf="@id/bl_dialog_yearMonth_line" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_show_content"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/bl_dialog_yearMonth_line">
+
+        <TextView
+            android:id="@+id/tv_dialog_time_hour"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="时"
+            android:gravity="center"
+            android:background="@color/color_F3FCF9"
+            app:layout_constraintWidth_percent="0.5"
+            android:textColor="#ff999999"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_dialog_time_minute"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="分"
+            android:gravity="center"
+            android:background="@color/color_F3FCF9"
+            app:layout_constraintWidth_percent="0.5"
+            android:textColor="#ff999999"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_dialog_time_hour"/>
+
+        
+        <com.loper7.date_time_picker.DateTimePicker
+            android:id="@+id/dp_dialog_time_hour"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout="@layout/item_dialog_time_picker"
+            android:background="@color/color_F3FCF9"
+            app:themeColor="#333333"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_time_hour"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <Button
+        android:id="@+id/btn_dialog_time_cancel"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:text="@string/cancel"
+        android:textColor="#11C685"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_show_content"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <Button
+        android:id="@+id/btn_dialog_time_submit"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="@string/confirm"
+        android:background="@color/white"
+        android:textColor="#11C685"
+        app:layout_constraintStart_toEndOf="@id/btn_dialog_time_cancel"
+        app:layout_constraintTop_toBottomOf="@id/cl_show_content"
+        app:layout_constraintWidth_percent="0.5" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

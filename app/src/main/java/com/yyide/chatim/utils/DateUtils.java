@@ -79,6 +79,19 @@ public class DateUtils {
      * <p>
      * s就是时间戳
      */
+    public static String stampToDate(long s,String format) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format,Locale.getDefault());
+        Date date = new Date(s);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
+    /**
+     * 将时间戳转换为时间
+     * <p>
+     * s就是时间戳
+     */
     public static String getDate(long dateTime) {
         String time = "";
         try {
@@ -751,10 +764,19 @@ public class DateUtils {
         return todayStr.equals(compareStr);
     }
 
-
+    /**
+     * 判断是否同一天
+     * @param startDate yyyy-mm-dd hh:mm 格式的字符串日期
+     * @param endDate yyyy-mm-dd hh:mm 格式的字符串日期
+     * @return true 是
+     */
     public static boolean isSameDay(String startDate, String endDate) {
         String start = formatTime(startDate, "", "yyyy-MM-dd");
         String end = formatTime(endDate, "", "yyyy-MM-dd");
         return start.equals(end);
     }
+
+
+
+
 }

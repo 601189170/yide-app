@@ -7,19 +7,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.PopupWindow
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.blankj.utilcode.util.ToastUtils
 import com.jzxiang.pickerview.TimePickerDialog
 import com.jzxiang.pickerview.listener.OnDateSetListener
-import com.taobao.accs.ACCSManager
 import com.yyide.chatim.R
 import com.yyide.chatim.SpData
 import com.yyide.chatim.activity.meeting.viewmodel.MeetingSaveViewModel
@@ -30,6 +26,7 @@ import com.yyide.chatim.constant.ResultCodeStr
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.ActivityMeetingCreateBinding
+import com.yyide.chatim.dialog.TimeSelectDialog
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.ParticipantRsp
 import com.yyide.chatim.model.schedule.Remind
@@ -41,7 +38,6 @@ import com.yyide.chatim.utils.logd
 import com.yyide.chatim.utils.loge
 import com.yyide.chatim.view.DialogUtil
 import org.greenrobot.eventbus.EventBus
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -58,6 +54,7 @@ class MeetingSaveActivity : BaseActivity() {
 
 
     private val timeFormat = "MM月dd日 HH:mm E"
+    private val showAllTimeFormat = "MM月dd日 E"
     private val allDayTimeFormat = "yyyy-MM-dd"
     private val requestServerTimeFormat = "yyyy-MM-dd HH:mm:ss"
 
@@ -86,7 +83,11 @@ class MeetingSaveActivity : BaseActivity() {
             context.startActivity(intent)
         }
 
-        fun jumpUpdateWithCode(context: Context, id: String, launcher: ActivityResultLauncher<Intent>) {
+        fun jumpUpdateWithCode(
+            context: Context,
+            id: String,
+            launcher: ActivityResultLauncher<Intent>
+        ) {
             val intent = Intent(context, MeetingSaveActivity::class.java)
             intent.putExtra("type", UPDATE_TYPE)
             intent.putExtra("id", id)
@@ -130,7 +131,7 @@ class MeetingSaveActivity : BaseActivity() {
                 DateUtils.formatTime(
                     it,
                     requestServerTimeFormat,
-                    timeFormat
+                    if (viewModel.allDayLiveData.value == true) showAllTimeFormat else timeFormat
                 )
             )
         }
@@ -141,13 +142,16 @@ class MeetingSaveActivity : BaseActivity() {
                 DateUtils.formatTime(
                     it,
                     requestServerTimeFormat,
-                    timeFormat
+                    if (viewModel.allDayLiveData.value == true) showAllTimeFormat else timeFormat
                 )
             )
         }
 
         // 监听checkout按钮的变化
         viewModel.allDayLiveData.observe(this) {
+
+            viewBinding.meetingAddAllDayCheckBox.isChecked = it
+
             if (it) {
                 val startTime = "${
                     DateUtils.formatTime(
@@ -158,7 +162,7 @@ class MeetingSaveActivity : BaseActivity() {
                 } 00:00:00"
                 val endTime = "${
                     DateUtils.formatTime(
-                        viewModel.startTimeLiveData.value,
+                        viewModel.endTimeLiveData.value,
                         requestServerTimeFormat,
                         allDayTimeFormat
                     )
@@ -166,6 +170,9 @@ class MeetingSaveActivity : BaseActivity() {
                 viewModel.startTimeLiveData.value = startTime
                 viewModel.endTimeLiveData.value = endTime
             }
+
+            viewModel.startTimeLiveData.value = viewModel.startTimeLiveData.value
+            viewModel.endTimeLiveData.value = viewModel.endTimeLiveData.value
         }
 
         viewBinding.meetingAddEtStartTime.setOnClickListener {
@@ -176,6 +183,9 @@ class MeetingSaveActivity : BaseActivity() {
                 startTimeListener,
                 isAllDay = viewModel.allDayLiveData.value == true
             )
+            /*val timeDialog = TimeSelectDialog(viewModel.startTimeLiveData.value ?: "")
+            timeDialog.setSelectTimeCallBack(startTimeCallBack)
+            timeDialog.show(supportFragmentManager, "timeSelect")*/
         }
 
         viewBinding.meetingAddEtEndTime.setOnClickListener {
@@ -191,7 +201,8 @@ class MeetingSaveActivity : BaseActivity() {
         // 保存会议
         viewModel.meetingSaveLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             // 从会议详情里面进入的需要携带返回值
             setResult(Activity.RESULT_OK, Intent().apply {
@@ -212,7 +223,8 @@ class MeetingSaveActivity : BaseActivity() {
         // 会议删除
         viewModel.meetingDelLiveData.observe(this) {
             hideLoading()
-            EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
+            EventBus.getDefault()
+                .post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA, ""))
             EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_MEETING_UPDATE_LIST, ""))
             // 从会议详情里面进入的需要携带返回值
             setResult(Activity.RESULT_OK, Intent().apply {
@@ -512,15 +524,15 @@ class MeetingSaveActivity : BaseActivity() {
         val sb = StringBuffer()
         list.forEachIndexed { index, participantListBean ->
             if (index == list.size - 1) {
-                if (participantListBean.realname.isNullOrEmpty()){
+                if (participantListBean.realname.isNullOrEmpty()) {
                     sb.append(participantListBean.name)
-                }else{
+                } else {
                     sb.append(participantListBean.realname)
                 }
             } else {
-                if (participantListBean.realname.isNullOrEmpty()){
+                if (participantListBean.realname.isNullOrEmpty()) {
                     sb.append(participantListBean.name)
-                }else{
+                } else {
                     sb.append(participantListBean.realname)
                 }
                 sb.append("、")
@@ -541,6 +553,20 @@ class MeetingSaveActivity : BaseActivity() {
             logd("startTimeListener: $startTime")
             viewModel.startTimeLiveData.value = startTime
         }
+
+
+    /*private val startTimeCallBack = object : TimeSelectDialog.SelectTimeCallBack {
+        override fun selectTimeStr(dateTamp: Long) {
+            var startTime = DateUtils.switchTime(Date(dateTamp), requestServerTimeFormat)
+            viewModel.allDayLiveData.value?.let {
+                if (it) {
+                    startTime = "${DateUtils.switchTime(Date(dateTamp), allDayTimeFormat)} 00:00:00"
+                }
+            }
+            logd("startTimeCallBack: $startTime")
+            viewModel.startTimeLiveData.value = startTime
+        }
+    }*/
 
     private val endTimeListener =
         OnDateSetListener { _: TimePickerDialog?, millSeconds: Long ->

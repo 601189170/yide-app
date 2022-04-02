@@ -64,7 +64,7 @@ class TeacherStatisticsActivity :
         val date = java.util.Calendar.getInstance()
         val bean = MonthDayBean()
         bean.year = date.get(java.util.Calendar.YEAR).toString()
-        bean.month = date.get(java.util.Calendar.MONTH).toString()
+        bean.month = (date.get(java.util.Calendar.MONTH) + 1).toString()
         bean.day = date.get(java.util.Calendar.DAY_OF_MONTH).toString()
         viewModel.setDate(bean)
         timePopUp.setMillisecond(date.timeInMillis)
@@ -94,7 +94,7 @@ class TeacherStatisticsActivity :
 
             binding.tvTeacherAttendanceStatisticsTime.text = "${it.year}年${it.month}月"
             binding.tvTeacherAttendanceStatisticsTimeTitle.text =
-                String.format(getString(R.string.statistics_time_pool), it.month)
+                String.format(getString(R.string.statistics_time_pool), "${it.month}月")
         }
 
         viewModel.monthRecordData.observe(this) {
@@ -220,7 +220,7 @@ class TeacherStatisticsActivity :
 
             val schemeCal = getSchemeCalendar(
                 calendar.get(java.util.Calendar.YEAR),
-                calendar.get(java.util.Calendar.MONTH),
+                calendar.get(java.util.Calendar.MONTH) + 1,
                 calendar.get(java.util.Calendar.DAY_OF_MONTH),
                 color
             )

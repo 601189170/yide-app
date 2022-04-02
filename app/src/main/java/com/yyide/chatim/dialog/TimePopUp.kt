@@ -79,7 +79,7 @@ class TimePopUp : BasePopupWindow {
             date.timeInMillis = selectMillisecond
             val bean = MonthDayBean()
             bean.year = date.get(Calendar.YEAR).toString()
-            bean.month = date.get(Calendar.MONTH).toString()
+            bean.month = (date.get(Calendar.MONTH) + 1).toString()
             bean.day = date.get(Calendar.DAY_OF_MONTH).toString()
             mSubmitCallback?.getSubmitData(bean)
             dismiss()

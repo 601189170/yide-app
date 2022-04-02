@@ -16,6 +16,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SizeUtils;
+import com.scwang.smart.refresh.header.ClassicsHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.TableItemAdapter;
 import com.yyide.chatim.adapter.TableSectionAdapter;
@@ -156,7 +158,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                 binding.tableClassTop.tableTopWeekTv.setText(selectWeek.getName());
                 if (!selectClassInfo.getId().equals("")) {
                     mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
-                }else {
+                } else {
                     mvpPresenter.listTimeDataByApp("0", selectWeek.getId());
                 }
             }
@@ -235,14 +237,14 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         });
 
         // 下拉刷新
-        binding.svContent.setOnRefreshListener(() -> {
+        binding.slContent.setOnRefreshListener(() -> {
             if (!selectClassInfo.getId().equals("")) {
                 mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), selectWeek.getId());
-            }else {
+            } else {
                 mvpPresenter.listTimeDataByApp("0", selectWeek.getId());
             }
         });
-        binding.svContent.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
+        binding.slContent.setColorSchemeColors(getActivity().getResources().getColor(R.color.colorPrimary));
 
 
         binding.tableClassReturnCurrent.setOnClickListener(v -> {
@@ -251,7 +253,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
             first = true;
             if (!selectClassInfo.getId().equals("")) {
                 mvpPresenter.listTimeDataByApp(selectClassInfo.getId(), null);
-            }else {
+            } else {
                 mvpPresenter.listTimeDataByApp("0", null);
             }
         });
@@ -276,7 +278,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
         }
 
         List<ChildrenItem> firstChildren = classInfo.get(0).getChildren();
-        if (firstChildren.isEmpty()){
+        if (firstChildren.isEmpty()) {
             binding.tableClassTop.className.setEnabled(false);
             binding.tableClassTop.className.setText("暂无班级");
             binding.tableClassTop.classNameLogo.setVisibility(View.INVISIBLE);
@@ -315,31 +317,35 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void listAllBySchoolIdFail(String msg) {
         Log.e("TAG", "listAllBySchoolId==>: " + msg);
+        binding.tableClassTop.className.setEnabled(false);
+        binding.tableClassTop.className.setText("暂无班级");
+        binding.tableClassTop.classNameLogo.setVisibility(View.INVISIBLE);
+        mvpPresenter.listTimeDataByApp("0", null);
     }
 
     @Override
     public void listTimeDataByApp(SiteTableRsp rsp) {
         Log.e("TAG", "listTimeDataByApp==>: " + JSON.toJSONString(rsp));
-        binding.svContent.setRefreshing(false);
+        binding.slContent.setRefreshing(false);
         if (rsp.getCode() == 0) {
             if (rsp.getData() != null) {
                 binding.empty.getRoot().setVisibility(View.GONE);
                 binding.svContent.setVisibility(View.VISIBLE);
 
-                if (rsp.getData().getWeekTotal() != 0){
+                if (rsp.getData().getWeekTotal() != 0) {
                     binding.tableClassTop.tableTopWeekTv.setVisibility(View.VISIBLE);
                     binding.tableClassTop.tableTopWeekLogo.setVisibility(View.VISIBLE);
                 }
 
                 final int getThisWeek = rsp.getData().getThisWeek();
-                if (first){
+                if (first) {
                     thisWeek = getThisWeek;
                     first = false;
                 }
 
-                if (getThisWeek == thisWeek){
+                if (getThisWeek == thisWeek) {
                     binding.tableClassReturnCurrent.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     binding.tableClassReturnCurrent.setVisibility(View.VISIBLE);
                 }
 
@@ -503,7 +509,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     @Override
     public void listTimeDataByAppFail(String msg) {
         Log.d("selectTableClassListSuccess", msg);
-        binding.svContent.setRefreshing(false);
+        binding.slContent.setRefreshing(false);
     }
 
     @Override

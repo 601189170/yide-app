@@ -74,6 +74,8 @@ public class MyTablePresenter extends BasePresenter<MyTableView> {
             public void onSuccess(BaseResponse<MyTableBean> model) {
                 if (model.getCode() == 0){
                     mvpView.SelectSchByTeaid(model.getData());
+                }else {
+                    mvpView.SelectSchByTeaidFail(model.getMessage());
                 }
             }
 

@@ -272,7 +272,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 startActivity(new Intent(getContext(), TableActivity.class));
                 break;
             case R.id.tvMenu5:
-                //startActivity(new Intent(getContext(), NAttendanceActivity.class));
+                startActivity(new Intent(getContext(), NAttendanceActivity.class));
                 break;
             default:
                 break;
