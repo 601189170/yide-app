@@ -33,6 +33,7 @@ import com.yyide.chatim.R;
 import com.yyide.chatim.ScanActivity;
 import com.yyide.chatim.SpData;
 
+import com.yyide.chatim.activity.attendance.teacher.NAttendanceActivity;
 import com.yyide.chatim.activity.gate.GateClassTeacherActivity;
 import com.yyide.chatim.activity.leave.AskForLeaveActivity;
 import com.yyide.chatim.activity.meeting.MeetingHomeActivity;
