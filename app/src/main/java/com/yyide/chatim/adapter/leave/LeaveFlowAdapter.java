@@ -1,5 +1,6 @@
 package com.yyide.chatim.adapter.leave;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -66,7 +67,7 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
                 holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.color_B3B3B3));
                 ivCheck.setVisibility(View.INVISIBLE);
             }
-
+            GlideUtil.loadImageHead(getContext(), leaveFlowBean.getAvatar(), imageView);
             //第一条线默认高亮
             if (getItemPosition(leaveFlowBean) == 0) {
                 imageView.setPadding(4, 4, 4, 4);
@@ -74,8 +75,16 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
                 ivCheck.setImageResource(R.drawable.icon_flow_checked);
                 imageView.setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
                 holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
+                if (!TextUtils.isEmpty(leaveFlowBean.getAvatar())) {
+                    imageView.setVisibility(View.INVISIBLE);
+                    holder.getView(R.id.tvName).setVisibility(View.VISIBLE);
+                    String name = leaveFlowBean.getUserName();
+                    if (TextUtils.isEmpty(name) && name.length() > 2) {
+                        name = name.substring(name.length() - 2, name.length());
+                    }
+                    holder.setText(R.id.tvName, name);
+                }
             }
-            GlideUtil.loadImageHead(getContext(), leaveFlowBean.getAvatar(), imageView);
         } else {
             ((ImageView) holder.getView(R.id.iv_user_head)).setImageResource(R.mipmap.icon_leave_cc);
             ((ImageView) holder.getView(R.id.iv_user_head)).setBackground(getContext().getResources().getDrawable(R.drawable.bg_blue));

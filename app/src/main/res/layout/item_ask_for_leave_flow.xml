@@ -18,15 +18,29 @@
         android:id="@+id/iv_user_head"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="@dimen/dp_15"
         android:scaleType="fitXY"
         android:src="@mipmap/icon_head"
+        android:layout_marginStart="@dimen/dp_15"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:left_bottom_radius="4dp"
         app:left_top_radius="4dp"
         app:right_bottom_radius="4dp"
         app:right_top_radius="4dp" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/dp_16"
+        android:background="@drawable/leave_defalut_bg"
+        android:padding="4dp"
+        android:gravity="center"
+        android:textColor="#ffffffff"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_flow_checked"

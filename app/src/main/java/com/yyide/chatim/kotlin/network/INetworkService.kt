@@ -3,6 +3,7 @@ package com.yyide.chatim.kotlin.network
 import com.yyide.chatim.kotlin.network.base.BaseResponse
 import com.yyide.chatim.model.*
 import com.yyide.chatim.model.schedule.ScheduleData
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
 import retrofit2.http.*
 

@@ -99,20 +99,6 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @BindView(R.id.cl_repeal)
     ConstraintLayout cl_repeal;
 
-    @BindView(R.id.gp_copyer_list)
-    Group gp_copyer_list;
-
-    @BindView(R.id.ll_copyer_list)
-    LinearLayout ll_copyer_list;
-
-    @BindView(R.id.tv_flow_content)
-    TextView tv_flow_content;
-
-    @BindView(R.id.iv_flow_checked)
-    ImageView iv_flow_checked;
-
-    @BindView(R.id.iv_unfold)
-    ImageView iv_unfold;
     @BindView(R.id.btn_more)
     Button btn_more;
     @BindView(R.id.nestedScrollView)
@@ -122,7 +108,6 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     @BindView(R.id.tvStudentName)
     TextView tvStudentName;
 
-    private boolean unfold = false;
     List<LeaveFlowBean> leaveFlowBeanList = new ArrayList<>();
     private LeaveFlowAdapter leaveFlowAdapter;
     private String id;
@@ -130,6 +115,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
     private String processId;
     private boolean updateList = false;
     private int status;
+    private int type;
 
     @Override
     public int getContentViewID() {
@@ -141,13 +127,14 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         super.onCreate(savedInstanceState);
         title.setText(R.string.ask_for_leave);
         //type 1请假人 2审批人
-        int type = getIntent().getIntExtra("type", 1);
+        type = getIntent().getIntExtra("type", 1);
         status = getIntent().getIntExtra("status", -1);
+        btn_more.setVisibility(View.GONE);
         if (type == 1) {
-//            btn_repeal.setVisibility(View.VISIBLE);
+            btn_repeal.setVisibility(View.VISIBLE);
             gp_approver.setVisibility(View.GONE);
         } else {
-//            btn_repeal.setVisibility(View.GONE);
+            btn_repeal.setVisibility(View.GONE);
             gp_approver.setVisibility(View.VISIBLE);
         }
         cl_content.setVisibility(View.INVISIBLE);
@@ -221,6 +208,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                         } else {
                             mvpPresenter.ondoApplyLeave(processId, reason);
                         }
+                        dialog.dismiss();
                     }
                 }
         );
@@ -230,70 +218,6 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 WindowManager.LayoutParams.WRAP_CONTENT
         );
     }
-
-    private void showGlobalActionPopup(View v) {
-        String[] listItems = new String[]{
-                "Change Skin"
-        };
-        List<String> data = new ArrayList<>();
-        Collections.addAll(data, listItems);
-        ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.simple_list_item, data);
-        AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    final String[] items = new String[]{"转交", "回退"};
-                    new QMUIDialog.MenuDialogBuilder(LeaveFlowDetailActivity.this)
-                            .addItems(items, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //QDSkinManager.changeSkin(which + 1);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setSkinManager(QMUISkinManager.defaultInstance(LeaveFlowDetailActivity.this))
-                            .create()
-                            .show();
-                }
-                if (mGlobalAction != null) {
-                    mGlobalAction.dismiss();
-                }
-            }
-        };
-        mGlobalAction = QMUIPopups.listPopup(this,
-                QMUIDisplayHelper.dp2px(this, 100),
-                QMUIDisplayHelper.dp2px(this, 110),
-                adapter,
-                onItemClickListener)
-                .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
-                .preferredDirection(QMUIPopup.DIRECTION_TOP)
-                .shadow(true)
-                .edgeProtection(QMUIDisplayHelper.dp2px(this, 10))
-                .offsetYIfTop(QMUIDisplayHelper.dp2px(this, 5))
-                .skinManager(QMUISkinManager.defaultInstance(this))
-                .show(v);
-    }
-
-    private QMUIPopup mGlobalAction;
-    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            if (i == 0) {
-                final String[] items = new String[]{"蓝色（默认）", "黑色", "白色"};
-                new QMUIDialog.MenuDialogBuilder(LeaveFlowDetailActivity.this)
-                        .addItems(items, (dialog, which) -> {
-                            //QDSkinManager.changeSkin(which + 1);
-                            dialog.dismiss();
-                        })
-                        .setSkinManager(QMUISkinManager.defaultInstance(LeaveFlowDetailActivity.this))
-                        .create()
-                        .show();
-            }
-            if (mGlobalAction != null) {
-                mGlobalAction.dismiss();
-            }
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -338,9 +262,6 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         tv_leave_time.setText(data.getCreateTime());
         taskId = data.getTaskId();
         processId = data.getProcInstId();
-        if (data.isBack()) {
-            btn_more.setVisibility(View.GONE);
-        }
         tv_leave_title.setText(data.getTitle());
         tv_start_time.setText(apprJson.getStartTime());
         tv_end_time.setText(apprJson.getEndTime());
@@ -348,14 +269,17 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         //审核结果: 0 审批拒绝 1 审批通过 2 审批中 3 已撤销
         leaveStatus(data.getStatus(), tv_leave_flow_status);
 
-        if (data.getHiApprNodeList() != null) {
-            for (int i = 0; i < data.getHiApprNodeList().size(); i++) {
-                LeaveDetailRsp.DataDTO.HiApprNodeListDTO hiApprNodeListDTO = data.getHiApprNodeList().get(i);
-                if (i == 1 && "1".equals(hiApprNodeListDTO.getStatus())) {
-                    btn_more.setVisibility(View.GONE);
-                }
-            }
-        }
+//        if (data.isBack()) {
+//            btn_more.setVisibility(View.GONE);
+//        }
+//        if (data.getHiApprNodeList() != null) {
+//            for (int i = 0; i < data.getHiApprNodeList().size(); i++) {
+//                LeaveDetailRsp.DataDTO.HiApprNodeListDTO hiApprNodeListDTO = data.getHiApprNodeList().get(i);
+//                if (i == 1 && "1".equals(hiApprNodeListDTO.getStatus())) {
+//                    btn_more.setVisibility(View.GONE);
+//                }
+//            }
+//        }
 
         if (data.getHiApprNodeList() != null && data.getCcList() != null && data.getCcList().size() > 0) {
             LeaveDetailRsp.DataDTO.HiApprNodeListDTO listDTO = new LeaveDetailRsp.DataDTO.HiApprNodeListDTO();
@@ -381,6 +305,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         Log.e(TAG, "repealResult: " + baseRsp.toString());
         if (baseRsp.getCode() == BaseConstant.REQUEST_SUCCESS2) {
             mvpPresenter.queryLeaveDetailsById(id);
+
             EventBus.getDefault().post(new EventMessage(BaseConstant.TYPE_LEAVE, ""));
         } else {
             ToastUtils.showShort("撤销失败：" + baseRsp.getMessage());
@@ -435,10 +360,14 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 view.setText(getString(R.string.approval_text));
                 view.setBackgroundResource(R.drawable.ask_for_leave_status_approval_shape);
                 view.setTextColor(getResources().getColor(R.color.black9));
-                if (status == 1) {
+                if (type == 1) {
                     cl_repeal.setVisibility(View.VISIBLE);
                 } else {
-                    cl_repeal.setVisibility(View.GONE);
+                    if (status == 1) {
+                        cl_repeal.setVisibility(View.VISIBLE);
+                    } else {
+                        cl_repeal.setVisibility(View.GONE);
+                    }
                 }
                 break;
             case "2":

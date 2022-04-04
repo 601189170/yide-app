@@ -30,6 +30,7 @@
         android:layout_marginTop="@dimen/dp_5"
         android:ellipsize="end"
         android:ems="4"
+        android:gravity="center"
         android:lines="1"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="@+id/iv_user_head"

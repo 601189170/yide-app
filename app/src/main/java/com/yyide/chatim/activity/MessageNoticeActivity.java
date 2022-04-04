@@ -168,6 +168,16 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
     }
 
     @Override
+    public void messageNumberSuccess(int number, String date) {
+
+    }
+
+    @Override
+    public void messageNumberFail(String msg) {
+
+    }
+
+    @Override
     public void getUserNoticePageFail(String msg) {
         ToastUtils.showShort(msg);
         refresh = false;

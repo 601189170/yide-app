@@ -1,12 +1,18 @@
 package com.yyide.chatim.presenter;
 
+import com.alibaba.fastjson.JSON;
+import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BasePresenter;
+import com.yyide.chatim.kotlin.network.base.BaseResponse;
 import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.model.TodoRsp;
 import com.yyide.chatim.model.UserMsgNoticeRsp;
 import com.yyide.chatim.net.ApiCallback;
 import com.yyide.chatim.view.UserNoticeView;
 
 import java.util.HashMap;
+
+import okhttp3.RequestBody;
 
 public class UserNoticePresenter extends BasePresenter<UserNoticeView> {
     public UserNoticePresenter(UserNoticeView view) {
@@ -41,29 +47,38 @@ public class UserNoticePresenter extends BasePresenter<UserNoticeView> {
         });
     }
 
-    /**
-     * 更新我的信息
-     */
-    public void updateMyNoticeDetails(long id) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", id);
-        addSubscription(dingApiStores.updateMyNoticeDetails(map), new ApiCallback<ResultBean>() {
+    //获取未处理消息数量
+    public void getMessageNumber() {
+//        mvpView.showLoading();
+        HashMap<String, Object> map = new HashMap();
+        map.put("pageNo", 1);
+        map.put("pageSize", 5);
+        map.put("status", 1);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSON.toJSONString(map));
+        addSubscription(dingApiStores.getMessageTransaction(body), new ApiCallback<BaseResponse<TodoRsp>>() {
             @Override
-            public void onSuccess(ResultBean model) {
-                mvpView.updateNoticeSuccess(model);
+            public void onSuccess(BaseResponse<TodoRsp> model) {
+                if (model.getCode() == BaseConstant.REQUEST_SUCCESS2 && model.getData() != null) {
+                    TodoRsp data = model.getData();
+                    if (data.getList() != null && data.getList().size() > 0) {
+                        TodoRsp.TodoItemBean itemBean = data.getList().get(data.getList().size() - 1);
+                        mvpView.messageNumberSuccess(data.getTotal(), itemBean.getStartTime());
+                    } else {
+                        mvpView.messageNumberSuccess(0, "");
+                    }
+                }
             }
 
             @Override
             public void onFailure(String msg) {
-                mvpView.getUserNoticePageFail(msg);
+                mvpView.messageNumberFail(msg);
             }
 
             @Override
             public void onFinish() {
-
+                mvpView.hideLoading();
             }
         });
     }
-
 
 }

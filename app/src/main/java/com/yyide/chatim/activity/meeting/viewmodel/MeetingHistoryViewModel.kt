@@ -8,7 +8,6 @@ import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.BaseViewModel
 import com.yyide.chatim.kotlin.network.NetworkApi
 import com.yyide.chatim.model.MeetingListData
-import com.yyide.chatim.model.schedule.ScheduleData
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 

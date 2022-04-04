@@ -9,11 +9,11 @@ import java.util.ArrayList
  * @description 描述
  */
 data class ParticipantRsp(
-        val code: Int = 0,
-        val success: Boolean = false,
-        val msg: String? = null,
+    val code: Int = 0,
+    val success: Boolean = false,
+    val msg: String? = null,
 //    val data: DataBean? = null,
-        val `data`: List<DataBean> ?= null,
+    val `data`: List<DataBean>? = null,
 ) {
     data class DataBean(
         var name: String? = null,
@@ -24,24 +24,25 @@ data class ParticipantRsp(
     ) {
         data class ParticipantListBean(
             var id: String? = null,
-            var userId:String?=null,
+            var userId: String? = null,
             var name: String? = "",
             var realname: String? = "",
             //var status:String? = null,
             @SerializedName("status")
-            var myType:String? = null,
+            var myType: String? = null,
             var type: String? = null,
-            var department:Boolean = false,
-            var checked:Boolean = false,
+            var department: Boolean = false,
+            var checked: Boolean = false,
+            var avatar: String = "",
             var guardians: List<GuardiansBean> = mutableListOf()
-        ){
+        ) {
             data class GuardiansBean(
-                val id:String? = null,
+                val id: String? = null,
                 var userId: String? = null,
                 var guardianName: String? = null,
                 var checked: Boolean = false,
                 //0.父亲1.母亲2.爷爷3.奶奶4.外公5.外婆，6其他
-                var relation:Int = 0
+                var relation: Int = 0
             )
         }
     }

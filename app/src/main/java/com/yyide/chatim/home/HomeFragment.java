@@ -58,6 +58,7 @@ import com.yyide.chatim.model.NoticeMyReleaseDetailBean;
 import com.yyide.chatim.model.ResultBean;
 import com.yyide.chatim.model.SchoolRsp;
 import com.yyide.chatim.model.TodoRsp;
+import com.yyide.chatim.model.UserBean;
 import com.yyide.chatim.presenter.HomeFragmentPresenter;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.utils.TakePicUtil;
@@ -408,10 +409,10 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
         if (schoolinfo != null) {
             schoolName.setText(schoolinfo.getSchoolName());
         }
-        if (SpData.getIdentityInfo() != null) {
-//            GetUserSchoolRsp.DataBean identityInfo = SpData.getIdentityInfo();
-//            GlideUtil.loadImageHead(getActivity(), identityInfo.img, head_img);
-//            SPUtils.getInstance().put(SpData.USERNAME, identityInfo.realname);
+        if (SpData.getUser() != null) {
+            UserBean userBean = SpData.getUser();
+            GlideUtil.loadImageHead(getActivity(), userBean.getAvatar(), head_img);
+            //SPUtils.getInstance().put(SpData.USERNAME, identityInfo.realname);
         }
     }
 
@@ -421,13 +422,11 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             if (!TextUtils.isEmpty(messageEvent.getMessage())) {
                 GlideUtil.loadImageHead(getActivity(), messageEvent.getMessage(), head_img);
             }
-        } else if (BaseConstant.TYPE_LEAVE.equals(messageEvent.getCode())) {
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO.equals(messageEvent.getCode())) {
             //关闭所有的Activity  MainActivity除外
             if (mLeftMenuPop != null && mLeftMenuPop.isShow()) {
                 mLeftMenuPop.hide();
             }
-        } else if (BaseConstant.TYPE_UPDATE_MESSAGE_TODO.equals(messageEvent.getCode())) {
         } else if (BaseConstant.TYPE_HOME_CHECK_IDENTITY.equals(messageEvent.getCode())) {
             setSchoolInfo();
             replaceFragment();

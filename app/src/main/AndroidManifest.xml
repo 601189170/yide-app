@@ -75,9 +75,9 @@
     <!--用于申请调用A-GPS模块-->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <!--如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限-->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!--如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明-->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!--开发者申请的key-->
 
     <application
@@ -93,6 +93,9 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".activity.TodoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.leave.LeaveParticipantActivity"
             android:exported="false" />
         <activity
             android:name=".activity.leave.AddApprovalActivity"
@@ -745,9 +748,9 @@
             android:screenOrientation="portrait" />
 
         <!--教师考勤-->
-        <activity android:name=".activity.attendance.teacher.TeacherStatisticsActivity"/>
-        <activity android:name=".activity.attendance.teacher.NAttendanceActivity"/>
-        <activity android:name=".activity.attendance.teacher.AttendanceRuleActivity"/>
+        <activity android:name=".activity.attendance.teacher.TeacherStatisticsActivity" />
+        <activity android:name=".activity.attendance.teacher.NAttendanceActivity" />
+        <activity android:name=".activity.attendance.teacher.AttendanceRuleActivity" />
 
         <!-- 高德地图-->
         <service android:name="com.amap.api.location.APSService" />

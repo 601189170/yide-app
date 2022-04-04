@@ -471,7 +471,7 @@ public interface DingApiStores {
     //获取消息代办列表
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/cloud/app/procAppr/pageTask")
-    Observable<TodoRsp> getMessageTransaction(@Body RequestBody requestBody);
+    Observable<BaseResponse<TodoRsp>> getMessageTransaction(@Body RequestBody requestBody);
 
     //https://api.uat.edu.1d1j.net/face/cloud-face/face/toStudentOss
     //上传学生face

@@ -13,7 +13,6 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -39,10 +38,6 @@ import com.tencent.qcloud.tim.uikit.base.IUIKitCallBack
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit.MessageUnreadWatcher
 import com.vivo.push.PushClient
-import com.yyide.chatim.activity.NoteBookActivity
-import com.yyide.chatim.activity.schedule.ScheduleSearchActivity
-import com.yyide.chatim.activity.schedule.ScheduleSettingsActivity
-import com.yyide.chatim.activity.schedule.SchoolCalendarActivity
 import com.yyide.chatim.alipush.AliasUtil
 import com.yyide.chatim.alipush.MyMessageReceiver
 import com.yyide.chatim.alipush.NotifyUtil
@@ -51,7 +46,6 @@ import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager
 import com.yyide.chatim.databinding.ActivityNewMainBinding
-import com.yyide.chatim.fragment.schedule.ScheduleFragment
 import com.yyide.chatim.fragment.schedule.ScheduleFragment2
 import com.yyide.chatim.home.AppFragment
 import com.yyide.chatim.home.HelpFragment
@@ -66,6 +60,7 @@ import com.yyide.chatim.thirdpush.OPPOPushImpl
 import com.yyide.chatim.thirdpush.ThirdPushTokenMgr
 import com.yyide.chatim.utils.*
 import com.yyide.chatim.view.DialogUtil
+import com.yyide.chatim.viewmodel.MainViewModel
 import com.yyide.chatim.viewmodel.ScheduleMangeViewModel
 import com.yyide.chatim.widget.LoadingButton
 import okhttp3.*
@@ -82,6 +77,8 @@ import java.util.*
  */
 class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBinding::inflate),
     MessageUnreadWatcher {
+
+    private lateinit var viewModel: MainViewModel
 
     companion object {
         private var mMessageReceiver: MessageReceiver? = null
@@ -112,6 +109,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         setScreenFull()
         EventBus.getDefault().register(this)
         registerMessageReceiver() // used for receive msg
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         //登录IM
         getUserSig()
         //注册极光别名
@@ -152,9 +150,8 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             }
         }
         initView()
-//        startActivity(Intent(this, SchoolCalendarActivity::class.java))
-
-//        startActivity(Intent(this, NoteBookActivity::class.java))
+        initViewModel()
+        viewModel.getTodoList()
     }
 
     private val HOME_TYPE = 1
@@ -332,7 +329,25 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         }
     }
 
-    fun registerMessageReceiver() {
+    private fun initViewModel() {
+        //消息待办数
+        viewModel.todoLiveData.observe(this) {
+            val result = it.getOrNull()
+            if (it.isSuccess) {
+                val dataList = result?.list
+                if (dataList != null && dataList.isNotEmpty()) {
+                    messageCount = result.total
+                    setMessageCount(todoCount + messageCount + noticeCount)
+                }
+            } else {
+                it.exceptionOrNull()?.localizedMessage?.let { it1 ->
+                    loge(it1)
+                }
+            }
+        }
+    }
+
+    private fun registerMessageReceiver() {
         mMessageReceiver = MessageReceiver()
         val filter = IntentFilter()
         filter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY

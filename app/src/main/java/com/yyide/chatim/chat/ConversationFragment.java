@@ -81,6 +81,10 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     TextView tv_user_notice_content;
     @BindView(R.id.tv_unNum)
     TextView tv_unNum;
+    @BindView(R.id.tvTodoNum)
+    TextView tvTodoNum;
+    @BindView(R.id.tvTodoTime)
+    TextView tvTodoTime;
 
     @Nullable
     @Override
@@ -254,6 +258,7 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     public void onResume() {
         super.onResume();
         //MessageNotification.getInstance().cancelNotification();
+        mvpPresenter.getMessageNumber();
     }
 
     /**
@@ -343,6 +348,25 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         }
     }
 
+    @Override
+    public void updateNoticeSuccess(ResultBean resultBean) {
+
+    }
+
+    @Override
+    public void messageNumberSuccess(int number, String date) {
+        if (number > 0) {
+            tvTodoNum.setVisibility(View.VISIBLE);
+            tvTodoNum.setText(number + "");
+            tvTodoTime.setText(date);
+        }
+    }
+
+    @Override
+    public void messageNumberFail(String msg) {
+
+    }
+
     /**
      * 设置未读数量
      *
@@ -359,11 +383,6 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
         } else {
             tv_unNum.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void updateNoticeSuccess(ResultBean resultBean) {
-
     }
 
     @Override

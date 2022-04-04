@@ -1,7 +1,6 @@
 package com.yyide.chatim.dialog;
 
 import android.app.Activity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -19,20 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.contrarywind.adapter.WheelAdapter;
-import com.contrarywind.view.WheelView;
 import com.yyide.chatim.R;
 import com.yyide.chatim.SpData;
-import com.yyide.chatim.model.AttendanceCheckRsp;
 import com.yyide.chatim.model.GetUserSchoolRsp;
-import com.yyide.chatim.model.SelectTableClassesRsp;
-import com.yyide.chatim.widget.ArrayWheelAdapter;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class AttendancePop extends PopupWindow {
     Activity context;
