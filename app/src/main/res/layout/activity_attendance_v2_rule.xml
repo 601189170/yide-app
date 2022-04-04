@@ -158,7 +158,6 @@
             android:text="@string/wifi_title"
             android:textColor="#333333"
             android:textSize="14sp"
-            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_range" />
 
@@ -180,7 +179,6 @@
             android:text="@string/ble_title"
             android:textColor="#333333"
             android:textSize="14sp"
-            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule_wifi" />
 

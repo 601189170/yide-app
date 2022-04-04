@@ -26,7 +26,9 @@ class TimeSelectDialog : DialogFragment {
 
     private var timeCallBack: SelectTimeCallBack? = null
 
-    constructor() : super()
+    constructor() : super(){
+        currentMillisecond = System.currentTimeMillis()
+    }
 
 
     constructor(date: String) : this() {
