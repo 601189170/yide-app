@@ -10,6 +10,7 @@ import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.model.BaseRsp
 import com.yyide.chatim.model.EventMessage
 import com.yyide.chatim.model.schedule.*
+import com.yyide.chatim.model.schedule.ParticipantRsp.DataBean.ParticipantListBean
 import com.yyide.chatim.net.AppClient
 import com.yyide.chatim.net.DingApiStores
 import com.yyide.chatim.utils.DateUtils
@@ -96,6 +97,7 @@ class ScheduleEditViewModel : ViewModel() {
         var endTime = endTimeLiveData.value?:""
         val startTimeToDateTime = ScheduleDaoUtil.toDateTime(startTime)
         val endTimeToDateTime = ScheduleDaoUtil.toDateTime(endTime)
+
         if (startTimeToDateTime == endTimeToDateTime){
             endTime = startTimeToDateTime.toString("yyyy-MM-dd ") + "23:59:59"
         }
@@ -129,12 +131,15 @@ class ScheduleEditViewModel : ViewModel() {
         scheduleData.endTime = endTime
         scheduleData.isAllDay = if (allDay) "1" else "0"
         scheduleData.labelList = labelListLiveData.value
-        scheduleData.participantList = participantList.value
+//        scheduleData.participantList = participantList.value
         loge("ScheduleEditViewModel==> "+JSON.toJSONString(scheduleData))
 
-//        if (participantList.value!=null){
-//            scheduleData.participantList = participantList.value
-//        }
+        if (participantList.value!=null){
+            scheduleData.participantList = participantList.value
+        }else{
+            val participantList: List<ParticipantListBean> = java.util.ArrayList()
+            scheduleData.participantList=participantList
+        }
 
 
         scheduleData.siteId = siteLiveData.value?.id

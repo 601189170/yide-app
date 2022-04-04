@@ -39,21 +39,24 @@ class ScheduleAddLabelActivity : BaseActivity() {
         val stringExtra = intent.getStringExtra("labelList")
         val labelListSource = JSONArray.parseArray(stringExtra, LabelListRsp.DataBean::class.java)
         labelManageViewModel.getLabelList().observe(this, Observer {
-            labelManageBinding.blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
-            if (it.isEmpty()) {
-                loge("没有数据")
-                return@Observer
-            }
-            labelList.clear()
-            labelList.addAll(it)
-            if (labelListSource != null && labelListSource.isNotEmpty()) {
-                labelList.forEach { dataBean ->
-                    if (labelListSource.map { it.id }.contains(dataBean.id)) {
-                        dataBean.checked = true
+            if (it!=null){
+                labelManageBinding.blankPage.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
+                if (it.isEmpty()) {
+                    loge("没有数据")
+                    return@Observer
+                }
+                labelList.clear()
+                labelList.addAll(it)
+                if (labelListSource != null && labelListSource.isNotEmpty()) {
+                    labelList.forEach { dataBean ->
+                        if (labelListSource.map { it.id }.contains(dataBean.id)) {
+                            dataBean.checked = true
+                        }
                     }
                 }
+                adapter.setList(labelList)
             }
-            adapter.setList(labelList)
+
         })
     }
 

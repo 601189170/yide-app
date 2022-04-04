@@ -1069,6 +1069,7 @@ public class DialogUtil {
         final DateTime time1 = dateTimes.get(0);
         final DateTime time2 = dateTimes.get(1);
         scheduleEditViewModel.getStartTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time1, "yyyy-MM-dd HH:mm:ss"));
+//        scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2, "MM-dd"));
         scheduleEditViewModel.getEndTimeLiveData().setValue(ScheduleDaoUtil.INSTANCE.toStringTime(time2, "yyyy-MM-dd HH:mm:ss"));
         String time = ScheduleDaoUtil.INSTANCE.toStringTime(time1, "MM月dd日 HH:mm");
         String toptime = ScheduleDaoUtil.INSTANCE.toStringTime(time1, "MM月dd日");
@@ -1095,6 +1096,8 @@ public class DialogUtil {
             }
             //日程提交
             mDialog.dismiss();
+            //防止重复提交
+            binding.btnFinish.setEnabled(false);
             scheduleEditViewModel.getScheduleTitleLiveData().setValue(title);
             onScheduleAddListener.onFinish(v);
         });

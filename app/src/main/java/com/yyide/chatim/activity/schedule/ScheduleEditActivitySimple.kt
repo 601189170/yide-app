@@ -1,5 +1,6 @@
 package com.yyide.chatim.activity.schedule
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -84,14 +85,29 @@ class ScheduleEditActivitySimple : BaseActivity() {
      * @param enable true设置可编辑 false设置不可编辑
      */
     private fun initView(){
-
+        val flexboxLayoutManager = FlexboxLayoutManager(this)
+        flexboxLayoutManager.flexDirection = FlexDirection.ROW
+        flexboxLayoutManager.flexWrap = FlexWrap.WRAP
+        flexboxLayoutManager.justifyContent = JustifyContent.FLEX_START
+        scheduleEditBinding.rvLabelList.layoutManager = flexboxLayoutManager
+        scheduleEditBinding.rvLabelList.layoutManager = flexboxLayoutManager
+        scheduleEditBinding.rvLabelList.addItemDecoration(
+                SpacesItemDecoration(
+                        SpacesItemDecoration.dip2px(
+                                5f
+                        )
+                )
+        )
+        scheduleEditBinding.rvLabelList.adapter = adapter
 
         scheduleEditBinding.top.title.text =  "日程详情"
         scheduleEditBinding.top.backLayout.setOnClickListener {
             finish()
         }
+
+
         //删除
-        scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
+//        scheduleEditBinding.top.ivRight.visibility = View.VISIBLE
         scheduleEditBinding.top.ivRight.setOnClickListener {
             DialogUtil.showScheduleDelDialog(
                     this,
@@ -108,7 +124,7 @@ class ScheduleEditActivitySimple : BaseActivity() {
 
                     })
         }
-        scheduleEditBinding.top.ivEdit.visibility=View.VISIBLE;
+
 
         val stringExtra = intent.getStringExtra("data")
         val from = intent.getStringExtra("from")
@@ -127,6 +143,13 @@ class ScheduleEditActivitySimple : BaseActivity() {
             promoter = it.promoterSelf()
             scheduleEditBinding.top.ivEdit.isEnabled=promoter;
             scheduleEditBinding.top.ivRight.isEnabled=promoter;
+            if (promoter){
+                scheduleEditBinding.top.ivEdit.visibility=View.VISIBLE
+                scheduleEditBinding.top.ivRight.visibility=View.VISIBLE
+            }else{
+                scheduleEditBinding.top.ivEdit.visibility=View.GONE
+                scheduleEditBinding.top.ivRight.visibility=View.GONE
+            }
             scheduleEditBinding.edit.setText(it.remark)
             scheduleEditBinding.tvAddress.text = it.siteName
             //日程名称name
@@ -173,9 +196,40 @@ class ScheduleEditActivitySimple : BaseActivity() {
                     }
                 }
             }
+            adapter.setList(it.labelList)
+
+
         }
+
 
     }
 
+    val adapter = object :
+            BaseQuickAdapter<LabelListRsp.DataBean, BaseViewHolder>(R.layout.item_schedule_label_flow_list) {
+        @SuppressLint("WrongConstant")
+        override fun convert(holder: BaseViewHolder, item: LabelListRsp.DataBean) {
+            holder.getView<ImageView>(R.id.iv_del).visibility = View.GONE
+            val drawable = GradientDrawable()
+//            drawable.cornerRadius = DisplayUtils.dip2px(this@ScheduleEditActivityMain, 2f).toFloat()
+//            drawable.setColor(ColorUtil.parseColor(item.colorValue))
+            drawable.setStroke(1, ColorUtil.parseColor(item.colorValue))
 
+            drawable.setShape(GradientDrawable.LINEAR_GRADIENT);
+
+            holder.setTextColor(R.id.tv_label,ColorUtil.parseColor(item.colorValue))
+
+            holder.getView<TextView>(R.id.tv_label).background = drawable
+            holder.setText(R.id.tv_label, item.labelName)
+//            holder.itemView.setOnClickListener {
+//                loge("item=$item")
+//                if (!enableEditMode){
+//                    loge("日程便签只有发起人才能删除！")
+//                    return@setOnClickListener
+//                }
+//                remove(item)
+//                labelList.remove(item)
+//                notifyDataSetChanged()
+//            }
+        }
+    }
 }

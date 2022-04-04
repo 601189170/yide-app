@@ -1,6 +1,7 @@
 package com.yyide.chatim.viewmodel
 
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -67,14 +68,16 @@ class StaffParticipantViewModel : ViewModel() {
                 val body = response.body()
                 if (body != null && body.code == BaseConstant.REQUEST_SUCCES_0 && body.data != null) {
                     val data = body.data
-                    data[0].list?.let {
-                        it.forEach {
-                            it.name = it.name
-                            it.realname = it.realname
+                    if (data.size>0){
+                        data[0].list?.let {
+                            it.forEach {
+                                it.name = it.name
+                                it.realname = it.realname
+                            }
                         }
+                        responseResult.postValue(data[0])
                     }
-//                    if (data.size>0)
-                    responseResult.postValue(data[0])
+
                 } else {
                     responseResult.postValue(null)
                 }
@@ -105,8 +108,9 @@ class StaffParticipantViewModel : ViewModel() {
                         mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
                     val participantList =
                         mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
-                    dataBean.name = data[0].name
-                    data[0].childList?.list?.forEach {
+                    dataBean.name = data.name
+
+                    data.list?.forEach {
                         val participantListBean =
                             ParticipantRsp.DataBean.ParticipantListBean()
                         participantListBean.department = true
@@ -115,26 +119,40 @@ class StaffParticipantViewModel : ViewModel() {
                         participantListBean.name = it.name
                         participantListBean.id = it.id
                         departmentList.add(participantListBean)
+                        it.participantList?.forEach {
+                            val participantListBean =
+                                    ParticipantRsp.DataBean.ParticipantListBean()
+                            participantListBean.id = it.id
+                            participantListBean.userId = it.userId
+                            participantListBean.name = it.name
+                            participantListBean.realname = it.realname
+                            //participantListBean.userName = it.realname
+                            participantListBean.department = false
+                            participantListBean.checked = false
+                            participantListBean.guardians = it.guardians
+                            participantList.add(participantListBean)
+                        }
                     }
 
-                    data[0].participantList?.forEach {
-                        val participantListBean =
-                            ParticipantRsp.DataBean.ParticipantListBean()
-                        participantListBean.id = it.id
-                        participantListBean.userId = it.userId
-                        participantListBean.name = it.name
-                        participantListBean.realname = it.realname
-                        //participantListBean.userName = it.realname
-                        participantListBean.department = false
-                        participantListBean.checked = false
-                        participantListBean.guardians = it.guardians
-                        participantList.add(participantListBean)
-                    }
+//                    data.participantList?.forEach {
+//                        val participantListBean =
+//                            ParticipantRsp.DataBean.ParticipantListBean()
+//                        participantListBean.id = it.id
+//                        participantListBean.userId = it.userId
+//                        participantListBean.name = it.name
+//                        participantListBean.realname = it.realname
+//                        //participantListBean.userName = it.realname
+//                        participantListBean.department = false
+//                        participantListBean.checked = false
+//                        participantListBean.guardians = it.guardians
+//                        participantList.add(participantListBean)
+//                    }
 
                     if (participantList.isNotEmpty() || departmentList.isNotEmpty()) {
                         //学生或家长
                         dataBean.list = departmentList
                         dataBean.personList = participantList
+                        Log.e("TAG", "responseResult.postValue: "+JSON.toJSONString(dataBean) )
                         responseResult.postValue(dataBean)
                     } else {
                         responseResult.postValue(null)

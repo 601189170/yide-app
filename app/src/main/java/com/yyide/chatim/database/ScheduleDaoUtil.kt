@@ -38,7 +38,10 @@ object ScheduleDaoUtil {
         val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         return DateTime.parse(date, dateTimeFormatter)
     }
-
+    fun toDateTime2(date: String): DateTime {
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("MM-dd")
+        return DateTime.parse(date, dateTimeFormatter)
+    }
     fun toDateTime(date: String, pattern: String = "yyyy-MM-dd HH:mm:ss"): DateTime {
         if (TextUtils.isEmpty(date)){
             val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")

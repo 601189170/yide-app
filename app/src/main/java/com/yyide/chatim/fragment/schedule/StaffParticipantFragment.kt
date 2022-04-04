@@ -1,6 +1,7 @@
 package com.yyide.chatim.fragment.schedule
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,7 @@ class StaffParticipantFragment : Fragment() {
         requestData(null)
         staffParticipantViewModel.getResponseResult().observe(this) {
             if (it != null) {
+
                 listCache[it.name ?: "未知"] = it
                 val list = mutableListOf<ParticipantRsp.DataBean.ParticipantListBean>()
                 it.list?.let {
@@ -78,7 +80,7 @@ class StaffParticipantFragment : Fragment() {
                 navAdapter.setList(staffParticipantViewModel.getParticipantList().value)
                 return@observe
             }
-            ToastUtils.showShort("当前部门没有数据")
+//            ToastUtils.showShort("当前部门没有数据")
         }
     }
 
@@ -226,13 +228,13 @@ class StaffParticipantFragment : Fragment() {
             PARTICIPANT_TYPE_GUARDIAN -> {
                 //请求家长监护人数据
                 staffParticipantViewModel.getStudentGuardianParticipant(
-                    participantListBean?.id ?: "", participantListBean?.type ?: "0", "1"
+                    participantListBean?.id ?: "", participantListBean?.type ?: "1", "1"
                 )
             }
             PARTICIPANT_TYPE_STUDENT -> {
                 //请求学生数据
                 staffParticipantViewModel.getStudentGuardianParticipant(
-                    participantListBean?.id ?: "", participantListBean?.type ?: "0", "2"
+                    participantListBean?.id ?: "", participantListBean?.type ?: "1", "2"
                 )
             }
             else -> {
