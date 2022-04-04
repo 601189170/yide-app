@@ -44,7 +44,7 @@ class TablePopUp : BasePopupWindow {
     init {
         setContentView(R.layout.popup_table_top)
         setBackground(0)
-        //setOutSideDismiss(false)
+        setOutSideDismiss(false)
     }
 
     override fun onViewCreated(contentView: View) {
@@ -56,6 +56,10 @@ class TablePopUp : BasePopupWindow {
 
         binding.tableTopExpandableCancel.remove()
         binding.tableTopExpandableSubmit.remove()
+
+        binding.viewPopupBlank.setOnClickListener {
+            dismiss()
+        }
 
         binding.tableTopExpandableRv.layoutManager = LinearLayoutManager(context)
 
