@@ -10,7 +10,7 @@ public interface UserNoticeView extends BaseView {
 
     void updateNoticeSuccess(ResultBean resultBean);
 
-    void messageNumberSuccess(int number, String date);
+    void messageNumberSuccess(int number, String date, String msg);
 
     void messageNumberFail(String msg);
 

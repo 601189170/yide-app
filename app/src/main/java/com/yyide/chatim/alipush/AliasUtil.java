@@ -88,7 +88,7 @@ public class AliasUtil {
     public static void syncAliases() {
         CloudPushService mPushService = PushServiceFactory.getCloudPushService();
         //保证当前账号的当前身份
-        final String userid = String.valueOf(SpData.getUserId());
+        final String userid = String.valueOf(SpData.getIdentityInfo().getId());
         final String deviceId = mPushService.getDeviceId();
         Log.e(TAG, "userid: " + userid+",deviceId："+deviceId);
         mPushService.listAliases(new CommonCallback() {
@@ -130,7 +130,7 @@ public class AliasUtil {
     public static void clearAlias() {
         CloudPushService mPushService = PushServiceFactory.getCloudPushService();
         //保证当前账号的当前身份
-        final String userid = String.valueOf(SpData.getUserId());
+        final String userid = String.valueOf(SpData.getIdentityInfo().getId());
         delUserEquipmentInfo(userid);
         delAlias(mPushService, userid);
     }
