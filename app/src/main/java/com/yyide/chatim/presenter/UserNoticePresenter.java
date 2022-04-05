@@ -61,10 +61,10 @@ public class UserNoticePresenter extends BasePresenter<UserNoticeView> {
                 if (model.getCode() == BaseConstant.REQUEST_SUCCESS2 && model.getData() != null) {
                     TodoRsp data = model.getData();
                     if (data.getList() != null && data.getList().size() > 0) {
-                        TodoRsp.TodoItemBean itemBean = data.getList().get(data.getList().size() - 1);
-                        mvpView.messageNumberSuccess(data.getTotal(), itemBean.getStartTime());
+                        TodoRsp.TodoItemBean itemBean = data.getList().get(0);
+                        mvpView.messageNumberSuccess(data.getTotal(), itemBean.getStartTime(), itemBean.getTitle());
                     } else {
-                        mvpView.messageNumberSuccess(0, "");
+                        mvpView.messageNumberSuccess(0, "", "");
                     }
                 }
             }

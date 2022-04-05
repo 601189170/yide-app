@@ -85,6 +85,8 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     TextView tvTodoNum;
     @BindView(R.id.tvTodoTime)
     TextView tvTodoTime;
+    @BindView(R.id.tvTodoDesc)
+    TextView tvTodoDesc;
 
     @Nullable
     @Override
@@ -354,11 +356,12 @@ public class ConversationFragment extends BaseMvpFragment<UserNoticePresenter> i
     }
 
     @Override
-    public void messageNumberSuccess(int number, String date) {
+    public void messageNumberSuccess(int number, String date, String msg) {
         if (number > 0) {
             tvTodoNum.setVisibility(View.VISIBLE);
             tvTodoNum.setText(number + "");
             tvTodoTime.setText(date);
+            tvTodoDesc.setText(msg);
         }
     }
 

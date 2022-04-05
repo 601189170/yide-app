@@ -168,7 +168,7 @@ public class MessageNoticeActivity extends BaseMvpActivity<UserNoticePresenter> 
     }
 
     @Override
-    public void messageNumberSuccess(int number, String date) {
+    public void messageNumberSuccess(int number, String date, String msg) {
 
     }
 
