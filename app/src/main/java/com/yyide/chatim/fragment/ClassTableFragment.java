@@ -59,7 +59,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     //private SwitchTableClassPop swichTableClassPop;
 
     private boolean first = true;
-    private int thisWeek = 1;
+    private int thisWeek = 0;
 
     private ClassTableFragmnet2Binding binding;
     // 当前所选周数
@@ -357,9 +357,14 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
                     ChildrenItem bean = new ChildrenItem("第" + weekNum + "周", "", weekNum);
                     data.add(bean);
                 }
-                selectWeek = data.get(getThisWeek - 1);
+                if (getThisWeek == 0) {
+                    binding.tableClassTop.tableTopWeekTv.setText("选择周次");
+                }else {
+                    selectWeek = data.get(getThisWeek - 1);
+                    binding.tableClassTop.tableTopWeekTv.setText(selectWeek.getName());
+                }
                 weekPopUp.setData(data, selectWeek);
-                binding.tableClassTop.tableTopWeekTv.setText(selectWeek.getName());
+
                 if (rsp.getData().getWeekList() != null) {
                     List<TimeUtil.WeekDay> toWeekDayList = TimeUtil.getWeekDay(rsp.getData().getWeekList());
                     timeAdapter.notifyData(toWeekDayList);

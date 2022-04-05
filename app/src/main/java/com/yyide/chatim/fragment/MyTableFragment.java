@@ -58,7 +58,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     private int weekDay = 0;
 
     private boolean first = true;
-    private int thisWeek = 1;
+    private int thisWeek = 0;
 
     private LayoutMytableFragmnetBinding binding;
 
@@ -258,9 +258,13 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
                 ChildrenItem bean = new ChildrenItem( "第" + weekNum + "周","",weekNum);
                 data.add(bean);
             }
-            selectWeek = data.get(getThisWeek - 1);
+            if (getThisWeek == 0) {
+                binding.tableMyTop.className.setText("选择周次");
+            }else {
+                selectWeek = data.get(getThisWeek - 1);
+                binding.tableMyTop.className.setText(selectWeek.getName());
+            }
             weekPopUp.setData(data, selectWeek);
-            binding.tableMyTop.className.setText(selectWeek.getName());
             List<TimeUtil.WeekDay> toWeekDayList = TimeUtil.getWeekDay(rsp.getWeekList());
             timeAdapter.notifyData(toWeekDayList);
             setToday();

@@ -100,7 +100,7 @@ class TablePopUp : BasePopupWindow {
 
 
     fun setData(data: List<ChildrenItem>, select:ChildrenItem?) {
-        selectData = select ?: data.first()
+        selectData = select
         expandableAdapter.setList(data)
     }
 

@@ -18,6 +18,7 @@ import com.yyide.chatim.R
 import com.yyide.chatim.adapter.TableSectionAdapter
 import com.yyide.chatim.adapter.sitetable.SiteTableItemAdapter
 import com.yyide.chatim.adapter.sitetable.SiteTableTimeAdapter
+import com.yyide.chatim.base.BaseFragment
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentSiteTableBinding
@@ -36,7 +37,7 @@ import org.joda.time.DateTime
 import razerdp.basepopup.BasePopupWindow
 
 
-class SiteTableFragment : Fragment() {
+class SiteTableFragment : BaseFragment() {
     private lateinit var siteTableFragmentBinding: FragmentSiteTableBinding
     private val siteTableViewModel: SiteTableViewModel by viewModels()
 
@@ -83,6 +84,7 @@ class SiteTableFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         siteTableViewModel.siteBuildingLiveData.observe(requireActivity()) {
+            dismiss()
             val buildings = it
             if (buildings == null || buildings.isEmpty()) {
                 //没有查询数据
@@ -149,9 +151,13 @@ class SiteTableFragment : Fragment() {
                 val bean = ChildrenItem("第" + weekNum + "周", "", weekNum)
                 data.add(bean)
             }
-            selectWeek = data[it.thisWeek - 1]
+            if (it.thisWeek == 0){
+                siteTableFragmentBinding.top.tableTopWeekTv.text = "选择周次"
+            }else{
+                selectWeek = data[it.thisWeek - 1]
+                siteTableFragmentBinding.top.tableTopWeekTv.text = selectWeek?.name
+            }
             weekPopUp.setData(data, selectWeek)
-            siteTableFragmentBinding.top.tableTopWeekTv.text = selectWeek?.name
             //本周一到周日日期标题
             weekdayList.clear()
             it.weekList?.let {
@@ -279,6 +285,7 @@ class SiteTableFragment : Fragment() {
             }
         }
         // TODO: 场地列表接口暂时没有，直接使用指定场地id访问场地课表接口
+        loading()
         siteTableViewModel.getBuildings()
 
     }

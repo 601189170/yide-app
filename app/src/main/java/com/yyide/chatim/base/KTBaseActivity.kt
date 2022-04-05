@@ -8,12 +8,12 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.viewbinding.ViewBinding
-import com.yyide.chatim.R
+import com.yyide.chatim.utils.LoadingTools
 
 open class KTBaseActivity<VB : ViewBinding>(open val block: (LayoutInflater) -> VB) :
     BaseActivity() {
     protected val binding by lazy { block(layoutInflater) }
-
+    private var loading: LoadingTools? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -33,4 +33,21 @@ open class KTBaseActivity<VB : ViewBinding>(open val block: (LayoutInflater) -> 
     }
 
     protected open fun initView() {}
+
+    override fun showLoading() {
+        if (loading != null && !isFinishing) {
+            loading?.showLoading()
+        }
+    }
+
+    override fun hideLoading() {
+        if (loading != null) {
+            loading?.closeLoading()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        loading = null
+    }
 }

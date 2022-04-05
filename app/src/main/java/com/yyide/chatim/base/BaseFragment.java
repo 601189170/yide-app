@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.reactivestreams.Subscription;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 /**
@@ -27,11 +28,12 @@ public class BaseFragment extends Fragment {
     public Activity mActivity;
     private LoadingTools loadingTools;
     protected DingApiStores mDingApiStores;
+    private Unbinder unbinder;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         mActivity = getActivity();
         loadingTools = new LoadingTools(getActivity());
         mDingApiStores = AppClient.getDingRetrofit().create(DingApiStores.class);
@@ -47,6 +49,7 @@ public class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         dismiss();
+        unbinder.unbind();
     }
 
     public void loading() {

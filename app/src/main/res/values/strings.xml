@@ -356,6 +356,7 @@
     <string name="sign_in">签到</string>
     <string name="sign_out">签退</string>
     <string name="not_punched">未打卡</string>
+    <string name="not_schedule">未排班</string>
     <string name="not_function_punched">无法打卡</string>
     <string name="can_punched_tip">签到打卡</string>
     <string name="attendance_in_range">已进入考勤范围: %s</string>

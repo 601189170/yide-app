@@ -9,5 +9,5 @@ package com.yyide.chatim.model.attendance.teacher
 data class PunchInfoBean(
     //打卡类别: 0不可打卡 1 地址 2 wifi 3外勤
     var type:Int = 0,
-    var showContent:String = ""
+    var showContent:String = "超出管理员指定打卡范围"
 )
