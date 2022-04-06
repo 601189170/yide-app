@@ -17,6 +17,7 @@ open class KTBaseActivity<VB : ViewBinding>(open val block: (LayoutInflater) -> 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        loading = LoadingTools(this)
         initView()
     }
 

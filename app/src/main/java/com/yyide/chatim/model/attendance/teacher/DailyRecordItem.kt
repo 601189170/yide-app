@@ -6,10 +6,11 @@ data class DailyRecordItem(
     val signTime: List<SignTimeItem>?,
     val aboutDate: String = "",
     val dailyRuleId: String = "",
-    val hasRecord: Boolean = false,
+    val hasRecord: Boolean = true,
     val hasScheduling: Boolean = false,
     val hasBeLate: Boolean = false,
     val dailyRuleDescription: String = "",
     val hasAskForLeave: Boolean = false,
-    val hasLeaveEarly: Boolean = false
+    val hasLeaveEarly: Boolean = false,
+    val hasAbnormal: Boolean = false
 )

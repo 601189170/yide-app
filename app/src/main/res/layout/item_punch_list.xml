@@ -25,6 +25,7 @@
         android:background="@drawable/bg_white2"
         android:text="未打卡"
         android:paddingHorizontal="5dp"
+        android:paddingVertical="2dp"
         android:layout_marginStart="5dp"
         android:textColor="#ff333333"
         android:textSize="10sp"

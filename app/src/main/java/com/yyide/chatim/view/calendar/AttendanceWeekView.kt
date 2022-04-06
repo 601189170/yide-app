@@ -41,7 +41,6 @@ class AttendanceWeekView(context: Context) : WeekView(context) {
     override fun onDrawScheme(canvas: Canvas, calendar: Calendar, x: Int) {
         val cx = x + mItemWidth / 2
         val cy = mItemHeight / 2
-        logd("color = ${calendar.schemeColor},text = ${calendar.scheme}")
         canvas.drawCircle(
             cx.toFloat(), mTextBaseLine + y + mItemHeight / 10,
             6F, mSchemePaint)

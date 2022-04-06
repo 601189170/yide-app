@@ -41,7 +41,6 @@ class AttendanceMonthView(context: Context) : MonthView(context) {
         val cx = x + mItemWidth / 2
         val cy = y + mItemHeight / 2
         //canvas.drawCircle(cx.toFloat(), cy.toFloat(), mRadius.toFloat(), mSchemePaint)
-        logd("color = ${calendar.schemeColor},text = ${calendar.scheme}")
         canvas.drawCircle(
                     cx.toFloat(), mTextBaseLine + y + mItemHeight / 10,
                     6F, mSchemePaint)

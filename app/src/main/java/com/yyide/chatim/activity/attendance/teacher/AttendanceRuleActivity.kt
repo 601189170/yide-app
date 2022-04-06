@@ -52,23 +52,49 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
 
         viewModel.attendanceRule.observe(this){
 
+
+            if (!it.hasScheduling){
+                binding.clTeacherAttendanceRuleTime.hide()
+                binding.clTeacherAttendanceRuleRange.hide()
+                binding.viewEmpty.root.show()
+                return@observe
+            }
+
+            binding.clTeacherAttendanceRuleTime.show()
+            binding.clTeacherAttendanceRuleRange.show()
+            binding.viewEmpty.root.hide()
+
             binding.tvTeacherAttendanceRuleName.text = it.personName
             binding.tvTeacherAttendanceJob.text = it.groupName
 
-            val showTimeStr = "${it.workDay}/r/n${it.restDay}休息"
-            binding.tvTeacherAttendanceRuleTime.text = showTimeStr
+            val timeRuleSb = StringBuilder()
+            for ((i,workStr) in it.workDay.withIndex()){
+                timeRuleSb.append(workStr)
+                if (i != (it.workDay.size - 1)){
+                    timeRuleSb.append("、")
+                }
+            }
+            timeRuleSb.append(" ").append(it.timeRange).append("\r\n")
+            for ((i,restStr) in it.restDay.withIndex()){
+                timeRuleSb.append(restStr)
+                if (i != (it.restDay.size - 1)){
+                    timeRuleSb.append("、")
+                }
+            }
+            timeRuleSb.append(" 休息")
+            binding.tvTeacherAttendanceRuleTime.text = timeRuleSb.toString()
 
             val sb = StringBuilder()
             it.addressList.forEach { address ->
-                sb.append(address.addressName).append("/r/n")
+                sb.append(address.addressName).append("\r\n")
             }
             binding.tvTeacherAttendanceRuleRange.text = sb.toString()
 
             val wifiSb = StringBuilder()
             it.wifiList.forEach { wifi ->
-                wifiSb.append(wifi.wifiName).append("/r/n")
+                wifiSb.append(wifi.wifiName).append("\r\n")
             }
-            binding.tvTeacherAttendanceRuleBle.text = wifiSb.toString()
+            binding.tvTeacherAttendanceRuleWifi.text = wifiSb.toString()
 
             binding.tvTeacherAttendanceRuleBle.text = ""
 
@@ -102,7 +128,7 @@ class AttendanceRuleActivity:KTBaseActivity<ActivityAttendanceV2RuleBinding>(Act
                 binding.tvTeacherAttendanceRuleBleTitle.remove()
                 binding.tvTeacherAttendanceRuleBle.remove()
             }else{
-                binding.ivTeacherAttendanceRuleRangeLogo.setImageResource(R.mipmap.icon_down)
+                binding.ivTeacherAttendanceRuleRangeLogo.setImageResource(R.mipmap.icon_up)
                 binding.tvTeacherAttendanceRuleRange.show()
                 binding.tvTeacherAttendanceRuleWifiTitle.show()
                 binding.tvTeacherAttendanceRuleWifi.show()

@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yyide.chatim.kotlin.network.attendance.AttendanceNetwork
+import com.yyide.chatim.model.attendance.teacher.DailyRecordItem
 import com.yyide.chatim.model.attendance.teacher.MonthDayBean
-import com.yyide.chatim.model.attendance.teacher.TeacherStatisticsDayBean
 import com.yyide.chatim.model.attendance.teacher.TeacherStatisticsMonthBean
 import kotlinx.coroutines.launch
 
@@ -21,11 +21,13 @@ class TeacherStatisticsViewModel : ViewModel() {
     private val monthRecordLiveData = MutableLiveData<Result<TeacherStatisticsMonthBean>>()
     val monthRecordData = monthRecordLiveData
 
-    private val dayRecordLiveData = MutableLiveData<Result<TeacherStatisticsDayBean>>()
+    private val dayRecordLiveData = MutableLiveData<Result<DailyRecordItem>>()
     val dayRecordData = dayRecordLiveData
 
     private val dateLiveData = MutableLiveData<MonthDayBean>()
     val date = dateLiveData
+
+    val dailyRecordList = mutableListOf<DailyRecordItem>()
 
     /**
      * 查询月度考勤信息

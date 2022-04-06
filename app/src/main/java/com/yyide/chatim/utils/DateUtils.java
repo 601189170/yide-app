@@ -79,9 +79,9 @@ public class DateUtils {
      * <p>
      * s就是时间戳
      */
-    public static String stampToDate(long s,String format) {
+    public static String stampToDate(long s, String format) {
         String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format,Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
         Date date = new Date(s);
         res = simpleDateFormat.format(date);
         return res;
@@ -756,6 +756,26 @@ public class DateUtils {
         }
     }
 
+    /**
+     * 是否是今天以后的
+     *
+     * @param compareDate 比较的日期
+     * @return true 大于今天
+     */
+    public static boolean compareDate(String compareDate) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Calendar todayCalendar = Calendar.getInstance();
+            Date today = new Date(todayCalendar.get(Calendar.YEAR) - 1900, todayCalendar.get(Calendar.MONTH), todayCalendar.get(Calendar.DAY_OF_MONTH));
+            Date compare = df.parse(compareDate);
+            int result = today.compareTo(compare);
+            return result < 0;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public static boolean isToday(String compareStr) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -766,8 +786,9 @@ public class DateUtils {
 
     /**
      * 判断是否同一天
+     *
      * @param startDate yyyy-mm-dd hh:mm 格式的字符串日期
-     * @param endDate yyyy-mm-dd hh:mm 格式的字符串日期
+     * @param endDate   yyyy-mm-dd hh:mm 格式的字符串日期
      * @return true 是
      */
     public static boolean isSameDay(String startDate, String endDate) {
@@ -777,6 +798,15 @@ public class DateUtils {
     }
 
 
+    public static String judgeIsNeedAddZero(String unit) {
+        if (unit == null || unit.isEmpty()) {
+            return "";
+        }
+        if (unit.length() == 1) {
+            return 0 + unit;
+        }
+        return unit;
+    }
 
 
 }

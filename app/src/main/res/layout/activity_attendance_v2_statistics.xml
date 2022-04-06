@@ -166,7 +166,7 @@
         android:orientation="vertical"
         app:calendar_content_view_id="@id/cl_teacher_attendance_calendar_bottom"
         app:calendar_show_mode="both_month_week_view"
-        app:default_status="shrink"
+        app:default_status="expand"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_teacher_attendance_pool">
@@ -205,7 +205,7 @@
                 android:layout_gravity="center"
                 android:background="#F3FCF9"
                 android:paddingVertical="15dp"
-                android:src="@drawable/calendar_down_icon"
+                android:src="@drawable/calendar_up_icon"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -234,10 +234,8 @@
                 android:id="@+id/teacher_attendance_empty"
                 layout="@layout/empty"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="15dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="180dp"
+                android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/tv_teacher_attendance_rule"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

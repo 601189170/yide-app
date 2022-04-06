@@ -15,20 +15,20 @@ interface IAttendanceService {
     /**
      * 查询教师考勤的月度考勤
      */
-    @GET("/school/schoolAttendanceClock/getClockRecordByMonth")
-    suspend fun requestClockRecordByMonth(@Path("month") day: String): BaseResponse<TeacherStatisticsMonthBean>
+    @GET("/attendance-web/attendanceWorkClock/getClockRecordByMonth")
+    suspend fun requestClockRecordByMonth(@Query("month") day: String): BaseResponse<TeacherStatisticsMonthBean>
 
     /**
      * 查询教师考勤的日度考勤
      */
-    @GET("/school/schoolAttendanceClock/getClockRecordByDay/{day}")
-    suspend fun requestClockRecordByDay(@Path("day") day: String): BaseResponse<TeacherStatisticsDayBean>
+    @GET("/attendance-web/attendanceWorkClock/getClockRecordByDay")
+    suspend fun requestClockRecordByDay(@Query("day") day: String): BaseResponse<DailyRecordItem>
 
 
     /**
      * 查询教师考勤考勤规则
      */
-    @GET("/school/schoolAttendanceClock/getClockRule")
+    @GET("/attendance-web/attendanceWorkClock/getClockRule")
     suspend fun requestAttendanceRule(): BaseResponse<TeacherAttendanceRuleBean>
 
 
@@ -36,7 +36,7 @@ interface IAttendanceService {
      * 查询教师考勤信息
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("/school/schoolAttendanceClock/getClockMessage")
+    @POST("/attendance-web/attendanceWorkClock/getClockMessage")
     suspend fun requestPunchMessage(@Body requestBody: RequestBody): BaseResponse<PunchMessageBean>
 
 
@@ -44,13 +44,20 @@ interface IAttendanceService {
      * 地址打卡
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("/school/schoolAttendanceClock/clockByAddress")
+    @POST("/attendance-web/attendanceWorkClock/clockByAddress")
     suspend fun punchByAddress(@Body requestBody: RequestBody): BaseResponse<String>
 
     /**
-     * 地址打卡
+     * 外勤打卡
      */
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("/school/schoolAttendanceClock/clockByWiFi")
+    @POST("/attendance-web/attendanceWorkClock/clockByOutside")
+    suspend fun punchByOutSide(@Body requestBody: RequestBody): BaseResponse<String>
+
+    /**
+     * wifi打卡
+     */
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("/attendance-web/attendanceWorkClock/clockByWiFi")
     suspend fun punchByWifi(@Body requestBody: RequestBody): BaseResponse<String>
 }

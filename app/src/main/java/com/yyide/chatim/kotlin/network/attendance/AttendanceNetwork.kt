@@ -55,6 +55,15 @@ object AttendanceNetwork : BaseNetworkApi<IAttendanceService>(BaseConstant.API_S
             service.punchByAddress(requestBody)
         }
 
+
+    /**
+     * 地址打卡
+     */
+    suspend fun punchByOutSide(requestBody: RequestBody) =
+        getResult {
+            service.punchByOutSide(requestBody)
+        }
+
     /**
      * wifi打卡
      */

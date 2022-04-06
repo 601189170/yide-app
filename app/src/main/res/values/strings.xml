@@ -359,7 +359,8 @@
     <string name="not_schedule">未排班</string>
     <string name="not_function_punched">无法打卡</string>
     <string name="can_punched_tip">签到打卡</string>
-    <string name="attendance_in_range">已进入考勤范围: %s</string>
+    <string name="attendance_in_range">已进入考勤范围:  %s</string>
+    <string name="attendance_in_wifi">已连接指定wifi:  %s</string>
 
     <string name="attendance_time_title">考勤时间</string>
     <string name="range_title">打卡范围</string>

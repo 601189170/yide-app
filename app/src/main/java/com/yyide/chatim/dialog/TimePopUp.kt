@@ -53,6 +53,10 @@ class TimePopUp : BasePopupWindow {
 
     private fun initListener() {
 
+        binding.viewPopupBlank.setOnClickListener {
+            dismiss()
+        }
+
         binding.dpPopupTime.setDisplayType(
             intArrayOf(
                 DateTimeConfig.YEAR, // 显示年
@@ -60,8 +64,8 @@ class TimePopUp : BasePopupWindow {
 
             )
         )
-        /*binding.dpPopupTime.showLabel(true)
-        binding.dpPopupTime.setLabelText(year = "年", month = "月")*/
+        binding.dpPopupTime.showLabel(false)
+        //binding.dpPopupTime.setLabelText(year = "年", month = "月")
 
 
         binding.dpPopupTime.setOnDateTimeChangedListener {
@@ -70,18 +74,18 @@ class TimePopUp : BasePopupWindow {
 
 
         binding.btnPopupTimeSubmit.setOnClickListener {
-            dismiss()
-        }
-
-        binding.btnPopupTimeCancel.setOnClickListener {
             selectMillisecond = tempMillisecond
             val date = Calendar.getInstance()
             date.timeInMillis = selectMillisecond
             val bean = MonthDayBean()
-            bean.year = date.get(Calendar.YEAR).toString()
-            bean.month = (date.get(Calendar.MONTH) + 1).toString()
-            bean.day = date.get(Calendar.DAY_OF_MONTH).toString()
+            bean.year = date.get(Calendar.YEAR)
+            bean.month = (date.get(Calendar.MONTH) + 1)
+            bean.day = 1
             mSubmitCallback?.getSubmitData(bean)
+            dismiss()
+        }
+
+        binding.btnPopupTimeCancel.setOnClickListener {
             dismiss()
         }
 

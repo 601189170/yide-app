@@ -20,6 +20,8 @@ import com.yyide.chatim.activity.attendance.teacher.viewmodel.TeacherAttendanceV
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityAttendanceTeacherBinding
 import com.yyide.chatim.databinding.ItemPunchRecordBinding
+import com.yyide.chatim.dialog.YearMonthSelectDialog
+import com.yyide.chatim.model.attendance.teacher.PunchInfoBean
 import com.yyide.chatim.model.attendance.teacher.SignTimeListItem
 import com.yyide.chatim.utils.*
 
@@ -40,6 +42,9 @@ class NAttendanceActivity :
 
     private lateinit var punchRecordAdapter : BaseQuickAdapter<SignTimeListItem, BaseViewHolder>
 
+    // 是否首次进来
+    private var isFirst = true
+
     companion object {
         fun startGo(context: Context) {
             val intent = Intent(context, NAttendanceActivity::class.java)
@@ -52,8 +57,6 @@ class NAttendanceActivity :
         super.onCreate(savedInstanceState)
         requestPermission()
         initListener()
-        viewModel.queryPunchMessage()
-        viewModel.queryAttendanceRule()
     }
 
     private fun requestPermission() {
@@ -151,14 +154,22 @@ class NAttendanceActivity :
 
         // 更新打卡信息
         viewModel.punchMessage.observe(this){
+            hideLoading()
             binding.tvTeacherAttendanceJob.text = it.groupName
             binding.tvTeacherAttendanceName.text = it.personName
-            if (it.signTimeList.size > 2) {
-                binding.rvTeacherAttendancePunchRecord.addItemDecoration(SignSpacesItemDecoration(5,applicationContext))
-            }else{
-                binding.rvTeacherAttendancePunchRecord.addItemDecoration(SignSpacesItemDecoration(20,applicationContext))
-            }
+            /*it.signTimeList?.let { list ->
+                if (list.size > 2) {
+                    binding.rvTeacherAttendancePunchRecord.addItemDecoration(SignSpacesItemDecoration(5,applicationContext))
+                }else{
+                    binding.rvTeacherAttendancePunchRecord.addItemDecoration(SignSpacesItemDecoration(20,applicationContext))
+                }
+            }*/
             punchRecordAdapter.setList(it.signTimeList)
+            if (!it.canSign){
+                viewModel.setPunchInfo(PunchInfoBean(viewModel.punchTypeNOT,it.signMessage))
+            }else{
+                viewModel.setPunchInfo(PunchInfoBean(-1,it.signMessage))
+            }
         }
 
         // 实时更新考勤状态
@@ -168,7 +179,7 @@ class NAttendanceActivity :
                     binding.clTeacherAttendancePunch.setBackgroundResource(R.mipmap.attendance_fail_bg)
                     binding.tvTeacherAttendancePunchState.text = "无法打卡"
                     binding.ivTeacherAttendanceTipLogo.setImageResource(R.mipmap.attendance_warn_logo)
-                    binding.tvTeacherAttendanceTip.text = getString(R.string.warn_out_of_range)
+                    binding.tvTeacherAttendanceTip.text = it.showContent
                 }
                 viewModel.punchTypeFieldwork ->{
                     binding.clTeacherAttendancePunch.setBackgroundResource(R.mipmap.attendance_fieldwork_bg)
@@ -178,11 +189,25 @@ class NAttendanceActivity :
                 }
                 else -> {
                     binding.clTeacherAttendancePunch.setBackgroundResource(R.mipmap.attendance_can_punch)
-                    binding.tvTeacherAttendancePunchState.text = "打卡"
-                    binding.clTeacherAttendancePunch.setBackgroundResource(R.mipmap.attendance_can_punch_logo)
-                    val showStr = String.format(getString(R.string.attendance_in_range),it.showContent)
-                    binding.tvTeacherAttendancePunchState.text = showStr
+                    if (viewModel.punchMessage.value?.signInOrOut == 0) {
+                        binding.tvTeacherAttendancePunchState.text = "签到打卡"
+                    }else {
+                        binding.tvTeacherAttendancePunchState.text = "签退打卡"
+                    }
+                    binding.ivTeacherAttendanceTipLogo.setImageResource(R.mipmap.attendance_can_punch_logo)
+                    binding.tvTeacherAttendanceTip.text = it.showContent
                 }
+            }
+        }
+
+        // 打卡成功后重新刷新下ui
+        viewModel.punchResult.observe(this){
+            if (it.isSuccess) {
+                showLoading()
+                val wifi = WifiTool.getConnectedWifiInfo(applicationContext)
+                val wifiName = wifi?.ssid?.replace("\"","") ?: ""
+                val wifiMac = wifi?.bssid ?: ""
+                viewModel.queryPunchMessage(wifiName = wifiName, wifiMac = wifiMac)
             }
         }
     }
@@ -203,6 +228,7 @@ class NAttendanceActivity :
             if (viewModel.punchInfo.value == null || viewModel.punchInfo.value?.type == viewModel.punchTypeNOT){
                 return@setOnClickListener
             }
+            showLoading()
             viewModel.requestPunch()
         }
 
@@ -212,8 +238,8 @@ class NAttendanceActivity :
      * 初始化高德定位
      */
     private fun initLocation() {
-
-        logd("mac = ${WifiTool.getConnectedWifiMacAddress(applicationContext)}")
+        val wifi = WifiTool.getConnectedWifiInfo(applicationContext)
+        logd("mac = ${wifi?.bssid},name = ${wifi?.ssid?.replace("\"","")}")
         AMapLocationClient.updatePrivacyAgree(applicationContext,true)
         AMapLocationClient.updatePrivacyShow(applicationContext,true,true)
         locationClient = AMapLocationClient(applicationContext)
@@ -225,6 +251,13 @@ class NAttendanceActivity :
                 locationInfo?.let { info ->
                     if (info.errorCode == 0) {
                         viewModel.judgePunchFunction(info)
+                        if (isFirst){
+                            showLoading()
+                            isFirst = false
+                            val wifiName = wifi?.ssid?.replace("\"","") ?: ""
+                            val wifiMac = wifi?.bssid ?: ""
+                            viewModel.queryPunchMessage(info.longitude,info.latitude,wifiName,wifiMac)
+                        }
                     } else {
                         loge("errorCode=${info.errorCode},errorInfo=${info.errorInfo}")
                     }
