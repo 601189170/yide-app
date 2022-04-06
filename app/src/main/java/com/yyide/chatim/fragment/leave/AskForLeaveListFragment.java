@@ -49,9 +49,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    @BindView(R.id.blank_page)
-    LinearLayout blank_page;
-
     private AskForLeaveListAdapter adapter;
 
     private List<LeaveListRsp.DataBean.RecordsBean> list;
@@ -130,14 +127,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         adapter.getLoadMoreModule().setEnableLoadMoreIfNotFullPage(false);
     }
 
-    public void showBlankPage() {
-        if (list.isEmpty()) {
-            blank_page.setVisibility(View.VISIBLE);
-        } else {
-            blank_page.setVisibility(View.GONE);
-        }
-    }
-
     @Override
     protected AskForLeaveListPresenter createPresenter() {
         return new AskForLeaveListPresenter(this);
@@ -186,7 +175,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         // data is null
         if (leaveListRsp.getData() == null) {
             ToastUtils.showShort(leaveListRsp.getMessage());
-            showBlankPage();
             return;
         }
 
@@ -202,7 +190,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         } else {
             adapter.getLoadMoreModule().loadMoreComplete();
         }
-        showBlankPage();
     }
 
     @Override
@@ -210,7 +197,6 @@ public class AskForLeaveListFragment extends BaseMvpFragment<AskForLeaveListPres
         Log.e(TAG, "leaveListFail: " + msg);
         refresh = false;
         swipeRefreshLayout.setRefreshing(false);
-        showBlankPage();
     }
 
 }

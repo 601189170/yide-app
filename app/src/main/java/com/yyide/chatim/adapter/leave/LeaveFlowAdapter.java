@@ -75,7 +75,7 @@ public class LeaveFlowAdapter extends BaseQuickAdapter<LeaveDetailRsp.DataDTO.Hi
                 ivCheck.setImageResource(R.drawable.icon_flow_checked);
                 imageView.setBackground(getContext().getResources().getDrawable(R.drawable.blue_border_1dp));
                 holder.getView(R.id.vEnd).setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimary));
-                if (!TextUtils.isEmpty(leaveFlowBean.getAvatar())) {
+                if (TextUtils.isEmpty(leaveFlowBean.getAvatar())) {
                     imageView.setVisibility(View.INVISIBLE);
                     holder.getView(R.id.tvName).setVisibility(View.VISIBLE);
                     String name = leaveFlowBean.getUserName();

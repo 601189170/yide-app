@@ -131,10 +131,8 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         status = getIntent().getIntExtra("status", -1);
         btn_more.setVisibility(View.GONE);
         if (type == 1) {
-            btn_repeal.setVisibility(View.VISIBLE);
             gp_approver.setVisibility(View.GONE);
         } else {
-            btn_repeal.setVisibility(View.GONE);
             gp_approver.setVisibility(View.VISIBLE);
         }
         cl_content.setVisibility(View.INVISIBLE);
@@ -196,6 +194,8 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
         dialog.setCanceledOnTouchOutside(true);
         DialogTodoLeaveRefuseBinding vb = DialogTodoLeaveRefuseBinding.inflate(getLayoutInflater());
         dialog.setContentView(vb.getRoot());
+        vb.tvTitle.setText("撤销理由");
+        vb.etInput.setHint("请输入撤销理由");
         vb.tvCancel.setOnClickListener(v -> dialog.dismiss());
         vb.tvConfirm.setOnClickListener(v ->
                 {
@@ -362,6 +362,7 @@ public class LeaveFlowDetailActivity extends BaseMvpActivity<LeaveDetailPresente
                 view.setTextColor(getResources().getColor(R.color.black9));
                 if (type == 1) {
                     cl_repeal.setVisibility(View.VISIBLE);
+                    btn_repeal.setVisibility(View.VISIBLE);
                 } else {
                     if (status == 1) {
                         cl_repeal.setVisibility(View.VISIBLE);

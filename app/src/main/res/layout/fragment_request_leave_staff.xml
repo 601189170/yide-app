@@ -160,7 +160,7 @@
                             android:layout_marginEnd="@dimen/dp_15"
                             android:background="@drawable/leave_reason_input_box_bg_shape"
                             android:hint="@string/input_reason_for_leave"
-                            android:maxLength="150"
+                            android:maxLength="300"
                             android:padding="@dimen/dp_10"
                             android:textColorHint="#BCC1CB"
                             android:textSize="@dimen/text_13"
