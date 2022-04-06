@@ -11,6 +11,7 @@ data class LeaveApprovalBean(
     data class DataBean(
         var approver: List<Approver>,
         var ccList: List<Cc>,
+        var ccType: String,//抄送人类型1：校长 、 2：校区负责任人 、3：学段负责人 、4：年级负责人、 5：班主任、 6：家长 、7：部门负责任人 、98：发起人自选、99：指定成员】
         var classList: List<LeaveClassBean>,
         var dept: DeptBean,
         var hours: Float,

@@ -28,11 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.ToastUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.github.mikephil.charting.utils.FSize;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -44,12 +41,9 @@ import com.yyide.chatim.activity.leave.AddApprovalActivity;
 import com.yyide.chatim.activity.leave.AddCcActivity;
 import com.yyide.chatim.activity.leave.LeaveFlowDetailActivity;
 import com.yyide.chatim.activity.leave.LeaveParticipantActivity;
-import com.yyide.chatim.activity.schedule.ScheduleParticipantActivity;
 import com.yyide.chatim.adapter.leave.LeaveReasonTagAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
-import com.yyide.chatim.dialog.DeptSelectPop;
-import com.yyide.chatim.dialog.OnCheckCallBack;
 import com.yyide.chatim.dialog.SwitchStudentPop;
 import com.yyide.chatim.model.ApproverRsp;
 import com.yyide.chatim.model.BaseRsp;
@@ -64,8 +58,6 @@ import com.yyide.chatim.utils.DateUtils;
 import com.yyide.chatim.utils.GlideUtil;
 import com.yyide.chatim.view.SpacesItemDecoration;
 import com.yyide.chatim.view.leave.StaffAskLeaveView;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -133,6 +125,7 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
     private List<ApproverRsp.DataBean.ListBean> carbonCopyPeopleList = new ArrayList<>();
     private String deptName;
     private String dept;//部门-班级= ID
+    private String ccType;
 
     public RequestLeaveStaffFragment() {
         // Required empty public constructor
@@ -274,10 +267,19 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
 
                 break;
             case R.id.iv_add_staff:
-                Intent intent1 = new Intent(getActivity(), LeaveParticipantActivity.class);
+                Intent intent1;
+                if (!TextUtils.isEmpty(ccType) && "98".equals(ccType)) {
+                    intent1 = new Intent(getActivity(), LeaveParticipantActivity.class);
+                } else {
+                    intent1 = new Intent(getActivity(), AddCcActivity.class);
+                    if (ccDataList != null && ccDataList.size() > 0) {
+                        intent1.putExtra("dataList", JSON.toJSONString(ccDataList));
+                    }
+                }
                 startActivityForResult(intent1, REQUEST_CODE);
                 break;
             case R.id.iv_add_approval:
+
                 break;
             default:
                 break;
@@ -388,8 +390,8 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
             removeAllViews();
             return;
         }
+        ccType = data.getCcType();
         ccDataList = data.getCcList();
-
         hours = data.getHours();
         sponsorType = data.getSponsorType();
         procId = data.getProcId();
@@ -402,6 +404,16 @@ public class RequestLeaveStaffFragment extends BaseMvpFragment<StaffAskLeavePres
         List<LeaveApprovalBean.LeaveCommitBean> dataList = new ArrayList<>();
         if (approvalData != null) {
             approvalData.clear();
+        }
+
+        //非自选抄送人默认显示第一个抄送人
+        if (ccDataList != null && ccDataList.size() > 0 && !TextUtils.isEmpty(ccType) && !"98".equals(ccType)) {
+            LeaveApprovalBean.Cc cc = ccDataList.get(0);
+            ParticipantRsp.DataBean.ParticipantListBean item = new ParticipantRsp.DataBean.ParticipantListBean();
+            item.setAvatar(cc.getAvatar());
+            item.setName(cc.getName());
+            item.setId(cc.getId() + "");
+            mCCAdapter.addData(item);
         }
 
         if (peopleForm != null) {

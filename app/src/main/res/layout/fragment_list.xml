@@ -18,12 +18,5 @@
             tools:context=".activity.notice.fragment.NoticeItemFragment"
             tools:listitem="@layout/item_notice_announcement" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <LinearLayout
-        android:id="@+id/blank_page"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-        <include layout="@layout/layout_blank_page" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
