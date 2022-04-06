@@ -41,10 +41,13 @@
 
         <TextView
             android:id="@+id/name"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_14"
+            android:layout_marginLeft="@dimen/dp_10"
             android:textColor="@color/text_333333"
             android:textSize="@dimen/text_14" />
         <TextView

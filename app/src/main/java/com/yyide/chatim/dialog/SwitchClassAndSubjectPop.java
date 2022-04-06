@@ -72,9 +72,9 @@ public class SwitchClassAndSubjectPop extends PopupWindow {
         WheelView time = mView.findViewById(R.id.time);
         WheelView hour_time = mView.findViewById(R.id.hour_time);
         WheelView minute_time = mView.findViewById(R.id.minute_time);
-        time.setLineSpacingMultiplier(3f);
-        hour_time.setLineSpacingMultiplier(3f);
-        minute_time.setLineSpacingMultiplier(3f);
+//        time.setLineSpacingMultiplier(3f);
+//        hour_time.setLineSpacingMultiplier(3f);
+//        minute_time.setLineSpacingMultiplier(3f);
 //        time.setTextSize(14f);
 //        hour_time.setTextSize(14f);
 //        minute_time.setTextSize(14f);
@@ -94,11 +94,19 @@ public class SwitchClassAndSubjectPop extends PopupWindow {
         time.setTextColorCenter(context.getResources().getColor(R.color.text_333333));
         time.setTextColorOut(context.getResources().getColor(R.color.text_999999));
         ljAdapter = new TimeWheelAdapter(getljData());
+        if (ljAdapter.stringList.size()>0)
+            classAdapter= new TimeWheelAdapter(getclassData(ljAdapter.stringList.get(0)));
+        if (classAdapter.stringList.size()>0)
+        subjectAdapter = new TimeWheelAdapter(getSubjectData(classAdapter.stringList.get(0)));
 
         time.setAdapter(ljAdapter);
 
+        hour_time.setAdapter(classAdapter);
+
+        minute_time.setAdapter(subjectAdapter);
 
         time.setOnItemSelectedListener(index -> {
+
             classAdapter= new TimeWheelAdapter(getclassData(ljAdapter.stringList.get(index)));
             hour_time.setAdapter(classAdapter);
             date1 = (getClassSubjectListRsp) ljAdapter.stringList.get(index);

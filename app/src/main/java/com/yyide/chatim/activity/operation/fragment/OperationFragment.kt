@@ -19,6 +19,7 @@ import com.yyide.chatim.databinding.OperationFragmentBinding
 import com.yyide.chatim.dialog.SwitchClassAndSubjectPop
 import com.yyide.chatim.dialog.SwitchNoticeTimePop
 import com.yyide.chatim.model.SubjectBean
+import com.yyide.chatim.model.WorkBean
 import com.yyide.chatim.model.getClassSubjectListRsp
 import com.yyide.chatim.model.schedule.LabelListRsp
 import com.yyide.chatim.model.schedule.ScheduleData
@@ -70,6 +71,7 @@ class OperationFragment : Fragment(){
                 Log.e("TAG", "OnClassListener: "+JSON.toJSONString(it) )
                 viewBinding.tv1.text=it.name
                 viewModel.tv1data.value=it
+                getTeacherData()
             },viewModel)
         })
         viewBinding.tv2.setOnClickListener(View.OnClickListener {
@@ -80,10 +82,11 @@ class OperationFragment : Fragment(){
                 if (date1!=null&&date2!=null&&date3!=null){
                     Log.e("TAG", "setSelectClasses: "+JSON.toJSONString(date1.name+"==>"+date2.name+"==》"+date3.name) )
                     viewBinding.tv2.text=date1.name+date2.name+date3.name
-                    viewModel.classesId.value=date2.id;
-                    viewModel.subjectId.value=date3.id;
+                    viewModel.classesId.value=date2.id
+                    viewModel.subjectId.value=date3.id
+
+                    getTeacherData()
                 }
-                viewModel.subjectId
 //                viewModel.tv1data.value?.let { it1 -> viewModel.getTecherWorkList(it1.type,viewModel.subjectId,viewModel.classesId,viewModel.subjectId,stime,etime) }
 
             }
@@ -113,22 +116,59 @@ class OperationFragment : Fragment(){
 
                 if (result!=null) {
                     listclassssub= result as MutableList<getClassSubjectListRsp>
+                    if (listclassssub.size>0){
+                        val first1:getClassSubjectListRsp
+                        val first2:getClassSubjectListRsp
+                        val first3:getClassSubjectListRsp
+
+
+
+                        first1=listclassssub[0]
+                        viewModel.ljName.value=first1.name
+                        if (listclassssub[0].children.size>0){
+                            first2=listclassssub[0].children[0]
+                            viewModel.classesId.value=first2.id
+                            viewModel.classesName.value=first2.name
+                        }
+                        if (listclassssub[0].children[0].children.size>0){
+                            first3=listclassssub[0].children[0].children[0];
+                            viewModel.subjectId.value=first3.id
+                            viewModel.subjectName.value=first3.name
+                        }
+
+                            viewBinding.tv2.text=viewModel.ljName.value+viewModel.classesName.value+viewModel.subjectName.value
+
+
+                        viewModel.startTime.value=viewBinding.layoutTime.tvStartTime.text.toString()
+                        viewModel.endTime.value=viewBinding.layoutTime.tvEndTime.text.toString()
+
+                            getTeacherData()
+
+
+
+
+
+                    }
+
+
+
                     Log.e("TAG", "getClassSubjectListRsp==》: "+ JSON.toJSONString(listclassssub))
 
                 }
 
         }
-        viewModel.TeacherWorkListLiveData.observe(viewLifecycleOwner){
-            if (it.isSuccess){
-                val result = it.getOrNull()
-                if (result!=null){
-                    result.data;
 
-                    Log.e("TAG", "TeacherWorkListLiveData: "+ JSON.toJSONString(it))
-                }
-            }
+
+    }
+    fun getTeacherData(){
+        val wh=viewModel.tv1data.value?.type
+        val classesId=viewModel.classesId.value
+        val subjectId=viewModel.subjectId.value
+        val startTime=viewModel.startTime.value
+        val endTime=viewModel.endTime.value
+        if (wh!=null&&classesId!=null&&subjectId!=null&&startTime!=null&&endTime!=null){
+            viewModel.getTecherWorkList(wh,subjectId,classesId,startTime,endTime)
         }
-
     }
     fun initData(){
         val selectBean = selectBean()

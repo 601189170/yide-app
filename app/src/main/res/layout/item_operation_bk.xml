@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_4"
                 android:text="第1节"
+                android:visibility="gone"
                 android:textColor="#ff222222"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/tvTime"
@@ -99,6 +100,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvContent" />
 
             <TextView
+                android:id="@+id/tv_complete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_15"

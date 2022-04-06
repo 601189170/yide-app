@@ -200,5 +200,10 @@ interface INetworkService {
     @GET("/cloud/app/work/getClassSubjectList")
     suspend fun getClassSubjectLis(@Query("isWhole") isWhole: String): BaseResponse<List<getClassSubjectListRsp>>
 
-
+    /**
+     * 教职工查看详情
+     */
+    @GET("/cloud/app/work/getSchoolWork")
+//    suspend fun getSchoolWorkData(@Query("id") id: String): BaseResponse<getSchoolWork>
+    suspend fun getSchoolWorkData(@Query("id") id: String): BaseResponse<getSchoolWork>
 }

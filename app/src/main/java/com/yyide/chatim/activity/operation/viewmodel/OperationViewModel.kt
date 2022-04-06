@@ -25,9 +25,17 @@ class OperationViewModel : ViewModel() {
 
     val subjectId = MutableLiveData<String>()
 
+    val subjectName = MutableLiveData<String>()
+
     val classesId = MutableLiveData<String>()
 
+    val classesName = MutableLiveData<String>()
 
+    val startTime = MutableLiveData<String>()
+
+    val endTime = MutableLiveData<String>()
+
+    val ljName = MutableLiveData<String>()
     /**
      * 教职工作业列表
      * isWhole	是	string	0全部作业 1:我发布的
@@ -50,6 +58,7 @@ class OperationViewModel : ViewModel() {
             map["pageSize"] = 20
             val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
             val result = NetworkApi.requestTeacherWorkList(body)
+            Log.e("TAG", "getTecherWorkList: "+JSON.toJSONString(result) )
             TeacherWorkListLiveData.value = result
         }
     }

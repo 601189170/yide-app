@@ -77,7 +77,7 @@ class BookStudentDetailActivity : BaseActivity() {
         viewBinding.tvName.text = student.name
         viewBinding.name.text = student.name
 //        viewBinding.sex.text = if (student.sex == "1") "男" else "女"
-        if (student.sex == "1"){
+        if (student.sex?.equals("1") == true){
             viewBinding.sex.text="男"
         }else if (student.sex == "0"){
             viewBinding.sex.text="女"
