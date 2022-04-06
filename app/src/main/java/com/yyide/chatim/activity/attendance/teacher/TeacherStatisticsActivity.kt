@@ -118,75 +118,49 @@ class TeacherStatisticsActivity :
         viewModel.date.observe(this) {
             val requestStr = "${it.year}年${it.month}月"
             binding.tvTeacherAttendanceStatisticsTime.text = requestStr
-            binding.tvTeacherAttendanceStatisticsTimeTitle.text = String.format(getString(R.string.statistics_time_pool), "${it.month}月")
+            binding.tvTeacherAttendanceStatisticsTimeTitle.text =
+                String.format(getString(R.string.statistics_time_pool), "${it.month}月")
             showLoading()
             viewModel.requestClockRecordByMonth("${it.year}-${it.month}")
         }
 
         viewModel.monthRecordData.observe(this) {
             hideLoading()
-            val monthData = it.getOrNull()
-            monthData?.let { monthInfo ->
-                binding.tvTeacherAttendanceAbsence.text = monthInfo.absenceFromWorkCount.toString()
-                binding.tvTeacherAttendanceLate.text = monthInfo.beLateCount.toString()
-                binding.tvTeacherAttendanceLeaveEarly.text = monthInfo.leaveEarlyCount.toString()
-                binding.tvTeacherAttendanceLeave.text = monthInfo.askForLeaveCount.toString()
+            val monthData = it.getOrNull() ?: return@observe
 
-                viewModel.dailyRecordList.clear()
-                viewModel.dailyRecordList.addAll(monthInfo.dailyRecord)
+            binding.tvTeacherAttendanceAbsence.text = monthData.absenceFromWorkCount.toString()
+            binding.tvTeacherAttendanceLate.text = monthData.beLateCount.toString()
+            binding.tvTeacherAttendanceLeaveEarly.text = monthData.leaveEarlyCount.toString()
+            binding.tvTeacherAttendanceLeave.text = monthData.askForLeaveCount.toString()
 
-                viewModel.date.value?.let { bean ->
-                    val monthStr = DateUtils.judgeIsNeedAddZero(bean.month.toString())
-                    val dayStr = DateUtils.judgeIsNeedAddZero(bean.day.toString())
-                    val requestStr = "${bean.year}-${monthStr}-${dayStr}"
-                    val todayRecord = monthInfo.dailyRecord.find { recordItem -> recordItem.aboutDate == requestStr }
-                    todayRecord?.let { todayData ->
-                        binding.tvTeacherAttendanceRule.text = todayData.dailyRuleDescription
-                        if (!todayData.hasScheduling) {
-                            binding.rvTeacherAttendancePunchList.hide()
-                            binding.teacherAttendanceEmpty.root.show()
-                            binding.teacherAttendanceEmpty.tvDesc.text = "当天无排班"
-                            binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
-                        } else if (!todayData.hasRecord) {
-                            binding.rvTeacherAttendancePunchList.hide()
-                            binding.teacherAttendanceEmpty.root.show()
-                            when {
-                                todayData.restDay -> {
-                                    binding.teacherAttendanceEmpty.tvDesc.text = "今天休息日"
-                                    binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
-                                }
-                                else -> {
-                                    binding.teacherAttendanceEmpty.tvDesc.text = "当天无打卡记录"
-                                    binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_not_punch)
-                                }
-                            }
-                        } else {
-                            binding.rvTeacherAttendancePunchList.show()
-                            binding.teacherAttendanceEmpty.root.hide()
-                            punchAdapter.setList(todayData.signTime)
-                        }
-                    }
+            viewModel.dailyRecordList.clear()
+            viewModel.dailyRecordList.addAll(monthData.dailyRecord)
+
+            viewModel.date.value?.let { bean ->
+                val monthStr = DateUtils.judgeIsNeedAddZero(bean.month.toString())
+                val dayStr = DateUtils.judgeIsNeedAddZero(bean.day.toString())
+                val requestStr = "${bean.year}-${monthStr}-${dayStr}"
+                val todayRecord =
+                    monthData.dailyRecord.find { recordItem -> recordItem.aboutDate == requestStr }
+
+                if (todayRecord == null) {
+                    binding.rvTeacherAttendancePunchList.hide()
+                    binding.teacherAttendanceEmpty.root.show()
+                    binding.teacherAttendanceEmpty.tvDesc.text = "暂无数据"
+                    binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.icon_no_data)
+                    return@let
                 }
-                parseSchemeDate(monthInfo.dailyRecord)
-            }
-
-        }
-
-
-        viewModel.dayRecordData.observe(this) {
-            val dayData = it.getOrNull()
-            dayData?.let { dayInfo ->
-                binding.tvTeacherAttendanceRule.text = dayInfo.dailyRuleDescription
-                if (!dayInfo.hasScheduling) {
+                binding.tvTeacherAttendanceRule.text = todayRecord.dailyRuleDescription
+                if (!todayRecord.hasScheduling) {
                     binding.rvTeacherAttendancePunchList.hide()
                     binding.teacherAttendanceEmpty.root.show()
                     binding.teacherAttendanceEmpty.tvDesc.text = "当天无排班"
                     binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
-                } else if (!dayInfo.hasRecord) {
+                } else if (!todayRecord.hasRecord) {
                     binding.rvTeacherAttendancePunchList.hide()
                     binding.teacherAttendanceEmpty.root.show()
                     when {
-                        dayInfo.restDay -> {
+                        todayRecord.restDay -> {
                             binding.teacherAttendanceEmpty.tvDesc.text = "今天休息日"
                             binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
                         }
@@ -198,9 +172,48 @@ class TeacherStatisticsActivity :
                 } else {
                     binding.rvTeacherAttendancePunchList.show()
                     binding.teacherAttendanceEmpty.root.hide()
-                    punchAdapter.setList(dayInfo.signTime)
+                    punchAdapter.setList(todayRecord.signTime)
                 }
             }
+            parseSchemeDate(monthData.dailyRecord)
+        }
+
+
+        viewModel.dayRecordData.observe(this) {
+            val dayData = it.getOrNull()
+            if (dayData == null) {
+                binding.rvTeacherAttendancePunchList.hide()
+                binding.teacherAttendanceEmpty.root.show()
+                binding.teacherAttendanceEmpty.tvDesc.text = "暂无数据"
+                binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.icon_no_data)
+                return@observe
+            }
+            binding.tvTeacherAttendanceRule.text = dayData.dailyRuleDescription
+            binding.tvTeacherAttendanceRule.text = dayData.dailyRuleDescription
+            if (!dayData.hasScheduling) {
+                binding.rvTeacherAttendancePunchList.hide()
+                binding.teacherAttendanceEmpty.root.show()
+                binding.teacherAttendanceEmpty.tvDesc.text = "当天无排班"
+                binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
+            } else if (!dayData.hasRecord) {
+                binding.rvTeacherAttendancePunchList.hide()
+                binding.teacherAttendanceEmpty.root.show()
+                when {
+                    dayData.restDay -> {
+                        binding.teacherAttendanceEmpty.tvDesc.text = "今天休息日"
+                        binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
+                    }
+                    else -> {
+                        binding.teacherAttendanceEmpty.tvDesc.text = "当天无打卡记录"
+                        binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_not_punch)
+                    }
+                }
+            } else {
+                binding.rvTeacherAttendancePunchList.show()
+                binding.teacherAttendanceEmpty.root.hide()
+                punchAdapter.setList(dayData.signTime)
+            }
+
         }
 
 
@@ -252,7 +265,7 @@ class TeacherStatisticsActivity :
         timePopUp.setSubmitCallBack(object : TimePopUp.SubmitCallBack {
             override fun getSubmitData(data: MonthDayBean) {
                 var day = 1
-                if (data.month == binding.calendarView.curMonth){
+                if (data.month == binding.calendarView.curMonth) {
                     day = binding.calendarView.curDay
                 }
                 data.day = day
@@ -262,7 +275,7 @@ class TeacherStatisticsActivity :
 
         binding.calendarView.setOnMonthChangeListener { year, month ->
             var day = 1
-            if (month == binding.calendarView.curMonth){
+            if (month == binding.calendarView.curMonth) {
                 day = binding.calendarView.curDay
             }
             val data = MonthDayBean(
@@ -293,32 +306,38 @@ class TeacherStatisticsActivity :
                         val monthStr = DateUtils.judgeIsNeedAddZero(calendar.month.toString())
                         val dayStr = DateUtils.judgeIsNeedAddZero(calendar.day.toString())
                         val requestStr = "${calendar.year}-${monthStr}-${dayStr}"
-                        val todayRecord = viewModel.dailyRecordList.find { recordItem -> recordItem.aboutDate == requestStr }
-                        todayRecord?.let { todayData ->
-                            binding.tvTeacherAttendanceRule.text = todayData.dailyRuleDescription
-                            if (!todayData.hasScheduling) {
-                                binding.rvTeacherAttendancePunchList.hide()
-                                binding.teacherAttendanceEmpty.root.show()
-                                binding.teacherAttendanceEmpty.tvDesc.text = "当天无排班"
-                                binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
-                            } else if (!todayData.hasRecord) {
-                                binding.rvTeacherAttendancePunchList.hide()
-                                binding.teacherAttendanceEmpty.root.show()
-                                when {
-                                    todayData.restDay -> {
-                                        binding.teacherAttendanceEmpty.tvDesc.text = "今天休息日"
-                                        binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
-                                    }
-                                    else -> {
-                                        binding.teacherAttendanceEmpty.tvDesc.text = "当天无打卡记录"
-                                        binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_not_punch)
-                                    }
+                        val todayRecord =
+                            viewModel.dailyRecordList.find { recordItem -> recordItem.aboutDate == requestStr }
+                        if (todayRecord == null) {
+                            binding.rvTeacherAttendancePunchList.hide()
+                            binding.teacherAttendanceEmpty.root.show()
+                            binding.teacherAttendanceEmpty.tvDesc.text = "暂无数据"
+                            binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.icon_no_data)
+                            return@let
+                        }
+                        binding.tvTeacherAttendanceRule.text = todayRecord.dailyRuleDescription
+                        if (!todayRecord.hasScheduling) {
+                            binding.rvTeacherAttendancePunchList.hide()
+                            binding.teacherAttendanceEmpty.root.show()
+                            binding.teacherAttendanceEmpty.tvDesc.text = "当天无排班"
+                            binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
+                        } else if (!todayRecord.hasRecord) {
+                            binding.rvTeacherAttendancePunchList.hide()
+                            binding.teacherAttendanceEmpty.root.show()
+                            when {
+                                todayRecord.restDay -> {
+                                    binding.teacherAttendanceEmpty.tvDesc.text = "今天休息日"
+                                    binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_off_day)
                                 }
-                            } else {
-                                binding.rvTeacherAttendancePunchList.show()
-                                binding.teacherAttendanceEmpty.root.hide()
-                                punchAdapter.setList(todayData.signTime)
+                                else -> {
+                                    binding.teacherAttendanceEmpty.tvDesc.text = "当天无打卡记录"
+                                    binding.teacherAttendanceEmpty.imageView2.setImageResource(R.mipmap.attendance_not_punch)
+                                }
                             }
+                        } else {
+                            binding.rvTeacherAttendancePunchList.show()
+                            binding.teacherAttendanceEmpty.root.hide()
+                            punchAdapter.setList(todayRecord.signTime)
                         }
                         //viewModel.requestClockRecordByDay(requestStr)
                     }
