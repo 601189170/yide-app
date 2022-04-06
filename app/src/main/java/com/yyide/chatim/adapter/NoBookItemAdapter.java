@@ -51,6 +51,7 @@ public class NoBookItemAdapter extends BaseAdapter {
         }
 
         TextView item = VHUtil.ViewHolder.get(view, R.id.name);
+        View line = VHUtil.ViewHolder.get(view, R.id.line);
         ImageView img = VHUtil.ViewHolder.get(view, R.id.img);
         ImageView right = VHUtil.ViewHolder.get(view, R.id.right);
 //        ImageView right = VHUtil.ViewHolder.get(view, R.id.right);
@@ -66,6 +67,7 @@ public class NoBookItemAdapter extends BaseAdapter {
         }
         img.setVisibility(getItem(position).itemType==1?View.GONE:View.VISIBLE);
         right.setVisibility(getItem(position).itemType==0?View.GONE:View.VISIBLE);
+        line.setVisibility(position== list.size()-1?View.GONE:View.VISIBLE);
 
         return view;
     }

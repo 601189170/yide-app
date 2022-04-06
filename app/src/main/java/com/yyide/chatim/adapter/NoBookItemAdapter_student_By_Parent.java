@@ -47,9 +47,11 @@ public class NoBookItemAdapter_student_By_Parent extends BaseAdapter {
 
         TextView item = VHUtil.ViewHolder.get(view, R.id.name);
         ImageView img = VHUtil.ViewHolder.get(view, R.id.img);
+        View line = VHUtil.ViewHolder.get(view, R.id.line);
         TextView msg_number = VHUtil.ViewHolder.get(view, R.id.msg_number);
         msg_number.setText("");
         item.setText(getItem(position).name);
+        line.setVisibility(position== list.size()-1?View.GONE:View.VISIBLE);
 
 
         return view;

@@ -73,7 +73,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
 
 
 
-
+    String logo;
 
 
     @Override
@@ -148,6 +148,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         Log.e(TAG, "setPostData==>: " + JSON.toJSONString(nowlist));
         intent.putExtra("listBean", JSON.toJSONString(list));
         intent.putExtra("nowBean", JSON.toJSONString(nowlist));
+        intent.putExtra("logo", logo);
         intent.putExtra("id", id);
         intent.putExtra("name", name);
         intent.putExtra("schoolName", mSchoolName);
@@ -167,7 +168,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         intent.putExtra("schoolType", schoolType);
         intent.putExtra("id", "");
         intent.putExtra("index", index+"");
-//        intent.putExtra("name", list.get(0).name);
+        intent.putExtra("logo", logo);
         intent.putExtra("name", list.get(index).name);
         intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
         startActivity(intent);
@@ -181,6 +182,7 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         intent.putExtra("schoolType", schoolType);
         intent.putExtra("id", list.get(index).id);
         intent.putExtra("name", list.get(index).name);
+        intent.putExtra("logo", logo);
         intent.putExtra("index", index+"");
         intent.setClass(NoteBookActivity.this, NoteByListActivity.class);
         startActivity(intent);
@@ -232,6 +234,8 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
         Log.e("TAG", "listByAppRsp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES_0) {
             //学校组织结构
+            mSchoolName=rsp.data.schoolName;
+            logo=rsp.data.schoolBadgeUrl;
             ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBeans1 = new ArrayList<>();
             ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBeans111 = new ArrayList<>();
             if (!TextUtils.isEmpty(rsp.data.schoolBadgeUrl)) {
@@ -304,6 +308,8 @@ public class NoteBookActivity extends BaseMvpActivity<NoteBookPresenter> impleme
 
         Log.e("TAG", "universityListByApp: " + JSON.toJSONString(rsp));
         if (rsp.code == BaseConstant.REQUEST_SUCCES_0) {
+            mSchoolName=rsp.data.schoolName;
+            logo=rsp.data.schoolBadgeUrl;
             if (!TextUtils.isEmpty(rsp.data.schoolBadgeUrl)) {
 //                    GlideUtil.loadImageHead(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);
                 GlideUtil.loadImage(NoteBookActivity.this, rsp.data.schoolBadgeUrl, img);

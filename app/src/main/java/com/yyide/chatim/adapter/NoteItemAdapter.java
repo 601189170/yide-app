@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,9 @@ public class NoteItemAdapter extends BaseMultiItemQuickAdapter<TeacherlistRsp.Da
             case 1:
 //                holder.setText(R.id.item, itemBean.organizationItem != null ? itemBean.organizationItem.name : "");
                 holder.setText(R.id.item, TextUtils.isEmpty(itemBean.name)?"":itemBean.name);
+                if (getItemPosition(itemBean) == (getData().size()-1)) {
+                    holder.getView(R.id.line).setVisibility(View.GONE);
+                }
                 break;
             default:
                 RoundImageView img = holder.getView(R.id.img);
@@ -70,7 +74,10 @@ public class NoteItemAdapter extends BaseMultiItemQuickAdapter<TeacherlistRsp.Da
                     );
                     BookPatriarchDetailActivity.start(getContext(), guardianItem);
                 });
-                View line = holder.getView(R.id.line);
+
+                if (getItemPosition(itemBean) == (getData().size()-1)) {
+                    holder.getView(R.id.line).setVisibility(View.GONE);
+                }
                 GlideUtil.loadImageHead(
                         getContext(),
                         itemBean.avatar,

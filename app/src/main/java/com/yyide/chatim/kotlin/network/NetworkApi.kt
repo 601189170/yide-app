@@ -189,4 +189,12 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
             getResult{
                 service.getClassSubjectLis(isWhole)
             }
+
+    /**
+     * 教职工查看详情
+     */
+    suspend fun getSchoolWorkData(id:String) =
+            getResult{
+                service.getSchoolWorkData(id)
+            }
 }

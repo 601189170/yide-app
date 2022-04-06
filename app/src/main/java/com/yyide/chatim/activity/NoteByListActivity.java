@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.yyide.chatim.model.ListByAppRsp;
 import com.yyide.chatim.model.ListByAppRsp2;
 import com.yyide.chatim.model.ListByAppRsp3;
 import com.yyide.chatim.model.NoteTabBean;
+import com.yyide.chatim.utils.GlideUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,10 @@ public class NoteByListActivity extends BaseActivity {
     FrameLayout content;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
+    @BindView(R.id.img)
+    ImageView img;
+    @BindView(R.id.pName)
+    TextView pName;
     TabRecyAdapter tabRecyAdapter;
     List<NoteTabBean> listTab = new ArrayList<>();
     ArrayList<ListByAppRsp2.DataDTO.DeptVOListDTO.ChildrenDTO> listBean = new ArrayList<>();
@@ -56,6 +62,8 @@ public class NoteByListActivity extends BaseActivity {
     private String organization;
     private String type;
     private String index;
+    private String schoolName;
+    private String logo;
     public static  String TAGStudentlistBeanByJz="TAGStudentlistBeanByJz";
     public static  String TAGStudentlistBeanByTeacher="TAGStudentlistBeanByTeacher";
     @Override
@@ -69,6 +77,8 @@ public class NoteByListActivity extends BaseActivity {
         id = getIntent().getStringExtra("id");
         name = getIntent().getStringExtra("name");
         organization = getIntent().getStringExtra("organization");
+        schoolName = getIntent().getStringExtra("schoolName");
+        logo = getIntent().getStringExtra("logo");
         type = getIntent().getStringExtra("type");
         index = getIntent().getStringExtra("index");
 
@@ -81,7 +91,8 @@ public class NoteByListActivity extends BaseActivity {
         String teacherdata = getIntent().getStringExtra(NoteByListActivity.TAGStudentlistBeanByTeacher);
         studentlistbeanByJz=(ArrayList<ListByAppRsp3.DataDTO.AdlistDTO>) JSON.parseObject(Jzdata,new TypeReference<ArrayList<ListByAppRsp3.DataDTO.AdlistDTO>>(){});
         studentlistbeanByTeacher=(ArrayList<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>) JSON.parseObject(teacherdata,new TypeReference<ArrayList<ListByAppRsp2.DataDTO.ClassAddBookDTOListDTO>>(){});
-
+        pName.setText(schoolName);
+        GlideUtil.loadImage(this, logo, img);
         title.setText("通讯录");
         Log.e("TAG", "NoteByListActivity: "+ JSON.toJSONString(listBean));
         Log.e("TAG", "NoteByListActivity==>: "+ JSON.toJSONString(nowBean));
@@ -117,6 +128,7 @@ public class NoteByListActivity extends BaseActivity {
                 recyclerview.smoothScrollToPosition(tabRecyAdapter.getItemCount());
             }
         });
+
         Log.e("TAG", "NoteByListActivity: "+ JSON.toJSONString(listBean));
 //        initSutdentData();
         initDeptFragment();

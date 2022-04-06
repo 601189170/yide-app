@@ -637,18 +637,9 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
                     bundle.putString("islast", "1");
                 }
 
-//                if (noteItemAdapter.getItem(position).organizationItem.children != null && noteItemAdapter.getItem(position).organizationItem.children.size() > 0) {
-//                    bundle.putParcelableArrayList(PARAMS_NAME, (ArrayList<? extends Parcelable>) noteItemAdapter.getItem(position).organizationItem.children);
-//                }
                 activity.initDeptFragmentNew(bundle);
             } else {
-//                Intent intent = new Intent();
-//                teacher_noteItemAdapter_teacher.getItem(position);
-//                Log.e("TAG", "initView: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
-//                intent.putExtra("data", JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)));
-//                intent.putExtra("organization", organization);
-//                intent.setClass(mActivity, PersonInfoActivity.class);
-//                startActivity(intent);
+
                 Log.e("TAG", "teacher_noteItemAdapter_teacher: "+JSON.toJSONString(teacher_noteItemAdapter_teacher.getItem(position)) );
 
                 BookTeacherItem teacherItem = new BookTeacherItem(
@@ -669,14 +660,7 @@ public class NoteByListFragment extends BaseMvpFragment<NoteBookByListPresenter>
             }
 
         });
-        if (listBean!=null&&listBean.size()>0){
-//            teacher_recyclerview_teacher.setVisibility(View.VISIBLE);
-//            teacher_recyclerview_all.setVisibility(View.GONE);
-//            teacher_recyclerview_student.setVisibility(View.GONE);
-//            parent_recyclerview_all.setVisibility(View.GONE);
-//            parent_recyclerView_student.setVisibility(View.GONE);
-//            parent_recyclerView_teacher.setVisibility(View.GONE);
-        }
+
     }
 
     @Override
