@@ -12,12 +12,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.SizeUtils;
-import com.scwang.smart.refresh.header.ClassicsHeader;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.yyide.chatim.R;
 import com.yyide.chatim.adapter.TableItemAdapter;
 import com.yyide.chatim.adapter.TableSectionAdapter;
@@ -25,9 +22,8 @@ import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.ClassTableFragmnet2Binding;
-import com.yyide.chatim.dialog.SwitchTableClassPop;
 import com.yyide.chatim.dialog.TableClassPopUp;
-import com.yyide.chatim.dialog.TablePopUp;
+import com.yyide.chatim.dialog.TableWeekPopUp;
 import com.yyide.chatim.dialog.TextPopUp;
 import com.yyide.chatim.model.SelectTableClassesRsp;
 import com.yyide.chatim.model.sitetable.SiteTableRsp;
@@ -69,7 +65,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
     // 当前所选班级
     ClassInfo selectClassInfo = new ClassInfo();
 
-    private TablePopUp weekPopUp;
+    private TableWeekPopUp weekPopUp;
     private TableClassPopUp classPopUp;
     private TextPopUp textPopUp;
 
@@ -150,7 +146,7 @@ public class ClassTableFragment extends BaseMvpFragment<ClassTablePresenter> imp
 
         binding.empty.tvDesc.setText("本周暂无课表数据");
 
-        weekPopUp = new TablePopUp(this);
+        weekPopUp = new TableWeekPopUp(this);
         weekPopUp.setPopupGravity(Gravity.BOTTOM);
         weekPopUp.setSubmitCallBack(data -> {
             if (data != null) {

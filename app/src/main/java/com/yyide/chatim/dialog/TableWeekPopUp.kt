@@ -21,7 +21,7 @@ import razerdp.basepopup.BasePopupWindow
  * @date 2022/3/25 10:27
  * @description 课表 Week popup
  */
-class TablePopUp : BasePopupWindow {
+class TableWeekPopUp : BasePopupWindow {
 
 
     lateinit var binding: PopupTableTopBinding
@@ -44,7 +44,6 @@ class TablePopUp : BasePopupWindow {
     init {
         setContentView(R.layout.popup_table_top)
         setBackground(0)
-        setOutSideDismiss(false)
     }
 
     override fun onViewCreated(contentView: View) {
@@ -67,6 +66,9 @@ class TablePopUp : BasePopupWindow {
             override fun convert(holder: BaseViewHolder, item: ChildrenItem) {
                 holder.setText(R.id.tv_title, item.name)
                 holder.getView<View>(R.id.iv_remind).hide()
+                if (holder.bindingAdapterPosition == expandableAdapter.data.size - 1){
+                    holder.getView<View>(R.id.v_line).hide()
+                }
                 selectData?.let {
                     if (item.id == it.id) {
                         holder.getView<View>(R.id.iv_remind).show()

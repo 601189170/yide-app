@@ -202,7 +202,7 @@ class MeetingDetailActivity :
     private fun parserLastActivityData(result: ActivityResult) {
         if (result.resultCode == Activity.RESULT_OK) {
             val jumpType = result.data?.getStringExtra(ResultCodeStr.NORMAL_TYPE_CODE) ?: ""
-            logd("shen jumpType = $jumpType")
+
             when (jumpType) {
                 ResultCodeStr.MEETING_DETAIL_EDIT_DEL -> {
                     finish()

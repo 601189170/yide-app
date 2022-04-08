@@ -81,6 +81,24 @@ public class TimeUtil {
         return false;
     }
 
+    /**
+     * 传入的时间是否已经结束
+     *
+     * @param endDate 传入的时间
+     * @return 返回 true结束
+     */
+    public static boolean isDateOver3(String endDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.getDefault());
+        try {
+            Date now = new Date();
+            Date old = sdf.parse(endDate);
+            return now.after(old);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static boolean isDateOver2(String endDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
         try {

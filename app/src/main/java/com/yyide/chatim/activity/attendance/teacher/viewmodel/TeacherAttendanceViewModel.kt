@@ -31,7 +31,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
 
     val userInfo: UserBean = SpData.getUser()
 
-    private val punchMessageLiveData = MutableLiveData<PunchMessageBean>()
+    private val punchMessageLiveData = MutableLiveData<Result<PunchMessageBean>>()
     val punchMessage = punchMessageLiveData
 
     private val punchResultLiveData = MutableLiveData<Result<String>>()
@@ -57,14 +57,14 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
 
         saveLocationInfo = locationInfo
 
-        if (punchMessage.value == null) {
-            logd("规则还没获得")
+        
+        if (punchMessage.value == null || punchMessage.value?.getOrNull() == null) {
             return
         }
 
         val info = PunchInfoBean()
 
-        punchMessage.value?.let {
+        punchMessage.value?.getOrNull()?.let {
             // 判断Wifi打卡
             if (it.canSignByWifi) {
                 val wifi = WifiTool.getConnectedWifiInfo(getApplication())
@@ -195,11 +195,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
         val body = JSON.toJSONString(map).toRequestBody(BaseConstant.JSON)
         viewModelScope.launch {
             val queryResult = AttendanceNetwork.requestPunchMessage(body)
-            val queryData = queryResult.getOrNull()
-            queryData?.let {
-                punchMessageLiveData.value = it
-            }
-
+            punchMessageLiveData.value = queryResult
         }
     }
 

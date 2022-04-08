@@ -374,4 +374,9 @@
     <string name="format_24H">HH:mm:ss</string>
     <string name="statistics_time_pool">%s汇总</string>
 
+    <!--信息发布 -->
+    <string name="submit">确认</string>
+    <string name="reBack">撤回</string>
+    <string name="reTop">置顶</string>
+
 </resources>

@@ -55,7 +55,6 @@ class TableClassPopUp : BasePopupWindow {
         setContentView(R.layout.popup_table_class)
         setBackground(0)
         popupGravity = Gravity.BOTTOM
-        setOutSideDismiss(false)
     }
 
     override fun onViewCreated(contentView: View) {
