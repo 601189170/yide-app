@@ -9,6 +9,8 @@ import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.AppItemBean;
 import com.yyide.chatim.model.AttendanceDayStatsRsp;
 import com.yyide.chatim.model.AttendanceRsp;
+import com.yyide.chatim.model.AttendanceStudentRsp;
+import com.yyide.chatim.model.AttendanceTeacherRsp;
 import com.yyide.chatim.model.AttendanceWeekStatsRsp;
 import com.yyide.chatim.model.BaseRsp;
 import com.yyide.chatim.model.BookRsp;
@@ -1049,4 +1051,14 @@ public interface DingApiStores {
     @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("/cloud/app/work/page")
     Observable<TeacherWorkListRsp> getpageList(@Body RequestBody requestBody);
+
+    //家长端获取学生考勤信息
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/attweb/app/eventStatistical/studentView")
+    Observable<AttendanceStudentRsp> getStudentAtt(@Body RequestBody requestBody);
+
+    //教师端获取学生考勤信息
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("/attweb/app/eventStatistical/teacherView")
+    Observable<AttendanceTeacherRsp> getTeacherAtt(@Body RequestBody requestBody);
 }

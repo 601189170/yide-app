@@ -206,4 +206,10 @@ interface INetworkService {
     @GET("/cloud/app/work/getSchoolWork")
 //    suspend fun getSchoolWorkData(@Query("id") id: String): BaseResponse<getSchoolWork>
     suspend fun getSchoolWorkData(@Query("id") id: String): BaseResponse<getSchoolWork>
+
+    /**
+     * 获取工作台App列表
+     */
+    @GET("/cloud/appCenter/list")
+    suspend fun getAppList(): BaseResponse<MutableList<NewAppRspJ>>
 }

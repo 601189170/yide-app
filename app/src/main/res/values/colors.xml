@@ -76,5 +76,8 @@
     <color name="leave_early">#FD4F45</color>
     <color name="late">#FFC328</color>
     <color name="punch_normal">#11C685</color>
+
+    <!-- 信息发布 -->
+    <color name="not_publish_color">#FAAD14</color>
     
 </resources>

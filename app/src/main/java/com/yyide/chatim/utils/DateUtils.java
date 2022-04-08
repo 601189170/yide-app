@@ -140,8 +140,7 @@ public class DateUtils {
      * 获取本周第一天
      */
     public static String getWeekStartDate() {
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormater = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault());
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_WEEK, 1);
         cal.getTime();

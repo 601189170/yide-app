@@ -47,10 +47,7 @@ import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager
 import com.yyide.chatim.databinding.ActivityNewMainBinding
 import com.yyide.chatim.fragment.schedule.ScheduleFragment2
-import com.yyide.chatim.home.AppFragment
-import com.yyide.chatim.home.HelpFragment
-import com.yyide.chatim.home.HomeFragment
-import com.yyide.chatim.home.MessageFragment
+import com.yyide.chatim.home.*
 import com.yyide.chatim.jiguang.ExampleUtil
 import com.yyide.chatim.jiguang.LocalBroadcastManager
 import com.yyide.chatim.model.*
@@ -101,7 +98,9 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
 
     //    private val scheduleFragment = ScheduleFragment()
     private val scheduleFragment = ScheduleFragment2()
-    private val appFragment = AppFragment()
+
+    //private val appFragment = AppFragment()
+    private val appFragment = NAppFragment()
     private val helpFragment = HelpFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {

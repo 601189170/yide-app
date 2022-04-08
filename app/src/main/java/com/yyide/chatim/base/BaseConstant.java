@@ -129,4 +129,5 @@ public class BaseConstant {
     public static final String TYPE_UPDATE_APP = "type_update_app";
     public static final String TYPE_UPDATE_NOTICE_MY_RELEASE = "type_update_notice_my_release";
     public static final String TYPE_UPDATE_SCHEDULE_LIST_DATA = "type_update_schedule_list_data";
+    public static final String TYPE_UPDATE_APPCENTER_LIST = "type_update_schedule_appcenter_list";
 }

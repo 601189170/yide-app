@@ -1,35 +1,26 @@
 package com.yyide.chatim.fragment;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.fastjson.JSON;
-import com.scwang.smart.refresh.header.ClassicsHeader;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.yyide.chatim.R;
-import com.yyide.chatim.SpData;
-import com.yyide.chatim.activity.PreparesLessonActivity;
 import com.yyide.chatim.adapter.MyTableAdapter;
 import com.yyide.chatim.adapter.TableTimeAdapter;
 import com.yyide.chatim.base.BaseConstant;
 import com.yyide.chatim.base.BaseMvpFragment;
 import com.yyide.chatim.databinding.LayoutMytableFragmnetBinding;
-import com.yyide.chatim.dialog.TablePopUp;
+import com.yyide.chatim.dialog.TableWeekPopUp;
 
 import com.yyide.chatim.model.EventMessage;
-import com.yyide.chatim.model.SelectSchByTeaidRsp;
 import com.yyide.chatim.model.table.ChildrenItem;
 import com.yyide.chatim.model.table.ListItem;
 import com.yyide.chatim.model.table.MyTableBean;
@@ -65,7 +56,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
     // 当前所选周数
     private ChildrenItem selectWeek;
 
-    private TablePopUp weekPopUp;
+    private TableWeekPopUp weekPopUp;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -157,7 +148,7 @@ public class MyTableFragment extends BaseMvpFragment<MyTablePresenter> implement
 
     private void initView() {
 
-        weekPopUp = new TablePopUp(this);
+        weekPopUp = new TableWeekPopUp(this);
         weekPopUp.setPopupGravity(Gravity.BOTTOM);
         weekPopUp.setSubmitCallBack(data -> {
             if (data != null) {

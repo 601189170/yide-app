@@ -169,32 +169,40 @@ object NetworkApi : BaseNetworkApi<INetworkService>(BaseConstant.API_SERVER_URL)
      * 教职工作业列表
      */
     suspend fun requestTeacherWorkList(requestBody: RequestBody) =
-            getResult{
-                service.requestTeacherWorkList(requestBody)
-            }
+        getResult {
+            service.requestTeacherWorkList(requestBody)
+        }
 
 
     /**
      * 获取科目
      */
     suspend fun selectSubjectByUserId() =
-            getResult{
-                service.requestselectSubjectByUserId()
-            }
+        getResult {
+            service.requestselectSubjectByUserId()
+        }
 
     /**
      * 获取年级班级科目联动数据
      */
-    suspend fun getClassSubjectList(isWhole:String) =
-            getResult{
-                service.getClassSubjectLis(isWhole)
-            }
+    suspend fun getClassSubjectList(isWhole: String) =
+        getResult {
+            service.getClassSubjectLis(isWhole)
+        }
 
     /**
      * 教职工查看详情
      */
-    suspend fun getSchoolWorkData(id:String) =
-            getResult{
-                service.getSchoolWorkData(id)
-            }
+    suspend fun getSchoolWorkData(id: String) =
+        getResult {
+            service.getSchoolWorkData(id)
+        }
+
+    /**
+     * 获取工作台App列表
+     */
+    suspend fun getAppList() =
+        getResult {
+            service.getAppList()
+        }
 }

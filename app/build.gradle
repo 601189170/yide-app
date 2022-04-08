@@ -3,6 +3,7 @@ apply plugin: 'com.huawei.agconnect'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.aliyun.ams.emas-services'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
 android {
 
     signingConfigs {
@@ -273,5 +274,6 @@ dependencies {
     // 下拉刷新
     implementation  'io.github.scwang90:refresh-layout-kernel:2.0.5'      //核心必须依赖
     implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
+
 }
 

@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.blankj.utilcode.util.SizeUtils
 import com.yyide.chatim.R
@@ -23,8 +22,8 @@ import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.toStringTime
 import com.yyide.chatim.databinding.FragmentSiteTableBinding
 import com.yyide.chatim.dialog.TableClassPopUp
-import com.yyide.chatim.dialog.TablePopUp
-import com.yyide.chatim.dialog.TablePopUp.SubmitCallBack
+import com.yyide.chatim.dialog.TableWeekPopUp
+import com.yyide.chatim.dialog.TableWeekPopUp.SubmitCallBack
 import com.yyide.chatim.dialog.TextPopUp
 import com.yyide.chatim.model.sitetable.SiteTableRsp
 import com.yyide.chatim.model.sitetable.toWeekDayList
@@ -66,7 +65,7 @@ class SiteTableFragment : BaseFragment() {
     // 当前所选场地
     private var selectClassInfo = ClassInfo()
 
-    private lateinit var weekPopUp: TablePopUp
+    private lateinit var weekPopUp: TableWeekPopUp
     private lateinit var classPopUp: TableClassPopUp
     private lateinit var textPopUp: TextPopUp
 
@@ -303,7 +302,7 @@ class SiteTableFragment : BaseFragment() {
         }
         siteTableFragmentBinding.top.grid.adapter = adapter*/
 
-        weekPopUp = TablePopUp(this)
+        weekPopUp = TableWeekPopUp(this)
         weekPopUp.popupGravity = Gravity.BOTTOM
         weekPopUp.setSubmitCallBack(object : SubmitCallBack {
             override fun getSubmitData(data: ChildrenItem?) {

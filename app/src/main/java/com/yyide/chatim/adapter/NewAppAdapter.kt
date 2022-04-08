@@ -1,0 +1,45 @@
+package com.yyide.chatim.adapter
+
+import android.widget.GridView
+import android.widget.TextView
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.yyide.chatim.R
+import com.yyide.chatim.model.NewAppRspJ
+import com.yyide.chatim.utils.JumpUtil
+
+/**
+ * @ProjectName : yideapp
+ * @Author : J
+ * @Time : 2022/4/7 18:22
+ * @Description : 文件描述
+ */
+class NewAppAdapter() : BaseQuickAdapter<NewAppRspJ, BaseViewHolder>(R.layout.app_item) {
+    override fun convert(holder: BaseViewHolder, item: NewAppRspJ) {
+        val title = holder.getView<TextView>(R.id.title)
+        val grid = holder.getView<GridView>(R.id.grid)
+        title.text = item.categoryName;
+        var adapter = NewAppItemAdapter()
+        grid.adapter = adapter
+        if (item.categoryName == "常用应用") {
+            item.apps = ArrayList()
+            var mCommon = NewAppRspJ.AppsDTO()
+            mCommon.appurl = ""
+            mCommon.id = ""
+            mCommon.name = "编辑"
+            item.apps.add(mCommon)
+        }
+        if (item.apps != null && item.apps.isNotEmpty()) {
+            adapter.notifyData(item.apps);
+        }
+        grid.setOnItemClickListener { _, _, position, _ ->
+            val gridItem = adapter.getItem(position)
+            JumpUtil.appOpen(context, gridItem.name, gridItem.appurl)
+        }
+    }
+
+}
+
+
+
+

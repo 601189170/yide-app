@@ -40,7 +40,7 @@ class NAttendanceActivity :
     //定位
     private var locationClient: AMapLocationClient? = null
 
-    private lateinit var punchRecordAdapter : BaseQuickAdapter<SignTimeListItem, BaseViewHolder>
+    private lateinit var punchRecordAdapter: BaseQuickAdapter<SignTimeListItem, BaseViewHolder>
 
     // 是否首次进来
     private var isFirst = true
@@ -97,7 +97,7 @@ class NAttendanceActivity :
                 }
             }
 
-        if (isAllGranted){
+        if (isAllGranted) {
             initLocation()
         }
     }
@@ -114,31 +114,33 @@ class NAttendanceActivity :
             binding.rivTeacherAttendanceImg
         )
 
-        punchRecordAdapter = object : BaseQuickAdapter<SignTimeListItem, BaseViewHolder>(R.layout.item_punch_record) {
+        punchRecordAdapter = object :
+            BaseQuickAdapter<SignTimeListItem, BaseViewHolder>(R.layout.item_punch_record) {
             override fun convert(holder: BaseViewHolder, item: SignTimeListItem) {
                 val binding = ItemPunchRecordBinding.bind(holder.itemView)
-                val signTypeStr = if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
+                val signTypeStr =
+                    if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
                 val timeStr = "$signTypeStr${item.shouldSignTime}"
                 val signStr = if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
                 val actualSignTime = "${item.actualSignTime}$signStr"
                 binding.tvPunchTime.text = timeStr
                 binding.tvPunchState.text = actualSignTime
-                when(item.signResult){
-                    "已打卡" -> {
+                when (item.signResult) {
+                    "正常" -> {
                         binding.tvPunchStateLogo.text = ""
                         binding.tvPunchStateLogo.setBackgroundResource(R.mipmap.attendance_success_logo)
                     }
-                    "迟到" ->{
+                    "迟到" -> {
                         binding.tvPunchStateLogo.text = "迟到"
                         binding.tvPunchStateLogo.setTextColor(R.color.late.asColor())
                         binding.tvPunchStateLogo.setBackgroundResource(R.drawable.bg_yellow_2)
                     }
-                    "早退" ->{
+                    "早退" -> {
                         binding.tvPunchStateLogo.text = "早退"
                         binding.tvPunchStateLogo.setTextColor(R.color.leave_early.asColor())
                         binding.tvPunchStateLogo.setBackgroundResource(R.drawable.bg_rad_2)
                     }
-                    else ->{
+                    else -> {
                         binding.tvPunchStateLogo.text = ""
                         binding.tvPunchStateLogo.background = null
                     }
@@ -153,35 +155,42 @@ class NAttendanceActivity :
         binding.rvTeacherAttendancePunchRecord.adapter = punchRecordAdapter
 
         // 更新打卡信息
-        viewModel.punchMessage.observe(this){
+        viewModel.punchMessage.observe(this) {
             hideLoading()
-            binding.tvTeacherAttendanceJob.text = it.groupName
-            binding.tvTeacherAttendanceName.text = it.personName
-            /*it.signTimeList?.let { list ->
-                if (list.size > 2) {
-                    binding.rvTeacherAttendancePunchRecord.addItemDecoration(SignSpacesItemDecoration(5,applicationContext))
-                }else{
-                    binding.rvTeacherAttendancePunchRecord.addItemDecoration(SignSpacesItemDecoration(20,applicationContext))
+            val data = it.getOrNull()
+            data?.let { bean ->
+                binding.tvTeacherAttendanceJob.text = bean.groupName
+                binding.tvTeacherAttendanceName.text = bean.personName
+                punchRecordAdapter.setList(bean.signTimeList)
+                if (!bean.canSign) {
+                    viewModel.setPunchInfo(PunchInfoBean(viewModel.punchTypeNOT, bean.signMessage))
+                } else {
+                    val type = when {
+                        bean.satisfyByAddress -> {
+                            viewModel.punchTypeAddress
+                        }
+                        bean.satisfyByWifi -> {
+                            viewModel.punchTypeWifi
+                        }
+                        else -> {
+                            viewModel.punchTypeFieldwork
+                        }
+                    }
+                    viewModel.setPunchInfo(PunchInfoBean(type, bean.signMessage))
                 }
-            }*/
-            punchRecordAdapter.setList(it.signTimeList)
-            if (!it.canSign){
-                viewModel.setPunchInfo(PunchInfoBean(viewModel.punchTypeNOT,it.signMessage))
-            }else{
-                viewModel.setPunchInfo(PunchInfoBean(-1,it.signMessage))
             }
         }
 
         // 实时更新考勤状态
-        viewModel.punchInfo.observe(this){
-            when(it.type){
+        viewModel.punchInfo.observe(this) {
+            when (it.type) {
                 viewModel.punchTypeNOT -> {
                     binding.clTeacherAttendancePunch.setBackgroundResource(R.mipmap.attendance_fail_bg)
                     binding.tvTeacherAttendancePunchState.text = "无法打卡"
                     binding.ivTeacherAttendanceTipLogo.setImageResource(R.mipmap.attendance_warn_logo)
                     binding.tvTeacherAttendanceTip.text = it.showContent
                 }
-                viewModel.punchTypeFieldwork ->{
+                viewModel.punchTypeFieldwork -> {
                     binding.clTeacherAttendancePunch.setBackgroundResource(R.mipmap.attendance_fieldwork_bg)
                     binding.tvTeacherAttendancePunchState.text = "外勤打卡"
                     binding.ivTeacherAttendanceTipLogo.setImageResource(R.mipmap.address_logo)
@@ -189,10 +198,10 @@ class NAttendanceActivity :
                 }
                 else -> {
                     binding.clTeacherAttendancePunch.setBackgroundResource(R.mipmap.attendance_can_punch)
-                    if (viewModel.punchMessage.value?.signInOrOut == 0) {
-                        binding.tvTeacherAttendancePunchState.text = "签到打卡"
-                    }else {
+                    if (viewModel.punchMessage.value?.getOrNull()?.signInOrOut == 1) {
                         binding.tvTeacherAttendancePunchState.text = "签退打卡"
+                    } else {
+                        binding.tvTeacherAttendancePunchState.text = "签到打卡"
                     }
                     binding.ivTeacherAttendanceTipLogo.setImageResource(R.mipmap.attendance_can_punch_logo)
                     binding.tvTeacherAttendanceTip.text = it.showContent
@@ -201,13 +210,15 @@ class NAttendanceActivity :
         }
 
         // 打卡成功后重新刷新下ui
-        viewModel.punchResult.observe(this){
+        viewModel.punchResult.observe(this) {
             if (it.isSuccess) {
                 showLoading()
                 val wifi = WifiTool.getConnectedWifiInfo(applicationContext)
-                val wifiName = wifi?.ssid?.replace("\"","") ?: ""
+                val wifiName = wifi?.ssid?.replace("\"", "") ?: ""
                 val wifiMac = wifi?.bssid ?: ""
                 viewModel.queryPunchMessage(wifiName = wifiName, wifiMac = wifiMac)
+            }else{
+                showShotToast("打卡失败")
             }
         }
     }
@@ -225,13 +236,32 @@ class NAttendanceActivity :
         }
 
         binding.clTeacherAttendancePunch.setOnClickListener {
-            if (viewModel.punchInfo.value == null || viewModel.punchInfo.value?.type == viewModel.punchTypeNOT){
+            if (viewModel.punchInfo.value == null || viewModel.punchInfo.value?.type == viewModel.punchTypeNOT) {
                 return@setOnClickListener
             }
+
+            if (isFastClick()){
+                showShotToast("请15s后再更新打卡")
+                return@setOnClickListener
+            }
+
             showLoading()
             viewModel.requestPunch()
         }
 
+    }
+
+    private var lastClickTime: Long = 0
+    private val MIN_CLICK_DELAY_TIME = 15*1000
+
+    private fun isFastClick(): Boolean {
+        var flag = false
+        val curClickTime = System.currentTimeMillis()
+        if ((curClickTime - lastClickTime) < MIN_CLICK_DELAY_TIME) {
+            flag = true
+        }
+        lastClickTime = curClickTime
+        return flag
     }
 
     /**
@@ -239,9 +269,9 @@ class NAttendanceActivity :
      */
     private fun initLocation() {
         val wifi = WifiTool.getConnectedWifiInfo(applicationContext)
-        logd("mac = ${wifi?.bssid},name = ${wifi?.ssid?.replace("\"","")}")
-        AMapLocationClient.updatePrivacyAgree(applicationContext,true)
-        AMapLocationClient.updatePrivacyShow(applicationContext,true,true)
+        logd("mac = ${wifi?.bssid},name = ${wifi?.ssid?.replace("\"", "")}")
+        AMapLocationClient.updatePrivacyAgree(applicationContext, true)
+        AMapLocationClient.updatePrivacyShow(applicationContext, true, true)
         locationClient = AMapLocationClient(applicationContext)
         val locationOption = AMapLocationClientOption()
         locationOption.isMockEnable = false
@@ -251,12 +281,17 @@ class NAttendanceActivity :
                 locationInfo?.let { info ->
                     if (info.errorCode == 0) {
                         viewModel.judgePunchFunction(info)
-                        if (isFirst){
+                        if (isFirst) {
                             showLoading()
                             isFirst = false
-                            val wifiName = wifi?.ssid?.replace("\"","") ?: ""
+                            val wifiName = wifi?.ssid?.replace("\"", "") ?: ""
                             val wifiMac = wifi?.bssid ?: ""
-                            viewModel.queryPunchMessage(info.longitude,info.latitude,wifiName,wifiMac)
+                            viewModel.queryPunchMessage(
+                                info.longitude,
+                                info.latitude,
+                                wifiName,
+                                wifiMac
+                            )
                         }
                     } else {
                         loge("errorCode=${info.errorCode},errorInfo=${info.errorInfo}")

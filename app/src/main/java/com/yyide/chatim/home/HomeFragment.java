@@ -42,6 +42,7 @@ import com.yyide.chatim.databinding.DialogHomeShowNoticeBinding;
 import com.yyide.chatim.dialog.LeftMenuPop;
 import com.yyide.chatim.fragment.AttendancePatriarchFragment;
 import com.yyide.chatim.fragment.AttendanceSchoolFragment;
+import com.yyide.chatim.fragment.AttendanceStudentFragment;
 import com.yyide.chatim.fragment.AttendanceTeacherFragment;
 import com.yyide.chatim.fragment.ClassHonorFragment;
 import com.yyide.chatim.fragment.NoticeFragment;
@@ -83,6 +84,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     FrameLayout noticeContent;
     @BindView(R.id.kq_content)
     FrameLayout kqContent;
+    @BindView(R.id.kq_banner_content)
+    FrameLayout kqBannerContent;
     @BindView(R.id.banner_content)
     FrameLayout bannerContent;
     @BindView(R.id.work_content)
@@ -297,6 +300,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);
             kqContent.setVisibility(View.VISIBLE);
+            kqBannerContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             tableContent.setVisibility(View.GONE);
             if (SpData.getClassInfo() != null) {
@@ -311,12 +315,16 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             fragmentTransaction.replace(R.id.notice_content, noticeFragment);
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, AttendanceSchoolFragment.newInstance());
+            //学生考勤
+            fragmentTransaction.replace(R.id.kq_banner_content, new AttendanceStudentFragment());
+
         } else if (SpData.getIdentityInfo() != null && !SpData.getIdentityInfo().staffIdentity()) {
             //家长身份
             tableContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             workContent.setVisibility(View.VISIBLE);
             kqContent.setVisibility(View.VISIBLE);
+            kqBannerContent.setVisibility(View.VISIBLE);
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);
             //班级课表
@@ -325,6 +333,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 //            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, new AttendancePatriarchFragment());
+            //学生考勤
+            fragmentTransaction.replace(R.id.kq_banner_content, new AttendanceStudentFragment());
             //班级作业
             fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级学生荣誉
@@ -335,6 +345,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             studentHonorContent.setVisibility(View.GONE);
             classHonorContent.setVisibility(View.GONE);
             kqContent.setVisibility(View.GONE);
+            kqBannerContent.setVisibility(View.GONE);
             noticeContent.setVisibility(View.VISIBLE);
             tableContent.setVisibility(View.GONE);
             //通知
@@ -346,6 +357,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
             studentHonorContent.setVisibility(View.VISIBLE);
             classHonorContent.setVisibility(View.VISIBLE);
             kqContent.setVisibility(View.VISIBLE);
+            kqBannerContent.setVisibility(View.VISIBLE);
             noticeContent.setVisibility(View.VISIBLE);
             //班级课表
             fragmentTransaction.replace(R.id.table_content, new TableFragment());
@@ -353,6 +365,8 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
 //            fragmentTransaction.replace(R.id.notice_content, new NoticeFragment());
             //班级考勤情况
             fragmentTransaction.replace(R.id.kq_content, new AttendanceTeacherFragment());
+            //学生考勤
+            fragmentTransaction.replace(R.id.kq_banner_content, new AttendanceStudentFragment());
             //班级作业
             fragmentTransaction.replace(R.id.work_content, new WorkFragment());
             //班级相册
