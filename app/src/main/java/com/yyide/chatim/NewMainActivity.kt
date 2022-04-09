@@ -47,7 +47,10 @@ import com.yyide.chatim.base.MMKVConstant
 import com.yyide.chatim.chat.helper.TUIKitLiveListenerManager
 import com.yyide.chatim.databinding.ActivityNewMainBinding
 import com.yyide.chatim.fragment.schedule.ScheduleFragment2
-import com.yyide.chatim.home.*
+import com.yyide.chatim.home.HelpFragment
+import com.yyide.chatim.home.HomeFragment
+import com.yyide.chatim.home.MessageFragment
+import com.yyide.chatim.home.NAppFragment
 import com.yyide.chatim.jiguang.ExampleUtil
 import com.yyide.chatim.jiguang.LocalBroadcastManager
 import com.yyide.chatim.model.*
@@ -93,18 +96,60 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     private var curDateTime: DateTime? = null
 
     //身份切换
-    private val homeFragment = HomeFragment()
-    private val messageFragment = MessageFragment()
+    private var homeFragment = HomeFragment()
+    private var messageFragment = MessageFragment()
+    private var scheduleFragment = ScheduleFragment2()
+    private var appFragment = NAppFragment()
+    private var helpFragment = HelpFragment()
 
-    //    private val scheduleFragment = ScheduleFragment()
-    private val scheduleFragment = ScheduleFragment2()
 
-    //private val appFragment = AppFragment()
-    private val appFragment = NAppFragment()
-    private val helpFragment = HelpFragment()
+    private val fragmentList = mutableListOf<Fragment>()
+    private val homeFragmentStr = "homeFragment"
+    private val messageFragmentStr = "messageFragment"
+    private val scheduleFragmentStr = "scheduleFragment"
+    private val appFragmentStr = "appFragment"
+    private val helpFragmentStr = "helpFragment"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+
+            fragmentList.clear()
+            /*获取保存的fragment  没有的话返回null*/
+            homeFragment = supportFragmentManager.getFragment(
+                savedInstanceState,
+                homeFragmentStr
+            ) as HomeFragment
+            messageFragment = supportFragmentManager.getFragment(
+                savedInstanceState,
+                messageFragmentStr
+            ) as MessageFragment
+            scheduleFragment = supportFragmentManager.getFragment(
+                savedInstanceState,
+                scheduleFragmentStr
+            ) as ScheduleFragment2
+            appFragment = supportFragmentManager.getFragment(
+                savedInstanceState,
+                appFragmentStr
+            ) as NAppFragment
+            helpFragment = supportFragmentManager.getFragment(
+                savedInstanceState,
+                helpFragmentStr
+            ) as HelpFragment
+
+            addToFragmentList(homeFragment)
+            addToFragmentList(messageFragment)
+            addToFragmentList(scheduleFragment)
+            addToFragmentList(appFragment)
+            addToFragmentList(helpFragment)
+
+        } else {
+            initFragment()
+        }
+
+
         setScreenFull()
         EventBus.getDefault().register(this)
         registerMessageReceiver() // used for receive msg
@@ -163,15 +208,37 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         binding.tab1Layout.setOnClickListener {
             binding.ivHome.visibility = View.VISIBLE
             binding.tab1.visibility = View.INVISIBLE
-            setFragment(HOME_TYPE, homeFragment)
+            showFragment(HOME_TYPE, homeFragment)
         }
-        binding.tab2Layout.setOnClickListener { setFragment(SCHEDULE_TYPE, scheduleFragment) }
-        binding.tab3Layout.setOnClickListener { setFragment(MESSAGE_TYPE, messageFragment) }
-        binding.tab4Layout.setOnClickListener { setFragment(APP_TYPE, appFragment) }
-        binding.tab5Layout.setOnClickListener { setFragment(HELP_TYPE, helpFragment) }
+        binding.tab2Layout.setOnClickListener { showFragment(SCHEDULE_TYPE, scheduleFragment) }
+        binding.tab3Layout.setOnClickListener { showFragment(MESSAGE_TYPE, messageFragment) }
+        binding.tab4Layout.setOnClickListener { showFragment(APP_TYPE, appFragment) }
+        binding.tab5Layout.setOnClickListener { showFragment(HELP_TYPE, helpFragment) }
 
         //默认选中Home
-        setFragment(HOME_TYPE, homeFragment)
+        //setFragment(HOME_TYPE, homeFragment)
+    }
+
+    private fun initFragment() {
+        addFragment(homeFragment)
+        addFragment(messageFragment)
+        addFragment(scheduleFragment)
+        addFragment(appFragment)
+        addFragment(helpFragment)
+        showFragment(HOME_TYPE, homeFragment)
+    }
+
+    private fun addToFragmentList(fragment: Fragment?) {
+        fragment?.let {
+            fragmentList.add(it)
+        }
+    }
+
+    private fun addFragment(fragment: Fragment) {
+        if (!fragment.isAdded) {
+            supportFragmentManager.beginTransaction().add(binding.content.id, fragment).commit()
+            fragmentList.add(fragment)
+        }
     }
 
     private fun setFragment(type: Int, fragment: Fragment) {
@@ -189,6 +256,30 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
         binding.tab5.isChecked = type == HELP_TYPE
         supportFragmentManager.beginTransaction().replace(binding.content.id, fragment).commit()
     }
+
+    private fun showFragment(type: Int, fragment: Fragment) {
+        if (type != HOME_TYPE) {
+            binding.ivHome.visibility = View.INVISIBLE
+            binding.tab1.visibility = View.VISIBLE
+        } else {
+            binding.ivHome.visibility = View.VISIBLE
+            binding.tab1.visibility = View.INVISIBLE
+        }
+        binding.tab1.isChecked = type == HOME_TYPE
+        binding.tab2.isChecked = type == SCHEDULE_TYPE
+        binding.tab3.isChecked = type == MESSAGE_TYPE
+        binding.tab4.isChecked = type == APP_TYPE
+        binding.tab5.isChecked = type == HELP_TYPE
+
+        for (frag in fragmentList) {
+            if (frag != fragment) {
+                supportFragmentManager.beginTransaction().hide(frag).commit()
+            }
+        }
+
+        supportFragmentManager.beginTransaction().show(fragment).commit()
+    }
+
 
     private fun prepareThirdPushToken() {
         ThirdPushTokenMgr.getInstance().setPushTokenToTIM()
@@ -278,7 +369,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             if (secondTime - firstTime < 2000) {
                 ActivityUtils.finishAllActivities()
             } else {
-                setFragment(HOME_TYPE, homeFragment)
+                showFragment(HOME_TYPE, homeFragment)
                 Toast.makeText(applicationContext, "再按一次返回键退出", Toast.LENGTH_SHORT).show()
                 firstTime = System.currentTimeMillis()
             }
@@ -291,11 +382,11 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
     fun Event(messageEvent: EventMessage) {
         Log.e(TAG, "Event: " + messageEvent.code)
         if (BaseConstant.TYPE_CHECK_HELP_CENTER == messageEvent.code) {
-            setFragment(SCHEDULE_TYPE, scheduleFragment)
+            showFragment(SCHEDULE_TYPE, scheduleFragment)
         } else if (BaseConstant.TYPE_SELECT_MESSAGE_TODO == messageEvent.code) {
             ActivityUtils.finishToActivity(NewMainActivity::class.java, false)
 //            setTab(1, 1)
-            setFragment(MESSAGE_TYPE, messageFragment)
+            showFragment(MESSAGE_TYPE, messageFragment)
         } else if (BaseConstant.TYPE_UPDATE_HOME == messageEvent.code) {
             //registerAlias();
             AliasUtil.syncAliases()
@@ -303,11 +394,11 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             //ConversationManagerKit.getInstance().addUnreadWatcher(this);
         } else if (BaseConstant.TYPE_MAIN == messageEvent.code) {
             ActivityUtils.finishToActivity(NewMainActivity::class.java, false)
-            setFragment(HOME_TYPE, homeFragment)
+            showFragment(HOME_TYPE, homeFragment)
         } else if (BaseConstant.TYPE_MESSAGE == messageEvent.code) {
-            setFragment(MESSAGE_TYPE, messageFragment)
+            showFragment(MESSAGE_TYPE, messageFragment)
         } else if (BaseConstant.TYPE_SCHEDULE == messageEvent.code) {
-            setFragment(APP_TYPE, appFragment)
+            showFragment(APP_TYPE, appFragment)
         } else if (BaseConstant.TYPE_UPDATE_APP == messageEvent.code) {
             //模拟数据测试应用更新
             isShow = true
@@ -324,7 +415,7 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
                 scheduleMangeViewModel!!.getAllScheduleList()
             }
         } else if (BaseConstant.TYPE_HOME_CHECK_SCHEDULE == messageEvent.code) {
-            setFragment(SCHEDULE_TYPE, scheduleFragment)
+            showFragment(SCHEDULE_TYPE, scheduleFragment)
         }
     }
 
@@ -742,6 +833,15 @@ class NewMainActivity : KTBaseActivity<ActivityNewMainBinding>(ActivityNewMainBi
             e.printStackTrace()
         }
         return null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        supportFragmentManager.putFragment(outState, homeFragmentStr, homeFragment)
+        supportFragmentManager.putFragment(outState, messageFragmentStr, messageFragment)
+        supportFragmentManager.putFragment(outState, scheduleFragmentStr, scheduleFragment)
+        supportFragmentManager.putFragment(outState, appFragmentStr, appFragment)
+        supportFragmentManager.putFragment(outState, helpFragmentStr, helpFragment)
+        super.onSaveInstanceState(outState)
     }
 
 }
