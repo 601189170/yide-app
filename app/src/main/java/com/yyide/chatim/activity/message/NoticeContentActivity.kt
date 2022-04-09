@@ -43,7 +43,7 @@ class NoticeContentActivity:KTBaseActivity<ActivityNoticeContentBinding>(Activit
     override fun initView() {
         super.initView()
         noticeData = intent.getParcelableExtra<AcceptMessageItem>("data") ?: AcceptMessageItem()
-        if (noticeData.isConfirm){
+        if (noticeData.isConfirm || !noticeData.isNeedConfirm){
             binding.noticeContentSubmitBtn.hide()
         }
         if (noticeData.contentType == 1){

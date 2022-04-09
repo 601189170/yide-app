@@ -2,12 +2,6 @@ package com.yyide.chatim.activity.message.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.BackgroundColorSpan
-import android.text.style.DrawableMarginSpan
-import android.text.style.ImageSpan
 import android.view.Gravity
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -131,40 +125,54 @@ class NoticeFragment :
                     if (viewModel.selectContent?.id != "0" && item.isTop) {
                         viewBind.itemMessageContentTopIv.show()
                     }
-                    if (item.isView) {
-                        viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
-                            null,
-                            null,
-                            null,
-                            null
-                        )
-                    }
                     viewBind.itemMessageContentTitleTv.text = item.title
                     val subStr = "${item.identityUserName}发布于"
                     viewBind.itemMessageContentSubTv.text = subStr
                     viewBind.itemMessageContentSubTimeTv.text = item.timerDate
                     when (viewModel.selectContent?.id) {
                         viewModel.noticeTypeByReceive -> {
-                            if (item.isConfirm) {
-                                viewBind.itemMessageContentStateIv.hide()
-                                viewBind.itemMessageContentStateTv.text = "已确认"
-                                viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
-                            } else {
-                                viewBind.itemMessageContentStateIv.show()
-                                viewBind.itemMessageContentStateTv.text = "去确认"
-                                viewBind.itemMessageContentStateTv.setTextColor(R.color.punch_normal.asColor())
+                            if (item.isView) {
+                                viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
+                                    null,
+                                    null,
+                                    null,
+                                    null
+                                )
+                            }
+                            if (item.isNeedConfirm) {
+                                if (item.isConfirm) {
+                                    viewBind.itemMessageContentStateIv.hide()
+                                    viewBind.itemMessageContentStateTv.text = "已确认"
+                                    viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
+                                } else {
+                                    viewBind.itemMessageContentStateIv.show()
+                                    viewBind.itemMessageContentStateTv.text = "去确认"
+                                    viewBind.itemMessageContentStateTv.setTextColor(R.color.punch_normal.asColor())
+                                }
+                            }else{
+                                viewBind.itemMessageContentStateTv.remove()
+                                viewBind.itemMessageContentStateIv.remove()
                             }
                         }
                         viewModel.noticeTypeByPublish -> {
-                            viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
+                            viewBind.itemMessageContentStateTv.show()
+                            viewBind.itemMessageContentStateIv.show()
+                            viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
+                                null,
+                                null,
+                                null,
+                                null
+                            )
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "已发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
+                                viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.black10.asColor())
                             } else {
                                 viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "待发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.not_publish_color.asColor())
+                                viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
                             }
                         }
                     }
@@ -218,6 +226,7 @@ class NoticeFragment :
 
 
         viewModel.acceptMessage.observe(requireActivity()) {
+            binding.messageNoticeSfl.isRefreshing = false
             if (current == 1) {
                 dataAdapter.setList(it.acceptMessage)
             } else {
@@ -230,6 +239,13 @@ class NoticeFragment :
                 dataAdapter.loadMoreModule.loadMoreComplete()
             }
         }
+
+        binding.messageNoticeSfl.setOnRefreshListener {
+            current = 1
+            request()
+        }
+        binding.messageNoticeSfl.setColorSchemeColors(requireActivity().resources.getColor(R.color.colorPrimary))
+
 
     }
 

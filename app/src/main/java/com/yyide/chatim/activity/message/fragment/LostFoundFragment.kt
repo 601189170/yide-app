@@ -128,15 +128,32 @@ class LostFoundFragment :
                     viewBind.itemMessageContentStateIv.remove()
                     viewBind.itemMessageContentStateTv.remove()
                     when (viewModel.selectContent?.id) {
+                        viewModel.noticeTypeByReceive -> {
+                            if (item.isView) {
+                                viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
+                                    null,
+                                    null,
+                                    null,
+                                    null
+                                )
+                            }
+                        }
                         viewModel.noticeTypeByPublish -> {
-                            viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
+                            viewBind.itemMessageContentTitleTv.setCompoundDrawablesRelative(
+                                null,
+                                null,
+                                null,
+                                null
+                            )
                             viewBind.itemMessageContentStateTv.show()
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateTv.text = "已发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.black11.asColor())
+                                viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.black10.asColor())
                             } else {
                                 viewBind.itemMessageContentStateTv.text = "待发布"
                                 viewBind.itemMessageContentStateTv.setTextColor(R.color.not_publish_color.asColor())
+                                viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
                             }
                         }
                     }
@@ -205,6 +222,7 @@ class LostFoundFragment :
         binding.messageNoticeContentTimeTv.text = viewModel.selectContentTime?.name ?: "今日"
 
         viewModel.acceptMessage.observe(requireActivity()) {
+            binding.messageNoticeSfl.isRefreshing = false
             if (current == 1) {
                 dataAdapter.setList(it.acceptMessage)
             } else {
@@ -217,6 +235,12 @@ class LostFoundFragment :
                 dataAdapter.loadMoreModule.loadMoreComplete()
             }
         }
+
+        binding.messageNoticeSfl.setOnRefreshListener {
+            current = 1
+            request()
+        }
+        binding.messageNoticeSfl.setColorSchemeColors(requireActivity().resources.getColor(R.color.colorPrimary))
 
 
     }

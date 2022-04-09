@@ -32,5 +32,6 @@ data class AcceptMessageItem(
     var isRetract: Boolean = false,
     val isTimer: Boolean = false,
     var receiveUsers: String = "",
-    var notifyUsersInfo: String = ""
+    var notifyUsersInfo: String = "",
+    var isNeedConfirm: Boolean = false
 ) : Parcelable

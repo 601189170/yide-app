@@ -30,6 +30,8 @@ class ParentItemProvider: BaseNodeProvider() {
         val viewBind = ItemNotifyParentNameBinding.bind(helper.itemView)
         val eItem = item as ElternsItem
         viewBind.itemNoticeParentTv.text = eItem.name
-        viewBind.itemNoticeParentItemTv.text = list[eItem.relations.toInt()]
+        if (eItem.relations.trim().isNotEmpty()) {
+            viewBind.itemNoticeParentItemTv.text = list[eItem.relations.toInt()]
+        }
     }
 }
