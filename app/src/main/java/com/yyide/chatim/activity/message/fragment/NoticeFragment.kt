@@ -24,8 +24,12 @@ import com.yyide.chatim.databinding.FragmentMessageNoticeBinding
 import com.yyide.chatim.databinding.ItemMessageContentBinding
 import com.yyide.chatim.dialog.TableWeekPopUp
 import com.yyide.chatim.model.message.AcceptMessageItem
+import com.yyide.chatim.model.message.EventMessageBean
 import com.yyide.chatim.model.table.ChildrenItem
 import com.yyide.chatim.utils.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import razerdp.basepopup.BasePopupWindow
 
 
@@ -62,12 +66,36 @@ class NoticeFragment :
         }
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
         initView()
         initListener()
         request()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEventMessageHandle(item: EventMessageBean) {
+        if (item.type != 0 || dataAdapter.data.isNullOrEmpty()) {
+            return
+        }
+        val index = dataAdapter.data.indexOfFirst { it.id == item.item.id }
+        dataAdapter.data[index] = item.item
+        if (index != -1) {
+            dataAdapter.notifyItemChanged(index, null)
+        }
+
     }
 
     private fun initData() {
@@ -110,14 +138,13 @@ class NoticeFragment :
                             null,
                             null
                         )
-                        viewBind.itemMessageContentTitleTv.text = " ${item.title}"
-                    }else{
-                        viewBind.itemMessageContentTitleTv.text = item.title
                     }
-                    val subStr = "${item.identityUserName}发布于${item.timerDate}"
+                    viewBind.itemMessageContentTitleTv.text = item.title
+                    val subStr = "${item.identityUserName}发布于"
                     viewBind.itemMessageContentSubTv.text = subStr
-                    when(viewModel.selectContent?.id){
-                        viewModel.noticeTypeByReceive ->{
+                    viewBind.itemMessageContentSubTimeTv.text = item.timerDate
+                    when (viewModel.selectContent?.id) {
+                        viewModel.noticeTypeByReceive -> {
                             if (item.isConfirm) {
                                 viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "已确认"
@@ -129,6 +156,7 @@ class NoticeFragment :
                             }
                         }
                         viewModel.noticeTypeByPublish -> {
+                            viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateIv.hide()
                                 viewBind.itemMessageContentStateTv.text = "已发布"
@@ -149,6 +177,7 @@ class NoticeFragment :
         binding.messageNoticeRv.adapter = dataAdapter
         dataAdapter.setEmptyView(R.layout.empty)
         dataAdapter.loadMoreModule.setOnLoadMoreListener {
+            logd("current = $current")
             dataAdapter.loadMoreModule.isEnableLoadMore = true
             current++
             request()
@@ -183,7 +212,9 @@ class NoticeFragment :
         }
 
         contentPopUp.setData(viewModel.mContentList, viewModel.selectContent)
+        binding.messageNoticeContentTv.text = viewModel.selectContent?.name ?: "我收到的"
         contentTimePopUp.setData(viewModel.mContentTimeList, viewModel.selectContentTime)
+        binding.messageNoticeContentTimeTv.text = viewModel.selectContentTime?.name ?: "今日"
 
 
         viewModel.acceptMessage.observe(requireActivity()) {

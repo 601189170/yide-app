@@ -9,7 +9,9 @@ import com.yyide.chatim.activity.message.viewmodel.NoticeContentViewModel
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityNoticeContentBinding
 import com.yyide.chatim.model.message.AcceptMessageItem
+import com.yyide.chatim.model.message.EventMessageBean
 import com.yyide.chatim.utils.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  *
@@ -19,7 +21,7 @@ import com.yyide.chatim.utils.*
  */
 class NoticeContentActivity:KTBaseActivity<ActivityNoticeContentBinding>(ActivityNoticeContentBinding::inflate) {
 
-    private var noticeData:AcceptMessageItem ?= null
+    private lateinit var noticeData:AcceptMessageItem
 
     private val viewModel by viewModels<NoticeContentViewModel>()
 
@@ -34,52 +36,56 @@ class NoticeContentActivity:KTBaseActivity<ActivityNoticeContentBinding>(Activit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initListener()
+        viewModel.getDetail(noticeData.receiveId,noticeData.contentType,noticeData.messType)
     }
 
 
     override fun initView() {
         super.initView()
-        noticeData = intent.getParcelableExtra<AcceptMessageItem>("data")
-        noticeData?.let {
-            if (it.isConfirm){
-                binding.noticeContentSubmitBtn.hide()
-            }
-            if (it.contentType == 1){
-                binding.noticeContentIv.show()
-                binding.noticeContentText.hide()
-            }else{
-                binding.noticeContentIv.hide()
-                binding.noticeContentText.show()
-            }
-            viewModel.getDetail(it.receiveId,it.contentType,it.messType)
+        noticeData = intent.getParcelableExtra<AcceptMessageItem>("data") ?: AcceptMessageItem()
+        if (noticeData.isConfirm){
+            binding.noticeContentSubmitBtn.hide()
         }
+        if (noticeData.contentType == 1){
+            binding.noticeContentIv.show()
+            binding.noticeContentMv.hide()
+        }else{
+            binding.noticeContentIv.hide()
+            binding.noticeContentMv.show()
+        }
+
+
 
         viewModel.messageInfo.observe(this){
 
             val data = it.getOrNull() ?: return@observe
             binding.noticeContentTop.title.text = data.title
 
-            val subStr = "${data.source}发布于${data.timerDate}"
+            val subStr = "${data.identityUserName}发布于${data.timerDate}"
             binding.noticeContentSubTv.text = subStr
 
             if (data.contentType == 1){
                 GlideUtil.loadImage(this,GlideUtil.DataUrl(data.contentImg),binding.noticeContentIv)
             }else{
-                val str = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    Html.fromHtml(data.content,Html.FROM_HTML_MODE_LEGACY).toString()
-                } else {
-                    Html.fromHtml(data.content).toString()
-                }
-                binding.noticeContentText.text = str
+                binding.noticeContentMv.loadDataWithBaseURL(
+                    null,
+                    data.content,
+                    "text/html",
+                    "utf-8",
+                    null
+                )
             }
         }
 
         viewModel.confirmInfo.observe(this){
+            hideLoading()
             val result = it.getOrNull()
             if (result == null){
                 showShotToast("确认失败")
                 return@observe
             }
+            noticeData.isConfirm = true
+            EventBus.getDefault().post(EventMessageBean(0,noticeData))
             binding.noticeContentSubmitBtn.hide()
         }
 
@@ -91,7 +97,8 @@ class NoticeContentActivity:KTBaseActivity<ActivityNoticeContentBinding>(Activit
         }
 
         binding.noticeContentSubmitBtn.setOnClickListener {
-            viewModel.confirmDetail(noticeData?.receiveId ?: 0)
+            showLoading()
+            viewModel.confirmDetail(noticeData.receiveId)
         }
 
     }

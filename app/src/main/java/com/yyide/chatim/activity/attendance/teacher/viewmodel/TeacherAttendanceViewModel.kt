@@ -46,7 +46,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
     val punchTypeWifi = 2
     val punchTypeFieldwork = 3
 
-    var saveLocationInfo:AMapLocation ?= null
+    var saveLocationInfo: AMapLocation? = null
 
     var wifiInfo: WifiInfo? = null
 
@@ -57,7 +57,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
 
         saveLocationInfo = locationInfo
 
-        
+
         if (punchMessage.value == null || punchMessage.value?.getOrNull() == null) {
             return
         }
@@ -73,7 +73,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
                     for (wifiItem in it.wifiList) {
                         if (wifi.bssid.equals(wifiItem.wifiMac)) {
                             info.showContent = String.format(
-                                getApplication<Application>().resources.getString(R.string.attendance_in_wifi),
+                                getApplication<Application>().resources.getString(R.string.attendance_in_range),
                                 wifiItem.wifiName
                             )
                             info.type = punchTypeWifi
@@ -117,8 +117,11 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
                 info.showContent = locationInfo.address
             }
         }
-
-        if (info.type != punchInfo.value?.type) {
+        // 打卡类型变化了
+        if (info.type != punchInfo.value?.type ||
+            // 如果是外勤打卡并且描述是不一样的
+            (info.type == punchTypeFieldwork && info.showContent != punchInfo.value?.showContent)
+        ) {
             punchInfoLivaData.value = info
         }
 
@@ -162,7 +165,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
                             val map = mutableMapOf<String, Any>()
                             map["geo"] = saveLocationInfo?.longitude ?: ""
                             map["lat"] = saveLocationInfo?.latitude ?: ""
-                            map["wifiName"] = info.ssid.replace("\"","")
+                            map["wifiName"] = info.ssid.replace("\"", "")
                             map["wifiMac"] = info.bssid
                             map["face"] = ""
                             map["addressName"] = saveLocationInfo?.address ?: ""
@@ -188,7 +191,7 @@ class TeacherAttendanceViewModel(application: Application) : AndroidViewModel(ap
     ) {
         val map = mutableMapOf<String, Any>()
         map["geo"] = if (geo == 0.0) saveLocationInfo?.longitude ?: 0.0 else geo
-        map["lat"] = if (lat == 0.0) saveLocationInfo?.latitude ?: 0.0  else lat
+        map["lat"] = if (lat == 0.0) saveLocationInfo?.latitude ?: 0.0 else lat
         map["wifiName"] = wifiName
         map["wifiMac"] = wifiMac
         map["addressName"] = saveLocationInfo?.address ?: ""

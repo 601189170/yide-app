@@ -25,6 +25,7 @@ import com.yyide.chatim.model.schedule.SearchParticipantRsp
 import com.yyide.chatim.model.schedule.toParticipantListBean
 import com.yyide.chatim.utils.DisplayUtils
 import com.yyide.chatim.utils.loge
+import com.yyide.chatim.utils.show
 import com.yyide.chatim.view.SpacesFlowItemDecoration
 import com.yyide.chatim.viewmodel.ParticipantSharedViewModel
 import com.yyide.chatim.viewmodel.StaffParticipantViewModel
@@ -109,6 +110,7 @@ class StaffParticipantFragment : Fragment() {
         )
         navAdapter.setList(staffParticipantViewModel.getParticipantList().value)
         staffParticipantBinding.rvTopNavList.adapter = navAdapter
+        navAdapter.setEmptyView(R.layout.empty)
         navAdapter.setOnItemClickListener { _, _, position ->
             staffParticipantViewModel.getParticipantList().value?.also {
                 loge("查看部门：${it[position].name}")
@@ -237,6 +239,10 @@ class StaffParticipantFragment : Fragment() {
                     participantListBean?.id ?: "", participantListBean?.type ?: "1", "2"
                 )
             }
+            PARTICIPANT_TYPE_MEETING_GUARDIAN -> {
+                staffParticipantBinding.staffParticipantEmpty.tvDesc.text= "会议不支持勾选学生家长"
+                staffParticipantBinding.staffParticipantEmpty.root.show()
+            }
             else -> {
             }
         }
@@ -360,6 +366,9 @@ class StaffParticipantFragment : Fragment() {
 
         //家长监护人
         const val PARTICIPANT_TYPE_GUARDIAN = 3
+
+        //从会议进来的家长监护人
+        const val PARTICIPANT_TYPE_MEETING_GUARDIAN = 4
 
         @JvmStatic
         fun newInstance(type: Int) =

@@ -1,5 +1,7 @@
 package com.yyide.chatim.activity.message
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.SparseArray
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import com.yyide.chatim.activity.message.fragment.NoticeFragment
 import com.yyide.chatim.adapter.message.MessageFragmentPager
 import com.yyide.chatim.base.KTBaseActivity
 import com.yyide.chatim.databinding.ActivityMessagePushBinding
+import com.yyide.chatim.model.message.AcceptMessageItem
 
 /**
  *
@@ -16,9 +19,16 @@ import com.yyide.chatim.databinding.ActivityMessagePushBinding
  * @date 2022/4/6 15:20
  * @description dev2 信息发布界面
  */
-class MessagePushActivity:KTBaseActivity<ActivityMessagePushBinding>(ActivityMessagePushBinding::inflate) {
+class MessagePushActivity :
+    KTBaseActivity<ActivityMessagePushBinding>(ActivityMessagePushBinding::inflate) {
 
-    companion object{
+    companion object {
+
+        fun startGo(context: Context) {
+            val intent = Intent(context, MessagePushActivity::class.java)
+            context.startActivity(intent)
+        }
+
         const val PAGE_NOTICE = 0
         const val PAGE_LOST = 1
     }
@@ -37,7 +47,12 @@ class MessagePushActivity:KTBaseActivity<ActivityMessagePushBinding>(ActivityMes
         }
 
         binding.messagePushVp.adapter = MessageFragmentPager(this)
-        TabLayoutMediator(binding.messagePushTl, binding.messagePushVp, true, false) { tab, position ->
+        TabLayoutMediator(
+            binding.messagePushTl,
+            binding.messagePushVp,
+            true,
+            false
+        ) { tab, position ->
             when (position) {
                 PAGE_NOTICE -> {
                     tab.text = "通知公告"
@@ -49,7 +64,7 @@ class MessagePushActivity:KTBaseActivity<ActivityMessagePushBinding>(ActivityMes
         }.attach()
     }
 
-    private fun initListener(){
+    private fun initListener() {
 
     }
 

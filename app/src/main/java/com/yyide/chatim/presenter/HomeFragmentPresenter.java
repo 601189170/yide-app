@@ -30,7 +30,6 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
     }
 
     public void getUserSchool() {
-//        mvpView.showLoading();
         addSubscription(dingApiStores.getUserSchool(), new ApiCallback<GetUserSchoolRsp>() {
             @Override
             public void onSuccess(GetUserSchoolRsp model) {
@@ -49,7 +48,7 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
         });
     }
 
-    public void getNotice() {
+    /*public void getNotice() {
         addSubscription(dingApiStores.noticeShow(), new ApiCallback<NoticeMyReleaseDetailBean>() {
             @Override
             public void onSuccess(NoticeMyReleaseDetailBean model) {
@@ -86,6 +85,6 @@ public class HomeFragmentPresenter extends BasePresenter<HomeFragmentView> {
                 mvpView.hideLoading();
             }
         });
-    }
+    }*/
 
 }

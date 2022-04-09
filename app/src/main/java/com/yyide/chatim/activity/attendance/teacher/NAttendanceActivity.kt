@@ -121,7 +121,8 @@ class NAttendanceActivity :
                 val signTypeStr =
                     if (item.signType == 0) getString(R.string.sign_in) else getString(R.string.sign_out)
                 val timeStr = "$signTypeStr${item.shouldSignTime}"
-                val signStr = if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
+                val signStr =
+                    if (item.signResult == "未打卡") getString(R.string.not_punched) else "已打卡"
                 val actualSignTime = "${item.actualSignTime}$signStr"
                 binding.tvPunchTime.text = timeStr
                 binding.tvPunchState.text = actualSignTime
@@ -163,8 +164,14 @@ class NAttendanceActivity :
                 binding.tvTeacherAttendanceName.text = bean.personName
                 punchRecordAdapter.setList(bean.signTimeList)
                 if (!bean.canSign) {
-                    viewModel.setPunchInfo(PunchInfoBean(viewModel.punchTypeNOT, bean.signMessage))
+                    viewModel.setPunchInfo(
+                        PunchInfoBean(
+                            viewModel.punchTypeNOT,
+                            bean.signMessage ?: ""
+                        )
+                    )
                 } else {
+                    //viewModel.judgePunchFunction(viewModel.saveLocationInfo!!)
                     val type = when {
                         bean.satisfyByAddress -> {
                             viewModel.punchTypeAddress
@@ -176,7 +183,7 @@ class NAttendanceActivity :
                             viewModel.punchTypeFieldwork
                         }
                     }
-                    viewModel.setPunchInfo(PunchInfoBean(type, bean.signMessage))
+                    viewModel.setPunchInfo(PunchInfoBean(type, bean.signMessage ?: ""))
                 }
             }
         }
@@ -212,12 +219,13 @@ class NAttendanceActivity :
         // 打卡成功后重新刷新下ui
         viewModel.punchResult.observe(this) {
             if (it.isSuccess) {
+                showShotToast(it.getOrNull() ?: "打卡成功")
                 showLoading()
                 val wifi = WifiTool.getConnectedWifiInfo(applicationContext)
                 val wifiName = wifi?.ssid?.replace("\"", "") ?: ""
                 val wifiMac = wifi?.bssid ?: ""
                 viewModel.queryPunchMessage(wifiName = wifiName, wifiMac = wifiMac)
-            }else{
+            } else {
                 showShotToast("打卡失败")
             }
         }
@@ -240,7 +248,7 @@ class NAttendanceActivity :
                 return@setOnClickListener
             }
 
-            if (isFastClick()){
+            if (isFastClick()) {
                 showShotToast("请15s后再更新打卡")
                 return@setOnClickListener
             }
@@ -252,7 +260,7 @@ class NAttendanceActivity :
     }
 
     private var lastClickTime: Long = 0
-    private val MIN_CLICK_DELAY_TIME = 15*1000
+    private val MIN_CLICK_DELAY_TIME = 15 * 1000
 
     private fun isFastClick(): Boolean {
         var flag = false

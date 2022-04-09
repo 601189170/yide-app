@@ -281,6 +281,7 @@ class MeetingSaveActivity : BaseActivity() {
         viewBinding.tvParticipant.setOnClickListener {
             val intent = Intent(this, ScheduleParticipantActivity::class.java)
             intent.putExtra("data", JSON.toJSONString(viewModel.participantList.value))
+            intent.putExtra("type","meeting")
             startActivity.launch(intent)
             resultCode = REQUEST_CODE_PARTICIPANT_SELECT
 

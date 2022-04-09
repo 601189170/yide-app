@@ -18,8 +18,12 @@ import com.yyide.chatim.databinding.FragmentMessageNoticeBinding
 import com.yyide.chatim.databinding.ItemMessageContentBinding
 import com.yyide.chatim.dialog.TableWeekPopUp
 import com.yyide.chatim.model.message.AcceptMessageItem
+import com.yyide.chatim.model.message.EventMessageBean
 import com.yyide.chatim.model.table.ChildrenItem
 import com.yyide.chatim.utils.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import razerdp.basepopup.BasePopupWindow
 
 /**
@@ -64,6 +68,27 @@ class LostFoundFragment :
         request()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEventMessageHandle(item: EventMessageBean) {
+        if (item.type != 1 || dataAdapter.data.isNullOrEmpty()) {
+            return
+        }
+        val index = dataAdapter.data.indexOfFirst { it.id == item.item.id }
+        if (index != -1) {
+            dataAdapter.notifyItemChanged(index, item)
+        }
+    }
+
     private fun initData() {
         viewModel.mContentList.clear()
         viewModel.mContentList.add(ChildrenItem("我收到的", id = viewModel.noticeTypeByReceive))
@@ -93,13 +118,18 @@ class LostFoundFragment :
                 LoadMoreModule {
                 override fun convert(holder: BaseViewHolder, item: AcceptMessageItem) {
                     val viewBind = ItemMessageContentBinding.bind(holder.itemView)
+                    if (viewModel.selectContent?.id != "0" && item.isTop) {
+                        viewBind.itemMessageContentTopIv.show()
+                    }
                     viewBind.itemMessageContentTitleTv.text = item.title
-                    val subStr = "${item.identityUserName}发布于${item.timerDate}"
+                    val subStr = "${item.identityUserName}发布于"
                     viewBind.itemMessageContentSubTv.text = subStr
-                    viewBind.itemMessageContentStateIv.hide()
-                    viewBind.itemMessageContentStateTv.hide()
-                    when(viewModel.selectContent?.id){
+                    viewBind.itemMessageContentSubTimeTv.text = item.timerDate
+                    viewBind.itemMessageContentStateIv.remove()
+                    viewBind.itemMessageContentStateTv.remove()
+                    when (viewModel.selectContent?.id) {
                         viewModel.noticeTypeByPublish -> {
+                            viewBind.itemMessageContentSubTimeTv.setTextColor(R.color.not_publish_color.asColor())
                             viewBind.itemMessageContentStateTv.show()
                             if (TimeUtil.isDateOver3(item.timerDate)) {
                                 viewBind.itemMessageContentStateTv.text = "已发布"
@@ -126,7 +156,7 @@ class LostFoundFragment :
             val jumpData = adapter.data[position] as AcceptMessageItem
             if (viewModel.selectContent?.id == viewModel.noticeTypeByReceive) {
                 NoticeContentActivity.startGo(requireContext(), jumpData)
-            }else{
+            } else {
                 PublishContentActivity.startGo(requireContext(), jumpData)
             }
         }
@@ -170,7 +200,9 @@ class LostFoundFragment :
         }
 
         contentPopUp.setData(viewModel.mContentList, viewModel.selectContent)
+        binding.messageNoticeContentTv.text = viewModel.selectContent?.name ?: "我收到的"
         contentTimePopUp.setData(viewModel.mContentTimeList, viewModel.selectContentTime)
+        binding.messageNoticeContentTimeTv.text = viewModel.selectContentTime?.name ?: "今日"
 
         viewModel.acceptMessage.observe(requireActivity()) {
             if (current == 1) {

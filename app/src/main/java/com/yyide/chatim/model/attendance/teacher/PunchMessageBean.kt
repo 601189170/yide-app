@@ -3,7 +3,7 @@ package com.yyide.chatim.model.attendance.teacher
 data class PunchMessageBean(val canSignInOutside: Boolean = false,
                             val canSignByWifi: Boolean = false,
                             val canSignByDevice: Boolean = false,
-                            val signMessage: String = "",
+                            val signMessage: String ?= "",
                             val signInOrOut: Int = 0,
                             val canSign: Boolean = false,
                             val todayNeedSign: Boolean = false,
