@@ -24,6 +24,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.yyide.chatim.R
+import com.yyide.chatim.SpData
 import com.yyide.chatim.base.BaseActivity
 import com.yyide.chatim.database.ScheduleDaoUtil
 import com.yyide.chatim.database.ScheduleDaoUtil.promoterSelf
@@ -182,6 +183,13 @@ class ScheduleEditActivityMain : BaseActivity() {
         from = intent.getStringExtra("from")
 
         type = intent.getStringExtra("type")
+        if (SpData.getIdentityInfo().staffIdentity()) {
+            scheduleEditBinding.tvBt6.visibility=View.VISIBLE
+            scheduleEditBinding.clParticipant.visibility=View.VISIBLE
+        }else{
+            scheduleEditBinding.tvBt6.visibility=View.GONE
+            scheduleEditBinding.clParticipant.visibility=View.GONE
+        }
         val scheduleData = JSON.parseObject(stringExtra, ScheduleData::class.java)
         val format = getString(R.string.schedule_create_time_and_status)
         scheduleData?.let {

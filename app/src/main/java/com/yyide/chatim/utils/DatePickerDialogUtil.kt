@@ -10,6 +10,7 @@ import com.loper7.date_time_picker.DateTimeConfig
 import com.loper7.date_time_picker.dialog.CardDatePickerDialog
 import com.yyide.chatim.R
 import com.yyide.chatim.database.ScheduleDaoUtil.toDateTime
+import com.yyide.chatim.databinding.DialogShowDateYearAndMonth2Binding
 import com.yyide.chatim.databinding.DialogShowDateYearAndMonthBinding
 import com.yyide.chatim.widget.WheelView
 import org.joda.time.DateTime
@@ -209,7 +210,7 @@ object DatePickerDialogUtil {
         endDate: DateTime,
         onDateSetListener: (datetime: DateTime) -> Unit
     ) {
-        val binding = DialogShowDateYearAndMonthBinding.inflate(LayoutInflater.from(context))
+        val binding = DialogShowDateYearAndMonth2Binding.inflate(LayoutInflater.from(context))
         val rootView = binding.root
         val mDialog = Dialog(context, R.style.dialog)
         mDialog.setContentView(rootView)
@@ -305,8 +306,8 @@ object DatePickerDialogUtil {
             onDateSetListener(toDateTime)
         }
         val dialogWindow = mDialog.window
-        dialogWindow!!.setGravity(Gravity.BOTTOM)
-        dialogWindow.setWindowAnimations(R.style.popwin_anim_style2)
+        dialogWindow!!.setGravity(Gravity.TOP)
+        dialogWindow.setWindowAnimations(R.style.popwin_anim_style_top)
         val lp = dialogWindow.attributes
         lp.width = context.resources.displayMetrics.widthPixels
         lp.height = DisplayUtils.dip2px(context, 380f)

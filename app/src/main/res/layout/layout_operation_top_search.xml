@@ -106,8 +106,8 @@
 
         <TextView
             android:id="@+id/tvStartTime"
-            android:layout_width="66dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:text="2021-08-01"
             android:textColor="#ff909399"

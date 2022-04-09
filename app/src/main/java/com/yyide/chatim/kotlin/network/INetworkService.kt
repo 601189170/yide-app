@@ -204,7 +204,6 @@ interface INetworkService {
      * 教职工查看详情
      */
     @GET("/cloud/app/work/getSchoolWork")
-//    suspend fun getSchoolWorkData(@Query("id") id: String): BaseResponse<getSchoolWork>
     suspend fun getSchoolWorkData(@Query("id") id: String): BaseResponse<getSchoolWork>
 
     /**
@@ -212,4 +211,68 @@ interface INetworkService {
      */
     @GET("/cloud/appCenter/list")
     suspend fun getAppList(): BaseResponse<MutableList<NewAppRspJ>>
+
+
+    /**
+     * 作业-撤销
+     */
+    @GET("/cloud/app/work/delete")
+    suspend fun deleteWork(@Query("id") id: String): BaseResponse<Boolean>
+
+    /**
+     * 教职工作业-提醒家长
+     */
+    @POST("/cloud/app/work/updateRemind")
+    suspend fun updateRemind(@Body requestBody: RequestBody): BaseResponse<Boolean>
+
+    /**
+     * 家长列表获取学生数据
+     */
+    @GET("/cloud/app/work/selectParentStudent")
+    suspend fun selectParentStudent(): BaseResponse<List<selectParentStudent>>
+
+    /**
+     * 家长列表获取学生数据
+     */
+    @POST("/cloud/app/work/selectParentPage")
+    suspend fun selectParentPage(@Body requestBody: RequestBody): BaseResponse<List<selectParentStudent>>
+
+    /**
+     * 家长查看作业详情
+     */
+    @GET("/cloud/app/work/getSchoolWorkFeedback")
+    suspend fun getSchoolWorkFeedback(@Query("id") id: String): BaseResponse<getSchoolWorkFeedback>
+
+
+    /**
+     * 家长-提交反馈
+     */
+    @GET("/cloud/app/work/updateWorkFeedback")
+    suspend fun updateWorkFeedback(@Body requestBody: RequestBody): BaseResponse<Boolean>
+
+    /**
+     * 获取关联课表
+     */
+    @POST("/cloud/app/timetable/getWeekTime")
+    suspend fun getWeekTime(@Body requestBody: RequestBody): BaseResponse<getWeekTimeRsp>
+
+    /**
+     * 作业添加-获取科目
+     */
+    @GET("/cloud/app/work/selectSubjectByUserId")
+    suspend fun selectSubjectByUserId(): BaseResponse<List<selectSubjectByUserIdRsp>>
+
+
+    /**
+     * 作业添加-获取班级
+     */
+    @GET("/cloud/app/timetable/getClassList")
+    suspend fun getClassList(): BaseResponse<List<getClassList>>
+
+    /**
+     * 作业-添加
+     */
+    @POST("/cloud/app/work/create")
+    suspend fun createWork(@Body requestBody: RequestBody): BaseResponse<Boolean>
 }
+

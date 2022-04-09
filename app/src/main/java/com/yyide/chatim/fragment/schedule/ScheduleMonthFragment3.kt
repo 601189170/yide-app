@@ -71,7 +71,7 @@ import org.joda.time.format.DateTimeFormatter
  * @description 日程/月
  */
 class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
-    SwipeRefreshLayout.OnRefreshListener {
+    SwipeRefreshLayout.OnRefreshListener,ScheduleListAdapter.ImgListener {
 //    lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonth2Binding
     lateinit var fragmentScheduleMonthBinding: FragmentScheduleMonth3Binding
 //    private var list = mutableListOf<ScheduleOuter>()
@@ -249,6 +249,7 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
         itemAnimator.supportsChangeAnimations = false
         rvScheduleList.setItemAnimator(itemAnimator)
         ScheduleMonthAdapter = ScheduleListAdapter()
+        ScheduleMonthAdapter.setImgListener(this)
 //        todayScheduleTodayAdapter = ScheduleListAdapter()
         rvScheduleList.setSwipeMenuCreator(swipeMenuCreator)
         rvScheduleList.setOnItemMenuClickListener(mMenuItemClickListener)
@@ -315,13 +316,19 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                     val type = scheduleData.type
                     when(type.toInt()){
                         Schedule.SCHEDULE_TYPE_SCHEDULE ->{
+//                            if (menuPosition == 0) {
+//                                loge("修改")
+//                                curModifySchedule = scheduleData
+//                                scheduleEditViewModel.changeScheduleState(scheduleData)
+//                                return@OnItemMenuClickListener
+//                            }
+//                            if (menuPosition == 1) {
+//                                loge("删除")
+//                                curModifySchedule = scheduleData
+//                                scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+//                                return@OnItemMenuClickListener
+//                            }
                             if (menuPosition == 0) {
-                                loge("修改")
-                                curModifySchedule = scheduleData
-                                scheduleEditViewModel.changeScheduleState(scheduleData)
-                                return@OnItemMenuClickListener
-                            }
-                            if (menuPosition == 1) {
                                 loge("删除")
                                 curModifySchedule = scheduleData
                                 scheduleEditViewModel.deleteScheduleById(scheduleData.id)
@@ -618,11 +625,11 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
                         run {
                             when (type.toInt()) {
                                 Schedule.SCHEDULE_TYPE_SCHEDULE -> {
-                                    if (scheduleData.status == "1") {
-                                        swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
-                                    } else {
-                                        swipeRightMenu.addMenuItem(markCompletedMenuItem)
-                                    }
+//                                    if (scheduleData.status == "1") {
+//                                        swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+//                                    } else {
+//                                        swipeRightMenu.addMenuItem(markCompletedMenuItem)
+//                                    }
                                     swipeRightMenu.addMenuItem(delMenuItem)
                                 }
                                 Schedule.SCHEDULE_TYPE_CONFERENCE -> {
@@ -716,5 +723,10 @@ class ScheduleMonthFragment3 : Fragment(), OnCalendarClickListener,
     override fun onRefresh() {
         refresh = true
         EventBus.getDefault().post(EventMessage(BaseConstant.TYPE_UPDATE_SCHEDULE_LIST_DATA,""))
+    }
+
+    override fun OnimgSelect(item: ScheduleData) {
+        curModifySchedule = item
+        scheduleEditViewModel.changeScheduleState(item)
     }
 }

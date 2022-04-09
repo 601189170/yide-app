@@ -143,7 +143,11 @@ class StaffParticipantFragment : Fragment() {
             loge("选择人员：$position")
             staffParticipantViewModel.curParticipantList.value?.also { curList ->
                 val participantListBean = curList[position]
+                Log.e("TAG", "onViewCreated: "+JSON.toJSONString(participantListBean) )
                 if (participantListBean.department) {
+                    Log.e("TAG", "participantListBean.department: "+JSON.toJSONString(participantListBean) )
+                    Log.e("TAG", "listCache: "+JSON.toJSONString(listCache) )
+
                     val dataBean = listCache[participantListBean.name]
                     if (dataBean != null) {
                         curList.clear()

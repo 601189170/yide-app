@@ -29,7 +29,8 @@ data class StudentGuardianRsp(
                 val showName: String? = null,
                 val id: String? = null,
                 val type: String? = null,
-                val participantList:List<ParticipantRsp.DataBean.ParticipantListBean>? = null
+                val participantList:List<ParticipantRsp.DataBean.ParticipantListBean>? = null,
+                val guardians:List<ParticipantRsp.DataBean.ParticipantListBean>
             )
 
     }

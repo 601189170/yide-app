@@ -1,6 +1,7 @@
 package com.yyide.chatim.adapter.schedule
 
 import android.view.View
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import com.alibaba.fastjson.JSON
@@ -35,6 +36,14 @@ class ScheduleTodayAdapter(type: Int,data: List<ScheduleData>) :
         )
         this.myType = type
     }
+    private  var listener: ImgListener?=null
+
+    fun setImgListener(listener: ImgListener){
+        this.listener=listener
+    }
+    interface ImgListener{
+        fun OnimgSelect(item: ScheduleData)
+    }
     /**
      * 相同的布局设置
      */
@@ -47,6 +56,22 @@ class ScheduleTodayAdapter(type: Int,data: List<ScheduleData>) :
             holder.getView(R.id.iv_schedule_type_img)
         )
         holder.getView<TextView>(R.id.iv_mine_label).visibility = if (item.promoterSelf()) View.VISIBLE else View.GONE
+        if (item.promoterSelf()){
+            holder.getView<CheckBox>(R.id.iv_finish_tag).visibility=View.VISIBLE
+            holder.getView<CheckBox>(R.id.iv_finish_tag).isEnabled=true
+            if (item.status == "1") {
+                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=true
+            } else {
+                holder.getView<CheckBox>(R.id.iv_finish_tag).isChecked=false
+            }
+
+            holder.getView<CheckBox>(R.id.iv_finish_tag).setOnClickListener(View.OnClickListener {
+                if (listener!=null){
+                    listener!!.OnimgSelect(item)
+                }
+            })
+        }
+
         //今日清单：
         //全天不跨天   全天
         //全天跨天     全天 第1天，共3天

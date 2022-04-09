@@ -93,24 +93,35 @@ public class SwitchClassAndSubjectPop extends PopupWindow {
         time.setCyclic(false);
         time.setTextColorCenter(context.getResources().getColor(R.color.text_333333));
         time.setTextColorOut(context.getResources().getColor(R.color.text_999999));
-        ljAdapter = new TimeWheelAdapter(getljData());
-        if (ljAdapter.stringList.size()>0)
+        if (getljData().size()>0){
+            ljAdapter = new TimeWheelAdapter(getljData());
+            time.setAdapter(ljAdapter);
+            date1 = (getClassSubjectListRsp) ljAdapter.stringList.get(0);
+        }
+
+        if (ljAdapter.stringList.size()>0){
             classAdapter= new TimeWheelAdapter(getclassData(ljAdapter.stringList.get(0)));
-        if (classAdapter.stringList.size()>0)
-        subjectAdapter = new TimeWheelAdapter(getSubjectData(classAdapter.stringList.get(0)));
+            hour_time.setAdapter(classAdapter);
+            date2 = (getClassSubjectListRsp) classAdapter.stringList.get(0);
+        }
 
-        time.setAdapter(ljAdapter);
 
-        hour_time.setAdapter(classAdapter);
+        if (classAdapter.stringList.size()>0){
+            subjectAdapter = new TimeWheelAdapter(getSubjectData(classAdapter.stringList.get(0)));
+            minute_time.setAdapter(subjectAdapter);
+            date3 = (getClassSubjectListRsp) subjectAdapter.stringList.get(0);
+        }
 
-        minute_time.setAdapter(subjectAdapter);
+
+
+
 
         time.setOnItemSelectedListener(index -> {
 
             classAdapter= new TimeWheelAdapter(getclassData(ljAdapter.stringList.get(index)));
             hour_time.setAdapter(classAdapter);
             date1 = (getClassSubjectListRsp) ljAdapter.stringList.get(index);
-//            hour_time.setCurrentItem(0);
+            hour_time.setCurrentItem(0);
 //            minute_time.setCurrentItem(0);
         });
 
@@ -119,7 +130,10 @@ public class SwitchClassAndSubjectPop extends PopupWindow {
         hour_time.setCyclic(false);
         hour_time.setTextColorCenter(context.getResources().getColor(R.color.text_333333));
         hour_time.setTextColorOut(context.getResources().getColor(R.color.text_999999));
+        time.setCurrentItem(0);
         hour_time.setCurrentItem(0);
+        minute_time.setCurrentItem(0);
+
         hour_time.setOnItemSelectedListener(index -> {
 
 
@@ -129,7 +143,7 @@ public class SwitchClassAndSubjectPop extends PopupWindow {
 
             date2 = (getClassSubjectListRsp) classAdapter.stringList.get(index);
 
-//            minute_time.setCurrentItem(0);
+            minute_time.setCurrentItem(0);
         });
 
         minute_time.setCyclic(false);

@@ -124,7 +124,13 @@
             android:exported="false"
             tools:ignore="Instantiatable" />
         <activity
-            android:name=".activity.operation.OperationActivity"
+            android:name=".activity.operation.OperationActivityByTeacher"
+            android:exported="false" />
+        <activity
+            android:name=".activity.operation.OperationCreatWorkActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.operation.OperationActivityByParents"
             android:exported="false" />
         <activity
             android:name=".activity.meeting.MeetingHistoryActivity"

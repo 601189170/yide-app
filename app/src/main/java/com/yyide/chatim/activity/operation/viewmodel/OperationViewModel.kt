@@ -19,7 +19,7 @@ class OperationViewModel : ViewModel() {
     //获取年纪关联数据
     val getClassSubjectListRsp = MutableLiveData<Result<List<getClassSubjectListRsp>>>()
     //选择类型
-    val tv1data = MutableLiveData<selectBean>()
+//    val tv1data = MutableLiveData<selectBean>()
     //选择科目
     val tv2data = MutableLiveData<SubjectBean>()
 
@@ -36,6 +36,13 @@ class OperationViewModel : ViewModel() {
     val endTime = MutableLiveData<String>()
 
     val ljName = MutableLiveData<String>()
+
+    val rightData = MutableLiveData<rightData>()
+
+    val leftData = MutableLiveData<selectBean>()
+
+
+
     /**
      * 教职工作业列表
      * isWhole	是	string	0全部作业 1:我发布的
@@ -46,7 +53,7 @@ class OperationViewModel : ViewModel() {
     pageNo	是	string	第几页
     pageSize	是	string	每页显示数量
      */
-    fun getTecherWorkList(isWhole: String, subjectId: String, classesId: String, startTime: String,endTime :String){
+    fun getTecherWorkList(isWhole: String, subjectId: String, classesId: String, startTime: String,endTime :String,pageNo:Int,pageSize:Int){
         viewModelScope.launch {
             val map = mutableMapOf<String, Any>()
             map["isWhole"] = isWhole
@@ -54,11 +61,10 @@ class OperationViewModel : ViewModel() {
             map["classesId"] = classesId
             map["startTime"] = startTime
             map["endTime"] = endTime
-            map["pageNo"] = 1
-            map["pageSize"] = 20
+            map["pageNo"] = pageNo
+            map["pageSize"] = pageSize
             val body = RequestBody.create(BaseConstant.JSON, JSON.toJSONString(map))
             val result = NetworkApi.requestTeacherWorkList(body)
-            Log.e("TAG", "getTecherWorkList: "+JSON.toJSONString(result) )
             TeacherWorkListLiveData.value = result
         }
     }

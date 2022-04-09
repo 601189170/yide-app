@@ -15,6 +15,7 @@ import com.yyide.chatim.base.BaseMvpActivity;
 import com.yyide.chatim.model.AppAddRsp;
 import com.yyide.chatim.model.EventMessage;
 import com.yyide.chatim.model.ResultBean;
+import com.yyide.chatim.model.selectParentStudent;
 import com.yyide.chatim.presenter.AppAddPresenter;
 import com.yyide.chatim.view.AppAddView;
 
@@ -44,6 +45,8 @@ public class AppAddActivity extends BaseMvpActivity<AppAddPresenter> implements 
         title.setText("添加");
         initView();
         mvpPresenter.getAppAddList(pageSize, pageNum);
+
+
     }
 
     @Override

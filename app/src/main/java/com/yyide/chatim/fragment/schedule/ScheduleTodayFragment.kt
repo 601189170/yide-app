@@ -28,6 +28,7 @@ import com.yyide.chatim.activity.meeting.MeetingSaveActivity
 import com.yyide.chatim.activity.schedule.ScheduleEditActivityMain
 import com.yyide.chatim.activity.schedule.ScheduleEditActivitySimple
 import com.yyide.chatim.activity.schedule.ScheduleTimetableClassActivity
+import com.yyide.chatim.adapter.schedule.ScheduleListAdapter
 import com.yyide.chatim.adapter.schedule.ScheduleTodayAdapter
 import com.yyide.chatim.base.BaseConstant
 import com.yyide.chatim.base.MMKVConstant
@@ -57,7 +58,7 @@ import org.joda.time.DateTime
  * @date 2021/9/18 16:149
  * @description 日程/今日
  */
-class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener, ScheduleTodayAdapter.ImgListener{
     lateinit var fragmentScheduleTodayBinding: FragmentScheduleTodayBinding
     private val scheduleViewModel by activityViewModels<ScheduleMangeViewModel>()
     private val todayScheduleViewModel: TodayScheduleViewModel by viewModels()
@@ -216,6 +217,7 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         )
 //        fragmentScheduleTodayBinding.rvTodayList.addItemDecoration(SpaceItemDecoration(DisplayUtils.dip2px(context,10f)))
         fragmentScheduleTodayBinding.rvTodayList.adapter = todayScheduleTodayAdapter
+        todayScheduleTodayAdapter.setImgListener(this)
         todayScheduleTodayAdapter.setOnItemClickListener { adapter, view, position ->
             loge("今日清单：$position")
             val scheduleData = todayList[position]
@@ -236,7 +238,10 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fragmentScheduleTodayBinding.swipeRefreshLayout.setOnRefreshListener(this)
         fragmentScheduleTodayBinding.swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorPrimary))
     }
-
+    override fun OnimgSelect(item: ScheduleData) {
+        curModifySchedule = item
+        scheduleEditViewModel.changeScheduleState(item)
+    }
     fun initData() {
         scheduleViewModel.requestAllScheduleResult.observe(requireActivity()){
             loge("刷新数据列表 $it")
@@ -354,11 +359,11 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 run {
                     when(type.toInt()){
                         SCHEDULE_TYPE_SCHEDULE->{
-                            if (scheduleData.status == "1") {
-                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
-                            } else {
-                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
-                            }
+//                            if (scheduleData.status == "1") {
+//                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+//                            } else {
+//                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
+//                            }
                             swipeRightMenu.addMenuItem(delMenuItem)
                         }
                         SCHEDULE_TYPE_CONFERENCE->{
@@ -385,11 +390,11 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 run {
                     when(type.toInt()){
                         SCHEDULE_TYPE_SCHEDULE->{
-                            if (scheduleData.status == "1") {
-                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
-                            } else {
-                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
-                            }
+//                            if (scheduleData.status == "1") {
+//                                swipeRightMenu.addMenuItem(markUnCompletedMenuItem)
+//                            } else {
+//                                swipeRightMenu.addMenuItem(markCompletedMenuItem)
+//                            }
                             swipeRightMenu.addMenuItem(delMenuItem)
                         }
                         SCHEDULE_TYPE_CONFERENCE->{
@@ -414,13 +419,19 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val type = scheduleData.type
                 when(type.toInt()){
                     SCHEDULE_TYPE_SCHEDULE->{
+//                        if (menuPosition == 0) {
+//                            loge("修改")
+//                            curModifySchedule = scheduleData
+//                            scheduleEditViewModel.changeScheduleState(scheduleData)
+//                            return@OnItemMenuClickListener
+//                        }
+//                        if (menuPosition == 1) {
+//                            loge("删除")
+//                            curModifySchedule = scheduleData
+//                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+//                            return@OnItemMenuClickListener
+//                        }
                         if (menuPosition == 0) {
-                            loge("修改")
-                            curModifySchedule = scheduleData
-                            scheduleEditViewModel.changeScheduleState(scheduleData)
-                            return@OnItemMenuClickListener
-                        }
-                        if (menuPosition == 1) {
                             loge("删除")
                             curModifySchedule = scheduleData
                             scheduleEditViewModel.deleteScheduleById(scheduleData.id)
@@ -452,13 +463,19 @@ class ScheduleTodayFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val type = scheduleData.type
                 when(type.toInt()){
                     SCHEDULE_TYPE_SCHEDULE->{
+//                        if (menuPosition == 0) {
+//                            loge("修改")
+//                            curModifySchedule = scheduleData
+//                            scheduleEditViewModel.changeScheduleState(scheduleData)
+//                            return@OnItemMenuClickListener
+//                        }
+//                        if (menuPosition == 1) {
+//                            loge("删除")
+//                            curModifySchedule = scheduleData
+//                            scheduleEditViewModel.deleteScheduleById(scheduleData.id)
+//                            return@OnItemMenuClickListener
+//                        }
                         if (menuPosition == 0) {
-                            loge("修改")
-                            curModifySchedule = scheduleData
-                            scheduleEditViewModel.changeScheduleState(scheduleData)
-                            return@OnItemMenuClickListener
-                        }
-                        if (menuPosition == 1) {
                             loge("删除")
                             curModifySchedule = scheduleData
                             scheduleEditViewModel.deleteScheduleById(scheduleData.id)
