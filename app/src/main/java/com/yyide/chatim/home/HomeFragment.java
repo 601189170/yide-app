@@ -128,7 +128,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mBaseView = inflater.inflate(R.layout.home_fragmnet, container, false);
-        viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         return mBaseView;
     }
 
@@ -175,6 +175,7 @@ public class HomeFragment extends BaseMvpFragment<HomeFragmentPresenter> impleme
                 ToastUtils.showLong("确认失败");
                 return;
             }
+            Log.d("ss","aa" + result);
             closeDialog();
         });
 
